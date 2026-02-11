@@ -1,15 +1,111 @@
 ---
-sidebar_position: 1
+sidebar_position: 0
 title: Agentspecs
 slug: /
 ---
 
 import DocCardList from '@theme/DocCardList';
 import { useDocsSidebar } from '@docusaurus/plugin-content-docs/client';
-import ModalImage from "react-modal-image";
 
 # 🤖 📐 Agentspecs
 
+YAML-based specifications for AI agents, MCP servers, skills, and environment variables.
+
 ## What is Agentspecs?
 
-**Agentspecs**
+**Agentspecs** is a repository of declarative specifications that define AI agent configurations and their capabilities. All specifications are written in YAML format and serve as the single source of truth for agent systems.
+
+## Specification Types
+
+This repository contains four types of specifications:
+
+### 📊 Agent Specifications
+Agent configurations organized by category (code-ai/, codemode-paper/, datalayer-ai/). Each agent spec defines its capabilities, MCP servers, skills, UI customization, and system prompts.
+
+### 🔌 MCP Server Specifications  
+MCP (Model Context Protocol) server configurations including commands, arguments, environment variables, and transport protocols.
+
+### 🛠️ Skill Specifications
+Agent skills with Python module references, dependencies, and environment variable requirements.
+
+### 🔐 Environment Variable Specifications
+Environment variable definitions with descriptions, registration URLs, and metadata.
+
+## Key Features
+
+- **Single Source of Truth**: YAML files are the authoritative specification
+- **Declarative**: Define what agents can do, not how they do it
+- **Composable**: Agents reference MCP servers and skills by ID
+- **Validated**: JSON Schema ensures consistency and correctness
+- **Extensible**: Easy to add new fields or specification types
+- **Human-Readable**: YAML format is easy to read and edit
+
+## Directory Structure
+
+```
+agentspecs/
+├── agents/                      # Agent specifications (organized by category)
+│   ├── code-ai/                # Code-focused agents
+│   ├── codemode-paper/         # Research paper agents
+│   └── datalayer-ai/           # Data-focused agents
+├── mcp-servers/                # MCP server specifications
+├── skills/                     # Skill specifications
+├── envvars/                    # Environment variable specifications
+└── agent-spec.schema.yaml      # JSON Schema for validation
+```
+
+## Quick Start
+
+### Creating a New Agent
+
+1. Choose the appropriate folder: `code-ai/`, `codemode-paper/`, or `datalayer-ai/`
+2. Create `agentspecs/agents/<folder>/my-agent.yaml`
+3. The agent ID will automatically become `<folder>/my-agent`
+
+Example:
+```yaml
+# File: agentspecs/agents/code-ai/my-agent.yaml
+# Full ID: "code-ai/my-agent"
+id: my-agent
+name: My Custom Agent
+description: A helpful agent for coding tasks
+
+tags:
+  - code
+  - development
+
+enabled: true
+mcp_servers:
+  - github
+  - filesystem
+
+icon: code
+emoji: 💻
+color: "#6366F1"
+```
+
+### Agent ID Format
+
+Agents are automatically prefixed with their folder name:
+- `code-ai/simple` - Simple agent in code-ai folder
+- `codemode-paper/financial-viz` - Financial visualization in codemode-paper folder  
+- `datalayer-ai/data-acquisition` - Data acquisition in datalayer-ai folder
+
+This prevents ID conflicts and improves organization.
+
+## Documentation
+
+<DocCardList items={useDocsSidebar().items} />
+
+## Best Practices
+
+1. **Naming**: Use kebab-case for IDs (`data-acquisition`). Exception: envvars use UPPER_SNAKE_CASE
+2. **Descriptions**: Be specific about capabilities and use cases
+3. **Tags**: Use consistent tags for better categorization
+4. **Environment Variables**: Always define in `envvars/` directory and reference by ID
+5. **System Prompts**: Keep base `system_prompt` general, use `system_prompt_codemode_addons` for execution-specific instructions
+
+## License
+
+Copyright (c) 2025-2026 Datalayer, Inc.  
+Distributed under the terms of the Modified BSD License.

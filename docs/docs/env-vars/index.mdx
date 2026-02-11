@@ -2,4 +2,138 @@
 title: Environment Variables
 ---
 
-# Environment Variables
+# Environment Variable Specifications
+
+Environment variable specifications define configuration values required by MCP servers and skills.
+
+## Overview
+
+Environment variables provide API keys, authentication tokens, and configuration values to agents. Each specification defines the variable's purpose, where to obtain it, and metadata.
+
+## Required Fields
+
+### `id` (string)
+Unique identifier (UPPER_SNAKE_CASE, e.g., `KAGGLE_TOKEN`, `GITHUB_TOKEN`, `OPENAI_API_KEY`)
+
+**Important**: Unlike other specs, envvar IDs use UPPER_SNAKE_CASE to match environment variable naming conventions.
+
+### `name` (string)
+Display name shown in the UI
+
+### `description` (string)
+Purpose and usage description
+
+## Optional Fields
+
+### `registrationUrl` (string)
+URL where users can obtain the variable (e.g., API key registration page)
+```yaml
+registrationUrl: https://www.kaggle.com/settings/account
+registrationUrl: https://github.com/settings/tokens
+registrationUrl: https://platform.openai.com/api-keys
+```
+
+### `tags` (list of strings)
+Categorization tags
+```yaml
+tags:
+  - authentication
+  - api-key
+  - kaggle
+  - data
+```
+
+### `icon` (string)
+UI icon identifier
+
+### `emoji` (string)
+UI emoji identifier
+
+## Complete Example
+
+```yaml
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: KAGGLE_TOKEN
+name: Kaggle API Token
+description: >
+  API token for accessing Kaggle datasets, competitions, notebooks, and models.
+  Required for Kaggle MCP server authentication.
+
+registrationUrl: https://www.kaggle.com/settings/account
+
+tags:
+  - authentication
+  - api-key
+  - kaggle
+  - data
+```
+
+## Environment Variable Hierarchy
+
+```
+Environment Variable Specification
+├── Basic Info (id, name, description)
+├── Registration (registrationUrl)
+├── Categorization (tags)
+└── UI (icon, emoji)
+```
+
+## Linking to MCP Servers and Skills
+
+Environment variables are referenced by their ID in MCP server and skill specifications:
+
+### In MCP Server Spec
+```yaml
+id: kaggle
+name: Kaggle MCP Server
+# ... other fields ...
+
+envvars:
+  - KAGGLE_TOKEN
+
+args:
+  - "--Authorization"
+  - "Bearer ${KAGGLE_TOKEN}"
+```
+
+### In Skill Spec
+```yaml
+id: data-analysis
+name: Data Analysis Skill
+# ... other fields ...
+
+envvars:
+  - OPENAI_API_KEY
+
+optional_env_vars:
+  - PLOT_DPI
+  - CHART_THEME
+```
+
+## Available Environment Variables
+
+The following environment variables are defined in `agentspecs/envvars/`:
+
+- **`KAGGLE_TOKEN`** - Kaggle API authentication
+- **`GITHUB_TOKEN`** - GitHub authentication for MCP server and skills
+- **`TAVILY_API_KEY`** - Tavily search and web crawling
+- **`ALPHAVANTAGE_API_KEY`** - Alpha Vantage financial data
+- **`OPENAI_API_KEY`** - OpenAI API access
+- **`SLACK_BOT_TOKEN`** - Slack bot authentication
+- **`SLACK_TEAM_ID`** - Slack workspace identifier
+- **`SLACK_CHANNEL_IDS`** - Slack channel access list
+- **`GOOGLE_OAUTH_CLIENT_ID`** - Google Workspace OAuth client ID
+- **`GOOGLE_OAUTH_CLIENT_SECRET`** - Google Workspace OAuth secret
+
+## Best Practices
+
+1. **ID Format**: Use UPPER_SNAKE_CASE (`KAGGLE_TOKEN`, not `kaggle_token` or `KaggleToken`)
+2. **Naming**: Follow standard environment variable conventions
+3. **Description**: Explain what the variable is used for and which services require it
+4. **Registration URL**: Always provide when applicable to help users obtain the value
+5. **Tags**: Include service name, type (api-key, token, secret), and category
+6. **Security**: Never include actual values in the specification
+7. **Documentation**: Be clear about whether the variable is required or optional
+8. **Scope**: Define one variable per specification file

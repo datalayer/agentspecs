@@ -1,0 +1,17 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: GITHUB_TOKEN
+name: GitHub Token
+description: GitHub API token for repository management and code operations. Required for GitHub MCP server and GitHub skill to interact with GitHub repositories programmatically.
+registrationUrl: https://github.com/settings/tokens
+tags:
+  - authentication
+  - token
+  - github
+  - git
+  - mcp-server
+  - skill
+
+icon: key
+emoji: 🔑

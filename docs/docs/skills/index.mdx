@@ -2,4 +2,142 @@
 title: Skills
 ---
 
-# Skills
+# Skill Specifications
+
+Skill specifications define reusable capabilities that agents can use, implemented as Python modules.
+
+## Overview
+
+Skills are Python modules that provide specific capabilities to agents. Each skill spec defines the module path, dependencies, and required environment variables.
+
+## Required Fields
+
+### `id` (string)
+Unique identifier (kebab-case, e.g., `data-analysis`, `code-generation`)
+
+### `name` (string)
+Display name shown in the UI
+
+### `description` (string)
+Skill capabilities description
+
+### `module` (string)
+Python module path where the skill is implemented
+```yaml
+module: agent_skills.data_analysis
+module: agent_skills.code_generation
+module: agent_skills.web_search
+```
+
+## Optional Fields
+
+### `envvars` (list of strings)
+Required environment variable IDs. References specs in `envvars/` directory.
+```yaml
+envvars:
+  - OPENAI_API_KEY
+  - GITHUB_TOKEN
+```
+
+### `optional_env_vars` (list of strings)
+Optional environment variables that enhance functionality
+```yaml
+optional_env_vars:
+  - PLOT_DPI
+  - CHART_THEME
+  - LOG_LEVEL
+```
+
+### `dependencies` (list of strings)
+Required Python packages with version constraints
+```yaml
+dependencies:
+  - pandas>=2.0.0
+  - matplotlib>=3.7.0
+  - seaborn>=0.12.0
+  - numpy>=1.24.0
+```
+
+### `tags` (list of strings)
+Categorization tags
+```yaml
+tags:
+  - data
+  - analysis
+  - visualization
+```
+
+### `icon` (string)
+UI icon identifier
+
+### `emoji` (string)
+UI emoji identifier
+
+## Complete Example
+
+```yaml
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: data-analysis
+name: Data Analysis Skill
+description: Perform statistical analysis and data visualization
+
+module: agent_skills.data_analysis
+
+envvars:
+  - OPENAI_API_KEY
+
+optional_env_vars:
+  - PLOT_DPI
+  - CHART_THEME
+
+dependencies:
+  - pandas>=2.0.0
+  - matplotlib>=3.7.0
+  - seaborn>=0.12.0
+  - numpy>=1.24.0
+  - scipy>=1.10.0
+
+tags:
+  - data
+  - analysis
+  - visualization
+  - statistics
+```
+
+## Skill Hierarchy
+
+```
+Skill Specification
+├── Basic Info (id, name, description, tags)
+├── Implementation (module)
+├── Environment
+│   ├── envvars (required environment variables)
+│   └── optional_env_vars (optional variables)
+├── Dependencies (Python packages)
+└── UI (icon, emoji)
+```
+
+## Linking Skills to Agents
+
+Skills are referenced in agent specifications by their ID:
+
+```yaml
+# In agent spec
+skills:
+  - data-analysis
+  - code-generation
+  - web-search
+```
+
+## Best Practices
+
+1. **ID Format**: Use kebab-case (`data-analysis`, not `data_analysis`)
+2. **Module Naming**: Use Python package naming conventions (`agent_skills.module_name`)
+3. **Dependencies**: Pin major versions to avoid breaking changes (`pandas>=2.0.0`)
+4. **Environment Variables**: Clearly separate required vs optional
+5. **Tags**: Use consistent tags across related skills
+6. **Description**: Focus on what the skill enables the agent to do
+7. **Version Constraints**: Use `>=` for minimum versions, avoid overly restrictive pinning
+8. **Documentation**: Ensure the module path points to existing Python code

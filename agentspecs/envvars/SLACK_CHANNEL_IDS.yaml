@@ -1,0 +1,14 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: SLACK_CHANNEL_IDS
+name: Slack Channel IDs
+description: Comma-separated list of Slack channel IDs that the bot is allowed to access. Restricts bot operations to specific channels for security and organization.
+tags:
+  - configuration
+  - slack
+  - channels
+  - identifier
+
+icon: hash
+emoji: #️⃣
