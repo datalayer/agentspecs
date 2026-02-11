@@ -5,7 +5,7 @@
 # Analyzes financial market data and creates visualizations and charts.
 
 id: financial-viz
-name: Financial Visualization Agent (Viz)
+name: Financial Visualization Agent
 description: >
   Analyzes financial market data and creates visualizations and charts.
 
