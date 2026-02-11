@@ -38,6 +38,12 @@ module.exports = {
       items: [
         {
           type: 'doc',
+          docId: 'agents/index',
+          position: 'left',
+          label: 'Agents',
+        },
+        {
+          type: 'doc',
           docId: 'mcp-servers/index',
           position: 'left',
           label: 'MCP Servers',

@@ -1,0 +1,22 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: github
+name: GitHub Skill
+description: GitHub repository management and code operations
+
+module: agent_skills.github
+
+envvars:
+  - GITHUB_TOKEN
+
+dependencies:
+  - PyGithub>=2.1.0
+
+tags:
+  - github
+  - git
+  - code
+
+icon: mark-github
+emoji: 🐙

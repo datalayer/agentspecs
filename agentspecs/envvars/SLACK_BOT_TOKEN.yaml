@@ -1,0 +1,17 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: SLACK_BOT_TOKEN
+name: Slack Bot Token
+description: OAuth token for Slack bot authentication. Required for Slack MCP server to send messages, manage channels, and interact with workspace members.
+registrationUrl: https://api.slack.com/apps
+tags:
+  - authentication
+  - oauth
+  - token
+  - slack
+  - messaging
+  - bot
+
+icon: key
+emoji: 🔑

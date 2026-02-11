@@ -1,0 +1,267 @@
+---
+sidebar_position: 1
+title: Agents
+---
+
+# Agent Specifications
+
+Agent specifications define AI agent configurations, capabilities, and behavior.
+
+## Overview
+
+Agent IDs are automatically prefixed with their folder name, ensuring uniqueness across categories.
+For example, an agent in `code-ai/simple.yaml` will have ID `"code-ai/simple"`, while `datalayer-ai/simple.yaml` has ID `"datalayer-ai/simple"`.
+
+## Agent Organization
+
+Agents are organized in subfolders by category:
+- **`code-ai/`**: Code-focused agents (coder, simple, tux)
+- **`codemode-paper/`**: Research paper agents (crawler-mcp, financial-viz, information-routing, task-decomposition)
+- **`datalayer-ai/`**: Data-focused agents (data-acquisition, github-agent, simple, web-search)
+
+This folder structure:
+1. **Prevents ID conflicts**: Multiple agents can have the same base ID (e.g., "simple") in different folders
+2. **Improves organization**: Related agents are grouped together
+3. **Enables categorization**: Frontend can display agents by category
+4. **Maintains clarity**: Full IDs like "code-ai/simple" clearly show the agent's purpose
+
+## Required Fields
+
+### `id` (string)
+Unique identifier within folder (kebab-case). The full ID becomes `folder/id` (e.g., `code-ai/simple`)
+
+### `name` (string)
+Display name shown in the UI
+
+### `description` (string)
+Agent capabilities description (1-2 sentences)
+
+## Optional Fields
+
+### `tags` (list of strings)
+Categorization tags for filtering and search
+```yaml
+tags:
+  - finance
+  - visualization
+  - charts
+```
+
+### `enabled` (boolean)
+Whether agent is active (default: `true`)
+
+### `mcp_servers` (list of strings)
+MCP server IDs to use. References specs in `mcp-servers/` directory.
+```yaml
+mcp_servers:
+  - alphavantage
+  - chart
+  - github
+```
+
+### `skills` (list of strings)
+Agent skills. References specs in `skills/` directory.
+```yaml
+skills:
+  - data-analysis
+  - visualization
+```
+
+### `environment_name` (string)
+Runtime environment name (default: `"ai-agents"`)
+
+### `icon` (string)
+UI icon identifier (e.g., `"trending-up"`, `"code"`, `"database"`)
+
+### `emoji` (string)
+UI emoji identifier (e.g., `"📈"`, `"💻"`, `"🔍"`)
+
+### `color` (string)
+Hex color code for UI theming
+```yaml
+color: "#3B82F6"  # Blue
+color: "#10B981"  # Green  
+color: "#F59E0B"  # Amber
+color: "#6366F1"  # Indigo
+```
+
+### `suggestions` (list of strings)
+Chat examples to show users what the agent can do (3-5 recommended)
+```yaml
+suggestions:
+  - Show me the stock price history for AAPL
+  - Create a chart comparing MSFT and GOOGL
+  - Analyze the trading volume trends for Tesla
+```
+
+### `welcome_message` (string)
+Greeting message shown when agent starts
+```yaml
+welcome_message: >
+  Welcome! I'm the Financial Visualization Agent. I can help you analyze
+  stock market data, track financial instruments, and create charts to
+  visualize market trends.
+```
+
+### `system_prompt` (string)
+Base system prompt for the agent. Defines the agent's role and capabilities.
+```yaml
+system_prompt: >
+  You are a financial market analyst with access to Alpha Vantage market data
+  and chart generation tools. You can fetch stock prices, analyze trading volumes,
+  create visualizations, and track market trends.
+```
+
+### `system_prompt_codemode_addons` (string)
+Additional instructions for Code Mode execution environment. This field provides guidance on how to use the 4 core Codemode tools (list_servers, search_tools, get_tool_details, execute_code).
+```yaml
+system_prompt_codemode_addons: >
+  ## IMPORTANT: Be Honest About Your Capabilities
+  NEVER claim to have tools or capabilities you haven't verified.
+
+  ## Core Codemode Tools
+  Use these 4 tools to accomplish any task:
+  1. **list_servers** - List available MCP servers
+  2. **search_tools** - Progressive tool discovery by natural language query
+  3. **get_tool_details** - Get full tool schema and documentation
+  4. **execute_code** - Run Python code that composes multiple tools
+
+  ## Recommended Workflow
+  1. **Discover**: Use list_servers and search_tools to find relevant tools
+  2. **Understand**: Use get_tool_details to check parameters
+  3. **Execute**: Use execute_code to perform multi-step tasks
+```
+
+### `welcome_notebook` (string)
+Jupyter notebook path to show on agent creation (optional)
+
+### `welcome_document` (string)
+Lexical document path to show on agent creation (optional)
+
+## Complete Example
+
+```yaml
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# File: agentspecs/agents/codemode-paper/financial-viz.yaml
+# Full ID will be: "codemode-paper/financial-viz"
+
+id: financial-viz
+name: Financial Visualization Agent (Viz)
+description: >
+  Analyzes financial market data and creates visualizations and charts.
+
+tags:
+  - finance
+  - stocks
+  - visualization
+
+enabled: true
+
+# MCP servers used by this agent
+mcp_servers:
+  - alphavantage
+  - chart
+
+# Skills available to this agent
+skills: []
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: trending-up
+emoji: 📈
+color: "#F59E0B"  # Amber
+
+# Chat suggestions
+suggestions:
+  - Show me the stock price history for AAPL
+  - Create a chart comparing MSFT and GOOGL over the last year
+  - Analyze the trading volume trends for Tesla
+
+# Welcome message
+welcome_message: >
+  Welcome! I'm the Financial Visualization Agent. I can help you analyze
+  stock market data, track financial instruments, and create charts to
+  visualize market trends.
+
+# System prompt for the agent
+system_prompt: >
+  You are a financial market analyst with access to Alpha Vantage market data
+  and chart generation tools. You can fetch stock prices, analyze trading volumes,
+  create visualizations, and track market trends. Provide clear insights with
+  relevant data points and generate charts to illustrate patterns.
+
+# Additional system prompt for code mode
+system_prompt_codemode_addons: >
+  ## IMPORTANT: Be Honest About Your Capabilities
+  NEVER claim to have tools or capabilities you haven't verified.
+
+  ## Core Codemode Tools
+  Use these 4 tools to accomplish any task:
+  1. **list_servers** - List available MCP servers
+     Use this to see what MCP servers you can access.
+
+  2. **search_tools** - Progressive tool discovery by natural language query
+     Use this to find relevant tools before executing tasks.
+
+  3. **get_tool_details** - Get full tool schema and documentation
+     Use this to understand tool parameters before calling them.
+
+  4. **execute_code** - Run Python code that composes multiple tools
+     Use this for complex multi-step operations. Code runs in a PERSISTENT sandbox.
+     Variables, functions, and state PERSIST between execute_code calls.
+     Import tools using: `from generated.servers.<server_name> import <function_name>`
+     NEVER use `import *` - always use explicit named imports.
+
+  ## Recommended Workflow
+  1. **Discover**: Use list_servers and search_tools to find relevant tools
+  2. **Understand**: Use get_tool_details to check parameters
+  3. **Execute**: Use execute_code to perform multi-step tasks, calling tools as needed
+
+  ## Token Efficiency
+  When possible, chain multiple tool calls in a single execute_code block.
+  This reduces output tokens by processing intermediate results in code rather
+  than returning them. If you want to examine results, print subsets, preview
+  (maximum 20 first characters) and/or counts instead of full data.
+
+# Optional: Jupyter notebook to show on agent creation
+welcome_notebook: null
+
+# Optional: Lexical document to show on agent creation
+welcome_document: null
+```
+
+## Agent Hierarchy
+
+```
+Agent Specification
+├── Basic Info (id, name, description, tags)
+├── Configuration (enabled, environment_name)
+├── Capabilities
+│   ├── MCP Servers (references to mcp-servers/*.yaml)
+│   └── Skills (references to skills/*.yaml)
+├── UI Customization (icon, emoji, color)
+├── User Guidance (suggestions, welcome_message)
+└── Prompts
+    ├── system_prompt (base instructions)
+    └── system_prompt_codemode_addons (execution mode instructions)
+```
+
+## Best Practices
+
+1. **ID Format**: Use kebab-case (`financial-viz`, not `financial_viz`)
+2. **Folder Selection**: Choose the most appropriate category folder
+3. **Description**: 1-2 sentences, present tense, focus on capabilities
+4. **Tags**: 2-5 relevant keywords for categorization
+5. **Suggestions**: Provide 3-5 concrete, actionable examples
+6. **Colors**: Use hex codes consistently based on agent type:
+   - Blue (`#3B82F6`): Data and information
+   - Green (`#10B981`): Web and networking  
+   - Indigo (`#6366F1`): Development and code
+   - Amber (`#F59E0B`): Finance and analytics
+   - Pink (`#EC4899`): Communication and workflow
+7. **System Prompts**: Keep base prompt general, use addons for execution-specific guidance
+8. **MCP References**: Only reference MCP servers that exist in `mcp-servers/` directory
