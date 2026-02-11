@@ -1,4 +1,4 @@
-# Agent Specifications
+# 🤖👷‍♂️ Agent Specs
 
 YAML-based specifications for AI agents, MCP servers, skills, and environment variables.
 
