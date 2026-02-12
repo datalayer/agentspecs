@@ -14,14 +14,14 @@ args:
   - "-i"
   - "--rm"
   - "-e"
-  - "GITHUB_TOKEN"
+  - "GITHUB_PERSONAL_ACCESS_TOKEN"
   - "ghcr.io/github/github-mcp-server"
 
 transport: stdio
 enabled: true
 
 env:
-  GITHUB_TOKEN: "${GITHUB_TOKEN}"
+  GITHUB_PERSONAL_ACCESS_TOKEN: "${GITHUB_TOKEN}"
 
 envvars:
   - GITHUB_TOKEN
