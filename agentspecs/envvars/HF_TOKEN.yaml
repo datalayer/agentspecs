@@ -1,0 +1,15 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: HF_TOKEN
+name: Hugging Face Token
+description: Access token for Hugging Face API. Required for Hugging Face MCP server authentication. Create a READ token from your settings.
+registrationUrl: https://huggingface.co/settings/tokens
+tags:
+  - authentication
+  - api-key
+  - huggingface
+  - machine-learning
+
+icon: key
+emoji: 🔑

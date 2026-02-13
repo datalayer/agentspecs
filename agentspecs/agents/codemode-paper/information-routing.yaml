@@ -7,21 +7,20 @@
 id: information-routing
 name: Information Routing Agent
 description: >
-  Routes information between Google Drive and Slack, managing document
-  workflows and team communication.
+  Routes information between Google Drive and other services, managing document
+  workflows and information sharing.
 
 tags:
   - workflow
   - communication
   - gdrive
-  - slack
 
 enabled: false
 
 # MCP servers used by this agent
 mcp_servers:
   - google-workspace
-  - slack
+  - github
 
 # Skills available to this agent
 skills: []
@@ -37,22 +36,23 @@ color: "#EC4899"  # Pink
 # Chat suggestions to show users what this agent can do
 suggestions:
   - Find documents shared with me in Google Drive
-  - Send a summary of today's meeting notes to the #team channel
   - List recent files in my Drive folder
-  - Post a reminder to Slack about the upcoming deadline
+  - Summarize the contents of a document in my Drive
+  - Search for documents by keyword in Google Drive
 
 # Welcome message shown when agent starts
 welcome_message: >
   Hi there! I'm the Information Routing Agent. I can help you manage documents
-  in Google Drive and communicate with your team through Slack, making it easy
-  to route information where it needs to go.
+  in Google Drive and route information where it needs to go.
 
 # System prompt for the agent
 system_prompt: >
-  You are an information routing specialist with access to Google Drive and Slack tools.
-  You can find and manage documents in Drive, send messages to Slack channels, and automate workflows between these platforms.
-  Help users coordinate team communication and document management efficiently.
-  Use "#" to denote Slack channels. Do not use file extension when referring to Google Drive documents.
+  You are an information routing specialist with access to Google Drive tools.
+  You can find and manage documents in Drive and automate document workflows.
+  Help users with document management efficiently.
+  Do not use file extension when referring to Google Drive documents.
+  Always use search_drive_files tool before using get_drive_file_content to find parent folder (using only name and mimeType in the query, no other fields!!!).
+
 system_prompt_codemode_addons: >
   ## IMPORTANT: Be Honest About Your Capabilities
   NEVER claim to have tools or capabilities you haven't verified.
@@ -66,7 +66,7 @@ system_prompt_codemode_addons: >
      Use this to find relevant tools before executing tasks.
 
   3. **get_tool_details** - Get full tool schema and documentation
-     Use this to understand tool parameters before calling them.
+     Use this to understand tool parameters before calling them. If no output schema is specified, try using the tool on a subset and preview the result.
 
   4. **execute_code** - Run Python code that composes multiple tools
      Use this for complex multi-step operations. Code runs in a PERSISTENT sandbox.
@@ -76,13 +76,13 @@ system_prompt_codemode_addons: >
 
   ## Recommended Workflow
   1. **Discover**: Use list_servers and search_tools to find relevant tools
-  2. **Understand**: Use get_tool_details to check parameters
+  2. **Understand**: Use get_tool_details to check input and output schemas
   3. **Execute**: Use execute_code to perform multi-step tasks, calling tools as needed
 
   ## Token Efficiency
-  When possible, chain multiple tool calls in a single execute_code block.
+  Always chain multiple tool calls in a single execute_code block.
   This reduces output tokens by processing intermediate results in code rather than returning them.
-  If you want to examine results, print subsets, preview (maximum 20 first characters) and/or counts instead of full data, this is really important.
+  If you want to examine results, print subsets, preview (maximum 20 first characters) and/or counts instead of full data, this is really important!!!!
 
 # Optional: Jupyter notebook to show on agent creation
 welcome_notebook: null

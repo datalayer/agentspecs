@@ -23,6 +23,8 @@ enabled: false
 mcp_servers:
   - tavily
   - github
+  - kaggle
+  - huggingface
 
 # Skills available to this agent
 skills: []
@@ -70,7 +72,6 @@ system_prompt_codemode_addons: >
      Use this to understand tool parameters before calling them.
 
   4. **execute_code** - Run Python code that composes multiple tools
-     Use this for complex multi-step operations. Code runs in a PERSISTENT sandbox.
      Variables, functions, and state PERSIST between execute_code calls.
      Import tools using: `from generated.servers.<server_name> import <function_name>`
      NEVER use `import *` - always use explicit named imports.
@@ -81,9 +82,11 @@ system_prompt_codemode_addons: >
   3. **Execute**: Use execute_code to perform multi-step tasks, calling tools as needed
 
   ## Token Efficiency
-  When possible, chain multiple tool calls in a single execute_code block.
+  Always chain multiple tool calls in a single execute_code block.
   This reduces output tokens by processing intermediate results in code rather than returning them.
   If you want to examine results, print subsets, preview (maximum 20 first characters) and/or counts instead of full data, this is really important.
+
+  For huggingface tools, use search_doc tool to understand other tools return's schema.
 
 # Optional: Jupyter notebook to show on agent creation
 welcome_notebook: null
