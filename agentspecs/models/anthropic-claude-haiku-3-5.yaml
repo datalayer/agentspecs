@@ -1,0 +1,13 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Anthropic Claude Haiku 3.5
+
+id: "anthropic:claude-3-5-haiku-20241022"
+name: Anthropic Claude Haiku 3.5
+description: Claude Haiku 3.5 by Anthropic - fast and efficient
+provider: anthropic
+default: false
+
+required_env_vars:
+  - ANTHROPIC_API_KEY

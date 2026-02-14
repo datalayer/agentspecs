@@ -1,0 +1,15 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Bedrock Claude Haiku 3.5
+
+id: "bedrock:us.anthropic.claude-3-5-haiku-20241022-v1:0"
+name: Bedrock Claude Haiku 3.5
+description: Claude Haiku 3.5 via AWS Bedrock - fast and efficient
+provider: bedrock
+default: false
+
+required_env_vars:
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - AWS_DEFAULT_REGION

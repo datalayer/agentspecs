@@ -1,0 +1,13 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Anthropic Claude Opus 4
+
+id: "anthropic:claude-opus-4-20250514"
+name: Anthropic Claude Opus 4
+description: Claude Opus 4 by Anthropic - highest capability model
+provider: anthropic
+default: false
+
+required_env_vars:
+  - ANTHROPIC_API_KEY
