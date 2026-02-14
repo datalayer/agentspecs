@@ -1,0 +1,15 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Bedrock Claude Opus 4
+
+id: "bedrock:us.anthropic.claude-opus-4-20250514-v1:0"
+name: Bedrock Claude Opus 4
+description: Claude Opus 4 via AWS Bedrock - highest capability
+provider: bedrock
+default: false
+
+required_env_vars:
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - AWS_DEFAULT_REGION

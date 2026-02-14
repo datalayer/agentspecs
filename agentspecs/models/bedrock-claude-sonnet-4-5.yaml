@@ -1,0 +1,15 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Bedrock Claude Sonnet 4.5
+
+id: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+name: Bedrock Claude Sonnet 4.5
+description: Claude Sonnet 4.5 via AWS Bedrock - balanced performance
+provider: bedrock
+default: true
+
+required_env_vars:
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - AWS_DEFAULT_REGION

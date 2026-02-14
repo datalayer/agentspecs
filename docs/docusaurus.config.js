@@ -5,7 +5,7 @@
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
-  title: '☰ 👷 Agentspecs',
+  title: '🤖 👷 Agentspecs',
   tagline: 'Agentspecs',
   url: 'https://agentspecs.datalayer.tech',
   baseUrl: '/',
@@ -59,6 +59,12 @@ module.exports = {
           docId: 'env-vars/index',
           position: 'left',
           label: 'Environment Variables',
+        },
+        {
+          type: 'doc',
+          docId: 'models/index',
+          position: 'left',
+          label: 'Models',
         },
         {
           href: 'https://discord.gg/YQFwvmSSuR',
