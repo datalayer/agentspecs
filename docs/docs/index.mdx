@@ -17,10 +17,10 @@ YAML-based specifications for AI agents, MCP servers, skills, and environment va
 
 ## Specification Types
 
-This repository contains four types of specifications:
+This repository contains five types of specifications:
 
 ### 📊 Agent Specifications
-Agent configurations organized by category (code-ai/, codemode-paper/, datalayer-ai/). Each agent spec defines its capabilities, MCP servers, skills, UI customization, and system prompts.
+Agent configurations organized by category (code-ai/, codemode-paper/, datalayer-ai/). Each agent spec defines its capabilities, model, MCP servers, skills, UI customization, and system prompts.
 
 ### 🔌 MCP Server Specifications  
 MCP (Model Context Protocol) server configurations including commands, arguments, environment variables, and transport protocols.
@@ -31,11 +31,14 @@ Agent skills with Python module references, dependencies, and environment variab
 ### 🔐 Environment Variable Specifications
 Environment variable definitions with descriptions, registration URLs, and metadata.
 
+### 🧠 Model Specifications
+AI model configurations with provider, credentials, and default designation.
+
 ## Key Features
 
 - **Single Source of Truth**: YAML files are the authoritative specification
 - **Declarative**: Define what agents can do, not how they do it
-- **Composable**: Agents reference MCP servers and skills by ID
+- **Composable**: Agents reference MCP servers, skills, and models by ID
 - **Validated**: JSON Schema ensures consistency and correctness
 - **Extensible**: Easy to add new fields or specification types
 - **Human-Readable**: YAML format is easy to read and edit
@@ -49,6 +52,7 @@ agentspecs/
 │   ├── codemode-paper/         # Research paper agents
 │   └── datalayer-ai/           # Data-focused agents
 ├── mcp-servers/                # MCP server specifications
+├── models/                     # AI model specifications
 ├── skills/                     # Skill specifications
 ├── envvars/                    # Environment variable specifications
 └── agent-spec.schema.yaml      # JSON Schema for validation

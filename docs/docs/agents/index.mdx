@@ -70,6 +70,14 @@ skills:
 ### `environment_name` (string)
 Runtime environment name (default: `"ai-agents"`)
 
+### `model` (string)
+AI model ID to use for this agent. References a model spec in `models/` directory by its `id` field. If omitted, the system default model is used.
+```yaml
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+model: "openai:gpt-4.1"
+model: "anthropic:claude-opus-4-20250514"
+```
+
 ### `icon` (string)
 UI icon identifier (e.g., `"trending-up"`, `"code"`, `"database"`)
 
@@ -166,6 +174,9 @@ mcp_servers:
 
 # Skills available to this agent
 skills: []
+
+# AI model (omit to use system default)
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
 
 # Runtime environment
 environment_name: ai-agents-env
