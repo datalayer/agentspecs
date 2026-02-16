@@ -1,0 +1,13 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Anthropic Claude Sonnet 4
+
+id: "anthropic:claude-sonnet-4-20250514"
+name: Anthropic Claude Sonnet 4
+description: Claude Sonnet 4 by Anthropic - strong reasoning and coding
+provider: anthropic
+default: false
+
+required_env_vars:
+  - ANTHROPIC_API_KEY

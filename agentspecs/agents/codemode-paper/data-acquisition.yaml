@@ -19,6 +19,10 @@ tags:
 
 enabled: true
 
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+sandbox_variant: local-eval
+
 # MCP servers used by this agent
 mcp_servers:
   - kaggle

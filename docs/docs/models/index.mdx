@@ -1,0 +1,170 @@
+---
+title: Models
+---
+
+# Model Specifications
+
+Model specifications define the AI models available to agents. Each specification captures the model's identity, provider, required credentials, and whether it is the default model used when no explicit model is configured.
+
+## Overview
+
+Model IDs follow the format `provider:model-name` (e.g., `bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0`, `openai:gpt-4.1`). This convention makes it easy to identify both the provider and the specific model variant at a glance.
+
+## Required Fields
+
+### `id` (string)
+Unique model identifier in the format `provider:model-name`. This is the value used to reference the model throughout the system.
+```yaml
+id: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+id: "openai:gpt-4.1"
+id: "anthropic:claude-opus-4-20250514"
+```
+
+### `name` (string)
+Display name shown in the UI.
+```yaml
+name: Bedrock Claude Sonnet 4.5
+name: OpenAI GPT-4.1
+```
+
+### `description` (string)
+Short description of the model's characteristics and strengths.
+```yaml
+description: Claude Sonnet 4.5 via AWS Bedrock - balanced performance
+description: GPT-4.1 by OpenAI - strong general purpose model
+```
+
+### `provider` (string)
+The model provider. Current values: `anthropic`, `bedrock`, `azure-openai`, `openai`.
+```yaml
+provider: bedrock
+provider: openai
+provider: anthropic
+provider: azure-openai
+```
+
+## Optional Fields
+
+### `default` (boolean)
+Whether this model is the system default (default: `false`). Exactly one model should have `default: true`. This model is used when an agent spec does not specify a `model` field, and when no environment override is set.
+```yaml
+default: true
+```
+
+### `required_env_vars` (list of strings)
+Environment variables that must be set for the model to be available. The system checks these at runtime to determine model availability.
+```yaml
+required_env_vars:
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - AWS_DEFAULT_REGION
+```
+
+## Complete Example
+
+```yaml
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Bedrock Claude Sonnet 4.5
+
+id: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+name: Bedrock Claude Sonnet 4.5
+description: Claude Sonnet 4.5 via AWS Bedrock - balanced performance
+provider: bedrock
+default: true
+
+required_env_vars:
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - AWS_DEFAULT_REGION
+```
+
+## Model Hierarchy
+
+```
+Model Specification
+├── Identity (id, name, description)
+├── Provider (provider)
+├── Default Flag (default)
+└── Environment (required_env_vars)
+```
+
+## Available Models
+
+### Anthropic (Direct API)
+
+| Model | ID | Description |
+|-------|-----|-------------|
+| **Claude Haiku 3.5** | `anthropic:claude-3-5-haiku-20241022` | Fast and efficient |
+| **Claude Sonnet 4** | `anthropic:claude-sonnet-4-20250514` | Strong reasoning and coding |
+| **Claude Sonnet 4.5** | `anthropic:claude-sonnet-4-5-20250514` | Balanced performance and speed |
+| **Claude Opus 4** | `anthropic:claude-opus-4-20250514` | Highest capability model |
+
+Required env vars: `ANTHROPIC_API_KEY`
+
+### AWS Bedrock
+
+| Model | ID | Description |
+|-------|-----|-------------|
+| **Claude Haiku 3.5** | `bedrock:us.anthropic.claude-3-5-haiku-20241022-v1:0` | Fast and efficient |
+| **Claude Sonnet 4** | `bedrock:us.anthropic.claude-sonnet-4-20250514-v1:0` | Strong reasoning |
+| **Claude Sonnet 4.5** ⭐ | `bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0` | Balanced performance (default) |
+| **Claude Opus 4** | `bedrock:us.anthropic.claude-opus-4-20250514-v1:0` | Highest capability |
+| **Claude Opus 4.6** | `bedrock:us.anthropic.claude-opus-4-6-v1:0` | Latest flagship model |
+
+Required env vars: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`
+
+### Azure OpenAI
+
+| Model | ID | Description |
+|-------|-----|-------------|
+| **GPT-4.1 Nano** | `azure-openai:gpt-4.1-nano` | Smallest and fastest |
+| **GPT-4.1 Mini** | `azure-openai:gpt-4.1-mini` | Compact version |
+| **GPT-4.1** | `azure-openai:gpt-4.1` | Strong general purpose |
+| **GPT-4o Mini** | `azure-openai:gpt-4o-mini` | Compact enterprise deployment |
+| **GPT-4o** | `azure-openai:gpt-4o` | Enterprise deployment |
+
+Required env vars: `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_ENDPOINT`
+
+### OpenAI (Direct API)
+
+| Model | ID | Description |
+|-------|-----|-------------|
+| **GPT-4.1 Nano** | `openai:gpt-4.1-nano` | Smallest and fastest |
+| **GPT-4.1 Mini** | `openai:gpt-4.1-mini` | Compact version of GPT-4.1 |
+| **GPT-4.1** | `openai:gpt-4.1` | Strong general purpose model |
+| **GPT-4o Mini** | `openai:gpt-4o-mini` | Compact and cost-effective |
+| **GPT-4o** | `openai:gpt-4o` | Fast multimodal model |
+| **o3 Mini** | `openai:o3-mini` | Reasoning-focused compact model |
+
+Required env vars: `OPENAI_API_KEY`
+
+## Linking Models to Agents
+
+Agents can specify a model in their YAML spec using the model ID:
+
+```yaml
+# In agent spec
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+```
+
+If an agent does not specify a `model` field, the system default model (marked with `default: true`) is used.
+
+## Code Generation
+
+Model specifications are used to generate:
+
+- **Python**: `AIModels` enum, `AIModel` dataclass, `AI_MODEL_CATALOGUE`, and `DEFAULT_MODEL` constant
+- **TypeScript**: `AIModels` object, `AIModel` interface, `AI_MODEL_CATALOGUE`, and `DEFAULT_MODEL` export
+
+Run `make specs` in the agent-runtimes repository to regenerate from the YAML files.
+
+## Best Practices
+
+1. **ID Format**: Use the `provider:model-name` convention
+2. **Single Default**: Ensure exactly one model has `default: true`
+3. **Environment Variables**: Always list all required credentials in `required_env_vars`
+4. **Descriptions**: Keep descriptions short — mention the provider, model tier, and key characteristic
+5. **Provider Consistency**: Use the canonical provider names (`anthropic`, `bedrock`, `azure-openai`, `openai`)
+6. **File Naming**: Use kebab-case matching the provider and model name (e.g., `bedrock-claude-sonnet-4-5.yaml`)

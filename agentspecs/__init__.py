@@ -38,6 +38,15 @@ from agent_skills import (
     RateLimiter,
 )
 
+from .models import (
+    AIModel as AIModel,
+    AIModels,
+    AI_MODEL_CATALOGUE,
+    DEFAULT_MODEL,
+    get_default_model,
+    get_model,
+    list_models,
+)
 from .server import mcp as codemode_server, configure as configure_server
 from .toolset import CodemodeToolset, PYDANTIC_AI_AVAILABLE
 
@@ -71,7 +80,15 @@ __all__ = [
     # Pydantic AI Toolset
     "CodemodeToolset",
     "PYDANTIC_AI_AVAILABLE",
-    # Models
+    # AI Models
+    "AIModel",
+    "AIModels",
+    "AI_MODEL_CATALOGUE",
+    "DEFAULT_MODEL",
+    "get_default_model",
+    "get_model",
+    "list_models",
+    # Types
     "ToolDefinition",
     "ToolParameter",
     "ToolCallResult",
