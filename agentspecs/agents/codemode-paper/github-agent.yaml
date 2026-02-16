@@ -20,7 +20,7 @@ enabled: false
 
 model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
 
-sandbox_variant: jupyter
+sandbox_variant: local-eval
 
 # MCP servers used by this agent
 mcp_servers:
