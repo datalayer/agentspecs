@@ -3,9 +3,9 @@
 
 # AI Model Specification: Bedrock Claude Opus 4.6
 
-id: "bedrock:us.anthropic.claude-opus-4-6-v1:0"
+id: "bedrock:us.anthropic.claude-opus-4-6-v1"
 name: Bedrock Claude Opus 4.6
-description: Claude Opus 4.6 via AWS Bedrock - latest flagship model
+description: Claude Opus 4.6 via AWS Bedrock
 provider: bedrock
 default: false
 
