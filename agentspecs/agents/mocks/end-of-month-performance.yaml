@@ -23,6 +23,13 @@ tags:
 
 enabled: true
 
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Consolidate, validate, and analyze end-of-month Salesforce sales data.
+  Compute revenue performance vs targets, detect anomalies in bookings and
+  discounting, explain variances by region/segment/product, and generate an
+  executive-ready PDF performance report with full data lineage.
+
 model: "openai-gpt-4-1"
 
 sandbox_variant: jupyter

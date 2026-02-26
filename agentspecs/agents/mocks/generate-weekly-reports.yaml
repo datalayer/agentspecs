@@ -43,6 +43,12 @@ icon: file
 emoji: 📝
 color: "#cf222e"  # Red — error status in UI
 
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Aggregate data across marketing, sales, and operations departments every
+  Monday. Generate a structured executive report with charts, KPI summaries,
+  trend analysis, and the top 3 actionable takeaways for leadership.
+
 # Protocols & UI Extensions
 protocol: ag-ui
 ui_extension: a2ui

@@ -105,6 +105,12 @@ team:
       trigger: "On completion of Sync Writer"
       approval: auto
 
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Collect and aggregate contact data from multiple CRM sources, analyze and
+  deduplicate records, write cleaned data back to CRM systems, and generate
+  sync summary reports with notifications.
+
 # Protocols & UI Extensions
 protocol: ag-ui
 ui_extension: a2ui

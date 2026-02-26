@@ -96,6 +96,12 @@ team:
       trigger: "On completion of Categorizer Agent"
       approval: manual
 
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Triage incoming support tickets by urgency, categorize by topic and
+  sentiment, identify recurring patterns, and generate resolution
+  recommendations with escalation paths for critical issues.
+
 # Protocols & UI Extensions
 protocol: ag-ui
 ui_extension: a2ui

@@ -120,6 +120,12 @@ team:
       trigger: "On completion of Reorder Planner"
       approval: auto
 
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Monitor inventory levels across all warehouses every 6 hours. Detect
+  discrepancies between system and physical counts, forecast demand by SKU,
+  generate reorder recommendations, and compile audit reports with findings.
+
 # Protocols & UI Extensions
 protocol: ag-ui
 ui_extension: a2ui

@@ -42,6 +42,12 @@ icon: credit-card
 emoji: 💳
 color: "#8250df"  # Purple
 
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Process and validate incoming financial transaction batches. Reconcile
+  balances across accounts, run AML compliance checks, flag suspicious
+  transactions for human review, and generate audit-ready reports.
+
 # Protocols & UI Extensions
 protocol: ag-ui
 ui_extension: a2ui

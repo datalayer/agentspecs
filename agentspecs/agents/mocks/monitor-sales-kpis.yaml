@@ -43,6 +43,12 @@ icon: graph
 emoji: 📊
 color: "#2da44e"  # Green — running status
 
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Monitor and analyze sales KPIs from the CRM system. Generate daily reports
+  summarizing key performance metrics, identify trends, and flag anomalies.
+  Send notifications when KPIs deviate more than 10% from targets.
+
 # Protocols & UI Extensions
 protocol: ag-ui
 ui_extension: a2ui
