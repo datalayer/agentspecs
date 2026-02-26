@@ -1,0 +1,218 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Audit Inventory Levels
+# Multi-agent team that monitors inventory across warehouses, detects
+# discrepancies, forecasts demand, and generates reorder recommendations.
+# Source: UI mock flow id=6 (Agents.tsx)
+
+id: audit-inventory-levels
+name: Audit Inventory Levels
+description: >
+  A multi-agent team that monitors inventory levels across warehouses,
+  detects discrepancies between physical and system counts, forecasts
+  demand by SKU, and generates automated reorder recommendations.
+
+tags:
+  - finance
+  - automation
+  - inventory
+  - supply-chain
+  - team
+
+enabled: true
+
+model: "openai-gpt-4-1"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent team
+mcp_servers:
+  - filesystem
+  - slack
+
+# Skills available to this agent team
+skills:
+  - pdf
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: package
+emoji: 📦
+color: "#0969da"  # Blue
+
+# Team configuration
+team:
+  orchestration_protocol: datalayer
+  execution_mode: sequential
+  supervisor:
+    name: Inventory Orchestrator Agent
+    model: "openai-gpt-4-1"
+  routing_instructions: >
+    Start with the Scanner to pull current levels, then Auditor to check
+    discrepancies, then Forecaster for demand predictions, then Planner for
+    reorder recommendations, then Reporter for the final audit report.
+    Escalate critical shortages immediately.
+  validation:
+    timeout: "600s"
+    retry_on_failure: true
+    max_retries: 3
+  agents:
+    - id: inv-1
+      name: Inventory Scanner Agent
+      role: "Primary · Initiator"
+      goal: Pull current inventory levels from all warehouse management systems
+      model: "openai-gpt-4-1"
+      mcp_server: Warehouse MCP
+      tools:
+        - WMS Connector
+        - Barcode Scanner API
+      trigger: "Schedule: Every 6 hours"
+      approval: auto
+    - id: inv-2
+      name: Discrepancy Auditor Agent
+      role: Secondary
+      goal: Compare system counts vs physical counts and flag discrepancies
+      model: "openai-gpt-4-1"
+      mcp_server: Audit MCP
+      tools:
+        - Count Comparator
+        - Discrepancy Logger
+        - Shrinkage Calculator
+      trigger: "On completion of Inventory Scanner"
+      approval: auto
+    - id: inv-3
+      name: Demand Forecaster Agent
+      role: Secondary
+      goal: Forecast demand by SKU using historical sales and seasonal patterns
+      model: "anthropic-claude-sonnet-4"
+      mcp_server: Analytics MCP
+      tools:
+        - Time Series Model
+        - Seasonal Analyzer
+        - External Signals Fetcher
+      trigger: "On completion of Discrepancy Auditor"
+      approval: auto
+    - id: inv-4
+      name: Reorder Planner Agent
+      role: Secondary
+      goal: Calculate optimal reorder points and generate purchase order recommendations
+      model: "openai-gpt-4-1"
+      mcp_server: Procurement MCP
+      tools:
+        - EOQ Calculator
+        - Supplier Catalog
+        - PO Generator
+      trigger: "On completion of Demand Forecaster"
+      approval: manual
+    - id: inv-5
+      name: Audit Report Agent
+      role: Final
+      goal: Compile inventory audit report with discrepancies, forecasts, and reorder plan
+      model: "openai-gpt-4-1"
+      mcp_server: Document Generation MCP
+      tools:
+        - PDF Generator
+        - Chart Builder
+        - Email Sender
+      trigger: "On completion of Reorder Planner"
+      approval: auto
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Evals
+evals:
+  - name: Inventory Accuracy
+    category: coding
+    task_count: 500
+  - name: Forecast Precision
+    category: reasoning
+    task_count: 300
+
+# Advanced settings
+advanced:
+  cost_limit: "$12.00 per run"
+  time_limit: "900 seconds"
+  max_iterations: 80
+  validation: "All warehouse counts must reconcile within 2% tolerance"
+
+# Authorization policy
+authorization_policy: ""
+
+# Trigger configuration
+trigger:
+  type: schedule
+  cron: "0 */6 * * *"
+  description: Every 6 hours
+
+# Guardrails
+guardrails:
+  - name: Google Workspace Agent
+    identity_provider: google
+    identity_name: inventory-bot@acme.com
+    permissions:
+      read:data: true
+      write:data: true
+      execute:code: true
+      access:internet: true
+      send:email: true
+      deploy:production: false
+    token_limits:
+      per_run: "100K"
+      per_day: "800K"
+      per_month: "8M"
+
+# Codemode
+codemode:
+  enabled: true
+  token_reduction: "~90%"
+  speedup: "~2× faster"
+
+# Output configuration
+output:
+  formats:
+    - PDF
+    - Spreadsheet
+    - Dashboard
+  template: Inventory Audit Report
+  storage: /outputs/inventory-audit/
+
+# Notifications
+notifications:
+  email: linda.m@company.com
+  slack: "#inventory-ops"
+
+# Chat suggestions
+suggestions:
+  - Run a full inventory audit now
+  - Show current stock levels across all warehouses
+  - What SKUs are below reorder point?
+  - Generate a demand forecast for next month
+
+# Welcome message
+welcome_message: >
+  Hello! I'm the Inventory Audit team orchestrator. I coordinate five
+  specialised agents — Scanner, Auditor, Forecaster, Reorder Planner,
+  and Reporter — to keep your inventory accurate, well-stocked, and
+  optimally managed across all warehouses.
+
+# System prompt
+system_prompt: >
+  You are the supervisor of an inventory audit team. You coordinate five
+  agents in sequence:
+  1. Inventory Scanner — pulls current levels from all warehouse management systems
+  2. Discrepancy Auditor — compares system vs physical counts, flags discrepancies
+  3. Demand Forecaster — predicts demand by SKU using historical and seasonal data
+  4. Reorder Planner — calculates optimal reorder points and generates PO recommendations
+  5. Audit Report Agent — compiles the final audit report with all findings
+  Escalate critical shortages (stockout within 48h) immediately to human
+  operators. Track shrinkage trends and flag unusual patterns.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null

@@ -1,0 +1,158 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Process Financial Transactions
+# Processes, validates, and reconciles financial transactions across
+# accounts and generates compliance-ready audit reports.
+# Source: UI mock flow id=3 (Agents.tsx)
+
+id: process-financial-transactions
+name: Process Financial Transactions
+description: >
+  Processes and validates financial transactions across accounts. Reconciles
+  balances, detects anomalies, enforces compliance rules, and generates
+  audit-ready transaction reports.
+
+tags:
+  - moderation
+  - finance
+  - transactions
+  - compliance
+  - reconciliation
+
+enabled: false
+
+model: "openai-gpt-4-1"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent
+mcp_servers:
+  - filesystem
+
+# Skills available to this agent
+skills:
+  - pdf
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: credit-card
+emoji: 💳
+color: "#8250df"  # Purple
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Trigger configuration
+trigger:
+  type: event
+  description: Triggered on new transaction batch arrival
+
+# Model configuration
+model_config:
+  temperature: 0.1
+  max_tokens: 4096
+
+# MCP server tool configuration
+mcp_server_tools:
+  - server: Transaction Ledger
+    tools:
+      - name: fetch_transactions
+        approval: auto
+      - name: validate_transaction
+        approval: auto
+      - name: flag_suspicious
+        approval: manual
+      - name: reconcile_balances
+        approval: auto
+  - server: Compliance Engine
+    tools:
+      - name: check_aml_rules
+        approval: auto
+      - name: generate_sar
+        approval: manual
+
+# Guardrails
+guardrails:
+  - name: Financial Data Handler
+    identity_provider: datalayer
+    identity_name: finance-bot@acme.com
+    permissions:
+      read:data: true
+      write:data: true
+      execute:code: true
+      access:internet: false
+      send:email: false
+      deploy:production: false
+    token_limits:
+      per_run: "30K"
+      per_day: "300K"
+      per_month: "3M"
+
+# Evals
+evals:
+  - name: Transaction Accuracy
+    category: coding
+    task_count: 500
+  - name: AML Detection Rate
+    category: safety
+    task_count: 200
+
+# Codemode
+codemode:
+  enabled: true
+  token_reduction: "~85%"
+  speedup: "~1.5× faster"
+
+# Output configuration
+output:
+  type: PDF
+  template: transaction_audit_report.pdf
+
+# Advanced settings
+advanced:
+  cost_limit: "$3.00 per run"
+  time_limit: "600 seconds"
+  max_iterations: 30
+  validation: "All transactions must reconcile to zero net balance"
+
+# Authorization policy
+authorization_policy: ""
+
+# Notifications
+notifications:
+  email: david.t@company.com
+  slack: "#finance-ops"
+
+# Chat suggestions
+suggestions:
+  - Process the latest batch of transactions
+  - Show reconciliation status for today
+  - Flag any suspicious transactions from this week
+  - Generate an AML compliance report
+
+# Welcome message
+welcome_message: >
+  Hello! I'm the Financial Transaction Processor. I validate and reconcile
+  financial transactions, enforce compliance rules, detect suspicious
+  activity, and generate audit-ready reports.
+
+# System prompt
+system_prompt: >
+  You are a financial transaction processing agent. Your responsibilities:
+  - Ingest and validate incoming transaction batches
+  - Reconcile balances across accounts and flag discrepancies
+  - Run AML (Anti-Money Laundering) compliance checks on all transactions
+  - Flag suspicious transactions for human review with evidence
+  - Generate structured audit reports in PDF format
+  - Never approve transactions above threshold limits without manual approval
+  - Use Codemode for all data processing to protect sensitive financial data
+  - Maintain full transaction lineage for regulatory audit trails
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null

@@ -1,0 +1,195 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Sync CRM Contacts
+# Multi-agent team that collects, analyzes, deduplicates, and syncs contact
+# data across CRM systems with supervisor orchestration.
+# Source: UI mock flow id=2 (Agents.tsx, AgentTeam.tsx)
+
+id: sync-crm-contacts
+name: Sync CRM Contacts
+description: >
+  A multi-agent team that collects and aggregates contact data from multiple
+  CRM sources, analyzes and deduplicates records, writes cleaned data back,
+  and generates sync summary reports.
+
+tags:
+  - sales
+  - crm
+  - team
+  - data-sync
+  - deduplication
+
+enabled: true
+
+model: "anthropic-claude-opus-4"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent team
+mcp_servers:
+  - filesystem
+  - slack
+
+# Skills available to this agent team
+skills:
+  - pdf
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: people
+emoji: 🔄
+color: "#0969da"  # Blue
+
+# Team configuration
+team:
+  orchestration_protocol: datalayer
+  execution_mode: sequential
+  supervisor:
+    name: CRM Orchestrator Agent
+    model: "anthropic-claude-opus-4"
+  routing_instructions: >
+    Route data collection tasks to the Data Collector first, then analysis,
+    then sync, then reporting. Escalate to human if sync fails 3 times.
+  validation:
+    timeout: "300s"
+    retry_on_failure: true
+    max_retries: 3
+  agents:
+    - id: tm-1
+      name: Data Collector Agent
+      role: "Primary · Initiator"
+      goal: Collect and aggregate contact data from multiple CRM sources
+      model: "openai-gpt-4-1"
+      mcp_server: Data Processing MCP
+      tools:
+        - API Connector
+        - Data Parser
+      trigger: "Schedule: Daily at 2:00 AM"
+      approval: auto
+    - id: tm-2
+      name: Analyzer Agent
+      role: Secondary
+      goal: Analyze collected data and identify patterns and duplicates
+      model: "anthropic-claude-opus-4"
+      mcp_server: Analytics MCP
+      tools:
+        - Statistical Analysis
+        - ML Predictor
+        - Deduplicator
+      trigger: "On completion of Data Collector"
+      approval: manual
+    - id: tm-3
+      name: Sync Writer Agent
+      role: Secondary
+      goal: Write cleaned and merged contacts back to the CRM systems
+      model: "openai-gpt-4-1"
+      mcp_server: CRM Write MCP
+      tools:
+        - Salesforce Connector
+        - HubSpot Connector
+      trigger: "On completion of Analyzer"
+      approval: manual
+    - id: tm-4
+      name: Report Generator Agent
+      role: Final
+      goal: Generate sync summary reports and send notifications
+      model: "openai-gpt-4-1"
+      mcp_server: Document Generation MCP
+      tools:
+        - PDF Generator
+        - Chart Builder
+        - Email Sender
+      trigger: "On completion of Sync Writer"
+      approval: auto
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Guardrails
+guardrails:
+  - name: GitHub CI Bot
+    identity_provider: github
+    identity_name: ci-bot@acme.com
+    permissions:
+      read:data: true
+      write:data: true
+      execute:code: true
+      access:internet: true
+      send:email: true
+      deploy:production: false
+    token_limits:
+      per_run: "60K"
+      per_day: "600K"
+      per_month: "6M"
+
+# Evals
+evals:
+  - name: Data Quality
+    category: coding
+    task_count: 300
+  - name: Deduplication Accuracy
+    category: reasoning
+    task_count: 150
+
+# Codemode
+codemode:
+  enabled: true
+  token_reduction: "~85%"
+  speedup: "~1.5× faster"
+
+# Advanced settings
+advanced:
+  cost_limit: "$10.00 per run"
+  time_limit: "600 seconds"
+  max_iterations: 100
+  validation: "All CRM records must reconcile after sync"
+
+# Authorization policy
+authorization_policy: ""
+
+# Output configuration
+output:
+  formats:
+    - JSON
+    - PDF
+  template: CRM Sync Report
+  storage: /outputs/crm-sync/
+
+# Notifications
+notifications:
+  email: jennifer.c@company.com
+  slack: "#crm-sync"
+
+# Chat suggestions
+suggestions:
+  - Run a full CRM contact sync now
+  - Show the latest sync report
+  - How many duplicates were found in the last run?
+  - List contacts that failed to sync
+
+# Welcome message
+welcome_message: >
+  Hello! I'm the CRM Contact Sync team orchestrator. I coordinate four
+  specialised agents — Data Collector, Analyzer, Sync Writer, and Report
+  Generator — to keep your CRM contacts clean, deduplicated, and in sync
+  across all platforms.
+
+# System prompt
+system_prompt: >
+  You are the supervisor of a CRM contact synchronization team. You
+  coordinate four agents in sequence:
+  1. Data Collector — pulls contact data from Salesforce, HubSpot, and other CRM sources
+  2. Analyzer — identifies duplicates, patterns, and data quality issues
+  3. Sync Writer — writes cleaned, merged contacts back to all CRM systems
+  4. Report Generator — produces sync summary reports and sends notifications
+  Route tasks sequentially. Escalate to human review if any sync operation
+  fails 3 times. Always confirm merge decisions for contacts with conflicting data.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null

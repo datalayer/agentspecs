@@ -1,0 +1,165 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Monitor Sales KPIs
+# Monitors and analyzes sales KPIs from the CRM system, generates daily
+# reports, identifies trends, and flags anomalies.
+# Source: UI mock flow id=1 (Agents.tsx, AgentFlow.tsx)
+
+id: monitor-sales-kpis
+name: Monitor Sales KPIs
+description: >
+  Monitor and analyze sales KPIs from the CRM system. Generate daily reports
+  summarizing key performance metrics, identify trends, and flag anomalies.
+  Send notifications when KPIs deviate more than 10% from targets.
+
+tags:
+  - support
+  - chatbot
+  - sales
+  - kpi
+  - monitoring
+
+enabled: true
+
+model: "openai-gpt-4-1"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent
+mcp_servers:
+  - filesystem
+
+# Skills available to this agent
+skills:
+  - github
+  - pdf
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: graph
+emoji: 📊
+color: "#2da44e"  # Green — running status
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Trigger configuration
+trigger:
+  type: schedule
+  cron: "0 8 * * *"
+  description: Every day at 8:00 AM UTC
+
+# Model configuration
+model_config:
+  temperature: 0.3
+  max_tokens: 4096
+
+# MCP server tool configuration
+mcp_server_tools:
+  - server: CRM Data Server
+    tools:
+      - name: get_sales_data
+        approval: auto
+      - name: get_customer_list
+        approval: auto
+      - name: update_records
+        approval: manual
+  - server: Analytics Server
+    tools:
+      - name: run_analysis
+        approval: auto
+      - name: generate_charts
+        approval: auto
+
+# Guardrails
+guardrails:
+  - name: Default Platform User
+    identity_provider: datalayer
+    identity_name: alice@acme.com
+    permissions:
+      read:data: true
+      write:data: true
+      execute:code: true
+      access:internet: true
+      send:email: false
+      deploy:production: false
+    token_limits:
+      per_run: "50K"
+      per_day: "500K"
+      per_month: "5M"
+
+# Evals
+evals:
+  - name: SWE-bench
+    category: coding
+    task_count: 2294
+  - name: HumanEval
+    category: coding
+    task_count: 164
+  - name: GPQA Diamond
+    category: reasoning
+    task_count: 448
+  - name: TruthfulQA
+    category: safety
+    task_count: 817
+
+# Codemode
+codemode:
+  enabled: true
+  token_reduction: "~90%"
+  speedup: "~2× faster"
+
+# Output configuration
+output:
+  type: Notebook
+  template: kpi_report_template.ipynb
+
+# Advanced settings
+advanced:
+  cost_limit: "$5.00 per run"
+  time_limit: "300 seconds"
+  max_iterations: 50
+  validation: "Output must contain required KPI fields"
+
+# Authorization policy
+authorization_policy: ""
+
+# Notifications
+notifications:
+  email: marcus.r@company.com
+  slack: "#sales-kpis"
+
+# Chat suggestions
+suggestions:
+  - Show me today's sales KPI dashboard
+  - What are the current revenue trends?
+  - Flag any KPIs that deviate more than 10% from targets
+  - Generate a weekly summary report
+
+# Welcome message
+welcome_message: >
+  Hello! I'm the Sales KPI Monitor. I continuously track your CRM data,
+  generate daily reports on key performance metrics, and alert you when
+  KPIs deviate significantly from targets.
+
+# System prompt
+system_prompt: >
+  You are a sales analytics agent that monitors CRM data and tracks key
+  performance indicators. Your responsibilities:
+  - Fetch sales data from the CRM system daily
+  - Calculate and track KPIs: revenue, conversion rate, pipeline velocity,
+    deal size, and customer acquisition cost
+  - Identify trends and anomalies in the data
+  - Generate structured reports with charts and summaries
+  - Send notifications when any KPI deviates more than 10% from its target
+  - Always provide data-backed insights with specific numbers
+  - Use Codemode for data processing to minimize token usage
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null

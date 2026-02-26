@@ -1,0 +1,190 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Analyze Support Tickets
+# Multi-agent team that triages, categorizes, and analyzes incoming support
+# tickets, identifying patterns and generating resolution recommendations.
+# Source: UI mock flow id=4 (Agents.tsx)
+
+id: analyze-support-tickets
+name: Analyze Support Tickets
+description: >
+  A multi-agent team that triages incoming support tickets, categorizes by
+  urgency and topic, identifies recurring patterns, and generates resolution
+  recommendations with escalation paths.
+
+tags:
+  - analytics
+  - data
+  - support
+  - tickets
+  - team
+
+enabled: true
+
+model: "openai-gpt-4-1"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent team
+mcp_servers:
+  - filesystem
+  - slack
+
+# Skills available to this agent team
+skills:
+  - pdf
+  - crawl
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: issue-opened
+emoji: 🎫
+color: "#bf8700"  # Amber — paused status
+
+# Team configuration
+team:
+  orchestration_protocol: datalayer
+  execution_mode: sequential
+  supervisor:
+    name: Support Orchestrator Agent
+    model: "openai-gpt-4-1"
+  routing_instructions: >
+    Route new tickets to the Triage Agent first, then to the Categorizer,
+    then to the Pattern Analyzer. Escalate P1/critical tickets immediately
+    to human support leads.
+  validation:
+    timeout: "180s"
+    retry_on_failure: true
+    max_retries: 2
+  agents:
+    - id: st-1
+      name: Triage Agent
+      role: "Primary · Initiator"
+      goal: Ingest new support tickets and assess urgency level (P1-P4)
+      model: "openai-gpt-4-1"
+      mcp_server: Helpdesk MCP
+      tools:
+        - Ticket Reader
+        - Priority Classifier
+      trigger: "Event: new ticket received"
+      approval: auto
+    - id: st-2
+      name: Categorizer Agent
+      role: Secondary
+      goal: Categorize tickets by topic, product area, and sentiment
+      model: "openai-gpt-4-1"
+      mcp_server: NLP Pipeline MCP
+      tools:
+        - Topic Classifier
+        - Sentiment Analyzer
+        - Product Tagger
+      trigger: "On completion of Triage Agent"
+      approval: auto
+    - id: st-3
+      name: Pattern Analyzer Agent
+      role: Final
+      goal: Identify recurring issues and generate resolution recommendations
+      model: "anthropic-claude-sonnet-4"
+      mcp_server: Analytics MCP
+      tools:
+        - Pattern Detector
+        - Knowledge Base Search
+        - Resolution Generator
+      trigger: "On completion of Categorizer Agent"
+      approval: manual
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Evals
+evals:
+  - name: Triage Accuracy
+    category: reasoning
+    task_count: 400
+  - name: Pattern Detection
+    category: coding
+    task_count: 200
+
+# Codemode
+codemode:
+  enabled: true
+  token_reduction: "~80%"
+  speedup: "~1.5× faster"
+
+# Advanced settings
+advanced:
+  cost_limit: "$4.00 per run"
+  time_limit: "300 seconds"
+  max_iterations: 40
+  validation: "All tickets must receive a priority classification"
+
+# Authorization policy
+authorization_policy: ""
+
+# Trigger configuration
+trigger:
+  type: schedule
+  cron: "0 */2 * * *"
+  description: Every 2 hours
+
+# Output configuration
+output:
+  formats:
+    - JSON
+    - Dashboard
+  template: Support Ticket Analysis Report
+  storage: /outputs/support-analysis/
+
+# Guardrails
+guardrails:
+  - name: Restricted Viewer
+    identity_provider: datalayer
+    identity_name: support-bot@acme.com
+    permissions:
+      read:data: true
+      write:data: false
+      execute:code: true
+      access:internet: true
+      send:email: false
+      deploy:production: false
+    token_limits:
+      per_run: "40K"
+      per_day: "400K"
+      per_month: "4M"
+
+# Notifications
+notifications:
+  email: patricia.j@company.com
+  slack: "#support-analysis"
+
+# Chat suggestions
+suggestions:
+  - Show me the latest ticket triage summary
+  - What are the top recurring issues this week?
+  - List all P1 tickets from today
+  - Generate a pattern analysis report
+
+# Welcome message
+welcome_message: >
+  Hello! I'm the Support Ticket Analyzer team. We triage incoming tickets,
+  categorize them by urgency and topic, identify recurring patterns, and
+  generate resolution recommendations to help your support team work faster.
+
+# System prompt
+system_prompt: >
+  You are the supervisor of a support ticket analysis team. You coordinate
+  three agents in sequence:
+  1. Triage Agent — assesses urgency (P1-P4) for all incoming tickets
+  2. Categorizer Agent — classifies by topic, product area, and sentiment
+  3. Pattern Analyzer — finds recurring issues and suggests resolutions
+  Escalate P1/critical tickets immediately. Aggregate findings into
+  structured dashboards and reports. Track resolution rate trends over time.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null

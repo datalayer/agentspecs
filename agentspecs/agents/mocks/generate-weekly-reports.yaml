@@ -1,0 +1,165 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Generate Weekly Reports
+# Aggregates data across departments and generates structured weekly
+# reports with charts, KPIs, and executive summaries.
+# Source: UI mock flow id=5 (Agents.tsx)
+
+id: generate-weekly-reports
+name: Generate Weekly Reports
+description: >
+  Aggregates data across marketing, sales, and operations departments.
+  Generates structured weekly reports with charts, KPI summaries, trend
+  analysis, and executive-level takeaways.
+
+tags:
+  - marketing
+  - reports
+  - weekly
+  - analytics
+  - automation
+
+enabled: true
+
+model: "openai-gpt-4-1"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent
+mcp_servers:
+  - filesystem
+  - slack
+
+# Skills available to this agent
+skills:
+  - pdf
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: file
+emoji: 📝
+color: "#cf222e"  # Red — error status in UI
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Trigger configuration
+trigger:
+  type: schedule
+  cron: "0 6 * * 1"
+  description: Every Monday at 6:00 AM UTC
+
+# Model configuration
+model_config:
+  temperature: 0.2
+  max_tokens: 8192
+
+# MCP server tool configuration
+mcp_server_tools:
+  - server: Data Warehouse
+    tools:
+      - name: query_marketing_data
+        approval: auto
+      - name: query_sales_data
+        approval: auto
+      - name: query_operations_data
+        approval: auto
+  - server: Visualization Engine
+    tools:
+      - name: generate_charts
+        approval: auto
+      - name: create_dashboard
+        approval: auto
+  - server: Document Generator
+    tools:
+      - name: compile_report
+        approval: auto
+      - name: send_report
+        approval: manual
+
+# Guardrails
+guardrails:
+  - name: Data Engineering Power User
+    identity_provider: datalayer
+    identity_name: reports-bot@acme.com
+    permissions:
+      read:data: true
+      write:data: true
+      execute:code: true
+      access:internet: true
+      send:email: true
+      deploy:production: false
+    token_limits:
+      per_run: "80K"
+      per_day: "500K"
+      per_month: "5M"
+
+# Evals
+evals:
+  - name: Report Completeness
+    category: coding
+    task_count: 100
+  - name: Data Accuracy
+    category: reasoning
+    task_count: 250
+
+# Codemode
+codemode:
+  enabled: true
+  token_reduction: "~90%"
+  speedup: "~2× faster"
+
+# Output configuration
+output:
+  type: PDF
+  template: weekly_executive_report.pdf
+
+# Advanced settings
+advanced:
+  cost_limit: "$8.00 per run"
+  time_limit: "600 seconds"
+  max_iterations: 60
+  validation: "Report must include all department KPIs and trend charts"
+
+# Authorization policy
+authorization_policy: ""
+
+# Notifications
+notifications:
+  email: robert.w@company.com
+  slack: "#weekly-reports"
+
+# Chat suggestions
+suggestions:
+  - Generate this week's executive report
+  - Show marketing KPIs for the last 7 days
+  - Compare this week's sales to last week
+  - What were the top operational issues this week?
+
+# Welcome message
+welcome_message: >
+  Hello! I'm the Weekly Report Generator. Every Monday I aggregate data from
+  marketing, sales, and operations to produce a structured executive report
+  with charts, KPI summaries, and actionable takeaways.
+
+# System prompt
+system_prompt: >
+  You are a weekly reporting agent that aggregates data across departments.
+  Your responsibilities:
+  - Query marketing, sales, and operations data from the data warehouse
+  - Calculate key performance indicators for each department
+  - Identify week-over-week trends, wins, and areas of concern
+  - Generate visualizations (charts, tables) for each metric
+  - Compile a structured executive report in PDF format
+  - Include an executive summary with the top 3 takeaways
+  - Use Codemode for all data queries and chart generation
+  - Send the final report via email and Slack on Monday morning
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
