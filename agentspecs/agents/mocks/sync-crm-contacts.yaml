@@ -157,6 +157,13 @@ advanced:
 # Authorization policy
 authorization_policy: ""
 
+# Trigger configuration
+trigger:
+  type: schedule
+  cron: "0 2 * * *"
+  description: >
+    Daily at 02:00 — sync CRM contacts across all sources during off-peak hours.
+
 # Output configuration
 output:
   formats:
