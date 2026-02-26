@@ -8,9 +8,9 @@
 id: end-of-month-sales-performance
 name: End of Month Sales Performance
 description: >
-  Consolidates and analyzes end-of-month sales data directly from Salesforce.
-  Computes revenue performance vs targets, detects anomalies in bookings and
-  discounting, explains variances by region/segment/product, and generates
+  Consolidates and analyzes end-of-month retail sales data directly from Salesforce.
+  Computes revenue performance vs targets by SKU, detects anomalies in bookings and
+  discounting, explains variances by region/segment/product/SKU, and generates
   executive-ready sales performance reports with full data lineage.
 
 tags:
@@ -20,14 +20,16 @@ tags:
   - performance
   - crm
   - finance
+  - retail
+  - sku
 
 enabled: true
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-
-  Consolidate, validate, and analyze end-of-month Salesforce sales data.
-  Compute revenue performance vs targets, detect anomalies in bookings and
-  discounting, explain variances by region/segment/product, and generate an
+  Consolidate, validate, and analyze end-of-month Salesforce retail sales data.
+  Compute revenue performance vs targets by SKU, detect anomalies in bookings and
+  discounting, explain variances by region/segment/product/SKU, and generate an
   executive-ready PDF performance report with full data lineage.
 
 model: "openai-gpt-4-1"
@@ -79,6 +81,8 @@ mcp_server_tools:
       - name: fetch_sales_targets
         approval: auto
       - name: compute_kpis
+        approval: auto
+      - name: fetch_sku_performance
         approval: auto
       - name: detect_revenue_anomalies
         approval: auto
@@ -189,6 +193,9 @@ evals:
   - name: Anomaly Detection Precision
     category: reasoning
     task_count: 200
+  - name: SKU-Level Revenue Reconciliation
+    category: coding
+    task_count: 150
 
 # Codemode
 codemode:
@@ -208,7 +215,8 @@ advanced:
   max_iterations: 30
   validation: >
     All reported revenue figures must reconcile with Salesforce closed-won totals
-    for the selected period. Variances vs targets must be computed and explained.
+    for the selected period, including SKU-level breakdowns. Variances vs targets
+    must be computed and explained at both aggregate and per-SKU levels.
     All outputs must include a data lineage section listing objects queried,
     filters applied, and record counts.
 
@@ -224,17 +232,19 @@ notifications:
 suggestions:
   - Generate the latest end-of-month sales performance report
   - Show revenue vs target by region
+  - Show top and bottom performing SKUs this month
   - Explain the top drivers of variance this month
-  - Detect unusual discounting patterns
-  - Compare this month’s performance vs last month
+  - Detect unusual discounting patterns by SKU
+  - Compare this month's performance vs last month
   - Show aggregated performance by sales segment
+  - Break down revenue by SKU category
 
 # Welcome message
 welcome_message: >
   Hello! I'm the End of Month Sales Performance agent. I analyze Salesforce
-  data at month-end, compute KPIs, detect anomalies, explain performance
-  variances, and generate executive-ready sales reports — with strict
-  data governance and traceability.
+  retail data at month-end, compute KPIs down to the SKU level, detect anomalies,
+  explain performance variances, and generate executive-ready sales reports —
+  with strict data governance and traceability.
 
 # System prompt
 system_prompt: >
@@ -242,10 +252,10 @@ system_prompt: >
   exclusively on Salesforce data.
   Your responsibilities:
   - Retrieve closed-won opportunities for the selected month
-  - Aggregate revenue by region, segment, product, and sales representative
-  - Compare actual performance vs targets and pipeline expectations
-  - Detect anomalies in revenue, discount rates, and deal size distribution
-  - Identify top positive and negative drivers of variance
+  - Aggregate revenue by region, segment, product, SKU, and sales representative
+  - Compare actual performance vs targets and pipeline expectations at SKU level
+  - Detect anomalies in revenue, discount rates, deal size distribution, and SKU mix
+  - Identify top and bottom performing SKUs and drivers of variance
   - Generate a structured executive-ready PDF report
   - Include a data lineage section documenting queries and record counts
   - Do not modify Salesforce data
