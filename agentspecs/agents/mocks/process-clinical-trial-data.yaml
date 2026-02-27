@@ -1,0 +1,246 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Process Clinical Trial Data
+# Multi-agent team for Healthcare & Life Sciences industry vertical.
+# Automates clinical trial data harmonisation, adverse event detection,
+# and submission-ready dataset preparation across multi-site trials.
+
+id: process-clinical-trial-data
+name: Process Clinical Trial Data
+description: >
+  A multi-agent team that automates clinical trial data processing across
+  dozens of trial sites. Harmonises patient records and lab results to
+  CDISC SDTM format, detects safety signals and adverse events in real time,
+  and prepares submission-ready datasets — all with strict HIPAA and GxP
+  compliance guardrails.
+
+tags:
+  - healthcare
+  - pharma
+  - clinical-trials
+  - patient-data
+  - compliance
+  - team
+
+enabled: true
+
+model: "anthropic-claude-sonnet-4"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent team
+mcp_servers:
+  - filesystem
+
+# Skills available to this agent team
+skills:
+  - pdf
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: heart
+emoji: 🏥
+color: "#cf222e"  # Red — healthcare & safety
+
+# Team configuration
+team:
+  orchestration_protocol: datalayer
+  execution_mode: sequential
+  supervisor:
+    name: Clinical Data Orchestrator Agent
+    model: "anthropic-claude-sonnet-4"
+  routing_instructions: >
+    Route incoming data through the Ingestion Agent first for format
+    detection and parsing, then to Harmonisation Agent for CDISC SDTM
+    standardisation, then Safety Monitor for adverse event screening,
+    then Submission Preparer for final dataset assembly. Escalate serious
+    adverse events (SAEs) immediately to the medical officer.
+  validation:
+    timeout: "600s"
+    retry_on_failure: true
+    max_retries: 2
+  agents:
+    - id: ct-1
+      name: Data Ingestion Agent
+      role: "Primary · Initiator"
+      goal: Ingest patient records, lab results, and CRFs from clinical sites
+      model: "openai-gpt-4-1"
+      mcp_server: Clinical EDC MCP
+      tools:
+        - Medidata Connector
+        - Veeva Vault Reader
+        - Oracle Clinical Adapter
+        - Format Detector
+      trigger: "Event: new data batch received from site"
+      approval: auto
+    - id: ct-2
+      name: Harmonisation Agent
+      role: Secondary
+      goal: Standardise all data to CDISC SDTM format with MedDRA coding
+      model: "openai-gpt-4-1"
+      mcp_server: Data Standards MCP
+      tools:
+        - SDTM Mapper
+        - MedDRA Coder
+        - Unit Converter
+        - Site Normaliser
+      trigger: "On completion of Data Ingestion Agent"
+      approval: auto
+    - id: ct-3
+      name: Safety Monitor Agent
+      role: Secondary
+      goal: Screen every data point for adverse events and safety signals
+      model: "anthropic-claude-sonnet-4"
+      mcp_server: Safety Database MCP
+      tools:
+        - AE Classifier
+        - Signal Detector
+        - SAE Escalator
+        - Evidence Trail Builder
+      trigger: "On completion of Harmonisation Agent"
+      approval: manual
+    - id: ct-4
+      name: Submission Preparer Agent
+      role: Final
+      goal: Assemble submission-ready SDTM datasets with validation and define.xml
+      model: "openai-gpt-4-1"
+      mcp_server: Submission MCP
+      tools:
+        - Dataset Validator
+        - Define.xml Generator
+        - PDF Report Builder
+        - Compliance Checker
+      trigger: "On completion of Safety Monitor Agent"
+      approval: auto
+
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Process clinical trial data from multiple sites: ingest patient records
+  and lab results, harmonise to CDISC SDTM format with MedDRA coding,
+  screen for adverse events and safety signals in real time, and prepare
+  submission-ready datasets with full validation and audit trails.
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Evals
+evals:
+  - name: SDTM Mapping Accuracy
+    category: coding
+    task_count: 500
+  - name: Adverse Event Detection Rate
+    category: safety
+    task_count: 300
+  - name: Data Quality Score
+    category: reasoning
+    task_count: 200
+
+# Codemode
+codemode:
+  enabled: true
+  token_reduction: "~95%"
+  speedup: "~3× faster"
+
+# Advanced settings
+advanced:
+  cost_limit: "$8.00 per run"
+  time_limit: "900 seconds"
+  max_iterations: 50
+  validation: >
+    All datasets must pass CDISC SDTM validation rules. PHI must never
+    be sent through the LLM — all patient data processed via Codemode only.
+
+# Authorization policy
+authorization_policy: ""
+
+# Trigger configuration
+trigger:
+  type: event
+  description: Triggered on new data batch arrival from clinical sites
+
+# Output configuration
+output:
+  formats:
+    - SDTM Dataset
+    - PDF
+    - Define.xml
+  template: Clinical Trial Data Package
+  storage: /outputs/clinical-trials/
+
+# Guardrails
+guardrails:
+  - name: HIPAA Compliant Clinical Agent
+    identity_provider: datalayer
+    identity_name: clinical-bot@acme.com
+    permissions:
+      read:data: true
+      write:data: false
+      execute:code: true
+      access:internet: false
+      send:email: false
+      deploy:production: false
+    data_scope:
+      denied_fields:
+        - "*SSN*"
+        - "*PatientName*"
+        - "*DateOfBirth*"
+        - "*Address*"
+        - "*Phone*"
+        - "*Email*"
+    data_handling:
+      pii_detection: true
+      pii_action: redact
+      default_aggregation: true
+    approval_policy:
+      require_manual_approval_for:
+        - "Any serious adverse event (SAE) escalation"
+        - "Patient-level data exports"
+        - "Safety signal notifications to regulators"
+      auto_approved:
+        - "Aggregated site-level statistics"
+        - "SDTM dataset transformations"
+    token_limits:
+      per_run: "80K"
+      per_day: "500K"
+      per_month: "5M"
+
+# Notifications
+notifications:
+  email: clinical-ops@company.com
+  slack: "#clinical-data"
+
+# Chat suggestions
+suggestions:
+  - Process the latest data batch from Site 014
+  - Show adverse event summary for this trial
+  - Run SDTM validation on the current dataset
+  - Generate a safety signal report
+  - What sites have data quality issues?
+
+# Welcome message
+welcome_message: >
+  Hello! I'm the Clinical Trial Data team orchestrator. I coordinate four
+  specialised agents — Ingestion, Harmonisation, Safety Monitor, and
+  Submission Preparer — to process multi-site clinical trial data with
+  full HIPAA compliance and regulatory-grade quality.
+
+# System prompt
+system_prompt: >
+  You are the supervisor of a clinical trial data processing team. You
+  coordinate four agents in sequence:
+  1. Data Ingestion Agent — ingests records from clinical sites (Medidata, Veeva, Oracle)
+  2. Harmonisation Agent — standardises to CDISC SDTM with MedDRA coding
+  3. Safety Monitor Agent — screens for adverse events and safety signals
+  4. Submission Preparer Agent — assembles validated submission-ready datasets
+  CRITICAL: PHI must never touch the LLM. All patient data must be processed
+  exclusively via Codemode. Escalate serious adverse events immediately to
+  the medical officer. Maintain full audit trails for regulatory inspection.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null

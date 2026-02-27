@@ -1,0 +1,192 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Optimize Dynamic Pricing
+# Single agent for E-Commerce & Retail industry vertical.
+# Monitors competitor pricing, forecasts demand, and generates margin-optimised
+# pricing recommendations across product catalogs.
+
+id: optimize-dynamic-pricing
+name: Optimize Dynamic Pricing
+description: >
+  Monitors competitor pricing across marketplaces, forecasts demand per SKU,
+  and generates margin-optimised pricing recommendations in real time.
+  Tracks 50K+ SKUs hourly across Amazon, Walmart, and niche channels,
+  combining competitive intelligence with demand signals to maximise margins.
+
+tags:
+  - retail
+  - e-commerce
+  - pricing
+  - analytics
+  - demand-forecasting
+  - margins
+
+enabled: true
+
+model: "openai-gpt-4-1"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent
+mcp_servers:
+  - filesystem
+
+# Skills available to this agent
+skills:
+  - pdf
+  - crawl
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: tag
+emoji: 🏷️
+color: "#bf8700"  # Amber — pricing & commerce
+
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Track competitor pricing across 50K+ SKUs hourly on Amazon, Walmart, and
+  niche marketplaces. Forecast demand per SKU-location pair using historical
+  sales, seasonality, and external signals. Generate margin-optimised pricing
+  recommendations with confidence intervals and projected revenue impact.
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Trigger configuration
+trigger:
+  type: schedule
+  cron: "0 * * * *"
+  description: Hourly competitive price scan and demand forecast update
+
+# Model configuration
+model_config:
+  temperature: 0.1
+  max_tokens: 4096
+
+# MCP server tool configuration
+mcp_server_tools:
+  - server: Marketplace Intelligence MCP
+    tools:
+      - name: scrape_competitor_prices
+        approval: auto
+      - name: fetch_marketplace_listings
+        approval: auto
+      - name: detect_new_products
+        approval: auto
+      - name: compute_price_elasticity
+        approval: auto
+      - name: forecast_demand
+        approval: auto
+      - name: generate_price_recommendations
+        approval: manual
+      - name: apply_price_changes
+        approval: manual
+
+# Guardrails
+guardrails:
+  - name: Pricing Intelligence Analyst
+    identity_provider: datalayer
+    identity_name: pricing-bot@acme.com
+    permissions:
+      read:data: true
+      write:data: false
+      execute:code: true
+      access:internet: true
+      send:email: false
+      deploy:production: false
+    data_handling:
+      pii_detection: false
+    approval_policy:
+      require_manual_approval_for:
+        - "Any price change above 15% from current price"
+        - "Bulk price updates affecting more than 100 SKUs"
+        - "Below-cost pricing recommendations"
+      auto_approved:
+        - "Competitive price monitoring and data collection"
+        - "Demand forecasting and analysis"
+        - "Price recommendations within 15% band"
+    token_limits:
+      per_run: "25K"
+      per_day: "500K"
+      per_month: "10M"
+
+# Evals
+evals:
+  - name: Price Tracking Accuracy
+    category: coding
+    task_count: 500
+  - name: Demand Forecast MAPE
+    category: reasoning
+    task_count: 300
+  - name: Margin Impact
+    category: coding
+    task_count: 200
+
+# Codemode
+codemode:
+  enabled: true
+  token_reduction: "~90%"
+  speedup: "~2× faster"
+
+# Output configuration
+output:
+  formats:
+    - Dashboard
+    - JSON
+    - Spreadsheet
+  template: Dynamic Pricing Report
+  storage: /outputs/dynamic-pricing/
+
+# Advanced settings
+advanced:
+  cost_limit: "$1.50 per run"
+  time_limit: "300 seconds"
+  max_iterations: 20
+  validation: >
+    All recommended prices must maintain minimum margin thresholds.
+    Demand forecasts must include confidence intervals.
+
+# Authorization policy
+authorization_policy: ""
+
+# Notifications
+notifications:
+  email: merchandising@company.com
+  slack: "#pricing-intelligence"
+
+# Chat suggestions
+suggestions:
+  - Show competitor price movements in the last 24 hours
+  - Which SKUs have the highest price elasticity?
+  - Generate pricing recommendations for the electronics category
+  - Forecast demand for top 100 SKUs next week
+  - What's the projected revenue impact of current recommendations?
+
+# Welcome message
+welcome_message: >
+  Hello! I'm the Dynamic Pricing agent. I monitor competitor prices across
+  50K+ SKUs hourly, forecast demand using historical and seasonal patterns,
+  and generate margin-optimised pricing recommendations to keep you
+  competitive while maximising profitability.
+
+# System prompt
+system_prompt: >
+  You are a dynamic pricing intelligence agent for an e-commerce retailer.
+  Your responsibilities:
+  - Monitor competitor pricing across Amazon, Walmart, and niche marketplaces
+  - Track price movements, new product entries, and promotional activity
+  - Forecast demand per SKU-location pair using time series and external signals
+  - Generate margin-optimised pricing recommendations with confidence intervals
+  - Never recommend below-cost pricing without explicit approval
+  - Use Codemode for all data processing to handle large SKU catalogs efficiently
+  - Provide projected revenue impact for every pricing recommendation
+  - Maintain audit trail of all price changes and their rationale
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null

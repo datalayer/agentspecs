@@ -1,0 +1,239 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Analyze Campaign Performance
+# Multi-agent team for Media & Marketing industry vertical.
+# Unifies cross-platform campaign data, detects anomalies,
+# and optimises budget allocation across advertising channels.
+
+id: analyze-campaign-performance
+name: Analyze Campaign Performance
+description: >
+  A multi-agent team that unifies marketing data from Google Ads, Meta,
+  TikTok, LinkedIn, GA4, CRM, and email platforms. Normalises metrics
+  into a unified view, detects performance anomalies in real time, and
+  generates budget reallocation recommendations to maximise ROAS.
+
+tags:
+  - marketing
+  - media
+  - campaigns
+  - analytics
+  - advertising
+  - social-media
+  - team
+
+enabled: true
+
+model: "openai-gpt-4-1"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent team
+mcp_servers:
+  - filesystem
+  - slack
+
+# Skills available to this agent team
+skills:
+  - pdf
+  - crawl
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: megaphone
+emoji: 📢
+color: "#8250df"  # Purple — media & creativity
+
+# Team configuration
+team:
+  orchestration_protocol: datalayer
+  execution_mode: sequential
+  supervisor:
+    name: Campaign Analytics Orchestrator Agent
+    model: "openai-gpt-4-1"
+  routing_instructions: >
+    Start with Platform Connector to pull data from all ad platforms,
+    then Metrics Normaliser for unified KPIs, then Anomaly Detector for
+    real-time performance monitoring, then Budget Optimiser for reallocation
+    recommendations. Escalate CPA spikes above 50% immediately.
+  validation:
+    timeout: "300s"
+    retry_on_failure: true
+    max_retries: 2
+  agents:
+    - id: cp-1
+      name: Platform Connector Agent
+      role: "Primary · Initiator"
+      goal: Pull campaign data from Google Ads, Meta, TikTok, LinkedIn, GA4, and email platforms
+      model: "openai-gpt-4-1"
+      mcp_server: Ad Platforms MCP
+      tools:
+        - Google Ads Connector
+        - Meta Ads Connector
+        - TikTok Ads Connector
+        - LinkedIn Ads Connector
+        - GA4 Connector
+      trigger: "Schedule: Every 4 hours"
+      approval: auto
+    - id: cp-2
+      name: Metrics Normaliser Agent
+      role: Secondary
+      goal: Normalise CPA, ROAS, CTR, and attribution across all platforms into unified view
+      model: "openai-gpt-4-1"
+      mcp_server: Analytics MCP
+      tools:
+        - Metric Unifier
+        - Currency Converter
+        - Attribution Mapper
+        - Naming Convention Resolver
+      trigger: "On completion of Platform Connector Agent"
+      approval: auto
+    - id: cp-3
+      name: Anomaly Detector Agent
+      role: Secondary
+      goal: Monitor all KPIs for CTR drops, CPA spikes, and budget pacing issues
+      model: "anthropic-claude-sonnet-4"
+      mcp_server: Monitoring MCP
+      tools:
+        - Anomaly Scanner
+        - Budget Pacer
+        - Alert Generator
+        - Campaign Pauser
+      trigger: "On completion of Metrics Normaliser Agent"
+      approval: manual
+    - id: cp-4
+      name: Budget Optimiser Agent
+      role: Final
+      goal: Generate budget reallocation recommendations to maximise ROAS across channels
+      model: "openai-gpt-4-1"
+      mcp_server: Optimisation MCP
+      tools:
+        - ROAS Calculator
+        - Budget Allocator
+        - Scenario Modeller
+        - Report Generator
+      trigger: "On completion of Anomaly Detector Agent"
+      approval: manual
+
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Unify marketing data from Google Ads, Meta, TikTok, LinkedIn, GA4, and email
+  platforms. Normalise metrics into a single cross-channel view with unified CPA,
+  ROAS, and CTR definitions. Detect performance anomalies in real time and
+  generate budget reallocation recommendations to maximise ROAS.
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Evals
+evals:
+  - name: Data Ingestion Completeness
+    category: coding
+    task_count: 400
+  - name: Anomaly Detection Precision
+    category: reasoning
+    task_count: 300
+  - name: ROAS Optimisation Impact
+    category: coding
+    task_count: 200
+
+# Codemode
+codemode:
+  enabled: true
+  token_reduction: "~85%"
+  speedup: "~2× faster"
+
+# Advanced settings
+advanced:
+  cost_limit: "$5.00 per run"
+  time_limit: "600 seconds"
+  max_iterations: 40
+  validation: >
+    All metrics must reconcile with platform-reported figures within 2%.
+    Budget recommendations must not exceed total allocated budget.
+
+# Authorization policy
+authorization_policy: ""
+
+# Trigger configuration
+trigger:
+  type: schedule
+  cron: "0 */4 * * *"
+  description: Every 4 hours for cross-platform campaign data sync and analysis
+
+# Output configuration
+output:
+  formats:
+    - Dashboard
+    - PDF
+    - Spreadsheet
+  template: Campaign Performance Report
+  storage: /outputs/campaign-analytics/
+
+# Guardrails
+guardrails:
+  - name: Marketing Analytics Agent
+    identity_provider: google
+    identity_name: marketing-bot@acme.com
+    permissions:
+      read:data: true
+      write:data: false
+      execute:code: true
+      access:internet: true
+      send:email: false
+      deploy:production: false
+    data_handling:
+      pii_detection: true
+      pii_action: redact
+    approval_policy:
+      require_manual_approval_for:
+        - "Pausing campaigns with daily spend above $1,000"
+        - "Budget reallocation above 20% of channel spend"
+        - "Any automated bid adjustments"
+      auto_approved:
+        - "Data collection and metric normalisation"
+        - "Anomaly detection and alerting"
+        - "Report generation"
+    token_limits:
+      per_run: "50K"
+      per_day: "400K"
+      per_month: "5M"
+
+# Notifications
+notifications:
+  email: marketing@company.com
+  slack: "#campaign-analytics"
+
+# Chat suggestions
+suggestions:
+  - Show cross-channel campaign performance for this week
+  - Which campaigns have abnormal CPA trends?
+  - Generate a budget reallocation recommendation
+  - Compare ROAS across Google Ads vs Meta this month
+  - What's the projected impact of shifting 20% budget to TikTok?
+
+# Welcome message
+welcome_message: >
+  Hello! I'm the Campaign Performance Analytics team. We unify data from all
+  your ad platforms, normalise metrics, detect anomalies in real time, and
+  recommend budget reallocations to maximise your ROAS across channels.
+
+# System prompt
+system_prompt: >
+  You are the supervisor of a marketing campaign analytics team. You
+  coordinate four agents in sequence:
+  1. Platform Connector — pulls data from Google Ads, Meta, TikTok, LinkedIn, GA4, email
+  2. Metrics Normaliser — unifies CPA, ROAS, CTR definitions with currency/timezone handling
+  3. Anomaly Detector — monitors KPIs, detects trending issues, alerts on anomalies
+  4. Budget Optimiser — generates data-driven budget reallocation recommendations
+  Escalate CPA spikes above 50% and budget pacing issues immediately.
+  All recommendations must include projected ROAS impact.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null

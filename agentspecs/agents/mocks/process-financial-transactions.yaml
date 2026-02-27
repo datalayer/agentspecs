@@ -20,7 +20,7 @@ tags:
   - compliance
   - reconciliation
 
-enabled: false
+enabled: true
 
 model: "openai-gpt-4-1"
 

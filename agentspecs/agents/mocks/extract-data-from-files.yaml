@@ -1,0 +1,129 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Extract Data from Files
+# Generic horizontal agent that extracts structured data from unstructured
+# files — invoices, receipts, forms, tables in PDFs, spreadsheets.
+
+id: extract-data-from-files
+name: Extract Data from Files
+description: >
+  A generic data extraction agent that processes unstructured files (PDFs,
+  scanned documents, spreadsheets, images with text) and extracts structured
+  data — tables, key-value pairs, line items, totals. Outputs clean JSON or
+  CSV ready for downstream systems. Applicable to invoices, receipts, forms,
+  medical records, legal documents, and more.
+
+tags:
+  - extraction
+  - data
+  - horizontal
+  - automation
+  - documents
+
+enabled: true
+
+model: "openai-gpt-4-1"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent
+mcp_servers:
+  - filesystem
+
+# Skills available to this agent
+skills:
+  - pdf
+  - github
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: database
+emoji: 🗃️
+color: "#bf8700"  # Amber
+
+# Goal / Prompt
+goal: >-
+  Extract structured data from unstructured files. Parse tables, key-value
+  pairs, line items, dates, amounts, and named entities from PDFs, images,
+  spreadsheets, and scanned documents. Output clean JSON and CSV with
+  confidence scores for each extracted field.
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Trigger configuration
+trigger:
+  type: event
+  event: file_uploaded
+  description: Triggered when new files are dropped into the extraction folder
+
+# Model configuration
+model_config:
+  temperature: 0.1
+  max_tokens: 8192
+
+# MCP server tool configuration
+mcp_server_tools:
+  - server: File Processor
+    tools:
+      - name: read_pdf_tables
+        approval: auto
+      - name: ocr_image
+        approval: auto
+      - name: parse_spreadsheet
+        approval: auto
+  - server: Schema Mapper
+    tools:
+      - name: map_to_schema
+        approval: auto
+      - name: validate_output
+        approval: auto
+      - name: write_to_database
+        approval: manual
+
+# Guardrails
+guardrails:
+  - name: Default Platform User
+    identity_provider: datalayer
+    identity_name: extraction-bot@acme.com
+    permissions:
+      read:data: true
+      write:data: true
+      execute:code: true
+      access:internet: false
+      send:email: false
+      deploy:production: false
+    token_limits:
+      per_run: "40K"
+      per_day: "400K"
+      per_month: "4M"
+
+# Evals
+evals:
+  - name: Table Extraction Accuracy
+    category: coding
+    task_count: 450
+  - name: Key-Value Pair Extraction
+    category: coding
+    task_count: 380
+  - name: Schema Mapping Quality
+    category: reasoning
+    task_count: 250
+
+# Notifications
+notifications:
+  slack: "#data-extraction"
+  email: "data-team@acme.com"
+
+# Output configuration
+output:
+  type: JSON
+  formats:
+    - JSON
+    - CSV
+  template: extraction-output-v1
+  storage: s3://acme-extractions/

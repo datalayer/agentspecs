@@ -1,0 +1,192 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Comprehensive Sales Analytics
+# Multi-agent team that upgrades the simple "Monitor Sales KPIs" single agent
+# into a full analytics pipeline with dedicated agents for data collection,
+# anomaly detection, trend analysis, and executive reporting.
+#
+# Tour narrative: This team is the "upgrade" of monitor-sales-kpis.
+# Where monitor-sales-kpis is a single agent doing everything alone,
+# this team has four specialized agents working in concert — each
+# excelling at one specific task — orchestrated by a supervisor.
+
+id: comprehensive-sales-analytics
+name: Comprehensive Sales Analytics
+description: >
+  A multi-agent team that replaces a single KPI monitor with four specialized
+  agents: a Data Collector that pulls real-time CRM metrics, an Anomaly
+  Detector that flags statistical outliers, a Trend Analyzer that identifies
+  patterns and forecasts, and a Report Generator that compiles executive
+  dashboards and sends alerts. Together they deliver deeper insights, faster
+  detection, and richer reporting than any single agent could.
+
+tags:
+  - sales
+  - analytics
+  - team
+  - kpi
+  - monitoring
+  - horizontal
+
+enabled: true
+
+model: "anthropic-claude-opus-4"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent team
+mcp_servers:
+  - filesystem
+  - slack
+
+# Skills available to this agent team
+skills:
+  - pdf
+  - github
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: graph
+emoji: 📈
+color: "#1a7f37"  # Dark green
+
+# Team configuration
+team:
+  orchestration_protocol: datalayer
+  execution_mode: sequential
+  supervisor:
+    name: Sales Analytics Supervisor
+    model: "anthropic-claude-opus-4"
+  routing_instructions: >
+    Route data collection to KPI Collector first, then pass raw metrics to
+    Anomaly Detector and Trend Analyzer in parallel, then aggregate all
+    outputs into the Report Generator. Escalate if anomalies exceed the
+    critical threshold (>25% deviation from target).
+  validation:
+    timeout: "300s"
+    retry_on_failure: true
+    max_retries: 3
+  agents:
+    - id: sa-1
+      name: KPI Data Collector
+      role: "Primary · Initiator"
+      goal: >
+        Pull real-time sales metrics from CRM, ERP, and marketing platforms.
+        Normalize data into a unified schema with timestamps, dimensions
+        (region, product line, rep), and measures (revenue, pipeline, conversion).
+      model: "openai-gpt-4-1"
+      mcp_server: CRM Data Server
+      tools:
+        - get_sales_data
+        - get_customer_list
+        - API Connector
+      trigger: "Schedule: Daily at 7:30 AM"
+      approval: auto
+    - id: sa-2
+      name: Anomaly Detector
+      role: Secondary
+      goal: >
+        Apply statistical anomaly detection (Z-score, IQR, moving average) to
+        the collected KPIs. Flag any metric deviating more than 10% from its
+        rolling 30-day average. Classify anomalies as info, warning, or critical.
+      model: "anthropic-claude-sonnet-4"
+      mcp_server: Analytics Server
+      tools:
+        - run_analysis
+        - Statistical Analysis
+        - ML Predictor
+      trigger: "On completion of KPI Data Collector"
+      approval: auto
+    - id: sa-3
+      name: Trend Analyzer
+      role: Secondary
+      goal: >
+        Identify week-over-week, month-over-month, and quarter-over-quarter
+        trends. Generate 30-day forecasts for each KPI using time-series
+        models. Highlight the top 3 improving and top 3 declining metrics.
+      model: "anthropic-claude-sonnet-4"
+      mcp_server: Analytics Server
+      tools:
+        - run_analysis
+        - generate_charts
+        - Forecaster
+      trigger: "On completion of KPI Data Collector"
+      approval: auto
+    - id: sa-4
+      name: Executive Report Generator
+      role: Final
+      goal: >
+        Compile all insights — raw KPIs, anomalies, trends, and forecasts —
+        into a polished executive dashboard with charts, tables, and narrative
+        commentary. Send the report via Slack and email. Highlight critical
+        anomalies with a red-flag summary at the top.
+      model: "openai-gpt-4-1"
+      mcp_server: Document Generation MCP
+      tools:
+        - PDF Generator
+        - Chart Builder
+        - Email Sender
+        - Slack Notifier
+      trigger: "On completion of Anomaly Detector & Trend Analyzer"
+      approval: manual
+
+# Goal / Prompt
+goal: >-
+  Run a comprehensive daily sales analytics pipeline: collect KPIs from CRM
+  and ERP, detect anomalies and classify severity, analyze trends and produce
+  30-day forecasts, then compile everything into an executive dashboard sent
+  via Slack and email. Flag critical deviations for immediate human review.
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Evals
+evals:
+  - name: KPI Accuracy
+    category: coding
+    task_count: 500
+  - name: Anomaly Detection Precision
+    category: reasoning
+    task_count: 350
+  - name: Trend Forecast Accuracy
+    category: reasoning
+    task_count: 300
+  - name: Report Quality
+    category: reasoning
+    task_count: 200
+
+# Guardrails
+guardrails:
+  - name: Sales Analytics Team
+    identity_provider: datalayer
+    identity_name: sales-analytics@acme.com
+    permissions:
+      read:data: true
+      write:data: true
+      execute:code: true
+      access:internet: true
+      send:email: true
+      deploy:production: false
+    token_limits:
+      per_run: "100K"
+      per_day: "1M"
+      per_month: "10M"
+
+# Notifications
+notifications:
+  slack: "#sales-analytics"
+  email: "leadership@acme.com"
+
+# Output configuration
+output:
+  type: PDF
+  formats:
+    - PDF
+    - Dashboard
+    - JSON
+  template: executive-sales-dashboard-v2
+  storage: s3://acme-sales-reports/

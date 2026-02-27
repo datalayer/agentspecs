@@ -1,0 +1,237 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Optimize Grid Operations
+# Multi-agent team for Energy & Utilities industry vertical.
+# Ingests IoT sensor data, predicts equipment failures, and optimises
+# grid load balancing across renewable and conventional sources.
+
+id: optimize-grid-operations
+name: Optimize Grid Operations
+description: >
+  A multi-agent team that processes millions of IoT sensor data points
+  from smart meters, substations, and renewable generation assets.
+  Predicts equipment failures 2–4 weeks in advance, optimises load
+  balancing across the grid, and reduces unplanned downtime by 50%.
+
+tags:
+  - energy
+  - utilities
+  - smart-grid
+  - iot
+  - predictive-maintenance
+  - sustainability
+  - team
+
+enabled: true
+
+model: "openai-gpt-4-1"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent team
+mcp_servers:
+  - filesystem
+
+# Skills available to this agent team
+skills:
+  - pdf
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: zap
+emoji: ⚡
+color: "#1a7f37"  # Green — energy & sustainability
+
+# Team configuration
+team:
+  orchestration_protocol: datalayer
+  execution_mode: sequential
+  supervisor:
+    name: Grid Operations Orchestrator Agent
+    model: "openai-gpt-4-1"
+  routing_instructions: >
+    Start with Sensor Ingestion to process real-time telemetry, then
+    Anomaly Detector for pattern identification, then Failure Predictor
+    for maintenance forecasting, then Grid Balancer for load optimisation.
+    Escalate critical failure predictions (< 48h) immediately to
+    operations dispatch.
+  validation:
+    timeout: "600s"
+    retry_on_failure: true
+    max_retries: 3
+  agents:
+    - id: grid-1
+      name: Sensor Ingestion Agent
+      role: "Primary · Initiator"
+      goal: Ingest and process real-time telemetry from SCADA, smart meters, and IoT gateways
+      model: "openai-gpt-4-1"
+      mcp_server: SCADA MCP
+      tools:
+        - SCADA Connector
+        - Smart Meter Reader
+        - IoT Gateway Adapter
+        - Time Series Processor
+      trigger: "Schedule: Every 5 minutes"
+      approval: auto
+    - id: grid-2
+      name: Anomaly Detector Agent
+      role: Secondary
+      goal: Detect vibration, temperature, and voltage anomalies across all grid assets
+      model: "openai-gpt-4-1"
+      mcp_server: Monitoring MCP
+      tools:
+        - Vibration Analyzer
+        - Temperature Anomaly Detector
+        - Voltage Pattern Scanner
+        - Historical Comparator
+      trigger: "On completion of Sensor Ingestion Agent"
+      approval: auto
+    - id: grid-3
+      name: Failure Predictor Agent
+      role: Secondary
+      goal: Predict equipment failures 2–4 weeks in advance using anomaly patterns and failure history
+      model: "anthropic-claude-sonnet-4"
+      mcp_server: Predictive Analytics MCP
+      tools:
+        - Failure Correlation Engine
+        - Risk Scorer
+        - Maintenance Scheduler
+        - Work Order Generator
+      trigger: "On completion of Anomaly Detector Agent"
+      approval: manual
+    - id: grid-4
+      name: Grid Balancer Agent
+      role: Final
+      goal: Optimise real-time load balancing across renewable and conventional generation sources
+      model: "openai-gpt-4-1"
+      mcp_server: Grid Control MCP
+      tools:
+        - Load Forecaster
+        - Renewable Integration Model
+        - Dispatch Optimiser
+        - Grid Stability Checker
+      trigger: "On completion of Failure Predictor Agent"
+      approval: auto
+
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Process millions of IoT sensor data points from SCADA systems, smart meters,
+  and renewable assets. Detect equipment anomalies in real time, predict
+  failures 2–4 weeks in advance, and optimise grid load balancing across
+  renewable and conventional sources to reduce unplanned downtime by 50%.
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Evals
+evals:
+  - name: Anomaly Detection Accuracy
+    category: coding
+    task_count: 600
+  - name: Failure Prediction Lead Time
+    category: reasoning
+    task_count: 300
+  - name: Grid Stability Score
+    category: coding
+    task_count: 200
+
+# Codemode
+codemode:
+  enabled: true
+  token_reduction: "~95%"
+  speedup: "~3× faster"
+
+# Advanced settings
+advanced:
+  cost_limit: "$6.00 per run"
+  time_limit: "600 seconds"
+  max_iterations: 40
+  validation: >
+    All sensor readings must be validated against equipment specifications.
+    Failure predictions must include confidence intervals and risk scores.
+
+# Authorization policy
+authorization_policy: ""
+
+# Trigger configuration
+trigger:
+  type: schedule
+  cron: "*/5 * * * *"
+  description: Every 5 minutes for real-time grid monitoring and optimization
+
+# Output configuration
+output:
+  formats:
+    - Dashboard
+    - PDF
+    - JSON
+  template: Grid Operations Report
+  storage: /outputs/grid-operations/
+
+# Guardrails
+guardrails:
+  - name: Grid Operations Agent
+    identity_provider: datalayer
+    identity_name: grid-bot@acme.com
+    permissions:
+      read:data: true
+      write:data: false
+      execute:code: true
+      access:internet: false
+      send:email: true
+      deploy:production: false
+    data_handling:
+      pii_detection: false
+    approval_policy:
+      require_manual_approval_for:
+        - "Emergency load shedding recommendations"
+        - "Equipment shutdown orders"
+        - "Maintenance work orders above $50K"
+      auto_approved:
+        - "Sensor data ingestion and processing"
+        - "Anomaly detection and alerting"
+        - "Load balancing recommendations"
+    token_limits:
+      per_run: "60K"
+      per_day: "1M"
+      per_month: "15M"
+
+# Notifications
+notifications:
+  email: grid-ops@company.com
+  slack: "#grid-operations"
+
+# Chat suggestions
+suggestions:
+  - Show current grid health across all substations
+  - Which assets have anomaly alerts right now?
+  - Predict failures for the next 4 weeks
+  - Optimise load balancing for tomorrow's forecast
+  - Generate a maintenance schedule for flagged assets
+
+# Welcome message
+welcome_message: >
+  Hello! I'm the Grid Operations team orchestrator. I coordinate four
+  agents — Sensor Ingestion, Anomaly Detector, Failure Predictor, and
+  Grid Balancer — to keep your grid running efficiently with predictive
+  maintenance and intelligent load optimisation.
+
+# System prompt
+system_prompt: >
+  You are the supervisor of a grid operations team for an energy utility.
+  You coordinate four agents in sequence:
+  1. Sensor Ingestion Agent — processes real-time telemetry from SCADA and IoT
+  2. Anomaly Detector Agent — identifies vibration, temperature, and voltage anomalies
+  3. Failure Predictor Agent — forecasts equipment failures with confidence intervals
+  4. Grid Balancer Agent — optimises load across renewable and conventional sources
+  Escalate imminent failure predictions (< 48h) and grid instability alerts
+  immediately to operations dispatch. Use Codemode for all sensor data processing.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null

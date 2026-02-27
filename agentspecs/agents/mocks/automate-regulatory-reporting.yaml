@@ -1,0 +1,249 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Automate Regulatory Reporting
+# Multi-agent team for Financial Services industry vertical.
+# Automates compliance reporting, risk monitoring, and regulatory filings
+# across Basel III/IV, MiFID II, SOX, and AML/KYC requirements.
+
+id: automate-regulatory-reporting
+name: Automate Regulatory Reporting
+description: >
+  A multi-agent team that automates end-to-end regulatory reporting for
+  financial institutions. Ingests data from trading systems, risk engines,
+  and accounting platforms, reconciles positions, computes risk metrics,
+  validates against regulatory rules (Basel III/IV, MiFID II, SOX),
+  and generates submission-ready compliance reports with full audit trails.
+
+tags:
+  - finance
+  - compliance
+  - regulatory
+  - risk
+  - banking
+  - audit
+  - team
+
+enabled: true
+
+model: "openai-gpt-4-1"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent team
+mcp_servers:
+  - filesystem
+  - slack
+
+# Skills available to this agent team
+skills:
+  - pdf
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: shield-check
+emoji: 🏦
+color: "#0969da"  # Blue — compliance & trust
+
+# Team configuration
+team:
+  orchestration_protocol: datalayer
+  execution_mode: sequential
+  supervisor:
+    name: Compliance Orchestrator Agent
+    model: "openai-gpt-4-1"
+  routing_instructions: >
+    Start with Data Ingestion to pull positions and transactions, then
+    Risk Calculator for metric computation, then Reconciliation Agent to
+    cross-check figures, then Validation Agent for regulatory rule checks,
+    then Report Generator for submission-ready output. Escalate any
+    reconciliation breaks above $10K immediately to the compliance team.
+  validation:
+    timeout: "900s"
+    retry_on_failure: true
+    max_retries: 2
+  agents:
+    - id: reg-1
+      name: Data Ingestion Agent
+      role: "Primary · Initiator"
+      goal: Extract positions, transactions, and P&L from trading and accounting systems
+      model: "openai-gpt-4-1"
+      mcp_server: Trading Systems MCP
+      tools:
+        - Position Reader
+        - Transaction Fetcher
+        - P&L Extractor
+      trigger: "Schedule: Monthly on the 3rd business day"
+      approval: auto
+    - id: reg-2
+      name: Risk Calculator Agent
+      role: Secondary
+      goal: Compute Basel III/IV risk-weighted assets, capital ratios, and VaR metrics
+      model: "anthropic-claude-sonnet-4"
+      mcp_server: Risk Engine MCP
+      tools:
+        - RWA Calculator
+        - VaR Engine
+        - Capital Ratio Computer
+        - Stress Test Runner
+      trigger: "On completion of Data Ingestion Agent"
+      approval: auto
+    - id: reg-3
+      name: Reconciliation Agent
+      role: Secondary
+      goal: Cross-check computed figures against source systems and flag discrepancies
+      model: "openai-gpt-4-1"
+      mcp_server: Reconciliation MCP
+      tools:
+        - Position Reconciler
+        - Break Detector
+        - Audit Logger
+      trigger: "On completion of Risk Calculator Agent"
+      approval: auto
+    - id: reg-4
+      name: Validation Agent
+      role: Secondary
+      goal: Validate all metrics against Basel III/IV, MiFID II, and SOX regulatory rules
+      model: "openai-gpt-4-1"
+      mcp_server: Compliance Rules MCP
+      tools:
+        - Basel Rule Validator
+        - MiFID II Checker
+        - SOX Control Verifier
+      trigger: "On completion of Reconciliation Agent"
+      approval: manual
+    - id: reg-5
+      name: Report Generator Agent
+      role: Final
+      goal: Generate submission-ready regulatory reports with full data lineage and audit trail
+      model: "openai-gpt-4-1"
+      mcp_server: Document Generation MCP
+      tools:
+        - PDF Generator
+        - XBRL Formatter
+        - Email Sender
+      trigger: "On completion of Validation Agent"
+      approval: auto
+
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Automate end-to-end regulatory reporting: ingest data from trading and
+  accounting systems, compute risk-weighted assets and capital ratios,
+  reconcile positions, validate against Basel III/IV, MiFID II, and SOX rules,
+  and generate submission-ready compliance reports with full audit trails.
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Evals
+evals:
+  - name: Risk Metric Accuracy
+    category: coding
+    task_count: 500
+  - name: Regulatory Rule Compliance
+    category: reasoning
+    task_count: 300
+  - name: Reconciliation Break Detection
+    category: coding
+    task_count: 200
+
+# Codemode
+codemode:
+  enabled: true
+  token_reduction: "~90%"
+  speedup: "~2× faster"
+
+# Advanced settings
+advanced:
+  cost_limit: "$15.00 per run"
+  time_limit: "1200 seconds"
+  max_iterations: 60
+  validation: >
+    All risk metrics must reconcile with source system totals within 0.01%
+    tolerance. Capital ratios must pass Basel III/IV threshold checks.
+
+# Authorization policy
+authorization_policy: ""
+
+# Trigger configuration
+trigger:
+  type: schedule
+  cron: "0 6 3 * *"
+  description: Monthly on the 3rd at 06:00 for regulatory reporting deadlines
+
+# Output configuration
+output:
+  formats:
+    - PDF
+    - XBRL
+  template: Regulatory Compliance Report
+  storage: /outputs/regulatory-reporting/
+
+# Guardrails
+guardrails:
+  - name: Compliance Data Handler
+    identity_provider: datalayer
+    identity_name: compliance-bot@acme.com
+    permissions:
+      read:data: true
+      write:data: false
+      execute:code: true
+      access:internet: false
+      send:email: false
+      deploy:production: false
+    data_scope:
+      allowed_systems:
+        - trading-platform
+        - risk-engine
+        - accounting-ledger
+      denied_fields:
+        - "*SSN*"
+        - "*TaxId*"
+        - "*Password*"
+    data_handling:
+      pii_detection: true
+      pii_action: redact
+    token_limits:
+      per_run: "120K"
+      per_day: "600K"
+      per_month: "6M"
+
+# Notifications
+notifications:
+  email: compliance@company.com
+  slack: "#regulatory-reporting"
+
+# Chat suggestions
+suggestions:
+  - Generate the monthly Basel III capital adequacy report
+  - Show current risk-weighted asset breakdown
+  - Run a reconciliation check on trading positions
+  - Validate latest figures against MiFID II rules
+  - What capital ratios are at risk of breaching thresholds?
+
+# Welcome message
+welcome_message: >
+  Hello! I'm the Regulatory Reporting team orchestrator. I coordinate five
+  agents — Data Ingestion, Risk Calculator, Reconciliation, Validation,
+  and Report Generator — to produce submission-ready regulatory reports
+  with full audit trails and compliance validation.
+
+# System prompt
+system_prompt: >
+  You are the supervisor of a regulatory reporting team for a financial
+  institution. You coordinate five agents in sequence:
+  1. Data Ingestion Agent — extracts positions, transactions, and P&L data
+  2. Risk Calculator Agent — computes Basel III/IV RWA, capital ratios, VaR
+  3. Reconciliation Agent — cross-checks figures and flags discrepancies
+  4. Validation Agent — validates against regulatory rules (Basel, MiFID, SOX)
+  5. Report Generator — produces submission-ready PDF and XBRL reports
+  Escalate reconciliation breaks above $10K and any regulatory threshold
+  breaches immediately. All outputs must include full data lineage.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null

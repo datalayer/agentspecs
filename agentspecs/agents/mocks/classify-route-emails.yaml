@@ -1,0 +1,126 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Classify & Route Emails
+# Generic horizontal agent that classifies incoming emails by intent,
+# priority, and department, then routes them to the correct queue.
+
+id: classify-route-emails
+name: Classify & Route Emails
+description: >
+  A generic email classification and routing agent. Analyzes incoming emails
+  to determine intent (inquiry, complaint, order, support request), assigns
+  priority (critical, high, medium, low), and routes to the appropriate
+  department queue. Works across any industry with email-based workflows.
+
+tags:
+  - email
+  - classification
+  - routing
+  - horizontal
+  - automation
+
+enabled: true
+
+model: "openai-gpt-4-1"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent
+mcp_servers:
+  - slack
+
+# Skills available to this agent
+skills:
+  - github
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: mail
+emoji: 📬
+color: "#0969da"  # Blue
+
+# Goal / Prompt
+goal: >-
+  Classify incoming emails by intent (inquiry, complaint, order, support),
+  assign priority (critical/high/medium/low), extract key entities (sender,
+  subject, account ID, product), and route to the correct department queue.
+  Flag urgent items for immediate human review.
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Trigger configuration
+trigger:
+  type: event
+  event: email_received
+  description: Triggered on each incoming email via webhook
+
+# Model configuration
+model_config:
+  temperature: 0.1
+  max_tokens: 2048
+
+# MCP server tool configuration
+mcp_server_tools:
+  - server: Email Gateway
+    tools:
+      - name: fetch_email
+        approval: auto
+      - name: parse_headers
+        approval: auto
+      - name: extract_attachments
+        approval: auto
+  - server: Routing Engine
+    tools:
+      - name: assign_queue
+        approval: auto
+      - name: set_priority
+        approval: auto
+      - name: escalate_to_human
+        approval: manual
+
+# Guardrails
+guardrails:
+  - name: Default Platform User
+    identity_provider: datalayer
+    identity_name: email-router@acme.com
+    permissions:
+      read:data: true
+      write:data: true
+      execute:code: false
+      access:internet: true
+      send:email: false
+      deploy:production: false
+    token_limits:
+      per_run: "10K"
+      per_day: "500K"
+      per_month: "5M"
+
+# Evals
+evals:
+  - name: Classification Accuracy
+    category: reasoning
+    task_count: 500
+  - name: Priority Detection
+    category: reasoning
+    task_count: 300
+  - name: Entity Extraction
+    category: coding
+    task_count: 400
+
+# Notifications
+notifications:
+  slack: "#email-routing"
+  email: "ops@acme.com"
+
+# Output configuration
+output:
+  type: JSON
+  formats:
+    - JSON
+  template: email-classification-v1
+  storage: s3://acme-email-logs/

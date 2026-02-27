@@ -1,0 +1,247 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Process Citizen Requests
+# Multi-agent team for Public Sector & Government industry vertical.
+# Automates citizen request intake, classification, policy impact
+# analysis, and transparent decision documentation.
+
+id: process-citizen-requests
+name: Process Citizen Requests
+description: >
+  A multi-agent team that automates citizen request processing for
+  government agencies. Classifies and triages permits, FOIA requests,
+  and benefit claims from multiple channels. Models policy impacts
+  across population datasets and ensures every automated decision
+  is explainable, auditable, and compliant with transparency mandates.
+
+tags:
+  - government
+  - public-sector
+  - civic
+  - policy
+  - compliance
+  - transparency
+  - team
+
+enabled: true
+
+model: "openai-gpt-4-1"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent team
+mcp_servers:
+  - filesystem
+
+# Skills available to this agent team
+skills:
+  - pdf
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: organization
+emoji: 🏛️
+color: "#0550ae"  # Dark blue — government & civic
+
+# Team configuration
+team:
+  orchestration_protocol: datalayer
+  execution_mode: sequential
+  supervisor:
+    name: Citizen Services Orchestrator Agent
+    model: "openai-gpt-4-1"
+  routing_instructions: >
+    Route incoming citizen requests to the Intake Agent for classification
+    and triage, then to the Case Processor for handling and routing, then
+    to the Policy Analyst for impact assessment on relevant items, then
+    to the Transparency Agent for audit trail and public documentation.
+    Escalate urgent citizen safety issues immediately to supervisors.
+  validation:
+    timeout: "300s"
+    retry_on_failure: true
+    max_retries: 2
+  agents:
+    - id: cit-1
+      name: Intake & Classification Agent
+      role: "Primary · Initiator"
+      goal: Classify, triage, and route citizen submissions from web portals, email, and documents
+      model: "openai-gpt-4-1"
+      mcp_server: Citizen Portal MCP
+      tools:
+        - Request Classifier
+        - Urgency Assessor
+        - Jurisdiction Router
+        - OCR Scanner
+      trigger: "Event: new citizen request received"
+      approval: auto
+    - id: cit-2
+      name: Case Processor Agent
+      role: Secondary
+      goal: Process and route requests to appropriate departments with required documentation
+      model: "openai-gpt-4-1"
+      mcp_server: Case Management MCP
+      tools:
+        - Case Creator
+        - Document Assembler
+        - Department Router
+        - Status Tracker
+      trigger: "On completion of Intake Agent"
+      approval: auto
+    - id: cit-3
+      name: Policy Impact Analyst Agent
+      role: Secondary
+      goal: Model policy outcomes across population datasets with scenario simulation
+      model: "anthropic-claude-sonnet-4"
+      mcp_server: Policy Analytics MCP
+      tools:
+        - Monte Carlo Simulator
+        - Demographic Analyzer
+        - Budget Impact Model
+        - Scenario Comparator
+      trigger: "On completion of Case Processor Agent"
+      approval: manual
+    - id: cit-4
+      name: Transparency & Audit Agent
+      role: Final
+      goal: Generate explainable decision documentation with full audit trail for public record
+      model: "openai-gpt-4-1"
+      mcp_server: Compliance MCP
+      tools:
+        - Decision Explainer
+        - Audit Trail Builder
+        - FOIA Compliance Checker
+        - Public Record Generator
+      trigger: "On completion of Policy Impact Analyst Agent"
+      approval: auto
+
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Process citizen requests from web portals, email, and scanned documents.
+  Classify by type, urgency, and jurisdiction, route to appropriate departments,
+  model policy impacts across population datasets with Monte Carlo simulation,
+  and generate explainable, auditable decision documentation for public record.
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Evals
+evals:
+  - name: Classification Accuracy
+    category: reasoning
+    task_count: 500
+  - name: Processing Time Reduction
+    category: coding
+    task_count: 300
+  - name: Transparency Compliance Score
+    category: safety
+    task_count: 200
+
+# Codemode
+codemode:
+  enabled: true
+  token_reduction: "~85%"
+  speedup: "~2× faster"
+
+# Advanced settings
+advanced:
+  cost_limit: "$4.00 per run"
+  time_limit: "300 seconds"
+  max_iterations: 30
+  validation: >
+    All automated decisions must include human-readable explanations.
+    Every action must be logged with timestamps for FOIA compliance.
+
+# Authorization policy
+authorization_policy: ""
+
+# Trigger configuration
+trigger:
+  type: event
+  description: Triggered on new citizen request submission from any channel
+
+# Output configuration
+output:
+  formats:
+    - PDF
+    - JSON
+    - Dashboard
+  template: Citizen Services Report
+  storage: /outputs/citizen-requests/
+
+# Guardrails
+guardrails:
+  - name: Government Services Agent
+    identity_provider: datalayer
+    identity_name: civic-bot@agency.gov
+    permissions:
+      read:data: true
+      write:data: true
+      execute:code: true
+      access:internet: false
+      send:email: true
+      deploy:production: false
+    data_scope:
+      denied_fields:
+        - "*SSN*"
+        - "*TaxId*"
+        - "*BankAccount*"
+        - "*CreditCard*"
+    data_handling:
+      pii_detection: true
+      pii_action: redact
+      default_aggregation: true
+    approval_policy:
+      require_manual_approval_for:
+        - "Benefit denial decisions"
+        - "Policy recommendations affecting more than 1,000 citizens"
+        - "Any FOIA response containing redacted content"
+        - "Escalations to elected officials"
+      auto_approved:
+        - "Request classification and triage"
+        - "Standard permit processing"
+        - "Aggregated statistics and reporting"
+    token_limits:
+      per_run: "40K"
+      per_day: "400K"
+      per_month: "5M"
+
+# Notifications
+notifications:
+  email: citizen-services@agency.gov
+  slack: "#citizen-services"
+
+# Chat suggestions
+suggestions:
+  - Show today's citizen request intake summary
+  - What's the current processing backlog by type?
+  - Run a policy impact simulation for the proposed zoning change
+  - Generate a transparency report for this quarter
+  - Which requests are overdue for response?
+
+# Welcome message
+welcome_message: >
+  Hello! I'm the Citizen Services team orchestrator. I coordinate four
+  agents — Intake, Case Processor, Policy Analyst, and Transparency Agent —
+  to process citizen requests 5× faster while ensuring every decision is
+  explainable, auditable, and compliant with transparency mandates.
+
+# System prompt
+system_prompt: >
+  You are the supervisor of a citizen services processing team for a
+  government agency. You coordinate four agents in sequence:
+  1. Intake & Classification Agent — classifies and triages citizen requests
+  2. Case Processor Agent — routes and tracks cases with documentation
+  3. Policy Impact Analyst Agent — models outcomes with Monte Carlo simulation
+  4. Transparency & Audit Agent — generates explainable, FOIA-compliant records
+  CRITICAL: Every automated decision must be explainable and auditable.
+  PII must be handled per government data handling standards.
+  Escalate citizen safety concerns immediately to human supervisors.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null

@@ -1,0 +1,125 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Summarize Documents
+# Generic horizontal agent that summarizes any document type — PDFs, reports,
+# contracts, research papers — producing structured executive summaries.
+
+id: summarize-documents
+name: Summarize Documents
+description: >
+  A generic document summarization agent that processes PDFs, Word files,
+  Markdown, and plain text. Produces structured executive summaries with
+  key findings, action items, and metadata extraction. Useful across every
+  industry vertical — from legal contracts to research papers.
+
+tags:
+  - documents
+  - summarization
+  - horizontal
+  - automation
+  - productivity
+
+enabled: true
+
+model: "anthropic-claude-sonnet-4"
+
+sandbox_variant: jupyter
+
+# MCP servers used by this agent
+mcp_servers:
+  - filesystem
+
+# Skills available to this agent
+skills:
+  - pdf
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: file
+emoji: 📄
+color: "#8250df"  # Purple
+
+# Goal / Prompt
+goal: >-
+  Summarize uploaded documents (PDFs, Word, Markdown, text) into structured
+  executive summaries. Extract key findings, decisions, action items, dates,
+  and named entities. Output a concise summary (max 500 words) plus metadata
+  in JSON format.
+
+# Protocols & UI Extensions
+protocol: ag-ui
+ui_extension: a2ui
+
+# Trigger configuration
+trigger:
+  type: event
+  event: document_uploaded
+  description: Triggered when a new document is uploaded to the workspace
+
+# Model configuration
+model_config:
+  temperature: 0.2
+  max_tokens: 4096
+
+# MCP server tool configuration
+mcp_server_tools:
+  - server: Document Reader
+    tools:
+      - name: read_pdf
+        approval: auto
+      - name: read_docx
+        approval: auto
+      - name: extract_text
+        approval: auto
+  - server: Output Writer
+    tools:
+      - name: write_summary
+        approval: auto
+      - name: store_metadata
+        approval: auto
+
+# Guardrails
+guardrails:
+  - name: Default Platform User
+    identity_provider: datalayer
+    identity_name: doc-agent@acme.com
+    permissions:
+      read:data: true
+      write:data: true
+      execute:code: true
+      access:internet: false
+      send:email: false
+      deploy:production: false
+    token_limits:
+      per_run: "30K"
+      per_day: "300K"
+      per_month: "3M"
+
+# Evals
+evals:
+  - name: Summarization Accuracy
+    category: reasoning
+    task_count: 350
+  - name: Key Finding Extraction
+    category: reasoning
+    task_count: 280
+  - name: Action Item Detection
+    category: coding
+    task_count: 200
+
+# Notifications
+notifications:
+  slack: "#document-summaries"
+  email: "team@acme.com"
+
+# Output configuration
+output:
+  type: Markdown
+  formats:
+    - Markdown
+    - JSON
+  template: executive-summary-v1
+  storage: s3://acme-summaries/
