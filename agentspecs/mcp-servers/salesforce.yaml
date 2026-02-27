@@ -1,0 +1,33 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# MCP Server Specification: Salesforce
+# Provides Salesforce CRM operations (queries, reports, objects, SOQL)
+
+id: salesforce
+name: Salesforce
+description: Salesforce CRM operations (queries, reports, objects, SOQL)
+
+command: npx
+args:
+  - "-y"
+  - "@anthropic/salesforce-mcp-server"
+
+transport: stdio
+enabled: true
+
+env:
+  SALESFORCE_ACCESS_TOKEN: "${SALESFORCE_ACCESS_TOKEN}"
+  SALESFORCE_INSTANCE_URL: "${SALESFORCE_INSTANCE_URL}"
+
+envvars:
+  - SALESFORCE_ACCESS_TOKEN
+  - SALESFORCE_INSTANCE_URL
+
+tags:
+  - crm
+  - sales
+  - analytics
+
+icon: briefcase
+emoji: ☁️
