@@ -1,0 +1,122 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Memory Specification: SimpleMem
+# Efficient lifelong memory for LLM agents based on
+# https://github.com/aiming-lab/SimpleMem.
+# Uses semantic lossless compression for compact, high-quality memory
+# with intent-aware retrieval planning.
+
+id: simplemem
+name: SimpleMem Lifelong Memory
+description: >
+  Efficient lifelong memory framework based on semantic lossless compression.
+  Maximizes information density and token utilization through a three-stage
+  pipeline: Semantic Structured Compression, Online Semantic Synthesis, and
+  Intent-Aware Retrieval Planning. Achieves 43.24% F1 score on LoCoMo
+  (26.4% above Mem0) with 30x fewer tokens than full-context methods.
+  Supports cross-session memory with 64% improvement over Claude-Mem.
+
+# Memory lifecycle
+persistence: cross-session # none | session | cross-session | permanent
+scope: agent               # agent | team | repository | user | global
+
+# Storage backend
+backend: lancedb           # in-memory | sqlite | lancedb | postgres | redis
+
+# Memory creation
+creation:
+  mode: automatic          # automatic | tool-call | explicit
+  description: >
+    Three-stage compression pipeline:
+    (1) Semantic Structured Compression — filters redundant dialogue and
+    converts informative windows into compact, atomic memory units with
+    resolved coreferences and absolute timestamps.
+    (2) Online Semantic Synthesis — consolidates related fragments during
+    the write phase into higher-level abstract representations, eliminating
+    redundancy in real-time.
+
+# Memory retrieval
+retrieval:
+  method: hybrid           # exact-match | rag | llm | hybrid
+  description: >
+    Intent-Aware Retrieval Planning (Stage 3). Uses the LLM to infer
+    search intent and dynamically determine retrieval scope and depth.
+    Executes parallel multi-view retrieval across semantic (vector),
+    lexical (BM25), and symbolic (metadata) indexes. Results merged
+    via ID-based deduplication.
+
+# Indexing
+indexing:
+  views:
+    - id: semantic
+      type: dense
+      description: Conceptual similarity via 1024-d vector embeddings
+    - id: lexical
+      type: sparse
+      description: Exact term matching via BM25-style keyword index
+    - id: symbolic
+      type: metadata
+      description: Structured filtering by timestamps, entities, persons
+
+# Verification
+verification:
+  enabled: false
+  description: >
+    SimpleMem's compression pipeline produces self-contained, atomic facts
+    with resolved references, reducing the need for external verification.
+
+# Cross-agent sharing
+sharing:
+  enabled: false           # Scoped to individual agent/session by default
+  description: >
+    Memory is agent-scoped. Cross-session extension allows persistence
+    across conversations for the same agent.
+
+# Cross-session support
+cross_session:
+  enabled: true
+  features:
+    - Session lifecycle management (start/record/stop/end)
+    - Automatic context injection with token budgeting
+    - Event collection (messages, tool uses, file changes)
+    - Observation extraction (decisions, discoveries, learnings)
+    - Provenance tracking linking entries to source evidence
+    - Consolidation (decay, merge, prune) for memory quality
+  storage: sqlite          # Session metadata in SQLite, vectors in LanceDB
+
+# Resource requirements
+resources:
+  embedding_model: "Qwen/Qwen3-Embedding-0.6B"   # Default; any OpenAI-compatible embedding
+  vector_store: lancedb
+  llm_for_extraction: true
+
+# Dependencies
+dependencies:
+  - simplemem>=0.1.0
+
+# Required environment variables
+required_env_vars:
+  - OPENAI_API_KEY         # Or any OpenAI-compatible API (Qwen, Azure OpenAI)
+
+# Configuration
+config:
+  platform: self-hosted    # self-hosted | mcp-cloud
+  mcp_url: https://mcp.simplemem.cloud
+  repo_url: https://github.com/aiming-lab/SimpleMem
+  paper_url: https://arxiv.org/abs/2601.02553
+
+# Tags
+tags:
+  - compression
+  - semantic
+  - lifelong
+  - cross-session
+  - intent-aware
+  - multi-view-retrieval
+  - token-efficient
+  - lancedb
+  - mcp
+
+icon: archive
+emoji: 🗜️

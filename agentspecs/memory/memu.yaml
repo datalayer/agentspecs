@@ -1,0 +1,121 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Memory Specification: memU
+# 24/7 always-on proactive memory for AI agents based on
+# https://github.com/NevaMind-AI/memU.
+# Treats memory as a file system with hierarchical categories,
+# items, and resources. Designed for long-running, always-on agents.
+
+id: memu
+name: memU Proactive Memory
+description: >
+  Proactive memory framework built for 24/7 always-on agents. Continuously
+  captures and understands user intent, enabling agents that can anticipate
+  needs and act proactively. Organizes memory as a hierarchical file system
+  (categories → items → resources) with auto-categorization, cross-references,
+  and pattern detection. Reduces LLM token cost by caching insights and
+  avoiding redundant calls. 92% average accuracy on the LoCoMo benchmark.
+
+# Memory lifecycle
+persistence: permanent     # none | session | cross-session | permanent
+scope: user                # agent | team | repository | user | global
+
+# Storage backend
+backend: memu              # in-memory | sqlite | lancedb | postgres | redis | mem0 | memu
+
+# Memory creation
+creation:
+  mode: automatic          # automatic | tool-call | explicit
+  description: >
+    memU continuously monitors agent interactions and proactively extracts
+    facts, preferences, skills, and context. Uses a three-layer hierarchy:
+    Resources (raw data), Items (extracted facts), Categories (auto-organized
+    topics). Zero-delay processing — memories are available immediately.
+
+# Memory retrieval
+retrieval:
+  method: hybrid           # exact-match | rag | llm | hybrid
+  modes:
+    - id: rag
+      description: >
+        Fast proactive context assembly using embeddings. Sub-second
+        memory surfacing for continuous background monitoring.
+    - id: llm
+      description: >
+        Deep anticipatory reasoning for complex contexts. LLM infers
+        what user needs before they ask, with query evolution and
+        early termination.
+
+# Verification
+verification:
+  enabled: false
+  description: >
+    memU's three-layer system auto-categorizes and cross-references
+    memories for pattern detection and context prediction.
+
+# Cross-agent sharing
+sharing:
+  enabled: true
+  description: >
+    Supports multi-agent coordination through user_id and agent_id
+    scoping with the where filter. Agents can share context through
+    the global memory pool or scope to specific agent groups.
+
+# Hierarchical memory architecture
+memory_layers:
+  - id: resource
+    description: Direct access to original data (conversations, documents, images)
+    proactive: Background monitoring for new patterns
+  - id: item
+    description: Extracted memory items (facts, preferences, skills)
+    proactive: Real-time extraction from ongoing interactions
+  - id: category
+    description: Auto-organized topic summaries
+    proactive: Automatic context assembly for anticipation
+
+# Proactive capabilities
+proactive:
+  enabled: true
+  features:
+    - User intention capture across sessions
+    - Anticipatory context loading
+    - Pattern detection from interaction history
+    - Proactive task execution and recommendations
+    - Cost-efficient caching of insights
+
+# Resource requirements
+resources:
+  embedding_model: required    # Configurable via llm_profiles
+  vector_store: postgres       # PostgreSQL with pgvector, or in-memory
+  llm_for_extraction: true
+
+# Dependencies
+dependencies:
+  - memu-py>=1.4.0
+
+# Required environment variables
+required_env_vars:
+  - OPENAI_API_KEY         # Or configured via llm_profiles for alternative providers
+
+# Configuration
+config:
+  platform: self-hosted    # self-hosted | cloud
+  cloud_url: https://memu.so
+  api_url: https://memu.pro/docs
+  repo_url: https://github.com/NevaMind-AI/memU
+
+# Tags
+tags:
+  - proactive
+  - always-on
+  - hierarchical
+  - file-system-memory
+  - auto-categorization
+  - cross-reference
+  - pattern-detection
+  - cost-efficient
+  - production
+
+icon: eye
+emoji: 👁️

@@ -1,0 +1,67 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Memory Specification: Ephemeral Memory
+# A simple in-process memory that terminates when the agent terminates.
+# No persistence, no external dependencies — useful for short-lived agents
+# that only need to remember context within a single session.
+
+id: ephemeral
+name: Ephemeral Memory
+description: >
+  Simple in-process memory that lives and dies with the agent. Stores
+  facts, preferences, and context in a local dictionary during the agent
+  session. When the agent terminates, all memory is lost. Best suited for
+  short-lived tasks, stateless assistants, and development/testing.
+
+# Memory lifecycle
+persistence: none          # none | session | cross-session | permanent
+scope: agent               # agent | team | repository | user | global
+
+# Storage backend
+backend: in-memory         # in-memory | sqlite | lancedb | postgres | redis
+
+# Memory creation
+creation:
+  mode: automatic          # automatic | tool-call | explicit
+  description: >
+    Facts and context are extracted automatically from conversation turns
+    and stored in a Python dict. No LLM call is needed for storage.
+
+# Memory retrieval
+retrieval:
+  method: exact-match      # exact-match | rag | llm | hybrid
+  description: >
+    Retrieval is simple key/value or linear scan over stored entries.
+    No embedding model required.
+
+# Verification
+verification:
+  enabled: false           # No citations or verification needed for ephemeral stores
+
+# Cross-agent sharing
+sharing:
+  enabled: false           # Memory is scoped to a single agent process
+
+# Resource requirements
+resources:
+  embedding_model: null    # No embedding model needed
+  vector_store: null       # No vector store needed
+  llm_for_extraction: false
+
+# Dependencies
+dependencies: []
+
+# Required environment variables
+required_env_vars: []
+
+# Tags
+tags:
+  - ephemeral
+  - simple
+  - in-memory
+  - session
+  - development
+
+icon: zap
+emoji: ⚡

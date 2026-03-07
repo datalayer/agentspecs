@@ -21,6 +21,9 @@ model: "bedrock:us.anthropic.claude-opus-4-6-v1"
 
 sandbox_variant: local-eval
 
+# Memory backend
+memory: ephemeral
+
 # MCP servers used by this agent
 mcp_servers:
   - google-workspace

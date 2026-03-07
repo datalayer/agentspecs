@@ -26,6 +26,9 @@ model: "anthropic-claude-sonnet-4"
 
 sandbox_variant: jupyter
 
+# Memory backend
+memory: ephemeral
+
 # MCP servers used by this agent
 mcp_servers:
   - filesystem

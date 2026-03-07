@@ -47,6 +47,13 @@ from .models import (
     get_model,
     list_models,
 )
+from .memory import (
+    MemorySpec,
+    Memories,
+    MEMORY_CATALOGUE,
+    get_memory,
+    list_memories,
+)
 from .server import mcp as codemode_server, configure as configure_server
 from .toolset import CodemodeToolset, PYDANTIC_AI_AVAILABLE
 
@@ -88,6 +95,12 @@ __all__ = [
     "get_default_model",
     "get_model",
     "list_models",
+    # Memory
+    "MemorySpec",
+    "Memories",
+    "MEMORY_CATALOGUE",
+    "get_memory",
+    "list_memories",
     # Types
     "ToolDefinition",
     "ToolParameter",

@@ -1,0 +1,99 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Memory Specification: Mem0
+# Universal memory layer for AI agents based on https://github.com/mem0ai/mem0.
+# Provides multi-level memory (user, session, agent) with automatic
+# extraction, deduplication, and semantic search.
+
+id: mem0
+name: Mem0 Memory
+description: >
+  Universal memory layer powered by Mem0 (mem-zero). Enhances AI agents
+  with an intelligent, persistent memory that remembers user preferences,
+  adapts to individual needs, and continuously learns over time. Supports
+  multi-level memory (User, Session, Agent state) with semantic search,
+  automatic fact extraction, and conflict resolution. 26% more accurate
+  than OpenAI Memory on the LOCOMO benchmark with 90% fewer tokens.
+
+# Memory lifecycle
+persistence: permanent     # none | session | cross-session | permanent
+scope: user                # agent | team | repository | user | global
+
+# Storage backend
+backend: mem0              # in-memory | sqlite | lancedb | postgres | redis | mem0
+
+# Memory creation
+creation:
+  mode: automatic          # automatic | tool-call | explicit
+  description: >
+    Mem0 automatically extracts facts, preferences, and relationships from
+    conversations using an LLM. Memories are deduplicated and conflicts
+    are resolved automatically. Supports add(), search(), and get() APIs.
+
+# Memory retrieval
+retrieval:
+  method: hybrid           # exact-match | rag | llm | hybrid
+  description: >
+    Hybrid retrieval combining semantic vector search with metadata
+    filtering. Supports user_id, agent_id, and session_id scoping.
+    Returns ranked memories with relevance scores.
+
+# Verification
+verification:
+  enabled: false           # Mem0 handles deduplication and conflict resolution internally
+  description: >
+    Mem0 uses an LLM to detect conflicting or duplicate memories during
+    the add() operation and resolves them automatically.
+
+# Cross-agent sharing
+sharing:
+  enabled: true
+  description: >
+    Memories can be scoped across agents via agent_id and shared through
+    the user_id dimension. Supports multi-agent coordination through
+    shared memory pools.
+
+# Resource requirements
+resources:
+  embedding_model: "text-embedding-3-small"
+  vector_store: qdrant     # Default; also supports chroma, pgvector, pinecone, milvus
+  llm_for_extraction: true
+
+# Multi-level memory
+memory_levels:
+  - id: user
+    description: Long-term user preferences and facts that persist across sessions
+  - id: session
+    description: Context relevant to the current conversation session
+  - id: agent
+    description: Agent-specific state and learned behaviors
+
+# Dependencies
+dependencies:
+  - mem0ai>=1.0.0
+
+# Required environment variables
+required_env_vars:
+  - OPENAI_API_KEY         # Or other LLM provider key for extraction
+
+# Configuration
+config:
+  platform: self-hosted    # self-hosted | hosted
+  hosted_url: https://app.mem0.ai
+  docs_url: https://docs.mem0.ai
+  repo_url: https://github.com/mem0ai/mem0
+
+# Tags
+tags:
+  - persistent
+  - semantic
+  - multi-level
+  - user-memory
+  - agent-memory
+  - session-memory
+  - deduplication
+  - production
+
+icon: brain
+emoji: 🧠
