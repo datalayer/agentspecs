@@ -26,8 +26,8 @@ model: "openai-gpt-4-1"
 
 sandbox_variant: jupyter
 
-# Memory backend
-memory: ephemeral
+# Memory backend (exercises the Mem0 durable memory feature)
+memory: mem0
 
 # MCP servers used by this agent
 mcp_servers:
@@ -127,12 +127,17 @@ output:
   type: Notebook
   template: kpi_report_template.ipynb
 
-# Advanced settings
+# Advanced settings (exercises cost budget guardrail & context window management)
 advanced:
   cost_limit: "$5.00 per run"
   time_limit: "300 seconds"
   max_iterations: 50
   validation: "Output must contain required KPI fields"
+  checkpoint_interval: 30
+  context_window:
+    max_tokens: 100000
+    eviction_strategy: sliding_window
+    summary_threshold: 0.85
 
 # Authorization policy
 authorization_policy: ""
