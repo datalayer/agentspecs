@@ -23,7 +23,7 @@ tags:
   - compliance
   - team
 
-enabled: true
+enabled: false
 
 model: "anthropic-claude-sonnet-4"
 

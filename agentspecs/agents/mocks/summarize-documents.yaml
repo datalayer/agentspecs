@@ -20,7 +20,7 @@ tags:
   - automation
   - productivity
 
-enabled: true
+enabled: false
 
 model: "anthropic-claude-sonnet-4"
 

@@ -20,7 +20,7 @@ tags:
   - data-sync
   - deduplication
 
-enabled: true
+enabled: false
 
 model: "anthropic-claude-opus-4"
 

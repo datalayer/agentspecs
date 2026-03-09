@@ -23,7 +23,7 @@ tags:
   - retail
   - sku
 
-enabled: true
+enabled: false
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

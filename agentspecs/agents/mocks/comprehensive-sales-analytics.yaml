@@ -29,7 +29,7 @@ tags:
   - monitoring
   - horizontal
 
-enabled: true
+enabled: false
 
 model: "anthropic-claude-opus-4"
 

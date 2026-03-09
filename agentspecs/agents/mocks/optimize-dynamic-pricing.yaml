@@ -22,7 +22,7 @@ tags:
   - demand-forecasting
   - margins
 
-enabled: true
+enabled: false
 
 model: "openai-gpt-4-1"
 

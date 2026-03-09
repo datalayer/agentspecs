@@ -23,7 +23,7 @@ tags:
   - sustainability
   - team
 
-enabled: true
+enabled: false
 
 model: "openai-gpt-4-1"
 
