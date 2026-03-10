@@ -22,7 +22,6 @@ tags:
   - policy
   - compliance
   - transparency
-  - team
 
 enabled: false
 
@@ -48,77 +47,6 @@ environment_name: ai-agents-env
 icon: organization
 emoji: 🏛️
 color: "#0550ae"  # Dark blue — government & civic
-
-# Team configuration
-team:
-  orchestration_protocol: datalayer
-  execution_mode: sequential
-  supervisor:
-    name: Citizen Services Orchestrator Agent
-    model: "openai-gpt-4-1"
-  routing_instructions: >
-    Route incoming citizen requests to the Intake Agent for classification
-    and triage, then to the Case Processor for handling and routing, then
-    to the Policy Analyst for impact assessment on relevant items, then
-    to the Transparency Agent for audit trail and public documentation.
-    Escalate urgent citizen safety issues immediately to supervisors.
-  validation:
-    timeout: "300s"
-    retry_on_failure: true
-    max_retries: 2
-  agents:
-    - id: cit-1
-      name: Intake & Classification Agent
-      role: "Primary · Initiator"
-      goal: Classify, triage, and route citizen submissions from web portals, email, and documents
-      model: "openai-gpt-4-1"
-      mcp_server: Citizen Portal MCP
-      tools:
-        - Request Classifier
-        - Urgency Assessor
-        - Jurisdiction Router
-        - OCR Scanner
-      trigger: "Event: new citizen request received"
-      approval: auto
-    - id: cit-2
-      name: Case Processor Agent
-      role: Secondary
-      goal: Process and route requests to appropriate departments with required documentation
-      model: "openai-gpt-4-1"
-      mcp_server: Case Management MCP
-      tools:
-        - Case Creator
-        - Document Assembler
-        - Department Router
-        - Status Tracker
-      trigger: "On completion of Intake Agent"
-      approval: auto
-    - id: cit-3
-      name: Policy Impact Analyst Agent
-      role: Secondary
-      goal: Model policy outcomes across population datasets with scenario simulation
-      model: "anthropic-claude-sonnet-4"
-      mcp_server: Policy Analytics MCP
-      tools:
-        - Monte Carlo Simulator
-        - Demographic Analyzer
-        - Budget Impact Model
-        - Scenario Comparator
-      trigger: "On completion of Case Processor Agent"
-      approval: manual
-    - id: cit-4
-      name: Transparency & Audit Agent
-      role: Final
-      goal: Generate explainable decision documentation with full audit trail for public record
-      model: "openai-gpt-4-1"
-      mcp_server: Compliance MCP
-      tools:
-        - Decision Explainer
-        - Audit Trail Builder
-        - FOIA Compliance Checker
-        - Public Record Generator
-      trigger: "On completion of Policy Impact Analyst Agent"
-      approval: auto
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

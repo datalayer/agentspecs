@@ -18,7 +18,6 @@ tags:
   - automation
   - inventory
   - supply-chain
-  - team
 
 enabled: false
 
@@ -45,83 +44,6 @@ environment_name: ai-agents-env
 icon: package
 emoji: 📦
 color: "#0969da"  # Blue
-
-# Team configuration
-team:
-  orchestration_protocol: datalayer
-  execution_mode: sequential
-  supervisor:
-    name: Inventory Orchestrator Agent
-    model: "openai-gpt-4-1"
-  routing_instructions: >
-    Start with the Scanner to pull current levels, then Auditor to check
-    discrepancies, then Forecaster for demand predictions, then Planner for
-    reorder recommendations, then Reporter for the final audit report.
-    Escalate critical shortages immediately.
-  validation:
-    timeout: "600s"
-    retry_on_failure: true
-    max_retries: 3
-  agents:
-    - id: inv-1
-      name: Inventory Scanner Agent
-      role: "Primary · Initiator"
-      goal: Pull current inventory levels from all warehouse management systems
-      model: "openai-gpt-4-1"
-      mcp_server: Warehouse MCP
-      tools:
-        - WMS Connector
-        - Barcode Scanner API
-      trigger: "Schedule: Every 6 hours"
-      approval: auto
-    - id: inv-2
-      name: Discrepancy Auditor Agent
-      role: Secondary
-      goal: Compare system counts vs physical counts and flag discrepancies
-      model: "openai-gpt-4-1"
-      mcp_server: Audit MCP
-      tools:
-        - Count Comparator
-        - Discrepancy Logger
-        - Shrinkage Calculator
-      trigger: "On completion of Inventory Scanner"
-      approval: auto
-    - id: inv-3
-      name: Demand Forecaster Agent
-      role: Secondary
-      goal: Forecast demand by SKU using historical sales and seasonal patterns
-      model: "anthropic-claude-sonnet-4"
-      mcp_server: Analytics MCP
-      tools:
-        - Time Series Model
-        - Seasonal Analyzer
-        - External Signals Fetcher
-      trigger: "On completion of Discrepancy Auditor"
-      approval: auto
-    - id: inv-4
-      name: Reorder Planner Agent
-      role: Secondary
-      goal: Calculate optimal reorder points and generate purchase order recommendations
-      model: "openai-gpt-4-1"
-      mcp_server: Procurement MCP
-      tools:
-        - EOQ Calculator
-        - Supplier Catalog
-        - PO Generator
-      trigger: "On completion of Demand Forecaster"
-      approval: manual
-    - id: inv-5
-      name: Audit Report Agent
-      role: Final
-      goal: Compile inventory audit report with discrepancies, forecasts, and reorder plan
-      model: "openai-gpt-4-1"
-      mcp_server: Document Generation MCP
-      tools:
-        - PDF Generator
-        - Chart Builder
-        - Email Sender
-      trigger: "On completion of Reorder Planner"
-      approval: auto
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

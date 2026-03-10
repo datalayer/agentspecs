@@ -1,0 +1,104 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Team Specification: Comprehensive Sales Analytics
+# Auto-extracted from agent spec comprehensive-sales-analytics
+
+id: comprehensive-sales-analytics
+name: Comprehensive Sales Analytics
+description: 'A multi-agent team that replaces a single KPI monitor with four specialized agents: a Data
+  Collector that pulls real-time CRM metrics, an Anomaly Detector that flags statistical outliers, a Trend
+  Analyzer that identifies patterns and forecasts, and a Report Generator that compiles executive dashboards
+  and sends alerts. Together they deliver deeper insights, faster detection, and richer reporting than
+  any single agent could.
+
+  '
+tags:
+- sales
+- analytics
+- kpi
+- monitoring
+- horizontal
+enabled: false
+icon: graph
+emoji: 📈
+color: '#1a7f37'
+agent_spec_id: comprehensive-sales-analytics
+orchestration_protocol: datalayer
+execution_mode: sequential
+supervisor:
+  name: Sales Analytics Supervisor
+  model: anthropic-claude-opus-4
+routing_instructions: 'Route data collection to KPI Collector first, then pass raw metrics to Anomaly
+  Detector and Trend Analyzer in parallel, then aggregate all outputs into the Report Generator. Escalate
+  if anomalies exceed the critical threshold (>25% deviation from target).
+
+  '
+validation:
+  timeout: 300s
+  retry_on_failure: true
+  max_retries: 3
+agents:
+- id: sa-1
+  name: KPI Data Collector
+  role: Primary · Initiator
+  goal: 'Pull real-time sales metrics from CRM, ERP, and marketing platforms. Normalize data into a unified
+    schema with timestamps, dimensions (region, product line, rep), and measures (revenue, pipeline, conversion).
+
+    '
+  model: openai-gpt-4-1
+  mcp_server: CRM Data Server
+  tools:
+  - get_sales_data
+  - get_customer_list
+  - API Connector
+  trigger: 'Schedule: Daily at 7:30 AM'
+  approval: auto
+- id: sa-2
+  name: Anomaly Detector
+  role: Secondary
+  goal: 'Apply statistical anomaly detection (Z-score, IQR, moving average) to the collected KPIs. Flag
+    any metric deviating more than 10% from its rolling 30-day average. Classify anomalies as info, warning,
+    or critical.
+
+    '
+  model: anthropic-claude-sonnet-4
+  mcp_server: Analytics Server
+  tools:
+  - run_analysis
+  - Statistical Analysis
+  - ML Predictor
+  trigger: On completion of KPI Data Collector
+  approval: auto
+- id: sa-3
+  name: Trend Analyzer
+  role: Secondary
+  goal: 'Identify week-over-week, month-over-month, and quarter-over-quarter trends. Generate 30-day forecasts
+    for each KPI using time-series models. Highlight the top 3 improving and top 3 declining metrics.
+
+    '
+  model: anthropic-claude-sonnet-4
+  mcp_server: Analytics Server
+  tools:
+  - run_analysis
+  - generate_charts
+  - Forecaster
+  trigger: On completion of KPI Data Collector
+  approval: auto
+- id: sa-4
+  name: Executive Report Generator
+  role: Final
+  goal: 'Compile all insights — raw KPIs, anomalies, trends, and forecasts — into a polished executive
+    dashboard with charts, tables, and narrative commentary. Send the report via Slack and email. Highlight
+    critical anomalies with a red-flag summary at the top.
+
+    '
+  model: openai-gpt-4-1
+  mcp_server: Document Generation MCP
+  tools:
+  - PDF Generator
+  - Chart Builder
+  - Email Sender
+  - Slack Notifier
+  trigger: On completion of Anomaly Detector & Trend Analyzer
+  approval: manual

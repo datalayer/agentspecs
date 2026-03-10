@@ -21,7 +21,6 @@ tags:
   - iot
   - predictive-maintenance
   - sustainability
-  - team
 
 enabled: false
 
@@ -47,77 +46,6 @@ environment_name: ai-agents-env
 icon: zap
 emoji: ⚡
 color: "#1a7f37"  # Green — energy & sustainability
-
-# Team configuration
-team:
-  orchestration_protocol: datalayer
-  execution_mode: sequential
-  supervisor:
-    name: Grid Operations Orchestrator Agent
-    model: "openai-gpt-4-1"
-  routing_instructions: >
-    Start with Sensor Ingestion to process real-time telemetry, then
-    Anomaly Detector for pattern identification, then Failure Predictor
-    for maintenance forecasting, then Grid Balancer for load optimisation.
-    Escalate critical failure predictions (< 48h) immediately to
-    operations dispatch.
-  validation:
-    timeout: "600s"
-    retry_on_failure: true
-    max_retries: 3
-  agents:
-    - id: grid-1
-      name: Sensor Ingestion Agent
-      role: "Primary · Initiator"
-      goal: Ingest and process real-time telemetry from SCADA, smart meters, and IoT gateways
-      model: "openai-gpt-4-1"
-      mcp_server: SCADA MCP
-      tools:
-        - SCADA Connector
-        - Smart Meter Reader
-        - IoT Gateway Adapter
-        - Time Series Processor
-      trigger: "Schedule: Every 5 minutes"
-      approval: auto
-    - id: grid-2
-      name: Anomaly Detector Agent
-      role: Secondary
-      goal: Detect vibration, temperature, and voltage anomalies across all grid assets
-      model: "openai-gpt-4-1"
-      mcp_server: Monitoring MCP
-      tools:
-        - Vibration Analyzer
-        - Temperature Anomaly Detector
-        - Voltage Pattern Scanner
-        - Historical Comparator
-      trigger: "On completion of Sensor Ingestion Agent"
-      approval: auto
-    - id: grid-3
-      name: Failure Predictor Agent
-      role: Secondary
-      goal: Predict equipment failures 2–4 weeks in advance using anomaly patterns and failure history
-      model: "anthropic-claude-sonnet-4"
-      mcp_server: Predictive Analytics MCP
-      tools:
-        - Failure Correlation Engine
-        - Risk Scorer
-        - Maintenance Scheduler
-        - Work Order Generator
-      trigger: "On completion of Anomaly Detector Agent"
-      approval: manual
-    - id: grid-4
-      name: Grid Balancer Agent
-      role: Final
-      goal: Optimise real-time load balancing across renewable and conventional generation sources
-      model: "openai-gpt-4-1"
-      mcp_server: Grid Control MCP
-      tools:
-        - Load Forecaster
-        - Renewable Integration Model
-        - Dispatch Optimiser
-        - Grid Stability Checker
-      trigger: "On completion of Failure Predictor Agent"
-      approval: auto
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

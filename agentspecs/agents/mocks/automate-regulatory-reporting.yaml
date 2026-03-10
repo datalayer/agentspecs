@@ -22,7 +22,6 @@ tags:
   - risk
   - banking
   - audit
-  - team
 
 enabled: false
 
@@ -49,86 +48,6 @@ environment_name: ai-agents-env
 icon: shield-check
 emoji: 🏦
 color: "#0969da"  # Blue — compliance & trust
-
-# Team configuration
-team:
-  orchestration_protocol: datalayer
-  execution_mode: sequential
-  supervisor:
-    name: Compliance Orchestrator Agent
-    model: "openai-gpt-4-1"
-  routing_instructions: >
-    Start with Data Ingestion to pull positions and transactions, then
-    Risk Calculator for metric computation, then Reconciliation Agent to
-    cross-check figures, then Validation Agent for regulatory rule checks,
-    then Report Generator for submission-ready output. Escalate any
-    reconciliation breaks above $10K immediately to the compliance team.
-  validation:
-    timeout: "900s"
-    retry_on_failure: true
-    max_retries: 2
-  agents:
-    - id: reg-1
-      name: Data Ingestion Agent
-      role: "Primary · Initiator"
-      goal: Extract positions, transactions, and P&L from trading and accounting systems
-      model: "openai-gpt-4-1"
-      mcp_server: Trading Systems MCP
-      tools:
-        - Position Reader
-        - Transaction Fetcher
-        - P&L Extractor
-      trigger: "Schedule: Monthly on the 3rd business day"
-      approval: auto
-    - id: reg-2
-      name: Risk Calculator Agent
-      role: Secondary
-      goal: Compute Basel III/IV risk-weighted assets, capital ratios, and VaR metrics
-      model: "anthropic-claude-sonnet-4"
-      mcp_server: Risk Engine MCP
-      tools:
-        - RWA Calculator
-        - VaR Engine
-        - Capital Ratio Computer
-        - Stress Test Runner
-      trigger: "On completion of Data Ingestion Agent"
-      approval: auto
-    - id: reg-3
-      name: Reconciliation Agent
-      role: Secondary
-      goal: Cross-check computed figures against source systems and flag discrepancies
-      model: "openai-gpt-4-1"
-      mcp_server: Reconciliation MCP
-      tools:
-        - Position Reconciler
-        - Break Detector
-        - Audit Logger
-      trigger: "On completion of Risk Calculator Agent"
-      approval: auto
-    - id: reg-4
-      name: Validation Agent
-      role: Secondary
-      goal: Validate all metrics against Basel III/IV, MiFID II, and SOX regulatory rules
-      model: "openai-gpt-4-1"
-      mcp_server: Compliance Rules MCP
-      tools:
-        - Basel Rule Validator
-        - MiFID II Checker
-        - SOX Control Verifier
-      trigger: "On completion of Reconciliation Agent"
-      approval: manual
-    - id: reg-5
-      name: Report Generator Agent
-      role: Final
-      goal: Generate submission-ready regulatory reports with full data lineage and audit trail
-      model: "openai-gpt-4-1"
-      mcp_server: Document Generation MCP
-      tools:
-        - PDF Generator
-        - XBRL Formatter
-        - Email Sender
-      trigger: "On completion of Validation Agent"
-      approval: auto
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

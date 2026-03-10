@@ -1,0 +1,82 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Team Specification: Sync CRM Contacts
+# Auto-extracted from agent spec sync-crm-contacts
+
+id: sync-crm-contacts
+name: Sync CRM Contacts
+description: 'A multi-agent team that collects and aggregates contact data from multiple CRM sources,
+  analyzes and deduplicates records, writes cleaned data back, and generates sync summary reports.
+
+  '
+tags:
+- sales
+- crm
+- data-sync
+- deduplication
+enabled: false
+icon: people
+emoji: 🔄
+color: '#0969da'
+agent_spec_id: sync-crm-contacts
+orchestration_protocol: datalayer
+execution_mode: sequential
+supervisor:
+  name: CRM Orchestrator Agent
+  model: anthropic-claude-opus-4
+routing_instructions: 'Route data collection tasks to the Data Collector first, then analysis, then sync,
+  then reporting. Escalate to human if sync fails 3 times.
+
+  '
+validation:
+  timeout: 300s
+  retry_on_failure: true
+  max_retries: 3
+agents:
+- id: tm-1
+  name: Data Collector Agent
+  role: Primary · Initiator
+  goal: Collect and aggregate contact data from multiple CRM sources
+  model: openai-gpt-4-1
+  mcp_server: Data Processing MCP
+  tools:
+  - API Connector
+  - Data Parser
+  trigger: 'Schedule: Daily at 2:00 AM'
+  approval: auto
+- id: tm-2
+  name: Analyzer Agent
+  role: Secondary
+  goal: Analyze collected data and identify patterns and duplicates
+  model: anthropic-claude-opus-4
+  mcp_server: Analytics MCP
+  tools:
+  - Statistical Analysis
+  - ML Predictor
+  - Deduplicator
+  trigger: On completion of Data Collector
+  approval: manual
+- id: tm-3
+  name: Sync Writer Agent
+  role: Secondary
+  goal: Write cleaned and merged contacts back to the CRM systems
+  model: openai-gpt-4-1
+  mcp_server: CRM Write MCP
+  tools:
+  - Salesforce Connector
+  - HubSpot Connector
+  trigger: On completion of Analyzer
+  approval: manual
+- id: tm-4
+  name: Report Generator Agent
+  role: Final
+  goal: Generate sync summary reports and send notifications
+  model: openai-gpt-4-1
+  mcp_server: Document Generation MCP
+  tools:
+  - PDF Generator
+  - Chart Builder
+  - Email Sender
+  trigger: On completion of Sync Writer
+  approval: auto
