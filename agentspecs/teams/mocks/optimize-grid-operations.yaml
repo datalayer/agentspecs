@@ -90,3 +90,36 @@ agents:
   - Grid Stability Checker
   trigger: On completion of Failure Predictor Agent
   approval: auto
+reaction_rules:
+- id: rr-grid-1
+  trigger: grid_instability_detected
+  action: emergency_rebalance
+  auto: true
+  max_retries: 1
+  escalate_after_retries: 1
+  priority: critical
+- id: rr-grid-2
+  trigger: forecast_deviation_high
+  action: recalibrate_model
+  auto: true
+  max_retries: 2
+  escalate_after_retries: 2
+  priority: medium
+health_monitoring:
+  heartbeat_interval: 10s
+  stale_threshold: 30s
+  unresponsive_threshold: 60s
+  stuck_threshold: 120s
+  max_restart_attempts: 5
+notifications:
+  on_start: true
+  on_completion: true
+  on_failure: true
+  on_escalation: true
+output:
+  formats:
+  - json
+  - csv
+  - pdf
+  template: Grid Operations Dashboard
+  storage: s3://reports/grid-operations/

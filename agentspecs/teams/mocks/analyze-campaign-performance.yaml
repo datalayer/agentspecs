@@ -91,3 +91,36 @@ agents:
   - Report Generator
   trigger: On completion of Anomaly Detector Agent
   approval: manual
+reaction_rules:
+- id: rr-camp-1
+  trigger: budget_threshold_exceeded
+  action: pause_and_notify
+  auto: true
+  max_retries: 1
+  escalate_after_retries: 1
+  priority: high
+- id: rr-camp-2
+  trigger: data_quality_low
+  action: retry_collection
+  auto: true
+  max_retries: 3
+  escalate_after_retries: 3
+  priority: medium
+health_monitoring:
+  heartbeat_interval: 30s
+  stale_threshold: 120s
+  unresponsive_threshold: 300s
+  stuck_threshold: 600s
+  max_restart_attempts: 3
+notifications:
+  on_start: true
+  on_completion: true
+  on_failure: true
+  on_escalation: true
+output:
+  formats:
+  - pdf
+  - csv
+  - json
+  template: Campaign Performance Report
+  storage: s3://reports/campaign-analytics/

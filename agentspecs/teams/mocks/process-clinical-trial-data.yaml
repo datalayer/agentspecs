@@ -91,3 +91,36 @@ agents:
   - Compliance Checker
   trigger: On completion of Safety Monitor Agent
   approval: auto
+reaction_rules:
+- id: rr-clin-1
+  trigger: safety_signal_detected
+  action: halt_and_escalate
+  auto: true
+  max_retries: 0
+  escalate_after_retries: 0
+  priority: critical
+- id: rr-clin-2
+  trigger: data_integrity_violation
+  action: quarantine_and_notify
+  auto: true
+  max_retries: 1
+  escalate_after_retries: 1
+  priority: critical
+health_monitoring:
+  heartbeat_interval: 10s
+  stale_threshold: 45s
+  unresponsive_threshold: 90s
+  stuck_threshold: 180s
+  max_restart_attempts: 2
+notifications:
+  on_start: true
+  on_completion: true
+  on_failure: true
+  on_escalation: true
+output:
+  formats:
+  - pdf
+  - json
+  - xml
+  template: Clinical Trial Data Report
+  storage: s3://reports/clinical-trials/

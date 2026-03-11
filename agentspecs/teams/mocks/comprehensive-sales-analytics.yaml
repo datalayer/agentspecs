@@ -102,3 +102,36 @@ agents:
   - Slack Notifier
   trigger: On completion of Anomaly Detector & Trend Analyzer
   approval: manual
+reaction_rules:
+- id: rr-sales-1
+  trigger: anomaly_critical
+  action: escalate_to_supervisor
+  auto: true
+  max_retries: 2
+  escalate_after_retries: 2
+  priority: high
+- id: rr-sales-2
+  trigger: data_stale
+  action: retry_collection
+  auto: true
+  max_retries: 3
+  escalate_after_retries: 3
+  priority: medium
+health_monitoring:
+  heartbeat_interval: 30s
+  stale_threshold: 120s
+  unresponsive_threshold: 300s
+  stuck_threshold: 600s
+  max_restart_attempts: 3
+notifications:
+  on_start: true
+  on_completion: true
+  on_failure: true
+  on_escalation: true
+output:
+  formats:
+  - pdf
+  - xlsx
+  - json
+  template: Executive Sales Dashboard
+  storage: s3://reports/sales-analytics/

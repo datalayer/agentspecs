@@ -92,3 +92,35 @@ agents:
   - Public Record Generator
   trigger: On completion of Policy Impact Analyst Agent
   approval: auto
+reaction_rules:
+- id: rr-cit-1
+  trigger: priority_request_detected
+  action: fast_track_processing
+  auto: true
+  max_retries: 2
+  escalate_after_retries: 2
+  priority: high
+- id: rr-cit-2
+  trigger: policy_ambiguity_detected
+  action: request_human_review
+  auto: false
+  max_retries: 1
+  escalate_after_retries: 1
+  priority: medium
+health_monitoring:
+  heartbeat_interval: 30s
+  stale_threshold: 120s
+  unresponsive_threshold: 300s
+  stuck_threshold: 600s
+  max_restart_attempts: 3
+notifications:
+  on_start: false
+  on_completion: true
+  on_failure: true
+  on_escalation: true
+output:
+  formats:
+  - pdf
+  - json
+  template: Citizen Request Processing Report
+  storage: s3://reports/citizen-requests/

@@ -94,3 +94,36 @@ agents:
   - Email Sender
   trigger: On completion of Reorder Planner
   approval: auto
+reaction_rules:
+- id: rr-inv-1
+  trigger: stockout_risk_detected
+  action: escalate_to_supervisor
+  auto: true
+  max_retries: 1
+  escalate_after_retries: 1
+  priority: high
+- id: rr-inv-2
+  trigger: discrepancy_threshold_exceeded
+  action: flag_for_manual_audit
+  auto: false
+  max_retries: 2
+  escalate_after_retries: 2
+  priority: high
+health_monitoring:
+  heartbeat_interval: 30s
+  stale_threshold: 120s
+  unresponsive_threshold: 300s
+  stuck_threshold: 600s
+  max_restart_attempts: 3
+notifications:
+  on_start: true
+  on_completion: true
+  on_failure: true
+  on_escalation: true
+output:
+  formats:
+  - pdf
+  - xlsx
+  - csv
+  template: Inventory Audit Report
+  storage: s3://reports/inventory-audits/

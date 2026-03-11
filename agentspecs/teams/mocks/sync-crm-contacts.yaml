@@ -80,3 +80,35 @@ agents:
   - Email Sender
   trigger: On completion of Sync Writer
   approval: auto
+reaction_rules:
+- id: rr-crm-1
+  trigger: sync_conflict_detected
+  action: log_and_skip
+  auto: true
+  max_retries: 3
+  escalate_after_retries: 3
+  priority: medium
+- id: rr-crm-2
+  trigger: api_rate_limit_hit
+  action: backoff_and_retry
+  auto: true
+  max_retries: 5
+  escalate_after_retries: 5
+  priority: low
+health_monitoring:
+  heartbeat_interval: 30s
+  stale_threshold: 120s
+  unresponsive_threshold: 300s
+  stuck_threshold: 600s
+  max_restart_attempts: 3
+notifications:
+  on_start: false
+  on_completion: true
+  on_failure: true
+  on_escalation: false
+output:
+  formats:
+  - json
+  - csv
+  template: CRM Sync Summary
+  storage: s3://reports/crm-sync/

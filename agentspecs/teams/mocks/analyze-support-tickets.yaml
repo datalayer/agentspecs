@@ -69,3 +69,35 @@ agents:
   - Resolution Generator
   trigger: On completion of Categorizer Agent
   approval: manual
+reaction_rules:
+- id: rr-supp-1
+  trigger: ticket_surge_detected
+  action: escalate_to_supervisor
+  auto: true
+  max_retries: 2
+  escalate_after_retries: 2
+  priority: high
+- id: rr-supp-2
+  trigger: classification_confidence_low
+  action: request_human_review
+  auto: false
+  max_retries: 1
+  escalate_after_retries: 1
+  priority: medium
+health_monitoring:
+  heartbeat_interval: 15s
+  stale_threshold: 60s
+  unresponsive_threshold: 180s
+  stuck_threshold: 300s
+  max_restart_attempts: 3
+notifications:
+  on_start: false
+  on_completion: true
+  on_failure: true
+  on_escalation: true
+output:
+  formats:
+  - pdf
+  - json
+  template: Support Ticket Analysis
+  storage: s3://reports/support-analytics/
