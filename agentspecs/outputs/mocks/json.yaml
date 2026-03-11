@@ -1,0 +1,13 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: json
+name: JSON
+description: >-
+  Deliver results as structured JSON data, suitable for
+  programmatic consumption by APIs, pipelines, or dashboards.
+icon: code
+supports_template: false
+supports_storage: true
+mime_types:
+  - application/json

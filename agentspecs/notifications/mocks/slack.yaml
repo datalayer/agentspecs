@@ -1,0 +1,26 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: slack
+name: Slack
+description: >-
+  Post notifications to a Slack channel or direct message when
+  agent events occur. Supports rich message formatting with blocks.
+icon: bell
+available: true
+fields:
+  - name: channel
+    label: Channel
+    type: string
+    required: true
+    placeholder: "#sales-analytics"
+  - name: mention_on_failure
+    label: Mention on Failure
+    type: string
+    required: false
+    placeholder: "@oncall-team"
+  - name: include_output
+    label: Include Output
+    type: boolean
+    required: false
+    default: false

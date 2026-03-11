@@ -18,7 +18,7 @@ tags:
 - analytics
 - advertising
 - social-media
-enabled: false
+enabled: true
 icon: megaphone
 emoji: 📢
 color: '#8250df'

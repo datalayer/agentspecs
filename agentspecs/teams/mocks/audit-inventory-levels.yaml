@@ -15,7 +15,7 @@ tags:
 - automation
 - inventory
 - supply-chain
-enabled: false
+enabled: true
 icon: package
 emoji: 📦
 color: '#0969da'

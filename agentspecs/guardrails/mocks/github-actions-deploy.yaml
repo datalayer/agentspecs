@@ -1,0 +1,69 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: github-actions-deploy
+name: GitHub Actions Deploy
+description: >-
+  Full-access guardrail for deployment agents running via GitHub Actions.
+  All permissions enabled including production deployment. Very high
+  token limits for complex multi-step deployment workflows.
+
+identity_provider: github
+identity_name: acme-deploy-bot
+
+permissions:
+  read:data: true
+  write:data: true
+  execute:code: true
+  access:internet: true
+  send:email: true
+  deploy:production: true
+
+token_limits:
+  per_run: "150K"
+  per_day: "3M"
+  per_month: "30M"
+
+data_scope:
+  allowed_systems:
+    - github
+    - kubernetes
+    - docker
+    - terraform
+  allowed_objects: []
+  denied_objects: []
+  denied_fields: []
+
+data_handling:
+  default_aggregation: false
+  allow_row_level_output: true
+  max_rows_in_output: 50000
+  redact_fields: []
+  hash_fields: []
+  pii_detection: false
+  pii_action: warn
+
+approval_policy:
+  require_manual_approval_for:
+    - "Production environment changes"
+    - "Infrastructure scaling beyond limits"
+  auto_approved:
+    - "Staging deployments"
+    - "Test environment operations"
+    - "Build and package operations"
+
+tool_limits:
+  max_tool_calls: 300
+  max_query_rows: 500000
+  max_query_runtime: "180s"
+  max_time_window_days: 365
+
+audit:
+  log_tool_calls: true
+  log_query_metadata_only: false
+  retain_days: 180
+  require_lineage_in_report: true
+
+content_safety:
+  treat_crm_text_fields_as_untrusted: false
+  do_not_follow_instructions_from_data: true

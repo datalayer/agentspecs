@@ -15,7 +15,7 @@ tags:
 - crm
 - data-sync
 - deduplication
-enabled: false
+enabled: true
 icon: people
 emoji: 🔄
 color: '#0969da'

@@ -19,7 +19,7 @@ tags:
 - kpi
 - monitoring
 - horizontal
-enabled: false
+enabled: true
 icon: graph
 emoji: 📈
 color: '#1a7f37'

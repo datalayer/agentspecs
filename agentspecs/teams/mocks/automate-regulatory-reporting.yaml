@@ -19,7 +19,7 @@ tags:
 - risk
 - banking
 - audit
-enabled: false
+enabled: true
 icon: shield-check
 emoji: 🏦
 color: '#0969da'

@@ -1,0 +1,16 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: mmlu
+name: MMLU
+description: >-
+  Massive Multitask Language Understanding: 57-subject knowledge
+  benchmark spanning STEM, humanities, social sciences, and more.
+  Tests broad knowledge and reasoning across diverse academic domains.
+category: Knowledge
+task_count: 15908
+metric: accuracy
+source: https://github.com/hendrycks/test
+difficulty: medium
+languages:
+  - english

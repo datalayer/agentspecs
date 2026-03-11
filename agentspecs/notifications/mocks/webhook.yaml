@@ -1,0 +1,27 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: webhook
+name: Webhook
+description: >-
+  Send notifications to a custom HTTP endpoint via POST request.
+  Payload includes event type, agent metadata, and optional output.
+icon: bell
+available: false
+coming_soon: true
+fields:
+  - name: url
+    label: Webhook URL
+    type: string
+    required: true
+    placeholder: "https://api.example.com/agent-events"
+  - name: secret
+    label: Signing Secret
+    type: string
+    required: false
+    placeholder: "Optional HMAC secret for payload signing"
+  - name: include_output
+    label: Include Output
+    type: boolean
+    required: false
+    default: true

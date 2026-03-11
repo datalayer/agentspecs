@@ -18,7 +18,7 @@ tags:
 - iot
 - predictive-maintenance
 - sustainability
-enabled: false
+enabled: true
 icon: zap
 emoji: ⚡
 color: '#1a7f37'

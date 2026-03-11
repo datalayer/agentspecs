@@ -1,0 +1,67 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: restricted-viewer
+name: Restricted Viewer
+description: >-
+  Minimal-permissions guardrail for read-only monitoring agents.
+  No code execution, no write access, very low token limits.
+  Suitable for dashboard viewers and audit observers.
+
+identity_provider: azure-ad
+identity_name: viewer-group@acme.onmicrosoft.com
+
+permissions:
+  read:data: true
+  write:data: false
+  execute:code: false
+  access:internet: false
+  send:email: false
+  deploy:production: false
+
+token_limits:
+  per_run: "10K"
+  per_day: "50K"
+  per_month: "500K"
+
+data_scope:
+  allowed_systems: []
+  allowed_objects: []
+  denied_objects: []
+  denied_fields:
+    - "*SSN*"
+    - "*Bank*"
+    - "*IBAN*"
+    - "*Password*"
+    - "*Secret*"
+
+data_handling:
+  default_aggregation: true
+  allow_row_level_output: false
+  max_rows_in_output: 0
+  redact_fields: []
+  hash_fields: []
+  pii_detection: true
+  pii_action: redact
+
+approval_policy:
+  require_manual_approval_for:
+    - "Any operation beyond read"
+  auto_approved:
+    - "Aggregated read-only queries"
+
+tool_limits:
+  max_tool_calls: 10
+  max_query_rows: 10000
+  max_query_runtime: "15s"
+  max_time_window_days: 30
+
+audit:
+  log_tool_calls: true
+  log_query_metadata_only: true
+  retain_days: 90
+  require_lineage_in_report: false
+
+content_safety:
+  treat_crm_text_fields_as_untrusted: true
+  do_not_follow_instructions_from_data: true

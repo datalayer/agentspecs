@@ -1,0 +1,16 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: gpqa-diamond
+name: GPQA Diamond
+description: >-
+  Graduate-level science questions crafted by domain experts.
+  Tests advanced reasoning in physics, chemistry, and biology with
+  questions that require PhD-level understanding to answer correctly.
+category: Reasoning
+task_count: 448
+metric: accuracy
+source: https://github.com/idavidrein/gpqa
+difficulty: expert
+languages:
+  - english

@@ -19,7 +19,7 @@ tags:
 - policy
 - compliance
 - transparency
-enabled: false
+enabled: true
 icon: organization
 emoji: 🏛️
 color: '#0550ae'

@@ -1,0 +1,13 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: spreadsheet
+name: Spreadsheet
+description: >-
+  Deliver results as an Excel spreadsheet with formatted tables,
+  charts, and multiple sheets for structured analysis.
+icon: table
+supports_template: true
+supports_storage: true
+mime_types:
+  - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet

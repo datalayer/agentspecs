@@ -1,0 +1,61 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: default-platform-user
+name: Default Platform User
+description: >-
+  Standard platform user guardrail with moderate permissions.
+  Suitable for general-purpose agents that need read access
+  and limited code execution.
+
+identity_provider: datalayer
+identity_name: alice@acme.com
+
+permissions:
+  read:data: true
+  write:data: false
+  execute:code: true
+  access:internet: true
+  send:email: false
+  deploy:production: false
+
+token_limits:
+  per_run: "50K"
+  per_day: "500K"
+  per_month: "5M"
+
+data_scope:
+  allowed_systems: []
+  allowed_objects: []
+  denied_objects: []
+  denied_fields: []
+
+data_handling:
+  default_aggregation: false
+  allow_row_level_output: true
+  max_rows_in_output: 1000
+  redact_fields: []
+  hash_fields: []
+  pii_detection: false
+  pii_action: warn
+
+approval_policy:
+  require_manual_approval_for: []
+  auto_approved:
+    - "All read-only queries"
+
+tool_limits:
+  max_tool_calls: 50
+  max_query_rows: 100000
+  max_query_runtime: "60s"
+  max_time_window_days: 90
+
+audit:
+  log_tool_calls: true
+  log_query_metadata_only: false
+  retain_days: 30
+  require_lineage_in_report: false
+
+content_safety:
+  treat_crm_text_fields_as_untrusted: false
+  do_not_follow_instructions_from_data: true

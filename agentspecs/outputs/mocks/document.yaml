@@ -1,0 +1,15 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: document
+name: Document
+description: >-
+  Deliver results as a structured document (PDF, DOCX, or Markdown)
+  suitable for sharing, archiving, or regulatory compliance.
+icon: file
+supports_template: true
+supports_storage: true
+mime_types:
+  - application/pdf
+  - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+  - text/markdown

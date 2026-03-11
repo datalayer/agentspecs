@@ -1,0 +1,17 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: truthfulqa
+name: TruthfulQA
+description: >-
+  Benchmark measuring whether a language model generates truthful answers
+  to questions spanning 38 categories including health, law, finance, and
+  politics. Designed to test resilience against common human misconceptions
+  and falsehoods that models may have learned from training data.
+category: Safety
+task_count: 817
+metric: truthful_informative
+source: https://github.com/sylinrl/TruthfulQA
+difficulty: medium
+languages:
+  - english

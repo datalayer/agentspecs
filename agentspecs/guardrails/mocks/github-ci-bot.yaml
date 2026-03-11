@@ -1,0 +1,68 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: github-ci-bot
+name: GitHub CI Bot
+description: >-
+  Guardrail for automated CI/CD agents running via GitHub Actions.
+  High token limits for batch processing, full code execution,
+  and internet access for package installation.
+
+identity_provider: github
+identity_name: acme-ci-bot
+
+permissions:
+  read:data: true
+  write:data: true
+  execute:code: true
+  access:internet: true
+  send:email: false
+  deploy:production: false
+
+token_limits:
+  per_run: "100K"
+  per_day: "2M"
+  per_month: "20M"
+
+data_scope:
+  allowed_systems:
+    - github
+    - npm
+    - pypi
+  allowed_objects: []
+  denied_objects: []
+  denied_fields: []
+
+data_handling:
+  default_aggregation: false
+  allow_row_level_output: true
+  max_rows_in_output: 10000
+  redact_fields: []
+  hash_fields: []
+  pii_detection: false
+  pii_action: warn
+
+approval_policy:
+  require_manual_approval_for:
+    - "Any production deployment"
+    - "Any write to protected branches"
+  auto_approved:
+    - "Build and test operations"
+    - "Package installation"
+    - "Code analysis and linting"
+
+tool_limits:
+  max_tool_calls: 200
+  max_query_rows: 500000
+  max_query_runtime: "120s"
+  max_time_window_days: 365
+
+audit:
+  log_tool_calls: true
+  log_query_metadata_only: false
+  retain_days: 90
+  require_lineage_in_report: false
+
+content_safety:
+  treat_crm_text_fields_as_untrusted: false
+  do_not_follow_instructions_from_data: true

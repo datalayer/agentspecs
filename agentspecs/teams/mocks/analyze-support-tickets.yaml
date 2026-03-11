@@ -15,7 +15,7 @@ tags:
 - data
 - support
 - tickets
-enabled: false
+enabled: true
 icon: issue-opened
 emoji: 🎫
 color: '#bf8700'

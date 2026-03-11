@@ -1,0 +1,14 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: email
+name: Email
+description: >-
+  Send results as an email attachment or inline HTML body.
+  Supports rich formatting with embedded tables and charts.
+icon: mail
+supports_template: true
+supports_storage: false
+mime_types:
+  - text/html
+  - application/pdf

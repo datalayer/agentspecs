@@ -1,0 +1,13 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: notebook
+name: Notebook
+description: >-
+  Deliver results as a Jupyter notebook with executable cells,
+  inline visualizations, and rich markdown narrative.
+icon: file-code
+supports_template: true
+supports_storage: true
+mime_types:
+  - application/x-ipynb+json

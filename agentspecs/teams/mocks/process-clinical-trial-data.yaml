@@ -18,7 +18,7 @@ tags:
 - clinical-trials
 - patient-data
 - compliance
-enabled: false
+enabled: true
 icon: heart
 emoji: 🏥
 color: '#cf222e'

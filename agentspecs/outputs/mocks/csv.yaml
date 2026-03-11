@@ -1,0 +1,13 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: csv
+name: CSV
+description: >-
+  Deliver results as a CSV file for easy import into spreadsheets,
+  data pipelines, or other analysis tools.
+icon: table
+supports_template: false
+supports_storage: true
+mime_types:
+  - text/csv

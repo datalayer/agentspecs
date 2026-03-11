@@ -1,0 +1,21 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: schedule
+name: Schedule
+description: >-
+  Run on a recurring schedule using a cron expression
+  (e.g. daily at 9 AM, every Monday, monthly on the 1st).
+type: schedule
+fields:
+  - name: cron
+    label: Cron Expression
+    type: string
+    required: true
+    placeholder: "0 9 * * * (every day at 9 AM)"
+    font: mono
+  - name: description
+    label: Description
+    type: string
+    required: false
+    placeholder: "Description (e.g. 'Monthly sales report')"

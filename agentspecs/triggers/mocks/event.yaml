@@ -1,0 +1,26 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: event
+name: Event-Based
+description: >-
+  Trigger on specific events such as a webhook call, API request,
+  database change, file upload, or email arrival.
+type: event
+fields:
+  - name: event_source
+    label: Event Source URL
+    type: string
+    required: false
+    placeholder: "https://helpdesk.example.com/webhooks"
+    help: "Allowed event source URL (leave empty to allow any source)"
+  - name: event
+    label: Event Name
+    type: string
+    required: false
+    placeholder: "email_received"
+  - name: description
+    label: Description
+    type: string
+    required: false
+    placeholder: "Description (e.g. 'Triggered on incoming email')"

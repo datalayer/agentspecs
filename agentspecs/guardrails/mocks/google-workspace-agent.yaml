@@ -1,0 +1,71 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: google-workspace-agent
+name: Google Workspace Agent
+description: >-
+  Guardrail for agents integrating with Google Workspace services
+  (Gmail, Drive, Calendar, Sheets). Moderate permissions with
+  email sending enabled. Service account-based identity with
+  Google OAuth.
+
+identity_provider: google
+identity_name: agent-sa@acme.iam.gserviceaccount.com
+
+permissions:
+  read:data: true
+  write:data: true
+  execute:code: false
+  access:internet: true
+  send:email: true
+  deploy:production: false
+
+token_limits:
+  per_run: "80K"
+  per_day: "1M"
+  per_month: "10M"
+
+data_scope:
+  allowed_systems:
+    - gmail
+    - google-drive
+    - google-sheets
+    - google-calendar
+  allowed_objects: []
+  denied_objects: []
+  denied_fields: []
+
+data_handling:
+  default_aggregation: false
+  allow_row_level_output: true
+  max_rows_in_output: 5000
+  redact_fields: []
+  hash_fields: []
+  pii_detection: true
+  pii_action: warn
+
+approval_policy:
+  require_manual_approval_for:
+    - "Sending external emails"
+    - "Sharing files outside organization"
+    - "Modifying calendar events for other users"
+  auto_approved:
+    - "Reading emails and documents"
+    - "Creating drafts"
+    - "Reading calendar"
+
+tool_limits:
+  max_tool_calls: 100
+  max_query_rows: 50000
+  max_query_runtime: "60s"
+  max_time_window_days: 180
+
+audit:
+  log_tool_calls: true
+  log_query_metadata_only: false
+  retain_days: 60
+  require_lineage_in_report: false
+
+content_safety:
+  treat_crm_text_fields_as_untrusted: true
+  do_not_follow_instructions_from_data: true
