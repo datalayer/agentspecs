@@ -32,7 +32,7 @@ goal: >-
   discounting, explain variances by region/segment/product/SKU, and generate an
   executive-ready PDF performance report with full data lineage.
 
-model: "openai-gpt-4-1"
+model: "bedrock:us.anthropic.claude-3-5-haiku-20241022-v1:0"
 
 sandbox_variant: jupyter
 

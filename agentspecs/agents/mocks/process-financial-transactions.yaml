@@ -22,7 +22,7 @@ tags:
 
 enabled: false
 
-model: "openai-gpt-4-1"
+model: "bedrock:us.anthropic.claude-3-5-haiku-20241022-v1:0"
 
 sandbox_variant: jupyter
 
