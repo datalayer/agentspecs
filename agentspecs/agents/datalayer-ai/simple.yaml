@@ -34,7 +34,7 @@ skills: []
 environment_name: ai-agents-env
 
 # UI customization
-icon: share-2
+icon: agent
 emoji: 🤖
 color: "#6366F1"  # Indigo
 
