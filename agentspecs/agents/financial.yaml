@@ -1,67 +1,61 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Agent Specification: Data Acquisition Agent
-# This agent acquires and manages data from various sources including
-# Kaggle datasets and local filesystem operations.
+# Agent Specification: Financial Visualization Agent
+# Analyzes financial market data and creates visualizations and charts.
 
-id: data-acquisition
-name: Data Acquisition Agent
+id: financial
+name: Financial Visualization Agent
 description: >
-  Acquires and manages data from various sources including Kaggle datasets
-  and local filesystem operations.
+  Analyzes financial market data and creates visualizations and charts.
 
 tags:
-  - data
-  - acquisition
-  - kaggle
-  - filesystem
+  - finance
+  - stocks
+  - visualization
+  - charts
 
 enabled: true
-
 model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
 
-sandbox_variant: local-eval
+sandbox_variant: jupyter
 
 # Memory backend
 memory: ephemeral
 
 # MCP servers used by this agent
 mcp_servers:
-  - kaggle
-  - filesystem
-  - tavily
+  - alphavantage
 
 # Skills available to this agent
-skills:
-  - github
+skills: []
 
 # Runtime environment
 environment_name: ai-agents-env
 
 # UI customization
-icon: database
-emoji: 📊
-color: "#3B82F6"  # Blue
+icon: trending-up
+emoji: 📈
+color: "#F59E0B"  # Amber
 
 # Chat suggestions to show users what this agent can do
 suggestions:
-  - Find popular machine learning datasets on Kaggle
-  - Download and explore a dataset for sentiment analysis
-  - List available files in my workspace
-  - Search Kaggle for time series forecasting competitions
+  - Show me the stock price history for AAPL
+  - Create a chart comparing MSFT and GOOGL over the last year
+  - Analyze the trading volume trends for Tesla
+  - Get the latest market news for tech stocks
 
 # Welcome message shown when agent starts
 welcome_message: >
-  Hello! I'm the Data Acquisition Agent. I can help you find and download
-  datasets from Kaggle, manage files in your workspace, and explore data
-  sources for your projects.
+  Welcome! I'm the Financial Visualization Agent. I can help you analyze
+  stock market data, track financial instruments, and create charts to
+  visualize market trends.
 
 # System prompt for the agent
 system_prompt: >
-  You are a data acquisition specialist with access to Kaggle datasets and filesystem tools.
-  You can search for datasets, download data, read and write files, and help users prepare data for analysis.
-  Guide users through finding relevant datasets and organizing their workspace efficiently.
+  You are a financial market analyst with access to Alpha Vantage market data tools.
+  You can fetch stock prices, analyze trading volumes, create visualizations, and track market trends.
+  Provide clear insights with relevant data points and suggest visualization approaches when appropriate.
 
 # Additional system prompt for code mode
 system_prompt_codemode_addons: >

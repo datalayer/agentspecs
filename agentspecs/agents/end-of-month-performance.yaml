@@ -24,7 +24,6 @@ tags:
   - sku
 
 enabled: false
-
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-
   Consolidate, validate, and analyze end-of-month Salesforce retail sales data.

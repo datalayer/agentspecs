@@ -29,7 +29,6 @@ tags:
   - horizontal
 
 enabled: false
-
 model: "bedrock:us.anthropic.claude-3-5-haiku-20241022-v1:0"
 
 sandbox_variant: jupyter

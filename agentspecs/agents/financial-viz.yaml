@@ -1,24 +1,21 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Agent Specification: Crawler Agent
-# Web crawling and research agent that searches the web and GitHub repositories.
+# Agent Specification: Financial Visualization Agent
+# Analyzes financial market data and creates visualizations and charts.
 
-id: crawler
-name: Crawler Agent
+id: financial-viz
+name: Financial Visualization Agent
 description: >
-  Web crawling and research agent that searches the web and GitHub
-  repositories for information.
+  Analyzes financial market data and creates visualizations and charts.
 
 tags:
-  - web
-  - search
-  - research
-  - crawler
-  - github
+  - finance
+  - stocks
+  - visualization
+  - charts
 
 enabled: false
-
 model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
 
 sandbox_variant: local-eval
@@ -28,10 +25,8 @@ memory: ephemeral
 
 # MCP servers used by this agent
 mcp_servers:
-  - tavily
-  - github
-  - kaggle
-  - huggingface
+  - alphavantage
+  - chart
 
 # Skills available to this agent
 skills: []
@@ -40,27 +35,28 @@ skills: []
 environment_name: ai-agents-env
 
 # UI customization
-icon: globe
-emoji: 🌐
-color: "#10B981"  # Green
+icon: trending-up
+emoji: 📈
+color: "#F59E0B"  # Amber
 
 # Chat suggestions to show users what this agent can do
 suggestions:
-  - Search the web for recent news about AI agents
-  - Find trending open-source Python projects on GitHub
-  - Research best practices for building RAG applications
-  - Compare popular JavaScript frameworks in 2024
+  - Show me the stock price history for AAPL
+  - Create a chart comparing MSFT and GOOGL over the last year
+  - Analyze the trading volume trends for Tesla
+  - Get the latest market news for tech stocks
 
 # Welcome message shown when agent starts
 welcome_message: >
-  Hi! I'm the Crawler Agent. I can search the web using Tavily, explore
-  GitHub repositories, and help you research topics across the internet.
+  Welcome! I'm the Financial Visualization Agent. I can help you analyze
+  stock market data, track financial instruments, and create charts to
+  visualize market trends.
 
 # System prompt for the agent
 system_prompt: >
-  You are a web crawling and research assistant with access to Tavily search and GitHub tools.
-  Use Tavily to search the web for current information and search GitHub repositories for relevant projects.
-  Synthesize information from multiple sources and provide clear summaries with sources cited.
+  You are a financial market analyst with access to Alpha Vantage market data and chart generation tools.
+  You can fetch stock prices, analyze trading volumes, create visualizations, and track market trends.
+  Provide clear insights with relevant data points and generate charts to illustrate patterns.
 
 # Additional system prompt for code mode
 system_prompt_codemode_addons: >
@@ -79,6 +75,7 @@ system_prompt_codemode_addons: >
      Use this to understand tool parameters before calling them.
 
   4. **execute_code** - Run Python code that composes multiple tools
+     Use this for complex multi-step operations. Code runs in a PERSISTENT sandbox.
      Variables, functions, and state PERSIST between execute_code calls.
      Import tools using: `from generated.servers.<server_name> import <function_name>`
      NEVER use `import *` - always use explicit named imports.
@@ -89,11 +86,9 @@ system_prompt_codemode_addons: >
   3. **Execute**: Use execute_code to perform multi-step tasks, calling tools as needed
 
   ## Token Efficiency
-  Always chain multiple tool calls in a single execute_code block.
+  When possible, chain multiple tool calls in a single execute_code block.
   This reduces output tokens by processing intermediate results in code rather than returning them.
   If you want to examine results, print subsets, preview (maximum 20 first characters) and/or counts instead of full data, this is really important.
-
-  For huggingface tools, use search_doc tool to understand other tools return's schema.
 
 # Optional: Jupyter notebook to show on agent creation
 welcome_notebook: null

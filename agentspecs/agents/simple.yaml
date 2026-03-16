@@ -16,7 +16,6 @@ tags:
   - assistant
 
 enabled: true
-
 model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
 
 sandbox_variant: jupyter
@@ -34,7 +33,7 @@ skills: []
 environment_name: ai-agents-env
 
 # UI customization
-icon: share-2
+icon: agent
 emoji: 🤖
 color: "#6366F1"  # Indigo
 

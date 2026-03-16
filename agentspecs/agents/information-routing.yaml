@@ -1,69 +1,64 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Agent Specification: Data Acquisition Agent
-# This agent acquires and manages data from various sources including
-# Kaggle datasets and local filesystem operations.
+# Agent Specification: Information Routing Agent
+# Routes information between Google Drive and Slack, managing workflows.
 
-id: data-acquisition
-name: Data Acquisition Agent
+id: information-routing
+name: Information Routing Agent
 description: >
-  Acquires and manages data from various sources including Kaggle datasets
-  and local filesystem operations.
+  Routes information between Google Drive and other services, managing document
+  workflows and information sharing.
 
 tags:
-  - data
-  - acquisition
-  - kaggle
-  - filesystem
+  - workflow
+  - communication
+  - gdrive
 
-enabled: true
+enabled: false
+model: "bedrock:us.anthropic.claude-opus-4-6-v1"
 
-model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
-
-sandbox_variant: jupyter
+sandbox_variant: local-eval
 
 # Memory backend
 memory: ephemeral
 
 # MCP servers used by this agent
 mcp_servers:
-  - kaggle
-  - filesystem
-  - tavily
+  - google-workspace
+  - github
 
 # Skills available to this agent
-skills:
-  - github
+skills: []
 
 # Runtime environment
 environment_name: ai-agents-env
 
 # UI customization
-icon: database
-emoji: 📊
-color: "#3B82F6"  # Blue
+icon: share-2
+emoji: 🔀
+color: "#EC4899"  # Pink
 
 # Chat suggestions to show users what this agent can do
 suggestions:
-  - Find popular machine learning datasets on Kaggle
-  - Download and explore a dataset for sentiment analysis
-  - List available files in my workspace
-  - Search Kaggle for time series forecasting competitions
+  - Find documents shared with me in Google Drive
+  - List recent files in my Drive folder
+  - Summarize the contents of a document in my Drive
+  - Search for documents by keyword in Google Drive
 
 # Welcome message shown when agent starts
 welcome_message: >
-  Hello! I'm the Data Acquisition Agent. I can help you find and download
-  datasets from Kaggle, manage files in your workspace, and explore data
-  sources for your projects.
+  Hi there! I'm the Information Routing Agent. I can help you manage documents
+  in Google Drive and route information where it needs to go.
 
 # System prompt for the agent
 system_prompt: >
-  You are a data acquisition specialist with access to Kaggle datasets and filesystem tools.
-  You can search for datasets, download data, read and write files, and help users prepare data for analysis.
-  Guide users through finding relevant datasets and organizing their workspace efficiently.
+  You are an information routing specialist with access to Google Drive tools.
+  You can find and manage documents in Drive and automate document workflows.
+  Help users with document management efficiently.
+  Do not use file extension when referring to Google Drive documents.
+  Always use search_drive_files tool before using get_drive_file_content to find parent folder (using only name and mimeType in the query, no other fields!!!).
 
-# Additional system prompt for code mode
 system_prompt_codemode_addons: >
   ## IMPORTANT: Be Honest About Your Capabilities
   NEVER claim to have tools or capabilities you haven't verified.
@@ -77,7 +72,7 @@ system_prompt_codemode_addons: >
      Use this to find relevant tools before executing tasks.
 
   3. **get_tool_details** - Get full tool schema and documentation
-     Use this to understand tool parameters before calling them.
+     Use this to understand tool parameters before calling them. If no output schema is specified, try using the tool on a subset and preview the result.
 
   4. **execute_code** - Run Python code that composes multiple tools
      Use this for complex multi-step operations. Code runs in a PERSISTENT sandbox.
@@ -87,13 +82,13 @@ system_prompt_codemode_addons: >
 
   ## Recommended Workflow
   1. **Discover**: Use list_servers and search_tools to find relevant tools
-  2. **Understand**: Use get_tool_details to check parameters
+  2. **Understand**: Use get_tool_details to check input and output schemas
   3. **Execute**: Use execute_code to perform multi-step tasks, calling tools as needed
 
   ## Token Efficiency
-  When possible, chain multiple tool calls in a single execute_code block.
+  Always chain multiple tool calls in a single execute_code block.
   This reduces output tokens by processing intermediate results in code rather than returning them.
-  If you want to examine results, print subsets, preview (maximum 20 first characters) and/or counts instead of full data, this is really important.
+  If you want to examine results, print subsets, preview (maximum 20 first characters) and/or counts instead of full data, this is really important!!!!
 
 # Optional: Jupyter notebook to show on agent creation
 welcome_notebook: null
