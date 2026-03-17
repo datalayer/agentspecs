@@ -53,11 +53,11 @@ agentspecs/
 
 ## Agent Specifications
 
-Agent IDs are automatically prefixed with their folder name, ensuring uniqueness across categories.
-For example, an agent in `code-ai/simple.yaml` will have ID `"code-ai/simple"`, while `datalayer-ai/simple.yaml` has ID `"datalayer-ai/simple"`.
+Agent IDs are not prefixed by folder name.
+For example, an agent in `code-ai/simple.yaml` has ID `"simple"` (same as any other `id` value defined in YAML).
 
 ### Required Fields
-- **`id`** (string): Unique identifier within folder (kebab-case). The full ID becomes `folder/id` (e.g., `code-ai/simple`)
+- **`id`** (string): Unique identifier (kebab-case) used directly as the runtime agent spec ID
 - **`name`** (string): Display name
 - **`description`** (string): Agent capabilities description
 
@@ -88,12 +88,12 @@ This folder structure:
 1. **Prevents ID conflicts**: Multiple agents can have the same base ID (e.g., "simple") in different folders
 2. **Improves organization**: Related agents are grouped together
 3. **Enables categorization**: Frontend can display agents by category
-4. **Maintains clarity**: Full IDs like "code-ai/simple" clearly show the agent's purpose
+4. **Maintains clarity**: Folder structure still communicates category without changing runtime ID format
 
 ### Example
 ```yaml
 # File: agentspecs/agents/codemode-paper/financial-viz.yaml
-# Full ID will be: "codemode-paper/financial-viz"
+# Runtime agent ID will be: "financial-viz"
 id: financial-viz
 name: Financial Visualization Agent (Viz)
 description: >
