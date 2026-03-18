@@ -38,6 +38,7 @@ mcp_servers:
 skills:
   - pdf
   - crawl
+  - events
 
 # Runtime environment
 environment_name: ai-agents-env
@@ -63,6 +64,7 @@ trigger:
   type: schedule
   cron: "0 * * * *"
   description: Hourly competitive price scan and demand forecast update
+  prompt: "Run the scheduled workflow and produce the configured deliverable."
 
 # Model configuration
 model_config:

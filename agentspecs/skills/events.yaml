@@ -1,0 +1,19 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: events
+name: Events Skill
+description: Event generation, enrichment, and lifecycle orchestration
+
+module: agent_skills.events
+
+dependencies:
+  - httpx>=0.27.0
+
+tags:
+  - events
+  - orchestration
+  - automation
+
+icon: bell
+emoji: 📅

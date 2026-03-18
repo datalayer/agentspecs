@@ -45,6 +45,7 @@ mcp_servers:
 skills:
   - pdf
   - github
+  - events
 
 # Runtime environment
 environment_name: ai-agents-env
@@ -111,3 +112,8 @@ output:
     - JSON
   template: executive-sales-dashboard-v2
   storage: s3://acme-sales-reports/
+
+# Trigger configuration
+trigger:
+  type: once
+  prompt: "Start when requested by a user and complete the workflow once."

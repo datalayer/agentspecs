@@ -37,6 +37,7 @@ mcp_servers:
 # Skills available to this agent team
 skills:
   - pdf
+  - events
 
 # Runtime environment
 environment_name: ai-agents-env
@@ -92,6 +93,7 @@ trigger:
   type: schedule
   cron: "*/5 * * * *"
   description: Every 5 minutes for real-time grid monitoring and optimization
+  prompt: "Run the scheduled workflow and produce the configured deliverable."
 
 # Output configuration
 output:

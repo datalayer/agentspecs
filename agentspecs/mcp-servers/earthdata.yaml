@@ -1,0 +1,30 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: earthdata
+name: Earthdata MCP
+description: Access NASA Earthdata search and metadata capabilities
+
+command: npx
+args:
+  - "-y"
+  - "earthdata-mcp-server"
+
+transport: stdio
+enabled: true
+
+env:
+  EARTHDATA_USERNAME: ${EARTHDATA_USERNAME}
+  EARTHDATA_PASSWORD: ${EARTHDATA_PASSWORD}
+
+envvars:
+  - EARTHDATA_USERNAME
+  - EARTHDATA_PASSWORD
+
+tags:
+  - geospatial
+  - earth-observation
+  - datasets
+
+icon: globe
+emoji: 🌍

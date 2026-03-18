@@ -1,0 +1,94 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Spatial Data Analysis Agent
+# Inspired by Eurus climate workflows and Earthdata catalog exploration.
+
+id: spatial-data-analysis
+name: Spatial Data Analysis Agent
+description: >
+  Discovers, acquires, and analyzes geospatial datasets using Earthdata and
+  Eurus tools. Produces map-ready summaries, anomaly diagnostics, and
+  reproducible analysis artifacts for environmental and climate use cases.
+
+tags:
+  - geospatial
+  - climate
+  - earth-observation
+  - analytics
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+sandbox_variant: jupyter
+
+# Memory backend
+memory: ephemeral
+
+# MCP servers used by this agent
+mcp_servers:
+  - earthdata
+  - eurus
+  - filesystem
+
+# Skills available to this agent
+skills:
+  - events
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: globe
+emoji: 🛰️
+color: "#0EA5E9"
+
+# Chat suggestions to show users what this agent can do
+suggestions:
+  - Find precipitation datasets for West Africa from the last 10 years
+  - Build a monthly anomaly map for ERA5 temperature
+  - Compare two regions for drought indicators and summarize differences
+  - Generate an event log for each processing step
+
+# Welcome message shown when agent starts
+welcome_message: >
+  Hello, I am the Spatial Data Analysis Agent. I can discover Earthdata
+  datasets, run Eurus-powered spatial analyses, and generate reproducible
+  outputs for geospatial investigations.
+
+# System prompt for the agent
+system_prompt: >
+  You are a geospatial and climate analysis specialist.
+  Use Earthdata tools to discover and filter relevant datasets.
+  Use Eurus tools to retrieve, transform, and analyze spatial data.
+  Clearly state assumptions, geographic bounds, time windows, and units.
+  Record lifecycle state transitions with event records for traceability.
+
+# Additional system prompt for code mode
+system_prompt_codemode_addons: >
+  ## IMPORTANT: Be Honest About Your Capabilities
+  NEVER claim to have tools or capabilities you haven't verified.
+
+  ## Core Codemode Tools
+  Use these 4 tools to accomplish any task:
+  1. **list_servers** - List available MCP servers
+  2. **search_tools** - Progressive tool discovery by natural language query
+  3. **get_tool_details** - Get full tool schema and documentation
+  4. **execute_code** - Run Python code that composes multiple tools
+
+  ## Workflow Guidance
+  1. Discover available Earthdata and Eurus tools.
+  2. Validate spatial/temporal parameters before execution.
+  3. Execute transformations in code and keep outputs concise.
+  4. Persist important run states as events.
+
+# Trigger configuration
+trigger:
+  type: once
+  prompt: "Start when requested by a user, discover relevant spatial datasets, and produce one complete analysis output."
+
+# Optional: Jupyter notebook to show on agent creation
+welcome_notebook: null
+
+# Optional: Lexical document to show on agent creation
+welcome_document: null

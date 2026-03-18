@@ -36,6 +36,7 @@ mcp_servers:
 skills:
   - github
   - pdf
+  - events
 
 # Runtime environment
 environment_name: ai-agents-env
@@ -60,6 +61,7 @@ trigger:
   type: schedule
   cron: "0 8 * * *"
   description: Every day at 8:00 AM UTC
+  prompt: "Run the scheduled workflow and produce the configured deliverable."
 
 # Model configuration
 model_config:

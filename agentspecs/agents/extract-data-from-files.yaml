@@ -37,6 +37,7 @@ mcp_servers:
 skills:
   - pdf
   - github
+  - events
 
 # Runtime environment
 environment_name: ai-agents-env
@@ -62,6 +63,7 @@ trigger:
   type: event
   event: file_uploaded
   description: Triggered when new files are dropped into the extraction folder
+  prompt: "Handle the 'file_uploaded' event and execute the workflow end-to-end."
 
 # Model configuration
 model_config:

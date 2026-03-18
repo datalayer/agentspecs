@@ -1,13 +1,13 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Agent Specification: Financial Visualization Agent
-# Analyzes financial market data and creates visualizations and charts.
+# Agent Specification: Financial Data Analysis Agent
+# Analyzes financial market data and provides chart-ready insights.
 
 id: financial
-name: Financial Visualization Agent
+name: Financial Data Analysis Agent
 description: >
-  Analyzes financial market data and creates visualizations and charts.
+  Analyzes financial market data and provides chart-ready insights.
 
 tags:
   - finance
@@ -15,7 +15,7 @@ tags:
   - visualization
   - charts
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
 
 sandbox_variant: jupyter
@@ -28,8 +28,8 @@ mcp_servers:
   - alphavantage
 
 # Skills available to this agent
-skills: []
-
+skills:
+  - events
 # Runtime environment
 environment_name: ai-agents-env
 
@@ -47,7 +47,7 @@ suggestions:
 
 # Welcome message shown when agent starts
 welcome_message: >
-  Welcome! I'm the Financial Visualization Agent. I can help you analyze
+  Welcome! I'm the Financial Data Analysis Agent. I can help you analyze
   stock market data, track financial instruments, and create charts to
   visualize market trends.
 
@@ -94,3 +94,8 @@ welcome_notebook: null
 
 # Optional: Lexical document to show on agent creation
 welcome_document: null
+
+# Trigger configuration
+trigger:
+  type: once
+  prompt: "Start when requested by a user and complete the workflow once."

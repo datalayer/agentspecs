@@ -45,6 +45,7 @@ mcp_servers:
 # Skills available to this agent
 skills:
   - pdf
+  - events
 
 # Runtime environment
 environment_name: ai-agents-env
@@ -64,6 +65,7 @@ trigger:
   cron: "0 6 1 * *"
   description: >
     Monthly on the 1st at 06:00 to process prior month Salesforce sales performance.
+  prompt: "Run the scheduled workflow and produce the configured deliverable."
 
 # Model configuration
 model_config:

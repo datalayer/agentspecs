@@ -39,6 +39,7 @@ mcp_servers:
 skills:
   - pdf
   - crawl
+  - events
 
 # Runtime environment
 environment_name: ai-agents-env
@@ -94,6 +95,7 @@ trigger:
   type: schedule
   cron: "0 */4 * * *"
   description: Every 4 hours for cross-platform campaign data sync and analysis
+  prompt: "Run the scheduled workflow and produce the configured deliverable."
 
 # Output configuration
 output:

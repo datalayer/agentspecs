@@ -37,6 +37,7 @@ mcp_servers:
 # Skills available to this agent team
 skills:
   - pdf
+  - events
 
 # Runtime environment
 environment_name: ai-agents-env
@@ -91,6 +92,7 @@ authorization_policy: ""
 trigger:
   type: event
   description: Triggered on new data batch arrival from clinical sites
+  prompt: "Handle this event trigger: Triggered on new data batch arrival from clinical sites"
 
 # Output configuration
 output:

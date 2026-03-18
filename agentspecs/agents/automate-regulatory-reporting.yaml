@@ -39,6 +39,7 @@ mcp_servers:
 # Skills available to this agent team
 skills:
   - pdf
+  - events
 
 # Runtime environment
 environment_name: ai-agents-env
@@ -94,6 +95,7 @@ trigger:
   type: schedule
   cron: "0 6 3 * *"
   description: Monthly on the 3rd at 06:00 for regulatory reporting deadlines
+  prompt: "Run the scheduled workflow and produce the configured deliverable."
 
 # Output configuration
 output:

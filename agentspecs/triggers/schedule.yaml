@@ -19,3 +19,8 @@ fields:
     type: string
     required: false
     placeholder: "Description (e.g. 'Monthly sales report')"
+  - name: prompt
+    label: Trigger Prompt
+    type: string
+    required: false
+    placeholder: "Run the scheduled workflow and produce the configured deliverable."

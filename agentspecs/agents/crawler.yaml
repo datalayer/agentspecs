@@ -32,6 +32,7 @@ mcp_servers:
 # Skills available to this agent
 skills:
   - github
+  - events
 
 # Runtime environment
 environment_name: ai-agents-env
@@ -96,3 +97,8 @@ welcome_notebook: null
 
 # Optional: Lexical document to show on agent creation
 welcome_document: null
+
+# Trigger configuration
+trigger:
+  type: once
+  prompt: "Start when requested by a user and complete the workflow once."
