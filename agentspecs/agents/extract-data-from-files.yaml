@@ -55,7 +55,7 @@ goal: >-
   confidence scores for each extracted field.
 
 # Protocols & UI Extensions
-protocol: ag-ui
+protocol: vercel-ai
 ui_extension: a2ui
 
 # Trigger configuration

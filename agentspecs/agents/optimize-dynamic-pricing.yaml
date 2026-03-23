@@ -56,7 +56,7 @@ goal: >-
   recommendations with confidence intervals and projected revenue impact.
 
 # Protocols & UI Extensions
-protocol: ag-ui
+protocol: vercel-ai
 ui_extension: a2ui
 
 # Trigger configuration

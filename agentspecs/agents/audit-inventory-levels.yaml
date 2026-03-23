@@ -52,7 +52,7 @@ goal: >-
   generate reorder recommendations, and compile audit reports with findings.
 
 # Protocols & UI Extensions
-protocol: ag-ui
+protocol: vercel-ai
 ui_extension: a2ui
 
 # Evals

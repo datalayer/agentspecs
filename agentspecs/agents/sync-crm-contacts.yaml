@@ -52,7 +52,7 @@ goal: >-
   sync summary reports with notifications.
 
 # Protocols & UI Extensions
-protocol: ag-ui
+protocol: vercel-ai
 ui_extension: a2ui
 
 # Guardrails

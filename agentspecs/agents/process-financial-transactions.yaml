@@ -52,7 +52,7 @@ goal: >-
   transactions for human review, and generate audit-ready reports.
 
 # Protocols & UI Extensions
-protocol: ag-ui
+protocol: vercel-ai
 ui_extension: a2ui
 
 # Trigger configuration

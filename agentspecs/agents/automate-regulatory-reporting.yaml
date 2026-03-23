@@ -57,7 +57,7 @@ goal: >-
   and generate submission-ready compliance reports with full audit trails.
 
 # Protocols & UI Extensions
-protocol: ag-ui
+protocol: vercel-ai
 ui_extension: a2ui
 
 # Evals

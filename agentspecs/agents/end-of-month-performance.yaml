@@ -56,7 +56,7 @@ emoji: 📊
 color: "#1f883d"  # Green — performance & growth
 
 # Protocols & UI Extensions
-protocol: ag-ui
+protocol: vercel-ai
 ui_extension: a2ui
 
 # Trigger configuration

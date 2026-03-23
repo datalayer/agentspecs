@@ -1,0 +1,14 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: runtime-echo
+name: Runtime Echo
+description: Echo text back to the caller for quick runtime verification.
+tags:
+  - runtime
+  - utility
+enabled: true
+approval: auto
+icon: comment
+emoji: "💬"
+

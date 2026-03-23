@@ -53,7 +53,7 @@ goal: >-
   recommendations with escalation paths for critical issues.
 
 # Protocols & UI Extensions
-protocol: ag-ui
+protocol: vercel-ai
 ui_extension: a2ui
 
 # Evals

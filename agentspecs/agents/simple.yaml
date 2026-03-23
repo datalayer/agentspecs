@@ -29,6 +29,10 @@ mcp_servers: []
 # No skills
 skills:
   - events
+
+# Runtime tools
+tools:
+  - runtime-echo
 # Runtime environment
 environment_name: ai-agents-env
 

@@ -53,7 +53,7 @@ goal: >-
   in JSON format.
 
 # Protocols & UI Extensions
-protocol: ag-ui
+protocol: vercel-ai
 ui_extension: a2ui
 
 # Trigger configuration

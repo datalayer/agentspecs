@@ -1,0 +1,14 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: runtime-sensitive-echo
+name: Runtime Sensitive Echo
+description: Echo text with a manual approval checkpoint before execution.
+tags:
+  - runtime
+  - approval
+enabled: true
+approval: manual
+icon: shield
+emoji: "🛡️"
+

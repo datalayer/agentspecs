@@ -63,7 +63,7 @@ goal: >-
   via Slack and email. Flag critical deviations for immediate human review.
 
 # Protocols & UI Extensions
-protocol: ag-ui
+protocol: vercel-ai
 ui_extension: a2ui
 
 # Evals

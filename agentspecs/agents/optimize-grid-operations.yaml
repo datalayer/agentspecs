@@ -55,7 +55,7 @@ goal: >-
   renewable and conventional sources to reduce unplanned downtime by 50%.
 
 # Protocols & UI Extensions
-protocol: ag-ui
+protocol: vercel-ai
 ui_extension: a2ui
 
 # Evals

@@ -38,6 +38,11 @@ skills:
   - pdf
   - events
 
+# Runtime tools available to this agent
+tools:
+  - runtime-echo
+  - runtime-sensitive-echo
+
 # Runtime environment
 environment_name: ai-agents-env
 
@@ -53,7 +58,7 @@ goal: >-
   Send notifications when KPIs deviate more than 10% from targets.
 
 # Protocols & UI Extensions
-protocol: ag-ui
+protocol: vercel-ai
 ui_extension: a2ui
 
 # Trigger configuration
