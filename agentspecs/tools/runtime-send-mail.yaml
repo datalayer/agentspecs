@@ -1,18 +1,18 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: runtime-sensitive-echo
-name: Runtime Sensitive Echo
-description: Echo text with a manual approval checkpoint before execution.
+id: runtime-send-mail
+name: Runtime Send Mail (Fake)
+description: Fake mail sender for tool approval demos; returns a simulated send receipt.
 tags:
   - runtime
   - approval
+  - mail
 enabled: true
 approval: manual
 runtime:
   language: python
   package: agent_runtimes.examples.tools
-  method: runtime_sensitive_echo
-icon: shield
-emoji: "🛡️"
-
+  method: runtime_send_mail
+icon: mail
+emoji: "📧"

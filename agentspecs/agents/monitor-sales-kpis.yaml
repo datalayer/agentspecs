@@ -42,6 +42,7 @@ skills:
 tools:
   - runtime-echo
   - runtime-sensitive-echo
+  - runtime-send-mail
 
 # Runtime environment
 environment_name: ai-agents-env

@@ -9,6 +9,10 @@ tags:
   - utility
 enabled: true
 approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.examples.tools
+  method: runtime_echo
 icon: comment
 emoji: "💬"
 
