@@ -1,0 +1,83 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Tool Approval Demo Agent
+# Minimal agent that demonstrates the tool approval flow:
+#   - runtime-echo: executes immediately (no approval needed)
+#   - runtime-sensitive-echo: requires human approval before execution
+#   - Tavily MCP server for web search
+#   - Events skill
+
+id: simple-full
+name: Tool Approval Demo
+description: >
+  A minimal demonstration agent showcasing the human-in-the-loop tool
+  approval flow. Includes one tool that runs automatically and one that
+  requires explicit human approval before execution, plus Tavily web search.
+
+tags:
+  - demo
+  - approval
+  - human-in-the-loop
+  - utility
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+sandbox_variant: jupyter
+
+# Memory backend
+memory: ephemeral
+
+# MCP servers
+mcp_servers:
+  - tavily
+
+# Skills
+skills:
+  - events
+
+# Runtime tools (runtime-echo = auto approval, runtime-sensitive-echo = manual approval)
+tools:
+  - runtime-echo
+  - runtime-sensitive-echo
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: shield
+emoji: 🛡️
+color: "#6366F1"  # Indigo
+
+# Chat suggestions
+suggestions:
+  - list your tools
+  - "Call the runtime_sensitive_echo tool with text 'hello' and reason 'audit'. Use a tool call only and do not write Python code."
+  - "Call the runtime_echo tool with text 'hello world'. Use a tool call only and do not write Python code."
+
+# Welcome message
+welcome_message: >
+  Hi! I'm the Tool Approval Demo agent. I have two echo tools — one runs
+  immediately, the other requires your approval before executing. I can also
+  search the web with Tavily.
+
+# System prompt
+system_prompt: >
+  You are a helpful assistant demonstrating the tool approval workflow.
+  You have access to two runtime tools:
+  - runtime_echo: echoes text back immediately, no approval required.
+  - runtime_sensitive_echo: echoes text with a reason, but requires human approval before executing.
+  You also have access to the Tavily MCP server for web search.
+  When asked to list your tools, briefly describe each one and ask the user which to run.
+  Do not call list_skills, load_skill, read_skill_resource, or run_skill_script.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
+
+# Trigger configuration
+trigger:
+  type: once
+  prompt: "Start when requested by a user and complete the workflow once."
