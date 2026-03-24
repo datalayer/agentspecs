@@ -5,6 +5,7 @@
 # Manages GitHub repositories, issues, and pull requests with email capabilities.
 
 id: github-agent
+version: 0.0.1
 name: GitHub Agent
 description: >
   Manages GitHub repositories, issues, and pull requests with email 
@@ -26,12 +27,12 @@ memory: ephemeral
 
 # MCP servers used by this agent
 mcp_servers:
-  - google-workspace
+  - google-workspace:0.0.1
 
 # Skills available to this agent
 skills:
-  - github
-  - events
+  - github:0.0.1
+  - events:0.0.1
 
 # Runtime environment
 environment_name: ai-agents-env

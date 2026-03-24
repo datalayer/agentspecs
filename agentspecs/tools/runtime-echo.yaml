@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: runtime-echo
+version: 0.0.1
 name: Runtime Echo
 description: Echo text back to the caller for quick runtime verification.
 tags:

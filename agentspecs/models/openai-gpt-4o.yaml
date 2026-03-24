@@ -4,6 +4,7 @@
 # AI Model Specification: OpenAI GPT-4o
 
 id: "openai:gpt-4o"
+version: 0.0.1
 name: OpenAI GPT-4o
 description: GPT-4o by OpenAI - fast multimodal model
 provider: openai

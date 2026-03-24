@@ -5,6 +5,7 @@
 # Auto-extracted from agent spec process-clinical-trial-data
 
 id: process-clinical-trial-data
+version: 0.0.1
 name: Process Clinical Trial Data
 description: 'A multi-agent team that automates clinical trial data processing across dozens of trial
   sites. Harmonises patient records and lab results to CDISC SDTM format, detects safety signals and adverse
@@ -22,7 +23,7 @@ enabled: true
 icon: heart
 emoji: 🏥
 color: '#cf222e'
-agent_spec_id: process-clinical-trial-data
+agent_spec_id: process-clinical-trial-data:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:

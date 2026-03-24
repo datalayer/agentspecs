@@ -4,6 +4,7 @@
 # AI Model Specification: Anthropic Claude Sonnet 4.5
 
 id: "anthropic:claude-sonnet-4-5-20250514"
+version: 0.0.1
 name: Anthropic Claude Sonnet 4.5
 description: Claude Sonnet 4.5 by Anthropic - balanced performance and speed
 provider: anthropic

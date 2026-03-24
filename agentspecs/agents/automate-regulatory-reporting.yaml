@@ -7,6 +7,7 @@
 # across Basel III/IV, MiFID II, SOX, and AML/KYC requirements.
 
 id: automate-regulatory-reporting
+version: 0.0.1
 name: Automate Regulatory Reporting
 description: >
   A multi-agent team that automates end-to-end regulatory reporting for
@@ -33,13 +34,13 @@ memory: ephemeral
 
 # MCP servers used by this agent team
 mcp_servers:
-  - filesystem
-  - slack
+  - filesystem:0.0.1
+  - slack:0.0.1
 
 # Skills available to this agent team
 skills:
-  - pdf
-  - events
+  - pdf:0.0.1
+  - events:0.0.1
 
 # Runtime environment
 environment_name: ai-agents-env

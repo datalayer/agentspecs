@@ -5,6 +5,7 @@
 # Auto-extracted from agent spec analyze-support-tickets
 
 id: analyze-support-tickets
+version: 0.0.1
 name: Analyze Support Tickets
 description: 'A multi-agent team that triages incoming support tickets, categorizes by urgency and topic,
   identifies recurring patterns, and generates resolution recommendations with escalation paths.
@@ -19,7 +20,7 @@ enabled: true
 icon: issue-opened
 emoji: 🎫
 color: '#bf8700'
-agent_spec_id: analyze-support-tickets
+agent_spec_id: analyze-support-tickets:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:

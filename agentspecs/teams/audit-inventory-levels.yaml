@@ -5,6 +5,7 @@
 # Auto-extracted from agent spec audit-inventory-levels
 
 id: audit-inventory-levels
+version: 0.0.1
 name: Audit Inventory Levels
 description: 'A multi-agent team that monitors inventory levels across warehouses, detects discrepancies
   between physical and system counts, forecasts demand by SKU, and generates automated reorder recommendations.
@@ -19,7 +20,7 @@ enabled: true
 icon: package
 emoji: 📦
 color: '#0969da'
-agent_spec_id: audit-inventory-levels
+agent_spec_id: audit-inventory-levels:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:

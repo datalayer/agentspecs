@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: github-actions-deploy
+version: 0.0.1
 name: GitHub Actions Deploy
 description: >-
   Full-access guardrail for deployment agents running via GitHub Actions.

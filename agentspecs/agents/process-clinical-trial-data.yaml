@@ -7,6 +7,7 @@
 # and submission-ready dataset preparation across multi-site trials.
 
 id: process-clinical-trial-data
+version: 0.0.1
 name: Process Clinical Trial Data
 description: >
   A multi-agent team that automates clinical trial data processing across
@@ -32,12 +33,12 @@ memory: ephemeral
 
 # MCP servers used by this agent team
 mcp_servers:
-  - filesystem
+  - filesystem:0.0.1
 
 # Skills available to this agent team
 skills:
-  - pdf
-  - events
+  - pdf:0.0.1
+  - events:0.0.1
 
 # Runtime environment
 environment_name: ai-agents-env

@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: data-engineering-power-user
+version: 0.0.1
 name: Data Engineering Power User
 description: >-
   Power-user guardrail for data engineering agents with full

@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: event
+version: 0.0.1
 name: Event-Based
 description: >-
   Trigger on specific events such as a webhook call, API request,

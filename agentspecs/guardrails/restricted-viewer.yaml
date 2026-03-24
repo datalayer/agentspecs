@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: restricted-viewer
+version: 0.0.1
 name: Restricted Viewer
 description: >-
   Minimal-permissions guardrail for read-only monitoring agents.

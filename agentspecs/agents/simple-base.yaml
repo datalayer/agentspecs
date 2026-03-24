@@ -5,6 +5,7 @@
 # A minimal agent with no MCP servers or skills.
 
 id: simple-base
+version: 0.0.1
 name: A Simple Agent
 description: >
   A simple conversational agent. No tools, no MCP servers, no skills —
@@ -28,11 +29,11 @@ mcp_servers: []
 
 # No skills
 skills:
-  - events
+  - events:0.0.1
 
 # Runtime tools
 tools:
-  - runtime-echo
+  - runtime-echo:0.0.1
 # Runtime environment
 environment_name: ai-agents-env
 

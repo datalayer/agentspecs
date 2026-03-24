@@ -2,13 +2,14 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: github
+version: 0.0.1
 name: GitHub Skill
 description: GitHub repository management and code operations
 
 module: agent_skills.github
 
 envvars:
-  - GITHUB_TOKEN
+  - GITHUB_TOKEN:0.0.1
 
 dependencies:
   - PyGithub>=2.1.0

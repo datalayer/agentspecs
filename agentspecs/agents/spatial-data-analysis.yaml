@@ -5,6 +5,7 @@
 # Inspired by Eurus climate workflows and Earthdata catalog exploration.
 
 id: spatial-data-analysis
+version: 0.0.1
 name: Spatial Data Analysis Agent
 description: >
   Discovers, acquires, and analyzes geospatial datasets using Earthdata and
@@ -27,13 +28,13 @@ memory: ephemeral
 
 # MCP servers used by this agent
 mcp_servers:
-  - earthdata
-  - eurus
-  - filesystem
+  - earthdata:0.0.1
+  - eurus:0.0.1
+  - filesystem:0.0.1
 
 # Skills available to this agent
 skills:
-  - events
+  - events:0.0.1
 
 # Runtime environment
 environment_name: ai-agents-env

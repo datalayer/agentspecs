@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: swe-bench-verified
+version: 0.0.1
 name: SWE-bench Verified
 description: >-
   Human-validated subset of SWE-bench with verified ground-truth patches.

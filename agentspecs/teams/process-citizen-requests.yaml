@@ -5,6 +5,7 @@
 # Auto-extracted from agent spec process-citizen-requests
 
 id: process-citizen-requests
+version: 0.0.1
 name: Process Citizen Requests
 description: 'A multi-agent team that automates citizen request processing for government agencies. Classifies
   and triages permits, FOIA requests, and benefit claims from multiple channels. Models policy impacts
@@ -23,7 +24,7 @@ enabled: true
 icon: organization
 emoji: 🏛️
 color: '#0550ae'
-agent_spec_id: process-citizen-requests
+agent_spec_id: process-citizen-requests:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:

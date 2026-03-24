@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: chart
+version: 0.0.1
 name: Chart Generator
 description: Generate charts and visualizations
 

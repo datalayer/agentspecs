@@ -7,6 +7,7 @@
 # Source: UI mock flow id=1 (Agents.tsx, AgentFlow.tsx)
 
 id: monitor-sales-kpis
+version: 0.0.1
 name: Monitor Sales KPIs
 description: >
   Monitor and analyze sales KPIs from the CRM system. Generate daily reports
@@ -30,19 +31,19 @@ memory: mem0
 
 # MCP servers used by this agent
 mcp_servers:
-  - filesystem
+  - filesystem:0.0.1
 
 # Skills available to this agent
 skills:
-  - github
-  - pdf
-  - events
+  - github:0.0.1
+  - pdf:0.0.1
+  - events:0.0.1
 
 # Runtime tools available to this agent
 tools:
-  - runtime-echo
-  - runtime-sensitive-echo
-  - runtime-send-mail
+  - runtime-echo:0.0.1
+  - runtime-sensitive-echo:0.0.1
+  - runtime-send-mail:0.0.1
 
 # Runtime environment
 environment_name: ai-agents-env

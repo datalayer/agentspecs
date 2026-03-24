@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: api-push
+version: 0.0.1
 name: API Push
 description: >-
   Push results to an external API endpoint via HTTP POST.

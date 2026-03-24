@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: slack
+version: 0.0.1
 name: Slack
 description: >-
   Post notifications to a Slack channel or direct message when

@@ -4,6 +4,7 @@
 # AI Model Specification: OpenAI GPT-4o Mini
 
 id: "openai:gpt-4o-mini"
+version: 0.0.1
 name: OpenAI GPT-4o Mini
 description: GPT-4o Mini by OpenAI - compact and cost-effective
 provider: openai

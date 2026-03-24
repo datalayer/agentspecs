@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: csv
+version: 0.0.1
 name: CSV
 description: >-
   Deliver results as a CSV file for easy import into spreadsheets,

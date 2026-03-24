@@ -5,6 +5,7 @@
 # Auto-extracted from agent spec comprehensive-sales-analytics
 
 id: comprehensive-sales-analytics
+version: 0.0.1
 name: Comprehensive Sales Analytics
 description: 'A multi-agent team that replaces a single KPI monitor with four specialized agents: a Data
   Collector that pulls real-time CRM metrics, an Anomaly Detector that flags statistical outliers, a Trend
@@ -23,7 +24,7 @@ enabled: true
 icon: graph
 emoji: 📈
 color: '#1a7f37'
-agent_spec_id: comprehensive-sales-analytics
+agent_spec_id: comprehensive-sales-analytics:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:

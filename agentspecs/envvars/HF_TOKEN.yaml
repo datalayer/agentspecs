@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: HF_TOKEN
+version: 0.0.1
 name: Hugging Face Token
 description: Access token for Hugging Face API. Required for Hugging Face MCP server authentication. Create a READ token from your settings.
 registrationUrl: https://huggingface.co/settings/tokens

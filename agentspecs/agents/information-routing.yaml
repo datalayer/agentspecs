@@ -5,6 +5,7 @@
 # Routes information between Google Drive and Slack, managing workflows.
 
 id: information-routing
+version: 0.0.1
 name: Information Routing Agent
 description: >
   Routes information between Google Drive and other services, managing document
@@ -25,12 +26,12 @@ memory: ephemeral
 
 # MCP servers used by this agent
 mcp_servers:
-  - google-workspace
-  - github
+  - google-workspace:0.0.1
+  - github:0.0.1
 
 # Skills available to this agent
 skills:
-  - events
+  - events:0.0.1
 # Runtime environment
 environment_name: ai-agents-env
 

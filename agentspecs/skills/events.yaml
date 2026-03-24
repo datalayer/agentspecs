@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: events
+version: 0.0.1
 name: Events Skill
 description: Event generation, enrichment, and lifecycle orchestration
 

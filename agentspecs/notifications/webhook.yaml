@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: webhook
+version: 0.0.1
 name: Webhook
 description: >-
   Send notifications to a custom HTTP endpoint via POST request.

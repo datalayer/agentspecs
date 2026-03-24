@@ -5,6 +5,7 @@
 # Auto-extracted from agent spec automate-regulatory-reporting
 
 id: automate-regulatory-reporting
+version: 0.0.1
 name: Automate Regulatory Reporting
 description: 'A multi-agent team that automates end-to-end regulatory reporting for financial institutions.
   Ingests data from trading systems, risk engines, and accounting platforms, reconciles positions, computes
@@ -23,7 +24,7 @@ enabled: true
 icon: shield-check
 emoji: 🏦
 color: '#0969da'
-agent_spec_id: automate-regulatory-reporting
+agent_spec_id: automate-regulatory-reporting:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:

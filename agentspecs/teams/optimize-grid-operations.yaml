@@ -5,6 +5,7 @@
 # Auto-extracted from agent spec optimize-grid-operations
 
 id: optimize-grid-operations
+version: 0.0.1
 name: Optimize Grid Operations
 description: 'A multi-agent team that processes millions of IoT sensor data points from smart meters,
   substations, and renewable generation assets. Predicts equipment failures 2–4 weeks in advance, optimises
@@ -22,7 +23,7 @@ enabled: true
 icon: zap
 emoji: ⚡
 color: '#1a7f37'
-agent_spec_id: optimize-grid-operations
+agent_spec_id: optimize-grid-operations:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:

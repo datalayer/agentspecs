@@ -4,6 +4,7 @@
 # AI Model Specification: Azure OpenAI GPT-4.1
 
 id: "azure-openai:gpt-4.1"
+version: 0.0.1
 name: Azure OpenAI GPT-4.1
 description: GPT-4.1 via Azure OpenAI - strong general purpose
 provider: azure-openai

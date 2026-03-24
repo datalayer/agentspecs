@@ -8,6 +8,7 @@
 # items, and resources. Designed for long-running, always-on agents.
 
 id: memu
+version: 0.0.1
 name: memU Proactive Memory
 description: >
   Proactive memory framework built for 24/7 always-on agents. Continuously

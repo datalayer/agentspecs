@@ -5,6 +5,7 @@
 # Auto-extracted from agent spec analyze-campaign-performance
 
 id: analyze-campaign-performance
+version: 0.0.1
 name: Analyze Campaign Performance
 description: 'A multi-agent team that unifies marketing data from Google Ads, Meta, TikTok, LinkedIn,
   GA4, CRM, and email platforms. Normalises metrics into a unified view, detects performance anomalies
@@ -22,7 +23,7 @@ enabled: true
 icon: megaphone
 emoji: 📢
 color: '#8250df'
-agent_spec_id: analyze-campaign-performance
+agent_spec_id: analyze-campaign-performance:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:

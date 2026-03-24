@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: dashboard
+version: 0.0.1
 name: Dashboard
 description: >-
   Deliver results as an interactive dashboard with charts,

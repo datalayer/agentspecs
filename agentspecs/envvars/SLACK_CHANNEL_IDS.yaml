@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: SLACK_CHANNEL_IDS
+version: 0.0.1
 name: Slack Channel IDs
 description: Comma-separated list of Slack channel IDs that the bot is allowed to access. Restricts bot operations to specific channels for security and organization.
 tags:

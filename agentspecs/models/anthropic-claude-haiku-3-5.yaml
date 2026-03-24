@@ -4,6 +4,7 @@
 # AI Model Specification: Anthropic Claude Haiku 3.5
 
 id: "anthropic:claude-3-5-haiku-20241022"
+version: 0.0.1
 name: Anthropic Claude Haiku 3.5
 description: Claude Haiku 3.5 by Anthropic - fast and efficient
 provider: anthropic

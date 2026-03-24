@@ -4,6 +4,7 @@
 # AI Model Specification: OpenAI GPT-4.1
 
 id: "openai:gpt-4.1"
+version: 0.0.1
 name: OpenAI GPT-4.1
 description: GPT-4.1 by OpenAI - strong general purpose model
 provider: openai

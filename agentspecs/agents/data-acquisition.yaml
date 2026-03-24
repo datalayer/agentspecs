@@ -6,6 +6,7 @@
 # Kaggle datasets and local filesystem operations.
 
 id: data-acquisition
+version: 0.0.1
 name: Data Acquisition Agent
 description: >
   Acquires and manages data from various sources including Kaggle datasets
@@ -27,14 +28,14 @@ memory: ephemeral
 
 # MCP servers used by this agent
 mcp_servers:
-  - kaggle
-  - filesystem
-  - tavily
+  - kaggle:0.0.1
+  - filesystem:0.0.1
+  - tavily:0.0.1
 
 # Skills available to this agent
 skills:
-  - github
-  - events
+  - github:0.0.1
+  - events:0.0.1
 
 # Runtime environment
 environment_name: ai-agents-env

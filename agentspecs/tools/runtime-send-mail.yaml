@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: runtime-send-mail
+version: 0.0.1
 name: Runtime Send Mail (Fake)
 description: Fake mail sender for tool approval demos; returns a simulated send receipt.
 tags:

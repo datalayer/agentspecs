@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: slack
+version: 0.0.1
 name: Slack
 description: Slack messaging and channel operations
 
@@ -13,9 +14,9 @@ args:
 transport: stdio
 
 envvars:
-  - SLACK_BOT_TOKEN
-  - SLACK_TEAM_ID
-  - SLACK_CHANNEL_IDS
+  - SLACK_BOT_TOKEN:0.0.1
+  - SLACK_TEAM_ID:0.0.1
+  - SLACK_CHANNEL_IDS:0.0.1
 
 env:
   SLACK_BOT_TOKEN: "${SLACK_BOT_TOKEN}"

@@ -9,6 +9,7 @@
 #   - Events skill
 
 id: simple-full
+version: 0.0.1
 name: Tool Approval Demo
 description: >
   A minimal demonstration agent showcasing the human-in-the-loop tool
@@ -31,16 +32,16 @@ memory: ephemeral
 
 # MCP servers
 mcp_servers:
-  - tavily
+  - tavily:0.0.1
 
 # Skills
 skills:
-  - events
+  - events:0.0.1
 
 # Runtime tools (runtime-echo = auto approval, runtime-sensitive-echo = manual approval)
 tools:
-  - runtime-echo
-  - runtime-sensitive-echo
+  - runtime-echo:0.0.1
+  - runtime-sensitive-echo:0.0.1
 
 # Runtime environment
 environment_name: ai-agents-env

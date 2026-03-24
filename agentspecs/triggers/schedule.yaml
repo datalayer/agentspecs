@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: schedule
+version: 0.0.1
 name: Schedule
 description: >-
   Run on a recurring schedule using a cron expression

@@ -4,6 +4,7 @@
 # AI Model Specification: OpenAI o3 Mini
 
 id: "openai:o3-mini"
+version: 0.0.1
 name: OpenAI o3 Mini
 description: o3 Mini by OpenAI - reasoning-focused compact model
 provider: openai

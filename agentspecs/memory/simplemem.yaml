@@ -8,6 +8,7 @@
 # with intent-aware retrieval planning.
 
 id: simplemem
+version: 0.0.1
 name: SimpleMem Lifelong Memory
 description: >
   Efficient lifelong memory framework based on semantic lossless compression.

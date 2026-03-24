@@ -5,6 +5,7 @@
 # Provides access to Hugging Face models, datasets, spaces, and papers
 
 id: huggingface
+version: 0.0.1
 name: Hugging Face
 description: Hugging Face models, datasets, spaces, and papers access
 
@@ -25,7 +26,7 @@ enabled: true
 
 # Environment variable specifications
 envvars:
-  - HF_TOKEN
+  - HF_TOKEN:0.0.1
 
 # Optional environment variables to pass to the server process
 env: {}

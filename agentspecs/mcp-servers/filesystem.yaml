@@ -5,6 +5,7 @@
 # Local filesystem read/write operations
 
 id: filesystem
+version: 0.0.1
 name: Filesystem
 description: Local filesystem read/write operations
 

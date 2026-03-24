@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: github-ci-bot
+version: 0.0.1
 name: GitHub CI Bot
 description: >-
   Guardrail for automated CI/CD agents running via GitHub Actions.

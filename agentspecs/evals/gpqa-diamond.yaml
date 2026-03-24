@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: gpqa-diamond
+version: 0.0.1
 name: GPQA Diamond
 description: >-
   Graduate-level science questions crafted by domain experts.

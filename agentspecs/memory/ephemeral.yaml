@@ -7,6 +7,7 @@
 # that only need to remember context within a single session.
 
 id: ephemeral
+version: 0.0.1
 name: Ephemeral Memory
 description: >
   Simple in-process memory that lives and dies with the agent. Stores

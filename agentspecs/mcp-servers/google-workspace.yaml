@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: google-workspace
+version: 0.0.1
 name: Google Workspace
 description: Google Drive, Gmail, Calendar, and Docs integration
 
@@ -12,8 +13,8 @@ args:
 transport: stdio
 
 envvars:
-  - GOOGLE_OAUTH_CLIENT_ID
-  - GOOGLE_OAUTH_CLIENT_SECRET
+  - GOOGLE_OAUTH_CLIENT_ID:0.0.1
+  - GOOGLE_OAUTH_CLIENT_SECRET:0.0.1
 
 env:
   GOOGLE_OAUTH_CLIENT_ID: "${GOOGLE_OAUTH_CLIENT_ID}"

@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: eurus
+version: 0.0.1
 name: Eurus Climate MCP
 description: Climate and reanalysis analysis tools for spatial workflows
 

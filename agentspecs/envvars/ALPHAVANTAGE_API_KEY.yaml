@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: ALPHAVANTAGE_API_KEY
+version: 0.0.1
 name: Alpha Vantage API Key
 description: API key for accessing Alpha Vantage financial market data and stock information. Provides real-time and historical stock prices, forex data, and cryptocurrency information.
 registrationUrl: https://www.alphavantage.co/support/#api-key

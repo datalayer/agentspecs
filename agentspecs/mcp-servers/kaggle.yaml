@@ -5,6 +5,7 @@
 # Provides access to Kaggle datasets, competitions, models, and notebooks
 
 id: kaggle
+version: 0.0.1
 name: Kaggle
 description: Kaggle datasets, models, competitions, and notebooks access
 
@@ -25,7 +26,7 @@ enabled: true
 
 # Environment variable specifications
 envvars:
-  - KAGGLE_TOKEN
+  - KAGGLE_TOKEN:0.0.1
 
 # Optional environment variables to pass to the server process
 env: {}

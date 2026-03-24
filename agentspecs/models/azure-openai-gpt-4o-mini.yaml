@@ -4,6 +4,7 @@
 # AI Model Specification: Azure OpenAI GPT-4o Mini
 
 id: "azure-openai:gpt-4o-mini"
+version: 0.0.1
 name: Azure OpenAI GPT-4o Mini
 description: GPT-4o Mini via Azure OpenAI - compact enterprise deployment
 provider: azure-openai

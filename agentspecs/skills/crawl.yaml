@@ -2,13 +2,14 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: crawl
+version: 0.0.1
 name: Web Crawl Skill
 description: Web crawling and content extraction capabilities
 
 module: agent_skills.crawl
 
 envvars:
-  - TAVILY_API_KEY
+  - TAVILY_API_KEY:0.0.1
 
 dependencies:
   - requests>=2.31.0

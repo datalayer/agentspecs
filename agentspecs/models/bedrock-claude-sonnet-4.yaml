@@ -4,6 +4,7 @@
 # AI Model Specification: Bedrock Claude Sonnet 4
 
 id: "bedrock:us.anthropic.claude-sonnet-4-20250514-v1:0"
+version: 0.0.1
 name: Bedrock Claude Sonnet 4
 description: Claude Sonnet 4 via AWS Bedrock - strong reasoning
 provider: bedrock

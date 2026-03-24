@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: GOOGLE_OAUTH_CLIENT_ID
+version: 0.0.1
 name: Google OAuth Client ID
 description: OAuth 2.0 client ID for Google Workspace authentication. Required for Google Drive, Gmail, Calendar, and Docs integration through the Google Workspace MCP server.
 registrationUrl: https://console.cloud.google.com/apis/credentials

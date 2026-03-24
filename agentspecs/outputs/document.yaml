@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: document
+version: 0.0.1
 name: Document
 description: >-
   Deliver results as a structured document (PDF, DOCX, or Markdown)

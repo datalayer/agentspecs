@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: once
+version: 0.0.1
 name: Run Once
 description: Execute agent immediately after deployment.
 type: once

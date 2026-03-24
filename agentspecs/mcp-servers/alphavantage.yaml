@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: alphavantage
+version: 0.0.1
 name: Alpha Vantage
 description: Financial market data and stock information
 
@@ -13,7 +14,7 @@ args:
 transport: stdio
 
 envvars:
-  - ALPHAVANTAGE_API_KEY
+  - ALPHAVANTAGE_API_KEY:0.0.1
 
 env:
   MAX_RESPONSE_TOKENS: "100000"

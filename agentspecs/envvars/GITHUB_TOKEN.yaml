@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: GITHUB_TOKEN
+version: 0.0.1
 name: GitHub Token
 description: GitHub API token for repository management and code operations. Required for GitHub MCP server and GitHub skill to interact with GitHub repositories programmatically.
 registrationUrl: https://github.com/settings/tokens

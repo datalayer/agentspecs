@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: notebook
+version: 0.0.1
 name: Notebook
 description: >-
   Deliver results as a Jupyter notebook with executable cells,

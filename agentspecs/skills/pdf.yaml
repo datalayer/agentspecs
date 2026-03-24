@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: pdf
+version: 0.0.1
 name: PDF Processing Skill
 description: PDF document reading, parsing, and extraction
 

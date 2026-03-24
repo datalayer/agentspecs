@@ -5,6 +5,7 @@
 # Web crawling and research agent that searches the web and GitHub repositories.
 
 id: crawler
+version: 0.0.1
 name: Crawler Agent
 description: >
   Web crawling and research agent that searches the web and GitHub
@@ -27,12 +28,12 @@ memory: ephemeral
 
 # MCP servers used by this agent
 mcp_servers:
-  - tavily
+  - tavily:0.0.1
 
 # Skills available to this agent
 skills:
-  - github
-  - events
+  - github:0.0.1
+  - events:0.0.1
 
 # Runtime environment
 environment_name: ai-agents-env

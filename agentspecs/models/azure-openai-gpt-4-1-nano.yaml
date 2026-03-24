@@ -4,6 +4,7 @@
 # AI Model Specification: Azure OpenAI GPT-4.1 Nano
 
 id: "azure-openai:gpt-4.1-nano"
+version: 0.0.1
 name: Azure OpenAI GPT-4.1 Nano
 description: GPT-4.1 Nano via Azure OpenAI - smallest and fastest
 provider: azure-openai

@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: agentbench
+version: 0.0.1
 name: AgentBench
 description: >-
   Multi-dimensional LLM-as-agent evaluation across 8 diverse environments

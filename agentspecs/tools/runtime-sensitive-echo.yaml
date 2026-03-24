@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: runtime-sensitive-echo
+version: 0.0.1
 name: Runtime Sensitive Echo
 description: Echo text with a manual approval checkpoint before execution.
 tags:

@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: email
+version: 0.0.1
 name: Email
 description: >-
   Send results as an email attachment or inline HTML body.

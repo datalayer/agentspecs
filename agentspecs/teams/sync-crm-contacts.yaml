@@ -5,6 +5,7 @@
 # Auto-extracted from agent spec sync-crm-contacts
 
 id: sync-crm-contacts
+version: 0.0.1
 name: Sync CRM Contacts
 description: 'A multi-agent team that collects and aggregates contact data from multiple CRM sources,
   analyzes and deduplicates records, writes cleaned data back, and generates sync summary reports.
@@ -19,7 +20,7 @@ enabled: true
 icon: people
 emoji: 🔄
 color: '#0969da'
-agent_spec_id: sync-crm-contacts
+agent_spec_id: sync-crm-contacts:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:

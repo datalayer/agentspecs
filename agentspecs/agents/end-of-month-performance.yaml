@@ -6,6 +6,7 @@
 # directly from Salesforce and generates executive-ready performance reports.
 
 id: end-of-month-sales-performance
+version: 0.0.1
 name: End of Month Sales Performance
 description: >
   Consolidates and analyzes end-of-month retail sales data directly from Salesforce.
@@ -40,12 +41,12 @@ memory: ephemeral
 
 # MCP servers used by this agent
 mcp_servers:
-  - salesforce
+  - salesforce:0.0.1
 
 # Skills available to this agent
 skills:
-  - pdf
-  - events
+  - pdf:0.0.1
+  - events:0.0.1
 
 # Runtime environment
 environment_name: ai-agents-env

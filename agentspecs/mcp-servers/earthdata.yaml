@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: earthdata
+version: 0.0.1
 name: Earthdata MCP
 description: Access NASA Earthdata search and metadata capabilities
 
@@ -18,8 +19,8 @@ env:
   EARTHDATA_PASSWORD: ${EARTHDATA_PASSWORD}
 
 envvars:
-  - EARTHDATA_USERNAME
-  - EARTHDATA_PASSWORD
+  - EARTHDATA_USERNAME:0.0.1
+  - EARTHDATA_PASSWORD:0.0.1
 
 tags:
   - geospatial

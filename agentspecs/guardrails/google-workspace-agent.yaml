@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: google-workspace-agent
+version: 0.0.1
 name: Google Workspace Agent
 description: >-
   Guardrail for agents integrating with Google Workspace services

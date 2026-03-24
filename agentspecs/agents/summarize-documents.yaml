@@ -6,6 +6,7 @@
 # contracts, research papers — producing structured executive summaries.
 
 id: summarize-documents
+version: 0.0.1
 name: Summarize Documents
 description: >
   A generic document summarization agent that processes PDFs, Word files,
@@ -30,12 +31,12 @@ memory: ephemeral
 
 # MCP servers used by this agent
 mcp_servers:
-  - filesystem
+  - filesystem:0.0.1
 
 # Skills available to this agent
 skills:
-  - pdf
-  - events
+  - pdf:0.0.1
+  - events:0.0.1
 
 # Runtime environment
 environment_name: ai-agents-env

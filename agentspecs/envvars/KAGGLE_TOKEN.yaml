@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: KAGGLE_TOKEN
+version: 0.0.1
 name: Kaggle API Token
 description: API token for accessing Kaggle datasets, competitions, notebooks, and models. Required for Kaggle MCP server authentication.
 registrationUrl: https://www.kaggle.com/settings/account

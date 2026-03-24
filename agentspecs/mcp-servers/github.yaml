@@ -5,6 +5,7 @@
 # Provides GitHub repository operations (issues, PRs, code search)
 
 id: github
+version: 0.0.1
 name: GitHub
 description: GitHub repository operations (issues, PRs, code search)
 
@@ -24,7 +25,7 @@ env:
   GITHUB_PERSONAL_ACCESS_TOKEN: "${GITHUB_TOKEN}"
 
 envvars:
-  - GITHUB_TOKEN
+  - GITHUB_TOKEN:0.0.1
 
 tags:
   - development

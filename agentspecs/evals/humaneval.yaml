@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 id: humaneval
+version: 0.0.1
 name: HumanEval
 description: >-
   Python function implementation from docstrings. Measures functional
