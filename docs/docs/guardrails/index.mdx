@@ -1,0 +1,28 @@
+---
+sidebar_position: 1
+title: Guardrails
+---
+
+# Guardrail Specifications
+
+Guardrail specs define policy and permission envelopes for agents.
+
+## Required Fields
+
+- `id`
+- `version`
+- `name`
+- `description`
+
+## Common Fields
+
+- identity/provider context
+- permission maps
+- approval policy
+- token limits
+- data handling constraints
+
+## Notes
+
+- Guardrails are referenced from agent specs.
+- Keep policy IDs stable and versioned.

@@ -20,6 +20,9 @@ Unique identifier (UPPER_SNAKE_CASE, e.g., `KAGGLE_TOKEN`, `GITHUB_TOKEN`, `OPEN
 ### `name` (string)
 Display name shown in the UI
 
+### `version` (string)
+Spec version (currently `0.0.1`).
+
 ### `description` (string)
 Purpose and usage description
 
@@ -56,6 +59,7 @@ UI emoji identifier
 # Distributed under the terms of the Modified BSD License.
 
 id: KAGGLE_TOKEN
+version: 0.0.1
 name: Kaggle API Token
 description: >
   API token for accessing Kaggle datasets, competitions, notebooks, and models.
@@ -91,7 +95,7 @@ name: Kaggle MCP Server
 # ... other fields ...
 
 envvars:
-  - KAGGLE_TOKEN
+  - KAGGLE_TOKEN:0.0.1
 
 args:
   - "--Authorization"
@@ -105,7 +109,7 @@ name: Data Analysis Skill
 # ... other fields ...
 
 envvars:
-  - OPENAI_API_KEY
+  - OPENAI_API_KEY:0.0.1
 
 optional_env_vars:
   - PLOT_DPI
@@ -137,3 +141,7 @@ The following environment variables are defined in `agentspecs/envvars/`:
 6. **Security**: Never include actual values in the specification
 7. **Documentation**: Be clear about whether the variable is required or optional
 8. **Scope**: Define one variable per specification file
+
+## Details
+
+For additional conventions around references and catalog behavior, see [Agentspecs Overview](../index).

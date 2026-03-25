@@ -1,0 +1,38 @@
+---
+sidebar_position: 1
+title: Outputs
+---
+
+# Output Specifications
+
+Output specs define standardized output channel/templates for agent results.
+
+## Required Fields
+
+- `id`
+- `version`
+- `name`
+- `description`
+
+## Common Fields
+
+- format capabilities
+- template support
+- storage support
+- mime types
+- icon
+
+## Example
+
+```yaml
+id: dashboard
+version: 0.0.1
+name: Dashboard
+description: Deliver results as an interactive dashboard
+supports_template: true
+supports_storage: true
+mime_types:
+  - text/html
+  - application/json
+icon: graph
+```

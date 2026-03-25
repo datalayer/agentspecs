@@ -5,7 +5,7 @@
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
-  title: '🤖 👷 Agentspecs',
+  title: '🧾 Agentspecs',
   tagline: 'Agentspecs',
   url: 'https://agentspecs.datalayer.tech',
   baseUrl: '/',

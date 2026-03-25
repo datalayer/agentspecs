@@ -20,6 +20,9 @@ id: "openai:gpt-4.1"
 id: "anthropic:claude-opus-4-20250514"
 ```
 
+### `version` (string)
+Spec version (currently `0.0.1`).
+
 ### `name` (string)
 Display name shown in the UI.
 ```yaml
@@ -69,6 +72,7 @@ required_env_vars:
 # AI Model Specification: Bedrock Claude Sonnet 4.5
 
 id: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+version: 0.0.1
 name: Bedrock Claude Sonnet 4.5
 description: Claude Sonnet 4.5 via AWS Bedrock - balanced performance
 provider: bedrock
@@ -168,3 +172,18 @@ Run `make specs` in the agent-runtimes repository to regenerate from the YAML fi
 4. **Descriptions**: Keep descriptions short — mention the provider, model tier, and key characteristic
 5. **Provider Consistency**: Use the canonical provider names (`anthropic`, `bedrock`, `azure-openai`, `openai`)
 6. **File Naming**: Use kebab-case matching the provider and model name (e.g., `bedrock-claude-sonnet-4-5.yaml`)
+
+## Full Field Coverage
+
+Required fields:
+
+- `id`
+- `version`
+- `name`
+- `description`
+- `provider`
+
+Common optional fields:
+
+- `default` (bool)
+- `required_env_vars`

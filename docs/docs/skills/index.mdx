@@ -15,6 +15,9 @@ Skills are Python modules that provide specific capabilities to agents. Each ski
 ### `id` (string)
 Unique identifier (kebab-case, e.g., `data-analysis`, `code-generation`)
 
+### `version` (string)
+Spec version (currently `0.0.1`).
+
 ### `name` (string)
 Display name shown in the UI
 
@@ -35,7 +38,7 @@ module: agent_skills.web_search
 Required environment variable IDs. References specs in `envvars/` directory.
 ```yaml
 envvars:
-  - OPENAI_API_KEY
+  - OPENAI_API_KEY:0.0.1
   - GITHUB_TOKEN
 ```
 
@@ -80,13 +83,14 @@ UI emoji identifier
 # Distributed under the terms of the Modified BSD License.
 
 id: data-analysis
+version: 0.0.1
 name: Data Analysis Skill
 description: Perform statistical analysis and data visualization
 
 module: agent_skills.data_analysis
 
 envvars:
-  - OPENAI_API_KEY
+  - OPENAI_API_KEY:0.0.1
 
 optional_env_vars:
   - PLOT_DPI
@@ -141,3 +145,21 @@ skills:
 6. **Description**: Focus on what the skill enables the agent to do
 7. **Version Constraints**: Use `>=` for minimum versions, avoid overly restrictive pinning
 8. **Documentation**: Ensure the module path points to existing Python code
+
+## Full Field Coverage
+
+Required fields:
+
+- `id`
+- `version`
+- `name`
+- `description`
+- `module`
+
+Common optional fields:
+
+- `envvars` (prefer `id:version` refs)
+- `optional_env_vars`
+- `dependencies`
+- `tags`
+- `icon`, `emoji`

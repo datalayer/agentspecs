@@ -1,0 +1,47 @@
+---
+sidebar_position: 1
+title: Tools
+---
+
+# Tool Specifications
+
+Tool specs define runtime-callable tools and their implementation bindings.
+
+## Required Fields
+
+- `id`
+- `version`
+- `name`
+- `description`
+
+## Common Fields
+
+- `enabled`
+- `approval` (`auto` or `manual`)
+- `runtime.language`
+- `runtime.package`
+- `runtime.method`
+- `tags`
+- `icon`, `emoji`
+
+## Example
+
+```yaml
+id: runtime-echo
+version: 0.0.1
+name: Runtime Echo
+description: Echo text back to caller for runtime verification
+enabled: true
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.examples.tools
+  method: runtime_echo
+icon: comment
+emoji: "💬"
+```
+
+## Notes
+
+- Use stable IDs and bump `version` for breaking changes.
+- Use explicit tool refs (`id:version`) from agent specs when present.

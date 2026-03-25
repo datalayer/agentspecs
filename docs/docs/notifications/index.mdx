@@ -1,0 +1,36 @@
+---
+sidebar_position: 1
+title: Notifications
+---
+
+# Notification Specifications
+
+Notification specs define reusable notification channels and field templates.
+
+## Required Fields
+
+- `id`
+- `version`
+- `name`
+- `description`
+
+## Common Fields
+
+- `available`
+- `icon`
+- `fields` (typed channel configuration fields)
+
+## Example
+
+```yaml
+id: slack
+version: 0.0.1
+name: Slack
+description: Post notifications to Slack channels
+icon: bell
+available: true
+fields:
+  - name: channel
+    type: string
+    required: true
+```

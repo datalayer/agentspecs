@@ -1,0 +1,39 @@
+---
+sidebar_position: 1
+title: Teams
+---
+
+# Team Specifications
+
+Team specs define multi-agent orchestration behavior.
+
+## Required Fields
+
+- `id`
+- `version`
+- `name`
+- `description`
+
+## Common Fields
+
+- `enabled`
+- `agent_spec_id` (use versioned reference)
+- `orchestration_protocol`
+- `execution_mode`
+- `supervisor`
+- `agents`
+- `reaction_rules`
+- `health_monitoring`
+- `notifications`
+- `output`
+
+## Example
+
+```yaml
+id: comprehensive-sales-analytics
+version: 0.0.1
+name: Comprehensive Sales Analytics
+agent_spec_id: comprehensive-sales-analytics:0.0.1
+orchestration_protocol: datalayer
+execution_mode: sequential
+```

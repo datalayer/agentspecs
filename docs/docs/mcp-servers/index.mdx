@@ -15,6 +15,9 @@ MCP servers provide tools and resources to agents through a standardized protoco
 ### `id` (string)
 Unique identifier (kebab-case, e.g., `kaggle`, `github`, `filesystem`)
 
+### `version` (string)
+Spec version (currently `0.0.1`).
+
 ### `name` (string)
 Display name shown in the UI
 
@@ -52,7 +55,7 @@ transport: remote  # Remote HTTP connection
 Required environment variable IDs. References specs in `envvars/` directory.
 ```yaml
 envvars:
-  - KAGGLE_TOKEN
+  - KAGGLE_TOKEN:0.0.1
   - GITHUB_TOKEN
 ```
 
@@ -107,6 +110,7 @@ The `${KAGGLE_TOKEN}` will be expanded at runtime by consuming systems.
 # Distributed under the terms of the Modified BSD License.
 
 id: kaggle
+version: 0.0.1
 name: Kaggle MCP Server
 description: Access Kaggle datasets, competitions, and kernels
 
@@ -124,7 +128,7 @@ args:
 transport: remote
 
 envvars:
-  - KAGGLE_TOKEN
+  - KAGGLE_TOKEN:0.0.1
 
 tags:
   - data
@@ -167,3 +171,22 @@ The following MCP servers are defined in `agentspecs/mcp-servers/`:
 6. **Transport**: Specify `stdio` for local processes, `remote` for HTTP connections
 7. **Tags**: Use consistent tags for better categorization
 8. **Description**: Be specific about what tools and resources the server provides
+
+## Full Field Coverage
+
+Required fields:
+
+- `id`
+- `version`
+- `name`
+- `description`
+- `command`
+- `args`
+
+Common optional fields:
+
+- `transport` (`stdio` or `remote`)
+- `envvars` (prefer versioned refs)
+- `env` (process env injection)
+- `tags`
+- `icon`, `emoji`

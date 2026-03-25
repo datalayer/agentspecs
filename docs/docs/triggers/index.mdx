@@ -1,0 +1,25 @@
+---
+sidebar_position: 1
+title: Triggers
+---
+
+# Trigger Specifications
+
+Trigger specs define reusable run triggers (for example once, schedule, event).
+
+## Required Fields
+
+- `id`
+- `version`
+- `name`
+- `description`
+
+## Common Fields
+
+- trigger type (`once`, `schedule`, `event`)
+- schedule/cron details
+- prompt templates
+
+## Notes
+
+- Agents can embed triggers directly or reference templates depending on runtime flow.

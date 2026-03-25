@@ -1,0 +1,26 @@
+---
+sidebar_position: 1
+title: Evals
+---
+
+# Eval Specifications
+
+Eval specs define reusable benchmark/evaluation suites.
+
+## Required Fields
+
+- `id`
+- `version`
+- `name`
+- `description`
+
+## Common Fields
+
+- category
+- task metadata
+- optional provider/model constraints
+
+## Notes
+
+- Evals are referenced from agent specs and runtime workflows.
+- Prefer explicit `id:version` references.
