@@ -93,14 +93,11 @@ agent_spec_id: comprehensive-sales-analytics:0.0.1
 
 ### Runtime Catalog Aliases
 
-Generated catalogs expose both keys:
+Generated catalogs are keyed by unversioned id only (e.g. `data-acquisition`).
 
-- unversioned alias: `data-acquisition`
-- versioned key: `data-acquisition:0.0.1`
+The `get_*` / `get*Spec` accessor functions accept both bare ids and versioned refs (`data-acquisition:0.0.1`), stripping the version suffix automatically.
 
-Both resolve to the same spec object. This preserves compatibility while enabling strict versioned refs.
-
-Important for consumers: iterating raw catalog values can include duplicates because both keys point to the same spec. Deduplicate by versionless id when rendering lists.
+Iterating catalog values (`.values()` / `Object.values()`) returns each spec exactly once — no deduplication is needed.
 
 ### Default Version During Codegen
 

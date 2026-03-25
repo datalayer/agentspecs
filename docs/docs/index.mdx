@@ -49,12 +49,7 @@ All specs are versioned and include:
 
 Cross-spec references should use `id:version` format (for example `tavily:0.0.1`).
 
-Generated catalogs expose both:
-
-- unversioned alias (`tavily`)
-- versioned key (`tavily:0.0.1`)
-
-When rendering lists from catalog maps, dedupe by versionless id to avoid duplicate entries.
+Generated catalogs are keyed by unversioned id only (e.g. `tavily`). The `get_*` / `get*Spec` accessor functions accept both bare ids and versioned refs (`tavily:0.0.1`), stripping the version suffix automatically. Iterating catalog values returns each spec exactly once.
 
 ## Directory Structure
 

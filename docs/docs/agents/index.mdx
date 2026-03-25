@@ -207,14 +207,9 @@ Advanced workflow fields:
 - `authorization_policy`
 - `notifications`
 
-## Catalog Alias Behavior
+## Catalog Key Convention
 
-Generated catalogs expose both aliases:
-
-- unversioned (`crawler`)
-- versioned (`crawler:0.0.1`)
-
-Both map to the same spec object. UI consumers should dedupe by versionless id when listing all specs.
+Generated catalogs are keyed by unversioned id only (e.g. `crawler`). The `getAgentSpec` accessor accepts both bare ids and versioned refs (`crawler:0.0.1`), stripping the version suffix automatically. Iterating catalog values returns each spec exactly once.
 
 ## Best Practices
 
