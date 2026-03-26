@@ -1,0 +1,15 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: jupyter-notebook
+version: 0.0.1
+name: Jupyter Notebook
+description: Frontend tools for interacting with Jupyter notebooks.
+tags:
+  - frontend
+  - notebook
+  - jupyter
+enabled: true
+toolset: all
+icon: notebook
+emoji: "📓"

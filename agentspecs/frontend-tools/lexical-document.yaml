@@ -1,0 +1,15 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: lexical-document
+version: 0.0.1
+name: Lexical Document
+description: Frontend tools for interacting with Lexical documents.
+tags:
+  - frontend
+  - document
+  - lexical
+enabled: true
+toolset: all
+icon: file
+emoji: "📄"

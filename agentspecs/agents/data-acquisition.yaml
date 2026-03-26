@@ -38,6 +38,9 @@ skills:
   - events:0.0.1
 
 # Runtime environment
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
 environment_name: ai-agents-env
 
 # UI customization

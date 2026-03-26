@@ -34,6 +34,9 @@ skills:
 # Runtime tools
 tools:
   - runtime-echo:0.0.1
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
 # Runtime environment
 environment_name: ai-agents-env
 

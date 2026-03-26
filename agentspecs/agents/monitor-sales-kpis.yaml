@@ -44,6 +44,9 @@ tools:
   - runtime-echo:0.0.1
   - runtime-sensitive-echo:0.0.1
   - runtime-send-mail:0.0.1
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
 
 # Runtime environment
 environment_name: ai-agents-env
