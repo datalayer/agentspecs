@@ -1,0 +1,24 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: text-summarizer
+version: 0.0.1
+name: Text Summarizer Skill
+description: Summarize text content using extractive and abstractive techniques. Use when the user asks for summaries, key points, or condensed versions of documents.
+
+# Variant 2: package + method reference
+# Attributes (license, compatibility, allowed-tools, metadata) are read
+# from the SKILL.md packaged inside the Python package at runtime.
+package: agent_skills.skills.text_summarizer
+method: summarize_text
+
+dependencies:
+  - agent-skills>=0.0.1
+
+tags:
+  - nlp
+  - summarization
+  - text-processing
+
+icon: note
+emoji: 📝
