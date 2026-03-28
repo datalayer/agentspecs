@@ -6,7 +6,7 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: '🧾 Agentspecs',
-  tagline: 'Agentspecs',
+  tagline: 'YAML-based specifications for AI agents, MCP servers, skills and more...',
   url: 'https://agentspecs.datalayer.tech',
   baseUrl: '/',
   onBrokenLinks: 'throw',

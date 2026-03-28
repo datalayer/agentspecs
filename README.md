@@ -10,7 +10,7 @@
 
 # 🧾 Agentspecs
 
-YAML-based specifications for agents, teams, MCP servers, tools, and related runtime catalogs.
+YAML-based specifications for AI agents, MCP servers, skills and more...
 
 ## Overview
 
