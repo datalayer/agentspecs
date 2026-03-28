@@ -6,7 +6,7 @@ version: 0.0.1
 name: GitHub Skill
 description: GitHub repository management and code operations
 
-module: agent_skills.github
+module: agent_skills.skills.github
 
 envvars:
   - GITHUB_TOKEN:0.0.1

@@ -6,7 +6,7 @@ version: 0.0.1
 name: Web Crawl Skill
 description: Web crawling and content extraction capabilities
 
-module: agent_skills.crawl
+module: agent_skills.skills.crawl
 
 envvars:
   - TAVILY_API_KEY:0.0.1

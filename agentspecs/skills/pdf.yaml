@@ -6,7 +6,7 @@ version: 0.0.1
 name: PDF Processing Skill
 description: PDF document reading, parsing, and extraction
 
-module: agent_skills.pdf
+module: agent_skills.skills.pdf
 
 dependencies:
   - PyPDF2>=3.0.0
