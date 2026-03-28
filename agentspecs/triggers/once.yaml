@@ -11,4 +11,4 @@ fields:
     label: Trigger Prompt
     type: string
     required: false
-    placeholder: "Start when requested by a user and complete the workflow once."
+    placeholder: "Start when requested by a user and complete the agent once."

@@ -24,4 +24,4 @@ fields:
     label: Trigger Prompt
     type: string
     required: false
-    placeholder: "Run the scheduled workflow and produce the configured deliverable."
+    placeholder: "Run the scheduled agent and produce the configured deliverable."

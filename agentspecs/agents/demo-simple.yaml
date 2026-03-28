@@ -4,7 +4,7 @@
 # Agent Specification: A Simple Agent
 # A minimal agent with no MCP servers or skills.
 
-id: simple-base
+id: demo-simple
 version: 0.0.1
 name: A Simple Agent
 description: >
