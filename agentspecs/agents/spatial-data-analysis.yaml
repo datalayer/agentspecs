@@ -86,10 +86,8 @@ system_prompt_codemode_addons: >
   3. Execute transformations in code and keep outputs concise.
   4. Persist important run states as events.
 
-# Trigger configuration
-trigger:
-  type: once
-  prompt: "Start when requested by a user, discover relevant spatial datasets, and produce one complete analysis output."
+# No trigger — this is an interactive agent
+trigger: null
 
 # Optional: Jupyter notebook to show on agent creation
 welcome_notebook: null

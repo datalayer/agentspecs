@@ -86,7 +86,5 @@ system_prompt_codemode_addons: null
 welcome_notebook: null
 welcome_document: null
 
-# Trigger configuration
-trigger:
-  type: once
-  prompt: "Start when requested by a user and complete the workflow once."
+# No trigger — this is an interactive agent
+trigger: null

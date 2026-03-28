@@ -73,7 +73,5 @@ welcome_notebook: null
 # Optional: Lexical document to show on agent creation
 welcome_document: null
 
-# Trigger configuration
-trigger:
-  type: once
-  prompt: "Start when requested by a user and complete the workflow once."
+# No trigger — this is an interactive chat agent
+trigger: null
