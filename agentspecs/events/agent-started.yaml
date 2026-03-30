@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: agent-started
+version: 0.0.1
+name: Agent Started
+description: >-
+  Emitted when an agent begins execution. Contains the runtime identifier,
+  agent spec, trigger type, and the prompt being executed.
+kind: agent-started
+fields:
+  - name: agent_runtime_id
+    label: Agent Runtime ID
+    type: string
+    required: true
+    description: Runtime pod or instance identifier.
+  - name: agent_spec_id
+    label: Agent Spec ID
+    type: string
+    required: true
+    description: Identifier of the agent specification being executed.
+  - name: started_at
+    label: Started At
+    type: string
+    required: true
+    description: ISO 8601 timestamp when the agent started.
+  - name: trigger_type
+    label: Trigger Type
+    type: string
+    required: true
+    description: "Type of trigger that launched the agent (e.g. once, cron, webhook)."
+  - name: trigger_prompt
+    label: Trigger Prompt
+    type: string
+    required: false
+    description: The prompt passed to the agent by the trigger.

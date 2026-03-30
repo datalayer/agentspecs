@@ -1,0 +1,66 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Once Trigger with Approval Demo
+# Demonstrates the "once" trigger type combined with tool approval:
+# the agent runs its trigger prompt once, requests manual approval
+# before executing the sensitive echo tool, and then terminates.
+
+id: demo-one-trigger-approval
+version: 0.0.1
+name: Demo with the Once Trigger and Tool Approval
+description: >
+  A demonstration agent for the "once" trigger type with manual tool approval.
+  When launched, the agent executes its trigger prompt once and invokes the
+  runtime-sensitive-echo tool, which requires manual approval before execution.
+  After completion, the runtime is terminated automatically.
+
+tags:
+  - demo
+  - trigger
+  - once
+  - lifecycle
+  - approval
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+sandbox_variant: jupyter
+
+# Memory backend
+memory: ephemeral
+
+# Skills
+skills:
+  - github:0.0.1
+  - events:0.0.1
+
+# Runtime tools
+tools:
+  - runtime-sensitive-echo:0.0.1
+frontend_tools:
+  - jupyter-notebook:0.0.1
+
+# Secrets / environment variables
+envvars:
+  - GITHUB_TOKEN:0.0.1
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: shield
+emoji: 🛡️
+color: "#ef4444"  # Red
+
+# Goal / Prompt
+goal: >-
+  Run a one-shot task: use the runtime-sensitive-echo tool to echo a summary
+  of the user's top 3 public GitHub repositories ranked by recent activity.
+  The tool requires manual approval before execution.
+
+# Trigger configuration
+trigger:
+  type: once
+  description: Run once with approval and terminate
+  prompt: "Use the runtime-sensitive-echo tool to echo a summary of the user's top 3 public GitHub repositories ranked by recent activity."

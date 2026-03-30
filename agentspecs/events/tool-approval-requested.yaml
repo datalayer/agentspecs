@@ -1,0 +1,31 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: tool-approval-requested
+version: 0.0.1
+name: Tool Approval Requested
+description: >-
+  Emitted when an agent invokes a tool that requires manual approval
+  before execution. The agent pauses until the request is approved or rejected.
+kind: tool-approval-requested
+fields:
+  - name: agent_runtime_id
+    label: Agent Runtime ID
+    type: string
+    required: true
+    description: Runtime pod or instance identifier.
+  - name: agent_spec_id
+    label: Agent Spec ID
+    type: string
+    required: false
+    description: Identifier of the agent specification requesting approval.
+  - name: tool_name
+    label: Tool Name
+    type: string
+    required: true
+    description: Name of the tool requiring approval.
+  - name: tool_args
+    label: Tool Arguments
+    type: string
+    required: false
+    description: JSON-serialized arguments passed to the tool.

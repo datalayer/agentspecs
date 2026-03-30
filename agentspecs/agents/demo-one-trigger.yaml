@@ -7,7 +7,7 @@
 
 id: demo-one-trigger
 version: 0.0.1
-name: Once Trigger Demo
+name: Demo with the Once Trigger
 description: >
   A demonstration agent for the "once" trigger type. When launched, the agent
   executes its trigger prompt exactly once, emits AGENT_STARTED and
@@ -38,6 +38,10 @@ tools:
 frontend_tools:
   - jupyter-notebook:0.0.1
 
+# Secrets / environment variables
+envvars:
+  - GITHUB_TOKEN:0.0.1
+
 # Runtime environment
 environment_name: ai-agents-env
 
@@ -48,11 +52,11 @@ color: "#f59e0b"  # Amber
 
 # Goal / Prompt
 goal: >-
-  Run a one-shot task: list the user's public GitHub repositories and provide
-  a brief summary of the most active ones.
+  Run a one-shot task: list the user's top 3 public and top 3 private GitHub
+  repositories, ranked by recent activity, and provide a brief summary of each.
 
 # Trigger configuration
 trigger:
   type: once
   description: Run once and terminate
-  prompt: "List the user's public GitHub repositories and provide a summary."
+  prompt: "List the user's top 3 public and top 3 private GitHub repositories, ranked by recent activity, and provide a brief summary of each."

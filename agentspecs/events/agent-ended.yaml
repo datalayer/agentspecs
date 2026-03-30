@@ -1,0 +1,51 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: agent-ended
+version: 0.0.1
+name: Agent Ended
+description: >-
+  Emitted when an agent finishes execution. Contains timing information,
+  exit status, optional output summary, and error details if applicable.
+kind: agent-ended
+fields:
+  - name: agent_runtime_id
+    label: Agent Runtime ID
+    type: string
+    required: true
+    description: Runtime pod or instance identifier.
+  - name: agent_spec_id
+    label: Agent Spec ID
+    type: string
+    required: true
+    description: Identifier of the agent specification that was executed.
+  - name: started_at
+    label: Started At
+    type: string
+    required: true
+    description: ISO 8601 timestamp when the agent started.
+  - name: ended_at
+    label: Ended At
+    type: string
+    required: true
+    description: ISO 8601 timestamp when the agent ended.
+  - name: duration_ms
+    label: Duration (ms)
+    type: number
+    required: true
+    description: Total execution time in milliseconds.
+  - name: exit_status
+    label: Exit Status
+    type: string
+    required: true
+    description: "Final status of the agent run (e.g. completed, error)."
+  - name: outputs
+    label: Outputs
+    type: string
+    required: false
+    description: Summary of the agent output or generated artifacts.
+  - name: error_message
+    label: Error Message
+    type: string
+    required: false
+    description: Error description if the agent run failed.
