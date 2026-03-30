@@ -31,19 +31,13 @@ sandbox_variant: jupyter
 memory: ephemeral
 
 # Skills
-skills:
-  - github:0.0.1
-  - events:0.0.1
+skills: []
 
 # Runtime tools
 tools:
   - runtime-sensitive-echo:0.0.1
 frontend_tools:
   - jupyter-notebook:0.0.1
-
-# Secrets / environment variables
-envvars:
-  - GITHUB_TOKEN:0.0.1
 
 # Runtime environment
 environment_name: ai-agents-env
@@ -55,12 +49,12 @@ color: "#ef4444"  # Red
 
 # Goal / Prompt
 goal: >-
-  Run a one-shot task: use the runtime-sensitive-echo tool to echo a summary
-  of the user's top 3 public GitHub repositories ranked by recent activity.
-  The tool requires manual approval before execution.
+  Call runtime_sensitive_echo exactly once with
+  message="Tool approval demo executed" and reason="audit".
+  Do not call any other tool.
 
 # Trigger configuration
 trigger:
   type: once
   description: Run once with approval and terminate
-  prompt: "Use the runtime-sensitive-echo tool to echo a summary of the user's top 3 public GitHub repositories ranked by recent activity."
+  prompt: "Call runtime_sensitive_echo exactly once with message='Tool approval demo executed' and reason='audit'. Do not call any other tool."
