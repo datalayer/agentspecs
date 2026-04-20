@@ -1,0 +1,74 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Datalayer Agent
+# Datalayer-focused assistant with profile/identity capabilities via datalayer-skills.
+
+id: datalayer-agent
+version: 0.0.1
+name: Datalayer Agent
+description: >
+  Datalayer-focused assistant that can inspect the authenticated user profile
+  using datalayer-skills.
+
+tags:
+  - datalayer
+  - iam
+  - profile
+  - identity
+
+enabled: false
+model: "bedrock:us.anthropic.claude-3-5-haiku-20241022-v1:0"
+
+sandbox_variant: jupyter
+
+# Memory backend
+memory: ephemeral
+
+# Skills available to this agent
+skills:
+  - datalayer-whoami:0.0.1
+
+# Required environment variables
+envvars:
+  - DATALAYER_API_KEY:0.0.1
+
+# Runtime environment
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+environment_name: ai-agents-env
+
+# UI customization
+icon: person
+emoji: 👤
+color: "#14B8A6"  # Teal
+
+# Chat suggestions to show users what this agent can do
+suggestions:
+  - Who am I on Datalayer?
+  - Show my Datalayer profile details
+  - What roles do I currently have in Datalayer?
+
+# Welcome message shown when agent starts
+welcome_message: >
+  Hi! I'm the Datalayer Agent. I can help you retrieve and summarize your
+  authenticated Datalayer profile.
+
+# System prompt for the agent
+system_prompt: >
+  You are a Datalayer assistant with access to the datalayer-whoami skill.
+  Use it to retrieve the authenticated user's profile when requested.
+  If DATALAYER_API_KEY is missing, clearly ask the user to configure it.
+
+# Additional system prompt for code mode
+system_prompt_codemode_addons: null
+
+# Optional: Jupyter notebook to show on agent creation
+welcome_notebook: null
+
+# Optional: Lexical document to show on agent creation
+welcome_document: null
+
+# No trigger — this is an interactive chat agent
+trigger: null

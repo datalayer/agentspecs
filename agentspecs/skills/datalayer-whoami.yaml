@@ -1,0 +1,24 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: datalayer-whoami
+version: 0.0.1
+name: Datalayer Whoami Skill
+description: Retrieve the authenticated Datalayer user profile using the datalayer-skills package.
+
+module: datalayer_skills.skills.whoami
+
+envvars:
+  - DATALAYER_API_KEY:0.0.1
+
+dependencies:
+  - datalayer_skills>=0.1.0
+
+tags:
+  - datalayer
+  - iam
+  - identity
+  - profile
+
+icon: person
+emoji: 👤

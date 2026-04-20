@@ -1,0 +1,16 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: DATALAYER_API_KEY
+version: 0.0.1
+name: Datalayer API Key
+description: API key for authenticating with Datalayer services, including datalayer-skills such as datalayer-whoami.
+registrationUrl: https://datalayer.app
+tags:
+  - authentication
+  - api-key
+  - datalayer
+  - skill
+
+icon: key
+emoji: 🔑
