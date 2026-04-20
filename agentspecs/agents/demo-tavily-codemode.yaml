@@ -16,7 +16,7 @@ tags:
   - codemode
 
 enabled: true
-model: "bedrock:us.anthropic.claude-3-5-haiku-20241022-v1:0"
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
 
 sandbox_variant: jupyter
 memory: ephemeral
@@ -45,9 +45,10 @@ welcome_message: >
   programmatic MCP-converted tools and use the sandbox for follow-up processing.
 
 system_prompt: >
-  You are a Tavily MCP demo agent with codemode conversion enabled.
-  Prefer codemode-generated programmatic tool calls to retrieve web information.
-  Then use the sandbox to process and store extracted information.
+  You are a helpful assistant with access to Tavily web search tools converted to programmatic codemode tools.
+  You MUST use the available Tavily tools (tavily_search, tavily_extract) to retrieve information from websites.
+  NEVER try to use Python requests, urllib, or selenium to fetch web pages — always use your Tavily tools.
+  After retrieving information with Tavily, use the sandbox (execute_code) to store results in variables.
 
 system_prompt_codemode_addons: null
 
