@@ -1,0 +1,75 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Tavily MCP with Codemode
+
+id: demo-tavily-codemode
+version: 0.0.1
+name: Demo Tavily MCP (Codemode)
+description: >
+  Demo agent using the Tavily MCP server with codemode conversion enabled.
+
+tags:
+  - demo
+  - mcp
+  - tavily
+  - codemode
+
+enabled: true
+model: "bedrock:us.anthropic.claude-3-5-haiku-20241022-v1:0"
+
+sandbox_variant: jupyter
+memory: ephemeral
+
+mcp_servers:
+  - tavily:0.0.1
+
+skills: []
+
+tools: []
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+environment_name: ai-agents-env
+
+icon: code
+emoji: "⚙️"
+color: "#8250DF"
+
+suggestions:
+  - "Extract information from the https://datalayer.ai website and use your sandbox to create a variable \"about_datalayer\" with that information"
+
+welcome_message: >
+  Hi! I'm the Tavily MCP demo agent with codemode enabled. I can use
+  programmatic MCP-converted tools and use the sandbox for follow-up processing.
+
+system_prompt: >
+  You are a Tavily MCP demo agent with codemode conversion enabled.
+  Prefer codemode-generated programmatic tool calls to retrieve web information.
+  Then use the sandbox to process and store extracted information.
+
+system_prompt_codemode_addons: null
+
+protocol: vercel-ai
+ui_extension: a2ui
+
+codemode:
+  enabled: true
+  token_reduction: "~90%"
+  speedup: "~2x faster"
+
+trigger: null
+model_config: null
+mcp_server_tools: null
+guardrails: null
+evals: null
+output: null
+advanced: null
+authorization_policy: null
+notifications: null
+pre_hooks: null
+post_hooks: null
+parameters: null
+welcome_notebook: null
+welcome_document: null

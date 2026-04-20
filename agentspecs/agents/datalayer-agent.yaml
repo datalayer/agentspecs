@@ -50,6 +50,10 @@ suggestions:
   - Show my Datalayer profile details
   - What roles do I currently have in Datalayer?
 
+pre_hooks:
+  packages:
+    - datalayer_skills>=0.1.0
+
 # Welcome message shown when agent starts
 welcome_message: >
   Hi! I'm the Datalayer Agent. I can help you retrieve and summarize your
