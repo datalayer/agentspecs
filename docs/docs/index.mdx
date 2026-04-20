@@ -18,6 +18,7 @@ Agentspecs is the source of truth for runtime catalogs compiled into Python and 
 The repository currently defines these spec families:
 
 - Agent specs
+- Hook specs
 - Team specs
 - MCP server specs
 - Skill specs
@@ -76,6 +77,62 @@ agentspecs/
 2. Always set `id` and `version`.
 3. Prefer explicit versioned references (`id:version`) for linked specs.
 4. Keep IDs stable and bump `version` for breaking changes.
+
+## Parameters
+
+Agent specs can declare launch-time `parameters` using JSON Schema. These
+parameters are validated before runtime creation and then injected into
+templated fields.
+
+### Why use parameters?
+
+- Build one reusable spec for many runtime contexts.
+- Enforce input shape (`type`, `enum`, `required`, defaults).
+- Drive prompts, hooks, and messages from validated values.
+
+### Where parameters are used
+
+Parameter values can be referenced with `{{name}}` templating in fields such as:
+
+- `system_prompt`
+- `welcome_message`
+- `pre_hooks.sandbox`
+- other text fields that support runtime templating
+
+### Example
+
+```yaml
+id: demo-parameters
+version: 0.0.1
+
+parameters:
+  type: object
+  properties:
+    project:
+      type: string
+      default: Orbit
+    role:
+      type: string
+      enum: [product analyst, engineering lead, support specialist]
+      default: product analyst
+  required:
+    - project
+
+system_prompt: >
+  You are an assistant dedicated to {{project}}.
+  Assume the user is a {{role}}.
+
+pre_hooks:
+  sandbox:
+    - |
+      project_name = """{{project}}"""
+```
+
+### Validation behavior
+
+- Missing required parameters fail validation.
+- Invalid values (for example enum mismatch) fail validation.
+- Optional parameters use their schema defaults when provided.
 
 ## Documentation
 

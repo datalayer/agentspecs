@@ -1,0 +1,83 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: demo-parameters
+version: 0.0.1
+name: Demo Parameters Agent
+description: >
+  Demonstrates launch-time parameterization with JSON schema validation.
+
+tags:
+  - demo
+  - parameters
+  - schema
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+sandbox_variant: jupyter
+memory: ephemeral
+
+mcp_servers: []
+skills: []
+tools:
+  - runtime-echo:0.0.1
+frontend_tools: []
+
+environment_name: ai-agents-env
+
+icon: sliders
+emoji: "🎛️"
+color: "#0F766E"
+
+parameters:
+  type: object
+  properties:
+    demo_params:
+      type: string
+      title: Demo Params
+      default: hello
+    project:
+      type: string
+      title: Project
+      default: Orbit
+    role:
+      type: string
+      title: Role
+      enum:
+        - product analyst
+        - engineering lead
+        - support specialist
+      default: product analyst
+    tone:
+      type: string
+      title: Tone
+      enum:
+        - concise
+        - detailed
+      default: concise
+  required:
+    - project
+
+suggestions:
+  - "Use execute_code to print(demo_params) from the sandbox, then explain the value."
+  - "Use execute_code to print('demo_params =', demo_params)."
+
+pre_hooks:
+  sandbox:
+    - |
+      demo_params = """{{demo_params}}"""
+      print(f"[demo-parameters] demo_params initialized: {demo_params!r}")
+
+welcome_message: >
+  This runtime was launched for project {{project}} and role {{role}}.
+
+system_prompt: >
+  You are an assistant dedicated to {{project}}.
+  Assume the user is a {{role}} and answer in a {{tone}} style.
+  A sandbox pre-hook set a Python variable named demo_params with value {{demo_params}}.
+
+system_prompt_codemode_addons: null
+welcome_notebook: null
+welcome_document: null
+trigger: null

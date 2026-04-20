@@ -6,6 +6,13 @@
 
 > Documentation for [Agentspecs](https://agentspecs.datalayer.tech) - Generate programmatic tools from MCP Servers and Skills. Built with [Docusaurus](https://docusaurus.io).
 
+Agentspecs covers declarative YAML catalogs including:
+
+- Agents, teams, MCP servers, skills, tools, models, memory, guardrails, evals
+- Workflow and delivery specs (triggers, outputs, notifications)
+- Agent launch-time **parameters** (JSON Schema validated)
+- Agent lifecycle **hooks** (`pre_hooks`, `post_hooks`) for sandbox setup/teardown
+
 ```bash
 # Install the dependencies.
 make install

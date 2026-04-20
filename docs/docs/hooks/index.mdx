@@ -1,0 +1,143 @@
+---
+title: Hooks
+---
+
+# Hooks
+
+Hooks let an agent spec run setup and teardown logic around the sandbox
+lifecycle.
+
+Use hooks when you need to:
+
+- Install Python packages before first execution.
+- Seed sandbox state (variables, files, context).
+- Perform cleanup or write final markers at shutdown.
+
+## Supported Hook Fields
+
+Hooks are defined in agent specs under these fields:
+
+### `pre_hooks.packages` (list of strings)
+
+Install Python packages before the runtime starts serving requests.
+
+```yaml
+pre_hooks:
+  packages:
+    - rich
+    - pandas
+```
+
+### `pre_hooks.sandbox` (list of Python blocks)
+
+Run Python setup code in the sandbox after startup and before the agent handles
+user requests.
+
+```yaml
+pre_hooks:
+  sandbox:
+    - |
+      from pathlib import Path
+      Path('/tmp/startup.txt').write_text('ready\n', encoding='utf-8')
+```
+
+### `post_hooks.sandbox` (list of Python blocks)
+
+Run Python teardown/finalization code when the agent is shutting down.
+
+```yaml
+post_hooks:
+  sandbox:
+    - |
+      from pathlib import Path
+      Path('/tmp/shutdown.txt').write_text('done\n', encoding='utf-8')
+```
+
+## Execution Order
+
+For an agent with hooks enabled:
+
+1. Sandbox is created (`eval` or `jupyter`, depending on `sandbox_variant`).
+2. `pre_hooks.packages` are installed.
+3. `pre_hooks.sandbox` scripts run.
+4. Agent starts handling prompts/tools.
+5. During shutdown, `post_hooks.sandbox` scripts run.
+
+If multiple scripts are defined in the same hook list, they run in list order.
+
+## Parameters and Templating
+
+Hooks support runtime templating with `{{parameter_name}}` values from the
+agent spec `parameters` schema.
+
+```yaml
+parameters:
+  type: object
+  properties:
+    demo_params:
+      type: string
+      default: hello
+
+pre_hooks:
+  sandbox:
+    - |
+      demo_params = """{{demo_params}}"""
+      print(f"demo_params initialized: {demo_params!r}")
+```
+
+## Complete Example
+
+```yaml
+id: demo-hooks
+version: 0.0.1
+sandbox_variant: eval
+
+pre_hooks:
+  packages:
+    - rich
+  sandbox:
+    - |
+      import datetime
+      import os
+      from pathlib import Path
+
+      hook_name = "demo-hooks:pre"
+      hook_ran_at = datetime.datetime.now().isoformat()
+      hook_env = {
+          k: os.environ[k]
+          for k in ("PATH", "HOME", "DATALAYER_CODE_SANDBOX_VARIANT")
+          if k in os.environ
+      }
+
+      Path('/tmp/agent_runtimes_pre_hook_demo.txt').write_text(
+          f'pre-hook executed at {hook_ran_at}\n',
+          encoding='utf-8',
+      )
+
+post_hooks:
+  sandbox:
+    - |
+      import datetime
+      from pathlib import Path
+
+      post_ran_at = datetime.datetime.now().isoformat()
+      Path('/tmp/agent_runtimes_post_hook_demo.txt').write_text(
+          f'post-hook executed at {post_ran_at}\n',
+          encoding='utf-8',
+      )
+```
+
+## Best Practices
+
+1. Keep hooks idempotent where possible.
+2. Keep setup fast; install only necessary packages.
+3. Prefer deterministic file paths and explicit UTF-8 writes.
+4. Validate critical hook outputs with a follow-up suggestion/tool call.
+5. Use `pre_hooks` for initialization and `post_hooks` for finalization only.
+
+## Related Docs
+
+- [Agents](/agents)
+- [Triggers](/triggers)
+- [Outputs](/outputs)
+- [Notifications](/notifications)

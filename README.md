@@ -194,19 +194,6 @@ Common fields:
 - `outputs`: output format templates/capabilities
 - `notifications`: notification channel templates
 
-## Generation and Consumption
-
-From Agent Runtimes, generated catalogs are produced via:
-
-```bash
-make specs
-```
-
-Generation scripts are under [scripts/codegen](../scripts/codegen), and outputs are written to:
-
-- Python: [agent_runtimes/specs](../agent_runtimes/specs)
-- TypeScript: [src/specs](../src/specs)
-
 ## Adding or Updating Specs
 
 1. Add or edit YAML in the relevant folder under [agentspecs/agentspecs](agentspecs).
@@ -214,6 +201,65 @@ Generation scripts are under [scripts/codegen](../scripts/codegen), and outputs 
 3. Use versioned cross-references (`name:version`) in fields that reference other specs.
 4. Keep IDs stable; bump `version` when introducing breaking changes.
 5. Regenerate catalogs in Agent Runtimes (`make specs`) and validate consumers.
+
+## Parameters (Launch-Time Inputs)
+
+Agent specs support a `parameters` field using JSON Schema. This lets one spec
+be reused across multiple launches while keeping runtime inputs validated and
+explicit.
+
+### What parameters provide
+
+- **Validation**: enforce `type`, `enum`, `required`, and defaults.
+- **Templating**: inject values into text fields using `{{parameter_name}}`.
+- **Reusability**: same agent spec, different runtime contexts.
+
+### Typical template targets
+
+- `system_prompt`
+- `welcome_message`
+- `pre_hooks.sandbox`
+- other template-aware text fields
+
+### Example
+
+```yaml
+id: demo-parameters
+version: 0.0.1
+
+parameters:
+  type: object
+  properties:
+    project:
+      type: string
+      default: Orbit
+    role:
+      type: string
+      enum:
+        - product analyst
+        - engineering lead
+        - support specialist
+      default: product analyst
+  required:
+    - project
+
+welcome_message: >
+  This runtime was launched for project {{project}}.
+
+system_prompt: >
+  You are an assistant dedicated to {{project}}.
+
+pre_hooks:
+  sandbox:
+    - |
+      project_name = """{{project}}"""
+```
+
+### Validation notes
+
+- Missing required parameters fail validation.
+- Invalid enum values fail validation.
+- Optional parameters use defaults when available.
 
 ## Best Practices
 

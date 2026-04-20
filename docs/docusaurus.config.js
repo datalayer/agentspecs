@@ -115,6 +115,12 @@ module.exports = {
           label: 'Notifications',
         },
         {
+          type: 'doc',
+          docId: 'hooks/index',
+          position: 'left',
+          label: 'Hooks',
+        },
+        {
           href: 'https://discord.gg/YQFwvmSSuR',
           position: 'right',
           className: 'header-discord-link',
