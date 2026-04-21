@@ -86,6 +86,12 @@ module.exports = {
         },
         {
           type: 'doc',
+          docId: 'subagents/index',
+          position: 'left',
+          label: 'Subagents',
+        },
+        {
+          type: 'doc',
           docId: 'guardrails/index',
           position: 'left',
           label: 'Guardrails',
