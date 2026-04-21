@@ -1,0 +1,182 @@
+---
+sidebar_position: 1
+title: Subagents
+---
+
+# Subagent Specifications
+
+Subagent specs define multi-agent delegation within a single agent. An orchestrator agent can delegate tasks to specialised subagents, each with its own model, instructions, and execution mode.
+
+Subagents are powered by the [subagents-pydantic-ai](https://github.com/datalayer/pydantic-ai-subagents) library.
+
+## Overview
+
+The `subagents` field in an agent spec configures a `SubAgentCapability` at runtime.
+The orchestrator agent receives delegation tools (`task`, `check_task`, `list_active_tasks`, etc.) and a dynamic system prompt listing available subagents.
+
+## Schema
+
+### `subagents` (object)
+
+Top-level subagents configuration block.
+
+#### `subagents.subagents` (list)
+
+List of subagent definitions. Each entry configures one subagent.
+
+#### `subagents.default_model` (string, optional)
+
+Default model for all subagents that don't specify their own. Falls back to the parent agent's model.
+
+```yaml
+default_model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+```
+
+#### `subagents.include_general_purpose` (boolean, default: `true`)
+
+Whether to include a built-in general-purpose subagent alongside the declared ones.
+
+#### `subagents.max_nesting_depth` (integer, default: `0`)
+
+Maximum depth of subagent nesting. `0` means subagents cannot create their own subagents.
+
+## Subagent Fields
+
+### Required
+
+#### `name` (string)
+
+Unique identifier for the subagent (used in the `task` tool to reference it).
+
+```yaml
+name: researcher
+```
+
+#### `description` (string)
+
+Short description of the subagent's capabilities (shown to the orchestrator).
+
+```yaml
+description: "Researches topics, gathers facts, and provides detailed analysis"
+```
+
+#### `instructions` (string)
+
+System prompt for the subagent. Defines its role and how it should behave.
+
+```yaml
+instructions: >
+  You are a thorough research assistant. When given a topic:
+  1. Break it down into key questions
+  2. Provide well-structured findings with evidence
+  3. Cite sources or reasoning for each claim
+```
+
+### Optional
+
+#### `model` (string)
+
+Override the default model for this specific subagent.
+
+```yaml
+model: "openai:gpt-4.1"
+```
+
+#### `preferred_mode` (string: `"sync"` | `"async"` | `"auto"`)
+
+Execution mode hint:
+- `sync` — wait for the subagent to finish before continuing
+- `async` — fire and forget, check results later with `check_task`
+- `auto` — let the system decide based on complexity
+
+```yaml
+preferred_mode: sync
+```
+
+#### `typical_complexity` (string: `"simple"` | `"moderate"` | `"complex"`)
+
+Hint about how complex this subagent's tasks typically are.
+
+```yaml
+typical_complexity: moderate
+```
+
+#### `can_ask_questions` (boolean, default: `false`)
+
+Whether the subagent can ask clarifying questions back to the orchestrator.
+
+```yaml
+can_ask_questions: true
+```
+
+#### `max_questions` (integer, optional)
+
+Maximum number of questions the subagent can ask per task (only relevant when `can_ask_questions` is `true`).
+
+```yaml
+max_questions: 3
+```
+
+#### `typically_needs_context` (boolean, optional)
+
+Hint whether this subagent typically needs extra context from the orchestrator.
+
+## Delegation Tools
+
+When subagents are configured, the orchestrator agent receives these tools:
+
+| Tool | Description |
+|------|-------------|
+| `task` | Assign a task to a named subagent |
+| `check_task` | Check the status/result of an async task |
+| `answer_subagent` | Answer a question asked by a subagent |
+| `list_active_tasks` | List all currently active delegated tasks |
+| `soft_cancel_task` | Gracefully cancel a running task |
+| `hard_cancel_task` | Immediately cancel a running task |
+
+## Complete Example
+
+```yaml
+id: demo-subagents
+version: 0.0.1
+name: Subagents Demo
+description: >
+  A demonstration agent that delegates tasks to specialised subagents.
+
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+system_prompt: >
+  You are a helpful orchestrator agent. Use the 'task' tool to delegate:
+  - Use 'researcher' for gathering facts and analysis
+  - Use 'writer' for composing text and formatting documents
+
+subagents:
+  default_model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+  include_general_purpose: true
+  max_nesting_depth: 0
+  subagents:
+    - name: researcher
+      description: "Researches topics, gathers facts, and provides detailed analysis"
+      instructions: >
+        You are a thorough research assistant. When given a topic:
+        1. Break it down into key questions
+        2. Provide well-structured findings with evidence
+        3. Cite sources or reasoning for each claim
+        4. Highlight areas of uncertainty or debate
+      preferred_mode: sync
+      typical_complexity: moderate
+      can_ask_questions: true
+      max_questions: 3
+
+    - name: writer
+      description: "Writes clear, structured content based on research or instructions"
+      instructions: >
+        You are a skilled technical writer. When given content to write:
+        1. Organise information into a logical structure
+        2. Use clear, concise language appropriate for the audience
+        3. Include headings, bullet points, and formatting for readability
+        4. Maintain a professional yet approachable tone
+      preferred_mode: sync
+      typical_complexity: moderate
+      can_ask_questions: false
+```
