@@ -1,0 +1,70 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: MCP Demo (No Codemode)
+
+id: demo-mcp
+version: 0.0.1
+name: Demo MCP
+description: >
+  Demo agent using MCP servers directly (without codemode conversion).
+
+tags:
+  - demo
+  - mcp
+  - tavily
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+sandbox_variant: null
+memory: ephemeral
+
+mcp_servers:
+  - tavily:0.0.1
+
+skills: []
+tools: []
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+environment_name: ai-agents-env
+
+icon: search
+emoji: "🔍"
+color: "#0969DA"
+
+suggestions:
+  - "Search the web for recent updates about MCP and summarize key findings"
+
+welcome_message: >
+  Hi! I'm the MCP demo agent. I use MCP tools directly without codemode.
+
+system_prompt: >
+  You are a helpful assistant with access to MCP tools.
+  Use Tavily MCP tools to retrieve web information when needed.
+  Do not claim codemode capabilities.
+
+system_prompt_codemode_addons: null
+
+protocol: vercel-ai
+ui_extension: a2ui
+
+codemode:
+  enabled: false
+
+trigger: null
+model_config: null
+mcp_server_tools: null
+guardrails: null
+evals: null
+output: null
+advanced: null
+authorization_policy: null
+notifications: null
+pre_hooks: null
+post_hooks: null
+parameters: null
+welcome_notebook: null
+welcome_document: null

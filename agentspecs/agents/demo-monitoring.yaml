@@ -1,0 +1,70 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Monitoring Demo
+# Tavily MCP + datalayer-skills (datalayer-whoami).
+
+id: demo-monitoring
+version: 0.0.1
+name: Demo Monitoring Agent
+description: >
+  Monitoring-focused demo agent with Tavily MCP tools and the datalayer-skills
+  whoami capability for profile-aware assistance.
+
+tags:
+  - demo
+  - monitoring
+  - mcp
+  - tavily
+  - datalayer-skills
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+sandbox_variant: jupyter
+memory: ephemeral
+
+mcp_servers:
+  - tavily:0.0.1
+
+skills:
+  - datalayer-whoami:0.0.1
+
+envvars:
+  - DATALAYER_API_KEY:0.0.1
+
+pre_hooks:
+  packages:
+    - datalayer_skills>=0.1.0
+
+tools: []
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+environment_name: ai-agents-env
+
+icon: graph
+emoji: "📈"
+color: "#0EA5E9"
+
+suggestions:
+  - "Search the web for recent AI observability updates using Tavily and summarize the highlights."
+  - "Who am I on Datalayer and what can I monitor in this session?"
+  - "Explain my last turn token and cost behavior in a concise summary."
+
+welcome_message: >
+  Hi! I'm the Monitoring Demo agent. I can use Tavily for web context and
+  datalayer-skills to inspect your authenticated Datalayer identity.
+
+system_prompt: >
+  You are a monitoring-oriented assistant.
+  Use Tavily MCP tools for current web information when useful.
+  Use the datalayer-whoami skill when the user asks about identity, profile,
+  or account context.
+  Keep explanations concise and practical.
+
+system_prompt_codemode_addons: null
+welcome_notebook: null
+welcome_document: null
+trigger: null

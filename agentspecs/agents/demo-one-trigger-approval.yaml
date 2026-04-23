@@ -28,6 +28,10 @@ model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
 # Memory backend
 memory: ephemeral
 
+# Explicitly disable codemode for this approval-flow demo.
+codemode:
+  enabled: false
+
 # Skills
 skills: []
 
