@@ -29,6 +29,7 @@ mcp_servers:
 
 skills:
   - datalayer-whoami:0.0.1
+  - jokes:0.0.1
 
 envvars:
   - DATALAYER_API_KEY:0.0.1

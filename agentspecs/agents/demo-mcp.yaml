@@ -23,7 +23,8 @@ memory: ephemeral
 mcp_servers:
   - tavily:0.0.1
 
-skills: []
+skills:
+  - jokes:0.0.1
 tools: []
 frontend_tools:
   - jupyter-notebook:0.0.1
