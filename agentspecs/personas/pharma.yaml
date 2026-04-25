@@ -1,0 +1,18 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Persona Specification: Pharma
+id: pharma
+version: 0.0.1
+name: Pharma
+description: >
+  A life-sciences persona for pharmaceutical and clinical workflows —
+  literature review, trial data exploration, regulatory reporting and
+  drug-safety signal triage.
+tags:
+  - pharma
+  - life-sciences
+  - clinical
+  - regulatory
+icon: beaker
+emoji: "💊"
