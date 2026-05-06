@@ -17,3 +17,17 @@ languages:
   - python
   - sql
   - bash
+dataset_source: local
+supports_live_monitoring: true
+supports_experiment_comparison: true
+evaluator_shapes:
+  - pass_rate
+recommended_windows:
+  - 1h
+  - 6h
+  - 24h
+  - 7d
+  - 30d
+trace_integration: true
+dataset_editability: read-only
+sdk_support: experimental

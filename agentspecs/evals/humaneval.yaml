@@ -15,3 +15,15 @@ source: https://github.com/openai/human-eval
 difficulty: medium
 languages:
   - python
+dataset_source: local
+supports_live_monitoring: false
+supports_experiment_comparison: true
+evaluator_shapes:
+  - pass_rate
+recommended_windows:
+  - 24h
+  - 7d
+  - 30d
+trace_integration: true
+dataset_editability: read-only
+sdk_support: stable
