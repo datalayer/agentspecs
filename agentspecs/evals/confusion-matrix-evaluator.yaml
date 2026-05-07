@@ -1,0 +1,17 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: confusion-matrix-evaluator
+version: 0.0.1
+name: ConfusionMatrixEvaluator
+description: Computes classification confusion matrix across the full experiment report.
+category: Report
+evaluator_type: report
+pydantic_class: ConfusionMatrixEvaluator
+output_kind: report_table
+cost_tier: free
+latency: instant
+requires:
+  - classification_labels
+source: https://pydantic.dev/docs/ai/evals/evaluators/built-in/#built-in-report-evaluators
+default_config: {}

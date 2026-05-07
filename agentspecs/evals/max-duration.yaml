@@ -1,0 +1,18 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: max-duration
+version: 0.0.1
+name: MaxDuration
+description: Enforces a maximum allowed execution duration per case.
+category: Performance
+evaluator_type: case
+pydantic_class: MaxDuration
+output_kind: boolean
+cost_tier: free
+latency: instant
+requires:
+  - duration
+source: https://pydantic.dev/docs/ai/evals/evaluators/built-in/#maxduration
+default_config:
+  seconds: 2.0

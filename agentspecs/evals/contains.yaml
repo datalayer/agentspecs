@@ -1,0 +1,19 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: contains
+version: 0.0.1
+name: Contains
+description: Checks whether output contains a required value, substring, or key-value pair.
+category: Comparison
+evaluator_type: case
+pydantic_class: Contains
+output_kind: boolean_with_reason
+cost_tier: free
+latency: instant
+requires: []
+source: https://pydantic.dev/docs/ai/evals/evaluators/built-in/#contains
+default_config:
+  value: required_term
+  case_sensitive: false
+  as_strings: true

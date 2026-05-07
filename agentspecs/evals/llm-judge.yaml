@@ -1,0 +1,21 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: llm-judge
+version: 0.0.1
+name: LLMJudge
+description: Uses an LLM rubric to score and/or assert subjective response quality.
+category: LLM-as-a-Judge
+evaluator_type: case
+pydantic_class: LLMJudge
+output_kind: score_and_assertion
+cost_tier: llm
+latency: slow
+requires:
+  - model
+  - rubric
+source: https://pydantic.dev/docs/ai/evals/evaluators/built-in/#llmjudge
+default_config:
+  rubric: Response is accurate and helpful.
+  include_input: true
+  include_expected_output: false

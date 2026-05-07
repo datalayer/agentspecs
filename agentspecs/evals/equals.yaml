@@ -1,0 +1,17 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: equals
+version: 0.0.1
+name: Equals
+description: Checks whether output equals a fixed expected value.
+category: Comparison
+evaluator_type: case
+pydantic_class: Equals
+output_kind: boolean
+cost_tier: free
+latency: instant
+requires: []
+source: https://pydantic.dev/docs/ai/evals/evaluators/built-in/#equals
+default_config:
+  value: expected_result

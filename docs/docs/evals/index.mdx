@@ -5,7 +5,7 @@ title: Evals
 
 # Eval Specifications
 
-Eval specs define reusable benchmark/evaluation suites.
+Eval specs define built-in evaluator profiles (case-level and report-level).
 
 ## Required Fields
 
@@ -13,14 +13,21 @@ Eval specs define reusable benchmark/evaluation suites.
 - `version`
 - `name`
 - `description`
+- `category`
+- `evaluator_type`
+- `pydantic_class`
+- `output_kind`
 
 ## Common Fields
 
-- category
-- task metadata
-- optional provider/model constraints
+- `cost_tier`
+- `latency`
+- `requires`
+- `default_config`
+- `source`
 
 ## Notes
 
 - Evals are referenced from agent specs and runtime workflows.
 - Prefer explicit `id:version` references.
+- Benchmark datasets are specified separately under `benchmarks/`.

@@ -1,0 +1,19 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: has-matching-span
+version: 0.0.1
+name: HasMatchingSpan
+description: Verifies that traces include at least one OpenTelemetry span matching a query.
+category: Span-Based
+evaluator_type: case
+pydantic_class: HasMatchingSpan
+output_kind: boolean
+cost_tier: free
+latency: fast
+requires:
+  - logfire
+source: https://pydantic.dev/docs/ai/evals/evaluators/built-in/#hasmatchingspan
+default_config:
+  query:
+    name_contains: tool_call

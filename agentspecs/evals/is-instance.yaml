@@ -1,0 +1,17 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: is-instance
+version: 0.0.1
+name: IsInstance
+description: Validates that the output type matches the expected runtime type name.
+category: Type Validation
+evaluator_type: case
+pydantic_class: IsInstance
+output_kind: boolean_with_reason
+cost_tier: free
+latency: instant
+requires: []
+source: https://pydantic.dev/docs/ai/evals/evaluators/built-in/#isinstance
+default_config:
+  type_name: str

@@ -31,7 +31,8 @@ agentspecs/
 ├── models/           # Model specs
 ├── memory/           # Memory backend specs
 ├── guardrails/       # Guardrail policy specs
-├── evals/            # Evaluation suite specs
+├── benchmarks/       # Benchmark dataset specs
+├── evals/            # Built-in evaluator specs
 ├── triggers/         # Trigger specs
 ├── outputs/          # Output format specs
 └── notifications/    # Notification channel specs
@@ -48,7 +49,8 @@ Current YAML file counts:
 - Models: 20
 - Memory backends: 4
 - Guardrails: 6
-- Evals: 8
+- Benchmarks: 8
+- Evals: 9
 - Triggers: 3
 - Outputs: 8
 - Notifications: 4
