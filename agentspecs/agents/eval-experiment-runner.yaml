@@ -37,7 +37,7 @@ color: "#14B8A6"
 
 suggestions:
   - "Run this eval script in the sandbox and summarize the assertion pass rate."
-  - "Execute the dataset evaluation and return a compact experiment report."
+  - "Execute the eval and return a compact experiment report."
   - "Compare two runs and highlight regressions."
 
 welcome_message: >
