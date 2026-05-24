@@ -1,0 +1,18 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: max-duration
+version: 0.0.1
+name: Max Duration
+description: Assert response latency remains below a configured duration threshold.
+category: Performance
+evaluator_type: case
+pydantic_class: MaxDurationEvaluator
+output_kind: boolean_with_reason
+cost_tier: free
+latency: instant
+requires:
+  - duration_ms
+source: https://ai.pydantic.dev/evals/
+default_config:
+  max_duration_ms: 5000

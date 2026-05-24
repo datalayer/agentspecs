@@ -1,0 +1,17 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: equals-expected
+version: 0.0.1
+name: Equals Expected
+description: Compare model output against an expected value with strict matching.
+category: Comparison
+evaluator_type: case
+pydantic_class: EqualsExpectedEvaluator
+output_kind: boolean
+cost_tier: free
+latency: instant
+requires:
+  - expected_output
+source: https://ai.pydantic.dev/evals/
+default_config: {}

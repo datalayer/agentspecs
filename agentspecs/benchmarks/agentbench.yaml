@@ -13,6 +13,15 @@ task_count: 4080
 metric: success_rate
 source: https://github.com/THUDM/AgentBench
 difficulty: hard
+dataset_source: hosted
+supports_live_monitoring: true
+supports_experiment_comparison: true
+evaluator_shapes:
+  - pass_rate
+  - numeric
+evaluators:
+  - precision-recall-evaluator:0.0.1
+  - llm-judge:0.0.1
 languages:
   - python
   - sql

@@ -14,5 +14,13 @@ task_count: 817
 metric: truthful_informative
 source: https://github.com/sylinrl/TruthfulQA
 difficulty: medium
+dataset_source: hosted
+supports_live_monitoring: false
+supports_experiment_comparison: true
+evaluator_shapes:
+  - categorical
+  - numeric
+evaluators:
+  - llm-judge:0.0.1
 languages:
   - english

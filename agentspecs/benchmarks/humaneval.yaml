@@ -13,5 +13,12 @@ task_count: 164
 metric: pass@k
 source: https://github.com/openai/human-eval
 difficulty: medium
+dataset_source: hosted
+supports_live_monitoring: false
+supports_experiment_comparison: true
+evaluator_shapes:
+  - pass_rate
+evaluators:
+  - precision-recall-evaluator:0.0.1
 languages:
   - python

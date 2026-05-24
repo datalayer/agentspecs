@@ -13,5 +13,12 @@ task_count: 15908
 metric: accuracy
 source: https://github.com/hendrycks/test
 difficulty: medium
+dataset_source: hosted
+supports_live_monitoring: false
+supports_experiment_comparison: true
+evaluator_shapes:
+  - numeric
+evaluators:
+  - precision-recall-evaluator:0.0.1
 languages:
   - english

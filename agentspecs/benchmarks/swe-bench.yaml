@@ -13,5 +13,13 @@ task_count: 2294
 metric: pass@1
 source: https://www.swebench.com/
 difficulty: hard
+dataset_source: hosted
+supports_live_monitoring: true
+supports_experiment_comparison: true
+evaluator_shapes:
+  - pass_rate
+evaluators:
+  - precision-recall-evaluator:0.0.1
+  - llm-judge:0.0.1
 languages:
   - python

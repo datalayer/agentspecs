@@ -8,10 +8,17 @@ description: >-
   Graduate-level science questions crafted by domain experts.
   Tests advanced reasoning in physics, chemistry, and biology with
   questions that require PhD-level understanding to answer correctly.
-category: Reasoning
+category: Knowledge
 task_count: 448
 metric: accuracy
 source: https://github.com/idavidrein/gpqa
 difficulty: expert
+dataset_source: hosted
+supports_live_monitoring: false
+supports_experiment_comparison: true
+evaluator_shapes:
+  - numeric
+evaluators:
+  - precision-recall-evaluator:0.0.1
 languages:
   - english

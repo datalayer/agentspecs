@@ -1,0 +1,17 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: confusion-matrix-evaluator
+version: 0.0.1
+name: Confusion Matrix Evaluator
+description: Aggregate evaluator for precision/recall style confusion-matrix reporting.
+category: Report
+evaluator_type: report
+pydantic_class: ConfusionMatrixEvaluator
+output_kind: report_table
+cost_tier: free
+latency: fast
+requires:
+  - expected_output
+source: https://ai.pydantic.dev/evals/
+default_config: {}

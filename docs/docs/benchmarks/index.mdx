@@ -1,0 +1,43 @@
+---
+sidebar_position: 2
+title: Benchmarks
+---
+
+# Benchmark Specifications
+
+Benchmark specs define runnable benchmark suites (datasets, metrics, and
+difficulty metadata).
+
+Each benchmark must declare one or more evaluator dependencies in the
+`evaluators` field.
+
+## Required Fields
+
+- `id`
+- `version`
+- `name`
+- `description`
+- `category`
+- `task_count`
+- `metric`
+- `evaluators`
+
+## Common Fields
+
+- `difficulty`
+- `languages`
+- `dataset_source`
+- `supports_live_monitoring`
+- `supports_experiment_comparison`
+- `evaluator_shapes`
+- `recommended_windows`
+- `trace_integration`
+- `dataset_editability`
+- `sdk_support`
+
+## Notes
+
+- Benchmarks are referenced from agent specs and runtime workflows.
+- Benchmark generation validates that each evaluator reference exists in the
+  eval catalog.
+- Prefer explicit `id:version` references.

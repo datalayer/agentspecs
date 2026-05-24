@@ -1,0 +1,17 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: contains
+version: 0.0.1
+name: Contains
+description: Assert that expected content appears in the model output.
+category: Comparison
+evaluator_type: case
+pydantic_class: ContainsEvaluator
+output_kind: boolean
+cost_tier: free
+latency: instant
+requires:
+  - expected_output
+source: https://ai.pydantic.dev/evals/
+default_config: {}
