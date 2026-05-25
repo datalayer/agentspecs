@@ -1,19 +1,19 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Agent Specification: Eval Experiment Runner
-# Purpose-built runtime agent used by the Evals UI to execute experiment runs.
+# Agent Specification: Eval Synthetic Runner
+# Synthetic eval runner used for deterministic no-agent evaluation flows.
 
-id: eval-experiment-runner
+id: eval-synthetic-runner
 version: 0.0.1
-name: Eval Experiment Runner
+name: Eval Synthetic Runner
 description: >-
-  Dedicated agent spec for launching and running evaluation experiments from
-  the Evals interface. Includes baseline tooling for reproducible eval runs.
+  Dedicated synthetic eval runner for deterministic no-agent evaluation flows
+  and reproducible testing output.
 
 tags:
   - evals
-  - experiments
+  - synthetic
   - runner
 
 enabled: true
@@ -47,12 +47,11 @@ suggestions:
   - Summarize run results with pass rate and latency highlights
 
 welcome_message: >-
-  Ready to run eval experiments. Configure your benchmark and evaluator setup,
-  then launch a run.
+  Ready to run synthetic eval experiments with deterministic outputs.
 
 system_prompt: >-
-  You are the Eval Experiment Runner. Execute evaluation workflows reliably,
-  validate inputs before execution, and summarize outcomes clearly.
+  You are the Eval Synthetic Runner. Produce deterministic synthetic evaluation
+  outputs for test and demo workflows.
 
 system_prompt_codemode_addons: null
 

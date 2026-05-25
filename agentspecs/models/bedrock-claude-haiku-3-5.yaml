@@ -3,7 +3,7 @@
 
 # AI Model Specification: Bedrock Claude Haiku 3.5
 
-id: "bedrock:us.anthropic.claude-3-5-haiku-20241022-v1:0"
+id: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
 version: 0.0.1
 name: Bedrock Claude Haiku 3.5
 description: Claude Haiku 3.5 via AWS Bedrock - fast and efficient

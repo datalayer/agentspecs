@@ -1,19 +1,19 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Agent Specification: Eval Experiment Runner
-# Purpose-built runtime agent used by the Evals UI to execute experiment runs.
+# Agent Specification: Demo Evals
+# Runtime agent used by eval examples for local and cloud execution.
 
-id: eval-experiment-runner
+id: demo-evals
 version: 0.0.1
-name: Eval Experiment Runner
+name: Demo Evals
 description: >-
-  Dedicated agent spec for launching and running evaluation experiments from
-  the Evals interface. Includes baseline tooling for reproducible eval runs.
+  Default eval runner for local and cloud execution in SDK eval examples.
+  Includes baseline tooling for reproducible eval runs.
 
 tags:
   - evals
-  - experiments
+  - demo
   - runner
 
 enabled: true
@@ -51,7 +51,7 @@ welcome_message: >-
   then launch a run.
 
 system_prompt: >-
-  You are the Eval Experiment Runner. Execute evaluation workflows reliably,
+  You are the Demo Evals Runner. Execute evaluation workflows reliably,
   validate inputs before execution, and summarize outcomes clearly.
 
 system_prompt_codemode_addons: null
