@@ -42,6 +42,7 @@ skills:
   - pdf:0.0.1
   - text-summarizer:0.0.1
   - jokes:0.0.1
+  - datalayer-whoami:1.0.0
 
 # Secrets / environment variables
 envvars:
