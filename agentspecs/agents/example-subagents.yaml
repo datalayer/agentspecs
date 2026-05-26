@@ -1,0 +1,63 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Demo Subagents
+# Runtime agent used by AgentSubagentsExample.
+
+id: example-subagents
+version: 0.0.1
+name: Demo Subagents
+description: >-
+  Demonstrates multi-agent delegation with a parent orchestrator that can split
+  work between a researcher and a writer subagent.
+
+tags:
+  - demo
+  - subagents
+  - orchestration
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+sandbox_variant: jupyter
+
+memory: ephemeral
+
+mcp_servers: []
+
+skills:
+  - events:0.0.1
+
+tools:
+  - runtime-echo:0.0.1
+
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+environment_name: ai-agents-env
+
+icon: people
+emoji: "👥"
+color: "#2563EB"
+
+suggestions:
+  - Research a topic and provide source-backed notes
+  - Write a concise summary from the research findings
+  - Split work between researcher and writer, then merge output
+
+welcome_message: >-
+  Subagents example agent ready. Ask me to delegate research and writing tasks
+  across specialist subagents.
+
+system_prompt: >-
+  You are the Demo Subagents Orchestrator. Decompose user requests into
+  specialist tasks, delegate effectively, and synthesize a coherent final
+  response.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
+
+trigger: null

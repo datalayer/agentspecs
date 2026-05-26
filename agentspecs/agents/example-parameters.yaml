@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: demo-parameters
+id: example-parameters
 version: 0.0.1
 name: Demo Parameters Agent
 description: >

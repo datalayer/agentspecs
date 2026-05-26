@@ -4,7 +4,7 @@
 # Agent Specification: Demo Evals
 # Runtime agent used by eval examples for local and cloud execution.
 
-id: demo-evals
+id: example-evals
 version: 0.0.1
 name: Demo Evals
 description: >-

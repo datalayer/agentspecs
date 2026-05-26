@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: demo-hooks
+id: example-hooks
 version: 0.0.1
 name: Demo Hooks Agent
 description: >
@@ -48,9 +48,9 @@ system_prompt: >
 
   1. Installed the Python package 'rich' (pip install).
   2. Wrote a UTF-8 marker file to /tmp/agent_runtimes_pre_hook_demo.txt
-     with the content: "pre-hook executed for demo-hooks at <timestamp>".
+     with the content: "pre-hook executed for example-hooks at <timestamp>".
   3. Defined these Python variables in the sandbox namespace:
-     - hook_name    (str) - "demo-hooks:pre"
+     - hook_name    (str) - "example-hooks:pre"
      - hook_ran_at  (str) - ISO-8601 timestamp of when the pre-hook ran
      - hook_env     (dict) - subset of os.environ captured at hook time
 
@@ -70,7 +70,7 @@ pre_hooks:
       import os
       from pathlib import Path
 
-      hook_name = "demo-hooks:pre"
+      hook_name = "example-hooks:pre"
       hook_ran_at = datetime.datetime.now().isoformat()
       hook_env = {
           k: os.environ[k]
@@ -79,10 +79,10 @@ pre_hooks:
       }
 
       Path('/tmp/agent_runtimes_pre_hook_demo.txt').write_text(
-          f'pre-hook executed for demo-hooks at {hook_ran_at}\n',
+          f'pre-hook executed for example-hooks at {hook_ran_at}\n',
           encoding='utf-8',
       )
-      print(f"[demo-hooks] pre-hook done: hook_ran_at={hook_ran_at!r}")
+      print(f"[example-hooks] pre-hook done: hook_ran_at={hook_ran_at!r}")
 
 post_hooks:
   sandbox:
@@ -92,10 +92,10 @@ post_hooks:
 
       post_ran_at = datetime.datetime.now().isoformat()
       Path('/tmp/agent_runtimes_post_hook_demo.txt').write_text(
-          f'post-hook executed for demo-hooks at {post_ran_at}\n',
+          f'post-hook executed for example-hooks at {post_ran_at}\n',
           encoding='utf-8',
       )
-      print(f"[demo-hooks] post-hook done: post_ran_at={post_ran_at!r}")
+      print(f"[example-hooks] post-hook done: post_ran_at={post_ran_at!r}")
 
 system_prompt_codemode_addons: null
 welcome_notebook: null

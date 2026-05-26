@@ -6,7 +6,7 @@
 # the agent runs its trigger prompt once, requests manual approval
 # before executing the sensitive echo tool, and then terminates.
 
-id: demo-one-trigger-approval
+id: example-one-trigger-approval
 version: 0.0.1
 name: Demo with the Once Trigger and Tool Approval
 description: >

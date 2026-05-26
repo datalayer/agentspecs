@@ -1,0 +1,62 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Demo Monitoring
+# Default agent used by AgentMonitoringExample.
+
+id: example-monitoring
+version: 0.0.1
+name: Demo Monitoring
+description: >-
+  Monitoring-focused example agent for AgentMonitoringExample. It is intentionally
+  lightweight so it starts reliably in local example runs.
+
+tags:
+  - demo
+  - monitoring
+  - observability
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+sandbox_variant: jupyter
+
+memory: ephemeral
+
+mcp_servers: []
+
+skills:
+  - events:0.0.1
+
+tools:
+  - runtime-echo:0.0.1
+
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+environment_name: ai-agents-env
+
+icon: pulse
+emoji: "📊"
+color: "#0EA5E9"
+
+suggestions:
+  - Show my current monitoring context summary
+  - Explain the last turn cost and total token usage
+  - Summarize recent activity and potential anomalies
+
+welcome_message: >-
+  Monitoring example agent ready. Ask for runtime activity, cost trends, and token
+  usage summaries.
+
+system_prompt: >-
+  You are the Demo Monitoring Agent. Prioritize concise operational summaries,
+  highlight anomalies, and provide clear next-step recommendations.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
+
+trigger: null

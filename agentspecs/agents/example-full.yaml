@@ -8,7 +8,7 @@
 #   - Tavily MCP server for web search
 #   - All catalog skills + local path-based jokes skill
 
-id: demo-full
+id: example-full
 version: 0.0.1
 name: Demo with MCP, Skills, Tool Approvals...
 description: >

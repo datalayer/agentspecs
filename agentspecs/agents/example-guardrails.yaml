@@ -1,0 +1,69 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Demo Guardrails
+# Runtime agent used by AgentGuardrailsExample.
+
+id: example-guardrails
+version: 0.0.1
+name: Demo Guardrails
+description: >-
+  Guardrails-focused example agent for AgentGuardrailsExample. Includes budget
+  limits and a sensitive tool requiring manual approval.
+
+tags:
+  - demo
+  - guardrails
+  - approval
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+sandbox_variant: jupyter
+
+memory: ephemeral
+
+mcp_servers: []
+
+skills:
+  - events:0.0.1
+
+tools:
+  - runtime-echo:0.0.1
+  - runtime-sensitive-echo:0.0.1
+
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+environment_name: ai-agents-env
+
+guardrails:
+  - name: Demo Cost Budget
+    cost_budget:
+      per_run_usd: 0.05
+      cumulative_usd: 5.00
+
+icon: shield
+emoji: "🛡️"
+color: "#EF4444"
+
+suggestions:
+  - Use runtime_echo to confirm basic tool execution
+  - Call runtime_sensitive_echo and approve/reject the request
+  - Summarize current cost usage vs configured run budget
+
+welcome_message: >-
+  Guardrails example agent ready. Try a sensitive tool call to exercise approvals,
+  and monitor run-cost budget consumption in real time.
+
+system_prompt: >-
+  You are the Demo Guardrails Agent. Prefer safe defaults, explain budget usage,
+  and clearly report whether tool approval is required.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
+
+trigger: null

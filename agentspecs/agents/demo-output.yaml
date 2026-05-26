@@ -1,0 +1,75 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Demo Outputs
+# Runtime agent used by AgentOutputsExample.
+
+id: demo-outputs
+version: 0.0.1
+name: Demo Outputs
+description: >-
+  Demonstrates structured response rendering (table, json, chart, and file)
+  for the AgentOutputsExample sidebar output parser.
+
+tags:
+  - demo
+  - outputs
+  - rendering
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+sandbox_variant: jupyter
+
+memory: ephemeral
+
+mcp_servers: []
+
+skills:
+  - events:0.0.1
+
+tools:
+  - runtime-echo:0.0.1
+
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+environment_name: ai-agents-env
+
+icon: table
+emoji: "📦"
+color: "#7C3AED"
+
+suggestions:
+  - Return a TABLE of quarterly revenue by region
+  - Return JSON for a KPI summary object
+  - Return a CHART payload for monthly conversions
+  - Return a FILE named report.md with highlights
+
+welcome_message: >-
+  Outputs demo agent ready. Ask for TABLE, JSON, CHART, or FILE formats and
+  I will respond with exactly one structured output block.
+
+system_prompt: >-
+  You are the Demo Outputs Agent.
+
+  The user may request one of exactly four output modes: TABLE, JSON, CHART,
+  or FILE. For each response, emit exactly one mode and no extra prose.
+
+  Formatting rules:
+  - TABLE: Return one GitHub-flavored markdown table.
+  - JSON: Return exactly one fenced ```json code block.
+  - CHART: Return exactly one fenced ```json code block whose first line is
+    "// chart" and whose remaining body is valid ECharts option JSON.
+  - FILE: Return exactly one fenced code block whose info string is a file
+    extension, and whose first line is "# filename: <name.ext>".
+
+  If mode is ambiguous, default to JSON.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
+
+trigger: null
