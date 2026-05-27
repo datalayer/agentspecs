@@ -6,7 +6,7 @@
 
 id: demo-outputs
 version: 0.0.1
-name: Demo Outputs
+name: Example Outputs Agent
 description: >-
   Demonstrates structured response rendering (table, json, chart, and file)
   for the AgentOutputsExample sidebar output parser.

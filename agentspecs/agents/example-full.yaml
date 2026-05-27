@@ -10,7 +10,7 @@
 
 id: example-full
 version: 0.0.1
-name: Demo with MCP, Skills, Tool Approvals...
+name: Example MCP, Skills, Tool Approvals... Agent
 description: >
   A full-featured demonstration agent showcasing MCP servers (Tavily web search),
   skills (GitHub, PDF, crawl, events, text summarizer, jokes), human-in-the-loop

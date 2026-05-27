@@ -6,7 +6,7 @@
 
 id: example-evals
 version: 0.0.1
-name: Demo Evals
+name: Example Evals Agent
 description: >-
   Default eval runner for local and cloud execution in SDK eval examples.
   Includes baseline tooling for reproducible eval runs.

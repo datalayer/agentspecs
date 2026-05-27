@@ -3,7 +3,7 @@
 
 id: example-hooks
 version: 0.0.1
-name: Demo Hooks Agent
+name: Example Hooks Agent
 description: >
   Demonstrates pre-hooks and post-hooks executed in the sandbox lifecycle.
 

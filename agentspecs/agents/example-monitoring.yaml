@@ -6,7 +6,7 @@
 
 id: example-monitoring
 version: 0.0.1
-name: Demo Monitoring
+name: Example Monitoring Agent
 description: >-
   Monitoring-focused example agent for AgentMonitoringExample. It is intentionally
   lightweight so it starts reliably in local example runs.

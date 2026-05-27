@@ -7,7 +7,7 @@
 
 id: example-one-trigger
 version: 0.0.1
-name: Demo with the Once Trigger
+name: Example Once Trigger Agent
 description: >
   A demonstration agent for the "once" trigger type. When launched, the agent
   executes its trigger prompt exactly once, emits AGENT_STARTED and

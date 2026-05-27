@@ -6,7 +6,7 @@
 
 id: example-subagents
 version: 0.0.1
-name: Demo Subagents
+name: Example Subagents Agent
 description: >-
   Demonstrates multi-agent delegation with a parent orchestrator that can split
   work between a researcher and a writer subagent.

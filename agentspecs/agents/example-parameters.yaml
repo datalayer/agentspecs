@@ -3,7 +3,7 @@
 
 id: example-parameters
 version: 0.0.1
-name: Demo Parameters Agent
+name: Example Parameters Agent
 description: >
   Demonstrates launch-time parameterization with JSON schema validation.
 

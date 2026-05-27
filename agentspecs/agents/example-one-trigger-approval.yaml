@@ -8,7 +8,7 @@
 
 id: example-one-trigger-approval
 version: 0.0.1
-name: Demo with the Once Trigger and Tool Approval
+name: Example Once Trigger and Tool Approval Agent
 description: >
   A demonstration agent for the "once" trigger type with manual tool approval.
   When launched, the agent executes its trigger prompt once and invokes the

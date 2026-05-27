@@ -6,7 +6,7 @@
 
 id: example-mcp
 version: 0.0.1
-name: Demo MCP
+name: Example MCP Agent
 description: >-
   MCP-focused example agent for AgentMCPExample. It connects to the Tavily MCP
   server and demonstrates search/research style tool usage from the chat panel.

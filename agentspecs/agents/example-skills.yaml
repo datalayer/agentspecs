@@ -7,7 +7,7 @@
 
 id: example-skills
 version: 0.0.1
-name: Skills Demo Agent
+name: Example Skills Agent
 description: >-
   Demo agent for skills usage with mixed discovery sources, including
   built-in file skills and package-registered skills like datalayer-whoami.

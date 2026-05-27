@@ -6,7 +6,7 @@
 
 id: example-otel
 version: 0.0.1
-name: Demo OTEL
+name: Example OTEL Agent
 description: >-
   OTEL observability example agent for AgentOtelExample. It assists the user in
   exploring traces, logs and metrics surfaced by the OTEL dashboard.

@@ -6,7 +6,7 @@
 
 id: example-guardrails
 version: 0.0.1
-name: Demo Guardrails
+name: Example Guardrails Agent
 description: >-
   Guardrails-focused example agent for AgentGuardrailsExample. Includes budget
   limits and a sensitive tool requiring manual approval.
@@ -39,7 +39,7 @@ frontend_tools:
 environment_name: ai-agents-env
 
 guardrails:
-  - name: Demo Cost Budget
+  - name: Example Cost Budget
     cost_budget:
       per_run_usd: 0.05
       cumulative_usd: 5.00
