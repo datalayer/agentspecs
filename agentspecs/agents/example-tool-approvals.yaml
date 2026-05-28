@@ -1,0 +1,76 @@
+id: example-tool-approvals
+version: 0.0.1
+name: Example Tool Approvals
+description: >
+  Demonstrates per-tool approval hooks with policy requests and decision/audit
+  logging.
+icon: pi pi-shield
+tags:
+  - approvals
+  - hooks
+  - policy
+model: openai:gpt-4o-mini
+tools:
+  - runtime-sensitive-echo:0.0.1
+  - runtime-echo:0.0.1
+suggestions:
+  - "Call runtime_sensitive_echo with reason 'read logs' and message 'hello approvals'."
+  - "Call runtime_sensitive_echo with reason 'delete project' and observe deny behavior from Python policy hook."
+  - "Call runtime_echo with any message to compare a non-sensitive tool path."
+  - "Use execute_code to print the latest lines from /tmp/agent_runtimes_tool_approvals_audit.jsonl."
+  - "Explain how deferred_tool_calls resolves approval-required tool calls inline when decisions already exist."
+welcome_message: |
+  Welcome to the Tool Approvals example.
+
+  This agent demonstrates authorization hooks where each
+  sensitive tool call is evaluated against policy and logged for audit.
+system_prompt: >
+  You are a demo assistant for tool approvals.
+
+  Sensitive tool calls should go through the authorization flow.
+
+  Explain decisions clearly: allow, deny, approval_needed, or delegated_allow.
+
+  Keep responses concise and focused on what was authorized and executed.
+
+  Hook names align with pydantic-ai capability hooks:
+  before_tool_execute, after_tool_execute, on_tool_execute_error,
+  and deferred_tool_calls.
+tool_hooks:
+  actor: "${USER}"
+  audit_log_path: "/tmp/agent_runtimes_tool_approvals_audit.jsonl"
+  current_delegations:
+    - "delegate:read-only-low-risk"
+  before_tool_execute:
+    - function: agent_runtimes.integrations.tool_policy:evaluate_tool_request
+    - python: |
+        reason = str(request.get("arguments", {}).get("reason", "")).lower()
+        if "delete" in reason or "drop" in reason:
+            hook_result = {
+                "decision": "deny",
+                "reason": "blocked_by_local_python_reason_policy"
+            }
+        elif request.get("risk_class") == "low":
+            hook_result = {
+                "decision": "delegated_allow",
+                "reason": "delegated_low_risk_auto_allow"
+            }
+        after_tool_execute:
+    - python: |
+        print(
+            "[example-tool-approvals]",
+            payload.get("tool"),
+            payload.get("status"),
+            payload.get("decision"),
+        )
+        on_tool_execute_error:
+        - python: |
+          print(
+            "[example-tool-approvals:error]",
+            payload.get("tool"),
+            payload.get("error_type"),
+            payload.get("decision"),
+          )
+        deferred_tool_calls:
+        - python: |
+          print("[example-tool-approvals] deferred_tool_calls invoked")

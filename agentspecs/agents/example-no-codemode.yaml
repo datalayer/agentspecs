@@ -1,0 +1,65 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Tavily MCP Demo (No Codemode)
+# Used by AgentCodemodeExample to demonstrate raw MCP tool usage.
+
+id: example-no-codemode
+version: 0.0.1
+name: Example Tavily No Codemode Agent
+description: >-
+  Tavily MCP demo agent without codemode conversion. MCP tools are used directly
+  without codemode orchestration.
+
+tags:
+  - demo
+  - mcp
+  - tavily
+  - no-codemode
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+sandbox_variant: jupyter
+memory: ephemeral
+
+mcp_servers:
+  - tavily:0.0.1
+
+skills:
+  - events:0.0.1
+
+tools:
+  - runtime-echo:0.0.1
+
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+environment_name: ai-agents-env
+
+icon: globe
+emoji: "🌐"
+color: "#0969DA"
+
+suggestions:
+  - Search for the latest updates about Datalayer
+  - Extract key points from the top result
+  - Summarize recent AI agent tooling trends
+
+welcome_message: >-
+  Tavily MCP no-codemode agent ready. I use MCP tools directly.
+
+system_prompt: >-
+  You are a Tavily MCP demo assistant without codemode. Use available MCP tools
+  directly for search and research requests, and provide concise summaries.
+
+system_prompt_codemode_addons: null
+
+# Explicitly disabled codemode behavior for this variant.
+codemode:
+  enabled: false
+
+welcome_notebook: null
+welcome_document: null
+trigger: null

@@ -22,6 +22,7 @@ mcp_servers: []
 skills: []
 tools:
   - runtime-echo:0.0.1
+  - runtime-sensitive-echo:0.0.1
 frontend_tools: []
 
 environment_name: ai-agents-env
@@ -35,6 +36,8 @@ suggestions:
   - "Print the hook_ran_at and hook_name variables that the pre-hook set in the sandbox."
   - "Run execute_code to verify that the 'rich' package was installed by the pre-hook."
   - "Show me all variables that the pre-hook defined in the sandbox namespace."
+  - "Call runtime_sensitive_echo with reason 'audit' to trigger per-tool authorization hooks."
+  - "Use execute_code to read /tmp/agent_runtimes_tool_approvals_audit.jsonl and summarize the latest authorization + execution entries."
 
 welcome_message: >
   I ran a pre-hook before starting up. It installed the 'rich' package, wrote a
@@ -56,6 +59,18 @@ system_prompt: >
 
   A post-hook is also configured — it will write
   /tmp/agent_runtimes_post_hook_demo.txt when the agent shuts down.
+
+  This agent also demonstrates per-tool hooks for runtime-sensitive tool calls.
+  Each proposed tool call is converted into an authorization request with actor,
+  tool, arguments, resource, current delegations, and risk class. Hook decisions
+  can be allow, deny, approval_needed, or delegated_allow. Decisions and
+  execution results are logged.
+
+  Hook names align with pydantic-ai capability hooks:
+  - before_tool_execute
+  - after_tool_execute
+  - on_tool_execute_error
+  - deferred_tool_calls
 
   When the user asks about hooks, use execute_code to show concrete evidence:
   read the marker file, print the variables, or import rich to confirm it
@@ -96,6 +111,43 @@ post_hooks:
           encoding='utf-8',
       )
       print(f"[example-hooks] post-hook done: post_ran_at={post_ran_at!r}")
+
+tool_hooks:
+  actor: "${USER}"
+  audit_log_path: "/tmp/agent_runtimes_tool_approvals_audit.jsonl"
+  current_delegations:
+    - "delegate:read-only-low-risk"
+  before_tool_execute:
+    - function: agent_runtimes.integrations.tool_policy:evaluate_tool_request
+    - python: |
+        # Plain Python hook variant. It can enforce extra local policy.
+        reason = str(request.get("arguments", {}).get("reason", "")).lower()
+        if "delete" in reason or "drop" in reason:
+            hook_result = {
+                "decision": "deny",
+                "reason": "blocked_by_local_python_hook_reason_policy"
+            }
+  after_tool_execute:
+    - python: |
+        # Post hook receives execution result payload in `payload`.
+        print(
+        "[example-hooks] after_tool_execute",
+            payload.get("tool"),
+            payload.get("status"),
+            payload.get("decision"),
+        )
+  on_tool_execute_error:
+    - python: |
+        print(
+            "[example-hooks] on_tool_execute_error",
+            payload.get("tool"),
+            payload.get("error_type"),
+            payload.get("decision"),
+        )
+  deferred_tool_calls:
+    - python: |
+        # Demonstrates the deferred hook key in spec config.
+        print("[example-hooks] deferred_tool_calls invoked")
 
 system_prompt_codemode_addons: null
 welcome_notebook: null

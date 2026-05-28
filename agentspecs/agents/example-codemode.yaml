@@ -1,0 +1,68 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Tavily MCP Demo (Codemode)
+# Used by AgentCodemodeExample to demonstrate codemode MCP orchestration.
+
+id: example-codemode
+version: 0.0.1
+name: Example Tavily Codemode Agent
+description: >-
+  Tavily MCP demo agent with codemode enabled. MCP tools can be composed through
+  codemode execution flows.
+
+tags:
+  - demo
+  - mcp
+  - tavily
+  - codemode
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+sandbox_variant: jupyter
+memory: ephemeral
+
+mcp_servers:
+  - tavily:0.0.1
+
+skills:
+  - events:0.0.1
+
+tools:
+  - runtime-echo:0.0.1
+
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+environment_name: ai-agents-env
+
+icon: code
+emoji: "⚙️"
+color: "#8250DF"
+
+suggestions:
+  - Search and extract key points about Datalayer in one step
+  - Research AI agent best practices and return a concise report
+  - Compare two web sources and summarize differences
+
+welcome_message: >-
+  Tavily MCP codemode agent ready. I can compose MCP-powered workflows.
+
+system_prompt: >-
+  You are a Tavily MCP demo assistant with codemode enabled. Prefer concise,
+  practical responses and use MCP tools when web search or extraction is needed.
+
+system_prompt_codemode_addons: >-
+  When helpful, compose MCP capabilities in a single run while keeping responses
+  concise and grounded in retrieved evidence.
+
+codemode:
+  enabled: true
+  token_reduction: "~80%"
+  speedup: "~1.5x"
+
+welcome_notebook: null
+welcome_document: null
+trigger: null

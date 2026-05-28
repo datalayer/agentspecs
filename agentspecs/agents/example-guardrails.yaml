@@ -52,6 +52,9 @@ suggestions:
   - Use runtime_echo to confirm basic tool execution
   - Call runtime_sensitive_echo and approve/reject the request
   - Summarize current cost usage vs configured run budget
+  - Trigger before_tool_execute by calling runtime_sensitive_echo with reason audit
+  - Trigger local deny policy with reason delete and explain the block
+  - Explain how deferred_tool_calls and approval queue interact for this run
 
 welcome_message: >-
   Guardrails example agent ready. Try a sensitive tool call to exercise approvals,
@@ -60,6 +63,44 @@ welcome_message: >-
 system_prompt: >-
   You are the Demo Guardrails Agent. Prefer safe defaults, explain budget usage,
   and clearly report whether tool approval is required.
+
+  This agent also demonstrates pydantic-ai tool execution hook naming:
+  before_tool_execute, after_tool_execute, on_tool_execute_error,
+  and deferred_tool_calls.
+
+tool_hooks:
+  actor: "${USER}"
+  audit_log_path: "/tmp/agent_runtimes_tool_approvals_audit.jsonl"
+  current_delegations:
+    - "delegate:guardrails-low-risk"
+  before_tool_execute:
+    - function: agent_runtimes.integrations.tool_policy:evaluate_tool_request
+    - python: |
+        reason = str(request.get("arguments", {}).get("reason", "")).lower()
+        if "delete" in reason:
+            hook_result = {
+                "decision": "deny",
+                "reason": "guardrails_local_delete_policy"
+            }
+  after_tool_execute:
+    - python: |
+        print(
+            "[example-guardrails] after_tool_execute",
+            payload.get("tool"),
+            payload.get("status"),
+            payload.get("decision"),
+        )
+  on_tool_execute_error:
+    - python: |
+        print(
+            "[example-guardrails] on_tool_execute_error",
+            payload.get("tool"),
+            payload.get("error_type"),
+            payload.get("decision"),
+        )
+  deferred_tool_calls:
+    - python: |
+        print("[example-guardrails] deferred_tool_calls invoked")
 
 system_prompt_codemode_addons: null
 
