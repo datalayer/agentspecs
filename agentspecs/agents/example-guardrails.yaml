@@ -70,7 +70,7 @@ system_prompt: >-
 
 tool_hooks:
   actor: "${USER}"
-  audit_log_path: "/tmp/agent_runtimes_tool_approvals_audit.jsonl"
+  audit_log_path: "agent_runtimes_tool_approvals_audit.jsonl"
   current_delegations:
     - "delegate:guardrails-low-risk"
   before_tool_execute:

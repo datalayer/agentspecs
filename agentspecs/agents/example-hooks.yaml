@@ -114,7 +114,7 @@ post_hooks:
 
 tool_hooks:
   actor: "${USER}"
-  audit_log_path: "/tmp/agent_runtimes_tool_approvals_audit.jsonl"
+  audit_log_path: "agent_runtimes_tool_approvals_audit.jsonl"
   current_delegations:
     - "delegate:read-only-low-risk"
   before_tool_execute:

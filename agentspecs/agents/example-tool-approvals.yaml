@@ -38,7 +38,7 @@ system_prompt: >
   and deferred_tool_calls.
 tool_hooks:
   actor: "${USER}"
-  audit_log_path: "/tmp/agent_runtimes_tool_approvals_audit.jsonl"
+  audit_log_path: "agent_runtimes_tool_approvals_audit.jsonl"
   current_delegations:
     - "delegate:read-only-low-risk"
   before_tool_execute:
@@ -55,7 +55,7 @@ tool_hooks:
                 "decision": "delegated_allow",
                 "reason": "delegated_low_risk_auto_allow"
             }
-        after_tool_execute:
+  after_tool_execute:
     - python: |
         print(
             "[example-tool-approvals]",
@@ -63,14 +63,14 @@ tool_hooks:
             payload.get("status"),
             payload.get("decision"),
         )
-        on_tool_execute_error:
-        - python: |
-          print(
+  on_tool_execute_error:
+    - python: |
+        print(
             "[example-tool-approvals:error]",
             payload.get("tool"),
             payload.get("error_type"),
             payload.get("decision"),
-          )
-        deferred_tool_calls:
-        - python: |
-          print("[example-tool-approvals] deferred_tool_calls invoked")
+        )
+  deferred_tool_calls:
+    - python: |
+        print("[example-tool-approvals] deferred_tool_calls invoked")

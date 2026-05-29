@@ -1,0 +1,62 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Example Notifications
+# Runtime agent used by the notifications example for local and cloud execution.
+
+id: example-notifications
+version: 0.0.1
+name: Example Notifications Agent
+description: >-
+  Demonstrates multi-channel notifications including in-app, email, and Slack
+  style destinations with preference management.
+
+tags:
+  - notifications
+  - alerts
+  - demo
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+sandbox_variant: jupyter
+
+memory: ephemeral
+
+mcp_servers: []
+
+skills:
+  - events:0.0.1
+
+tools:
+  - runtime-echo:0.0.1
+
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+environment_name: ai-agents-env
+
+icon: bell
+emoji: "🔔"
+color: "#F59E0B"
+
+suggestions:
+  - Configure notification channels for in-app, email, and Slack
+  - Trigger a test notification and verify delivery status
+  - Summarize unread notifications and recent alert activity
+
+welcome_message: >-
+  Ready to demonstrate notifications. Configure your channels and send a test
+  alert to validate delivery.
+
+system_prompt: >-
+  You are the Example Notifications Agent. Help users configure notification
+  channels, test delivery paths, and summarize recent notification activity.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
+
+trigger: null
