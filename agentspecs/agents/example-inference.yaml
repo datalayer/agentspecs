@@ -1,0 +1,58 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: example-inference
+version: 0.0.1
+name: Example Inference Provider Agent
+description: >-
+  Demonstrates inference-provider switching (local vs datalayer) for a local
+  agent runtime session.
+
+tags:
+  - demo
+  - inference
+  - provider
+  - runtime
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+inference_provider: local
+
+sandbox_variant: jupyter
+memory: ephemeral
+
+mcp_servers: []
+
+skills:
+  - events:0.0.1
+
+tools:
+  - runtime-echo:0.0.1
+
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+environment_name: ai-agents-env
+
+icon: pulse
+emoji: "🧠"
+color: "#2563EB"
+
+suggestions:
+  - Compare local and datalayer inference providers for latency and routing.
+  - Explain where model responses are generated for this current provider.
+  - Summarize the tradeoffs of switching providers for this agent.
+
+welcome_message: >-
+  Inference provider demo ready. Switch between local and datalayer providers,
+  then ask me the same prompt to compare behavior.
+
+system_prompt: >-
+  You are the inference provider demo agent. Be concise, technical, and explicit
+  about provider-routing implications when asked.
+
+system_prompt_codemode_addons: null
+welcome_notebook: null
+welcome_document: null
+trigger: null
