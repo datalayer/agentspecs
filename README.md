@@ -22,7 +22,7 @@ The YAML files in [agentspecs/agentspecs](agentspecs) are compiled into Python a
 
 ```text
 agentspecs/
-├── agents/           # Agent specs
+├── agents/           # Agentspecs
 ├── teams/            # Team orchestration specs
 ├── mcp-servers/      # MCP server specs
 ├── skills/           # Skill specs
@@ -207,7 +207,7 @@ Common fields:
 
 ## Parameters (Launch-Time Inputs)
 
-Agent specs support a `parameters` field using JSON Schema. This lets one spec
+Agentspecs support a `parameters` field using JSON Schema. This lets one spec
 be reused across multiple launches while keeping runtime inputs validated and
 explicit.
 

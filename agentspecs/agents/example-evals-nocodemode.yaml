@@ -4,7 +4,7 @@
 # Agent Specification: Demo Evals (No Codemode)
 # Runtime agent used by eval examples for local and cloud execution without codemode.
 
-id: example-evals-nocodmode
+id: example-evals-nocodemode
 version: 0.0.1
 name: Example Evals Agent (No Codemode)
 description: >-
