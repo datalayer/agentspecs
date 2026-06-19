@@ -32,6 +32,8 @@ skills:
 tools:
   - runtime-echo:0.0.1
 
+disable_tool_approvals: true
+
 frontend_tools:
   - jupyter-notebook:0.0.1
   - lexical-document:0.0.1

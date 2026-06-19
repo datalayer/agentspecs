@@ -9,7 +9,7 @@ tags:
   - approvals
   - hooks
   - policy
-model: openai:gpt-4o-mini
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
 tools:
   - runtime-sensitive-echo:0.0.1
   - runtime-echo:0.0.1
