@@ -45,9 +45,8 @@ color: "#6366F1"
 
 # Chat suggestions
 suggestions:
-  - Make a quick vegetarian dinner
-  - Add chicken to the recipe
-  - Make it spicy and high protein
+  - Help me create a simple pasta recipe.
+  - Add tomatoes to the recipe.
 
 welcome_message: >
   Hi! Tell me what you'd like to cook and I'll build a recipe with you.

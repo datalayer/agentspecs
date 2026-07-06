@@ -44,9 +44,8 @@ color: "#6366F1"
 
 # Chat suggestions
 suggestions:
-  - Show me a plan with steps
-  - Display some rich content
-  - Render a summary card
+  - Create a project plan for building a mobile app.
+  - Generate a marketing strategy for a new product launch.
 
 welcome_message: >
   Hi! Ask me to show something and I'll render it using the available UI tools.

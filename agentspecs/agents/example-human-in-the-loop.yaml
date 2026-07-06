@@ -45,9 +45,8 @@ color: "#6366F1"
 
 # Chat suggestions
 suggestions:
-  - Plan a deployment pipeline
-  - Help me plan a code review process
-  - Create a plan to set up a new project
+  - Plan a weekend trip to Paris.
+  - Plan a birthday party for next Saturday.
 
 welcome_message: >
   Hi! Describe a task and I'll draft a step-by-step plan for you to review.

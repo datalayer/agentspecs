@@ -45,9 +45,9 @@ color: "#6366F1"
 
 # Chat suggestions
 suggestions:
-  - Write a haiku about spring
-  - Create a haiku about the ocean
-  - Make a haiku about city lights
+  - Write me a haiku about cherry blossoms in spring.
+  - Create a haiku about coding late at night.
+  - Generate a haiku about hiking a mountain trail.
 
 welcome_message: >
   Hi! Give me a theme and I'll craft a haiku for you.

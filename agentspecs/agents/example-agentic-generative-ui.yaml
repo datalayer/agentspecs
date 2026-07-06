@@ -46,9 +46,8 @@ color: "#6366F1"
 
 # Chat suggestions
 suggestions:
-  - Plan and build a simple website
-  - Organize a small research project
-  - Set up a data pipeline step by step
+  - Create a project plan for building a mobile app.
+  - Generate a marketing strategy for a new product launch.
 
 welcome_message: >
   Hi! Give me a goal and I'll create a plan, then work through the steps.

@@ -45,9 +45,8 @@ color: "#6366F1"
 
 # Chat suggestions
 suggestions:
-  - What time is it?
+  - What is the current time?
   - What's the current date?
-  - What time is it in Tokyo?
 
 welcome_message: >
   Hi! Ask me for the current time in any timezone.

@@ -45,9 +45,8 @@ color: "#6366F1"
 
 # Chat suggestions
 suggestions:
-  - What's the weather in Tokyo?
-  - Weather in New York
-  - How's the weather in London?
+  - What's the weather like in Paris?
+  - Show me the weather forecast for Tokyo.
 
 welcome_message: >
   Hi! Ask me about the weather in any city.
