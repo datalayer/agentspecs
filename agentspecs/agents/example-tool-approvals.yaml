@@ -5,6 +5,7 @@ description: >
   Demonstrates per-tool approval hooks with policy requests and decision/audit
   logging.
 icon: pi pi-shield
+emoji: "✅"
 tags:
   - approvals
   - hooks
