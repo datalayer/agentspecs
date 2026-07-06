@@ -1,0 +1,68 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Backend Tool Rendering (AG-UI)
+# Weather assistant using a backend tool with real API calls. Mirrors the
+# former /api/v1/examples/backend_tool_rendering endpoint agent.
+
+id: example-backend-tool-rendering
+version: 0.0.1
+name: Backend Tool Rendering
+description: >
+  An AG-UI weather assistant that fetches real weather data with a backend tool
+  for the frontend to render as a weather card.
+
+tags:
+  - example
+  - ag-ui
+  - weather
+
+enabled: true
+protocol: ag-ui
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+# Memory backend
+memory: ephemeral
+
+# No MCP servers
+mcp_servers: []
+
+# No skills
+skills: []
+
+# Runtime tools
+tools:
+  - example-get-weather:0.0.1
+frontend_tools: []
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: sun
+emoji: 🌤️
+color: "#6366F1"
+
+# Chat suggestions
+suggestions:
+  - What's the weather in Tokyo?
+  - Weather in New York
+  - How's the weather in London?
+
+welcome_message: >
+  Hi! Ask me about the weather in any city.
+
+system_prompt: |
+  You are a helpful weather assistant that provides accurate weather information.
+
+  When users ask about weather:
+  - If no location is provided, ask for one
+  - Translate non-English location names to English
+  - For multi-part locations (e.g., "New York, NY"), use the most specific part
+  - Include temperature, humidity, wind, and conditions in your response
+  - Keep responses concise but informative
+
+  Use the `get_weather` tool to fetch current weather data.
+
+system_prompt_codemode_addons: null
+trigger: null

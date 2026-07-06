@@ -1,0 +1,19 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: generate-haiku
+version: 0.0.1
+name: Generate Haiku
+description: Generate a haiku (Japanese + English + gradient) rendered as a card by the frontend.
+tags:
+  - example
+  - ag-ui
+  - generative-ui
+enabled: true
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.examples.tools.ag_ui
+  method: generate_haiku
+icon: pencil
+emoji: "🖋️"

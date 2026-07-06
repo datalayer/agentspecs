@@ -1,0 +1,19 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: example-current-time
+version: 0.0.1
+name: Current Time
+description: Return the current time in ISO format for a given timezone.
+tags:
+  - example
+  - ag-ui
+  - time
+enabled: true
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.examples.tools.ag_ui
+  method: current_time
+icon: clock
+emoji: "🕒"

@@ -1,0 +1,19 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: example-get-weather
+version: 0.0.1
+name: Get Weather
+description: Fetch current weather for a location from the Open-Meteo API for frontend rendering.
+tags:
+  - example
+  - ag-ui
+  - weather
+enabled: true
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.examples.tools.ag_ui
+  method: get_weather
+icon: sun
+emoji: "🌤️"

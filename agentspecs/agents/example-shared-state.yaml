@@ -1,0 +1,69 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Shared State (AG-UI)
+# Recipe builder with bidirectional state sync. Mirrors the former
+# /api/v1/examples/shared_state endpoint agent.
+
+id: example-shared-state
+version: 0.0.1
+name: Shared State
+description: >
+  An AG-UI recipe-builder agent demonstrating bidirectional state
+  synchronization between the agent and the UI.
+
+tags:
+  - example
+  - ag-ui
+  - shared-state
+
+enabled: true
+protocol: ag-ui
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+# Memory backend
+memory: ephemeral
+
+# No MCP servers
+mcp_servers: []
+
+# No skills
+skills: []
+
+# Runtime tools
+tools:
+  - example-display-recipe:0.0.1
+frontend_tools: []
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: book
+emoji: 🍳
+color: "#6366F1"
+
+# Chat suggestions
+suggestions:
+  - Make a quick vegetarian dinner
+  - Add chicken to the recipe
+  - Make it spicy and high protein
+
+welcome_message: >
+  Hi! Tell me what you'd like to cook and I'll build a recipe with you.
+
+system_prompt: |
+  You are a helpful recipe assistant.
+
+  IMPORTANT RULES:
+  1. Create recipes using the existing ingredients when possible
+  2. Add new ingredients to the existing list (don't replace)
+  3. Use the `display_recipe` tool to update the recipe
+  4. Do NOT repeat the recipe in your message after using the tool
+  5. Do NOT call `display_recipe` multiple times in a row
+
+  After updating the recipe, give a brief summary of changes (one sentence).
+  Don't describe the full recipe.
+
+system_prompt_codemode_addons: null
+trigger: null

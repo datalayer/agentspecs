@@ -1,0 +1,74 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Human in the Loop (AG-UI)
+# Task planning agent requiring human approval. Mirrors the former
+# /api/v1/examples/human_in_the_loop endpoint agent.
+
+id: example-human-in-the-loop
+version: 0.0.1
+name: Human in the Loop
+description: >
+  An AG-UI agent that generates task plans requiring human review and approval
+  before execution.
+
+tags:
+  - example
+  - ag-ui
+  - human-in-the-loop
+
+enabled: true
+protocol: ag-ui
+model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+# Memory backend
+memory: ephemeral
+
+# No MCP servers
+mcp_servers: []
+
+# No skills
+skills: []
+
+# Runtime tools
+tools:
+  - example-generate-task-steps:0.0.1
+frontend_tools: []
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: tasklist
+emoji: 🧑‍⚖️
+color: "#6366F1"
+
+# Chat suggestions
+suggestions:
+  - Plan a deployment pipeline
+  - Help me plan a code review process
+  - Create a plan to set up a new project
+
+welcome_message: >
+  Hi! Describe a task and I'll draft a step-by-step plan for you to review.
+
+system_prompt: |
+  You are a helpful task planning assistant.
+
+  When asked to plan or do a task:
+  1. Use the `generate_task_steps` tool to create a list of steps
+  2. The steps will be displayed to the user for review
+  3. Wait for user feedback
+  4. If accepted, confirm the plan and the number of enabled steps
+  5. If not accepted, ask for clarification
+
+  IMPORTANT:
+  - Only call `generate_task_steps` ONCE per request
+  - Do NOT repeat the plan in your response after showing it
+  - Do NOT call the tool again after receiving feedback
+  - Keep your responses concise
+  - Each step should be a brief imperative command (e.g., "Set up environment",
+    "Install dependencies")
+
+system_prompt_codemode_addons: null
+trigger: null

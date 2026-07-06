@@ -1,0 +1,19 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: display-recipe
+version: 0.0.1
+name: Display Recipe
+description: Update the shared recipe state and emit an AG-UI state snapshot.
+tags:
+  - example
+  - ag-ui
+  - shared-state
+enabled: true
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.examples.tools.ag_ui
+  method: display_recipe
+icon: book
+emoji: "🍳"

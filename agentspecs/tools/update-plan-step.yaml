@@ -1,0 +1,19 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: update-plan-step
+version: 0.0.1
+name: Update Plan Step
+description: Update a plan step and emit an AG-UI state delta (JSON Patch RFC 6902).
+tags:
+  - example
+  - ag-ui
+  - state
+enabled: true
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.examples.tools.ag_ui
+  method: update_plan_step
+icon: checklist
+emoji: "✅"
