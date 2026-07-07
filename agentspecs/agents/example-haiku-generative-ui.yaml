@@ -19,7 +19,7 @@ tags:
 
 enabled: true
 protocol: ag-ui
-model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+model: "bedrock:us.anthropic.claude-opus-4-8-v1"
 
 # Memory backend
 memory: ephemeral
@@ -34,6 +34,13 @@ skills: []
 tools:
   - example-generate-haiku:0.0.1
 frontend_tools: []
+
+# Frontend render bindings: which backend tool the UI renders inline, the
+# renderer key the example maps to a component, and an optional CSS file.
+frontend_render_tools:
+  - tool: generate_haiku
+    renderer: haiku-card
+    css: haiku-card.css
 
 # Runtime environment
 environment_name: ai-agents-env

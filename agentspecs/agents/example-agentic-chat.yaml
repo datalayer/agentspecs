@@ -19,7 +19,7 @@ tags:
 
 enabled: true
 protocol: ag-ui
-model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+model: "bedrock:us.anthropic.claude-opus-4-8-v1"
 
 # Memory backend
 memory: ephemeral
