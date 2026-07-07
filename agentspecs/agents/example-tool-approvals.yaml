@@ -10,7 +10,7 @@ tags:
   - approvals
   - hooks
   - policy
-model: "bedrock:us.anthropic.claude-opus-4-8-v1"
+model: "bedrock:us.anthropic.claude-opus-4-8"
 tools:
   - runtime-sensitive-echo:0.0.1
   - runtime-echo:0.0.1

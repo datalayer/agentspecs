@@ -24,7 +24,7 @@ tags:
   - sustainability
 
 enabled: false
-model: "bedrock:us.anthropic.claude-opus-4-8-v1"
+model: "bedrock:us.anthropic.claude-opus-4-8"
 
 sandbox_variant: jupyter
 

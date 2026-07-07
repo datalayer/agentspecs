@@ -32,7 +32,7 @@ goal: >-
   discounting, explain variances by region/segment/product/SKU, and generate an
   executive-ready PDF performance report with full data lineage.
 
-model: "bedrock:us.anthropic.claude-opus-4-8-v1"
+model: "bedrock:us.anthropic.claude-opus-4-8"
 
 sandbox_variant: jupyter
 
