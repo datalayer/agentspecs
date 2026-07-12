@@ -29,19 +29,13 @@ frontend_tools:
   - jupyter-notebook:0.0.1
   - lexical-document:0.0.1
 environment_name: ai-agents-env
-icon: graph
+icon: sync
 emoji: "📊"
 color: "#1F883D"
 
 suggestions:
   - >-
-    Start this workflow and provide a sample dataset I can analyze.
-  - >-
-    Run an end-to-end analysis and summarize the top findings clearly.
-  - >-
-    Highlight anomalies, trends, and suggested next actions.
-  - >-
-    Show the code you run and explain each step briefly.
+    Use /home/jovyan/datasets/datalayer-nfs/finance/transactions_q1.csv and run a critic loop: first produce a reconciliation analysis, then critique it for gaps and publish a corrected final report.
 
 welcome_message: >-
   Hi! I can help with agent critic loop for analysis. Share data, files, or context

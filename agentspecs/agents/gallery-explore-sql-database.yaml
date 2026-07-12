@@ -27,19 +27,13 @@ frontend_tools:
   - jupyter-notebook:0.0.1
   - lexical-document:0.0.1
 environment_name: ai-agents-env
-icon: graph
+icon: database
 emoji: "📊"
 color: "#1F883D"
 
 suggestions:
   - >-
-    Start this workflow and provide a sample dataset I can analyze.
-  - >-
-    Run an end-to-end analysis and summarize the top findings clearly.
-  - >-
-    Highlight anomalies, trends, and suggested next actions.
-  - >-
-    Show the code you run and explain each step briefly.
+    Use /home/jovyan/datasets/datalayer-nfs/sql/query_workload.sql as a starting workload, profile query intent, and propose executable SQL exploration steps.
 
 welcome_message: >-
   Hi! I can help with explore a sql database. Share data, files, or context

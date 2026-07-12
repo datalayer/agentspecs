@@ -33,13 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - >-
-    Start this workflow and provide a sample dataset I can analyze.
-  - >-
-    Run an end-to-end analysis and summarize the top findings clearly.
-  - >-
-    Highlight anomalies, trends, and suggested next actions.
-  - >-
-    Show the code you run and explain each step briefly.
+    Use /home/jovyan/datasets/datalayer-nfs/sales/sales_pipeline.csv to generate a dashboard-style notebook with funnel metrics, regional split, and one executive summary cell.
 
 welcome_message: >-
   Hi! I can help with ai creates dashboards. Share data, files, or context

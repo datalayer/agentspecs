@@ -27,27 +27,13 @@ frontend_tools:
   - jupyter-notebook:0.0.1
   - lexical-document:0.0.1
 environment_name: ai-agents-env
-icon: graph
+icon: table
 emoji: "📊"
 color: "#1F883D"
 
 suggestions:
   - >-
-    Load and analyze the Iris CSV from
-    https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv,
-    then summarize key patterns and outliers.
-  - >-
-    Fetch Titanic data from
-    https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv
-    and build a quick survival analysis with charts.
-  - >-
-    Load this public Excel file
-    https://people.sc.fsu.edu/~jburkardt/data/xls/cities.xls and create a clean
-    profile report (types, missing values, distributions).
-  - >-
-    Use a well-known public Kaggle dataset (for example House Prices or
-    Titanic), load it, and run a compact exploratory analysis with actionable
-    findings.
+    Load /home/jovyan/datasets/datalayer-nfs/titanic/titanic.xlsx with pandas.read_excel, then produce a 3-cell notebook: schema+missing values, survival breakdown, and one chart with a concise summary.
 
 welcome_message: >-
   Hi! I can help with analyze an excel spreadsheet. Share data, files, or context

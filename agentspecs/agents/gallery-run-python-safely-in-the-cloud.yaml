@@ -29,19 +29,13 @@ frontend_tools:
   - jupyter-notebook:0.0.1
   - lexical-document:0.0.1
 environment_name: ai-agents-env
-icon: graph
+icon: shield
 emoji: "📊"
 color: "#1F883D"
 
 suggestions:
   - >-
-    Start this workflow and provide a sample dataset I can analyze.
-  - >-
-    Run an end-to-end analysis and summarize the top findings clearly.
-  - >-
-    Highlight anomalies, trends, and suggested next actions.
-  - >-
-    Show the code you run and explain each step briefly.
+    Use /home/jovyan/datasets/datalayer-nfs/notebooks/experiment_metrics.csv and execute Python in a controlled runtime with clear safety and output notes.
 
 welcome_message: >-
   Hi! I can help with run python safely in the cloud. Share data, files, or context

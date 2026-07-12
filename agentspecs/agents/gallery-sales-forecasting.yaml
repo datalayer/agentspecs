@@ -32,13 +32,7 @@ color: "#1F883D"
 
 suggestions:
   - >-
-    Start this workflow and provide a sample dataset I can analyze.
-  - >-
-    Run an end-to-end analysis and summarize the top findings clearly.
-  - >-
-    Highlight anomalies, trends, and suggested next actions.
-  - >-
-    Show the code you run and explain each step briefly.
+    Use /home/jovyan/datasets/datalayer-nfs/sales/sales_history.csv to produce a short-term sales forecast with assumptions and confidence notes.
 
 welcome_message: >-
   Hi! I can help with sales forecasting. Share data, files, or context

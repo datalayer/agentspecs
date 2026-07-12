@@ -27,19 +27,13 @@ frontend_tools:
   - jupyter-notebook:0.0.1
   - lexical-document:0.0.1
 environment_name: ai-agents-env
-icon: graph
+icon: git-branch
 emoji: "📊"
 color: "#1F883D"
 
 suggestions:
   - >-
-    Start this workflow and provide a sample dataset I can analyze.
-  - >-
-    Run an end-to-end analysis and summarize the top findings clearly.
-  - >-
-    Highlight anomalies, trends, and suggested next actions.
-  - >-
-    Show the code you run and explain each step briefly.
+    Compare /home/jovyan/datasets/datalayer-nfs/titanic/titanic_baseline.csv and /home/jovyan/datasets/datalayer-nfs/titanic/titanic_candidate.csv, then summarize schema and value-level differences.
 
 welcome_message: >-
   Hi! I can help with compare two spreadsheets. Share data, files, or context
