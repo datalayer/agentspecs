@@ -1,0 +1,70 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: gallery-accountant
+version: 0.0.1
+name: Accountant
+description: >-
+  Work with Odoo accounting data to reconcile invoices and payments, analyze
+  journal balances, and prepare close-ready summaries.
+
+tags:
+  - gallery
+  - accounting
+  - finance
+  - odoo
+  - reconciliation
+
+enabled: true
+model: "bedrock:us.anthropic.claude-opus-4-8"
+sandbox_variant: jupyter
+memory: ephemeral
+mcp_servers:
+  - odoo:0.0.1
+skills:
+  - accounting:0.0.1
+tools:
+  - runtime-echo:0.0.1
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+environment_name: ai-agents-env
+icon: book
+emoji: "🧮"
+color: "#1F883D"
+
+suggestions:
+  - >-
+    Connect to Odoo and list unpaid customer invoices older than 30 days,
+    grouped by customer with totals and top delinquencies.
+  - >-
+    Compare posted payments against open invoices for this month and flag likely
+    reconciliation mismatches with proposed next checks.
+  - >-
+    Build a close summary with journal balance deltas versus last month and
+    highlight unusual movements.
+
+welcome_message: >-
+  Hi! I am your Accountant agent for Odoo workflows. I can help reconcile
+  invoices and payments, analyze journals, and prepare close-ready summaries.
+
+system_prompt: >-
+  You are a specialized assistant for this gallery workflow: Accountant.
+  Objective: Use Odoo data to perform accounting workflows including
+  reconciliation, aging analysis, journal checks, and close summaries.
+  Use the Odoo MCP server for ERP operations and the notebook/runtime tools for
+  calculations and structured outputs. Keep results concise, auditable, and
+  action-oriented.
+
+system_prompt_codemode_addons: >-
+  Prefer deterministic steps, preserve traceability of calculations, and present
+  clear exceptions with recommended follow-up actions.
+
+codemode:
+  enabled: true
+  token_reduction: "~80%"
+  speedup: "~1.5x"
+
+welcome_notebook: null
+welcome_document: null
+trigger: null

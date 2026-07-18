@@ -1,0 +1,32 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# MCP Server Specification: Odoo
+# Odoo ERP operations (search, invoices, journals, reconciliations)
+
+id: odoo
+version: 0.0.1
+name: Odoo
+description: Odoo ERP operations (search, invoices, journals, reconciliations)
+
+command: uvx
+args:
+  - mcp-server-odoo
+
+transport: stdio
+enabled: true
+
+env:
+  ODOO_URL: "${ODOO_URL}"
+  ODOO_API_KEY: "${ODOO_API_KEY}"
+  ODOO_DB: "${ODOO_DB}"
+  ODOO_LOCALE: "${ODOO_LOCALE}"
+
+tags:
+  - erp
+  - accounting
+  - finance
+  - odoo
+
+icon: server
+emoji: "📚"
