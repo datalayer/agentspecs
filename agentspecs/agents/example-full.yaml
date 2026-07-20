@@ -17,10 +17,9 @@ description: >
   tool approval, and frontend tools (Jupyter notebooks, Lexical documents).
 
 tags:
-  - demo
-  - approval
-  - human-in-the-loop
-  - utility
+  - document-processing
+  - human-approval
+  - notebook
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

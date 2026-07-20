@@ -13,10 +13,9 @@ description: >
   and local filesystem operations.
 
 tags:
-  - data
-  - acquisition
-  - kaggle
-  - filesystem
+  - data-acquisition
+  - etl
+  - pipeline
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

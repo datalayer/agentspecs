@@ -13,9 +13,9 @@ description: >
   tools. The generative UI is produced by the frontend.
 
 tags:
-  - example
-  - ag-ui
-  - generative-ui
+  - workflow
+  - automation
+  - analysis
 
 enabled: true
 protocol: ag-ui

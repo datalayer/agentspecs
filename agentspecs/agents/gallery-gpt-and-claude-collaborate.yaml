@@ -9,11 +9,9 @@ description: >-
   code, one critiques the output, and one summarizes results.
 
 tags:
-  - gallery
-  - gpt
-  - and
-  - claude
-  - collaborate
+  - workflow
+  - summarization
+  - automation
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

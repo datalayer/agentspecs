@@ -9,11 +9,9 @@ description: >-
   interruptions, and return results when the job is complete.
 
 tags:
-  - gallery
-  - long
-  - running
-  - agent
-  - overnight
+  - operations
+  - workflow
+  - automation
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

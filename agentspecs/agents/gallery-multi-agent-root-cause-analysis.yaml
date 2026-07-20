@@ -9,12 +9,9 @@ description: >-
   review, and synthesis to produce root-cause findings.
 
 tags:
-  - gallery
-  - multi
-  - agent
-  - root
-  - cause
   - analysis
+  - analytics
+  - reporting
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

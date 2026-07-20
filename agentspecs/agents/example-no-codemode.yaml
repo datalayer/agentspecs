@@ -12,10 +12,9 @@ description: >-
   without codemode orchestration.
 
 tags:
-  - demo
-  - mcp
-  - tavily
-  - no-codemode
+  - workflow
+  - automation
+  - analysis
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

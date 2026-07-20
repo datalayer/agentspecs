@@ -9,9 +9,9 @@ description: >-
   and explain the assumptions behind the forecast.
 
 tags:
-  - gallery
   - sales
   - forecasting
+  - analytics
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

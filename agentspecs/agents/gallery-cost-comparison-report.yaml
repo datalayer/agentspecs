@@ -9,10 +9,9 @@ description: >-
   tokens, latency, and cost are reduced.
 
 tags:
-  - gallery
+  - analysis
   - cost
-  - comparison
-  - report
+  - reporting
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

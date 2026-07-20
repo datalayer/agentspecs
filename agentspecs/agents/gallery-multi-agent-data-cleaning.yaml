@@ -9,11 +9,9 @@ description: >-
   into separate agents with a shared context.
 
 tags:
-  - gallery
-  - multi
-  - agent
-  - data
-  - cleaning
+  - data-acquisition
+  - data-quality
+  - etl
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

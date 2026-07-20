@@ -9,9 +9,9 @@ description: >-
   identify mismatches and explain exceptions.
 
 tags:
-  - gallery
-  - financial
+  - finance
   - reconciliation
+  - banking
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

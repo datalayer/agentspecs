@@ -9,8 +9,8 @@ description: >-
   receive cited answers with supporting context.
 
 tags:
-  - gallery
-  - document
+  - research
+  - document-processing
   - qa
 
 enabled: true

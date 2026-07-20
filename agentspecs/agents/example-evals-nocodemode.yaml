@@ -12,10 +12,9 @@ description: >-
   example-evals in SDK eval examples.
 
 tags:
-  - evals
-  - demo
-  - runner
-  - no-codemode
+  - workflow
+  - automation
+  - analysis
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

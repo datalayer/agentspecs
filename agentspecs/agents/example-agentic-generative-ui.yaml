@@ -13,9 +13,9 @@ description: >
   progress is made using JSON Patch (RFC 6902) state deltas.
 
 tags:
-  - example
-  - ag-ui
-  - generative-ui
+  - workflow
+  - automation
+  - analysis
 
 enabled: true
 protocol: ag-ui

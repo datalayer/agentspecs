@@ -13,9 +13,9 @@ description: >
   gradient, rendered as cards by the frontend.
 
 tags:
-  - example
-  - ag-ui
-  - generative-ui
+  - workflow
+  - automation
+  - analysis
 
 enabled: true
 protocol: ag-ui

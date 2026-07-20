@@ -8,9 +8,9 @@ description: >
   Demonstrates launch-time parameterization with JSON schema validation.
 
 tags:
-  - demo
-  - parameters
-  - schema
+  - workflow
+  - automation
+  - analysis
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

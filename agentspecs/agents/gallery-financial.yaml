@@ -12,9 +12,8 @@ description: >
 
 tags:
   - finance
-  - stocks
   - visualization
-  - charts
+  - analysis
 
 enabled: false
 model: "bedrock:us.anthropic.claude-opus-4-8"

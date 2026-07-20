@@ -13,9 +13,9 @@ description: >
   for the frontend to render as a weather card.
 
 tags:
-  - example
-  - ag-ui
-  - weather
+  - workflow
+  - automation
+  - analysis
 
 enabled: true
 protocol: ag-ui

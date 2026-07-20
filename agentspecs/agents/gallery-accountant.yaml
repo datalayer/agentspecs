@@ -9,10 +9,8 @@ description: >-
   journal balances, and prepare close-ready summaries.
 
 tags:
-  - gallery
-  - accounting
   - finance
-  - odoo
+  - accounting
   - reconciliation
 
 enabled: true

@@ -9,10 +9,9 @@ description: >-
   asking follow-up questions in natural language.
 
 tags:
-  - gallery
-  - ai
-  - creates
-  - dashboards
+  - workflow
+  - visualization
+  - automation
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

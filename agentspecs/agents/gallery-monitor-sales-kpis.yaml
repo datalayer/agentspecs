@@ -15,11 +15,9 @@ description: >
   Send notifications when KPIs deviate more than 10% from targets.
 
 tags:
-  - support
-  - chatbot
   - sales
+  - customer-support
   - kpi
-  - monitoring
 
 enabled: false
 model: "bedrock:us.anthropic.claude-opus-4-8"

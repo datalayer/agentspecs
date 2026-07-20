@@ -9,11 +9,9 @@ description: >-
   the best findings into one final report.
 
 tags:
-  - gallery
-  - five
-  - notebooks
-  - in
-  - parallel
+  - workflow
+  - notebook
+  - reporting
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

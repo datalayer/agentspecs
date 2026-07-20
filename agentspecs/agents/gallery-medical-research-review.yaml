@@ -9,10 +9,9 @@ description: >-
   research note for domain experts to validate.
 
 tags:
-  - gallery
-  - medical
+  - healthcare
   - research
-  - review
+  - analysis
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

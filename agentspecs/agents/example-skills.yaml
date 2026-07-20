@@ -13,9 +13,9 @@ description: >-
   built-in file skills and package-registered skills like datalayer-whoami.
 
 tags:
-  - demo
-  - skills
-  - discovery
+  - workflow
+  - automation
+  - analysis
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

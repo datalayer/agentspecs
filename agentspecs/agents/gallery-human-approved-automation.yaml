@@ -9,9 +9,8 @@ description: >-
   reports, or external notifications before they happen.
 
 tags:
-  - gallery
-  - human
-  - approved
+  - workflow
+  - human-approval
   - automation
 
 enabled: true

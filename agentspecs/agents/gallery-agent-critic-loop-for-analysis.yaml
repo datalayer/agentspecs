@@ -9,12 +9,9 @@ description: >-
   analysis quality and reduce logical errors in outputs.
 
 tags:
-  - gallery
-  - agent
-  - critic
-  - loop
-  - for
   - analysis
+  - data-quality
+  - analytics
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

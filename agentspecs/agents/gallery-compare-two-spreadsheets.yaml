@@ -9,10 +9,9 @@ description: >-
   differences, and summarize what changed and why it matters.
 
 tags:
-  - gallery
-  - compare
-  - two
-  - spreadsheets
+  - analysis
+  - excel
+  - summarization
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

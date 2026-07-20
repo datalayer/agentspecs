@@ -13,10 +13,9 @@ description: >
   reproducible analysis artifacts for environmental and climate use cases.
 
 tags:
-  - geospatial
-  - climate
-  - earth-observation
   - analytics
+  - sustainability
+  - summarization
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

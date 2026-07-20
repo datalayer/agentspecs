@@ -13,9 +13,9 @@ description: >
   current time in any timezone.
 
 tags:
-  - example
-  - ag-ui
-  - chat
+  - workflow
+  - automation
+  - analysis
 
 enabled: true
 protocol: ag-ui

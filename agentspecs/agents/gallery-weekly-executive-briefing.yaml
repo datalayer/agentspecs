@@ -9,10 +9,9 @@ description: >-
   recommended actions from operational and analytics data.
 
 tags:
-  - gallery
-  - weekly
-  - executive
-  - briefing
+  - analytics
+  - reporting
+  - risk
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

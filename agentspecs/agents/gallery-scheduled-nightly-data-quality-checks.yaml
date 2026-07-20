@@ -9,12 +9,9 @@ description: >-
   morning report with prioritized issues.
 
 tags:
-  - gallery
-  - scheduled
-  - nightly
-  - data
-  - quality
-  - checks
+  - operations
+  - data-acquisition
+  - data-quality
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

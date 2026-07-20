@@ -9,10 +9,9 @@ description: >-
   the full workflow in an executable notebook.
 
 tags:
-  - gallery
-  - scientific
+  - research
   - notebook
-  - assistant
+  - workflow
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

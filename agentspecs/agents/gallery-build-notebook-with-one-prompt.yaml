@@ -9,12 +9,9 @@ description: >-
   analysis, charts, explanations, and next steps.
 
 tags:
-  - gallery
-  - build
+  - analysis
   - notebook
-  - with
-  - one
-  - prompt
+  - visualization
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

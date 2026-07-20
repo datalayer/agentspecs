@@ -9,12 +9,9 @@ description: >-
   and output a clean KPI table with source citations.
 
 tags:
-  - gallery
-  - extract
-  - kpis
-  - from
-  - quarterly
-  - pdf
+  - data-acquisition
+  - kpi
+  - reporting
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

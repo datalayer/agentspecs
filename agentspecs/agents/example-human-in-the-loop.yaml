@@ -13,9 +13,9 @@ description: >
   before execution.
 
 tags:
-  - example
-  - ag-ui
-  - human-in-the-loop
+  - workflow
+  - human-approval
+  - automation
 
 enabled: true
 protocol: ag-ui

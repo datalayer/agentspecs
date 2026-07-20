@@ -9,10 +9,9 @@ description: >-
   joins, and opportunities to simplify the analysis.
 
 tags:
-  - gallery
-  - agent
-  - reviews
+  - analysis
   - sql
+  - risk
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

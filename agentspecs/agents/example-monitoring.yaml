@@ -12,9 +12,9 @@ description: >-
   lightweight so it starts reliably in local example runs.
 
 tags:
-  - demo
   - monitoring
-  - observability
+  - operations
+  - performance
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

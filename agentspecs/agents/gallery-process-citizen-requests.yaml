@@ -17,12 +17,9 @@ description: >
   is explainable, auditable, and compliant with transparency mandates.
 
 tags:
-  - government
-  - public-sector
-  - civic
-  - policy
   - compliance
-  - transparency
+  - government
+  - audit
 
 enabled: false
 model: "bedrock:us.anthropic.claude-opus-4-8"

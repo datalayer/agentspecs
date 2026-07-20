@@ -12,9 +12,9 @@ description: >-
   work between a researcher and a writer subagent.
 
 tags:
-  - demo
-  - subagents
-  - orchestration
+  - research
+  - workflow
+  - analysis
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

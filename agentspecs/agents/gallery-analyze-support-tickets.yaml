@@ -15,10 +15,9 @@ description: >
   recommendations with escalation paths.
 
 tags:
+  - customer-support
   - analytics
-  - data
-  - support
-  - tickets
+  - data-acquisition
 
 enabled: false
 model: "bedrock:us.anthropic.claude-opus-4-8"

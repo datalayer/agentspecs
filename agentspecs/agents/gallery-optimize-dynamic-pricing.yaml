@@ -16,12 +16,9 @@ description: >
   combining competitive intelligence with demand signals to maximise margins.
 
 tags:
-  - retail
-  - e-commerce
-  - pricing
   - analytics
-  - demand-forecasting
-  - margins
+  - pricing
+  - forecasting
 
 enabled: false
 model: "bedrock:us.anthropic.claude-opus-4-8"

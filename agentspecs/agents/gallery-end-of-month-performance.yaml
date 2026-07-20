@@ -15,14 +15,9 @@ description: >
   executive-ready sales performance reports with full data lineage.
 
 tags:
+  - finance
   - analytics
   - sales
-  - revenue
-  - performance
-  - crm
-  - finance
-  - retail
-  - sku
 
 enabled: false
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)

@@ -12,9 +12,9 @@ description: >-
   Includes baseline tooling for reproducible eval runs.
 
 tags:
-  - evals
-  - demo
-  - runner
+  - workflow
+  - automation
+  - analysis
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

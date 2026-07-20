@@ -15,11 +15,9 @@ description: >
   industry vertical — from legal contracts to research papers.
 
 tags:
-  - documents
+  - research
+  - document-processing
   - summarization
-  - horizontal
-  - automation
-  - productivity
 
 enabled: false
 model: "bedrock:us.anthropic.claude-opus-4-8"

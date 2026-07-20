@@ -15,10 +15,9 @@ description: >
   validated, themeable A2UI surface you can fill in.
 
 tags:
-  - example
-  - ag-ui
-  - a2ui
-  - generative-ui
+  - workflow
+  - automation
+  - analysis
 
 enabled: true
 protocol: ag-ui

@@ -26,8 +26,6 @@ tags:
   - sales
   - analytics
   - kpi
-  - monitoring
-  - horizontal
 
 enabled: false
 model: "bedrock:us.anthropic.claude-opus-4-8"

@@ -9,11 +9,9 @@ description: >-
   failures do not require restarting from scratch.
 
 tags:
-  - gallery
-  - resumable
+  - workflow
   - etl
-  - with
-  - checkpoints
+  - data-quality
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

@@ -12,9 +12,8 @@ description: >
   notification capabilities.
 
 tags:
+  - workflow
   - github
-  - git
-  - code
   - email
 
 enabled: false

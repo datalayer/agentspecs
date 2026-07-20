@@ -17,11 +17,8 @@ description: >
 
 tags:
   - marketing
-  - media
-  - campaigns
   - analytics
-  - advertising
-  - social-media
+  - email
 
 enabled: false
 model: "bedrock:us.anthropic.claude-opus-4-8"

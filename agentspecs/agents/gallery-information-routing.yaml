@@ -12,9 +12,9 @@ description: >
   workflows and information sharing.
 
 tags:
+  - data-acquisition
   - workflow
-  - communication
-  - gdrive
+  - routing
 
 enabled: false
 model: "bedrock:us.anthropic.claude-opus-4-8"

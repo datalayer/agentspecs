@@ -12,9 +12,9 @@ description: >-
   style destinations with preference management.
 
 tags:
-  - notifications
-  - alerts
-  - demo
+  - monitoring
+  - email
+  - operations
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

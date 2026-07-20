@@ -12,9 +12,9 @@ description: >-
   Persists user preferences and supports memory inspection/search.
 
 tags:
-  - memory
-  - mem0
-  - demo
+  - customer-support
+  - workflow
+  - routing
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

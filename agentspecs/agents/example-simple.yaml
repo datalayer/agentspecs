@@ -12,9 +12,9 @@ description: >
   just a helpful AI assistant you can chat with.
 
 tags:
-  - simple
-  - chat
-  - assistant
+  - workflow
+  - automation
+  - analysis
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

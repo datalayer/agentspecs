@@ -17,11 +17,9 @@ description: >
   compliance guardrails.
 
 tags:
-  - healthcare
-  - pharma
-  - clinical-trials
-  - patient-data
   - compliance
+  - healthcare
+  - regulatory
 
 enabled: false
 model: "bedrock:us.anthropic.claude-opus-4-8"

@@ -7,9 +7,9 @@ description: >
 icon: pi pi-shield
 emoji: "✅"
 tags:
-  - approvals
-  - hooks
-  - policy
+  - compliance
+  - human-approval
+  - audit
 model: "bedrock:us.anthropic.claude-opus-4-8"
 tools:
   - runtime-sensitive-echo:0.0.1

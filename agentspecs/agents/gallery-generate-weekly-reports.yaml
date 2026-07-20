@@ -15,11 +15,9 @@ description: >
   analysis, and executive-level takeaways.
 
 tags:
+  - sales
   - marketing
-  - reports
-  - weekly
-  - analytics
-  - automation
+  - reporting
 
 enabled: false
 model: "bedrock:us.anthropic.claude-opus-4-8"

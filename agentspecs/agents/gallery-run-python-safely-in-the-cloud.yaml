@@ -9,12 +9,9 @@ description: >-
   code you still need to copy and run manually.
 
 tags:
-  - gallery
-  - run
-  - python
-  - safely
-  - in
-  - the
+  - operations
+  - notebook
+  - automation
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

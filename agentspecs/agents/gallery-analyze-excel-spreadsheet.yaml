@@ -9,10 +9,9 @@ description: >-
   anomalies, and a plain-English explanation of what matters.
 
 tags:
-  - gallery
-  - analyze
+  - analysis
   - excel
-  - spreadsheet
+  - summarization
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

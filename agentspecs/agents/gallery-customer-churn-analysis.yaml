@@ -9,10 +9,9 @@ description: >-
   report with suggested next actions.
 
 tags:
-  - gallery
-  - customer
-  - churn
+  - customer-support
   - analysis
+  - risk
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

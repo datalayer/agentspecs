@@ -9,10 +9,9 @@ description: >-
   prepare a review summary for human approval.
 
 tags:
-  - gallery
   - insurance
-  - claims
-  - review
+  - analysis
+  - document-processing
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

@@ -16,11 +16,9 @@ description: >
   medical records, legal documents, and more.
 
 tags:
-  - extraction
-  - data
-  - horizontal
+  - data-acquisition
   - automation
-  - documents
+  - document-processing
 
 enabled: false
 model: "bedrock:us.anthropic.claude-opus-4-8"

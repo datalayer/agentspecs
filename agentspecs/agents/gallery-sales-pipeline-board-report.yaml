@@ -9,11 +9,9 @@ description: >-
   forecast, and regional performance insights.
 
 tags:
-  - gallery
   - sales
   - pipeline
-  - board
-  - report
+  - reporting
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

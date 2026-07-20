@@ -9,10 +9,9 @@ description: >-
   generate a structured report from many PDF files.
 
 tags:
-  - gallery
-  - summarize
-  - "10"
-  - pdfs
+  - data-acquisition
+  - summarization
+  - pdf
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

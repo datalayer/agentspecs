@@ -12,11 +12,9 @@ description: >
   repositories for information.
 
 tags:
-  - web
-  - search
   - research
-  - crawler
   - github
+  - analysis
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

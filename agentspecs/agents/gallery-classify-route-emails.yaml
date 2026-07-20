@@ -15,11 +15,9 @@ description: >
   department queue. Works across any industry with email-based workflows.
 
 tags:
+  - customer-support
   - email
-  - classification
   - routing
-  - horizontal
-  - automation
 
 enabled: false
 model: "bedrock:us.anthropic.claude-opus-4-8"

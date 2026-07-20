@@ -12,9 +12,9 @@ description: >-
   for the AgentOutputsExample sidebar output parser.
 
 tags:
-  - demo
-  - outputs
-  - rendering
+  - workflow
+  - visualization
+  - automation
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

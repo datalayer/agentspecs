@@ -12,10 +12,9 @@ description: >-
   server and demonstrates search/research style tool usage from the chat panel.
 
 tags:
-  - demo
-  - mcp
-  - tools
   - research
+  - analysis
+  - summarization
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

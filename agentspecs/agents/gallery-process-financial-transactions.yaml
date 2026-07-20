@@ -15,11 +15,9 @@ description: >
   audit-ready transaction reports.
 
 tags:
-  - moderation
   - finance
+  - human-approval
   - transactions
-  - compliance
-  - reconciliation
 
 enabled: false
 model: "bedrock:us.anthropic.claude-opus-4-8"

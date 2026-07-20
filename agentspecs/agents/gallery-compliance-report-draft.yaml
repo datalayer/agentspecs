@@ -9,10 +9,9 @@ description: >-
   draft a structured compliance report for review.
 
 tags:
-  - gallery
   - compliance
-  - report
-  - draft
+  - reporting
+  - document-processing
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

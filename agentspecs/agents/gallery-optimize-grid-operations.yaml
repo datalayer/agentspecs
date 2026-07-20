@@ -16,12 +16,9 @@ description: >
   balancing across the grid, and reduces unplanned downtime by 50%.
 
 tags:
-  - energy
-  - utilities
-  - smart-grid
-  - iot
-  - predictive-maintenance
+  - operations
   - sustainability
+  - automation
 
 enabled: false
 model: "bedrock:us.anthropic.claude-opus-4-8"

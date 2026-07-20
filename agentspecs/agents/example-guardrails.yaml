@@ -12,9 +12,9 @@ description: >-
   limits and a sensitive tool requiring manual approval.
 
 tags:
-  - demo
-  - guardrails
-  - approval
+  - workflow
+  - human-approval
+  - automation
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

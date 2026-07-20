@@ -13,9 +13,9 @@ description: >
   synchronization between the agent and the UI.
 
 tags:
-  - example
-  - ag-ui
-  - shared-state
+  - workflow
+  - automation
+  - analysis
 
 enabled: true
 protocol: ag-ui

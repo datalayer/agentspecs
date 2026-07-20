@@ -9,11 +9,9 @@ description: >-
   by hand in Excel, then export the result.
 
 tags:
-  - gallery
-  - replace
+  - workflow
   - excel
-  - pivot
-  - work
+  - visualization
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"

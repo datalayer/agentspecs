@@ -9,10 +9,8 @@ description: >-
   index strategies with before/after performance notes.
 
 tags:
-  - gallery
-  - optimize
+  - workflow
   - sql
-  - query
   - performance
 
 enabled: true

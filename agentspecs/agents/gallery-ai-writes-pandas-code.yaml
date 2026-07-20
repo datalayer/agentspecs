@@ -9,11 +9,9 @@ description: >-
   explain the Pandas code behind the result.
 
 tags:
-  - gallery
-  - ai
-  - writes
-  - pandas
-  - code
+  - workflow
+  - notebook
+  - automation
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"
