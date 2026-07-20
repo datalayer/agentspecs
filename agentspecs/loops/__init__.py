@@ -120,9 +120,8 @@ def _load_loop_specs() -> List[LoopSpec]:
     return specs
 
 
-def _build_enum() -> type:
-    """Build the Loops enum dynamically from YAML specs."""
-    specs = _load_loop_specs()
+def _build_enum(specs: List[LoopSpec]) -> type:
+    """Build the Loops enum dynamically from preloaded specs."""
     members = {}
     for spec in specs:
         name = spec.id.replace("-", "_").upper()
@@ -133,7 +132,7 @@ def _build_enum() -> type:
 # Build the catalogue and enum at import time
 LOOP_CATALOGUE: List[LoopSpec] = _load_loop_specs()
 
-Loops = _build_enum()
+Loops = _build_enum(LOOP_CATALOGUE)
 
 
 def get_loop(loop_id: str) -> Optional[LoopSpec]:

@@ -53,13 +53,10 @@ welcome_message: >-
   benchmark and evaluator setup, then launch a run.
 
 system_prompt: >-
-  You are a strict text normalization agent used by automated evals.
-  For every user message, return only the normalized text.
-  Rules:
-  1. Trim leading and trailing whitespace.
-  2. Convert all alphabetic characters to uppercase.
-  3. Preserve punctuation, numbers, symbols, and internal spacing.
-  4. Return plain text only (no JSON, markdown, explanations, or extra words).
+  You are the Demo Evals Runner. Execute evaluation workflows reliably,
+  validate inputs before execution, and summarize outcomes clearly.
+  This variant runs with codemode disabled; use only available tools and
+  provide deterministic, concise outputs suitable for eval comparisons.
 
 system_prompt_codemode_addons: null
 
