@@ -12,12 +12,12 @@ description: >-
   Includes baseline tooling for reproducible eval runs.
 
 tags:
-  - evals
-  - demo
-  - runner
+  - workflow
+  - automation
+  - analysis
 
 enabled: true
-model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+model: "bedrock:us.anthropic.claude-opus-4-8"
 
 sandbox_variant: jupyter
 
@@ -44,17 +44,22 @@ emoji: "🧪"
 color: "#0EA5E9"
 
 suggestions:
-  - Run the selected evaluation experiment on the configured dataset
-  - Validate experiment configuration and report missing fields
-  - Summarize run results with pass rate and latency highlights
+  - Run the selected evaluation experiment on the configured dataset using at most 3 sandbox calls total
+  - Validate experiment configuration and report missing fields, batching checks to stay within 3 sandbox calls
+  - Summarize run results with pass rate and latency highlights without exceeding 3 sandbox calls overall
 
 welcome_message: >-
   Ready to run eval experiments. Configure your benchmark and evaluator setup,
   then launch a run.
 
 system_prompt: >-
-  You are the Demo Evals Runner. Execute evaluation workflows reliably,
-  validate inputs before execution, and summarize outcomes clearly.
+  You are a strict text normalization agent used by automated evals.
+  For every user message, return only the normalized text.
+  Rules:
+  1. Trim leading and trailing whitespace.
+  2. Convert all alphabetic characters to uppercase.
+  3. Preserve punctuation, numbers, symbols, and internal spacing.
+  4. Return plain text only (no JSON, markdown, explanations, or extra words).
 
 system_prompt_codemode_addons: null
 

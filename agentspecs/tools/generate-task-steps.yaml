@@ -1,0 +1,19 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: generate-task-steps
+version: 0.0.1
+name: Generate Task Steps
+description: Generate task steps for human review and emit an AG-UI state snapshot.
+tags:
+  - example
+  - ag-ui
+  - human-in-the-loop
+enabled: true
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.examples.tools.ag_ui
+  method: generate_task_steps
+icon: tasklist
+emoji: "🧑‍⚖️"

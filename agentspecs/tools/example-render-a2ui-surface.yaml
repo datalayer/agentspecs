@@ -1,0 +1,20 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: example-render-a2ui-surface
+version: 0.0.1
+name: Render A2UI Surface
+description: Turn a declarative field spec into a validated A2UI v0.9 surface rendered live by the frontend as an interactive form/card.
+tags:
+  - example
+  - ag-ui
+  - a2ui
+  - generative-ui
+enabled: true
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.examples.tools.a2ui
+  method: render_a2ui_surface
+icon: browser
+emoji: "🎛️"

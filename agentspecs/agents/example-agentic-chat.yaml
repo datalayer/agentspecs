@@ -1,0 +1,60 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Agentic Chat (AG-UI)
+# Basic conversational agent with a current-time tool. Mirrors the former
+# /api/v1/examples/agentic_chat endpoint agent.
+
+id: example-agentic-chat
+version: 0.0.1
+name: Agentic Chat
+description: >
+  A basic conversational AG-UI agent that can chat and use a tool to get the
+  current time in any timezone.
+
+tags:
+  - workflow
+  - automation
+  - analysis
+
+enabled: true
+protocol: ag-ui
+model: "bedrock:us.anthropic.claude-opus-4-8"
+
+# Memory backend
+memory: ephemeral
+
+# No MCP servers
+mcp_servers: []
+
+# No skills
+skills: []
+
+# Runtime tools
+tools:
+  - example-current-time:0.0.1
+frontend_tools: []
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: clock
+emoji: 🕒
+color: "#6366F1"
+
+# Chat suggestions
+suggestions:
+  - What is the current time?
+  - What's the current date?
+
+welcome_message: >
+  Hi! Ask me for the current time in any timezone.
+
+system_prompt: >
+  You are a helpful assistant that can provide the current time in any timezone.
+  Use the current_time tool when asked about the time. Keep your responses
+  concise and helpful.
+
+system_prompt_codemode_addons: null
+trigger: null

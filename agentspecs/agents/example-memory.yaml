@@ -12,12 +12,12 @@ description: >-
   Persists user preferences and supports memory inspection/search.
 
 tags:
-  - memory
-  - mem0
-  - demo
+  - customer-support
+  - workflow
+  - routing
 
 enabled: true
-model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+model: "bedrock:us.anthropic.claude-opus-4-8"
 
 sandbox_variant: jupyter
 

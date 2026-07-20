@@ -54,6 +54,15 @@ from .memory import (
     get_memory,
     list_memories,
 )
+from .loops import (
+    LoopSpec,
+    LoopHuman,
+    LoopTermination,
+    Loops,
+    LOOP_CATALOGUE,
+    get_loop,
+    list_loops,
+)
 from .server import mcp as codemode_server, configure as configure_server
 from .toolset import CodemodeToolset, PYDANTIC_AI_AVAILABLE
 
@@ -101,6 +110,14 @@ __all__ = [
     "MEMORY_CATALOGUE",
     "get_memory",
     "list_memories",
+    # Loops
+    "LoopSpec",
+    "LoopHuman",
+    "LoopTermination",
+    "Loops",
+    "LOOP_CATALOGUE",
+    "get_loop",
+    "list_loops",
     # Types
     "ToolDefinition",
     "ToolParameter",

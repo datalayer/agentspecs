@@ -1,0 +1,150 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Analyze Support Tickets
+# Multi-agent team that triages, categorizes, and analyzes incoming support
+# tickets, identifying patterns and generating resolution recommendations.
+# Source: UI mock flow id=4 (Agents.tsx)
+
+id: gallery-analyze-support-tickets
+version: 0.0.1
+name: Analyze Support Tickets
+description: >
+  A multi-agent team that triages incoming support tickets, categorizes by
+  urgency and topic, identifies recurring patterns, and generates resolution
+  recommendations with escalation paths.
+
+tags:
+  - customer-support
+  - analytics
+  - data-acquisition
+
+enabled: false
+model: "bedrock:us.anthropic.claude-opus-4-8"
+
+sandbox_variant: jupyter
+
+# Memory backend
+memory: ephemeral
+
+# MCP servers used by this agent team
+mcp_servers:
+  - filesystem:0.0.1
+  - slack:0.0.1
+
+# Skills available to this agent team
+skills:
+  - pdf:0.0.1
+  - crawl:0.0.1
+  - events:0.0.1
+
+# Runtime environment
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+environment_name: ai-agents-env
+
+# UI customization
+icon: issue-opened
+emoji: 🎫
+color: "#bf8700"  # Amber — paused status
+
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Triage incoming support tickets by urgency, categorize by topic and
+  sentiment, identify recurring patterns, and generate resolution
+  recommendations with escalation paths for critical issues.
+
+# Protocols & UI Extensions
+protocol: vercel-ai
+ui_extension: a2ui
+
+# Evals
+evals:
+  - name: Triage Accuracy
+    category: reasoning
+    task_count: 400
+  - name: Pattern Detection
+    category: coding
+    task_count: 200
+
+# Codemode
+codemode:
+  enabled: true
+  token_reduction: "~80%"
+  speedup: "~1.5× faster"
+
+# Advanced settings
+advanced:
+  cost_limit: "$4.00 per run"
+  time_limit: "300 seconds"
+  max_iterations: 40
+  validation: "All tickets must receive a priority classification"
+
+# Authorization policy
+authorization_policy: ""
+
+# Trigger configuration
+trigger:
+  type: schedule
+  cron: "0 */2 * * *"
+  description: Every 2 hours
+  prompt: "Run the scheduled workflow and produce the configured deliverable."
+
+# Output configuration
+output:
+  formats:
+    - JSON
+    - Dashboard
+  template: Support Ticket Analysis Report
+  storage: /outputs/support-analysis/
+
+# Guardrails
+guardrails:
+  - name: Restricted Viewer
+    identity_provider: datalayer
+    identity_name: support-bot@acme.com
+    permissions:
+      read:data: true
+      write:data: false
+      execute:code: true
+      access:internet: true
+      send:email: false
+      deploy:production: false
+    token_limits:
+      per_run: "40K"
+      per_day: "400K"
+      per_month: "4M"
+
+# Notifications
+notifications:
+  email: patricia.j@company.com
+  slack: "#support-analysis"
+
+# Chat suggestions
+suggestions:
+  - Show me the latest ticket triage summary
+  - What are the top recurring issues this week?
+  - List all P1 tickets from today
+  - Generate a pattern analysis report
+
+# Welcome message
+welcome_message: >
+  Hello! I'm the Support Ticket Analyzer team. We triage incoming tickets,
+  categorize them by urgency and topic, identify recurring patterns, and
+  generate resolution recommendations to help your support team work faster.
+
+# System prompt
+system_prompt: >
+  You are the supervisor of a support ticket analysis team. You coordinate
+  three agents in sequence:
+  1. Triage Agent — assesses urgency (P1-P4) for all incoming tickets
+  2. Categorizer Agent — classifies by topic, product area, and sentiment
+  3. Pattern Analyzer — finds recurring issues and suggests resolutions
+  Escalate P1/critical tickets immediately. Aggregate findings into
+  structured dashboards and reports. Track resolution rate trends over time.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null

@@ -1,0 +1,60 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: gallery-multi-agent-root-cause-analysis
+version: 0.0.1
+name: Multi-Agent Root Cause Analysis
+description: >-
+  Assign agents to anomaly detection, hypothesis generation, evidence
+  review, and synthesis to produce root-cause findings.
+
+tags:
+  - analysis
+  - analytics
+  - reporting
+
+enabled: true
+model: "bedrock:us.anthropic.claude-opus-4-8"
+sandbox_variant: jupyter
+memory: ephemeral
+mcp_servers: []
+skills:
+  - events:0.0.1
+tools:
+  - runtime-echo:0.0.1
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+environment_name: ai-agents-env
+icon: bug
+emoji: "📊"
+color: "#1F883D"
+
+suggestions:
+  - >-
+    Use /home/jovyan/datasets/datalayer-nfs/ops/incidents.csv to run multi-agent root-cause analysis and produce a ranked remediation plan.
+
+welcome_message: >-
+  Hi! I can help with multi-agent root cause analysis. Share data, files, or context
+  and I will run the workflow end-to-end, explain what matters, and suggest
+  practical next steps.
+
+system_prompt: >-
+  You are a specialized assistant for this gallery workflow: Multi-Agent Root Cause Analysis.
+  Objective: Assign agents to anomaly detection, hypothesis generation, evidence review, and synthesis to produce root-cause findings.
+  Use the runtime tools and notebook execution environment when needed. Keep
+  outputs concise, structured, and decision-oriented. Provide clear reasoning
+  and recommended next actions.
+
+system_prompt_codemode_addons: >-
+  Compose focused execution steps, validate intermediate results, and summarize
+  outcomes after each run. Prefer efficient, reproducible code paths.
+
+codemode:
+  enabled: true
+  token_reduction: "~80%"
+  speedup: "~1.5x"
+
+welcome_notebook: null
+welcome_document: null
+trigger: null

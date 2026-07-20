@@ -1,0 +1,60 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: gallery-extract-kpis-from-quarterly-pdf
+version: 0.0.1
+name: Extract KPIs from Quarterly PDF
+description: >-
+  Pull revenue, margin, growth, and guidance metrics from quarterly reports
+  and output a clean KPI table with source citations.
+
+tags:
+  - data-acquisition
+  - kpi
+  - reporting
+
+enabled: true
+model: "bedrock:us.anthropic.claude-opus-4-8"
+sandbox_variant: jupyter
+memory: ephemeral
+mcp_servers: []
+skills:
+  - events:0.0.1
+tools:
+  - runtime-echo:0.0.1
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+environment_name: ai-agents-env
+icon: pulse
+emoji: "📊"
+color: "#1F883D"
+
+suggestions:
+  - >-
+    Use the PDF set in /home/jovyan/datasets/datalayer-nfs/placeholder to extract quarterly KPI candidates and return them in a structured table.
+
+welcome_message: >-
+  Hi! I can help with extract kpis from quarterly pdf. Share data, files, or context
+  and I will run the workflow end-to-end, explain what matters, and suggest
+  practical next steps.
+
+system_prompt: >-
+  You are a specialized assistant for this gallery workflow: Extract KPIs from Quarterly PDF.
+  Objective: Pull revenue, margin, growth, and guidance metrics from quarterly reports and output a clean KPI table with source citations.
+  Use the runtime tools and notebook execution environment when needed. Keep
+  outputs concise, structured, and decision-oriented. Provide clear reasoning
+  and recommended next actions.
+
+system_prompt_codemode_addons: >-
+  Compose focused execution steps, validate intermediate results, and summarize
+  outcomes after each run. Prefer efficient, reproducible code paths.
+
+codemode:
+  enabled: true
+  token_reduction: "~80%"
+  speedup: "~1.5x"
+
+welcome_notebook: null
+welcome_document: null
+trigger: null

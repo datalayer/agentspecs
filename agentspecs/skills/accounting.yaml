@@ -1,0 +1,21 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: accounting
+version: 0.0.1
+name: Accounting Skill
+description: Accounting analysis workflows for reconciliation, close, variance, and audit-ready summaries
+
+module: agent_skills.skills.accounting
+
+dependencies:
+  - pandas>=2.0.0
+
+tags:
+  - accounting
+  - finance
+  - reconciliation
+  - close
+
+icon: book
+emoji: "🧮"

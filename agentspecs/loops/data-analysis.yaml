@@ -1,0 +1,73 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Loop Specification: Data Analysis Loop
+# A generic observe → think → act → evaluate loop for iterative data analysis.
+# The LLM acts as an orchestrator that decides the next step each iteration
+# instead of solving the whole task in a single prompt. State (dataframes,
+# charts, intermediate results) lives in the notebook/runtime, not the prompt.
+
+id: data-analysis
+version: 0.0.1
+name: Data Analysis Loop
+description: >
+  A generic iterative loop for data analysis. Each iteration the agent observes
+  the current runtime state, decides the next step, executes code in the
+  notebook, and evaluates the result against the objective. Intermediate state
+  (dataframes, charts, tables) is stored outside the model so each LLM call
+  stays small, focused, and inexpensive.
+
+# The goal the loop works toward (a goal specification, not step-by-step orders)
+objective: >
+  Analyze the provided dataset, identify the most important trends and metrics,
+  produce clear visualizations, and summarize actionable findings.
+
+# Loop strategy family
+strategy: observe-think-act-evaluate
+
+# Ordered phases that make up one iteration
+phases:
+  - observe
+  - think
+  - act
+  - evaluate
+
+# Boundaries the agent must respect
+constraints:
+  - Never modify source data files
+  - Prefer reproducible, incremental code cells
+  - Read only the summary of intermediate results, not full datasets
+
+# Termination policy
+termination:
+  max_iterations: 15
+  success_criteria:
+    - The objective is met and a final summary has been produced
+    - Key metrics and visualizations are available in the notebook
+  failure_criteria:
+    - The dataset cannot be loaded after repeated attempts
+  on_blocked: ask-human
+
+# Human participation
+human:
+  mode: initiate
+  approval_required: false
+  approval_for: []
+  description: >
+    The human provides the goal and constraints, then observes. The agent runs
+    the loop autonomously and reports the final result.
+
+# Where state lives between iterations
+state_backends:
+  - notebook
+  - runtime
+  - filesystem
+
+tags:
+  - data-analysis
+  - analytics
+  - generic
+  - iterative
+
+icon: graph
+emoji: 📊

@@ -1,0 +1,59 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Tool Based Generative UI (AG-UI)
+# Agent that relies on frontend-defined render tools. Mirrors the former
+# /api/v1/examples/tool_based_generative_ui endpoint agent.
+
+id: example-tool-based-generative-ui
+version: 0.0.1
+name: Tool Based Generative UI
+description: >
+  An AG-UI agent that renders rich content by calling frontend-defined render
+  tools. The generative UI is produced by the frontend.
+
+tags:
+  - workflow
+  - automation
+  - analysis
+
+enabled: true
+protocol: ag-ui
+model: "bedrock:us.anthropic.claude-opus-4-8"
+
+# Memory backend
+memory: ephemeral
+
+# No MCP servers
+mcp_servers: []
+
+# No skills
+skills: []
+
+# No backend tools — render tools are provided by the frontend
+tools: []
+frontend_tools: []
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: browser
+emoji: 🎨
+color: "#6366F1"
+
+# Chat suggestions
+suggestions:
+  - Create a project plan for building a mobile app.
+  - Generate a marketing strategy for a new product launch.
+
+welcome_message: >
+  Hi! Ask me to show something and I'll render it using the available UI tools.
+
+system_prompt: >
+  You are a helpful assistant that can display rich content. When asked to show
+  or display something, use the appropriate render tool. Available render tools
+  will be provided by the frontend.
+
+system_prompt_codemode_addons: null
+trigger: null

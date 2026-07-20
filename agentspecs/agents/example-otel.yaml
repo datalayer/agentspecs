@@ -12,13 +12,12 @@ description: >-
   exploring traces, logs and metrics surfaced by the OTEL dashboard.
 
 tags:
-  - demo
-  - otel
-  - observability
-  - telemetry
+  - monitoring
+  - visualization
+  - operations
 
 enabled: true
-model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+model: "bedrock:us.anthropic.claude-opus-4-8"
 
 sandbox_variant: jupyter
 

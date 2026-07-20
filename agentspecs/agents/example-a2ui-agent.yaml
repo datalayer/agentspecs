@@ -1,0 +1,86 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: A2UI Agent (AG-UI)
+# A generative-UI agent that renders real, interactive A2UI surfaces (forms,
+# cards, lists) from natural-language requests using the render_a2ui_surface
+# backend tool. The frontend renders the returned A2UI v0.9 messages live.
+
+id: example-a2ui-agent
+version: 0.0.1
+name: A2UI Agent
+description: >
+  An AG-UI agent that generates interactive A2UI surfaces on demand. Describe a
+  form, intake, configurator, survey or booking flow and the agent renders a
+  validated, themeable A2UI surface you can fill in.
+
+tags:
+  - workflow
+  - automation
+  - analysis
+
+enabled: true
+protocol: ag-ui
+model: "bedrock:us.anthropic.claude-opus-4-8"
+
+# Memory backend
+memory: ephemeral
+
+# No MCP servers
+mcp_servers: []
+
+# No skills
+skills: []
+
+# Runtime tools
+tools:
+  - example-render-a2ui-surface:0.0.1
+frontend_tools: []
+
+# Frontend render bindings: the UI renders the backend tool result inline as a
+# live A2UI surface using the 'a2ui-surface' renderer.
+frontend_render_tools:
+  - tool: render_a2ui_surface
+    renderer: a2ui-surface
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: browser
+emoji: 🎛️
+color: "#6366F1"
+
+# Chat suggestions covering a comprehensive, real A2UI scenario.
+suggestions:
+  - Build a support ticket intake form with category, priority and a description.
+  - Create a trip booking form with destination, dates, travelers and budget.
+  - Generate a customer feedback survey with a rating slider and comments.
+  - Make a product configurator for a laptop with CPU, RAM and add-ons.
+
+welcome_message: >
+  Hi! I turn requests into interactive A2UI surfaces. Ask me to build a form,
+  survey, configurator or booking flow and I'll render it live for you.
+
+system_prompt: |
+  You are an A2UI generative-UI agent. You render real, interactive user
+  interfaces (forms, intakes, configurators, surveys, bookings, checklists)
+  from the user's request.
+
+  How to respond:
+  1. ALWAYS call the `render_a2ui_surface` tool to produce the UI. Never
+     describe the form in prose instead of rendering it.
+  2. Choose a concise `title` and a one-sentence `intro`.
+  3. Design a sensible ordered list of `fields`. Pick the best `type` for each:
+     - `text` / `email` for short input, `longtext` for descriptions/notes
+     - `choice` (single) or `multichoice` (many) with `options` for pick-lists
+     - `checkbox` for yes/no, `slider` (with `min`/`max`) for ranges/ratings
+     - `date` / `datetime` for scheduling
+  4. When the request implies triage or categorization (e.g. support tickets),
+     add `summary_items` such as detected Category or Priority.
+  5. Keep forms focused: usually 4-8 fields.
+  6. After the tool call, reply with ONE short sentence confirming what you
+     built. Do NOT repeat every field in text — the surface is shown directly.
+
+system_prompt_codemode_addons: null
+trigger: null

@@ -5,11 +5,12 @@ description: >
   Demonstrates per-tool approval hooks with policy requests and decision/audit
   logging.
 icon: pi pi-shield
+emoji: "✅"
 tags:
-  - approvals
-  - hooks
-  - policy
-model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+  - compliance
+  - human-approval
+  - audit
+model: "bedrock:us.anthropic.claude-opus-4-8"
 tools:
   - runtime-sensitive-echo:0.0.1
   - runtime-echo:0.0.1

@@ -1,0 +1,65 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Loop Specification: Plan → Execute → Critic Loop
+# A three-role control loop that iteratively improves output quality. A planner
+# proposes steps, an executor runs them, and a critic reviews the result and
+# decides whether to continue refining or stop. Useful for analysis where
+# logical errors must be caught and corrected before publishing.
+
+id: plan-execute-critic
+version: 0.0.1
+name: Plan / Execute / Critic Loop
+description: >
+  A control loop with three roles. The planner decomposes the goal into the
+  next concrete step, the executor performs it in the runtime, and the critic
+  evaluates the outcome for gaps or errors. The loop repeats until the critic
+  is satisfied or the iteration budget is exhausted, driving higher-quality,
+  self-corrected results.
+
+objective: >
+  Produce a high-quality analysis or report that has been reviewed and
+  corrected for logical errors before it is finalized.
+
+strategy: plan-execute-critic
+
+phases:
+  - plan
+  - execute
+  - critic
+
+constraints:
+  - The critic must not rewrite results, only identify issues to fix
+  - Each step must build on validated intermediate results
+  - Stop refining once the critic reports no material issues
+
+termination:
+  max_iterations: 8
+  success_criteria:
+    - The critic reports no material issues with the latest result
+    - A final, corrected output has been published
+  failure_criteria:
+    - The critic reports the goal is not achievable with available data
+  on_blocked: ask-human
+
+human:
+  mode: feedback
+  approval_required: false
+  approval_for: []
+  description: >
+    The human can inject feedback between iterations to steer the planner and
+    critic without restarting the loop from scratch.
+
+state_backends:
+  - notebook
+  - runtime
+  - filesystem
+
+tags:
+  - analysis
+  - data-quality
+  - self-correction
+  - multi-role
+
+icon: checklist
+emoji: ✅
