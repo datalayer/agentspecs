@@ -1,0 +1,154 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Audit Inventory Levels
+# Multi-agent team that monitors inventory across warehouses, detects
+# discrepancies, forecasts demand, and generates reorder recommendations.
+# Source: UI mock flow id=6 (Agents.tsx)
+
+id: gallery-audit-inventory-levels
+version: 0.0.1
+name: Audit Inventory Levels
+description: >
+  A multi-agent team that monitors inventory levels across warehouses,
+  detects discrepancies between physical and system counts, forecasts
+  demand by SKU, and generates automated reorder recommendations.
+
+tags:
+  - finance
+  - automation
+  - inventory
+  - supply-chain
+
+enabled: false
+model: "bedrock:us.anthropic.claude-opus-4-8"
+
+sandbox_variant: jupyter
+
+# Memory backend
+memory: ephemeral
+
+# MCP servers used by this agent team
+mcp_servers:
+  - filesystem:0.0.1
+  - slack:0.0.1
+
+# Skills available to this agent team
+skills:
+  - pdf:0.0.1
+  - events:0.0.1
+
+# Runtime environment
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+environment_name: ai-agents-env
+
+# UI customization
+icon: package
+emoji: 📦
+color: "#0969da"  # Blue
+
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Monitor inventory levels across all warehouses every 6 hours. Detect
+  discrepancies between system and physical counts, forecast demand by SKU,
+  generate reorder recommendations, and compile audit reports with findings.
+
+# Protocols & UI Extensions
+protocol: vercel-ai
+ui_extension: a2ui
+
+# Evals
+evals:
+  - name: Inventory Accuracy
+    category: coding
+    task_count: 500
+  - name: Forecast Precision
+    category: reasoning
+    task_count: 300
+
+# Advanced settings
+advanced:
+  cost_limit: "$12.00 per run"
+  time_limit: "900 seconds"
+  max_iterations: 80
+  validation: "All warehouse counts must reconcile within 2% tolerance"
+
+# Authorization policy
+authorization_policy: ""
+
+# Trigger configuration
+trigger:
+  type: schedule
+  cron: "0 */6 * * *"
+  description: Every 6 hours
+  prompt: "Run the scheduled workflow and produce the configured deliverable."
+
+# Guardrails
+guardrails:
+  - name: Google Workspace Agent
+    identity_provider: google
+    identity_name: inventory-bot@acme.com
+    permissions:
+      read:data: true
+      write:data: true
+      execute:code: true
+      access:internet: true
+      send:email: true
+      deploy:production: false
+    token_limits:
+      per_run: "100K"
+      per_day: "800K"
+      per_month: "8M"
+
+# Codemode
+codemode:
+  enabled: true
+  token_reduction: "~90%"
+  speedup: "~2× faster"
+
+# Output configuration
+output:
+  formats:
+    - PDF
+    - Spreadsheet
+    - Dashboard
+  template: Inventory Audit Report
+  storage: /outputs/inventory-audit/
+
+# Notifications
+notifications:
+  email: linda.m@company.com
+  slack: "#inventory-ops"
+
+# Chat suggestions
+suggestions:
+  - Run a full inventory audit now
+  - Show current stock levels across all warehouses
+  - What SKUs are below reorder point?
+  - Generate a demand forecast for next month
+
+# Welcome message
+welcome_message: >
+  Hello! I'm the Inventory Audit team orchestrator. I coordinate five
+  specialised agents — Scanner, Auditor, Forecaster, Reorder Planner,
+  and Reporter — to keep your inventory accurate, well-stocked, and
+  optimally managed across all warehouses.
+
+# System prompt
+system_prompt: >
+  You are the supervisor of an inventory audit team. You coordinate five
+  agents in sequence:
+  1. Inventory Scanner — pulls current levels from all warehouse management systems
+  2. Discrepancy Auditor — compares system vs physical counts, flags discrepancies
+  3. Demand Forecaster — predicts demand by SKU using historical and seasonal data
+  4. Reorder Planner — calculates optimal reorder points and generates PO recommendations
+  5. Audit Report Agent — compiles the final audit report with all findings
+  Escalate critical shortages (stockout within 48h) immediately to human
+  operators. Track shrinkage trends and flag unusual patterns.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
