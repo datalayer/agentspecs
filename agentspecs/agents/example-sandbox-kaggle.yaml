@@ -1,0 +1,68 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Sandbox Variant (kaggle)
+
+id: example-sandbox-kaggle
+version: 0.0.1
+name: Example Sandbox Kaggle Agent
+description: >-
+  Demonstration agent configured to run codemode code execution with the
+  'kaggle' sandbox variant.
+
+tags:
+  - sandbox
+  - codemode
+  - kaggle
+
+enabled: true
+model: "bedrock:us.anthropic.claude-opus-4-8"
+
+sandbox_variant: kaggle
+memory: ephemeral
+
+mcp_servers:
+  - tavily:0.0.1
+
+skills:
+  - events:0.0.1
+
+tools:
+  - runtime-echo:0.0.1
+
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+environment_name: ai-agents-env
+
+icon: package
+emoji: "H"
+color: "#1F6FEB"
+
+suggestions:
+  - "Use execute_code to print('sandbox variant: kaggle')"
+  - "Use execute_code to compute sum(i*i for i in range(20))"
+  - "Use execute_code to load pandas and build a small DataFrame"
+
+welcome_message: >-
+  You're connected to the kaggle sandbox variant demo. Ask me to run
+  Python code and I will use execute_code in codemode.
+
+system_prompt: >-
+  You are a sandbox-variant demonstration assistant. Prefer executing
+  Python code via execute_code for computations, data checks, and quick
+  experiments, then summarize results clearly.
+
+system_prompt_codemode_addons: >-
+  Always use execute_code when the user requests calculations, scripts,
+  DataFrame operations, package checks, or shell-style diagnostics.
+
+codemode:
+  enabled: true
+  token_reduction: "~80%"
+  speedup: "~1.5x"
+
+welcome_notebook: null
+welcome_document: null
+trigger: null
