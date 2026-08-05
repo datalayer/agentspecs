@@ -7,7 +7,7 @@
 id: workers-cohort-comparison
 version: 0.0.1
 name: Cohort Comparison Worker
-vertical: life-sciences
+domain: life-sciences
 description: >-
   Compares cohorts, validates statistical results, and checks reproducibility.
 
@@ -15,7 +15,7 @@ tags:
   - life-sciences
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

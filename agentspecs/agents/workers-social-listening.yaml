@@ -7,7 +7,7 @@
 id: workers-social-listening
 version: 0.0.1
 name: Social Listening Worker
-vertical: marketing
+domain: marketing
 description: >-
   Monitors conversations across platforms and surfaces actionable insights.
 
@@ -15,7 +15,7 @@ tags:
   - marketing
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

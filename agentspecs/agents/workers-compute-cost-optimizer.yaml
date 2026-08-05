@@ -7,7 +7,7 @@
 id: workers-compute-cost-optimizer
 version: 0.0.1
 name: Compute-Cost Optimizer
-vertical: life-sciences
+domain: life-sciences
 description: >-
   Optimizes pipeline runtime and compute cost while preserving reproducibility.
 
@@ -15,7 +15,7 @@ tags:
   - life-sciences
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

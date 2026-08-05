@@ -7,7 +7,7 @@
 id: workers-infrastructure-monitoring
 version: 0.0.1
 name: Infrastructure Monitoring Worker
-vertical: earth-observation
+domain: earth-observation
 description: >-
   Monitors infrastructure and physical assets from satellite imagery and detects anomalies over time.
 
@@ -15,7 +15,7 @@ tags:
   - earth-observation
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

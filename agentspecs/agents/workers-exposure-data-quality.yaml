@@ -7,7 +7,7 @@
 id: workers-exposure-data-quality
 version: 0.0.1
 name: Exposure Data Quality Worker
-vertical: insurance
+domain: insurance
 description: >-
   Cleanses exposure data, validates geocoding, and improves data quality for risk analysis.
 
@@ -15,7 +15,7 @@ tags:
   - insurance
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

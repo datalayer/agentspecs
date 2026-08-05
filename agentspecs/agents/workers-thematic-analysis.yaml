@@ -7,7 +7,7 @@
 id: workers-thematic-analysis
 version: 0.0.1
 name: Thematic Analysis Worker
-vertical: market-analyst
+domain: market-analyst
 description: >-
   Codes transcripts, extracts themes, and organizes qualitative evidence.
 
@@ -15,7 +15,7 @@ tags:
   - market-analyst
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

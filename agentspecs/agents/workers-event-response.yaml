@@ -7,7 +7,7 @@
 id: workers-event-response
 version: 0.0.1
 name: Event Response Worker
-vertical: insurance
+domain: insurance
 description: >-
   Assesses live catastrophe events against insured portfolios to estimate exposure and losses.
 
@@ -15,7 +15,7 @@ tags:
   - insurance
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

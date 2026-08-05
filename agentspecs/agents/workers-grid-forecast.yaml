@@ -7,7 +7,7 @@
 id: workers-grid-forecast
 version: 0.0.1
 name: Grid Forecast Worker
-vertical: energy
+domain: energy
 description: >-
   Forecasts electricity demand and prices to support grid operations and planning.
 
@@ -15,7 +15,7 @@ tags:
   - energy
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

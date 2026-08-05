@@ -7,7 +7,7 @@
 id: workers-trends-seeker
 version: 0.0.1
 name: Trends Seeker
-vertical: personal-assistant
+domain: personal-assistant
 description: >-
   Tracks emerging trends across sources and summarizes what is gaining momentum.
 
@@ -15,7 +15,7 @@ tags:
   - personal-assistant
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

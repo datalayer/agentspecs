@@ -7,7 +7,7 @@
 id: workers-single-cell-processing
 version: 0.0.1
 name: Single-Cell Processing Worker
-vertical: life-sciences
+domain: life-sciences
 description: >-
   Processes, clusters, and annotates single-cell datasets with reproducible workflows.
 
@@ -15,7 +15,7 @@ tags:
   - life-sciences
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

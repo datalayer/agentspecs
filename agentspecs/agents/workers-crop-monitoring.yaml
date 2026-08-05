@@ -7,7 +7,7 @@
 id: workers-crop-monitoring
 version: 0.0.1
 name: Crop Monitoring Worker
-vertical: earth-observation
+domain: earth-observation
 description: >-
   Monitors crop health, growth stages, and field conditions using multi-temporal satellite imagery.
 
@@ -15,7 +15,7 @@ tags:
   - earth-observation
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

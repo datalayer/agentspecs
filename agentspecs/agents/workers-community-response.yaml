@@ -7,7 +7,7 @@
 id: workers-community-response
 version: 0.0.1
 name: Community Response Worker
-vertical: marketing
+domain: marketing
 description: >-
   Triages comments and messages and drafts community replies for approval.
 
@@ -15,7 +15,7 @@ tags:
   - marketing
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

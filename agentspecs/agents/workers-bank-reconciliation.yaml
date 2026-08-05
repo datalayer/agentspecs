@@ -7,7 +7,7 @@
 id: workers-bank-reconciliation
 version: 0.0.1
 name: Bank Reconciliation Worker
-vertical: accounting
+domain: accounting
 description: >-
   Reconciles bank statements against the ledger, matches transactions, and investigates exceptions.
 
@@ -15,7 +15,7 @@ tags:
   - accounting
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

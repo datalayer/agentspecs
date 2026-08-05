@@ -7,7 +7,7 @@
 id: workers-product-finder
 version: 0.0.1
 name: Product Finder
-vertical: personal-assistant
+domain: personal-assistant
 description: >-
   Researches and compares products against a user's criteria and budget.
 
@@ -15,7 +15,7 @@ tags:
   - personal-assistant
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

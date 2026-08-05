@@ -7,7 +7,7 @@
 id: workers-rna-seq
 version: 0.0.1
 name: RNA-Seq Worker
-vertical: life-sciences
+domain: life-sciences
 description: >-
   Runs RNA-seq quality control and differential expression analysis with reproducible pipelines.
 
@@ -15,7 +15,7 @@ tags:
   - life-sciences
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

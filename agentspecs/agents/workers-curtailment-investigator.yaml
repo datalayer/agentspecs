@@ -7,7 +7,7 @@
 id: workers-curtailment-investigator
 version: 0.0.1
 name: Curtailment Investigator
-vertical: energy
+domain: energy
 description: >-
   Analyzes curtailment events, quantifies lost generation, and investigates root causes.
 
@@ -15,7 +15,7 @@ tags:
   - energy
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

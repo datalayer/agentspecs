@@ -7,7 +7,7 @@
 id: workers-travel-recommender
 version: 0.0.1
 name: Travel Recommender
-vertical: personal-assistant
+domain: personal-assistant
 description: >-
   Researches travel options and builds personalized itineraries with source comparison.
 
@@ -15,7 +15,7 @@ tags:
   - personal-assistant
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

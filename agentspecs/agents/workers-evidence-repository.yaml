@@ -7,7 +7,7 @@
 id: workers-evidence-repository
 version: 0.0.1
 name: Evidence Repository Worker
-vertical: market-analyst
+domain: market-analyst
 description: >-
   Organizes research evidence for traceability from qualitative findings to conclusions.
 
@@ -15,7 +15,7 @@ tags:
   - market-analyst
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

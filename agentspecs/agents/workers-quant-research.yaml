@@ -7,7 +7,7 @@
 id: workers-quant-research
 version: 0.0.1
 name: Quant Research Worker
-vertical: capital-markets
+domain: capital-markets
 description: >-
   Constructs datasets and researches factors for quantitative strategies with point-in-time care.
 
@@ -15,7 +15,7 @@ tags:
   - capital-markets
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

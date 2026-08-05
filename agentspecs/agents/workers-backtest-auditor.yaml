@@ -7,7 +7,7 @@
 id: workers-backtest-auditor
 version: 0.0.1
 name: Backtest Auditor
-vertical: capital-markets
+domain: capital-markets
 description: >-
   Audits backtests for look-ahead leakage, survivorship bias, and methodological errors.
 
@@ -15,7 +15,7 @@ tags:
   - capital-markets
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

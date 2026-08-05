@@ -7,7 +7,7 @@
 id: workers-content-repurposing
 version: 0.0.1
 name: Content Repurposing Worker
-vertical: marketing
+domain: marketing
 description: >-
   Adapts existing content and assets across channels and formats.
 
@@ -15,7 +15,7 @@ tags:
   - marketing
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

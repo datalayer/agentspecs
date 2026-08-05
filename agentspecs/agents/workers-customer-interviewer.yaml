@@ -6,7 +6,7 @@
 # structured, actionable insights.
 
 id: workers-customer-interviewer
-vertical: market-analyst
+domain: market-analyst
 version: 0.0.1
 name: Customer Interviewer
 description: >-

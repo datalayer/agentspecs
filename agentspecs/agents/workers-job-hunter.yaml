@@ -7,7 +7,7 @@
 id: workers-job-hunter
 version: 0.0.1
 name: Job Hunter
-vertical: personal-assistant
+domain: personal-assistant
 description: >-
   Searches for relevant jobs and prepares tailored application materials.
 
@@ -15,7 +15,7 @@ tags:
   - personal-assistant
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

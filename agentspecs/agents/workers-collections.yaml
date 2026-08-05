@@ -7,7 +7,7 @@
 id: workers-collections
 version: 0.0.1
 name: Collections Worker
-vertical: accounting
+domain: accounting
 description: >-
   Follows up on overdue receivables and drafts collection communications for approval.
 
@@ -15,7 +15,7 @@ tags:
   - accounting
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

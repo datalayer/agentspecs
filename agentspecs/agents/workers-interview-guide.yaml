@@ -7,7 +7,7 @@
 id: workers-interview-guide
 version: 0.0.1
 name: Interview Guide Worker
-vertical: market-analyst
+domain: market-analyst
 description: >-
   Generates research plans and structured interview guides from research objectives.
 
@@ -15,7 +15,7 @@ tags:
   - market-analyst
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

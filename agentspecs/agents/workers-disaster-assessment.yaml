@@ -7,7 +7,7 @@
 id: workers-disaster-assessment
 version: 0.0.1
 name: Disaster Assessment Worker
-vertical: earth-observation
+domain: earth-observation
 description: >-
   Assesses affected areas after natural disasters by comparing pre- and post-event satellite imagery.
 
@@ -15,7 +15,7 @@ tags:
   - earth-observation
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

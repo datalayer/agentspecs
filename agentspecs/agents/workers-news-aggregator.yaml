@@ -6,7 +6,7 @@
 # topics, sources, companies, and industries.
 
 id: workers-news-aggregator
-vertical: personal-assistant
+domain: personal-assistant
 version: 0.0.1
 name: News Aggregator
 description: >-

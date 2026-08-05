@@ -7,7 +7,7 @@
 id: workers-cat-exposure
 version: 0.0.1
 name: CAT Exposure Worker
-vertical: insurance
+domain: insurance
 description: >-
   Geocodes insurance portfolios and overlays hazard data to analyze catastrophe exposure.
 
@@ -15,7 +15,7 @@ tags:
   - insurance
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

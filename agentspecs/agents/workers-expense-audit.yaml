@@ -7,7 +7,7 @@
 id: workers-expense-audit
 version: 0.0.1
 name: Expense Audit Worker
-vertical: accounting
+domain: accounting
 description: >-
   Audits employee expenses for duplicates, anomalies, and policy violations.
 
@@ -15,7 +15,7 @@ tags:
   - accounting
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

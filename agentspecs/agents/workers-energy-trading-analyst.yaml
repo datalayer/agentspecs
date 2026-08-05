@@ -7,7 +7,7 @@
 id: workers-energy-trading-analyst
 version: 0.0.1
 name: Energy Trading Analyst
-vertical: energy
+domain: energy
 description: >-
   Analyzes power markets, price signals, and trading opportunities across energy markets.
 
@@ -15,7 +15,7 @@ tags:
   - energy
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

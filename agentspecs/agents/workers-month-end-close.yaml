@@ -7,7 +7,7 @@
 id: workers-month-end-close
 version: 0.0.1
 name: Month-End Close Worker
-vertical: accounting
+domain: accounting
 description: >-
   Prepares close checklists, suggests accruals, and reconciles intercompany balances for month-end close.
 
@@ -15,7 +15,7 @@ tags:
   - accounting
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

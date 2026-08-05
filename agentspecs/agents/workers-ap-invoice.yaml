@@ -7,7 +7,7 @@
 id: workers-ap-invoice
 version: 0.0.1
 name: AP Invoice Worker
-vertical: accounting
+domain: accounting
 description: >-
   Extracts, codes, and matches supplier invoices to purchase orders and receipts in Odoo.
 
@@ -15,7 +15,7 @@ tags:
   - accounting
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

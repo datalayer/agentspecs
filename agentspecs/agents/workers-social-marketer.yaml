@@ -8,7 +8,7 @@
 id: workers-social-marketer
 version: 0.0.1
 name: Social Marketer
-vertical: marketing
+domain: marketing
 description: >-
   Monitors trends and relevant conversations across LinkedIn, X, and Bluesky.
   Using connected MCP tools, it identifies engagement opportunities, recommends

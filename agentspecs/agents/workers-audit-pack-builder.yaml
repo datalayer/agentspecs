@@ -7,7 +7,7 @@
 id: workers-audit-pack-builder
 version: 0.0.1
 name: Audit-Pack Builder
-vertical: accounting
+domain: accounting
 description: >-
   Assembles auditable evidence packs from invoices, approvals, and postings across Odoo.
 
@@ -15,7 +15,7 @@ tags:
   - accounting
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

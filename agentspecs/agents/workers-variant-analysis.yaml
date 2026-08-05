@@ -7,7 +7,7 @@
 id: workers-variant-analysis
 version: 0.0.1
 name: Variant Analysis Worker
-vertical: life-sciences
+domain: life-sciences
 description: >-
   Analyzes genomic variants, annotates findings, and prepares interpretable reports.
 
@@ -15,7 +15,7 @@ tags:
   - life-sciences
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

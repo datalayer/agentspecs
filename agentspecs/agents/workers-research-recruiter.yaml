@@ -7,7 +7,7 @@
 id: workers-research-recruiter
 version: 0.0.1
 name: Research Recruiter
-vertical: market-analyst
+domain: market-analyst
 description: >-
   Selects and schedules research participants and manages consent.
 
@@ -15,7 +15,7 @@ tags:
   - market-analyst
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

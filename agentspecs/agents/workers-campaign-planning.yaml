@@ -7,7 +7,7 @@
 id: workers-campaign-planning
 version: 0.0.1
 name: Campaign Planning Worker
-vertical: marketing
+domain: marketing
 description: >-
   Plans content calendars and campaign tasks across channels.
 
@@ -15,7 +15,7 @@ tags:
   - marketing
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

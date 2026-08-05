@@ -7,7 +7,7 @@
 id: workers-renewable-asset-performance
 version: 0.0.1
 name: Renewable Asset Performance Worker
-vertical: energy
+domain: energy
 description: >-
   Compares expected versus actual generation, adjusts for weather, and investigates performance anomalies.
 
@@ -15,7 +15,7 @@ tags:
   - energy
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

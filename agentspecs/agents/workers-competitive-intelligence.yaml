@@ -7,7 +7,7 @@
 id: workers-competitive-intelligence
 version: 0.0.1
 name: Competitive Intelligence Worker
-vertical: market-analyst
+domain: market-analyst
 description: >-
   Researches competitors and market dynamics and synthesizes findings.
 
@@ -15,7 +15,7 @@ tags:
   - market-analyst
   - agent-worker
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter
