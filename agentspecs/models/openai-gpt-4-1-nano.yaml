@@ -9,6 +9,7 @@ name: OpenAI GPT-4.1 Nano
 description: GPT-4.1 Nano by OpenAI - smallest and fastest
 provider: openai
 default: false
+tokens_limit: 32768
 
 required_env_vars:
   - OPENAI_API_KEY

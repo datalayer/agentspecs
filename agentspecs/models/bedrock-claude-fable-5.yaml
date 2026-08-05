@@ -9,6 +9,7 @@ name: Bedrock Claude Fable 5
 description: Claude Fable 5 via AWS Bedrock
 provider: bedrock
 default: false
+tokens_limit: 64000
 
 required_env_vars:
   - AWS_ACCESS_KEY_ID

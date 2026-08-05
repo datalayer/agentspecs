@@ -1,0 +1,76 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Single-Cell Processing Worker
+# Life Sciences vertical worker.
+
+id: workers-single-cell-processing
+version: 0.0.1
+name: Single-Cell Processing Worker
+vertical: life-sciences
+description: >-
+  Processes, clusters, and annotates single-cell datasets with reproducible workflows.
+
+tags:
+  - life-sciences
+  - agent-worker
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+
+sandbox_variant: jupyter
+
+# Durable memory to retain context across sessions
+memory: mem0
+
+# MCP servers used by this agent
+mcp_servers:
+  - huggingface:0.0.1
+  - kaggle:0.0.1
+
+# Skills available to this agent
+skills:
+  - text-summarizer:0.0.1
+  - pdf:0.0.1
+
+# Runtime tools — sensitive actions require human approval
+tools:
+  - runtime-echo:0.0.1
+  - runtime-sensitive-echo:0.0.1
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+# Secrets / environment variables
+envvars:
+  - HF_TOKEN:0.0.1
+  - KAGGLE_TOKEN:0.0.1
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: beaker
+emoji: "🧬"
+color: "#06B6D4"
+
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Process and cluster single-cell data and deliver annotated, reproducible outputs.
+
+# Protocols & UI Extensions
+protocol: vercel-ai
+ui_extension: a2ui
+
+# Model configuration
+model_config:
+  temperature: 0.5
+  max_tokens: 4096
+
+# Codemode
+codemode:
+  enabled: true
+
+# System prompt
+system_prompt: >-
+  You are the Single-Cell Processing Worker, an autonomous agent worker in the life sciences domain. Processes, clusters, and annotates single-cell datasets with reproducible workflows. Work step by step, show your reasoning and evidence, and require explicit human approval before any external or irreversible action.

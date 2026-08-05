@@ -25,6 +25,7 @@ class AIModel(BaseModel):
     provider: str = Field(..., description="Provider name (anthropic, openai, bedrock, azure-openai)")
     default: bool = Field(default=False, description="Whether this is the default model")
     required_env_vars: List[str] = Field(default_factory=list, description="Required environment variable names")
+    tokens_limit: Optional[int] = Field(default=None, description="Maximum output tokens the model can generate in a single run")
 
 
 def _load_model_specs() -> List[AIModel]:

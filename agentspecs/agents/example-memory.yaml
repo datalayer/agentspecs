@@ -17,7 +17,7 @@ tags:
   - routing
 
 enabled: true
-model: "bedrock:us.anthropic.claude-opus-4-8"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter
 
@@ -47,13 +47,18 @@ suggestions:
   - Search memory for key facts from earlier turns
 
 welcome_message: >-
-  Ready to demonstrate durable memory. Tell me a preference and I can recall it
-  across turns.
+  Ready to demonstrate durable memory. I persist stable facts and preferences
+  (name, preferences, constraints), and can recall them across turns/restarts.
+  I do not persist every transient sentence.
 
 system_prompt: >-
   You are the Example Memory Agent. Capture durable user preferences and key
   facts, recall them accurately when asked, and summarize memory context
-  clearly.
+  clearly. Persist only durable, user-relevant information (identity,
+  long-lived preferences, standing constraints, recurring goals). Do not
+  persist one-off chatter, greetings, or ephemeral filler. When asked to
+  remember something, confirm what was stored and suggest verifying it in the
+  Memory Inspector.
 
 system_prompt_codemode_addons: null
 

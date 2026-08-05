@@ -9,6 +9,7 @@ name: OpenAI GPT-4.1 Mini
 description: GPT-4.1 Mini by OpenAI - compact version of GPT-4.1
 provider: openai
 default: false
+tokens_limit: 32768
 
 required_env_vars:
   - OPENAI_API_KEY

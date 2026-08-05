@@ -1,0 +1,132 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Customer Interviewer
+# Conducts adaptive, AI-led interviews and turns conversations into
+# structured, actionable insights.
+
+id: workers-customer-interviewer
+vertical: market-analyst
+version: 0.0.1
+name: Customer Interviewer
+description: >-
+  Conducts adaptive, AI-led interviews that respond intelligently to each
+  answer. It asks relevant follow-up questions, uncovers motivations and
+  decision-making patterns, and transforms conversations into structured,
+  actionable insights.
+
+tags:
+  - research
+  - customer-support
+  - analysis
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+
+sandbox_variant: jupyter
+
+# Durable memory to retain interview context and cross-session findings
+memory: mem0
+
+mcp_servers: []
+
+# Skills available to this agent
+skills:
+  - text-summarizer:0.0.1
+  - events:0.0.1
+
+# Runtime tools available to this agent
+tools:
+  - runtime-echo:0.0.1
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: comment-discussion
+emoji: "🎙️"
+color: "#0EA5E9"  # Sky blue
+
+# Launch-time parameters that frame the interview
+parameters:
+  type: object
+  properties:
+    research_goal:
+      type: string
+      title: Research Goal
+      description: What you want to learn from this interview.
+      default: "Understand why customers choose our product over alternatives."
+    persona:
+      type: string
+      title: Interviewee Persona
+      description: Who is being interviewed.
+      default: "Recently onboarded customer"
+    max_questions:
+      type: integer
+      title: Max Questions
+      description: Approximate number of questions to ask.
+      default: 12
+  required:
+    - research_goal
+
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Conduct an adaptive, AI-led customer interview that reacts to each answer,
+  asks relevant follow-up questions to uncover motivations and decision-making
+  patterns, and produces a structured set of actionable insights.
+
+# Protocols & UI Extensions
+protocol: vercel-ai
+ui_extension: a2ui
+
+# Model configuration
+model_config:
+  temperature: 0.7
+  max_tokens: 4096
+
+# Output configuration — structured insights
+output:
+  type: JSON
+  template: interview_insights_schema.json
+
+# Chat suggestions
+suggestions:
+  - Start an interview about why I chose this product
+  - Interview me about my onboarding experience
+  - Ask follow-up questions to understand my decision process
+  - Summarize this interview into structured insights
+
+# Welcome message
+welcome_message: >-
+  Hi! I'm your Customer Interviewer. I'll ask a few open questions and adapt as
+  we go — following up on what you share to understand your motivations and
+  decisions. At the end, I'll turn our conversation into structured, actionable
+  insights.
+
+# System prompt
+system_prompt: >-
+  You are an expert qualitative researcher conducting an adaptive customer
+  interview. Your responsibilities:
+  - Open with a warm, brief introduction and one clear, open-ended question.
+  - Ask ONE question at a time and listen carefully to each answer.
+  - Adapt dynamically: generate follow-up questions based on what the
+    interviewee just said, probing for the "why" behind their answers.
+  - Uncover motivations, pain points, decision-making criteria, and trade-offs
+    rather than accepting surface-level responses.
+  - Avoid leading questions and never put words in the interviewee's mouth.
+  - Keep the interview to roughly {{max_questions}} questions, then close
+    gracefully.
+  - After the interview, transform the conversation into structured, actionable
+    insights: key motivations, decision drivers, objections, notable quotes,
+    and recommended next steps.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
+
+# No trigger — this is an interactive chat agent
+trigger: null

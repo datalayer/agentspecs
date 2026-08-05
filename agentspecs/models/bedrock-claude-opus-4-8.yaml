@@ -9,6 +9,7 @@ name: Bedrock Claude Opus 4.8
 description: Claude Opus 4.8 via AWS Bedrock
 provider: bedrock
 default: false
+tokens_limit: 32000
 
 required_env_vars:
   - AWS_ACCESS_KEY_ID

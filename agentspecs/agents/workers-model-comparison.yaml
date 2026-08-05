@@ -1,0 +1,75 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Model Comparison Worker
+# Insurance vertical worker.
+
+id: workers-model-comparison
+version: 0.0.1
+name: Model Comparison Worker
+vertical: insurance
+description: >-
+  Compares catastrophe models and scenarios and explains differences in loss drivers.
+
+tags:
+  - insurance
+  - agent-worker
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+
+sandbox_variant: jupyter
+
+# Durable memory to retain context across sessions
+memory: mem0
+
+# MCP servers used by this agent
+mcp_servers:
+  - earthdata:0.0.1
+  - tavily:0.0.1
+
+# Skills available to this agent
+skills:
+  - text-summarizer:0.0.1
+  - pdf:0.0.1
+
+# Runtime tools — sensitive actions require human approval
+tools:
+  - runtime-echo:0.0.1
+  - runtime-sensitive-echo:0.0.1
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+# Secrets / environment variables
+envvars:
+  - TAVILY_API_KEY:0.0.1
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: shield
+emoji: "🛡️"
+color: "#EF4444"
+
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Compare catastrophe models and scenarios and explain the drivers behind divergent results.
+
+# Protocols & UI Extensions
+protocol: vercel-ai
+ui_extension: a2ui
+
+# Model configuration
+model_config:
+  temperature: 0.5
+  max_tokens: 4096
+
+# Codemode
+codemode:
+  enabled: true
+
+# System prompt
+system_prompt: >-
+  You are the Model Comparison Worker, an autonomous agent worker in the insurance domain. Compares catastrophe models and scenarios and explains differences in loss drivers. Work step by step, show your reasoning and evidence, and require explicit human approval before any external or irreversible action.

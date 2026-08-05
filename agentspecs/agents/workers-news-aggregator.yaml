@@ -1,0 +1,150 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: News Aggregator
+# Creates a personalized daily news briefing from each user's preferred
+# topics, sources, companies, and industries.
+
+id: workers-news-aggregator
+vertical: personal-assistant
+version: 0.0.1
+name: News Aggregator
+description: >-
+  Creates a personalized daily news briefing based on each user's preferred
+  topics, sources, companies, and industries. It filters out noise, identifies
+  important developments, and delivers a concise summary of what matters most.
+
+tags:
+  - research
+  - summarization
+  - monitoring
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+
+sandbox_variant: jupyter
+
+# Durable memory so the agent remembers each user's preferences over time
+memory: mem0
+
+# MCP servers used by this agent
+mcp_servers:
+  - tavily:0.0.1
+
+# Skills available to this agent
+skills:
+  - text-summarizer:0.0.1
+  - crawl:0.0.1
+  - events:0.0.1
+
+# Runtime tools available to this agent
+tools:
+  - runtime-echo:0.0.1
+  - runtime-send-mail:0.0.1
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: rss
+emoji: "📰"
+color: "#EF4444"  # Red
+
+# Launch-time parameters that personalize the briefing
+parameters:
+  type: object
+  properties:
+    topics:
+      type: string
+      title: Topics
+      description: Comma-separated topics of interest.
+      default: "artificial intelligence, cloud computing"
+    sources:
+      type: string
+      title: Preferred Sources
+      description: Comma-separated preferred news sources or domains.
+      default: "reuters.com, techcrunch.com"
+    companies:
+      type: string
+      title: Companies to Track
+      description: Comma-separated companies to follow.
+      default: "Datalayer, Anthropic"
+    industries:
+      type: string
+      title: Industries
+      description: Comma-separated industries to monitor.
+      default: "developer tools, machine learning"
+    tone:
+      type: string
+      title: Briefing Tone
+      enum:
+        - concise
+        - detailed
+      default: concise
+  required:
+    - topics
+
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Produce a personalized daily news briefing covering the user's preferred
+  topics, sources, companies, and industries, filtering out noise and
+  surfacing the most important developments in a concise summary.
+
+# Protocols & UI Extensions
+protocol: vercel-ai
+ui_extension: a2ui
+
+# Trigger configuration — run every morning
+trigger:
+  type: schedule
+  cron: "0 7 * * *"
+  description: Every day at 7:00 AM UTC
+  prompt: >-
+    Search for the latest news on {{topics}} from {{sources}}, tracking
+    {{companies}} across {{industries}}. Filter out noise, rank developments by
+    importance, and produce a {{tone}} daily briefing with sources cited.
+
+# Model configuration
+model_config:
+  temperature: 0.3
+  max_tokens: 4096
+
+# Output configuration
+output:
+  type: Markdown
+  template: daily_briefing_template.md
+
+# Chat suggestions
+suggestions:
+  - Build my daily briefing for AI and cloud computing
+  - Summarize the most important developments about my tracked companies
+  - What changed in my industries since yesterday?
+  - Give me a concise briefing and cite the sources
+
+# Welcome message
+welcome_message: >-
+  Hi! I'm your News Aggregator. Tell me the topics, sources, companies, and
+  industries you care about, and I'll deliver a concise daily briefing of what
+  matters most — with the noise filtered out.
+
+# System prompt
+system_prompt: >-
+  You are a personalized news briefing agent. Your responsibilities:
+  - Use Tavily web search to gather recent, credible news on the user's topics,
+    preferred sources, tracked companies, and industries.
+  - Filter out low-signal, duplicate, and off-topic items.
+  - Rank the remaining developments by importance and relevance to the user.
+  - Produce a concise briefing: a short "what matters most" summary followed by
+    grouped highlights (by topic/company/industry), each with a one-line
+    takeaway and a cited source link.
+  - Remember the user's stated preferences across sessions and refine the
+    briefing over time.
+  - Never fabricate headlines or sources; only report items you actually found.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null

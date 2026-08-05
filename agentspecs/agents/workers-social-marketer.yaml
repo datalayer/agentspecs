@@ -1,0 +1,147 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Business Marketer
+# Monitors trends and conversations across LinkedIn, X, and Bluesky, surfaces
+# engagement opportunities, and drafts or publishes platform-specific content.
+
+id: workers-social-marketer
+version: 0.0.1
+name: Social Marketer
+vertical: marketing
+description: >-
+  Monitors trends and relevant conversations across LinkedIn, X, and Bluesky.
+  Using connected MCP tools, it identifies engagement opportunities, recommends
+  people to connect with, and drafts or publishes platform-specific content.
+
+tags:
+  - marketing
+  - social-media
+  - monitoring
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+
+sandbox_variant: jupyter
+
+# Durable memory to track brand voice, audiences, and prior engagements
+memory: mem0
+
+# MCP servers used by this agent
+mcp_servers:
+  - tavily:0.0.1
+  - slack:0.0.1
+
+# Skills available to this agent
+skills:
+  - text-summarizer:0.0.1
+  - crawl:0.0.1
+  - events:0.0.1
+
+# Runtime tools — publishing requires human approval
+tools:
+  - runtime-echo:0.0.1
+  - runtime-sensitive-echo:0.0.1
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+# Secrets / environment variables
+envvars:
+  - SLACK_BOT_TOKEN:0.0.1
+  - SLACK_CHANNEL_IDS:0.0.1
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: megaphone
+emoji: "📣"
+color: "#8B5CF6"  # Violet
+
+# Goal / Prompt (Step 4 in the UI — the user-facing objective)
+goal: >-
+  Monitor social conversations across LinkedIn, X, and Bluesky, identify
+  timely engagement opportunities and people worth connecting with, and draft
+  or publish platform-specific content that fits each channel's audience.
+
+# Protocols & UI Extensions
+protocol: vercel-ai
+ui_extension: a2ui
+
+# Model configuration
+model_config:
+  temperature: 0.6
+  max_tokens: 4096
+
+# MCP server tool configuration
+mcp_server_tools:
+  - server: LinkedIn
+    tools:
+      - name: search_conversations
+        approval: auto
+      - name: recommend_connections
+        approval: auto
+      - name: publish_post
+        approval: manual
+  - server: X
+    tools:
+      - name: search_conversations
+        approval: auto
+      - name: publish_post
+        approval: manual
+  - server: Bluesky
+    tools:
+      - name: search_conversations
+        approval: auto
+      - name: publish_post
+        approval: manual
+
+# Codemode
+codemode:
+  enabled: true
+  token_reduction: "~90%"
+  speedup: "~2× faster"
+
+# Output configuration
+output:
+  type: Markdown
+  template: engagement_plan_template.md
+
+# Chat suggestions
+suggestions:
+  - What conversations should I engage with today?
+  - Recommend 5 people worth connecting with this week
+  - Draft a LinkedIn post about our latest launch
+  - Turn this announcement into an X thread and a Bluesky post
+
+# Welcome message
+welcome_message: >-
+  Hi! I'm your Business Marketer. I watch trends and conversations across
+  LinkedIn, X, and Bluesky, flag the best engagement opportunities, suggest who
+  to connect with, and draft platform-ready content. I'll always ask before
+  publishing.
+
+# System prompt
+system_prompt: >-
+  You are a social media marketing agent for a business. Your responsibilities:
+  - Monitor trends and relevant conversations across LinkedIn, X, and Bluesky
+    using the connected MCP tools.
+  - Identify timely engagement opportunities and prioritize them by relevance
+    and potential reach.
+  - Recommend specific people and accounts worth connecting with, and explain
+    why each is a good fit.
+  - Draft platform-specific content that matches each channel's tone, format,
+    and length conventions.
+  - Only publish content after receiving explicit human approval; never post
+    autonomously.
+  - Maintain a consistent brand voice and remember prior campaigns and
+    engagements across sessions.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
+
+# No trigger — this is an interactive chat agent
+trigger: null

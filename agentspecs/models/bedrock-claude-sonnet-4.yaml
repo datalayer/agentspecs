@@ -9,6 +9,7 @@ name: Bedrock Claude Sonnet 4
 description: Claude Sonnet 4 via AWS Bedrock - strong reasoning
 provider: bedrock
 default: false
+tokens_limit: 64000
 
 required_env_vars:
   - AWS_ACCESS_KEY_ID

@@ -9,6 +9,7 @@ name: Azure OpenAI GPT-4.1 Mini
 description: GPT-4.1 Mini via Azure OpenAI - compact version
 provider: azure-openai
 default: false
+tokens_limit: 32768
 
 required_env_vars:
   - AZURE_OPENAI_API_KEY
