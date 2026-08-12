@@ -50,7 +50,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: beaker
+icon: cpu
 emoji: "🧬"
 color: "#06B6D4"
 

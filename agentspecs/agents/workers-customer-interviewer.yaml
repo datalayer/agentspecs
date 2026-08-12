@@ -20,7 +20,7 @@ tags:
   - customer-support
   - analysis
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 sandbox_variant: jupyter

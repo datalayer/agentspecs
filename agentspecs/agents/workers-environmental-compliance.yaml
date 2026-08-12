@@ -6,7 +6,7 @@
 
 id: workers-environmental-compliance
 version: 0.0.1
-name: Environmental Compliance Worker
+name: Environmental Compliance Analyst
 domain: earth-observation
 description: >-
   Tracks environmental compliance from Earth observation data and generates recurring, auditable reports.
@@ -49,7 +49,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: globe
+icon: shield-check
 emoji: "🛰️"
 color: "#10B981"
 

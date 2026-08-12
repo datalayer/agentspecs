@@ -6,7 +6,7 @@
 
 id: workers-cohort-comparison
 version: 0.0.1
-name: Cohort Comparison Worker
+name: Cohort Analyst
 domain: life-sciences
 description: >-
   Compares cohorts, validates statistical results, and checks reproducibility.
@@ -50,7 +50,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: beaker
+icon: people
 emoji: "🧬"
 color: "#06B6D4"
 

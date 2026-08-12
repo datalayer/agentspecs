@@ -6,7 +6,7 @@
 
 id: workers-quant-research
 version: 0.0.1
-name: Quant Research Worker
+name: Quant Researcher
 domain: capital-markets
 description: >-
   Constructs datasets and researches factors for quantitative strategies with point-in-time care.
@@ -48,7 +48,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: graph
+icon: beaker
 emoji: "📈"
 color: "#3B82F6"
 

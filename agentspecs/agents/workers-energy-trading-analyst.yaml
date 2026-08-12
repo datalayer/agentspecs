@@ -48,7 +48,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: zap
+icon: graph
 emoji: "⚡"
 color: "#EAB308"
 

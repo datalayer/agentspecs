@@ -6,7 +6,7 @@
 
 id: workers-single-cell-processing
 version: 0.0.1
-name: Single-Cell Processing Worker
+name: Single-Cell Processor
 domain: life-sciences
 description: >-
   Processes, clusters, and annotates single-cell datasets with reproducible workflows.
@@ -50,7 +50,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: beaker
+icon: cpu
 emoji: "🧬"
 color: "#06B6D4"
 

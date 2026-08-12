@@ -6,7 +6,7 @@
 
 id: workers-model-comparison
 version: 0.0.1
-name: Model Comparison Worker
+name: Model Comparison Analyst
 domain: insurance
 description: >-
   Compares catastrophe models and scenarios and explains differences in loss drivers.
@@ -49,7 +49,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: shield
+icon: graph
 emoji: "🛡️"
 color: "#EF4444"
 

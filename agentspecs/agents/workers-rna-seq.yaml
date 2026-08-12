@@ -6,7 +6,7 @@
 
 id: workers-rna-seq
 version: 0.0.1
-name: RNA-Seq Worker
+name: RNA-Seq
 domain: life-sciences
 description: >-
   Runs RNA-seq quality control and differential expression analysis with reproducible pipelines.

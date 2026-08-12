@@ -6,7 +6,7 @@
 
 id: workers-mail-triage
 version: 0.0.1
-name: Mail Triage Worker
+name: Mail Triage Assistant
 domain: personal-assistant
 description: >-
   Classifies the inbox, drafts replies, and extracts follow-up tasks, with approval for sending.
@@ -50,7 +50,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: person
+icon: mail
 emoji: "🤖"
 color: "#A855F7"
 

@@ -6,7 +6,7 @@
 
 id: workers-portfolio-risk
 version: 0.0.1
-name: Portfolio Risk Worker
+name: Portfolio Risk Analyst
 domain: capital-markets
 description: >-
   Computes exposures and generates recurring, auditable portfolio risk reports.
@@ -48,7 +48,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: graph
+icon: shield
 emoji: "📈"
 color: "#3B82F6"
 

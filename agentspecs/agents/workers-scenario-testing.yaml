@@ -6,7 +6,7 @@
 
 id: workers-scenario-testing
 version: 0.0.1
-name: Scenario Testing Worker
+name: Scenario Tester
 domain: capital-markets
 description: >-
   Runs stress tests and scenario analysis to quantify portfolio sensitivity to shocks.
@@ -48,7 +48,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: graph
+icon: play
 emoji: "📈"
 color: "#3B82F6"
 

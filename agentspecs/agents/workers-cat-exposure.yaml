@@ -6,7 +6,7 @@
 
 id: workers-cat-exposure
 version: 0.0.1
-name: CAT Exposure Worker
+name: CAT Exposure Analyst
 domain: insurance
 description: >-
   Geocodes insurance portfolios and overlays hazard data to analyze catastrophe exposure.

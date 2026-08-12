@@ -6,7 +6,7 @@
 
 id: workers-change-detection
 version: 0.0.1
-name: Change Detection Worker
+name: Change Detection
 domain: earth-observation
 description: >-
   Detects environmental and land-use change between satellite image time periods and produces evidence-backed change maps.
@@ -49,7 +49,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: globe
+icon: telescope
 emoji: "🛰️"
 color: "#10B981"
 

@@ -6,7 +6,7 @@
 
 id: workers-ap-invoice
 version: 0.0.1
-name: AP Invoice Worker
+name: AP Invoice Analyst
 domain: accounting
 description: >-
   Extracts, codes, and matches supplier invoices to purchase orders and receipts in Odoo.
@@ -44,7 +44,7 @@ frontend_tools:
 environment_name: ai-agents-env
 
 # UI customization
-icon: credit-card
+icon: file
 emoji: "🧾"
 color: "#F59E0B"
 

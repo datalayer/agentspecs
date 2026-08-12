@@ -6,7 +6,7 @@
 
 id: workers-event-response
 version: 0.0.1
-name: Event Response Worker
+name: Event Responder
 domain: insurance
 description: >-
   Assesses live catastrophe events against insured portfolios to estimate exposure and losses.
@@ -49,7 +49,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: shield
+icon: pulse
 emoji: "🛡️"
 color: "#EF4444"
 

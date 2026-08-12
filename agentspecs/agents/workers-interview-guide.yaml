@@ -6,7 +6,7 @@
 
 id: workers-interview-guide
 version: 0.0.1
-name: Interview Guide Worker
+name: Interview Guide Designer
 domain: market-analyst
 description: >-
   Generates research plans and structured interview guides from research objectives.
@@ -49,7 +49,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: search
+icon: note
 emoji: "🔎"
 color: "#EC4899"
 

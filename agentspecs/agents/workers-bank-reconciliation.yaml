@@ -6,7 +6,7 @@
 
 id: workers-bank-reconciliation
 version: 0.0.1
-name: Bank Reconciliation Worker
+name: Bank Reconciler
 domain: accounting
 description: >-
   Reconciles bank statements against the ledger, matches transactions, and investigates exceptions.
@@ -44,7 +44,7 @@ frontend_tools:
 environment_name: ai-agents-env
 
 # UI customization
-icon: credit-card
+icon: sync
 emoji: "🧾"
 color: "#F59E0B"
 

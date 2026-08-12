@@ -6,7 +6,7 @@
 
 id: workers-renewable-asset-performance
 version: 0.0.1
-name: Renewable Asset Performance Worker
+name: Renewable Asset Performance Analyst
 domain: energy
 description: >-
   Compares expected versus actual generation, adjusts for weather, and investigates performance anomalies.

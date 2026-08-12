@@ -6,7 +6,7 @@
 
 id: workers-exposure-data-quality
 version: 0.0.1
-name: Exposure Data Quality Worker
+name: Exposure Data Quality Analyst
 domain: insurance
 description: >-
   Cleanses exposure data, validates geocoding, and improves data quality for risk analysis.
@@ -49,7 +49,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: shield
+icon: tools
 emoji: "🛡️"
 color: "#EF4444"
 

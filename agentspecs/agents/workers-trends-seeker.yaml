@@ -50,7 +50,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: person
+icon: graph
 emoji: "🤖"
 color: "#A855F7"
 

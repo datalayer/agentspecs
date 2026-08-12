@@ -6,7 +6,7 @@
 
 id: workers-crop-monitoring
 version: 0.0.1
-name: Crop Monitoring Worker
+name: Crop Monitor
 domain: earth-observation
 description: >-
   Monitors crop health, growth stages, and field conditions using multi-temporal satellite imagery.
@@ -49,7 +49,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: globe
+icon: telescope
 emoji: "🛰️"
 color: "#10B981"
 

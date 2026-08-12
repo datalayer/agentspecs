@@ -6,7 +6,7 @@
 
 id: workers-performance-attribution
 version: 0.0.1
-name: Performance Attribution Worker
+name: Performance Attribution Analyst
 domain: capital-markets
 description: >-
   Attributes portfolio performance to its underlying drivers and produces clear reports.

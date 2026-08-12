@@ -6,7 +6,7 @@
 
 id: workers-infrastructure-monitoring
 version: 0.0.1
-name: Infrastructure Monitoring Worker
+name: Infrastructure Monitor
 domain: earth-observation
 description: >-
   Monitors infrastructure and physical assets from satellite imagery and detects anomalies over time.
@@ -49,7 +49,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: globe
+icon: telescope
 emoji: "🛰️"
 color: "#10B981"
 

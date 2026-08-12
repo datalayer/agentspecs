@@ -6,7 +6,7 @@
 
 id: workers-competitive-intelligence
 version: 0.0.1
-name: Competitive Intelligence Worker
+name: Competitive Intelligence Analyst
 domain: market-analyst
 description: >-
   Researches competitors and market dynamics and synthesizes findings.

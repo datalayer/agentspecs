@@ -6,7 +6,7 @@
 
 id: workers-collections
 version: 0.0.1
-name: Collections Worker
+name: Collections Specialist
 domain: accounting
 description: >-
   Follows up on overdue receivables and drafts collection communications for approval.
@@ -44,7 +44,7 @@ frontend_tools:
 environment_name: ai-agents-env
 
 # UI customization
-icon: credit-card
+icon: mail
 emoji: "🧾"
 color: "#F59E0B"
 

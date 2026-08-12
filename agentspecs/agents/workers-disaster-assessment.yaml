@@ -6,7 +6,7 @@
 
 id: workers-disaster-assessment
 version: 0.0.1
-name: Disaster Assessment Worker
+name: Disaster Assessor
 domain: earth-observation
 description: >-
   Assesses affected areas after natural disasters by comparing pre- and post-event satellite imagery.
@@ -49,7 +49,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: globe
+icon: pulse
 emoji: "🛰️"
 color: "#10B981"
 

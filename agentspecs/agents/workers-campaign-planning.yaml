@@ -6,7 +6,7 @@
 
 id: workers-campaign-planning
 version: 0.0.1
-name: Campaign Planning Worker
+name: Campaign Planner
 domain: marketing
 description: >-
   Plans content calendars and campaign tasks across channels.

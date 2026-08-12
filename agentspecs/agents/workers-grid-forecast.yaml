@@ -6,7 +6,7 @@
 
 id: workers-grid-forecast
 version: 0.0.1
-name: Grid Forecast Worker
+name: Grid Forecaster
 domain: energy
 description: >-
   Forecasts electricity demand and prices to support grid operations and planning.
@@ -48,7 +48,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: zap
+icon: pulse
 emoji: "⚡"
 color: "#EAB308"
 

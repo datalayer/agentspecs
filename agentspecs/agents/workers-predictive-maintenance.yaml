@@ -6,7 +6,7 @@
 
 id: workers-predictive-maintenance
 version: 0.0.1
-name: Predictive Maintenance Worker
+name: Predictive Maintenance Analyst
 domain: energy
 description: >-
   Detects equipment degradation and anomalies to predict failures and prioritize maintenance.
@@ -48,7 +48,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: zap
+icon: tools
 emoji: "⚡"
 color: "#EAB308"
 

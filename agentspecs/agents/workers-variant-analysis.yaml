@@ -6,7 +6,7 @@
 
 id: workers-variant-analysis
 version: 0.0.1
-name: Variant Analysis Worker
+name: Variant Analyst
 domain: life-sciences
 description: >-
   Analyzes genomic variants, annotates findings, and prepares interpretable reports.

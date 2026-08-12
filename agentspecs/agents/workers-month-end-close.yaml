@@ -6,7 +6,7 @@
 
 id: workers-month-end-close
 version: 0.0.1
-name: Month-End Close Worker
+name: Month-End Close Analyst
 domain: accounting
 description: >-
   Prepares close checklists, suggests accruals, and reconciles intercompany balances for month-end close.
@@ -44,7 +44,7 @@ frontend_tools:
 environment_name: ai-agents-env
 
 # UI customization
-icon: credit-card
+icon: sync
 emoji: "🧾"
 color: "#F59E0B"
 

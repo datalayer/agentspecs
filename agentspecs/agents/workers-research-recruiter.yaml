@@ -49,7 +49,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: search
+icon: people
 emoji: "🔎"
 color: "#EC4899"
 

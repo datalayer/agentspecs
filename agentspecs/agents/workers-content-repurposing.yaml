@@ -6,7 +6,7 @@
 
 id: workers-content-repurposing
 version: 0.0.1
-name: Content Repurposing Worker
+name: Content Strategist
 domain: marketing
 description: >-
   Adapts existing content and assets across channels and formats.
@@ -51,7 +51,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: megaphone
+icon: share-2
 emoji: "📣"
 color: "#8B5CF6"
 

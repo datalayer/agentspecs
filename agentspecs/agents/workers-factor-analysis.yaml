@@ -6,7 +6,7 @@
 
 id: workers-factor-analysis
 version: 0.0.1
-name: Factor Analysis Worker
+name: Factor Analyst
 domain: capital-markets
 description: >-
   Analyzes factor exposures and returns across a portfolio or strategy.

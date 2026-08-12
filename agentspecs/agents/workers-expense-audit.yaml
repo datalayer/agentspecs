@@ -6,7 +6,7 @@
 
 id: workers-expense-audit
 version: 0.0.1
-name: Expense Audit Worker
+name: Expense Audit
 domain: accounting
 description: >-
   Audits employee expenses for duplicates, anomalies, and policy violations.

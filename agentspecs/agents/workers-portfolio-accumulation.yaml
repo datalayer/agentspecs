@@ -6,7 +6,7 @@
 
 id: workers-portfolio-accumulation
 version: 0.0.1
-name: Portfolio Accumulation Worker
+name: Portfolio Accumulation Analyst
 domain: insurance
 description: >-
   Analyzes accumulation and concentration risk across an insurance portfolio.
@@ -49,7 +49,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: shield
+icon: table
 emoji: "🛡️"
 color: "#EF4444"
 

@@ -6,7 +6,7 @@
 
 id: workers-evidence-repository
 version: 0.0.1
-name: Evidence Repository Worker
+name: Evidence Curator
 domain: market-analyst
 description: >-
   Organizes research evidence for traceability from qualitative findings to conclusions.
@@ -49,7 +49,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: search
+icon: book
 emoji: "🔎"
 color: "#EC4899"
 

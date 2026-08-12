@@ -6,7 +6,7 @@
 
 id: workers-social-listening
 version: 0.0.1
-name: Social Listening Worker
+name: Social Listener
 domain: marketing
 description: >-
   Monitors conversations across platforms and surfaces actionable insights.
@@ -51,7 +51,7 @@ envvars:
 environment_name: ai-agents-env
 
 # UI customization
-icon: megaphone
+icon: comment-discussion
 emoji: "📣"
 color: "#8B5CF6"
 
