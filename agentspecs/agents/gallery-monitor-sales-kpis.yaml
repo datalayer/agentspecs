@@ -22,7 +22,7 @@ tags:
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
-sandbox_variant: jupyter
+sandbox_variant: jupyter-server
 
 # Memory backend (exercises the Mem0 durable memory feature)
 memory: mem0

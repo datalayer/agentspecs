@@ -18,7 +18,7 @@ tags:
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
-sandbox_variant: jupyter
+sandbox_variant: jupyter-server
 
 # Durable memory to retain context across sessions
 memory: mem0

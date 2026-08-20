@@ -13,7 +13,7 @@ Environment variables provide API keys, authentication tokens, and configuration
 ## Required Fields
 
 ### `id` (string)
-Unique identifier (UPPER_SNAKE_CASE, e.g., `KAGGLE_TOKEN`, `GITHUB_TOKEN`, `OPENAI_API_KEY`)
+Unique identifier (UPPER_SNAKE_CASE, e.g., `KAGGLE_API_TOKEN`, `GITHUB_TOKEN`, `OPENAI_API_KEY`)
 
 **Important**: Unlike other specs, envvar IDs use UPPER_SNAKE_CASE to match environment variable naming conventions.
 
@@ -58,7 +58,7 @@ UI emoji identifier
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: KAGGLE_TOKEN
+id: KAGGLE_API_TOKEN
 version: 0.0.1
 name: Kaggle API Token
 description: >
@@ -95,11 +95,11 @@ name: Kaggle MCP Server
 # ... other fields ...
 
 envvars:
-  - KAGGLE_TOKEN:0.0.1
+  - KAGGLE_API_TOKEN:0.0.1
 
 args:
   - "--Authorization"
-  - "Bearer ${KAGGLE_TOKEN}"
+  - "Bearer ${KAGGLE_API_TOKEN}"
 ```
 
 ### In Skill Spec
@@ -120,7 +120,7 @@ optional_env_vars:
 
 The following environment variables are defined in `agentspecs/envvars/`:
 
-- **`KAGGLE_TOKEN`** - Kaggle API authentication
+- **`KAGGLE_API_TOKEN`** - Kaggle API authentication
 - **`GITHUB_TOKEN`** - GitHub authentication for MCP server and skills
 - **`TAVILY_API_KEY`** - Tavily search and web crawling
 - **`ALPHAVANTAGE_API_KEY`** - Alpha Vantage financial data
@@ -133,7 +133,7 @@ The following environment variables are defined in `agentspecs/envvars/`:
 
 ## Best Practices
 
-1. **ID Format**: Use UPPER_SNAKE_CASE (`KAGGLE_TOKEN`, not `kaggle_token` or `KaggleToken`)
+1. **ID Format**: Use UPPER_SNAKE_CASE (`KAGGLE_API_TOKEN`, not `kaggle_token` or `KaggleToken`)
 2. **Naming**: Follow standard environment variable conventions
 3. **Description**: Explain what the variable is used for and which services require it
 4. **Registration URL**: Always provide when applicable to help users obtain the value

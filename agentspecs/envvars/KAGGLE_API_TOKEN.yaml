@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: KAGGLE_TOKEN
+id: KAGGLE_API_TOKEN
 version: 0.0.1
 name: Kaggle API Token
 description: API token for accessing Kaggle datasets, competitions, notebooks, and models. Required for Kaggle MCP server authentication.

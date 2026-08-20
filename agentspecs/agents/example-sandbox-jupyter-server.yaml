@@ -1,24 +1,24 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Agent Specification: Sandbox Variant (colab)
+# Agent Specification: Sandbox Variant (jupyter-server)
 
-id: example-sandbox-colab
+id: example-sandbox-jupyter-server
 version: 0.0.1
-name: Example Sandbox Colab Agent
+name: Example Sandbox Jupyter-server Agent
 description: >-
   Demonstration agent configured to run codemode code execution with the
-  'colab' sandbox variant.
+  'jupyter-server' sandbox variant.
 
 tags:
   - sandbox
   - codemode
-  - google-colab
+  - jupyter-server
 
 enabled: true
 model: "bedrock:us.anthropic.claude-opus-4-8"
 
-sandbox_variant: google-colab
+sandbox_variant: jupyter-server
 memory: ephemeral
 
 mcp_servers:
@@ -37,16 +37,16 @@ frontend_tools:
 environment_name: ai-agents-env
 
 icon: package
-emoji: "E"
+emoji: "A"
 color: "#1F6FEB"
 
 suggestions:
-  - "Use execute_code to print('sandbox variant: google-colab')"
+  - "Use execute_code to print('sandbox variant: jupyter-server')"
   - "Use execute_code to compute sum(i*i for i in range(20))"
   - "Use execute_code to load pandas and build a small DataFrame"
 
 welcome_message: >-
-  You're connected to the google-colab sandbox variant demo. Ask me to run
+  You're connected to the jupyter-server sandbox variant demo. Ask me to run
   Python code and I will use execute_code in codemode.
 
 system_prompt: >-

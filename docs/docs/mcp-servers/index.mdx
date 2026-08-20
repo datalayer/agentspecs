@@ -39,7 +39,7 @@ args:
   - "-m"
   - "mcp_remote"
   - "--Authorization"
-  - "Bearer ${KAGGLE_TOKEN}"
+  - "Bearer ${KAGGLE_API_TOKEN}"
 ```
 
 ## Optional Fields
@@ -55,7 +55,7 @@ transport: remote  # Remote HTTP connection
 Required environment variable IDs. References specs in `envvars/` directory.
 ```yaml
 envvars:
-  - KAGGLE_TOKEN:0.0.1
+  - KAGGLE_API_TOKEN:0.0.1
   - GITHUB_TOKEN
 ```
 
@@ -91,17 +91,17 @@ args:
   - "-m"
   - "mcp_remote"
   - "--Authorization"
-  - "Bearer ${KAGGLE_TOKEN}"
+  - "Bearer ${KAGGLE_API_TOKEN}"
   - "--accept"
   - "application/json"
   - "--"
   - "https://mcp.kaggle.com"
 
 envvars:
-  - KAGGLE_TOKEN
+  - KAGGLE_API_TOKEN
 ```
 
-The `${KAGGLE_TOKEN}` will be expanded at runtime by consuming systems.
+The `${KAGGLE_API_TOKEN}` will be expanded at runtime by consuming systems.
 
 ## Complete Example
 
@@ -119,7 +119,7 @@ args:
   - "-m"
   - "mcp_remote"
   - "--Authorization"
-  - "Bearer ${KAGGLE_TOKEN}"
+  - "Bearer ${KAGGLE_API_TOKEN}"
   - "--accept"
   - "application/json"
   - "--"
@@ -128,7 +128,7 @@ args:
 transport: remote
 
 envvars:
-  - KAGGLE_TOKEN:0.0.1
+  - KAGGLE_API_TOKEN:0.0.1
 
 tags:
   - data

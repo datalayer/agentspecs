@@ -29,7 +29,7 @@ goal: >-
 
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
-sandbox_variant: jupyter
+sandbox_variant: jupyter-server
 
 # Memory backend
 memory: ephemeral

@@ -1,14 +1,14 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Agent Specification: Sandbox Variant (colab)
+# Agent Specification: Sandbox Variant (google-colab)
 
-id: example-sandbox-colab
+id: example-sandbox-google-colab
 version: 0.0.1
-name: Example Sandbox Colab Agent
+name: Example Sandbox Google-colab Agent
 description: >-
   Demonstration agent configured to run codemode code execution with the
-  'colab' sandbox variant.
+  'google-colab' sandbox variant.
 
 tags:
   - sandbox
@@ -37,7 +37,7 @@ frontend_tools:
 environment_name: ai-agents-env
 
 icon: package
-emoji: "E"
+emoji: "A"
 color: "#1F6FEB"
 
 suggestions:

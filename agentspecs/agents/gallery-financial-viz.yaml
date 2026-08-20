@@ -18,7 +18,7 @@ tags:
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
-sandbox_variant: local-eval
+sandbox_variant: eval
 
 # Memory backend
 memory: ephemeral
