@@ -1,0 +1,15 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: database
+version: 0.0.1
+name: Database
+description: >-
+  Write results back to a SQL or NoSQL store, where the rest of the
+  business already reads from rather than into a file somebody must find.
+icon: database
+supports_template: false
+supports_storage: true
+mime_types:
+  - application/sql
+  - application/json
