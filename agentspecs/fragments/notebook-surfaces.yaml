@@ -1,0 +1,18 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Capability fragment: the surfaces an agent drives.
+#
+# Not a runnable agent — no model, no system prompt — which is the point. The
+# notebook specialists include this rather than inheriting from the base agent,
+# because inheriting would also inherit the base's subagent list and let
+# @NotebookCompactor delegate to itself.
+
+id: notebook-surfaces
+version: 0.0.1
+
+frontend_tools:
+  - jupyter-notebook:0.0.1
+
+tags:
+  - notebook

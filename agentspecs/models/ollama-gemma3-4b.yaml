@@ -1,0 +1,22 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Gemma 3 4B (Ollama)
+
+id: "ollama:gemma3:4b"
+version: 0.0.1
+name: Gemma 3 4B (Ollama)
+description: Gemma 3 4B running locally through Ollama - small and fast, no tool calling
+provider: ollama
+default: false
+tokens_limit: 4096
+
+# Runs on the user's own machine: no API key, and selecting it moves execution
+# to a local sandbox so the code stays where the tokens do.
+local: true
+required_env_vars: []
+
+# No capabilities declared: this model does not do reliable tool
+# calling, and LOOP warns at selection rather than failing mid-run.
+capabilities:
+  - chat

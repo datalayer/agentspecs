@@ -1,0 +1,22 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Llama 3.1 8B (Ollama)
+
+id: "ollama:llama3.1:8b"
+version: 0.0.1
+name: Llama 3.1 8B (Ollama)
+description: Meta Llama 3.1 8B running locally through Ollama - tool calling, no data leaves the machine
+provider: ollama
+default: false
+tokens_limit: 4096
+
+# Runs on the user's own machine: no API key, and selecting it moves execution
+# to a local sandbox so the code stays where the tokens do.
+local: true
+required_env_vars: []
+
+capabilities:
+  - chat
+  - tools
+  - codemode

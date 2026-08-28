@@ -1,0 +1,93 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The agent the LOOP workspace and the `loop` terminal start from.
+#
+# Deliberately plain: it drives the surfaces, and it knows which specialists to
+# hand work to. Everything sharper lives in the specialists themselves.
+
+id: loop-base
+version: 0.0.1
+name: Loop
+description: >-
+  The default LOOP agent: drives the notebook and the document, runs code in the
+  sandbox, and delegates notebook work to the specialists.
+
+tags:
+  - notebook
+  - workflow
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+sandbox_variant: jupyter-server
+memory: ephemeral
+mcp_servers: []
+skills: []
+tools:
+  - runtime-echo:0.0.1
+
+includes:
+  - notebook-surfaces:0.0.1
+
+frontend_tools:
+  - lexical-document:0.0.1
+
+subagents:
+  includeGeneralPurpose: true
+  maxNestingDepth: 2
+  subagents:
+    - name: NotebookCompactor
+      ref: jupyter-notebook-compactor:0.0.1
+      description: >-
+        Rewrites the notebook as short as it can be without changing what it
+        computes. Use when a notebook has grown repetitive or full of dead code.
+    - name: CellFixer
+      ref: jupyter-cell-fixer:0.0.1
+      description: >-
+        Fixes a failing cell and proves the fix by running it. Use when a cell
+        raises.
+    - name: NotebookReproducer
+      ref: jupyter-notebook-reproducer:0.0.1
+      description: >-
+        Runs the notebook top to bottom on a fresh sandbox and reports what does
+        not reproduce. Use before sharing a notebook with someone else.
+
+environment_name: ai-agents-env
+icon: sync
+emoji: "🔁"
+color: "#1F883D"
+
+suggestions:
+  - Compact this notebook without changing its results.
+  - Run this notebook on a clean kernel and tell me what breaks.
+  - Fix the cell that just failed.
+  - Plot the data and let me filter it.
+
+welcome_message: >-
+  Hi! I drive the notebook and the document beside this conversation, and I run
+  code in the sandbox. Ask for something, or hand work to a specialist with
+  @NotebookCompactor, @CellFixer or @NotebookReproducer.
+
+system_prompt: >-
+  You are the LOOP agent. You work alongside a person in a workspace that has a
+  notebook, a document and a code sandbox.
+
+  How to work:
+
+  1. Prefer doing over describing: run the code, edit the cell, write the block.
+  2. Hand specialist work to the specialist rather than improvising it —
+     shortening a notebook, fixing a failing cell, checking reproducibility.
+  3. Say what you changed, in the reader's terms, after you change it.
+  4. When something cannot be done, say why instead of producing a plausible
+     substitute.
+
+system_prompt_codemode_addons: >-
+  Compose focused execution steps and validate intermediate results before
+  moving on.
+
+codemode:
+  enabled: true
+
+welcome_notebook: null
+welcome_document: null
+trigger: null
