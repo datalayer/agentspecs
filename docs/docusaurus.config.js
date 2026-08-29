@@ -44,9 +44,15 @@ module.exports = {
         },
         {
           type: 'doc',
-          docId: 'teams/index',
+          docId: 'agent-teams/index',
           position: 'left',
-          label: 'Teams',
+          label: 'Agent Teams',
+        },
+        {
+          type: 'doc',
+          docId: 'modularity/index',
+          position: 'left',
+          label: 'Modularity',
         },
         {
           href: 'https://discord.gg/YQFwvmSSuR',

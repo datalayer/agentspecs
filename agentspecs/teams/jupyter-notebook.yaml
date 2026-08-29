@@ -89,6 +89,20 @@ delegation:
   allow_peer_delegation: false
   include_general_purpose: false
 
+# One thread, and both members read all of it.
+#
+# The alternative — a transcript each — would mean the Compactor rewriting a
+# notebook without having seen the explanation the learner was just given, and
+# the Tutor teaching around changes it does not know happened. The supervisor
+# routes between them precisely because they are working on the same notebook
+# in the same conversation, and routing is guesswork if the member receiving
+# the work cannot see what was asked before.
+#
+# `isolated` is the right answer for a team whose members would mislead each
+# other more than they would help. This is not one of those.
+context:
+  sharing: shared
+
 validation:
   timeout: 300s
   retry_on_failure: true

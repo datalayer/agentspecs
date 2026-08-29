@@ -1,0 +1,63 @@
+---
+sidebar_position: 3
+title: Composition
+---
+
+# Composition
+
+Mixing in capability, with `includes`. Reach for it when several unrelated
+specs need the same thing — the relationship is "has", not "is a kind of".
+
+## Fragments
+
+A **fragment** lives in `agentspecs/fragments/` and is not a runnable agent: it
+has no model and no system prompt, only capability.
+
+```yaml
+# fragments/notebook-surfaces.yaml
+id: notebook-surfaces
+version: 0.0.1
+
+frontend_tools:
+  - jupyter-notebook:0.0.1
+
+tags:
+  - notebook
+```
+
+```yaml
+# agents/notebook-compactor.yaml
+includes:
+  - notebook-surfaces:0.0.1
+```
+
+A spec may include many fragments. They are applied first and
+[`extends`](./extension) second, so a parent can override what a fragment
+brought in. See [Merge semantics](./#merge-semantics) for how the fields combine.
+
+## Subagents by reference
+
+The same idea one level up: a subagent may **be** another spec rather than
+repeat it.
+
+```yaml
+subagents:
+  maxNestingDepth: 2
+  subagents:
+    - name: NotebookCompactor
+      ref: notebook-compactor:0.0.1
+      description: >-
+        Rewrites the notebook as short as it can be without changing what it
+        computes.
+```
+
+The specialist is then defined once and referenced by every parent that wants
+it, instead of having its instructions copy-pasted into each — which is how they
+drift apart. `instructions` becomes optional when `ref` is given; the referenced
+spec's system prompt and model are used.
+
+A reference to a spec that is not installed costs **that subagent**, with a
+warning, not the parent agent.
+
+[Agent teams](../agent-teams) compose the same way, for the same reason: a team
+member names a catalogue agent with `ref` rather than restating it.

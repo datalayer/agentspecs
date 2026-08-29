@@ -1,0 +1,4 @@
+# Position is alphabetical by label. Docusaurus does not sort by label
+# on its own, so the order is stated rather than assumed.
+label: "Skills"
+position: 12

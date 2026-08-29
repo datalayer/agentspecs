@@ -1,0 +1,100 @@
+---
+sidebar_position: 3
+title: Execution
+---
+
+# Execution
+
+How the members are run, and who decides what happens next.
+
+## `execution_mode` (enum)
+
+| Mode | Meaning |
+| --- | --- |
+| `sequential` | One after another, in declaration order. |
+| `parallel` | All at once; nothing waits for anything. |
+| `graph` | In the order `depends_on` implies — parallel where the graph allows. |
+| `supervisor` | The supervisor decides who runs next, each turn. |
+
+## `supervisor` (object)
+Who decides what happens next. **Every team has one.** A team is not a list of
+agents — it is a list of agents plus someone routing between them, and a spec
+that leaves that out describes a set, not a team. Where the answer is "they
+simply run in order", that is still a decision, and naming the agent that owns
+it is what makes the team inspectable: a reader can see who to ask why a member
+ran.
+
+| Field | Meaning |
+| --- | --- |
+| `name` | Display name. Required. |
+| `ref` | Agent catalogue reference. A supervisor is an agent like any other. |
+| `model` | Model id, overriding the referenced agent's. |
+| `goal` | What the supervisor is accountable for across the whole run. |
+| `instructions` | Supervision prompt, for a supervisor defined only here. Ignored when `ref` is set. |
+| `approval` | `auto` or `manual` — whether a person signs off the routing decisions. |
+| `can_terminate` | Whether it may end the run before every member has gone. `false` makes it a router only. |
+
+A supervisor needs either a `ref` or a `model` and `instructions` of its own —
+it cannot be a name with nothing behind it.
+
+```yaml
+supervisor:
+  name: Jupyter Tutor
+  ref: jupyter-tutor:0.0.1
+  goal: >-
+    Keep the person learning. Hand the notebook to the Compactor only when they
+    have asked for it and understood what it will change.
+  can_terminate: false
+```
+
+`can_terminate: false` is worth reaching for more often than it looks. A
+supervisor that also does work will end the run at the natural moment for
+*its own* job, which may be well before the team's is done.
+
+## `delegation` (object)
+How far members may hand work to each other, and to subagents.
+
+| Field | Default | Meaning |
+| --- | --- | --- |
+| `max_depth` | `2` | Levels of delegation allowed. `0` forbids it. |
+| `allow_peer_delegation` | `false` | Whether a member may hand work to another member, rather than only to its own subagents. |
+| `include_general_purpose` | `false` | Whether members also get the general-purpose subagent. |
+
+`allow_peer_delegation: false` keeps routing between members visible: it goes
+through the supervisor, where a person can see it happen.
+
+## `routing_instructions` (string)
+
+Prose for the supervisor about where requests go. Read by a model, so write it
+for one: say which kinds of request belong to which member, what to do when a
+request is both, and what to do when it is neither.
+
+```yaml
+routing_instructions: >-
+  Send anything about understanding, learning or explaining to the Tutor. Send
+  anything about the shape of the notebook to the Compactor.
+
+  When a request is both, the Tutor goes first and explains, then the Compactor
+  acts on what was agreed.
+
+  When neither fits, answer directly rather than forcing the request onto a
+  specialist.
+```
+
+That last line matters more than it looks. Without it a supervisor will pick
+the closest member for a request that suits none of them, and the team answers
+badly rather than plainly.
+
+## `validation` (object)
+
+Limits on a run as a whole.
+
+| Field | Meaning |
+| --- | --- |
+| `timeout` | Wall-clock limit for the whole run, e.g. `300s` |
+| `retry_on_failure` | Whether a failed run is retried |
+| `max_retries` | How many times |
+
+## See also
+
+- [Members](./members) — what the supervisor is routing between

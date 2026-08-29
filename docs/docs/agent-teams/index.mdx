@@ -1,0 +1,183 @@
+---
+sidebar_position: 1
+title: Agent Teams
+---
+
+import DocCardList from '@theme/DocCardList';
+
+# Agent Team Specifications
+
+A team is several agents working on one job, plus someone deciding what happens
+next. Team specifications say which agents, in what order, who supervises them,
+and how far they may hand work to each other.
+
+## Overview
+
+Two ideas carry the format, and both exist to make a team something a runtime
+can execute rather than something a person has to interpret.
+
+**A team composes agents that already exist.** A [member](./members) names one
+with `ref`, pointing into the [agent catalogue](../agents) exactly as a subagent
+does:
+
+```yaml
+agents:
+  - id: compactor
+    ref: jupyter-notebook-compactor:0.0.1
+```
+
+The member inherits that agent's model, tools, prompt and its own subagents.
+Everything else on the member says what is different *about it in this team* —
+what it is for, what it waits for, whether a person signs off its output.
+
+A member may still be defined inline, with no `ref`, for a role that exists
+only inside one team.
+
+**The order of work is data.** [`depends_on`](./members#depends_on-list-of-member-ids)
+names the members that must finish first, so a runtime can compute the order,
+run independent members at once, and refuse a team whose graph has a cycle:
+
+```yaml
+agents:
+  - id: triage
+  - id: categorize
+    depends_on: [triage]
+  - id: analyze
+    depends_on: [categorize]
+```
+
+## Required Fields
+
+### `id` (string)
+Unique team identifier.
+
+```yaml
+id: jupyter-notebook
+```
+
+### `name` (string)
+Display name.
+
+### `supervisor` (object)
+Who decides what happens next. **Every team has one.** A team is not a list of
+agents — it is a list of agents plus someone routing between them, and a spec
+that leaves that out describes a set, not a team.
+
+See [Execution](./execution) for its fields and for the modes it runs in.
+
+## The two halves of a team spec
+
+<DocCardList />
+
+## Common Fields
+
+- `version`, `description`, `tags`, `enabled`
+- `icon`, `emoji`, `color`
+- `orchestration_protocol`
+- `reaction_rules` — what the team does when something happens mid-run
+- `health_monitoring` — when a member counts as late, stuck, or gone
+- `notifications`, `output`
+
+## Using teams from Python
+
+```python
+from agentspecs.teams import get_team, list_teams, teams_using
+
+team = get_team("jupyter-notebook")
+
+team.execution_order()
+# [['tutor', 'compactor']] — one group, so both may run at once
+
+team.referenced_agents()
+# every agent this team names, members and subagents, for a host to check
+# it can actually run the team
+
+teams_using("jupyter-notebook-compactor")
+# the question asked before changing an agent spec: who depends on this?
+```
+
+`execution_order()` returns members grouped by what can run at once — each
+group depends only on the groups before it. It raises on a cycle, which is also
+how the loader validates one.
+
+## Example
+
+The `jupyter-notebook` team: a tutor that teaches Python in the notebook
+someone has open, and a compactor that shortens it.
+
+```yaml
+id: jupyter-notebook
+version: 0.0.1
+name: Jupyter Notebook
+description: >-
+  A team for working in a notebook: one member teaches the person Python in the
+  notebook they have open, the other rewrites that notebook as short as it can
+  be without changing what it computes.
+
+tags: [notebook, jupyter, teaching, refactoring]
+enabled: true
+
+orchestration_protocol: datalayer
+execution_mode: supervisor
+
+# The tutor supervises. It is the member that talks to the person, so it
+# already has to judge whether an answer is an explanation or a change.
+# `can_terminate: false` because a tutor would end the run when the learner
+# understood — which is exactly when a requested compaction has not happened.
+supervisor:
+  name: Jupyter Tutor
+  ref: jupyter-tutor:0.0.1
+  goal: >-
+    Keep the person learning. Hand the notebook to the Compactor only when they
+    have asked for it and understood what it will change.
+  can_terminate: false
+
+routing_instructions: >-
+  Send anything about understanding, learning or explaining to the Tutor. Send
+  anything about the shape of the notebook to the Compactor.
+
+# Members reach their own subagents, not each other: the Tutor handing work to
+# the Compactor would edit a notebook the learner is working in.
+delegation:
+  max_depth: 2
+  allow_peer_delegation: false
+  include_general_purpose: false
+
+agents:
+  - id: tutor
+    ref: jupyter-tutor:0.0.1
+    role: initiator
+    goal: Teach the person Python in the notebook they have open.
+    depends_on: []
+    approval: auto
+
+  - id: compactor
+    ref: jupyter-notebook-compactor:0.0.1
+    role: finalizer
+    goal: Rewrite the notebook as short as it can be without changing results.
+    depends_on: []
+    # It rewrites the person's notebook. A person sees the plan first.
+    approval: manual
+    subagents:
+      - name: CellFixer
+        ref: jupyter-cell-fixer:0.0.1
+        description: Fixes a failing cell and proves the fix by running it.
+      - name: NotebookReproducer
+        ref: jupyter-notebook-reproducer:0.0.1
+        description: >-
+          Runs the notebook top to bottom on a fresh sandbox and reports what
+          does not reproduce.
+```
+
+## Generated code
+
+`make specs` in `agent-runtimes` turns these YAML files into Python and
+TypeScript:
+
+```
+agent_runtimes/specs/teams/   # TeamSpec, TeamAgentspec, TeamSubagentspec, …
+src/specs/teams/              # the same, as TypeScript constants
+```
+
+Both carry `ref`, `depends_on`, `subagents` and `delegation`, so a host can
+resolve a team to real agents without re-reading the YAML.
