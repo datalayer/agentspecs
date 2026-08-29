@@ -28,6 +28,7 @@ goal: >-
   executive-ready PDF performance report with full data lineage.
 
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
 
 sandbox_variant: jupyter-server
 

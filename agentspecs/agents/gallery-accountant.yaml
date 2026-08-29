@@ -15,6 +15,7 @@ tags:
 
 enabled: true
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
 sandbox_variant: jupyter-server
 memory: ephemeral
 mcp_servers:

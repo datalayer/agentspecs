@@ -22,6 +22,7 @@ tags:
 enabled: true
 protocol: ag-ui
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
 
 # Memory backend
 memory: ephemeral
