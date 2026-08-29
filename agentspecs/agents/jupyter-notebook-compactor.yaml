@@ -1,6 +1,22 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
+# The Notebook Compactor.
+#
+# One spec, two places to run it. There was briefly a second spec for the
+# in-browser case — same prompt, same rules, `harness: vercel-ai` — and it was
+# the wrong shape: what a compaction *is* does not change with where the loop
+# turns, so duplicating the whole spec to change one field duplicated
+# everything that had nothing to do with the difference.
+#
+# The harness is decided by the location instead. Run server-side, this is a
+# pydantic-ai agent with the sandbox and codemode below. Run in a browser,
+# there is no server to hold any of that, so the loop turns in the page with
+# the Vercel AI SDK and the frontend tools are the whole toolset — the
+# `harness` field here is what it defaults to, not a demand.
+#
+# The prompt is written to be true either way: it never assumes it can execute.
+
 id: jupyter-notebook-compactor
 version: 0.0.1
 name: Notebook Compactor
@@ -78,6 +94,11 @@ system_prompt: >-
   - Never delete a cell whose output another cell depends on.
   - Never silently drop a user's prose. Tighten it or leave it.
   - When you are unsure whether something is dead, say so instead of guessing.
+
+  Where you can execute the notebook, verify by running rather than by eye.
+  Where you cannot — running in a reader's browser, there is no runtime behind
+  you — reason from what you read, say so when reading is not enough to be
+  sure, and never claim to have run anything.
 
 system_prompt_codemode_addons: >-
   Verify your reasoning about dead code by executing the notebook's dependency
