@@ -42,7 +42,7 @@ validation:
 agents:
 - id: sa-1
   name: KPI Data Collector
-  role: Primary · Initiator
+  role: initiator
   goal: 'Pull real-time sales metrics from CRM, ERP, and marketing platforms. Normalize data into a unified
     schema with timestamps, dimensions (region, product line, rep), and measures (revenue, pipeline, conversion).
 
@@ -57,7 +57,7 @@ agents:
   approval: auto
 - id: sa-2
   name: Anomaly Detector
-  role: Secondary
+  role: contributor
   goal: 'Apply statistical anomaly detection (Z-score, IQR, moving average) to the collected KPIs. Flag
     any metric deviating more than 10% from its rolling 30-day average. Classify anomalies as info, warning,
     or critical.
@@ -69,11 +69,12 @@ agents:
   - run_analysis
   - Statistical Analysis
   - ML Predictor
-  trigger: On completion of KPI Data Collector
+  depends_on:
+  - sa-1
   approval: auto
 - id: sa-3
   name: Trend Analyzer
-  role: Secondary
+  role: contributor
   goal: 'Identify week-over-week, month-over-month, and quarter-over-quarter trends. Generate 30-day forecasts
     for each KPI using time-series models. Highlight the top 3 improving and top 3 declining metrics.
 
@@ -84,11 +85,12 @@ agents:
   - run_analysis
   - generate_charts
   - Forecaster
-  trigger: On completion of KPI Data Collector
+  depends_on:
+  - sa-1
   approval: auto
 - id: sa-4
   name: Executive Report Generator
-  role: Final
+  role: finalizer
   goal: 'Compile all insights — raw KPIs, anomalies, trends, and forecasts — into a polished executive
     dashboard with charts, tables, and narrative commentary. Send the report via Slack and email. Highlight
     critical anomalies with a red-flag summary at the top.
@@ -101,18 +103,18 @@ agents:
   - Chart Builder
   - Email Sender
   - Slack Notifier
-  trigger: On completion of Anomaly Detector & Trend Analyzer
+  trigger: 'On completion of Anomaly Detector & Trend Analyzer'
   approval: manual
 reaction_rules:
 - id: rr-sales-1
-  trigger: anomaly_critical
+  trigger: 'anomaly_critical'
   action: escalate_to_supervisor
   auto: true
   max_retries: 2
   escalate_after_retries: 2
   priority: high
 - id: rr-sales-2
-  trigger: data_stale
+  trigger: 'data_stale'
   action: retry_collection
   auto: true
   max_retries: 3

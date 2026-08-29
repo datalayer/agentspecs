@@ -1,0 +1,170 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The Jupyter Notebook team.
+#
+# The first team written against the agent catalogue rather than beside it.
+# Every member is a `ref` into `agents/`, so the model, tools, prompt and
+# subagents come from the one place they are defined — change
+# `jupyter-notebook-compactor` and this team changes with it, which was not
+# true of a team that restated a name, a model and a list of tool labels
+# inline.
+#
+# It is also the first team whose members do not run in a line. The tutor and
+# the compactor answer different requests and neither waits for the other, so
+# the mode is `supervisor`: the tutor reads what was asked and hands it to
+# whichever member it is for. `depends_on` stays empty for both, and that is a
+# statement — these two are independent, and a runtime is free to say so.
+
+id: jupyter-notebook
+version: 0.0.1
+name: Jupyter Notebook
+description: >-
+  A team for working in a notebook: one member teaches the person Python in the
+  notebook they have open, the other rewrites that notebook as short as it can
+  be without changing what it computes.
+
+tags:
+  - notebook
+  - jupyter
+  - teaching
+  - refactoring
+
+enabled: true
+icon: book
+emoji: "📓"
+color: "#F37726"
+
+orchestration_protocol: datalayer
+
+# Not sequential: nothing here is a pipeline. A request is either a question
+# about the code or a request to tidy it, and the supervisor decides which.
+execution_mode: supervisor
+
+# The tutor supervises, and that is the design rather than a convenience.
+#
+# It is the member that talks to the person: it reads the notebook, hears the
+# question and already has to judge whether the answer is an explanation or a
+# change. Handing that judgement to a separate coordinator would put a second
+# agent between the learner and the one teaching them, and give it less to go
+# on than the tutor already has.
+#
+# It appears below as a member too. A supervisor that also does work is not a
+# contradiction — it is the front door, and here the front door teaches.
+#
+# `can_terminate: false` is the important line. A tutor that could end the run
+# would end it at the natural moment for a *teacher* — the learner understood —
+# which is exactly when a requested compaction has not happened yet.
+supervisor:
+  name: Jupyter Tutor
+  ref: jupyter-tutor:0.0.1
+  model: "bedrock:us.anthropic.claude-sonnet-4-6"
+  goal: >-
+    Keep the person learning. Answer what was asked, and hand the notebook to
+    the Compactor only when they have asked for it and understood what it will
+    change.
+  approval: auto
+  can_terminate: false
+
+routing_instructions: >-
+  Send anything about understanding, learning or explaining — "what does this
+  do", "why did this fail", "teach me", a request for an exercise — to the
+  Tutor. Send anything about the shape of the notebook — shortening it, merging
+  cells, removing dead code or stale outputs — to the Compactor.
+
+  When a request is both ("clean this up and explain what you did"), the Tutor
+  goes first and explains, then the Compactor acts on what was agreed. Never
+  let the Compactor rewrite a notebook the person is still learning from
+  without saying what changed.
+
+  When neither fits, answer directly rather than forcing the request onto a
+  specialist.
+
+# Members may reach their own subagents, but not each other: the Tutor handing
+# work to the Compactor would edit a notebook the learner is working in, which
+# is the one thing the Tutor exists not to do. Routing between them is the
+# supervisor's job, where a person can see it happen.
+delegation:
+  max_depth: 2
+  allow_peer_delegation: false
+  include_general_purpose: false
+
+validation:
+  timeout: 300s
+  retry_on_failure: true
+  max_retries: 1
+
+agents:
+  - id: tutor
+    ref: jupyter-tutor:0.0.1
+    name: Jupyter Tutor
+    role: initiator
+    goal: >-
+      Teach the person Python in the notebook they have open — what their code
+      does, why it broke, and what to try next — leaving them able to write the
+      next cell themselves.
+    # Independent of the compactor. Neither waits for the other.
+    depends_on: []
+    # A tutor's output is an explanation, and holding an explanation for
+    # sign-off would make a conversation into a queue.
+    approval: auto
+
+  - id: compactor
+    ref: jupyter-notebook-compactor:0.0.1
+    name: Notebook Compactor
+    role: finalizer
+    goal: >-
+      Rewrite the notebook as short as it can be without changing what it
+      computes, and report exactly which cells were touched.
+    depends_on: []
+    # This one rewrites the person's notebook. A person sees the plan first.
+    approval: manual
+    subagents:
+      - name: CellFixer
+        ref: jupyter-cell-fixer:0.0.1
+        description: >-
+          Fixes a failing cell and proves the fix by running it. Reach for this
+          when compaction uncovers a cell that was already broken — repairing
+          it is not part of compacting, and silently leaving it is worse.
+      - name: NotebookReproducer
+        ref: jupyter-notebook-reproducer:0.0.1
+        description: >-
+          Runs the notebook top to bottom on a fresh sandbox and reports what
+          does not reproduce. Reach for this to prove a compaction changed
+          nothing, which is the claim a compaction rests on.
+
+reaction_rules:
+  - id: rr-nb-1
+    trigger: compaction_would_change_results
+    action: request_human_review
+    auto: false
+    max_retries: 0
+    escalate_after_retries: 0
+    priority: high
+  - id: rr-nb-2
+    trigger: learner_repeatedly_stuck
+    action: escalate_to_supervisor
+    auto: true
+    max_retries: 2
+    escalate_after_retries: 2
+    priority: medium
+
+health_monitoring:
+  heartbeat_interval: 15s
+  stale_threshold: 60s
+  unresponsive_threshold: 180s
+  stuck_threshold: 300s
+  max_restart_attempts: 3
+
+notifications:
+  on_start: false
+  on_completion: true
+  on_failure: true
+  on_escalation: true
+
+output:
+  formats:
+    - ipynb
+    - markdown
+  template: Notebook Session Summary
+  storage: ""

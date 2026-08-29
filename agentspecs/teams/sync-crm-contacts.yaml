@@ -37,7 +37,7 @@ validation:
 agents:
 - id: tm-1
   name: Data Collector Agent
-  role: Primary · Initiator
+  role: initiator
   goal: Collect and aggregate contact data from multiple CRM sources
   model: openai-gpt-4-1
   mcp_server: Data Processing MCP
@@ -48,7 +48,7 @@ agents:
   approval: auto
 - id: tm-2
   name: Analyzer Agent
-  role: Secondary
+  role: contributor
   goal: Analyze collected data and identify patterns and duplicates
   model: anthropic-claude-opus-4
   mcp_server: Analytics MCP
@@ -56,22 +56,22 @@ agents:
   - Statistical Analysis
   - ML Predictor
   - Deduplicator
-  trigger: On completion of Data Collector
+  trigger: 'On completion of Data Collector'
   approval: manual
 - id: tm-3
   name: Sync Writer Agent
-  role: Secondary
+  role: contributor
   goal: Write cleaned and merged contacts back to the CRM systems
   model: openai-gpt-4-1
   mcp_server: CRM Write MCP
   tools:
   - Salesforce Connector
   - HubSpot Connector
-  trigger: On completion of Analyzer
+  trigger: 'On completion of Analyzer'
   approval: manual
 - id: tm-4
   name: Report Generator Agent
-  role: Final
+  role: finalizer
   goal: Generate sync summary reports and send notifications
   model: openai-gpt-4-1
   mcp_server: Document Generation MCP
@@ -79,18 +79,18 @@ agents:
   - PDF Generator
   - Chart Builder
   - Email Sender
-  trigger: On completion of Sync Writer
+  trigger: 'On completion of Sync Writer'
   approval: auto
 reaction_rules:
 - id: rr-crm-1
-  trigger: sync_conflict_detected
+  trigger: 'sync_conflict_detected'
   action: log_and_skip
   auto: true
   max_retries: 3
   escalate_after_retries: 3
   priority: medium
 - id: rr-crm-2
-  trigger: api_rate_limit_hit
+  trigger: 'api_rate_limit_hit'
   action: backoff_and_retry
   auto: true
   max_retries: 5

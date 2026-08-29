@@ -38,7 +38,7 @@ validation:
 agents:
 - id: inv-1
   name: Inventory Scanner Agent
-  role: Primary · Initiator
+  role: initiator
   goal: Pull current inventory levels from all warehouse management systems
   model: openai-gpt-4-1
   mcp_server: Warehouse MCP
@@ -49,7 +49,7 @@ agents:
   approval: auto
 - id: inv-2
   name: Discrepancy Auditor Agent
-  role: Secondary
+  role: contributor
   goal: Compare system counts vs physical counts and flag discrepancies
   model: openai-gpt-4-1
   mcp_server: Audit MCP
@@ -57,11 +57,11 @@ agents:
   - Count Comparator
   - Discrepancy Logger
   - Shrinkage Calculator
-  trigger: On completion of Inventory Scanner
+  trigger: 'On completion of Inventory Scanner'
   approval: auto
 - id: inv-3
   name: Demand Forecaster Agent
-  role: Secondary
+  role: contributor
   goal: Forecast demand by SKU using historical sales and seasonal patterns
   model: anthropic-claude-sonnet-4
   mcp_server: Analytics MCP
@@ -69,11 +69,11 @@ agents:
   - Time Series Model
   - Seasonal Analyzer
   - External Signals Fetcher
-  trigger: On completion of Discrepancy Auditor
+  trigger: 'On completion of Discrepancy Auditor'
   approval: auto
 - id: inv-4
   name: Reorder Planner Agent
-  role: Secondary
+  role: contributor
   goal: Calculate optimal reorder points and generate purchase order recommendations
   model: openai-gpt-4-1
   mcp_server: Procurement MCP
@@ -81,11 +81,11 @@ agents:
   - EOQ Calculator
   - Supplier Catalog
   - PO Generator
-  trigger: On completion of Demand Forecaster
+  trigger: 'On completion of Demand Forecaster'
   approval: manual
 - id: inv-5
   name: Audit Report Agent
-  role: Final
+  role: finalizer
   goal: Compile inventory audit report with discrepancies, forecasts, and reorder plan
   model: openai-gpt-4-1
   mcp_server: Document Generation MCP
@@ -93,18 +93,18 @@ agents:
   - PDF Generator
   - Chart Builder
   - Email Sender
-  trigger: On completion of Reorder Planner
+  trigger: 'On completion of Reorder Planner'
   approval: auto
 reaction_rules:
 - id: rr-inv-1
-  trigger: stockout_risk_detected
+  trigger: 'stockout_risk_detected'
   action: escalate_to_supervisor
   auto: true
   max_retries: 1
   escalate_after_retries: 1
   priority: high
 - id: rr-inv-2
-  trigger: discrepancy_threshold_exceeded
+  trigger: 'discrepancy_threshold_exceeded'
   action: flag_for_manual_audit
   auto: false
   max_retries: 2

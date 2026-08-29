@@ -43,7 +43,7 @@ validation:
 agents:
 - id: reg-1
   name: Data Ingestion Agent
-  role: Primary · Initiator
+  role: initiator
   goal: Extract positions, transactions, and P&L from trading and accounting systems
   model: openai-gpt-4-1
   mcp_server: Trading Systems MCP
@@ -55,7 +55,7 @@ agents:
   approval: auto
 - id: reg-2
   name: Risk Calculator Agent
-  role: Secondary
+  role: contributor
   goal: Compute Basel III/IV risk-weighted assets, capital ratios, and VaR metrics
   model: anthropic-claude-sonnet-4
   mcp_server: Risk Engine MCP
@@ -64,11 +64,12 @@ agents:
   - VaR Engine
   - Capital Ratio Computer
   - Stress Test Runner
-  trigger: On completion of Data Ingestion Agent
+  depends_on:
+  - reg-1
   approval: auto
 - id: reg-3
   name: Reconciliation Agent
-  role: Secondary
+  role: contributor
   goal: Cross-check computed figures against source systems and flag discrepancies
   model: openai-gpt-4-1
   mcp_server: Reconciliation MCP
@@ -76,11 +77,12 @@ agents:
   - Position Reconciler
   - Break Detector
   - Audit Logger
-  trigger: On completion of Risk Calculator Agent
+  depends_on:
+  - reg-2
   approval: auto
 - id: reg-4
   name: Validation Agent
-  role: Secondary
+  role: contributor
   goal: Validate all metrics against Basel III/IV, MiFID II, and SOX regulatory rules
   model: openai-gpt-4-1
   mcp_server: Compliance Rules MCP
@@ -88,11 +90,12 @@ agents:
   - Basel Rule Validator
   - MiFID II Checker
   - SOX Control Verifier
-  trigger: On completion of Reconciliation Agent
+  depends_on:
+  - reg-3
   approval: manual
 - id: reg-5
   name: Report Generator Agent
-  role: Final
+  role: finalizer
   goal: Generate submission-ready regulatory reports with full data lineage and audit trail
   model: openai-gpt-4-1
   mcp_server: Document Generation MCP
@@ -100,18 +103,19 @@ agents:
   - PDF Generator
   - XBRL Formatter
   - Email Sender
-  trigger: On completion of Validation Agent
+  depends_on:
+  - reg-4
   approval: auto
 reaction_rules:
 - id: rr-reg-1
-  trigger: compliance_violation_detected
+  trigger: 'compliance_violation_detected'
   action: halt_and_escalate
   auto: true
   max_retries: 0
   escalate_after_retries: 0
   priority: critical
 - id: rr-reg-2
-  trigger: data_validation_failure
+  trigger: 'data_validation_failure'
   action: retry_with_fallback
   auto: true
   max_retries: 3

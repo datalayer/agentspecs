@@ -42,7 +42,7 @@ validation:
 agents:
 - id: ct-1
   name: Data Ingestion Agent
-  role: Primary · Initiator
+  role: initiator
   goal: Ingest patient records, lab results, and CRFs from clinical sites
   model: openai-gpt-4-1
   mcp_server: Clinical EDC MCP
@@ -55,7 +55,7 @@ agents:
   approval: auto
 - id: ct-2
   name: Harmonisation Agent
-  role: Secondary
+  role: contributor
   goal: Standardise all data to CDISC SDTM format with MedDRA coding
   model: openai-gpt-4-1
   mcp_server: Data Standards MCP
@@ -64,11 +64,12 @@ agents:
   - MedDRA Coder
   - Unit Converter
   - Site Normaliser
-  trigger: On completion of Data Ingestion Agent
+  depends_on:
+  - ct-1
   approval: auto
 - id: ct-3
   name: Safety Monitor Agent
-  role: Secondary
+  role: contributor
   goal: Screen every data point for adverse events and safety signals
   model: anthropic-claude-sonnet-4
   mcp_server: Safety Database MCP
@@ -77,11 +78,12 @@ agents:
   - Signal Detector
   - SAE Escalator
   - Evidence Trail Builder
-  trigger: On completion of Harmonisation Agent
+  depends_on:
+  - ct-2
   approval: manual
 - id: ct-4
   name: Submission Preparer Agent
-  role: Final
+  role: finalizer
   goal: Assemble submission-ready SDTM datasets with validation and define.xml
   model: openai-gpt-4-1
   mcp_server: Submission MCP
@@ -90,18 +92,19 @@ agents:
   - Define.xml Generator
   - PDF Report Builder
   - Compliance Checker
-  trigger: On completion of Safety Monitor Agent
+  depends_on:
+  - ct-3
   approval: auto
 reaction_rules:
 - id: rr-clin-1
-  trigger: safety_signal_detected
+  trigger: 'safety_signal_detected'
   action: halt_and_escalate
   auto: true
   max_retries: 0
   escalate_after_retries: 0
   priority: critical
 - id: rr-clin-2
-  trigger: data_integrity_violation
+  trigger: 'data_integrity_violation'
   action: quarantine_and_notify
   auto: true
   max_retries: 1
