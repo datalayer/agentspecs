@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/churn/customer_churn.csv to identify churn signals, rank at-risk customers, and propose retention actions.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/churn/customer_churn.csv to identify churn signals, rank at-risk customers, and propose retention actions.
 
 welcome_message: >-
   Hi! I can help with customer churn analysis. Share data, files, or context

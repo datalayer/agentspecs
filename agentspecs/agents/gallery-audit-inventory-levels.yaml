@@ -124,10 +124,10 @@ notifications:
 
 # Chat suggestions
 suggestions:
-  - Run a full inventory audit now
-  - Show current stock levels across all warehouses
-  - What SKUs are below reorder point?
-  - Generate a demand forecast for next month
+  - text: Run a full inventory audit now
+  - text: Show current stock levels across all warehouses
+  - text: What SKUs are below reorder point?
+  - text: Generate a demand forecast for next month
 
 # Welcome message
 welcome_message: >

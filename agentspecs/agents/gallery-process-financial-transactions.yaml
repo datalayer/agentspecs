@@ -142,10 +142,10 @@ notifications:
 
 # Chat suggestions
 suggestions:
-  - Process the latest batch of transactions
-  - Show reconciliation status for today
-  - Flag any suspicious transactions from this week
-  - Generate an AML compliance report
+  - text: Process the latest batch of transactions
+  - text: Show reconciliation status for today
+  - text: Flag any suspicious transactions from this week
+  - text: Generate an AML compliance report
 
 # Welcome message
 welcome_message: >

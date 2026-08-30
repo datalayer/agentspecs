@@ -144,11 +144,11 @@ notifications:
 
 # Chat suggestions
 suggestions:
-  - Show cross-channel campaign performance for this week
-  - Which campaigns have abnormal CPA trends?
-  - Generate a budget reallocation recommendation
-  - Compare ROAS across Google Ads vs Meta this month
-  - What's the projected impact of shifting 20% budget to TikTok?
+  - text: Show cross-channel campaign performance for this week
+  - text: Which campaigns have abnormal CPA trends?
+  - text: Generate a budget reallocation recommendation
+  - text: Compare ROAS across Google Ads vs Meta this month
+  - text: What's the projected impact of shifting 20% budget to TikTok?
 
 # Welcome message
 welcome_message: >

@@ -150,11 +150,11 @@ notifications:
 
 # Chat suggestions
 suggestions:
-  - Show today's citizen request intake summary
-  - What's the current processing backlog by type?
-  - Run a policy impact simulation for the proposed zoning change
-  - Generate a transparency report for this quarter
-  - Which requests are overdue for response?
+  - text: Show today's citizen request intake summary
+  - text: What's the current processing backlog by type?
+  - text: Run a policy impact simulation for the proposed zoning change
+  - text: Generate a transparency report for this quarter
+  - text: Which requests are overdue for response?
 
 # Welcome message
 welcome_message: >

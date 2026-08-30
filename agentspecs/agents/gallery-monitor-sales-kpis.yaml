@@ -159,10 +159,10 @@ notifications:
 
 # Chat suggestions
 suggestions:
-  - Show me today's sales KPI dashboard
-  - What are the current revenue trends?
-  - Flag any KPIs that deviate more than 10% from targets
-  - Generate a weekly summary report
+  - text: Show me today's sales KPI dashboard
+  - text: What are the current revenue trends?
+  - text: Flag any KPIs that deviate more than 10% from targets
+  - text: Generate a weekly summary report
 
 # Welcome message
 welcome_message: >

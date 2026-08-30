@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/finance/transactions_q1.csv to reconcile duplicate or inconsistent ledger entries and summarize unresolved items.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/finance/transactions_q1.csv to reconcile duplicate or inconsistent ledger entries and summarize unresolved items.
 
 welcome_message: >-
   Hi! I can help with financial reconciliation. Share data, files, or context

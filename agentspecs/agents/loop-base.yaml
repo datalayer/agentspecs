@@ -59,10 +59,10 @@ emoji: "🔁"
 color: "#1F883D"
 
 suggestions:
-  - Compact this notebook without changing its results.
-  - Run this notebook on a clean kernel and tell me what breaks.
-  - Fix the cell that just failed.
-  - Plot the data and let me filter it.
+  - text: Compact this notebook without changing its results.
+  - text: Run this notebook on a clean kernel and tell me what breaks.
+  - text: Fix the cell that just failed.
+  - text: Plot the data and let me filter it.
 
 welcome_message: >-
   Hi! I drive the notebook and the document beside this conversation, and I run

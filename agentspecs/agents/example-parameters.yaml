@@ -61,8 +61,8 @@ parameters:
     - project
 
 suggestions:
-  - "Use execute_code to print(demo_params) from the sandbox, then explain the value."
-  - "Use execute_code to print('demo_params =', demo_params)."
+  - text: "Use execute_code to print(demo_params) from the sandbox, then explain the value."
+  - text: "Use execute_code to print('demo_params =', demo_params)."
 
 pre_hooks:
   sandbox:

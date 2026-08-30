@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Compare /home/jovyan/datasets/datalayer-nfs/titanic/titanic_baseline.csv and /home/jovyan/datasets/datalayer-nfs/titanic/titanic_candidate.csv, then summarize schema and value-level differences.
+  - text: >-
+      Compare /home/jovyan/datasets/datalayer-nfs/titanic/titanic_baseline.csv and /home/jovyan/datasets/datalayer-nfs/titanic/titanic_candidate.csv, then summarize schema and value-level differences.
 
 welcome_message: >-
   Hi! I can help with compare two spreadsheets. Share data, files, or context

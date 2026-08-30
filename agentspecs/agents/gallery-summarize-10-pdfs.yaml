@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Load the 10 PDFs in /home/jovyan/datasets/datalayer-nfs/placeholder and produce a concise synthesis with a per-document key takeaway table.
+  - text: >-
+      Load the 10 PDFs in /home/jovyan/datasets/datalayer-nfs/placeholder and produce a concise synthesis with a per-document key takeaway table.
 
 welcome_message: >-
   Hi! I can help with summarize 10 pdfs. Share data, files, or context

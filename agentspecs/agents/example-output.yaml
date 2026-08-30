@@ -43,10 +43,10 @@ emoji: "📦"
 color: "#7C3AED"
 
 suggestions:
-  - Return a TABLE of quarterly revenue by region
-  - Return JSON for a KPI summary object
-  - Return a CHART payload for monthly conversions
-  - Return a FILE named report.md with highlights
+  - text: Return a TABLE of quarterly revenue by region
+  - text: Return JSON for a KPI summary object
+  - text: Return a CHART payload for monthly conversions
+  - text: Return a FILE named report.md with highlights
 
 welcome_message: >-
   Example output agent ready. Ask for TABLE, JSON, CHART, or FILE formats and

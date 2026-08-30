@@ -62,9 +62,9 @@ emoji: "👥"
 color: "#2563EB"
 
 suggestions:
-  - Research a topic and provide source-backed notes
-  - Write a concise summary from the research findings
-  - Split work between researcher and writer, then merge output
+  - text: Research a topic and provide source-backed notes
+  - text: Write a concise summary from the research findings
+  - text: Split work between researcher and writer, then merge output
 
 welcome_message: >-
   Subagents example agent ready. Ask me to delegate research and writing tasks

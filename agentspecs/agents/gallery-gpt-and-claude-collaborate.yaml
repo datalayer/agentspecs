@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/marketing/campaign_performance.csv and orchestrate a two-agent collaboration where one analyzes and one critiques.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/marketing/campaign_performance.csv and orchestrate a two-agent collaboration where one analyzes and one critiques.
 
 welcome_message: >-
   Hi! I can help with gpt and claude collaborate. Share data, files, or context

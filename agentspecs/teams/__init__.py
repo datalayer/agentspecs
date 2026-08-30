@@ -330,6 +330,25 @@ class TeamOutput(BaseModel):
     storage: str = Field(default="")
 
 
+class TeamSuggestion(BaseModel):
+    """An opener offered at a team's front door.
+
+    Text and, optionally, a mark to show beside it. The same shape an agent's
+    suggestions have, deliberately: a caller listing what can be asked should
+    not have to know whether it is looking at a team or at one of its members.
+    Both marks are optional and independent — an octicon for chrome drawn in
+    line art, an emoji for somewhere with colour.
+    """
+
+    text: str = Field(..., description="What is sent when the suggestion is taken")
+    icon: Optional[str] = Field(
+        default=None, description="Octicon name to show beside it"
+    )
+    emoji: Optional[str] = Field(
+        default=None, description="Unicode emoji to show beside it"
+    )
+
+
 class TeamSpec(BaseModel):
     """Specification for a team of agents."""
 
@@ -355,7 +374,7 @@ class TeamSpec(BaseModel):
         description="Who decides what happens next. Every team has one.",
     )
     routing_instructions: str = Field(default="")
-    suggestions: List[str] = Field(
+    suggestions: List[TeamSuggestion] = Field(
         default_factory=list,
         description=(
             "Openers shown in an empty chat, so a person arriving at a team "

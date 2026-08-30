@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/compliance/audit_findings.csv to draft a compliance report with top risks, control gaps, and remediation priorities.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/compliance/audit_findings.csv to draft a compliance report with top risks, control gaps, and remediation priorities.
 
 welcome_message: >-
   Hi! I can help with compliance report draft. Share data, files, or context

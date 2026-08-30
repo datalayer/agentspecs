@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/churn/customer_churn.csv and split the analysis across five agents, then merge their findings into one final brief.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/churn/customer_churn.csv and split the analysis across five agents, then merge their findings into one final brief.
 
 welcome_message: >-
   Hi! I can help with five ai agents analyze a csv. Share data, files, or context

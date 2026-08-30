@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/marketing/campaign_performance.csv to analyze ROAS, conversion efficiency, and channel-level recommendations.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/marketing/campaign_performance.csv to analyze ROAS, conversion efficiency, and channel-level recommendations.
 
 welcome_message: >-
   Hi! I can help with marketing analytics. Share data, files, or context

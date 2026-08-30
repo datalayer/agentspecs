@@ -48,10 +48,10 @@ emoji: "🩹"
 color: "#CF222E"
 
 suggestions:
-  - Fix the cell that just failed.
-  - This cell raises a KeyError — what is actually wrong?
-  - Fix the import error without pinning a new dependency.
-  - Explain the traceback before you change anything.
+  - text: Fix the cell that just failed.
+  - text: This cell raises a KeyError — what is actually wrong?
+  - text: Fix the import error without pinning a new dependency.
+  - text: Explain the traceback before you change anything.
 
 welcome_message: >-
   Hi! I fix failing cells. Show me the cell and its traceback and I will explain

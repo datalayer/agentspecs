@@ -45,10 +45,10 @@ color: "#F59E0B"  # Amber
 
 # Chat suggestions to show users what this agent can do
 suggestions:
-  - Show me the stock price history for AAPL
-  - Create a chart comparing MSFT and GOOGL over the last year
-  - Analyze the trading volume trends for Tesla
-  - Get the latest market news for tech stocks
+  - text: Show me the stock price history for AAPL
+  - text: Create a chart comparing MSFT and GOOGL over the last year
+  - text: Analyze the trading volume trends for Tesla
+  - text: Get the latest market news for tech stocks
 
 # Welcome message shown when agent starts
 welcome_message: >

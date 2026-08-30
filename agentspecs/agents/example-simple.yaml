@@ -48,10 +48,10 @@ color: "#6366F1"  # Indigo
 
 # Chat suggestions to show users what this agent can do
 suggestions:
-  - Tell me a joke
-  - Explain quantum computing in simple terms
-  - Help me brainstorm ideas for a weekend project
-  - Summarize the key points of a topic I describe
+  - text: Tell me a joke
+  - text: Explain quantum computing in simple terms
+  - text: Help me brainstorm ideas for a weekend project
+  - text: Summarize the key points of a topic I describe
 
 # Welcome message shown when agent starts
 welcome_message: >

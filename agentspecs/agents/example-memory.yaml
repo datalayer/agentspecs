@@ -43,9 +43,9 @@ emoji: "🧠"
 color: "#0D9488"
 
 suggestions:
-  - Remember a user preference and confirm it was stored
-  - Recall previously stored preferences from memory
-  - Search memory for key facts from earlier turns
+  - text: Remember a user preference and confirm it was stored
+  - text: Recall previously stored preferences from memory
+  - text: Search memory for key facts from earlier turns
 
 welcome_message: >-
   Ready to demonstrate durable memory. I persist stable facts and preferences

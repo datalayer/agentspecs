@@ -43,9 +43,9 @@ emoji: "📊"
 color: "#0EA5E9"
 
 suggestions:
-  - Show my current monitoring context summary
-  - Explain the last turn cost and total token usage
-  - Summarize recent activity and potential anomalies
+  - text: Show my current monitoring context summary
+  - text: Explain the last turn cost and total token usage
+  - text: Summarize recent activity and potential anomalies
 
 welcome_message: >-
   Monitoring example agent ready. Ask for runtime activity, cost trends, and token

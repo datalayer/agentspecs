@@ -45,9 +45,9 @@ emoji: "🧪"
 color: "#0284C7"
 
 suggestions:
-  - Run the selected evaluation experiment on the configured dataset
-  - Validate experiment configuration and report missing fields
-  - Summarize run results with pass rate and latency highlights
+  - text: Run the selected evaluation experiment on the configured dataset
+  - text: Validate experiment configuration and report missing fields
+  - text: Summarize run results with pass rate and latency highlights
 
 welcome_message: >-
   Ready to run eval experiments without codemode enabled. Configure your

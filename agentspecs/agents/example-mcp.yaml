@@ -45,10 +45,10 @@ emoji: "🌐"
 color: "#0EA5E9"
 
 suggestions:
-  - Search the web for recent news about AI agents
-  - Find trending open-source Python projects on GitHub
-  - Research best practices for building RAG applications
-  - Compare popular JavaScript frameworks in 2024
+  - text: Search the web for recent news about AI agents
+  - text: Find trending open-source Python projects on GitHub
+  - text: Research best practices for building RAG applications
+  - text: Compare popular JavaScript frameworks in 2024
 
 welcome_message: >-
   MCP example agent ready. Ask me to search, extract, crawl, and research via

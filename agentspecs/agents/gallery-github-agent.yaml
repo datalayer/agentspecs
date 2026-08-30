@@ -47,10 +47,10 @@ color: "#6366F1"  # Indigo
 
 # Chat suggestions to show users what this agent can do
 suggestions:
-  - List my open pull requests across all repositories
-  - Create an issue for a bug I found in datalayer/ui
-  - Show recent commits on the main branch
-  - Search for repositories related to Jupyter notebooks
+  - text: List my open pull requests across all repositories
+  - text: Create an issue for a bug I found in datalayer/ui
+  - text: Show recent commits on the main branch
+  - text: Search for repositories related to Jupyter notebooks
 
 # Welcome message shown when agent starts
 welcome_message: >

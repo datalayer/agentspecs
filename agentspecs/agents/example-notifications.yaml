@@ -43,9 +43,9 @@ emoji: "🔔"
 color: "#F59E0B"
 
 suggestions:
-  - Configure notification channels for in-app, email, and Slack
-  - Trigger a test notification and verify delivery status
-  - Summarize unread notifications and recent alert activity
+  - text: Configure notification channels for in-app, email, and Slack
+  - text: Trigger a test notification and verify delivery status
+  - text: Summarize unread notifications and recent alert activity
 
 welcome_message: >-
   Ready to demonstrate notifications. Configure your channels and send a test

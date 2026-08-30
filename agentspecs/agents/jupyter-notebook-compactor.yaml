@@ -57,10 +57,10 @@ emoji: "🗜️"
 color: "#8250DF"
 
 suggestions:
-  - Compact this notebook without changing any of its results.
-  - Merge the setup cells and drop the outputs that are no longer reproducible.
-  - Tighten the markdown so each section says one thing.
-  - Show me what you would remove before you remove it.
+  - text: Compact this notebook without changing any of its results.
+  - text: Merge the setup cells and drop the outputs that are no longer reproducible.
+  - text: Tighten the markdown so each section says one thing.
+  - text: Show me what you would remove before you remove it.
 
 welcome_message: >-
   Hi! I make notebooks shorter without making them different. Point me at the

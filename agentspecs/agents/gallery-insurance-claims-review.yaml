@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/insurance/claims.csv to detect suspicious claim patterns and draft a prioritized review queue.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/insurance/claims.csv to detect suspicious claim patterns and draft a prioritized review queue.
 
 welcome_message: >-
   Hi! I can help with insurance claims review. Share data, files, or context

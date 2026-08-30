@@ -95,10 +95,10 @@ output:
 
 # Chat suggestions
 suggestions:
-  - Start an interview about why I chose this product
-  - Interview me about my onboarding experience
-  - Ask follow-up questions to understand my decision process
-  - Summarize this interview into structured insights
+  - text: Start an interview about why I chose this product
+  - text: Interview me about my onboarding experience
+  - text: Ask follow-up questions to understand my decision process
+  - text: Summarize this interview into structured insights
 
 # Welcome message
 welcome_message: >-

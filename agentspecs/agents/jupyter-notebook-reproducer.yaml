@@ -41,10 +41,10 @@ emoji: "🔁"
 color: "#0969DA"
 
 suggestions:
-  - Run this notebook on a clean kernel and tell me what breaks.
-  - Does this notebook still reproduce from top to bottom?
-  - Find the cells that only work because something ran earlier.
-  - What would someone else need to run this notebook tomorrow?
+  - text: Run this notebook on a clean kernel and tell me what breaks.
+  - text: Does this notebook still reproduce from top to bottom?
+  - text: Find the cells that only work because something ran earlier.
+  - text: What would someone else need to run this notebook tomorrow?
 
 welcome_message: >-
   Hi! I check whether a notebook still works for someone who is not you. I run

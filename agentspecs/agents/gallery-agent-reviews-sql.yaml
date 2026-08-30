@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/sql/query_workload.sql and perform a structured SQL review with lint findings, risk notes, and an improved query draft.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/sql/query_workload.sql and perform a structured SQL review with lint findings, risk notes, and an improved query draft.
 
 welcome_message: >-
   Hi! I can help with agent reviews sql. Share data, files, or context

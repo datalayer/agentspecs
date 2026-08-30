@@ -47,10 +47,10 @@ color: "#10B981"  # Green
 
 # Chat suggestions to show users what this agent can do
 suggestions:
-  - Search the web for recent news about AI agents
-  - Find trending open-source Python projects on GitHub
-  - Research best practices for building RAG applications
-  - Compare popular JavaScript frameworks in 2024
+  - text: Search the web for recent news about AI agents
+  - text: Find trending open-source Python projects on GitHub
+  - text: Research best practices for building RAG applications
+  - text: Compare popular JavaScript frameworks in 2024
 
 # Welcome message shown when agent starts
 welcome_message: >

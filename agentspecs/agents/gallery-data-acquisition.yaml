@@ -50,10 +50,10 @@ color: "#3B82F6"  # Blue
 
 # Chat suggestions to show users what this agent can do
 suggestions:
-  - Find popular machine learning datasets on Kaggle
-  - Download and explore a dataset for sentiment analysis
-  - List available files in my workspace
-  - Search Kaggle for time series forecasting competitions
+  - text: Find popular machine learning datasets on Kaggle
+  - text: Download and explore a dataset for sentiment analysis
+  - text: List available files in my workspace
+  - text: Search Kaggle for time series forecasting competitions
 
 # Welcome message shown when agent starts
 welcome_message: >

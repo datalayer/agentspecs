@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/inventory/inventory_demand.csv to forecast near-term stock risk and recommend reorder priorities.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/inventory/inventory_demand.csv to forecast near-term stock risk and recommend reorder priorities.
 
 welcome_message: >-
   Hi! I can help with inventory demand planning. Share data, files, or context

@@ -33,15 +33,15 @@ emoji: "🧮"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Connect to Odoo and list unpaid customer invoices older than 30 days,
-    grouped by customer with totals and top delinquencies.
-  - >-
-    Compare posted payments against open invoices for this month and flag likely
-    reconciliation mismatches with proposed next checks.
-  - >-
-    Build a close summary with journal balance deltas versus last month and
-    highlight unusual movements.
+  - text: >-
+      Connect to Odoo and list unpaid customer invoices older than 30 days,
+      grouped by customer with totals and top delinquencies.
+  - text: >-
+      Compare posted payments against open invoices for this month and flag likely
+      reconciliation mismatches with proposed next checks.
+  - text: >-
+      Build a close summary with journal balance deltas versus last month and
+      highlight unusual movements.
 
 welcome_message: >-
   Hi! I am your Accountant agent for Odoo workflows. I can help reconcile

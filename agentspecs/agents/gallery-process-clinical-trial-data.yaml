@@ -150,11 +150,11 @@ notifications:
 
 # Chat suggestions
 suggestions:
-  - Process the latest data batch from Site 014
-  - Show adverse event summary for this trial
-  - Run SDTM validation on the current dataset
-  - Generate a safety signal report
-  - What sites have data quality issues?
+  - text: Process the latest data batch from Site 014
+  - text: Show adverse event summary for this trial
+  - text: Run SDTM validation on the current dataset
+  - text: Generate a safety signal report
+  - text: What sites have data quality issues?
 
 # Welcome message
 welcome_message: >

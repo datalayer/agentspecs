@@ -49,10 +49,10 @@ color: "#0EA5E9"
 
 # Chat suggestions to show users what this agent can do
 suggestions:
-  - Find precipitation datasets for West Africa from the last 10 years
-  - Build a monthly anomaly map for ERA5 temperature
-  - Compare two regions for drought indicators and summarize differences
-  - Generate an event log for each processing step
+  - text: Find precipitation datasets for West Africa from the last 10 years
+  - text: Build a monthly anomaly map for ERA5 temperature
+  - text: Compare two regions for drought indicators and summarize differences
+  - text: Generate an event log for each processing step
 
 # Welcome message shown when agent starts
 welcome_message: >

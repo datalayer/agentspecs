@@ -49,10 +49,10 @@ emoji: "🧰"
 color: "#0D9488"
 
 suggestions:
-  - List all your available skills and group them by source type
-  - Use datalayer-whoami to return my user identity context
-  - Use crawl to summarize https://datalayer.ai
-  - Use github to list public repositories for an account
+  - text: List all your available skills and group them by source type
+  - text: Use datalayer-whoami to return my user identity context
+  - text: Use crawl to summarize https://datalayer.ai
+  - text: Use github to list public repositories for an account
 
 welcome_message: >-
   Hi! I am the Skills Demo Agent. I can use built-in file skills and

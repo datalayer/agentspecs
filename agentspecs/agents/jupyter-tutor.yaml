@@ -61,12 +61,52 @@ icon: mortar-board
 emoji: "🎓"
 color: "#0969DA"
 
+# What to ask, for the two people who arrive here.
+#
+# Every one of them names the notebook, and that is the point rather than a
+# house style: this tutor teaches *in* the document the person already has
+# open, and an opener like "teach me loops" invites it to answer in the
+# abstract — which is the one thing it is not for. "Write me a loop in this
+# notebook" cannot be answered without looking at what is already there.
+#
+# Ordered for the beginner first. Somebody who has never written a loop is the
+# reader most likely to be stuck at an empty chat with nothing to type, and the
+# reader a list of expert questions turns away.
 suggestions:
-  - Explain what this cell does, line by line.
-  - Why did this raise a KeyError?
-  - I want to learn list comprehensions — start from the loop I just wrote.
-  - Give me an exercise on pandas groupby, using the data already in this notebook.
-  - Review my code and tell me what a Python developer would write differently.
+  # First, and the one the public page leans on.
+  #
+  # It asks for nothing and assumes nothing: a visitor who has just landed does
+  # not yet know what is in the notebook, and neither does the agent until it
+  # looks. Every other opener below asks for a particular thing; this one asks
+  # the agent to go and find out, which is the shortest path from "what is
+  # this?" to watching it work.
+  - text: Explore this notebook and tell me what you find.
+    icon: telescope
+    emoji: "🔭"
+  - text: Show me how to write a loop in Python, in a new cell in this notebook.
+    icon: rocket
+    emoji: "🚀"
+  - text: Explain what this notebook does, cell by cell, as if I am new to Python.
+    icon: book
+    emoji: "📖"
+  - text: Why did this cell raise an error? Walk me through what went wrong.
+    icon: bug
+    emoji: "🐛"
+  - text: Give me an exercise on pandas groupby, using the data already in this notebook.
+    icon: mortar-board
+    emoji: "🎓"
+  - text: I want to learn list comprehensions — start from the loop I just wrote.
+    icon: light-bulb
+    emoji: "💡"
+  - text: Review this notebook and tell me what an experienced Python developer would write differently.
+    icon: code-review
+    emoji: "🔍"
+  - text: Show me a faster, more idiomatic way to write the slowest cell in this notebook.
+    icon: zap
+    emoji: "⚡"
+  - text: What would break if this notebook ran on ten times the data? Point at the cells.
+    icon: graph
+    emoji: "📈"
 
 welcome_message: >-
   Hi! I am here to help you learn Python, using the notebook you already have

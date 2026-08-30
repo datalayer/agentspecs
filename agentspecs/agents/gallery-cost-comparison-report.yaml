@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/cost/cloud_costs.csv to produce a month-over-month cost comparison report with major cost drivers.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/cost/cloud_costs.csv to produce a month-over-month cost comparison report with major cost drivers.
 
 welcome_message: >-
   Hi! I can help with cost comparison report. Share data, files, or context

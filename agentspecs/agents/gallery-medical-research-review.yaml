@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/medical/clinical_trials.csv to summarize trial outcomes, safety trade-offs, and key evidence caveats.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/medical/clinical_trials.csv to summarize trial outcomes, safety trade-offs, and key evidence caveats.
 
 welcome_message: >-
   Hi! I can help with medical research review. Share data, files, or context

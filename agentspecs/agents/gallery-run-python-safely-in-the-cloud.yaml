@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/notebooks/experiment_metrics.csv and execute Python in a controlled runtime with clear safety and output notes.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/notebooks/experiment_metrics.csv and execute Python in a controlled runtime with clear safety and output notes.
 
 welcome_message: >-
   Hi! I can help with run python safely in the cloud. Share data, files, or context

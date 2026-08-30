@@ -166,11 +166,11 @@ notifications:
 
 # Chat suggestions
 suggestions:
-  - Show competitor price movements in the last 24 hours
-  - Which SKUs have the highest price elasticity?
-  - Generate pricing recommendations for the electronics category
-  - Forecast demand for top 100 SKUs next week
-  - What's the projected revenue impact of current recommendations?
+  - text: Show competitor price movements in the last 24 hours
+  - text: Which SKUs have the highest price elasticity?
+  - text: Generate pricing recommendations for the electronics category
+  - text: Forecast demand for top 100 SKUs next week
+  - text: What's the projected revenue impact of current recommendations?
 
 # Welcome message
 welcome_message: >

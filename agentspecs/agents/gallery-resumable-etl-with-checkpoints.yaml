@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/etl/source_orders.csv to build a resumable ETL flow with explicit checkpoint states.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/etl/source_orders.csv to build a resumable ETL flow with explicit checkpoint states.
 
 welcome_message: >-
   Hi! I can help with resumable etl with checkpoints. Share data, files, or context

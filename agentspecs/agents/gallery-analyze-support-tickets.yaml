@@ -124,10 +124,10 @@ notifications:
 
 # Chat suggestions
 suggestions:
-  - Show me the latest ticket triage summary
-  - What are the top recurring issues this week?
-  - List all P1 tickets from today
-  - Generate a pattern analysis report
+  - text: Show me the latest ticket triage summary
+  - text: What are the top recurring issues this week?
+  - text: List all P1 tickets from today
+  - text: Generate a pattern analysis report
 
 # Welcome message
 welcome_message: >

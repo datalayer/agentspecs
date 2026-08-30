@@ -33,12 +33,12 @@ emoji: "🪝"
 color: "#0E7490"
 
 suggestions:
-  - "Read the pre-hook marker file at /tmp/agent_runtimes_pre_hook_demo.txt using execute_code."
-  - "Print the hook_ran_at and hook_name variables that the pre-hook set in the sandbox."
-  - "Run execute_code to verify that the 'rich' package was installed by the pre-hook."
-  - "Show me all variables that the pre-hook defined in the sandbox namespace."
-  - "Call runtime_sensitive_echo with reason 'audit' to trigger per-tool authorization hooks."
-  - "Use execute_code to read /tmp/agent_runtimes_tool_approvals_audit.jsonl and summarize the latest authorization + execution entries."
+  - text: "Read the pre-hook marker file at /tmp/agent_runtimes_pre_hook_demo.txt using execute_code."
+  - text: "Print the hook_ran_at and hook_name variables that the pre-hook set in the sandbox."
+  - text: "Run execute_code to verify that the 'rich' package was installed by the pre-hook."
+  - text: "Show me all variables that the pre-hook defined in the sandbox namespace."
+  - text: "Call runtime_sensitive_echo with reason 'audit' to trigger per-tool authorization hooks."
+  - text: "Use execute_code to read /tmp/agent_runtimes_tool_approvals_audit.jsonl and summarize the latest authorization + execution entries."
 
 welcome_message: >
   I ran a pre-hook before starting up. It installed the 'rich' package, wrote a

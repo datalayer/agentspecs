@@ -85,11 +85,25 @@ routing_instructions: >-
 # The supervisor answers first, so these are what the *team* can be asked, not
 # what any one member does: a person who has just opened the workspace does not
 # yet know there are two agents behind it, and should not have to.
+# The team's front door, where the supervisor answers.
+#
+# Both members are represented: three that reach the tutor and one that reaches
+# the compactor, so a reader can see from the openers alone that this team does
+# two different things. Each names the notebook, because both members work in
+# the one the person already has open.
 suggestions:
-  - Explain what this notebook does, cell by cell
-  - Teach me something about the code in this notebook
-  - Add a cell that plots the data as a bar chart
-  - Shorten this notebook without changing what it computes
+  - text: Show me how to write a loop in Python, in a new cell in this notebook.
+    icon: rocket
+    emoji: "🚀"
+  - text: Explain what this notebook does, cell by cell, as if I am new to Python.
+    icon: book
+    emoji: "📖"
+  - text: Add a cell to this notebook that plots the data as a bar chart.
+    icon: graph
+    emoji: "📊"
+  - text: Shorten this notebook without changing what it computes.
+    icon: fold
+    emoji: "✂️"
 
 # Members may reach their own subagents, but not each other: the Tutor handing
 # work to the Compactor would edit a notebook the learner is working in, which

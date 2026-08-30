@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use the PDF set in /home/jovyan/datasets/datalayer-nfs/placeholder to extract quarterly KPI candidates and return them in a structured table.
+  - text: >-
+      Use the PDF set in /home/jovyan/datasets/datalayer-nfs/placeholder to extract quarterly KPI candidates and return them in a structured table.
 
 welcome_message: >-
   Hi! I can help with extract kpis from quarterly pdf. Share data, files, or context

@@ -54,10 +54,10 @@ color: "#6366F1"
 
 # Chat suggestions covering a comprehensive, real A2UI scenario.
 suggestions:
-  - Build a support ticket intake form with category, priority and a description.
-  - Create a trip booking form with destination, dates, travelers and budget.
-  - Generate a customer feedback survey with a rating slider and comments.
-  - Make a product configurator for a laptop with CPU, RAM and add-ons.
+  - text: Build a support ticket intake form with category, priority and a description.
+  - text: Create a trip booking form with destination, dates, travelers and budget.
+  - text: Generate a customer feedback survey with a rating slider and comments.
+  - text: Make a product configurator for a laptop with CPU, RAM and add-ons.
 
 welcome_message: >
   Hi! I turn requests into interactive A2UI surfaces. Ask me to build a form,

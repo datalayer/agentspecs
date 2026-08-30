@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/quality/dirty_customers.csv and coordinate multiple agents to deduplicate and clean the dataset.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/quality/dirty_customers.csv and coordinate multiple agents to deduplicate and clean the dataset.
 
 welcome_message: >-
   Hi! I can help with multi-agent data cleaning. Share data, files, or context

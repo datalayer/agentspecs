@@ -148,10 +148,10 @@ notifications:
 
 # Chat suggestions
 suggestions:
-  - Generate this week's executive report
-  - Show marketing KPIs for the last 7 days
-  - Compare this week's sales to last week
-  - What were the top operational issues this week?
+  - text: Generate this week's executive report
+  - text: Show marketing KPIs for the last 7 days
+  - text: Compare this week's sales to last week
+  - text: What were the top operational issues this week?
 
 # Welcome message
 welcome_message: >

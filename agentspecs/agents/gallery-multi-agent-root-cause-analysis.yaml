@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/ops/incidents.csv to run multi-agent root-cause analysis and produce a ranked remediation plan.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/ops/incidents.csv to run multi-agent root-cause analysis and produce a ranked remediation plan.
 
 welcome_message: >-
   Hi! I can help with multi-agent root cause analysis. Share data, files, or context

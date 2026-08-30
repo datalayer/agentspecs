@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/sales/sales_pipeline.csv to generate a board-ready pipeline report with stage health and key risks.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/sales/sales_pipeline.csv to generate a board-ready pipeline report with stage health and key risks.
 
 welcome_message: >-
   Hi! I can help with sales pipeline board report. Share data, files, or context

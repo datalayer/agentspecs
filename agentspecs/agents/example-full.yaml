@@ -66,14 +66,14 @@ color: "#6366F1"  # Indigo
 
 # Chat suggestions
 suggestions:
-  - list your tools
-  - "Search the web for the latest news on AI agents using Tavily."
-  - "List my public GitHub repositories and summarize the most active ones."
-  - "Echo with text 'hello' and reason 'audit', then share the result."
-  - "Echo 'hello world' and share the result in a short sentence."
-  - "Call the runtime_sensitive_echo tool with text 'hello' and reason 'audit', then reply with the tool result."
-  - "Call the runtime_echo tool with text 'hello world', then reply with the tool result."
-  - "Tell me a joke using your skills."
+  - text: list your tools
+  - text: "Search the web for the latest news on AI agents using Tavily."
+  - text: "List my public GitHub repositories and summarize the most active ones."
+  - text: "Echo with text 'hello' and reason 'audit', then share the result."
+  - text: "Echo 'hello world' and share the result in a short sentence."
+  - text: "Call the runtime_sensitive_echo tool with text 'hello' and reason 'audit', then reply with the tool result."
+  - text: "Call the runtime_echo tool with text 'hello world', then reply with the tool result."
+  - text: "Tell me a joke using your skills."
 
 # Welcome message
 welcome_message: >

@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Load PDFs from /home/jovyan/datasets/datalayer-nfs/placeholder, answer three cross-document questions, and cite which file supports each answer.
+  - text: >-
+      Load PDFs from /home/jovyan/datasets/datalayer-nfs/placeholder, answer three cross-document questions, and cite which file supports each answer.
 
 welcome_message: >-
   Hi! I can help with document q&a. Share data, files, or context

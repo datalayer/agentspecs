@@ -40,9 +40,9 @@ emoji: "🧠"
 color: "#2563EB"
 
 suggestions:
-  - Compare local and datalayer inference providers for latency and routing.
-  - Explain where model responses are generated for this current provider.
-  - Summarize the tradeoffs of switching providers for this agent.
+  - text: Compare local and datalayer inference providers for latency and routing.
+  - text: Explain where model responses are generated for this current provider.
+  - text: Summarize the tradeoffs of switching providers for this agent.
 
 welcome_message: >-
   Inference provider demo ready. Switch between local and datalayer providers,

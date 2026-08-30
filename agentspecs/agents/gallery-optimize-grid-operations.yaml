@@ -141,11 +141,11 @@ notifications:
 
 # Chat suggestions
 suggestions:
-  - Show current grid health across all substations
-  - Which assets have anomaly alerts right now?
-  - Predict failures for the next 4 weeks
-  - Optimise load balancing for tomorrow's forecast
-  - Generate a maintenance schedule for flagged assets
+  - text: Show current grid health across all substations
+  - text: Which assets have anomaly alerts right now?
+  - text: Predict failures for the next 4 weeks
+  - text: Optimise load balancing for tomorrow's forecast
+  - text: Generate a maintenance schedule for flagged assets
 
 # Welcome message
 welcome_message: >

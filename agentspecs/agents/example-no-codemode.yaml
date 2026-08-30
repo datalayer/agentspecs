@@ -43,9 +43,9 @@ emoji: "🌐"
 color: "#0969DA"
 
 suggestions:
-  - Search for the latest updates about Datalayer
-  - Extract key points from the top result
-  - Summarize recent AI agent tooling trends
+  - text: Search for the latest updates about Datalayer
+  - text: Extract key points from the top result
+  - text: Summarize recent AI agent tooling trends
 
 welcome_message: >-
   Tavily MCP no-codemode agent ready. I use MCP tools directly.

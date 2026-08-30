@@ -32,8 +32,8 @@ emoji: "📊"
 color: "#1F883D"
 
 suggestions:
-  - >-
-    Use /home/jovyan/datasets/datalayer-nfs/quality/data_quality_checks.csv to define nightly quality checks and return a failure triage summary.
+  - text: >-
+      Use /home/jovyan/datasets/datalayer-nfs/quality/data_quality_checks.csv to define nightly quality checks and return a failure triage summary.
 
 welcome_message: >-
   Hi! I can help with scheduled nightly data quality checks. Share data, files, or context
