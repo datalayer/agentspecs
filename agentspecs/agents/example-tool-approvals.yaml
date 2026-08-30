@@ -4,7 +4,8 @@ name: Example Tool Approvals
 description: >
   Demonstrates per-tool approval hooks with policy requests and decision/audit
   logging.
-icon: pi pi-shield
+# A PrimeIcons class name had leaked in here; the catalogue names octicons.
+icon: shield
 emoji: "✅"
 tags:
   - compliance

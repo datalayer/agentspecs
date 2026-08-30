@@ -9,6 +9,7 @@ name: Bedrock Claude Opus 4.6
 description: Claude Opus 4.6 via AWS Bedrock
 provider: bedrock
 default: false
+available: true
 tokens_limit: 32000
 
 required_env_vars:

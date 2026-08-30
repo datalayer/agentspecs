@@ -24,6 +24,10 @@ class AIModel(BaseModel):
     description: str = Field(default="", description="Model description")
     provider: str = Field(..., description="Provider name (anthropic, openai, bedrock, azure-openai)")
     default: bool = Field(default=False, description="Whether this is the default model")
+    available: bool = Field(
+        default=False,
+        description="Whether this model is offered to a person choosing one. The catalogue is what the platform knows how to talk to; this is what it is worth offering today. Without the distinction a picker lists twenty-six models, most of them superseded, and the choice becomes a chore rather than a help.",
+    )
     required_env_vars: List[str] = Field(default_factory=list, description="Required environment variable names")
     tokens_limit: Optional[int] = Field(default=None, description="Maximum output tokens the model can generate in a single run")
 

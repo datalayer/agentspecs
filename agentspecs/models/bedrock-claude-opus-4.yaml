@@ -9,6 +9,7 @@ name: Bedrock Claude Opus 4
 description: Claude Opus 4 via AWS Bedrock - highest capability
 provider: bedrock
 default: false
+available: false
 tokens_limit: 32000
 
 required_env_vars:

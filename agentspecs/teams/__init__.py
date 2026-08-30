@@ -355,6 +355,16 @@ class TeamSpec(BaseModel):
         description="Who decides what happens next. Every team has one.",
     )
     routing_instructions: str = Field(default="")
+    suggestions: List[str] = Field(
+        default_factory=list,
+        description=(
+            "Openers shown in an empty chat, so a person arriving at a team "
+            "sees what it can be asked rather than an empty box. At the team "
+            "level because they describe the team's front door: the "
+            "supervisor answers first, and what it is worth asking is a "
+            "property of the whole team rather than of any one member."
+        ),
+    )
     delegation: TeamDelegation = Field(default_factory=TeamDelegation)
     validation: Optional[TeamValidation] = Field(default=None)
 

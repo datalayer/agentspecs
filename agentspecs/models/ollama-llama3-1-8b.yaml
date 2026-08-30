@@ -9,6 +9,7 @@ name: Llama 3.1 8B (Ollama)
 description: Meta Llama 3.1 8B running locally through Ollama - tool calling, no data leaves the machine
 provider: ollama
 default: false
+available: false
 tokens_limit: 4096
 
 # Runs on the user's own machine: no API key, and selecting it moves execution

@@ -9,6 +9,7 @@ name: OpenAI o3 Mini
 description: o3 Mini by OpenAI - reasoning-focused compact model
 provider: openai
 default: false
+available: false
 tokens_limit: 100000
 
 required_env_vars:

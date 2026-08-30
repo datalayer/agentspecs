@@ -9,6 +9,7 @@ name: Qwen2.5 Coder 7B (Ollama)
 description: Qwen2.5 Coder 7B running locally through Ollama - code-focused with tool calling
 provider: ollama
 default: false
+available: false
 tokens_limit: 4096
 
 # Runs on the user's own machine: no API key, and selecting it moves execution

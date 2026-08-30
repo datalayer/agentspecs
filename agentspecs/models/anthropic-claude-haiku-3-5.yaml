@@ -9,6 +9,7 @@ name: Anthropic Claude Haiku 3.5
 description: Claude Haiku 3.5 by Anthropic - fast and efficient
 provider: anthropic
 default: false
+available: false
 tokens_limit: 8192
 
 required_env_vars:

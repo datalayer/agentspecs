@@ -13,7 +13,15 @@ tags:
   - debugging
   - productivity
 
-enabled: true
+# Not offered on its own.
+#
+# It is a specialist the Compactor reaches when compaction turns up a cell that
+# was already broken — repairing one is not a task somebody comes to the
+# gallery to start, and listing it beside the Tutor and the Compactor invites a
+# choice with no good answer. `enabled: false` takes it out of the catalogue
+# listings; the Compactor still names it as a subagent, and a subagent is
+# resolved from the catalogue by id rather than from what is offered.
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
 sandbox_variant: jupyter-server

@@ -9,6 +9,7 @@ name: OpenAI GPT-4o
 description: GPT-4o by OpenAI - fast multimodal model
 provider: openai
 default: false
+available: false
 tokens_limit: 16384
 
 required_env_vars:

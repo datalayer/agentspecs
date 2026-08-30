@@ -9,6 +9,7 @@ name: Gemma 3 4B (Ollama)
 description: Gemma 3 4B running locally through Ollama - small and fast, no tool calling
 provider: ollama
 default: false
+available: false
 tokens_limit: 4096
 
 # Runs on the user's own machine: no API key, and selecting it moves execution

@@ -9,6 +9,7 @@ name: Bedrock Claude Sonnet 4.6
 description: Claude Sonnet 4.6 via AWS Bedrock - balanced performance
 provider: bedrock
 default: true
+available: true
 tokens_limit: 64000
 
 required_env_vars:

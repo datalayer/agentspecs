@@ -56,7 +56,7 @@ execution_mode: supervisor
 # would end it at the natural moment for a *teacher* — the learner understood —
 # which is exactly when a requested compaction has not happened yet.
 supervisor:
-  name: Jupyter Tutor
+  name: Code Tutor
   ref: jupyter-tutor:0.0.1
   model: "bedrock:us.anthropic.claude-sonnet-4-6"
   goal: >-
@@ -79,6 +79,17 @@ routing_instructions: >-
 
   When neither fits, answer directly rather than forcing the request onto a
   specialist.
+
+# What an empty chat offers, as the front door's own words.
+#
+# The supervisor answers first, so these are what the *team* can be asked, not
+# what any one member does: a person who has just opened the workspace does not
+# yet know there are two agents behind it, and should not have to.
+suggestions:
+  - Explain what this notebook does, cell by cell
+  - Teach me something about the code in this notebook
+  - Add a cell that plots the data as a bar chart
+  - Shorten this notebook without changing what it computes
 
 # Members may reach their own subagents, but not each other: the Tutor handing
 # work to the Compactor would edit a notebook the learner is working in, which
@@ -111,7 +122,7 @@ validation:
 agents:
   - id: tutor
     ref: jupyter-tutor:0.0.1
-    name: Jupyter Tutor
+    name: Code Tutor
     role: initiator
     goal: >-
       Teach the person Python in the notebook they have open — what their code

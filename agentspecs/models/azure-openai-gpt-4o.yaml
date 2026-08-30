@@ -9,6 +9,7 @@ name: Azure OpenAI GPT-4o
 description: GPT-4o via Azure OpenAI - enterprise deployment
 provider: azure-openai
 default: false
+available: false
 tokens_limit: 16384
 
 required_env_vars:
