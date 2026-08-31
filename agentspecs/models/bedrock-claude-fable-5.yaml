@@ -9,7 +9,11 @@ name: Bedrock Claude Fable 5
 description: Claude Fable 5 via AWS Bedrock
 provider: bedrock
 default: false
-available: true
+# Switched off: the AWS account backing this deployment is not entitled to it.
+# Bedrock answers `AccessDeniedException` (403) — "is not available for this
+# account" — so offering it in a model menu is offering a request that can only
+# fail. Flip back to `true` once the entitlement is granted.
+available: false
 tokens_limit: 64000
 
 required_env_vars:

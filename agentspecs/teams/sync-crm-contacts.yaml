@@ -25,7 +25,7 @@ orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:
   name: CRM Orchestrator Agent
-  model: anthropic-claude-opus-4
+  model: bedrock:us.anthropic.claude-sonnet-4-6
 routing_instructions: 'Route data collection tasks to the Data Collector first, then analysis, then sync,
   then reporting. Escalate to human if sync fails 3 times.
 
@@ -50,7 +50,7 @@ agents:
   name: Analyzer Agent
   role: contributor
   goal: Analyze collected data and identify patterns and duplicates
-  model: anthropic-claude-opus-4
+  model: bedrock:us.anthropic.claude-sonnet-4-6
   mcp_server: Analytics MCP
   tools:
   - Statistical Analysis

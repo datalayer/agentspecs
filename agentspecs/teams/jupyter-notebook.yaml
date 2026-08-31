@@ -58,7 +58,7 @@ execution_mode: supervisor
 supervisor:
   name: Code Tutor
   ref: jupyter-tutor:0.0.1
-  model: "bedrock:us.anthropic.claude-opus-4-8"
+  model: "bedrock:us.anthropic.claude-sonnet-4-6"
   goal: >-
     Keep the person learning. Answer what was asked, and hand the notebook to
     the Compactor only when they have asked for it and understood what it will

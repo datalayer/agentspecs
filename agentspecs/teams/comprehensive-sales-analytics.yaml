@@ -29,7 +29,7 @@ orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:
   name: Sales Analytics Supervisor
-  model: anthropic-claude-opus-4
+  model: bedrock:us.anthropic.claude-sonnet-4-6
 routing_instructions: 'Route data collection to KPI Collector first, then pass raw metrics to Anomaly
   Detector and Trend Analyzer in parallel, then aggregate all outputs into the Report Generator. Escalate
   if anomalies exceed the critical threshold (>25% deviation from target).

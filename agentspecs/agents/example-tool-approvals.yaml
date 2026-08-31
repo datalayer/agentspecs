@@ -11,7 +11,7 @@ tags:
   - compliance
   - human-approval
   - audit
-model: "bedrock:us.anthropic.claude-opus-4-8"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
 tools:
   - runtime-sensitive-echo:0.0.1
