@@ -22,7 +22,7 @@ tags:
 # listings; the Compactor still names it as a subagent, and a subagent is
 # resolved from the catalogue by id rather than from what is offered.
 enabled: false
-model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model: "bedrock:us.anthropic.claude-opus-4-8"
 harness: pydantic-ai
 sandbox_variant: jupyter-server
 memory: ephemeral

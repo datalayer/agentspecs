@@ -14,7 +14,7 @@ tags:
   - analysis
 
 enabled: true
-model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model: "bedrock:us.anthropic.claude-opus-4-8"
 harness: pydantic-ai
 inference_provider: local
 

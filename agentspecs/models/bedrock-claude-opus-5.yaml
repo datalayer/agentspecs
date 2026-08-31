@@ -1,0 +1,25 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Bedrock Claude Opus 5
+#
+# The id is the short form every model in this catalogue uses —
+# `bedrock:us.anthropic.claude-<family>-<version>` — rather than the dated,
+# versioned identifier AWS publishes. That is deliberate and load-bearing: the
+# inference service normalises this prefix for LiteLLM, so one spec runs
+# unchanged on either harness, and a dated id would pin every spec to a
+# snapshot that has to be edited when the snapshot moves.
+
+id: "bedrock:us.anthropic.claude-opus-5"
+version: 0.0.1
+name: Bedrock Claude Opus 5
+description: Claude Opus 5 via AWS Bedrock - the current frontier model
+provider: bedrock
+default: false
+available: true
+tokens_limit: 32000
+
+required_env_vars:
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - AWS_DEFAULT_REGION
