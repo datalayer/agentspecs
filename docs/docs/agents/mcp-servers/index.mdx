@@ -150,16 +150,40 @@ MCP Server Specification
 
 ## Available MCP Servers
 
-The following MCP servers are defined in `agentspecs/mcp-servers/`:
+The following MCP servers are defined in `agentspecs/mcp-servers/`, one
+specification file each, and launched from `MCP_SERVER_CATALOG`. A test holds
+the two together with this list, because it named eight while thirteen
+existed — five servers invisible to anybody reading this page to find out
+what was available.
 
-- **`tavily`** - Web search via Tavily API
+- **`alphavantage`** - Financial market data
+- **`chart`** - Chart generation
+- **`datalayer`** - Notebooks, sandboxes and data on Datalayer itself
+- **`earthdata`** - NASA Earthdata search and access
+- **`eurus`** - Climate and reanalysis analysis
 - **`filesystem`** - Local filesystem operations
 - **`github`** - GitHub repository operations
 - **`google-workspace`** - Google Workspace integration
-- **`slack`** - Slack messaging
+- **`huggingface`** - Models, datasets, spaces and papers
 - **`kaggle`** - Kaggle datasets and competitions
-- **`alphavantage`** - Financial market data
-- **`chart`** - Chart generation
+- **`odoo`** - Odoo ERP records
+- **`salesforce`** - Salesforce records
+- **`slack`** - Slack messaging
+- **`tavily`** - Web search via Tavily API
+
+### The Datalayer server is off by default
+
+Every other server here reaches something *outside* Datalayer. `datalayer`
+reaches this platform, and an agent running in a Datalayer sandbox already
+has the notebook it was given — enabling it says "this agent should also act
+on my other notebooks", which is a choice somebody makes rather than a
+default they discover.
+
+It is reached through `mcp-remote` with a bearer token from
+`DATALAYER_API_KEY`, not through the OAuth flow. `mcp-remote` can do OAuth
+2.1 with PKCE, which is right for a person at a desktop client and wrong
+here: it opens a browser and waits for a consent screen to be approved. An
+agent runtime has nobody at the keyboard.
 
 ## Best Practices
 

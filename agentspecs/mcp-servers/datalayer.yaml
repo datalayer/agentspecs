@@ -1,0 +1,51 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# MCP Server Specification: Datalayer
+# The hosted Datalayer MCP server: notebooks, code execution and data,
+# on the platform this catalogue is part of.
+
+id: datalayer
+version: 0.0.1
+name: Datalayer
+description: Read, edit and run Jupyter notebooks on Datalayer, with sandboxes and data
+
+# A hosted server, reached through `mcp-remote`: the runtime speaks stdio to
+# a bridge that speaks streamable HTTP to https://mcp.datalayer.run.
+#
+# The header rather than the OAuth flow, and deliberately. `mcp-remote` can
+# do OAuth 2.1 with PKCE, which is right for a person at a desktop client and
+# wrong here: it opens a browser and waits for somebody to approve a consent
+# screen. An agent runtime has nobody at the keyboard, so it presents a
+# credential it already holds — the same token the Datalayer CLI and SDK use.
+command: npx
+args:
+  - "-y"
+  - "mcp-remote"
+  - "https://mcp.datalayer.run/mcp"
+  - "--header"
+  - "Authorization: Bearer ${DATALAYER_API_KEY}"
+
+transport: stdio
+
+# Not on by default. Every other server here reaches something outside
+# Datalayer; this one reaches *this* platform, and an agent running inside a
+# Datalayer sandbox already has the notebook it was given. Enabling it is
+# saying "this agent should also act on my other notebooks", which is a
+# choice somebody makes rather than a default they discover.
+enabled: false
+
+envvars:
+  - DATALAYER_API_KEY:0.0.1
+
+env: {}
+
+tags:
+  - notebooks
+  - jupyter
+  - datalayer
+  - sandboxes
+  - data
+
+icon: notebook
+emoji: 🚀
