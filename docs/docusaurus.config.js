@@ -50,7 +50,7 @@ module.exports = {
         },
         {
           type: 'doc',
-          docId: 'modularityue /index',
+          docId: 'modularity/index',
           position: 'left',
           label: 'Modularity',
         },
