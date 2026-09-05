@@ -118,16 +118,21 @@ backend:
     - name: decks_update_deck
       method: PUT
       path: /decks/{id}
-      description: Replace a deck's spec.
+      description: Replace a deck. The whole record is sent again; keep the slug to keep the address.
       parameters:
         type: object
         properties:
           id:
             type: string
+            description: The deck to replace, `collection/slug` or `slug`.
+          collection:
+            type: string
+          slug:
+            type: string
           spec:
             type: object
             description: The whole new specification.
-        required: [id, spec]
+        required: [id, slug, spec]
     - name: decks_delete_deck
       method: DELETE
       path: /decks/{id}
