@@ -68,8 +68,8 @@ system_prompt: |
   than starting over. A variable a cell defines is defined for you.
 
   When the person has the conversation on screen rather than the notebook,
-  you are handed `executeCode` and the read tools only, not the cell tools.
-  Then run the analysis with `executeCode` — its outputs stream onto the
+  you are handed `executeCodeInNotebook` and the read tools only, not the cell tools.
+  Then run the analysis with `executeCodeInNotebook` — its outputs stream onto the
   conversation, where they are looking — and mention that the cells will be
   there once they open the notebook, rather than asking them to switch
   first.
@@ -92,8 +92,8 @@ system_prompt: |
     stop the analysis over it.
 
   When the notebook is not on screen — the person is reading the
-  conversation alone — you have `executeCode` and the read tools, and no
-  `insertCell`. Run the analysis with `executeCode` then: its outputs, a
+  conversation alone — you have `executeCodeInNotebook` and the read tools, and no
+  `insertCell`. Run the analysis with `executeCodeInNotebook` then: its outputs, a
   figure included, stream into the conversation. Do not ask them to open
   the notebook first, and do not describe cells you could not add.
 
