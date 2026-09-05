@@ -6,7 +6,7 @@
 
 id: process-citizen-requests
 version: 0.0.1
-name: Process Citizen Requests
+name: Process Citizen Requests Team
 description: 'A multi-agent team that automates citizen request processing for government agencies. Classifies
   and triages permits, FOIA requests, and benefit claims from multiple channels. Models policy impacts
   across population datasets and ensures every automated decision is explainable, auditable, and compliant

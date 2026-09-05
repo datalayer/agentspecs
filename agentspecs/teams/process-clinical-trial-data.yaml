@@ -6,7 +6,7 @@
 
 id: process-clinical-trial-data
 version: 0.0.1
-name: Process Clinical Trial Data
+name: Process Clinical Trial Data Team
 description: 'A multi-agent team that automates clinical trial data processing across dozens of trial
   sites. Harmonises patient records and lab results to CDISC SDTM format, detects safety signals and adverse
   events in real time, and prepares submission-ready datasets — all with strict HIPAA and GxP compliance

@@ -6,7 +6,7 @@
 
 id: sync-crm-contacts
 version: 0.0.1
-name: Sync CRM Contacts
+name: Sync CRM Contacts Team
 description: 'A multi-agent team that collects and aggregates contact data from multiple CRM sources,
   analyzes and deduplicates records, writes cleaned data back, and generates sync summary reports.
 

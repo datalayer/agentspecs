@@ -3,11 +3,11 @@
 
 id: jupyter-notebook-reproducer
 version: 0.0.1
-name: Notebook Reproducer
+name: Jupyter Notebook Reproducer
 description: >-
-  Run a notebook top to bottom on a fresh sandbox and report exactly what does
-  not reproduce — hidden state, order dependence, missing data, unpinned
-  dependencies.
+  Runs the notebook you have open top to bottom on a fresh sandbox and reports
+  exactly what does not reproduce — hidden state, order dependence, missing
+  data, unpinned dependencies.
 
 tags:
   - notebook

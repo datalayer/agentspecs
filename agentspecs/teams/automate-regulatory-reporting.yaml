@@ -6,7 +6,7 @@
 
 id: automate-regulatory-reporting
 version: 0.0.1
-name: Automate Regulatory Reporting
+name: Automate Regulatory Reporting Team
 description: 'A multi-agent team that automates end-to-end regulatory reporting for financial institutions.
   Ingests data from trading systems, risk engines, and accounting platforms, reconciles positions, computes
   risk metrics, validates against regulatory rules (Basel III/IV, MiFID II, SOX), and generates submission-ready

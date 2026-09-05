@@ -3,10 +3,11 @@
 
 id: jupyter-cell-fixer
 version: 0.0.1
-name: Cell Fixer
+name: Jupyter Cell Fixer
 description: >-
-  Take a failing cell and its traceback, propose a fix, and run it to prove the
-  fix works — never rewriting a reader's cell without showing the change first.
+  Fixes a failing cell in the notebook you have open — takes the cell and its
+  traceback, proposes a fix, and runs it to prove the fix works, never
+  rewriting your cell without showing the change first.
 
 tags:
   - notebook

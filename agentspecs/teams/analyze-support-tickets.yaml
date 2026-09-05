@@ -6,7 +6,7 @@
 
 id: analyze-support-tickets
 version: 0.0.1
-name: Analyze Support Tickets
+name: Analyze Support Tickets Team
 description: 'A multi-agent team that triages incoming support tickets, categorizes by urgency and topic,
   identifies recurring patterns, and generates resolution recommendations with escalation paths.
 

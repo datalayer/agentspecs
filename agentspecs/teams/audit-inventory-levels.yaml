@@ -6,7 +6,7 @@
 
 id: audit-inventory-levels
 version: 0.0.1
-name: Audit Inventory Levels
+name: Audit Inventory Levels Team
 description: 'A multi-agent team that monitors inventory levels across warehouses, detects discrepancies
   between physical and system counts, forecasts demand by SKU, and generates automated reorder recommendations.
 

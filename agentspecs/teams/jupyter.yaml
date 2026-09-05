@@ -1,32 +1,46 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# The Jupyter Notebook team.
+# The Jupyter team: the agents that work in the notebook a person has open.
 #
-# The first team written against the agent catalogue rather than beside it.
+# One team, not two. It began as two — a Tutor and a Compactor for a learner,
+# then an Analyst, a Reviewer and a Writer for a shared analysis — and the
+# two said the same things about themselves: every member is a `ref` into
+# `agents/`, all of them run in the browser, all of them read one shared
+# transcript, and a supervisor routes between them because the members do not
+# run in a line. What differed was the roster, and a roster is not a reason
+# for a second team. So: six members, one front door.
+#
 # Every member is a `ref` into `agents/`, so the model, tools, prompt and
 # subagents come from the one place they are defined — change
 # `jupyter-notebook-compactor` and this team changes with it, which was not
 # true of a team that restated a name, a model and a list of tool labels
 # inline.
 #
-# It is also the first team whose members do not run in a line. The tutor and
-# the compactor answer different requests and neither waits for the other, so
-# the mode is `supervisor`: the tutor reads what was asked and hands it to
-# whichever member it is for. `depends_on` stays empty for both, and that is a
-# statement — these two are independent, and a runtime is free to say so.
+# Supervisor mode, because nothing here is a pipeline. A request is an
+# analysis, a check on one, a write-up of one, slides about one, a question
+# about the code, or a request to tidy it, and the supervisor decides which.
+# `depends_on` stays empty for every member, and that is a statement — they
+# are independent, and a runtime is free to say so.
 
-id: jupyter-notebook
+id: jupyter
 version: 0.0.1
-name: Jupyter Notebook
+name: Jupyter Team
 description: >-
-  A team for working in a notebook: one member teaches the person Python in the
-  notebook they have open, the other rewrites that notebook as short as it can
-  be without changing what it computes.
+  Six agents working in the same Jupyter notebook: the Analyst adds and runs
+  the cells, the Reviewer checks them and records what it finds, the Writer
+  writes the result up between them, Decks turns what they found into a
+  presentation, the Tutor teaches the person Python in the cells they have,
+  and the Compactor rewrites the notebook as short as it can be without
+  changing what it computes.
 
 tags:
   - notebook
   - jupyter
+  - collaboration
+  - analysis
+  - review
+  - presentations
   - teaching
   - refactoring
 
@@ -36,95 +50,103 @@ emoji: "📓"
 color: "#F37726"
 
 orchestration_protocol: datalayer
-
-# Not sequential: nothing here is a pipeline. A request is either a question
-# about the code or a request to tidy it, and the supervisor decides which.
 execution_mode: supervisor
 
-# The tutor supervises, and that is the design rather than a convenience.
+# The Analyst supervises, and that is the design rather than a convenience.
 #
-# It is the member that talks to the person: it reads the notebook, hears the
-# question and already has to judge whether the answer is an explanation or a
-# change. Handing that judgement to a separate coordinator would put a second
-# agent between the learner and the one teaching them, and give it less to go
-# on than the tutor already has.
+# It is the member that already has to read the notebook to answer anything,
+# so it is the one best placed to judge what a request is — an analysis, a
+# check, a write-up, slides, a lesson, a tidy — and hand it on. Handing that
+# judgement to a separate coordinator would put a second agent between the
+# person and the one working for them, with less to go on. It appears below
+# as a member too: a supervisor that also does work is not a contradiction —
+# it is the front door, and here the front door analyses.
 #
-# It appears below as a member too. A supervisor that also does work is not a
-# contradiction — it is the front door, and here the front door teaches.
-#
-# `can_terminate: false` is the important line. A tutor that could end the run
-# would end it at the natural moment for a *teacher* — the learner understood —
-# which is exactly when a requested compaction has not happened yet.
+# `can_terminate: false` is the important line. A front door that could end
+# the run would end it at the natural moment for *its* work — the analysis
+# done, the question answered — which is exactly when a requested write-up,
+# deck or compaction has not happened yet.
 supervisor:
-  name: Code Tutor
-  ref: jupyter-tutor:0.0.1
+  name: Jupyter Analyst
+  ref: jupyter-data-analyst:0.0.1
   model: "bedrock:us.anthropic.claude-sonnet-4-6"
   goal: >-
-    Keep the person learning. Answer what was asked, and hand the notebook to
-    the Compactor only when they have asked for it and understood what it will
-    change.
+    Keep the work in the notebook. Answer analysis requests directly; send a
+    request to check something to the Reviewer, a request to write something
+    up to the Writer, a request for slides to Decks, a question about the
+    code to the Tutor and a request to tidy the notebook to the Compactor —
+    and never leave results anywhere but the cells, or the deck made from
+    them.
   approval: auto
   can_terminate: false
 
 routing_instructions: >-
-  Send anything about understanding, learning or explaining — "what does this
-  do", "why did this fail", "teach me", a request for an exercise — to the
-  Tutor. Send anything about the shape of the notebook — shortening it, merging
-  cells, removing dead code or stale outputs — to the Compactor.
+  Send anything about exploring, computing, plotting or extending the
+  analysis — "analyze", "plot", "compute", "add a cell that…" — to the
+  Jupyter Analyst. Send anything about checking, verifying, doubting or
+  re-running — "find what is wrong", "check this", "is this right",
+  "re-run" — to Jupyter Reviewer. Send anything about explaining,
+  summarising, writing up or verifying the wording of a conclusion to
+  Jupyter Writer. Send anything about slides, a deck or a presentation —
+  "make a deck of this", "turn the findings into slides", "present this",
+  "add a slide" — to Jupyter Decks, which builds the deck from what the
+  cells show and opens it beside the conversation. Send anything about
+  understanding or learning — "what does this do", "why did this fail",
+  "teach me", a request for an exercise — to Jupyter Tutor. Send anything
+  about the shape of the notebook — shortening it, merging cells, removing
+  dead code or stale outputs — to Jupyter Compactor.
 
-  When a request is both ("clean this up and explain what you did"), the Tutor
-  goes first and explains, then the Compactor acts on what was agreed. Never
-  let the Compactor rewrite a notebook the person is still learning from
-  without saying what changed.
+  When a request is two of these, the one that produces cells goes first
+  and the one that reads them follows: the Analyst before the Writer or
+  Decks ("analyze this and write it up", "analyze this and make a deck"),
+  the Tutor before the Compactor ("clean this up and explain what you did").
+  Never let the Compactor rewrite a notebook the person is still learning
+  from without saying what changed. When none fits, answer directly rather
+  than forcing the request onto a specialist.
 
-  When neither fits, answer directly rather than forcing the request onto a
-  specialist.
-
-# What an empty chat offers, as the front door's own words.
-#
-# The supervisor answers first, so these are what the *team* can be asked, not
-# what any one member does: a person who has just opened the workspace does not
-# yet know there are two agents behind it, and should not have to.
-# The team's front door, where the supervisor answers.
-#
-# Both members are represented: three that reach the tutor and one that reaches
-# the compactor, so a reader can see from the openers alone that this team does
-# two different things. Each names the notebook, because both members work in
-# the one the person already has open.
+# What an empty chat offers, in the front door's own words: one opener per
+# member, in the order the work usually goes. A person who has just opened
+# the workspace does not yet know there are six agents behind it, and should
+# not have to; each opener is a whole request in the words somebody would
+# type, and each names the notebook, because every member works in the one
+# the person already has open.
 suggestions:
-  - text: Show me how to write a loop in Python, in a new cell in this notebook.
-    icon: rocket
-    emoji: "🚀"
-  - text: Explain what this notebook does, cell by cell, as if I am new to Python.
+  - text: Analyze the dataset
+    icon: graph
+    emoji: "🔎"
+  - text: Find what is wrong
+    icon: checklist
+    emoji: "🧐"
+  - text: Verify the conclusion
+    icon: pencil
+    emoji: "✍️"
+  - text: Turn the findings into a deck
+    icon: project
+    emoji: "📊"
+  - text: Explain this notebook cell by cell, as if I am new to Python
     icon: book
     emoji: "📖"
-  - text: Add a cell to this notebook that plots the data as a bar chart.
-    icon: graph
-    emoji: "📊"
-  - text: Shorten this notebook without changing what it computes.
+  - text: Shorten this notebook without changing what it computes
     icon: fold
     emoji: "✂️"
 
-# Members may reach their own subagents, but not each other: the Tutor handing
-# work to the Compactor would edit a notebook the learner is working in, which
-# is the one thing the Tutor exists not to do. Routing between them is the
-# supervisor's job, where a person can see it happen.
+# Members reach the person through the notebook, not each other: the Analyst
+# handing work straight to the Writer would produce a write-up of cells the
+# person has not seen yet, and the Tutor handing work to the Compactor would
+# edit a notebook the learner is working in, which is the one thing the Tutor
+# exists not to do. Routing is the supervisor's, where a person can see it
+# happen. Members may still reach their own subagents.
 delegation:
   max_depth: 2
   allow_peer_delegation: false
   include_general_purpose: false
 
-# One thread, and both members read all of it.
-#
-# The alternative — a transcript each — would mean the Compactor rewriting a
-# notebook without having seen the explanation the learner was just given, and
-# the Tutor teaching around changes it does not know happened. The supervisor
-# routes between them precisely because they are working on the same notebook
-# in the same conversation, and routing is guesswork if the member receiving
-# the work cannot see what was asked before.
-#
-# `isolated` is the right answer for a team whose members would mislead each
-# other more than they would help. This is not one of those.
+# One thread, read by all six. The Reviewer checking cells it did not see
+# asked for, the Writer summarising a review it never read, Decks making
+# slides of numbers it was not shown, the Compactor rewriting a notebook
+# without the explanation the learner was just given: each is the handoff
+# problem this team exists to remove. Routing is guesswork if the member
+# receiving the work cannot see what was asked before.
 context:
   sharing: shared
 
@@ -134,15 +156,58 @@ validation:
   max_retries: 1
 
 agents:
+  - id: analyst
+    ref: jupyter-data-analyst:0.0.1
+    name: Jupyter Analyst
+    role: initiator
+    goal: >-
+      Explore the data in the open notebook — add the cells, run them, and
+      leave the results on them for the others to build on.
+    depends_on: []
+    approval: auto
+
+  - id: reviewer
+    ref: jupyter-notebook-reviewer:0.0.1
+    name: Jupyter Reviewer
+    role: reviewer
+    goal: >-
+      Re-run what matters, find what is wrong or unsupported, and record the
+      verdict in the notebook beside the code it concerns.
+    depends_on: []
+    approval: auto
+
+  - id: writer
+    ref: jupyter-notebook-writer:0.0.1
+    name: Jupyter Writer
+    role: finalizer
+    goal: >-
+      Write the analysis up between the cells — summary, explanations,
+      conclusion — saying only what the cells support.
+    depends_on: []
+    approval: auto
+
+  # The way out of the notebook. Its tools come from the decks plugin the
+  # page mounts — read and write decks, open and drive one — and it makes
+  # nothing up: a slide says what a cell showed.
+  - id: decks
+    ref: worker-decks:0.0.1
+    name: Jupyter Decks
+    role: contributor
+    goal: >-
+      Turn what the notebook found into a deck — a title, the numbers as
+      metrics or a chart, the conclusion — open it beside the conversation,
+      and step through it on request.
+    depends_on: []
+    approval: auto
+
   - id: tutor
     ref: jupyter-tutor:0.0.1
-    name: Code Tutor
-    role: initiator
+    name: Jupyter Tutor
+    role: contributor
     goal: >-
       Teach the person Python in the notebook they have open — what their code
       does, why it broke, and what to try next — leaving them able to write the
       next cell themselves.
-    # Independent of the compactor. Neither waits for the other.
     depends_on: []
     # A tutor's output is an explanation, and holding an explanation for
     # sign-off would make a conversation into a queue.
@@ -150,7 +215,7 @@ agents:
 
   - id: compactor
     ref: jupyter-notebook-compactor:0.0.1
-    name: Notebook Compactor
+    name: Jupyter Compactor
     role: finalizer
     goal: >-
       Rewrite the notebook as short as it can be without changing what it
@@ -186,6 +251,13 @@ reaction_rules:
     auto: true
     max_retries: 2
     escalate_after_retries: 2
+    priority: medium
+  - id: rr-nb-3
+    trigger: review_found_unsupported_claim
+    action: escalate_to_supervisor
+    auto: true
+    max_retries: 1
+    escalate_after_retries: 1
     priority: medium
 
 health_monitoring:

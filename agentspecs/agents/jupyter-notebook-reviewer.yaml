@@ -10,7 +10,7 @@
 
 id: jupyter-notebook-reviewer
 version: 0.0.1
-name: Reviewer
+name: Jupyter Notebook Reviewer
 description: >-
   Checks the analysis in the notebook you have open — re-runs the cells that
   matter, finds what is wrong, and records what it found next to the code.

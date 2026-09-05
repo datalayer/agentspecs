@@ -11,7 +11,7 @@
 
 id: jupyter-notebook-writer
 version: 0.0.1
-name: Writer
+name: Jupyter Notebook Writer
 description: >-
   Writes the analysis up inside the notebook you have open — headings,
   explanations and a conclusion between the cells, checked against what the

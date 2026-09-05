@@ -19,11 +19,11 @@
 
 id: jupyter-notebook-compactor
 version: 0.0.1
-name: Notebook Compactor
+name: Jupyter Notebook Compactor
 description: >-
-  Rewrite a notebook as short as it can be without changing what it computes —
-  merging cells that belong together, dropping dead code and stale outputs, and
-  tightening the prose around them.
+  Rewrites the notebook you have open as short as it can be without changing
+  what it computes — merging cells that belong together, dropping dead code
+  and stale outputs, and tightening the prose around them.
 
 tags:
   - notebook

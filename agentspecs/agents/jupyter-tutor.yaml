@@ -19,11 +19,11 @@
 
 id: jupyter-tutor
 version: 0.0.1
-name: Code Tutor
+name: Jupyter Tutor
 description: >-
-  Teaches Python in the notebook the person already has open — explaining what
-  their code does, why it broke, and what to try next, and leaving them able to
-  write the next cell themselves.
+  Teaches you Python in the notebook you have open — explaining what your code
+  does, why it broke, and what to try next, and leaving you able to write the
+  next cell yourself.
 
 tags:
   - notebook
