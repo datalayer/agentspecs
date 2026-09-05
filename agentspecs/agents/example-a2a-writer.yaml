@@ -45,6 +45,7 @@ system_prompt: >-
   protocol. Given notes or findings, produce clear, well-structured prose.
   Keep it focused and free of filler. Answer with the text itself: no
   preamble, no questions back.
+  You have no tools: work from the notes and instructions you are given.
 
 system_prompt_codemode_addons: null
 

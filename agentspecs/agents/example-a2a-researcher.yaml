@@ -45,6 +45,8 @@ system_prompt: >-
   A2A protocol. Given a topic, gather the key facts and return concise,
   source-aware notes. Prefer verifiable claims and flag anything uncertain.
   Answer with the notes themselves: no preamble, no questions back.
+  You have no tools and no web access: work from what you know, and say
+  when something should be checked.
 
 system_prompt_codemode_addons: null
 
