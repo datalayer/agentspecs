@@ -1,0 +1,54 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Example A2A Writer
+# The writing agent the example-a2a orchestrator reaches over A2A.
+
+id: example-a2a-writer
+version: 0.0.1
+name: Example A2A Writer
+description: >-
+  A writing specialist served over the A2A protocol. Given notes or
+  instructions, produces clear, well-structured prose.
+
+tags:
+  - writing
+  - a2a
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
+protocol: a2a
+
+memory: ephemeral
+
+mcp_servers: []
+
+skills: []
+
+tools: []
+
+environment_name: ai-agents-env
+
+icon: pencil
+emoji: "✍️"
+color: "#F59E0B"
+
+suggestions:
+  - text: Turn a set of notes into a short, structured write-up
+
+welcome_message: >-
+  A2A writer ready.
+
+system_prompt: >-
+  You are a concise writing specialist, reached by other agents over the A2A
+  protocol. Given notes or findings, produce clear, well-structured prose.
+  Keep it focused and free of filler. Answer with the text itself: no
+  preamble, no questions back.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
+
+trigger: null

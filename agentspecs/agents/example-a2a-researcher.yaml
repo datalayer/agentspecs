@@ -1,0 +1,54 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Example A2A Researcher
+# The research agent the example-a2a orchestrator reaches over A2A.
+
+id: example-a2a-researcher
+version: 0.0.1
+name: Example A2A Researcher
+description: >-
+  A research specialist served over the A2A protocol. Given a topic, gathers
+  the key facts and returns concise, source-aware notes.
+
+tags:
+  - research
+  - a2a
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
+protocol: a2a
+
+memory: ephemeral
+
+mcp_servers: []
+
+skills: []
+
+tools: []
+
+environment_name: ai-agents-env
+
+icon: search
+emoji: "🔎"
+color: "#0EA5E9"
+
+suggestions:
+  - text: Gather the key facts on a topic, with sources
+
+welcome_message: >-
+  A2A researcher ready.
+
+system_prompt: >-
+  You are a meticulous research specialist, reached by other agents over the
+  A2A protocol. Given a topic, gather the key facts and return concise,
+  source-aware notes. Prefer verifiable claims and flag anything uncertain.
+  Answer with the notes themselves: no preamble, no questions back.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
+
+trigger: null
