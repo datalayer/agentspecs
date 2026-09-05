@@ -1,14 +1,17 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-inventory-demand-planning
+id: worker-inventory-demand-planning
 version: 0.0.1
 name: Inventory Demand Planning
+domain: market-analyst
 description: >-
   Forecast product demand, identify stockout risk, and propose reorder
   quantities across SKUs, regions, and seasonal trends.
 
 tags:
+  - market-analyst
+  - agent-worker
   - inventory
   - forecasting
   - planning

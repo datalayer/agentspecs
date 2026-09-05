@@ -5,9 +5,10 @@
 # Generic horizontal agent that extracts structured data from unstructured
 # files — invoices, receipts, forms, tables in PDFs, spreadsheets.
 
-id: gallery-extract-data-from-files
+id: worker-extract-data-from-files
 version: 0.0.1
 name: Extract Data from Files
+domain: data-engineering
 description: >
   A generic data extraction agent that processes unstructured files (PDFs,
   scanned documents, spreadsheets, images with text) and extracts structured
@@ -16,6 +17,8 @@ description: >
   medical records, legal documents, and more.
 
 tags:
+  - data-engineering
+  - agent-worker
   - data-acquisition
   - automation
   - document-processing

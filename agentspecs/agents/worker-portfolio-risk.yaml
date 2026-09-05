@@ -4,7 +4,7 @@
 # Agent Specification: Portfolio Risk Worker
 # Capital Markets vertical worker.
 
-id: workers-portfolio-risk
+id: worker-portfolio-risk
 version: 0.0.1
 name: Portfolio Risk Analyst
 domain: capital-markets

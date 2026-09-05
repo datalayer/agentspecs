@@ -5,7 +5,7 @@
 # Monitors trends and conversations across LinkedIn, X, and Bluesky, surfaces
 # engagement opportunities, and drafts or publishes platform-specific content.
 
-id: workers-social-marketer
+id: worker-social-marketer
 version: 0.0.1
 name: Social Marketer
 domain: marketing

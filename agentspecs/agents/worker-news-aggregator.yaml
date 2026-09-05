@@ -5,7 +5,7 @@
 # Creates a personalized daily news briefing from each user's preferred
 # topics, sources, companies, and industries.
 
-id: workers-news-aggregator
+id: worker-news-aggregator
 domain: personal-assistant
 version: 0.0.1
 name: News Aggregator

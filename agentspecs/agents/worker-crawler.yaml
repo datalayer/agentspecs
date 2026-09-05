@@ -4,14 +4,17 @@
 # Agent Specification: Crawler Agent
 # Web crawling and research agent that searches the web and GitHub repositories.
 
-id: gallery-crawler
+id: worker-crawler
 version: 0.0.1
 name: Crawler Agent
+domain: market-analyst
 description: >
   Web crawling and research agent that searches the web and GitHub
   repositories for information.
 
 tags:
+  - market-analyst
+  - agent-worker
   - research
   - github
   - analysis

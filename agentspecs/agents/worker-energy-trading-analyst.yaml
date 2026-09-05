@@ -4,7 +4,7 @@
 # Agent Specification: Energy Trading Analyst
 # Energy vertical worker.
 
-id: workers-energy-trading-analyst
+id: worker-energy-trading-analyst
 version: 0.0.1
 name: Energy Trading Analyst
 domain: energy

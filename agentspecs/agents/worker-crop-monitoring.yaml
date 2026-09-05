@@ -4,7 +4,7 @@
 # Agent Specification: Crop Monitoring Worker
 # Earth Observation vertical worker.
 
-id: workers-crop-monitoring
+id: worker-crop-monitoring
 version: 0.0.1
 name: Crop Monitor
 domain: earth-observation

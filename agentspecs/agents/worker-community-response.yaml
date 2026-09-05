@@ -4,7 +4,7 @@
 # Agent Specification: Community Response Worker
 # Marketing vertical worker.
 
-id: workers-community-response
+id: worker-community-response
 version: 0.0.1
 name: Community Manager
 domain: marketing

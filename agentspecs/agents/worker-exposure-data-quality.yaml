@@ -4,7 +4,7 @@
 # Agent Specification: Exposure Data Quality Worker
 # Insurance vertical worker.
 
-id: workers-exposure-data-quality
+id: worker-exposure-data-quality
 version: 0.0.1
 name: Exposure Data Quality Analyst
 domain: insurance

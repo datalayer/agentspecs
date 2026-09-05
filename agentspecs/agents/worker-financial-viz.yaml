@@ -4,13 +4,16 @@
 # Agent Specification: Financial Visualization Agent
 # Analyzes financial market data and creates visualizations and charts.
 
-id: gallery-financial-viz
+id: worker-financial-viz
 version: 0.0.1
 name: Financial Visualization Agent
+domain: accounting
 description: >
   Analyzes financial market data and creates visualizations and charts.
 
 tags:
+  - accounting
+  - agent-worker
   - finance
   - visualization
   - reporting

@@ -6,15 +6,18 @@
 # data across CRM systems with supervisor orchestration.
 # Source: UI mock flow id=2 (Agents.tsx, AgentTeam.tsx)
 
-id: gallery-sync-crm-contacts
+id: worker-sync-crm-contacts
 version: 0.0.1
 name: Sync CRM Contacts
+domain: marketing
 description: >
   A multi-agent team that collects and aggregates contact data from multiple
   CRM sources, analyzes and deduplicates records, writes cleaned data back,
   and generates sync summary reports.
 
 tags:
+  - marketing
+  - agent-worker
   - sales
   - crm
   - data-acquisition

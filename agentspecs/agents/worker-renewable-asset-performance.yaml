@@ -4,7 +4,7 @@
 # Agent Specification: Renewable Asset Performance Worker
 # Energy vertical worker.
 
-id: workers-renewable-asset-performance
+id: worker-renewable-asset-performance
 version: 0.0.1
 name: Renewable Asset Performance Analyst
 domain: energy

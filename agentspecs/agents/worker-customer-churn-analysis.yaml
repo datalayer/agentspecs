@@ -1,14 +1,17 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-customer-churn-analysis
+id: worker-customer-churn-analysis
 version: 0.0.1
 name: Customer Churn Analysis
+domain: market-analyst
 description: >-
   Detect churn signals, rank at-risk customers, and generate a retention
   report with suggested next actions.
 
 tags:
+  - market-analyst
+  - agent-worker
   - customer-support
   - analysis
   - risk

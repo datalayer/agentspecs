@@ -1,14 +1,17 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-sales-forecasting
+id: worker-sales-forecasting
 version: 0.0.1
 name: Sales Forecasting
+domain: market-analyst
 description: >-
   Use historical sales data to project future revenue, identify seasonality,
   and explain the assumptions behind the forecast.
 
 tags:
+  - market-analyst
+  - agent-worker
   - sales
   - forecasting
   - analytics

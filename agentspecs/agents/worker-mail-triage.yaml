@@ -4,7 +4,7 @@
 # Agent Specification: Mail Triage Worker
 # Personal Assistant vertical worker.
 
-id: workers-mail-triage
+id: worker-mail-triage
 version: 0.0.1
 name: Mail Triage Assistant
 domain: personal-assistant

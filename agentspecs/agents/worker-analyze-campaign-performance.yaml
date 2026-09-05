@@ -6,9 +6,10 @@
 # Unifies cross-platform campaign data, detects anomalies,
 # and optimises budget allocation across advertising channels.
 
-id: gallery-analyze-campaign-performance
+id: worker-analyze-campaign-performance
 version: 0.0.1
 name: Analyze Campaign Performance
+domain: marketing
 description: >
   A multi-agent team that unifies marketing data from Google Ads, Meta,
   TikTok, LinkedIn, GA4, CRM, and email platforms. Normalises metrics
@@ -17,6 +18,7 @@ description: >
 
 tags:
   - marketing
+  - agent-worker
   - analytics
   - email
 

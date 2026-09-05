@@ -4,7 +4,7 @@
 # Agent Specification: Research Recruiter
 # Market Analyst vertical worker.
 
-id: workers-research-recruiter
+id: worker-research-recruiter
 version: 0.0.1
 name: Research Recruiter
 domain: market-analyst

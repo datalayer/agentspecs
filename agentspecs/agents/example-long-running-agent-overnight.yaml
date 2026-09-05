@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-long-running-agent-overnight
+id: example-long-running-agent-overnight
 version: 0.0.1
 name: Long-Running Agent Overnight
 description: >-

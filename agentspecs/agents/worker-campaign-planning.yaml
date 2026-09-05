@@ -4,7 +4,7 @@
 # Agent Specification: Campaign Planning Worker
 # Marketing vertical worker.
 
-id: workers-campaign-planning
+id: worker-campaign-planning
 version: 0.0.1
 name: Campaign Planner
 domain: marketing

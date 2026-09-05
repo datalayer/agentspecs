@@ -5,9 +5,10 @@
 # Generic horizontal agent that summarizes any document type — PDFs, reports,
 # contracts, research papers — producing structured executive summaries.
 
-id: gallery-summarize-documents
+id: worker-summarize-documents
 version: 0.0.1
 name: Summarize Documents
+domain: personal-assistant
 description: >
   A generic document summarization agent that processes PDFs, Word files,
   Markdown, and plain text. Produces structured executive summaries with
@@ -15,11 +16,13 @@ description: >
   industry vertical — from legal contracts to research papers.
 
 tags:
+  - personal-assistant
+  - agent-worker
   - research
   - document-processing
   - summarization
 
-enabled: false
+enabled: true
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
 

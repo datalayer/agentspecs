@@ -6,15 +6,18 @@
 # tickets, identifying patterns and generating resolution recommendations.
 # Source: UI mock flow id=4 (Agents.tsx)
 
-id: gallery-analyze-support-tickets
+id: worker-analyze-support-tickets
 version: 0.0.1
 name: Analyze Support Tickets
+domain: market-analyst
 description: >
   A multi-agent team that triages incoming support tickets, categorizes by
   urgency and topic, identifies recurring patterns, and generates resolution
   recommendations with escalation paths.
 
 tags:
+  - market-analyst
+  - agent-worker
   - customer-support
   - analytics
   - data-acquisition

@@ -14,7 +14,7 @@
 # — insert, update, run, read cells — arrive from the workspace, so
 # `frontend_tools` stays empty here as it does for the shell.
 
-id: notebook-analyst
+id: jupyter-notebook-analyst
 version: 0.0.1
 name: Analyst
 description: >-

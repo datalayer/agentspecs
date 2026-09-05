@@ -4,7 +4,7 @@
 # Agent Specification: Cohort Comparison Worker
 # Life Sciences vertical worker.
 
-id: workers-cohort-comparison
+id: worker-cohort-comparison
 version: 0.0.1
 name: Cohort Analyst
 domain: life-sciences

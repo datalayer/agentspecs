@@ -4,7 +4,7 @@
 # Agent Specification: Backtest Auditor
 # Capital Markets vertical worker.
 
-id: workers-backtest-auditor
+id: worker-backtest-auditor
 version: 0.0.1
 name: Backtest Auditor
 domain: capital-markets

@@ -4,7 +4,7 @@
 # Agent Specification: Product Finder
 # Personal Assistant vertical worker.
 
-id: workers-product-finder
+id: worker-product-finder
 version: 0.0.1
 name: Product Finder
 domain: personal-assistant

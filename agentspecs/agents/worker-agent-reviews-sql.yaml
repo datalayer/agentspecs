@@ -1,14 +1,17 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-agent-reviews-sql
+id: worker-agent-reviews-sql
 version: 0.0.1
 name: Agent Reviews SQL
+domain: data-engineering
 description: >-
   Review SQL queries for correctness, performance, missing filters, risky
   joins, and opportunities to simplify the analysis.
 
 tags:
+  - data-engineering
+  - agent-worker
   - analysis
   - sql
   - risk

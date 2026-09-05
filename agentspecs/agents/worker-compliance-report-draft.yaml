@@ -1,14 +1,17 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-compliance-report-draft
+id: worker-compliance-report-draft
 version: 0.0.1
 name: Compliance Report Draft
+domain: accounting
 description: >-
   Collect evidence from documents and data, flag missing information, and
   draft a structured compliance report for review.
 
 tags:
+  - accounting
+  - agent-worker
   - compliance
   - reporting
   - document-processing

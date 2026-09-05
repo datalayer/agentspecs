@@ -6,9 +6,10 @@
 # Ingests IoT sensor data, predicts equipment failures, and optimises
 # grid load balancing across renewable and conventional sources.
 
-id: gallery-optimize-grid-operations
+id: worker-optimize-grid-operations
 version: 0.0.1
 name: Optimize Grid Operations
+domain: energy
 description: >
   A multi-agent team that processes millions of IoT sensor data points
   from smart meters, substations, and renewable generation assets.
@@ -16,6 +17,8 @@ description: >
   balancing across the grid, and reduces unplanned downtime by 50%.
 
 tags:
+  - energy
+  - agent-worker
   - operations
   - sustainability
   - automation

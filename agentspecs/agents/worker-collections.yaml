@@ -4,7 +4,7 @@
 # Agent Specification: Collections Worker
 # Accounting vertical worker.
 
-id: workers-collections
+id: worker-collections
 version: 0.0.1
 name: Collections Specialist
 domain: accounting

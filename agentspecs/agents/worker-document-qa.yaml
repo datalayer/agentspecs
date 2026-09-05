@@ -1,14 +1,17 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-document-qa
+id: worker-document-qa
 version: 0.0.1
 name: Document Q&A
+domain: personal-assistant
 description: >-
   Ask questions across contracts, reports, policies, or research notes and
   receive cited answers with supporting context.
 
 tags:
+  - personal-assistant
+  - agent-worker
   - research
   - document-processing
   - qa

@@ -4,7 +4,7 @@
 # Agent Specification: Job Hunter
 # Personal Assistant vertical worker.
 
-id: workers-job-hunter
+id: worker-job-hunter
 version: 0.0.1
 name: Job Hunter
 domain: personal-assistant

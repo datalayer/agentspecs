@@ -4,14 +4,17 @@
 # Agent Specification: GitHub Agent
 # Manages GitHub repositories, issues, and pull requests with email capabilities.
 
-id: gallery-github-agent
+id: worker-github-agent
 version: 0.0.1
 name: GitHub Agent
+domain: data-engineering
 description: >
   Manages GitHub repositories, issues, and pull requests with email 
   notification capabilities.
 
 tags:
+  - data-engineering
+  - agent-worker
   - workflow
   - github
   - email

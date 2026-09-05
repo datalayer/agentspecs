@@ -4,15 +4,18 @@
 # Agent Specification: Spatial Data Analysis Agent
 # Inspired by Eurus climate workflows and Earthdata catalog exploration.
 
-id: gallery-spatial-data-analysis
+id: worker-spatial-data-analysis
 version: 0.0.1
 name: Spatial Data Analysis Agent
+domain: earth-observation
 description: >
   Discovers, acquires, and analyzes geospatial datasets using Earthdata and
   Eurus tools. Produces map-ready summaries, anomaly diagnostics, and
   reproducible analysis artifacts for environmental and climate use cases.
 
 tags:
+  - earth-observation
+  - agent-worker
   - analytics
   - sustainability
   - summarization

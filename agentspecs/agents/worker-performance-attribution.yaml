@@ -4,7 +4,7 @@
 # Agent Specification: Performance Attribution Worker
 # Capital Markets vertical worker.
 
-id: workers-performance-attribution
+id: worker-performance-attribution
 version: 0.0.1
 name: Performance Attribution Analyst
 domain: capital-markets

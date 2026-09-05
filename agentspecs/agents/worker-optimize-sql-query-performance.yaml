@@ -1,14 +1,17 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-optimize-sql-query-performance
+id: worker-optimize-sql-query-performance
 version: 0.0.1
 name: Optimize SQL Query Performance
+domain: data-engineering
 description: >-
   Profile slow SQL queries, identify bottlenecks, and suggest rewrites and
   index strategies with before/after performance notes.
 
 tags:
+  - data-engineering
+  - agent-worker
   - workflow
   - sql
   - performance

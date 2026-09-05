@@ -4,7 +4,7 @@
 # Agent Specification: Infrastructure Monitoring Worker
 # Earth Observation vertical worker.
 
-id: workers-infrastructure-monitoring
+id: worker-infrastructure-monitoring
 version: 0.0.1
 name: Infrastructure Monitor
 domain: earth-observation

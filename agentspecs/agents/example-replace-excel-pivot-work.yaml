@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-replace-excel-pivot-work
+id: example-replace-excel-pivot-work
 version: 0.0.1
 name: Replace Excel Pivot Work
 description: >-

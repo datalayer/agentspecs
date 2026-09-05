@@ -4,7 +4,7 @@
 # Agent Specification: Scenario Testing Worker
 # Capital Markets vertical worker.
 
-id: workers-scenario-testing
+id: worker-scenario-testing
 version: 0.0.1
 name: Scenario Tester
 domain: capital-markets

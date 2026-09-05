@@ -4,7 +4,7 @@
 # Agent Specification: RNA-Seq Worker
 # Life Sciences vertical worker.
 
-id: workers-rna-seq
+id: worker-rna-seq
 version: 0.0.1
 name: RNA-Seq
 domain: life-sciences

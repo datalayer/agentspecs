@@ -4,7 +4,7 @@
 # Agent Specification: Compute-Cost Optimizer
 # Life Sciences vertical worker.
 
-id: workers-compute-cost-optimizer
+id: worker-compute-cost-optimizer
 version: 0.0.1
 name: Compute-Cost Optimizer
 domain: life-sciences

@@ -4,7 +4,7 @@
 # Agent Specification: Bank Reconciliation Worker
 # Accounting vertical worker.
 
-id: workers-bank-reconciliation
+id: worker-bank-reconciliation
 version: 0.0.1
 name: Bank Reconciler
 domain: accounting
@@ -15,7 +15,7 @@ tags:
   - accounting
   - agent-worker
 
-enabled: false
+enabled: true
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
 

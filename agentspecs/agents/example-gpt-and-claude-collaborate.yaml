@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-gpt-and-claude-collaborate
+id: example-gpt-and-claude-collaborate
 version: 0.0.1
 name: GPT and Claude Collaborate
 description: >-

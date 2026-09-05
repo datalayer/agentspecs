@@ -1,14 +1,17 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-weekly-executive-briefing
+id: worker-weekly-executive-briefing
 version: 0.0.1
 name: Weekly Executive Briefing
+domain: personal-assistant
 description: >-
   Generate a weekly executive summary with KPI deltas, top risks, and
   recommended actions from operational and analytics data.
 
 tags:
+  - personal-assistant
+  - agent-worker
   - analytics
   - reporting
   - risk

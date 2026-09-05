@@ -1,15 +1,17 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-insurance-claims-review
+id: worker-insurance-claims-review
 version: 0.0.1
 name: Insurance Claims Review
+domain: insurance
 description: >-
   Group claims, detect unusual patterns, compare supporting documents, and
   prepare a review summary for human approval.
 
 tags:
   - insurance
+  - agent-worker
   - analysis
   - document-processing
 

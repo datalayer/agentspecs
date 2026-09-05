@@ -4,7 +4,7 @@
 # Agent Specification: Grid Forecast Worker
 # Energy vertical worker.
 
-id: workers-grid-forecast
+id: worker-grid-forecast
 version: 0.0.1
 name: Grid Forecaster
 domain: energy

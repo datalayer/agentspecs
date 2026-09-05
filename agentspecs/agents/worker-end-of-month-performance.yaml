@@ -5,9 +5,10 @@
 # Consolidates, validates, and analyzes end-of-month sales performance
 # directly from Salesforce and generates executive-ready performance reports.
 
-id: gallery-end-of-month-performance
+id: worker-end-of-month-performance
 version: 0.0.1
 name: End of Month Sales Performance
+domain: market-analyst
 description: >
   Consolidates and analyzes end-of-month retail sales data directly from Salesforce.
   Computes revenue performance vs targets by SKU, detects anomalies in bookings and
@@ -15,6 +16,8 @@ description: >
   executive-ready sales performance reports with full data lineage.
 
 tags:
+  - market-analyst
+  - agent-worker
   - finance
   - analytics
   - sales

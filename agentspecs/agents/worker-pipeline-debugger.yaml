@@ -4,7 +4,7 @@
 # Agent Specification: Pipeline Debugger
 # Life Sciences vertical worker.
 
-id: workers-pipeline-debugger
+id: worker-pipeline-debugger
 version: 0.0.1
 name: Pipeline Debugger
 domain: life-sciences

@@ -4,7 +4,7 @@
 # Agent Specification: Environmental Compliance Worker
 # Earth Observation vertical worker.
 
-id: workers-environmental-compliance
+id: worker-environmental-compliance
 version: 0.0.1
 name: Environmental Compliance Analyst
 domain: earth-observation

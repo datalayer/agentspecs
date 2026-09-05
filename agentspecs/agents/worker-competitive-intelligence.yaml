@@ -4,7 +4,7 @@
 # Agent Specification: Competitive Intelligence Worker
 # Market Analyst vertical worker.
 
-id: workers-competitive-intelligence
+id: worker-competitive-intelligence
 version: 0.0.1
 name: Competitive Intelligence Analyst
 domain: market-analyst

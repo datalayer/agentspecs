@@ -6,15 +6,18 @@
 # accounts and generates compliance-ready audit reports.
 # Source: UI mock flow id=3 (Agents.tsx)
 
-id: gallery-process-financial-transactions
+id: worker-process-financial-transactions
 version: 0.0.1
 name: Process Financial Transactions
+domain: accounting
 description: >
   Processes and validates financial transactions across accounts. Reconciles
   balances, detects anomalies, enforces compliance rules, and generates
   audit-ready transaction reports.
 
 tags:
+  - accounting
+  - agent-worker
   - finance
   - human-approval
   - transactions

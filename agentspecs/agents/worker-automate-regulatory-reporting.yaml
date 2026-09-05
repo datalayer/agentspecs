@@ -6,9 +6,10 @@
 # Automates compliance reporting, risk monitoring, and regulatory filings
 # across Basel III/IV, MiFID II, SOX, and AML/KYC requirements.
 
-id: gallery-automate-regulatory-reporting
+id: worker-automate-regulatory-reporting
 version: 0.0.1
 name: Automate Regulatory Reporting
+domain: accounting
 description: >
   A multi-agent team that automates end-to-end regulatory reporting for
   financial institutions. Ingests data from trading systems, risk engines,
@@ -17,6 +18,8 @@ description: >
   and generates submission-ready compliance reports with full audit trails.
 
 tags:
+  - accounting
+  - agent-worker
   - finance
   - compliance
   - regulatory

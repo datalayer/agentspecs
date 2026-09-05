@@ -39,7 +39,7 @@ execution_mode: supervisor
 
 supervisor:
   name: Analyst
-  ref: notebook-analyst:0.0.1
+  ref: jupyter-notebook-analyst:0.0.1
   model: "bedrock:us.anthropic.claude-sonnet-4-6"
   goal: >-
     Keep the work in the notebook. Answer analysis requests directly; send a
@@ -96,7 +96,7 @@ validation:
 
 agents:
   - id: analyst
-    ref: notebook-analyst:0.0.1
+    ref: jupyter-notebook-analyst:0.0.1
     name: Analyst
     role: initiator
     goal: >-
@@ -106,7 +106,7 @@ agents:
     approval: auto
 
   - id: reviewer
-    ref: notebook-reviewer:0.0.1
+    ref: jupyter-notebook-reviewer:0.0.1
     name: Reviewer
     role: reviewer
     goal: >-
@@ -116,7 +116,7 @@ agents:
     approval: auto
 
   - id: writer
-    ref: notebook-writer:0.0.1
+    ref: jupyter-notebook-writer:0.0.1
     name: Writer
     role: finalizer
     goal: >-

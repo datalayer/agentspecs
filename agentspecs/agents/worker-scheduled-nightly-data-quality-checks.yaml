@@ -1,14 +1,17 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-scheduled-nightly-data-quality-checks
+id: worker-scheduled-nightly-data-quality-checks
 version: 0.0.1
 name: Scheduled Nightly Data Quality Checks
+domain: data-engineering
 description: >-
   Run nightly validation jobs, detect schema and freshness drift, and send a
   morning report with prioritized issues.
 
 tags:
+  - data-engineering
+  - agent-worker
   - operations
   - data-acquisition
   - data-quality

@@ -4,7 +4,7 @@
 # Agent Specification: Thematic Analysis Worker
 # Market Analyst vertical worker.
 
-id: workers-thematic-analysis
+id: worker-thematic-analysis
 version: 0.0.1
 name: Thematic Analyst
 domain: market-analyst

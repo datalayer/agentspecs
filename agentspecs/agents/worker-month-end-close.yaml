@@ -4,7 +4,7 @@
 # Agent Specification: Month-End Close Worker
 # Accounting vertical worker.
 
-id: workers-month-end-close
+id: worker-month-end-close
 version: 0.0.1
 name: Month-End Close Analyst
 domain: accounting

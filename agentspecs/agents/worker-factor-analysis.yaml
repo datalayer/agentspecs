@@ -4,7 +4,7 @@
 # Agent Specification: Factor Analysis Worker
 # Capital Markets vertical worker.
 
-id: workers-factor-analysis
+id: worker-factor-analysis
 version: 0.0.1
 name: Factor Analyst
 domain: capital-markets

@@ -1,14 +1,17 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-sales-pipeline-board-report
+id: worker-sales-pipeline-board-report
 version: 0.0.1
 name: Sales Pipeline Board Report
+domain: market-analyst
 description: >-
   Build a board-ready sales pipeline report with stage conversion, weighted
   forecast, and regional performance insights.
 
 tags:
+  - market-analyst
+  - agent-worker
   - sales
   - pipeline
   - reporting

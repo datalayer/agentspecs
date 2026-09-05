@@ -1,14 +1,17 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-scientific-notebook-assistant
+id: worker-scientific-notebook-assistant
 version: 0.0.1
 name: Scientific Notebook Assistant
+domain: life-sciences
 description: >-
   Analyze experimental data, generate plots, explain results, and preserve
   the full workflow in an executable notebook.
 
 tags:
+  - life-sciences
+  - agent-worker
   - research
   - notebook
   - workflow

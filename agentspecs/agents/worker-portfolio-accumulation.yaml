@@ -4,7 +4,7 @@
 # Agent Specification: Portfolio Accumulation Worker
 # Insurance vertical worker.
 
-id: workers-portfolio-accumulation
+id: worker-portfolio-accumulation
 version: 0.0.1
 name: Portfolio Accumulation Analyst
 domain: insurance

@@ -8,7 +8,7 @@
 # itself rather than into a message nobody will find later. See
 # `notebook-analyst` for why all three run in the browser.
 
-id: notebook-reviewer
+id: jupyter-notebook-reviewer
 version: 0.0.1
 name: Reviewer
 description: >-

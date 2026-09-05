@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-multi-agent-root-cause-analysis
+id: example-multi-agent-root-cause-analysis
 version: 0.0.1
 name: Multi-Agent Root Cause Analysis
 description: >-

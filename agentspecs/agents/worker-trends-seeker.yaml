@@ -4,7 +4,7 @@
 # Agent Specification: Trends Seeker
 # Personal Assistant vertical worker.
 
-id: workers-trends-seeker
+id: worker-trends-seeker
 version: 0.0.1
 name: Trends Seeker
 domain: personal-assistant

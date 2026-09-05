@@ -6,9 +6,10 @@
 # Monitors competitor pricing, forecasts demand, and generates margin-optimised
 # pricing recommendations across product catalogs.
 
-id: gallery-optimize-dynamic-pricing
+id: worker-optimize-dynamic-pricing
 version: 0.0.1
 name: Optimize Dynamic Pricing
+domain: market-analyst
 description: >
   Monitors competitor pricing across marketplaces, forecasts demand per SKU,
   and generates margin-optimised pricing recommendations in real time.
@@ -16,6 +17,8 @@ description: >
   combining competitive intelligence with demand signals to maximise margins.
 
 tags:
+  - market-analyst
+  - agent-worker
   - analytics
   - pricing
   - forecasting

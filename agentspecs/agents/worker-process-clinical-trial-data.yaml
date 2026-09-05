@@ -6,9 +6,10 @@
 # Automates clinical trial data harmonisation, adverse event detection,
 # and submission-ready dataset preparation across multi-site trials.
 
-id: gallery-process-clinical-trial-data
+id: worker-process-clinical-trial-data
 version: 0.0.1
 name: Process Clinical Trial Data
+domain: life-sciences
 description: >
   A multi-agent team that automates clinical trial data processing across
   dozens of trial sites. Harmonises patient records and lab results to
@@ -17,6 +18,8 @@ description: >
   compliance guardrails.
 
 tags:
+  - life-sciences
+  - agent-worker
   - compliance
   - healthcare
   - regulatory

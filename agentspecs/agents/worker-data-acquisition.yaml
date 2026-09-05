@@ -5,14 +5,17 @@
 # This agent acquires and manages data from various sources including
 # Kaggle datasets and local filesystem operations.
 
-id: gallery-data-acquisition
+id: worker-data-acquisition
 version: 0.0.1
 name: Data Acquisition Agent
+domain: data-engineering
 description: >
   Acquires and manages data from various sources including Kaggle datasets
   and local filesystem operations.
 
 tags:
+  - data-engineering
+  - agent-worker
   - data-acquisition
   - etl
   - pipeline

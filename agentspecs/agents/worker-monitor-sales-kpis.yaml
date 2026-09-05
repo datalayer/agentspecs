@@ -6,15 +6,18 @@
 # reports, identifies trends, and flags anomalies.
 # Source: UI mock flow id=1 (Agents.tsx, AgentFlow.tsx)
 
-id: gallery-monitor-sales-kpis
+id: worker-monitor-sales-kpis
 version: 0.0.1
 name: Monitor Sales KPIs
+domain: market-analyst
 description: >
   Monitor and analyze sales KPIs from the CRM system. Generate daily reports
   summarizing key performance metrics, identify trends, and flag anomalies.
   Send notifications when KPIs deviate more than 10% from targets.
 
 tags:
+  - market-analyst
+  - agent-worker
   - sales
   - customer-support
   - kpi

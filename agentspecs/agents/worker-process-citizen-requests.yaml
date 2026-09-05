@@ -6,9 +6,10 @@
 # Automates citizen request intake, classification, policy impact
 # analysis, and transparent decision documentation.
 
-id: gallery-process-citizen-requests
+id: worker-process-citizen-requests
 version: 0.0.1
 name: Process Citizen Requests
+domain: public-sector
 description: >
   A multi-agent team that automates citizen request processing for
   government agencies. Classifies and triages permits, FOIA requests,
@@ -17,6 +18,8 @@ description: >
   is explainable, auditable, and compliant with transparency mandates.
 
 tags:
+  - public-sector
+  - agent-worker
   - compliance
   - government
   - audit

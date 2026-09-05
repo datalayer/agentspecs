@@ -4,7 +4,7 @@
 # Agent Specification: Coding Tutor
 # Personal Assistant vertical worker.
 
-id: workers-coding-tutor
+id: worker-coding-tutor
 version: 0.0.1
 name: Coding Tutor
 domain: personal-assistant

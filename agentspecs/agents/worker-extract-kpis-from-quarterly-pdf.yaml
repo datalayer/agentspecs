@@ -1,14 +1,17 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: gallery-extract-kpis-from-quarterly-pdf
+id: worker-extract-kpis-from-quarterly-pdf
 version: 0.0.1
 name: Extract KPIs from Quarterly PDF
+domain: accounting
 description: >-
   Pull revenue, margin, growth, and guidance metrics from quarterly reports
   and output a clean KPI table with source citations.
 
 tags:
+  - accounting
+  - agent-worker
   - data-acquisition
   - kpi
   - reporting

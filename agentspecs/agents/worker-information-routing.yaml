@@ -4,14 +4,17 @@
 # Agent Specification: Information Routing Agent
 # Routes information between Google Drive and Slack, managing workflows.
 
-id: gallery-information-routing
+id: worker-information-routing
 version: 0.0.1
 name: Information Routing Agent
+domain: personal-assistant
 description: >
   Routes information between Google Drive and other services, managing document
   workflows and information sharing.
 
 tags:
+  - personal-assistant
+  - agent-worker
   - data-acquisition
   - workflow
   - routing

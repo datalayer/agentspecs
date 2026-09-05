@@ -4,7 +4,7 @@
 # Agent Specification: Model Comparison Worker
 # Insurance vertical worker.
 
-id: workers-model-comparison
+id: worker-model-comparison
 version: 0.0.1
 name: Model Comparison Analyst
 domain: insurance

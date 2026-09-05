@@ -4,7 +4,7 @@
 # Agent Specification: Social Listening Worker
 # Marketing vertical worker.
 
-id: workers-social-listening
+id: worker-social-listening
 version: 0.0.1
 name: Social Listener
 domain: marketing

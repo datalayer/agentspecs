@@ -4,7 +4,7 @@
 # Agent Specification: Change Detection Worker
 # Earth Observation vertical worker.
 
-id: workers-change-detection
+id: worker-change-detection
 version: 0.0.1
 name: Change Detection
 domain: earth-observation

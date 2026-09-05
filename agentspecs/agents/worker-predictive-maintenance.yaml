@@ -4,7 +4,7 @@
 # Agent Specification: Predictive Maintenance Worker
 # Energy vertical worker.
 
-id: workers-predictive-maintenance
+id: worker-predictive-maintenance
 version: 0.0.1
 name: Predictive Maintenance Analyst
 domain: energy

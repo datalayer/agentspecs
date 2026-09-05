@@ -9,7 +9,7 @@
 # lives with the code and the results it describes, not in a document
 # somewhere else. See `notebook-analyst` for why all three run in the browser.
 
-id: notebook-writer
+id: jupyter-notebook-writer
 version: 0.0.1
 name: Writer
 description: >-

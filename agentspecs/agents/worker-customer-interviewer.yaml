@@ -5,7 +5,7 @@
 # Conducts adaptive, AI-led interviews and turns conversations into
 # structured, actionable insights.
 
-id: workers-customer-interviewer
+id: worker-customer-interviewer
 domain: market-analyst
 version: 0.0.1
 name: Customer Interviewer

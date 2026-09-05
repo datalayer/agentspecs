@@ -4,7 +4,7 @@
 # Agent Specification: Quant Research Worker
 # Capital Markets vertical worker.
 
-id: workers-quant-research
+id: worker-quant-research
 version: 0.0.1
 name: Quant Researcher
 domain: capital-markets

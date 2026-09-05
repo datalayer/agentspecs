@@ -4,7 +4,7 @@
 # Agent Specification: Evidence Repository Worker
 # Market Analyst vertical worker.
 
-id: workers-evidence-repository
+id: worker-evidence-repository
 version: 0.0.1
 name: Evidence Curator
 domain: market-analyst

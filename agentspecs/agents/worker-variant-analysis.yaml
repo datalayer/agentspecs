@@ -4,7 +4,7 @@
 # Agent Specification: Variant Analysis Worker
 # Life Sciences vertical worker.
 
-id: workers-variant-analysis
+id: worker-variant-analysis
 version: 0.0.1
 name: Variant Analyst
 domain: life-sciences

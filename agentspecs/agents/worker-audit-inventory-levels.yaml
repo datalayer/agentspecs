@@ -6,15 +6,18 @@
 # discrepancies, forecasts demand, and generates reorder recommendations.
 # Source: UI mock flow id=6 (Agents.tsx)
 
-id: gallery-audit-inventory-levels
+id: worker-audit-inventory-levels
 version: 0.0.1
 name: Audit Inventory Levels
+domain: accounting
 description: >
   A multi-agent team that monitors inventory levels across warehouses,
   detects discrepancies between physical and system counts, forecasts
   demand by SKU, and generates automated reorder recommendations.
 
 tags:
+  - accounting
+  - agent-worker
   - finance
   - automation
   - inventory

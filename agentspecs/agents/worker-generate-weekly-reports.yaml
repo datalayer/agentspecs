@@ -6,17 +6,19 @@
 # reports with charts, KPIs, and executive summaries.
 # Source: UI mock flow id=5 (Agents.tsx)
 
-id: gallery-generate-weekly-reports
+id: worker-generate-weekly-reports
 version: 0.0.1
 name: Generate Weekly Reports
+domain: marketing
 description: >
   Aggregates data across marketing, sales, and operations departments.
   Generates structured weekly reports with charts, KPI summaries, trend
   analysis, and executive-level takeaways.
 
 tags:
-  - sales
   - marketing
+  - agent-worker
+  - sales
   - reporting
 
 enabled: false

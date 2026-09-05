@@ -4,7 +4,7 @@
 # Agent Specification: Disaster Assessment Worker
 # Earth Observation vertical worker.
 
-id: workers-disaster-assessment
+id: worker-disaster-assessment
 version: 0.0.1
 name: Disaster Assessor
 domain: earth-observation

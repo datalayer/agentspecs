@@ -5,9 +5,10 @@
 # Generic horizontal agent that classifies incoming emails by intent,
 # priority, and department, then routes them to the correct queue.
 
-id: gallery-classify-route-emails
+id: worker-classify-route-emails
 version: 0.0.1
 name: Classify & Route Emails
+domain: personal-assistant
 description: >
   A generic email classification and routing agent. Analyzes incoming emails
   to determine intent (inquiry, complaint, order, support request), assigns
@@ -15,6 +16,8 @@ description: >
   department queue. Works across any industry with email-based workflows.
 
 tags:
+  - personal-assistant
+  - agent-worker
   - customer-support
   - email
   - routing

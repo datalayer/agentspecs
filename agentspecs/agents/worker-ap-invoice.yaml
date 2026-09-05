@@ -4,7 +4,7 @@
 # Agent Specification: AP Invoice Worker
 # Accounting vertical worker.
 
-id: workers-ap-invoice
+id: worker-ap-invoice
 version: 0.0.1
 name: AP Invoice Analyst
 domain: accounting

@@ -4,7 +4,7 @@
 # Agent Specification: CAT Exposure Worker
 # Insurance vertical worker.
 
-id: workers-cat-exposure
+id: worker-cat-exposure
 version: 0.0.1
 name: CAT Exposure Analyst
 domain: insurance

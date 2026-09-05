@@ -4,7 +4,7 @@
 # Agent Specification: Event Response Worker
 # Insurance vertical worker.
 
-id: workers-event-response
+id: worker-event-response
 version: 0.0.1
 name: Event Responder
 domain: insurance

@@ -11,9 +11,10 @@
 # this team has four specialized agents working in concert — each
 # excelling at one specific task — orchestrated by a supervisor.
 
-id: gallery-comprehensive-sales-analytics
+id: worker-comprehensive-sales-analytics
 version: 0.0.1
 name: Comprehensive Sales Analytics
+domain: market-analyst
 description: >
   A multi-agent team that replaces a single KPI monitor with four specialized
   agents: a Data Collector that pulls real-time CRM metrics, an Anomaly
@@ -23,6 +24,8 @@ description: >
   detection, and richer reporting than any single agent could.
 
 tags:
+  - market-analyst
+  - agent-worker
   - sales
   - analytics
   - kpi

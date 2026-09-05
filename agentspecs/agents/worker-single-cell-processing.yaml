@@ -4,7 +4,7 @@
 # Agent Specification: Single-Cell Processing Worker
 # Life Sciences vertical worker.
 
-id: workers-single-cell-processing
+id: worker-single-cell-processing
 version: 0.0.1
 name: Single-Cell Processor
 domain: life-sciences
