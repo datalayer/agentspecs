@@ -51,11 +51,17 @@ color: "#EF4444"
 
 suggestions:
   - text: Use runtime_echo to confirm basic tool execution
+    summary: "Basic tool execution"
   - text: Call runtime_sensitive_echo and approve/reject the request
+    summary: "Approve or reject echo"
   - text: Summarize current cost usage vs configured run budget
+    summary: "Cost vs budget"
   - text: Trigger before_tool_execute by calling runtime_sensitive_echo with reason audit
+    summary: "Trigger before_tool_execute"
   - text: Trigger local deny policy with reason delete and explain the block
+    summary: "Trigger the deny policy"
   - text: Explain how deferred_tool_calls and approval queue interact for this run
+    summary: "Deferred calls and approvals"
 
 welcome_message: >-
   Guardrails example agent ready. Try a sensitive tool call to exercise approvals,

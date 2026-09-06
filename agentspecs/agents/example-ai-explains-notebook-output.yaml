@@ -34,6 +34,7 @@ color: "#1F883D"
 suggestions:
   - text: >-
       Use /home/jovyan/datasets/datalayer-nfs/notebooks/experiment_metrics.csv to build and run a notebook, then explain each output cell in plain language.
+    summary: "Explain each output"
 
 welcome_message: >-
   Hi! I can help with ai explains notebook output. Share data, files, or context

@@ -82,15 +82,19 @@ color: "#1F883D"
 # notebook, and neither does the agent until it looks.
 suggestions:
   - text: Analyze this dataset and summarize the main findings.
+    summary: "Summarize the dataset"
     icon: telescope
     emoji: "🔭"
   - text: Plot revenue by region as a bar chart, in a new cell.
+    summary: "Revenue by region chart"
     icon: graph
     emoji: "📊"
   - text: Find anomalies in this notebook and explain them.
+    summary: "Find anomalies"
     icon: bug
     emoji: "🐛"
   - text: Profile every column — types, missing values, and ranges that look wrong.
+    summary: "Profile every column"
     icon: checklist
     emoji: "🧮"
 

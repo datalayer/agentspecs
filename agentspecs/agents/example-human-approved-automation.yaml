@@ -34,6 +34,7 @@ color: "#1F883D"
 suggestions:
   - text: >-
       Use /home/jovyan/datasets/datalayer-nfs/compliance/approval_queue.csv to propose automation actions and require explicit human approval before execution.
+    summary: "Approval-gated automation"
 
 welcome_message: >-
   Hi! I can help with human-approved automation. Share data, files, or context

@@ -37,6 +37,7 @@ color: "#1F883D"
 suggestions:
   - text: >-
       Load PDFs from /home/jovyan/datasets/datalayer-nfs/placeholder, answer three cross-document questions, and cite which file supports each answer.
+    summary: "Cross-document questions"
 
 welcome_message: >-
   Hi! I can help with document q&a. Share data, files, or context

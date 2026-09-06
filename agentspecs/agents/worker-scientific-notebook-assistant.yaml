@@ -37,6 +37,7 @@ color: "#1F883D"
 suggestions:
   - text: >-
       Use /home/jovyan/datasets/datalayer-nfs/notebooks/scientific_measurements.csv to run exploratory analysis and produce publication-ready notebook notes.
+    summary: "Exploratory analysis notes"
 
 welcome_message: >-
   Hi! I can help with scientific notebook assistant. Share data, files, or context

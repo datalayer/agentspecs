@@ -154,10 +154,15 @@ notifications:
 # Chat suggestions
 suggestions:
   - text: Process the latest data batch from Site 014
+    summary: "Process the Site 014 batch"
   - text: Show adverse event summary for this trial
+    summary: "Adverse event summary"
   - text: Run SDTM validation on the current dataset
+    summary: "SDTM validation"
   - text: Generate a safety signal report
+    summary: "Safety signal report"
   - text: What sites have data quality issues?
+    summary: "Sites with quality issues"
 
 # Welcome message
 welcome_message: >

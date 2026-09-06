@@ -42,10 +42,13 @@ color: "#1A7F37"
 
 suggestions:
   - text: Verify the conclusion
+    summary: "Verify the conclusion"
     emoji: "✍️"
   - text: Write the executive summary at the top
+    summary: "Executive summary"
     emoji: "📄"
   - text: Explain each cell in plain language
+    summary: "Explain each cell"
     emoji: "💬"
 
 welcome_message: >-

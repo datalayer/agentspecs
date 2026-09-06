@@ -18,10 +18,15 @@ tools:
   - runtime-echo:0.0.1
 suggestions:
   - text: "Call runtime_sensitive_echo with reason 'read logs' and message 'hello approvals'."
+    summary: "Sensitive echo: read logs"
   - text: "Call runtime_sensitive_echo with reason 'delete project' and observe deny behavior from Python policy hook."
+    summary: "Sensitive echo: delete project"
   - text: "Call runtime_echo with any message to compare a non-sensitive tool path."
+    summary: "Non-sensitive echo"
   - text: "Use execute_code to print the latest lines from /tmp/agent_runtimes_tool_approvals_audit.jsonl."
+    summary: "Latest audit lines"
   - text: "Explain how deferred_tool_calls resolves approval-required tool calls inline when decisions already exist."
+    summary: "Deferred tool calls"
 welcome_message: |
   Welcome to the Tool Approvals example.
 

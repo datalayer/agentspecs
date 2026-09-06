@@ -46,8 +46,11 @@ color: "#0284C7"
 
 suggestions:
   - text: Run the selected evaluation experiment on the configured dataset
+    summary: "Run the experiment"
   - text: Validate experiment configuration and report missing fields
+    summary: "Validate the config"
   - text: Summarize run results with pass rate and latency highlights
+    summary: "Summarize the results"
 
 welcome_message: >-
   Ready to run eval experiments without codemode enabled. Configure your

@@ -81,30 +81,39 @@ suggestions:
   # the agent to go and find out, which is the shortest path from "what is
   # this?" to watching it work.
   - text: Explore this notebook and tell me what you find.
+    summary: "Explore the notebook"
     icon: telescope
     emoji: "🔭"
   - text: Show me how to write a loop in Python, in a new cell in this notebook.
+    summary: "A loop, in a new cell"
     icon: rocket
     emoji: "🚀"
   - text: Explain what this notebook does, cell by cell, as if I am new to Python.
+    summary: "Cell by cell, for beginners"
     icon: book
     emoji: "📖"
   - text: Why did this cell raise an error? Walk me through what went wrong.
+    summary: "Why the error?"
     icon: bug
     emoji: "🐛"
   - text: Give me an exercise on pandas groupby, using the data already in this notebook.
+    summary: "Groupby exercise"
     icon: mortar-board
     emoji: "🎓"
   - text: I want to learn list comprehensions — start from the loop I just wrote.
+    summary: "Learn list comprehensions"
     icon: light-bulb
     emoji: "💡"
   - text: Review this notebook and tell me what an experienced Python developer would write differently.
+    summary: "Expert review"
     icon: code-review
     emoji: "🔍"
   - text: Show me a faster, more idiomatic way to write the slowest cell in this notebook.
+    summary: "Faster slowest cell"
     icon: zap
     emoji: "⚡"
   - text: What would break if this notebook ran on ten times the data? Point at the cells.
+    summary: "Ten times the data"
     icon: graph
     emoji: "📈"
 

@@ -47,7 +47,9 @@ color: "#6366F1"
 # Chat suggestions
 suggestions:
   - text: Help me create a simple pasta recipe.
+    summary: "Pasta recipe"
   - text: Add tomatoes to the recipe.
+    summary: "Add tomatoes"
 
 welcome_message: >
   Hi! Tell me what you'd like to cook and I'll build a recipe with you.

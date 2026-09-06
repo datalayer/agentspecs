@@ -44,8 +44,11 @@ color: "#0EA5E9"
 
 suggestions:
   - text: Show my current monitoring context summary
+    summary: "Monitoring summary"
   - text: Explain the last turn cost and total token usage
+    summary: "Last turn cost and tokens"
   - text: Summarize recent activity and potential anomalies
+    summary: "Recent activity and anomalies"
 
 welcome_message: >-
   Monitoring example agent ready. Ask for runtime activity, cost trends, and token

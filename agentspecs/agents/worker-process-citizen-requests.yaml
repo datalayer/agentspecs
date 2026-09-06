@@ -154,10 +154,15 @@ notifications:
 # Chat suggestions
 suggestions:
   - text: Show today's citizen request intake summary
+    summary: "Today's intake summary"
   - text: What's the current processing backlog by type?
+    summary: "Backlog by type"
   - text: Run a policy impact simulation for the proposed zoning change
+    summary: "Zoning impact simulation"
   - text: Generate a transparency report for this quarter
+    summary: "Quarterly transparency report"
   - text: Which requests are overdue for response?
+    summary: "Overdue requests"
 
 # Welcome message
 welcome_message: >

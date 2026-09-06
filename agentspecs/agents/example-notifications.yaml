@@ -44,8 +44,11 @@ color: "#F59E0B"
 
 suggestions:
   - text: Configure notification channels for in-app, email, and Slack
+    summary: "Configure channels"
   - text: Trigger a test notification and verify delivery status
+    summary: "Send a test notification"
   - text: Summarize unread notifications and recent alert activity
+    summary: "Unread notifications"
 
 welcome_message: >-
   Ready to demonstrate notifications. Configure your channels and send a test

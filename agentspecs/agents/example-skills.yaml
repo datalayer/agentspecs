@@ -50,9 +50,13 @@ color: "#0D9488"
 
 suggestions:
   - text: List all your available skills and group them by source type
+    summary: "List your skills"
   - text: Use datalayer-whoami to return my user identity context
+    summary: "Who am I"
   - text: Use crawl to summarize https://datalayer.ai
+    summary: "Crawl datalayer.ai"
   - text: Use github to list public repositories for an account
+    summary: "GitHub public repos"
 
 welcome_message: >-
   Hi! I am the Skills Demo Agent. I can use built-in file skills and

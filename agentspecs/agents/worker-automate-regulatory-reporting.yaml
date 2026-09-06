@@ -147,10 +147,15 @@ notifications:
 # Chat suggestions
 suggestions:
   - text: Generate the monthly Basel III capital adequacy report
+    summary: "Basel III report"
   - text: Show current risk-weighted asset breakdown
+    summary: "Risk-weighted assets"
   - text: Run a reconciliation check on trading positions
+    summary: "Reconcile trading positions"
   - text: Validate latest figures against MiFID II rules
+    summary: "Validate against MiFID II"
   - text: What capital ratios are at risk of breaching thresholds?
+    summary: "Ratios near thresholds"
 
 # Welcome message
 welcome_message: >

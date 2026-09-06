@@ -52,12 +52,16 @@ color: "#8250DF"
 
 suggestions:
   - text: Draft a five-slide deck introducing our Q3 roadmap
+    summary: "Q3 roadmap deck"
     emoji: "✨"
   - text: Open the Q2 review at the metrics slide
+    summary: "Open the Q2 review"
     emoji: "📂"
   - text: Turn the bullets on slide 3 of "Reactor in five slides" into a two-column comparison
+    summary: "Bullets to two columns"
     emoji: "✏️"
   - text: Present the open deck
+    summary: "Present the deck"
     emoji: "🎬"
 
 welcome_message: >-

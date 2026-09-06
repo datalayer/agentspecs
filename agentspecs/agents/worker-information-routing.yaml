@@ -50,9 +50,13 @@ color: "#EC4899"  # Pink
 # Chat suggestions to show users what this agent can do
 suggestions:
   - text: Find documents shared with me in Google Drive
+    summary: "Shared with me"
   - text: List recent files in my Drive folder
+    summary: "Recent Drive files"
   - text: Summarize the contents of a document in my Drive
+    summary: "Summarize a document"
   - text: Search for documents by keyword in Google Drive
+    summary: "Search Drive by keyword"
 
 # Welcome message shown when agent starts
 welcome_message: >

@@ -46,8 +46,11 @@ color: "#0EA5E9"
 
 suggestions:
   - text: Run the selected evaluation experiment on the configured dataset using at most 3 sandbox calls total
+    summary: "Run the experiment"
   - text: Validate experiment configuration and report missing fields, batching checks to stay within 3 sandbox calls
+    summary: "Validate the config"
   - text: Summarize run results with pass rate and latency highlights without exceeding 3 sandbox calls overall
+    summary: "Summarize the results"
 
 welcome_message: >-
   Ready to run eval experiments. Configure your benchmark and evaluator setup,

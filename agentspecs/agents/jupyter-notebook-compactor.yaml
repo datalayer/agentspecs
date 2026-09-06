@@ -58,9 +58,13 @@ color: "#8250DF"
 
 suggestions:
   - text: Compact this notebook without changing any of its results.
+    summary: "Compact the notebook"
   - text: Merge the setup cells and drop the outputs that are no longer reproducible.
+    summary: "Merge the setup cells"
   - text: Tighten the markdown so each section says one thing.
+    summary: "Tighten the markdown"
   - text: Show me what you would remove before you remove it.
+    summary: "Preview the removals"
 
 welcome_message: >-
   Hi! I make notebooks shorter without making them different. Point me at the

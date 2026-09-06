@@ -46,9 +46,13 @@ color: "#0EA5E9"
 
 suggestions:
   - text: Search the web for recent news about AI agents
+    summary: "AI agent news"
   - text: Find trending open-source Python projects on GitHub
+    summary: "Trending Python projects"
   - text: Research best practices for building RAG applications
+    summary: "RAG best practices"
   - text: Compare popular JavaScript frameworks in 2024
+    summary: "JavaScript frameworks 2024"
 
 welcome_message: >-
   MCP example agent ready. Ask me to search, extract, crawl, and research via

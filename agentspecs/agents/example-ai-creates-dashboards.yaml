@@ -34,6 +34,7 @@ color: "#1F883D"
 suggestions:
   - text: >-
       Use /home/jovyan/datasets/datalayer-nfs/sales/sales_pipeline.csv to generate a dashboard-style notebook with funnel metrics, regional split, and one executive summary cell.
+    summary: "Sales pipeline dashboard"
 
 welcome_message: >-
   Hi! I can help with ai creates dashboards. Share data, files, or context

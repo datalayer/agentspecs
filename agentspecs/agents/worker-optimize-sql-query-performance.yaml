@@ -37,6 +37,7 @@ color: "#1F883D"
 suggestions:
   - text: >-
       Use /home/jovyan/datasets/datalayer-nfs/sql/query_workload.sql to identify query bottlenecks and propose optimized SQL with rationale.
+    summary: "Query bottlenecks"
 
 welcome_message: >-
   Hi! I can help with optimize sql query performance. Share data, files, or context

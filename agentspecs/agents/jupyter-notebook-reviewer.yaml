@@ -40,10 +40,13 @@ color: "#BF8700"
 
 suggestions:
   - text: Find what is wrong
+    summary: "Find what is wrong"
     emoji: "🧐"
   - text: Re-run every cell and tell me what changed
+    summary: "Re-run and compare"
     emoji: "🔁"
   - text: Check the numbers in the last output
+    summary: "Check the last output"
     emoji: "🧮"
 
 welcome_message: >-

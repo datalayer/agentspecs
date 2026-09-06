@@ -121,9 +121,13 @@ output:
 # Chat suggestions
 suggestions:
   - text: Build my daily briefing for AI and cloud computing
+    summary: "Daily AI and cloud briefing"
   - text: Summarize the most important developments about my tracked companies
+    summary: "Tracked companies"
   - text: What changed in my industries since yesterday?
+    summary: "Since yesterday"
   - text: Give me a concise briefing and cite the sources
+    summary: "Briefing with sources"
 
 # Welcome message
 welcome_message: >-

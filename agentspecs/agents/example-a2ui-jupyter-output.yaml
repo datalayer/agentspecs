@@ -39,16 +39,22 @@ color: "#0969DA"
 # like something a reader would say.
 suggestions:
   - text: Run something in the code sandbox that prints as it goes.
+    summary: "Streaming output"
     emoji: "📜"
   - text: Plot a chart in the code sandbox and show me the image.
+    summary: "Plot a chart"
     emoji: "📈"
   - text: Build a small DataFrame in the code sandbox and show it as a table.
+    summary: "DataFrame as a table"
     emoji: "🧮"
   - text: Run something in the code sandbox that fails, so I can see the traceback.
+    summary: "Show a traceback"
     emoji: "🐛"
   - text: Show me an interactive slider from the code sandbox.
+    summary: "Interactive slider"
     emoji: "🎛️"
   - text: Give me a surface with buttons I can press.
+    summary: "Buttons to press"
     emoji: "🖲️"
 
 welcome_message: >-

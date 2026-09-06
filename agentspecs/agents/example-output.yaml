@@ -44,9 +44,13 @@ color: "#7C3AED"
 
 suggestions:
   - text: Return a TABLE of quarterly revenue by region
+    summary: "Revenue table"
   - text: Return JSON for a KPI summary object
+    summary: "KPI JSON"
   - text: Return a CHART payload for monthly conversions
+    summary: "Conversions chart"
   - text: Return a FILE named report.md with highlights
+    summary: "Report file"
 
 welcome_message: >-
   Example output agent ready. Ask for TABLE, JSON, CHART, or FILE formats and

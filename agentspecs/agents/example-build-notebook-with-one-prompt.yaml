@@ -34,6 +34,7 @@ color: "#1F883D"
 suggestions:
   - text: >-
       Use /home/jovyan/datasets/datalayer-nfs/notebooks/experiment_metrics.csv and generate a complete analysis notebook from one prompt, including conclusions.
+    summary: "Notebook from one prompt"
 
 welcome_message: >-
   Hi! I can help with build a notebook with one prompt. Share data, files, or context

@@ -34,6 +34,7 @@ color: "#1F883D"
 suggestions:
   - text: >-
       Use /home/jovyan/datasets/datalayer-nfs/churn/customer_churn.csv and split the analysis across five agents, then merge their findings into one final brief.
+    summary: "Five agents on churn"
 
 welcome_message: >-
   Hi! I can help with five ai agents analyze a csv. Share data, files, or context

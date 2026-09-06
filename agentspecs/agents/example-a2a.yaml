@@ -64,8 +64,11 @@ color: "#7C3AED"
 
 suggestions:
   - text: Research a topic through the A2A researcher and report its notes
+    summary: "Research via A2A"
   - text: Have the A2A writer draft a short guide from a few bullet points
+    summary: "Guide via the A2A writer"
   - text: Research then write, one A2A agent handing to the other
+    summary: "Research then write"
 
 welcome_message: >-
   A2A example agent ready. Ask me to delegate research and writing to the

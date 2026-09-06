@@ -54,7 +54,9 @@ color: "#6366F1"
 # Chat suggestions
 suggestions:
   - text: What's the weather like in Paris?
+    summary: "Weather in Paris"
   - text: Show me the weather forecast for Tokyo.
+    summary: "Tokyo forecast"
 
 welcome_message: >
   Hi! Ask me about the weather in any city.

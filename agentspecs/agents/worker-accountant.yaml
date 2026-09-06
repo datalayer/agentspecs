@@ -38,12 +38,15 @@ suggestions:
   - text: >-
       Connect to Odoo and list unpaid customer invoices older than 30 days,
       grouped by customer with totals and top delinquencies.
+    summary: "Unpaid invoices over 30 days"
   - text: >-
       Compare posted payments against open invoices for this month and flag likely
       reconciliation mismatches with proposed next checks.
+    summary: "Payments vs invoices"
   - text: >-
       Build a close summary with journal balance deltas versus last month and
       highlight unusual movements.
+    summary: "Close summary"
 
 welcome_message: >-
   Hi! I am your Accountant agent for Odoo workflows. I can help reconcile

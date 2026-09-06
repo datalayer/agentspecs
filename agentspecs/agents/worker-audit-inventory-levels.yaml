@@ -128,9 +128,13 @@ notifications:
 # Chat suggestions
 suggestions:
   - text: Run a full inventory audit now
+    summary: "Full inventory audit"
   - text: Show current stock levels across all warehouses
+    summary: "Stock across warehouses"
   - text: What SKUs are below reorder point?
+    summary: "SKUs below reorder point"
   - text: Generate a demand forecast for next month
+    summary: "Next month's demand"
 
 # Welcome message
 welcome_message: >

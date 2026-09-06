@@ -112,9 +112,13 @@ output:
 # Chat suggestions
 suggestions:
   - text: What conversations should I engage with today?
+    summary: "Conversations to join"
   - text: Recommend 5 people worth connecting with this week
+    summary: "Five people to connect"
   - text: Draft a LinkedIn post about our latest launch
+    summary: "LinkedIn launch post"
   - text: Turn this announcement into an X thread and a Bluesky post
+    summary: "X thread and Bluesky post"
 
 # Welcome message
 welcome_message: >-

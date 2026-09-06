@@ -40,14 +40,19 @@ color: "#0969DA"
 # conversation instead of in a comparison panel.
 suggestions:
   - text: Print two rows of ten growing dots, one dot per second.
+    summary: "Growing dots"
     emoji: "📜"
   - text: Plot a chart in the code sandbox and show me the image.
+    summary: "Plot a chart"
     emoji: "📈"
   - text: Build a small DataFrame in the code sandbox and show it as a table.
+    summary: "DataFrame as a table"
     emoji: "🧮"
   - text: Run something in the code sandbox that fails, so I can see the traceback.
+    summary: "Show a traceback"
     emoji: "🐛"
   - text: Show me an interactive slider from the code sandbox.
+    summary: "Interactive slider"
     emoji: "🎛️"
 
 welcome_message: >-

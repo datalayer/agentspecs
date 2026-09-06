@@ -170,10 +170,15 @@ notifications:
 # Chat suggestions
 suggestions:
   - text: Show competitor price movements in the last 24 hours
+    summary: "Competitor prices, 24h"
   - text: Which SKUs have the highest price elasticity?
+    summary: "Highest price elasticity"
   - text: Generate pricing recommendations for the electronics category
+    summary: "Electronics pricing"
   - text: Forecast demand for top 100 SKUs next week
+    summary: "Top 100 SKU demand"
   - text: What's the projected revenue impact of current recommendations?
+    summary: "Revenue impact"
 
 # Welcome message
 welcome_message: >

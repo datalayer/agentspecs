@@ -42,9 +42,13 @@ color: "#0969DA"
 
 suggestions:
   - text: Run this notebook on a clean kernel and tell me what breaks.
+    summary: "Run on a clean kernel"
   - text: Does this notebook still reproduce from top to bottom?
+    summary: "Does it still reproduce?"
   - text: Find the cells that only work because something ran earlier.
+    summary: "Order-dependent cells"
   - text: What would someone else need to run this notebook tomorrow?
+    summary: "What a rerun needs"
 
 welcome_message: >-
   Hi! I check whether a notebook still works for someone who is not you. I run

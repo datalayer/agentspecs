@@ -36,6 +36,7 @@ color: "#F59E0B"
 
 suggestions:
   - text: Turn a set of notes into a short, structured write-up
+    summary: "Notes into a write-up"
 
 welcome_message: >-
   A2A writer ready.

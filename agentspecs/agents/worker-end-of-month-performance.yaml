@@ -238,13 +238,21 @@ notifications:
 # Chat suggestions
 suggestions:
   - text: Generate the latest end-of-month sales performance report
+    summary: "End-of-month report"
   - text: Show revenue vs target by region
+    summary: "Revenue vs target"
   - text: Show top and bottom performing SKUs this month
+    summary: "Top and bottom SKUs"
   - text: Explain the top drivers of variance this month
+    summary: "Variance drivers"
   - text: Detect unusual discounting patterns by SKU
+    summary: "Unusual discounting"
   - text: Compare this month's performance vs last month
+    summary: "Month over month"
   - text: Show aggregated performance by sales segment
+    summary: "By sales segment"
   - text: Break down revenue by SKU category
+    summary: "Revenue by category"
 
 # Welcome message
 welcome_message: >

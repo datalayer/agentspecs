@@ -34,6 +34,7 @@ color: "#1F883D"
 suggestions:
   - text: >-
       Load /home/jovyan/datasets/datalayer-nfs/titanic/titanic.xlsx with pandas.read_excel, then produce a 3-cell notebook: schema+missing values, survival breakdown, and one chart with a concise summary.
+    summary: "Titanic in three cells"
 
 welcome_message: >-
   Hi! I can help with analyze an excel spreadsheet. Share data, files, or context

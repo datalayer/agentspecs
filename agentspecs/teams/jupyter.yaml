@@ -112,21 +112,27 @@ routing_instructions: >-
 # the person already has open.
 suggestions:
   - text: Analyze the dataset
+    summary: "Analyze the dataset"
     icon: graph
     emoji: "🔎"
   - text: Find what is wrong
+    summary: "Find what is wrong"
     icon: checklist
     emoji: "🧐"
   - text: Verify the conclusion
+    summary: "Verify the conclusion"
     icon: pencil
     emoji: "✍️"
   - text: Turn the findings into a deck
+    summary: "Findings into a deck"
     icon: project
     emoji: "📊"
   - text: Explain this notebook cell by cell, as if I am new to Python
+    summary: "Cell by cell, for beginners"
     icon: book
     emoji: "📖"
   - text: Shorten this notebook without changing what it computes
+    summary: "Shorten the notebook"
     icon: fold
     emoji: "✂️"
 

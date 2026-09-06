@@ -36,6 +36,7 @@ color: "#0EA5E9"
 
 suggestions:
   - text: Gather the key facts on a topic, with sources
+    summary: "Key facts with sources"
 
 welcome_message: >-
   A2A researcher ready.

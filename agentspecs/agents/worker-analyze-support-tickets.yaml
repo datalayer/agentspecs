@@ -128,9 +128,13 @@ notifications:
 # Chat suggestions
 suggestions:
   - text: Show me the latest ticket triage summary
+    summary: "Latest triage summary"
   - text: What are the top recurring issues this week?
+    summary: "Top recurring issues"
   - text: List all P1 tickets from today
+    summary: "Today's P1 tickets"
   - text: Generate a pattern analysis report
+    summary: "Pattern analysis report"
 
 # Welcome message
 welcome_message: >

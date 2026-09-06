@@ -44,8 +44,11 @@ color: "#0D9488"
 
 suggestions:
   - text: Remember a user preference and confirm it was stored
+    summary: "Remember a preference"
   - text: Recall previously stored preferences from memory
+    summary: "Recall preferences"
   - text: Search memory for key facts from earlier turns
+    summary: "Search memory"
 
 welcome_message: >-
   Ready to demonstrate durable memory. I persist stable facts and preferences

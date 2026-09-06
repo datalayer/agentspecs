@@ -41,8 +41,11 @@ color: "#2563EB"
 
 suggestions:
   - text: Compare local and datalayer inference providers for latency and routing.
+    summary: "Compare providers"
   - text: Explain where model responses are generated for this current provider.
+    summary: "Where responses come from"
   - text: Summarize the tradeoffs of switching providers for this agent.
+    summary: "Provider trade-offs"
 
 welcome_message: >-
   Inference provider demo ready. Switch between local and datalayer providers,

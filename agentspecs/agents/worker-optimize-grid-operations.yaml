@@ -145,10 +145,15 @@ notifications:
 # Chat suggestions
 suggestions:
   - text: Show current grid health across all substations
+    summary: "Grid health now"
   - text: Which assets have anomaly alerts right now?
+    summary: "Anomaly alerts"
   - text: Predict failures for the next 4 weeks
+    summary: "Failures, next 4 weeks"
   - text: Optimise load balancing for tomorrow's forecast
+    summary: "Tomorrow's load balancing"
   - text: Generate a maintenance schedule for flagged assets
+    summary: "Maintenance schedule"
 
 # Welcome message
 welcome_message: >

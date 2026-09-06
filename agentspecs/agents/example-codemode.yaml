@@ -44,8 +44,11 @@ color: "#8250DF"
 
 suggestions:
   - text: Search and extract key points about Datalayer in one step
+    summary: "Datalayer key points"
   - text: Research AI agent best practices and return a concise report
+    summary: "AI agent practices report"
   - text: Compare two web sources and summarize differences
+    summary: "Compare two sources"
 
 welcome_message: >-
   Tavily MCP codemode agent ready. I can compose MCP-powered workflows.

@@ -147,10 +147,15 @@ notifications:
 # Chat suggestions
 suggestions:
   - text: Show cross-channel campaign performance for this week
+    summary: "Cross-channel this week"
   - text: Which campaigns have abnormal CPA trends?
+    summary: "Abnormal CPA trends"
   - text: Generate a budget reallocation recommendation
+    summary: "Budget reallocation"
   - text: Compare ROAS across Google Ads vs Meta this month
+    summary: "ROAS: Google vs Meta"
   - text: What's the projected impact of shifting 20% budget to TikTok?
+    summary: "Shift 20% to TikTok"
 
 # Welcome message
 welcome_message: >

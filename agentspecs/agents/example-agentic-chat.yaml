@@ -47,7 +47,9 @@ color: "#6366F1"
 # Chat suggestions
 suggestions:
   - text: What is the current time?
+    summary: "Current time"
   - text: What's the current date?
+    summary: "Current date"
 
 welcome_message: >
   Hi! Ask me for the current time in any timezone.
