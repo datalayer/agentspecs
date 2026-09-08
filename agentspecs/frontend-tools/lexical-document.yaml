@@ -4,11 +4,16 @@
 id: lexical-document
 version: 0.0.1
 name: Lexical Document
-description: Frontend tools for interacting with Lexical documents.
+description: >-
+  Frontend tools for interacting with Lexical documents: reading and writing
+  blocks, running Jupyter cells in the page, and drawing diagrams into the
+  document with Excalidraw.
 tags:
   - frontend
   - document
   - lexical
+  - drawing
+  - diagram
 enabled: true
 toolset: all
 icon: file
