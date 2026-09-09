@@ -7,6 +7,7 @@ name: LLM Judge
 description: Use an LLM-as-a-judge prompt to score quality and provide rationale.
 category: LLM-as-a-Judge
 evaluator_type: case
+executable: false
 pydantic_class: LLMJudgeEvaluator
 output_kind: score_and_assertion
 cost_tier: llm

@@ -7,6 +7,7 @@ name: Contains
 description: Assert that expected content appears in the model output.
 category: Comparison
 evaluator_type: case
+executable: true
 pydantic_class: ContainsEvaluator
 output_kind: boolean
 cost_tier: free
