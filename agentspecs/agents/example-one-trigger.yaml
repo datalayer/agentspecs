@@ -35,8 +35,7 @@ skills:
 # Runtime tools
 tools:
   - runtime-echo:0.0.1
-frontend_tools:
-  - jupyter-notebook:0.0.1
+frontend_tools: []
 
 # Secrets / environment variables
 envvars:
@@ -56,6 +55,21 @@ goal: >-
   repositories, ranked by recent activity, and provide a brief summary of each.
 
 # Trigger configuration
+# Approvals are the Tool Approvals example's subject; a trigger that fires
+# unattended cannot wait on one, and neither should its chat.
+disable_tool_approvals: true
+
+suggestions:
+  # First: the trigger itself, which is what this agent is about.
+  - text: >-
+      Which trigger are you configured with, what prompt does it run, and
+      what happens when it fires?
+    summary: "Your trigger"
+  - text: Run your trigger prompt now, as if the trigger had just fired.
+    summary: "Run the trigger prompt"
+  - text: How would a cron or a webhook trigger differ from your once trigger?
+    summary: "Cron and webhook versus once"
+
 trigger:
   type: once
   description: Run once and terminate

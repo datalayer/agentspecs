@@ -34,9 +34,7 @@ tools:
 
 disable_tool_approvals: true
 
-frontend_tools:
-  - jupyter-notebook:0.0.1
-  - lexical-document:0.0.1
+frontend_tools: []
 
 environment_name: ai-agents-env
 

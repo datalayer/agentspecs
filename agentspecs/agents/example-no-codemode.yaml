@@ -26,15 +26,17 @@ memory: ephemeral
 mcp_servers:
   - tavily:0.0.1
 
+# Approvals are the Tool Approvals example's subject; here a prompt before
+# every Tavily call would only interrupt the comparison the example is about.
+disable_tool_approvals: true
+
 skills:
   - events:0.0.1
 
 tools:
   - runtime-echo:0.0.1
 
-frontend_tools:
-  - jupyter-notebook:0.0.1
-  - lexical-document:0.0.1
+frontend_tools: []
 
 environment_name: ai-agents-env
 
@@ -43,12 +45,20 @@ emoji: "🌐"
 color: "#0969DA"
 
 suggestions:
-  - text: Search for the latest updates about Datalayer
+  # First: the same task the codemode agent gets, so the two panes of the
+  # example compare like with like — here one MCP tool call after another.
+  - text: >-
+      Run three web searches — Datalayer notebooks, Datalayer runtimes,
+      Datalayer AI agents — extract the top result of each, and store the key
+      points of all three in a variable named about_datalayer in the sandbox.
+    summary: "Three searches, tool by tool"
+  - text: >-
+      Search for the latest updates about Datalayer and summarize the top
+      three results.
     summary: "Latest Datalayer updates"
-  - text: Extract key points from the top result
-    summary: "Key points of the top result"
-  - text: Summarize recent AI agent tooling trends
-    summary: "AI tooling trends"
+  - text: >-
+      Extract the key points from https://datalayer.ai and list them.
+    summary: "Key points of one page"
 
 welcome_message: >-
   Tavily MCP no-codemode agent ready. I use MCP tools directly.

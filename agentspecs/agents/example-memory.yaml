@@ -32,9 +32,7 @@ skills:
 tools:
   - runtime-echo:0.0.1
 
-frontend_tools:
-  - jupyter-notebook:0.0.1
-  - lexical-document:0.0.1
+frontend_tools: []
 
 environment_name: ai-agents-env
 
@@ -43,11 +41,14 @@ emoji: "🧠"
 color: "#0D9488"
 
 suggestions:
-  - text: Remember a user preference and confirm it was stored
-    summary: "Remember a preference"
-  - text: Recall previously stored preferences from memory
-    summary: "Recall preferences"
-  - text: Search memory for key facts from earlier turns
+  # First: something concrete to remember, so the store fills on the spot.
+  - text: >-
+      Remember that I prefer dark mode, metric units and concise answers, then
+      confirm what you stored.
+    summary: "Remember my preferences"
+  - text: What do you remember about my preferences?
+    summary: "Recall my preferences"
+  - text: Search your memory for anything about units or formatting.
     summary: "Search memory"
 
 welcome_message: >-

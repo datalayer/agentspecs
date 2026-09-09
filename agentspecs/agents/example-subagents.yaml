@@ -60,10 +60,17 @@ emoji: "👥"
 color: "#2563EB"
 
 suggestions:
-  - text: Research a topic and provide source-backed notes
+  # First: both subagents in one request — the roster's Running badge moves
+  # from the researcher to the writer.
+  - text: >-
+      Delegate to the researcher: three source-backed facts about the Jupyter
+      kernel protocol; then have the writer turn them into one short
+      paragraph.
+    summary: "Research, then write"
+  - text: >-
+      Delegate to the researcher: five facts about the history of the
+      lighthouse, with sources, and report them as notes.
     summary: "Research with notes"
-  - text: Write a concise summary from the research findings
-    summary: "Write the summary"
   - text: Split work between researcher and writer, then merge output
     summary: "Split and merge"
 

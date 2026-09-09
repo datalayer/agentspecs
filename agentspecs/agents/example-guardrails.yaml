@@ -33,9 +33,7 @@ tools:
   - runtime-echo:0.0.1
   - runtime-sensitive-echo:0.0.1
 
-frontend_tools:
-  - jupyter-notebook:0.0.1
-  - lexical-document:0.0.1
+frontend_tools: []
 
 environment_name: ai-agents-env
 
@@ -50,10 +48,14 @@ emoji: "🛡️"
 color: "#EF4444"
 
 suggestions:
+  # First: a tool the guardrail holds for approval — the approval card and
+  # the cost gauge of the example both move.
+  - text: >-
+      Call runtime_sensitive_echo with text "hello" and reason "audit", wait
+      for my decision, then report the result.
+    summary: "Approve or reject a sensitive call"
   - text: Use runtime_echo to confirm basic tool execution
     summary: "Basic tool execution"
-  - text: Call runtime_sensitive_echo and approve/reject the request
-    summary: "Approve or reject echo"
   - text: Summarize current cost usage vs configured run budget
     summary: "Cost vs budget"
   - text: Trigger before_tool_execute by calling runtime_sensitive_echo with reason audit

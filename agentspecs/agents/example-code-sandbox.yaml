@@ -1,0 +1,80 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Example Code Sandbox
+# Runtime agent used by AgentCodeSandboxExample: Python run in a sandbox the
+# server manages, whose variant (eval, jupyter-server) can be switched live.
+
+id: example-code-sandbox
+version: 0.0.1
+name: Example Code Sandbox Agent
+description: >-
+  Demonstrates the code sandbox. The agent runs Python through execute_code in
+  a sandbox the server manages — in-process eval or a Jupyter kernel — and the
+  example switches the variant, watches the sandbox's status and interrupts a
+  run.
+
+tags:
+  - sandbox
+  - code-execution
+  - python
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
+
+# The Local target starts a Jupyter sandbox; the example can switch it to
+# eval and back while the agent runs.
+sandbox_variant: jupyter-server
+
+memory: ephemeral
+
+mcp_servers: []
+
+skills: []
+
+tools: []
+
+frontend_tools: []
+
+environment_name: ai-agents-env
+
+icon: codespaces
+emoji: "📦"
+color: "#1F6FEB"
+
+suggestions:
+  # First: code that runs and prints — what a sandbox is for.
+  - text: >-
+      Write and run Python that computes the first 20 Fibonacci numbers and
+      prints them on one line.
+    summary: "First 20 Fibonacci numbers"
+  - text: >-
+      Write and run Python that counts from 1 to 30, printing each number and
+      sleeping one second between them.
+    summary: "Count to 30, one per second"
+  - text: >-
+      Write and run Python that draws a matplotlib bar chart of five
+      programming languages by popularity and saves it as chart.png, then
+      tell me the file size.
+    summary: "Bar chart saved to chart.png"
+
+welcome_message: >-
+  Code sandbox agent ready. Ask me to run Python: I execute it in the sandbox
+  and report what it printed.
+
+system_prompt: >-
+  You are the Code Sandbox example agent. Any computation, script, loop,
+  data check or file the person asks for is done by running Python in the
+  sandbox with `execute_code` — never by working it out yourself. Run the
+  code, then report what it printed, briefly. For a task that takes a while,
+  print progress as it goes so the sandbox's status and output can be
+  followed. Answer in the conversation, and only with the tools you actually
+  have; never call a tool you were not given.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
+
+trigger: null

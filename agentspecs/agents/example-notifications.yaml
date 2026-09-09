@@ -26,15 +26,23 @@ memory: ephemeral
 
 mcp_servers: []
 
-skills:
-  - events:0.0.1
+# No skills: the model reached for the events skill on the first opener and
+# the run failed on a skill nobody had enabled; channels are the subject here.
+skills: []
 
-tools:
-  - runtime-echo:0.0.1
+tools: []
 
-frontend_tools:
-  - jupyter-notebook:0.0.1
-  - lexical-document:0.0.1
+# The channels the agent notifies through; the example's panel turns email
+# and Slack on and gives them their targets.
+notifications:
+  in-app:
+    enabled: true
+  email:
+    enabled: false
+  slack:
+    enabled: false
+
+frontend_tools: []
 
 environment_name: ai-agents-env
 
@@ -43,11 +51,17 @@ emoji: "🔔"
 color: "#F59E0B"
 
 suggestions:
-  - text: Configure notification channels for in-app, email, and Slack
-    summary: "Configure channels"
-  - text: Trigger a test notification and verify delivery status
-    summary: "Send a test notification"
-  - text: Summarize unread notifications and recent alert activity
+  # First: a notification the panel shows at once, and the channels' state.
+  - text: >-
+      Send me an in-app notification titled "Hello from the example" saying
+      the notifications channel works, then tell me which channels are
+      enabled.
+    summary: "Send an in-app notification"
+  - text: >-
+      Send a warning-level notification through every enabled channel about
+      disk space running low, and report how each channel took it.
+    summary: "Warn on every channel"
+  - text: List the notifications sent so far and which are still unread.
     summary: "Unread notifications"
 
 welcome_message: >-
@@ -55,8 +69,15 @@ welcome_message: >-
   alert to validate delivery.
 
 system_prompt: >-
-  You are the Example Notifications Agent. Help users configure notification
-  channels, test delivery paths, and summarize recent notification activity.
+  You are the Example Notifications Agent. You notify the person through the
+  channels configured for you — in-app, email, Slack — with
+  `send_notification`, and you can see what was sent and how each channel
+  took it with `list_notifications`. Channels are configured by the person
+  in the panel beside the chat, not by you: when a channel is off or has no
+  target, say so and point to the panel. Report deliveries honestly from
+  the tool's answer — the local server records email rather than sending
+  it. Answer in the conversation, and only with the tools you actually
+  have; never call a tool you were not given.
 
 system_prompt_codemode_addons: null
 

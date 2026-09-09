@@ -27,6 +27,10 @@ memory: ephemeral
 mcp_servers:
   - tavily:0.0.1
 
+# Approvals are the Tool Approvals example's subject; a prompt before every
+# Tavily call would only get in the way of the tools panel this example shows.
+disable_tool_approvals: true
+
 skills:
   - events:0.0.1
   - jokes:0.0.1
@@ -34,9 +38,7 @@ skills:
 tools:
   - runtime-echo:0.0.1
 
-frontend_tools:
-  - jupyter-notebook:0.0.1
-  - lexical-document:0.0.1
+frontend_tools: []
 
 environment_name: ai-agents-env
 
