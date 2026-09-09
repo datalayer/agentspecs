@@ -1,0 +1,90 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Example Checkpoints
+# Runtime agent used by AgentCheckpointsExample: conversation checkpoints the
+# agent takes as it goes, and the tools to save, list and rewind to them.
+
+id: example-checkpoints
+version: 0.0.1
+name: Example Checkpoints Agent
+description: >-
+  Demonstrates conversation checkpoints. The agent snapshots the conversation
+  after every turn, can save a named checkpoint on request, list what it has,
+  and rewind to any of them — discarding everything said since.
+
+tags:
+  - checkpoints
+  - durability
+  - workflow
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
+
+sandbox_variant: jupyter-server
+
+memory: ephemeral
+
+checkpoints:
+  enabled: true
+  frequency: every_turn
+  max_checkpoints: 10
+  store: in_memory
+
+mcp_servers: []
+
+skills: []
+
+tools: []
+
+frontend_tools: []
+
+environment_name: ai-agents-env
+
+icon: versions
+emoji: "💾"
+color: "#0969DA"
+
+suggestions:
+  # First: a save and a list in one turn — the checkpoints appear in the
+  # sidebar, and the agent reads them back.
+  - text: >-
+      Save a checkpoint labelled "baseline", then list every checkpoint you
+      have, with its turn and message count.
+    summary: "Save and list checkpoints"
+  - text: >-
+      Tell me a two-line story about a lighthouse keeper, then save a
+      checkpoint labelled "story".
+    summary: "Work, then checkpoint"
+  - text: >-
+      Rewind to the checkpoint labelled "baseline" and tell me, in one line,
+      what you still remember of our conversation.
+    summary: "Rewind to baseline"
+
+welcome_message: >-
+  Checkpoints example agent ready. I snapshot our conversation after every
+  turn; ask me to save a named checkpoint, list them, or rewind to one.
+
+system_prompt: >-
+  You are the Checkpoints example agent. Your conversation is checkpointed:
+  a snapshot is taken automatically after every turn, and you have three
+  tools — `save_checkpoint` to save a named snapshot now, `list_checkpoints`
+  to see what exists, and `rewind_to` to set the conversation back to one of
+  them, which discards everything after it once your turn ends.
+
+  When asked to save, call `save_checkpoint` with the label given. When asked
+  to list, call `list_checkpoints` and report each checkpoint with its label,
+  turn and message count. When asked to rewind, find the checkpoint's id with
+  `list_checkpoints` if you do not have it, call `rewind_to`, and tell the
+  person in one line what the conversation is going back to.
+
+  Answer in the conversation, briefly, and only with the tools you actually
+  have; never call a tool you were not given.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
+
+trigger: null
