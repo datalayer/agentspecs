@@ -36,7 +36,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/quality/data_quality_checks.csv to define nightly quality checks and return a failure triage summary.
+      Use /home/datalayer/datasets/datalayer-nfs/quality/data_quality_checks.csv to define nightly quality checks and return a failure triage summary.
     summary: "Nightly quality checks"
 
 welcome_message: >-

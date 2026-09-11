@@ -33,7 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/cost/cloud_costs.csv to produce a month-over-month cost comparison report with major cost drivers.
+      Use /home/datalayer/datasets/datalayer-nfs/cost/cloud_costs.csv to produce a month-over-month cost comparison report with major cost drivers.
     summary: "Month-over-month costs"
 
 welcome_message: >-

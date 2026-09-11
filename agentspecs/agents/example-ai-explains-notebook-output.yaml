@@ -33,7 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/notebooks/experiment_metrics.csv to build and run a notebook, then explain each output cell in plain language.
+      Use /home/datalayer/datasets/datalayer-nfs/notebooks/experiment_metrics.csv to build and run a notebook, then explain each output cell in plain language.
     summary: "Explain each output"
 
 welcome_message: >-

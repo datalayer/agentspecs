@@ -36,7 +36,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/medical/clinical_trials.csv to summarize trial outcomes, safety trade-offs, and key evidence caveats.
+      Use /home/datalayer/datasets/datalayer-nfs/medical/clinical_trials.csv to summarize trial outcomes, safety trade-offs, and key evidence caveats.
     summary: "Trial outcomes summary"
 
 welcome_message: >-

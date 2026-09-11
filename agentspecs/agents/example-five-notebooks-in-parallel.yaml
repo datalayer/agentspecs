@@ -33,7 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/notebooks/parallel_tasks.csv to plan and execute five notebook tasks in parallel with a combined status summary.
+      Use /home/datalayer/datasets/datalayer-nfs/notebooks/parallel_tasks.csv to plan and execute five notebook tasks in parallel with a combined status summary.
     summary: "Five notebooks in parallel"
 
 welcome_message: >-

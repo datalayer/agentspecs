@@ -33,7 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/etl/daily_events.csv to run an overnight-style batch analysis and provide a completion summary with checkpoints.
+      Use /home/datalayer/datasets/datalayer-nfs/etl/daily_events.csv to run an overnight-style batch analysis and provide a completion summary with checkpoints.
     summary: "Overnight batch analysis"
 
 welcome_message: >-

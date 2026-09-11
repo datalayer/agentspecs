@@ -33,7 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/notebooks/experiment_metrics.csv and generate a complete analysis notebook from one prompt, including conclusions.
+      Use /home/datalayer/datasets/datalayer-nfs/notebooks/experiment_metrics.csv and generate a complete analysis notebook from one prompt, including conclusions.
     summary: "Notebook from one prompt"
 
 welcome_message: >-

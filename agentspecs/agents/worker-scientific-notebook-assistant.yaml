@@ -36,7 +36,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/notebooks/scientific_measurements.csv to run exploratory analysis and produce publication-ready notebook notes.
+      Use /home/datalayer/datasets/datalayer-nfs/notebooks/scientific_measurements.csv to run exploratory analysis and produce publication-ready notebook notes.
     summary: "Exploratory analysis notes"
 
 welcome_message: >-

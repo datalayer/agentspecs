@@ -33,7 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/finance/transactions_q1.csv and run a critic loop: first produce a reconciliation analysis, then critique it for gaps and publish a corrected final report.
+      Use /home/datalayer/datasets/datalayer-nfs/finance/transactions_q1.csv and run a critic loop: first produce a reconciliation analysis, then critique it for gaps and publish a corrected final report.
     summary: "Critic loop on transactions"
 
 welcome_message: >-

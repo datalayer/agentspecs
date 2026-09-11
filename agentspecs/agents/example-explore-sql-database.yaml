@@ -33,7 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/sql/query_workload.sql as a starting workload, profile query intent, and propose executable SQL exploration steps.
+      Use /home/datalayer/datasets/datalayer-nfs/sql/query_workload.sql as a starting workload, profile query intent, and propose executable SQL exploration steps.
     summary: "Explore the SQL workload"
 
 welcome_message: >-

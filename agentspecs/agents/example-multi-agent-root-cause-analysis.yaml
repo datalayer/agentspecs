@@ -33,7 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/ops/incidents.csv to run multi-agent root-cause analysis and produce a ranked remediation plan.
+      Use /home/datalayer/datasets/datalayer-nfs/ops/incidents.csv to run multi-agent root-cause analysis and produce a ranked remediation plan.
     summary: "Multi-agent root cause"
 
 welcome_message: >-

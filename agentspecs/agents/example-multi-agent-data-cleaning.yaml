@@ -33,7 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/quality/dirty_customers.csv and coordinate multiple agents to deduplicate and clean the dataset.
+      Use /home/datalayer/datasets/datalayer-nfs/quality/dirty_customers.csv and coordinate multiple agents to deduplicate and clean the dataset.
     summary: "Multi-agent data cleaning"
 
 welcome_message: >-

@@ -36,7 +36,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/sales/sales_pipeline.csv to produce a weekly executive briefing with trends, risks, and actions.
+      Use /home/datalayer/datasets/datalayer-nfs/sales/sales_pipeline.csv to produce a weekly executive briefing with trends, risks, and actions.
     summary: "Weekly executive briefing"
 
 welcome_message: >-

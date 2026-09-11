@@ -33,7 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/etl/source_orders.csv to build a resumable ETL flow with explicit checkpoint states.
+      Use /home/datalayer/datasets/datalayer-nfs/etl/source_orders.csv to build a resumable ETL flow with explicit checkpoint states.
     summary: "Resumable ETL"
 
 welcome_message: >-

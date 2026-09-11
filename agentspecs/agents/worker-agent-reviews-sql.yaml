@@ -36,7 +36,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/sql/query_workload.sql and perform a structured SQL review with lint findings, risk notes, and an improved query draft.
+      Use /home/datalayer/datasets/datalayer-nfs/sql/query_workload.sql and perform a structured SQL review with lint findings, risk notes, and an improved query draft.
     summary: "Structured SQL review"
 
 welcome_message: >-

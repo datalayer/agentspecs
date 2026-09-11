@@ -35,7 +35,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/insurance/claims.csv to detect suspicious claim patterns and draft a prioritized review queue.
+      Use /home/datalayer/datasets/datalayer-nfs/insurance/claims.csv to detect suspicious claim patterns and draft a prioritized review queue.
     summary: "Suspicious claims queue"
 
 welcome_message: >-

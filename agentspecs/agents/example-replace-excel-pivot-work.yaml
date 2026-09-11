@@ -33,7 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Load /home/jovyan/datasets/datalayer-nfs/titanic/titanic.xlsx with pandas.read_excel, then replace a manual pivot-table workflow in one notebook by producing: schema+missing values, survival breakdown, and one chart with a concise summary.
+      Load /home/datalayer/datasets/datalayer-nfs/titanic/titanic.xlsx with pandas.read_excel, then replace a manual pivot-table workflow in one notebook by producing: schema+missing values, survival breakdown, and one chart with a concise summary.
     summary: "Replace the pivot table"
 
 welcome_message: >-

@@ -33,7 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/sales/sales_history.csv and write pandas code that cleans, aggregates by month and region, and highlights growth trends.
+      Use /home/datalayer/datasets/datalayer-nfs/sales/sales_history.csv and write pandas code that cleans, aggregates by month and region, and highlights growth trends.
     summary: "Pandas code for trends"
 
 welcome_message: >-

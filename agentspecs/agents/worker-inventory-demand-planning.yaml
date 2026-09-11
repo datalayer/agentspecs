@@ -36,7 +36,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/inventory/inventory_demand.csv to forecast near-term stock risk and recommend reorder priorities.
+      Use /home/datalayer/datasets/datalayer-nfs/inventory/inventory_demand.csv to forecast near-term stock risk and recommend reorder priorities.
     summary: "Stock risk and reorders"
 
 welcome_message: >-

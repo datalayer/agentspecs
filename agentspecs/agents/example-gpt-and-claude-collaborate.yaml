@@ -33,7 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/marketing/campaign_performance.csv and orchestrate a two-agent collaboration where one analyzes and one critiques.
+      Use /home/datalayer/datasets/datalayer-nfs/marketing/campaign_performance.csv and orchestrate a two-agent collaboration where one analyzes and one critiques.
     summary: "Analyst and critic"
 
 welcome_message: >-

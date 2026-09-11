@@ -33,7 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Compare /home/jovyan/datasets/datalayer-nfs/titanic/titanic_baseline.csv and /home/jovyan/datasets/datalayer-nfs/titanic/titanic_candidate.csv, then summarize schema and value-level differences.
+      Compare /home/datalayer/datasets/datalayer-nfs/titanic/titanic_baseline.csv and /home/datalayer/datasets/datalayer-nfs/titanic/titanic_candidate.csv, then summarize schema and value-level differences.
     summary: "Compare two CSVs"
 
 welcome_message: >-

@@ -33,7 +33,7 @@ color: "#1F883D"
 
 suggestions:
   - text: >-
-      Use /home/jovyan/datasets/datalayer-nfs/notebooks/experiment_metrics.csv and execute Python in a controlled runtime with clear safety and output notes.
+      Use /home/datalayer/datasets/datalayer-nfs/notebooks/experiment_metrics.csv and execute Python in a controlled runtime with clear safety and output notes.
     summary: "Python in a controlled runtime"
 
 welcome_message: >-
