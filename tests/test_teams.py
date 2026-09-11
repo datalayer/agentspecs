@@ -71,7 +71,7 @@ class TestCatalogue:
         assert TEAM_CATALOGUE, "the team catalogue is empty"
 
     def test_get_team_finds_one_by_id(self):
-        assert get_team("jupyter-notebook") is not None
+        assert get_team("jupyter") is not None
         assert get_team("no-such-team") is None
 
     def test_list_teams_filters_by_tag(self):
@@ -99,7 +99,7 @@ class TestReferencesResolve:
     def test_teams_using_finds_dependants(self):
         # Asked when an agent spec is about to change: who depends on this?
         users = [team.id for team in teams_using("jupyter-notebook-compactor")]
-        assert "jupyter-notebook" in users
+        assert "jupyter" in users
 
     def test_teams_using_matches_without_a_version(self):
         assert teams_using("jupyter-tutor") == teams_using("jupyter-tutor:0.0.1")
@@ -214,36 +214,47 @@ class TestValidation:
             )
 
 
-class TestJupyterNotebookTeam:
-    """The team the reference-based design was written for."""
+class TestJupyterTeam:
+    """The team the reference-based design was written for.
 
-    def test_the_tutor_supervises_and_cannot_end_the_run(self):
-        team = get_team("jupyter-notebook")
-        assert team.supervisor.ref == "jupyter-tutor:0.0.1"
-        # A tutor would end the run when the learner understood, which is
-        # exactly when a requested compaction has not happened yet.
+    It began as two — a Tutor and a Compactor for a learner, then an analysis
+    team — and is one team of six since the two were merged under the id
+    `jupyter`.
+    """
+
+    def test_the_analyst_supervises_and_cannot_end_the_run(self):
+        team = get_team("jupyter")
+        assert team.supervisor.ref == "jupyter-data-analyst:0.0.1"
+        # A front door that could end the run would end it when its own
+        # analysis is done, which is exactly when a requested write-up, deck or
+        # compaction has not happened yet.
         assert team.supervisor.can_terminate is False
 
-    def test_both_specialists_are_members(self):
-        team = get_team("jupyter-notebook")
+    def test_all_six_specialists_are_members(self):
+        team = get_team("jupyter")
         assert [m.ref for m in team.agents] == [
+            "jupyter-data-analyst:0.0.1",
+            "jupyter-notebook-reviewer:0.0.1",
+            "jupyter-notebook-writer:0.0.1",
+            "worker-decks:0.0.1",
             "jupyter-tutor:0.0.1",
             "jupyter-notebook-compactor:0.0.1",
         ]
 
     def test_the_compactor_needs_a_person(self):
         # It rewrites the notebook somebody is working in.
-        team = get_team("jupyter-notebook")
+        team = get_team("jupyter")
         assert team.member("compactor").approval.value == "manual"
         assert team.member("tutor").approval.value == "auto"
 
     def test_members_may_not_delegate_to_each_other(self):
         # The tutor handing work to the compactor would edit a notebook the
         # learner is working in — the one thing the tutor exists not to do.
-        team = get_team("jupyter-notebook")
+        team = get_team("jupyter")
         assert team.delegation.allow_peer_delegation is False
 
     def test_roles_are_structural(self):
-        team = get_team("jupyter-notebook")
-        assert team.member("tutor").role is TeamRole.INITIATOR
+        team = get_team("jupyter")
+        assert team.member("analyst").role is TeamRole.INITIATOR
         assert team.member("compactor").role is TeamRole.FINALIZER
+        assert team.member("writer").role is TeamRole.FINALIZER
