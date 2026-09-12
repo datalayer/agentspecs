@@ -28,7 +28,7 @@ orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:
   name: Grid Operations Orchestrator Agent
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
 routing_instructions: 'Start with Sensor Ingestion to process real-time telemetry, then Anomaly Detector
   for pattern identification, then Failure Predictor for maintenance forecasting, then Grid Balancer for
   load optimisation. Escalate critical failure predictions (< 48h) immediately to operations dispatch.
@@ -43,7 +43,7 @@ agents:
   name: Sensor Ingestion Agent
   role: initiator
   goal: Ingest and process real-time telemetry from SCADA, smart meters, and IoT gateways
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: SCADA MCP
   tools:
   - SCADA Connector
@@ -56,7 +56,7 @@ agents:
   name: Anomaly Detector Agent
   role: contributor
   goal: Detect vibration, temperature, and voltage anomalies across all grid assets
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Monitoring MCP
   tools:
   - Vibration Analyzer
@@ -70,7 +70,7 @@ agents:
   name: Failure Predictor Agent
   role: contributor
   goal: Predict equipment failures 2–4 weeks in advance using anomaly patterns and failure history
-  model: anthropic-claude-sonnet-4
+  model: anthropic:claude-sonnet-4-20250514
   mcp_server: Predictive Analytics MCP
   tools:
   - Failure Correlation Engine
@@ -84,7 +84,7 @@ agents:
   name: Grid Balancer Agent
   role: finalizer
   goal: Optimise real-time load balancing across renewable and conventional generation sources
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Grid Control MCP
   tools:
   - Load Forecaster

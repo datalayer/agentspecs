@@ -39,7 +39,7 @@ agents:
   name: Data Collector Agent
   role: initiator
   goal: Collect and aggregate contact data from multiple CRM sources
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Data Processing MCP
   tools:
   - API Connector
@@ -62,7 +62,7 @@ agents:
   name: Sync Writer Agent
   role: contributor
   goal: Write cleaned and merged contacts back to the CRM systems
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: CRM Write MCP
   tools:
   - Salesforce Connector
@@ -73,7 +73,7 @@ agents:
   name: Report Generator Agent
   role: finalizer
   goal: Generate sync summary reports and send notifications
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Document Generation MCP
   tools:
   - PDF Generator

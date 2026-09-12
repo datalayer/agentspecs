@@ -28,7 +28,7 @@ orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:
   name: Campaign Analytics Orchestrator Agent
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
 routing_instructions: 'Start with Platform Connector to pull data from all ad platforms, then Metrics
   Normaliser for unified KPIs, then Anomaly Detector for real-time performance monitoring, then Budget
   Optimiser for reallocation recommendations. Escalate CPA spikes above 50% immediately.
@@ -43,7 +43,7 @@ agents:
   name: Platform Connector Agent
   role: initiator
   goal: Pull campaign data from Google Ads, Meta, TikTok, LinkedIn, GA4, and email platforms
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Ad Platforms MCP
   tools:
   - Google Ads Connector
@@ -57,7 +57,7 @@ agents:
   name: Metrics Normaliser Agent
   role: contributor
   goal: Normalise CPA, ROAS, CTR, and attribution across all platforms into unified view
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Analytics MCP
   tools:
   - Metric Unifier
@@ -71,7 +71,7 @@ agents:
   name: Anomaly Detector Agent
   role: contributor
   goal: Monitor all KPIs for CTR drops, CPA spikes, and budget pacing issues
-  model: anthropic-claude-sonnet-4
+  model: anthropic:claude-sonnet-4-20250514
   mcp_server: Monitoring MCP
   tools:
   - Anomaly Scanner
@@ -85,7 +85,7 @@ agents:
   name: Budget Optimiser Agent
   role: finalizer
   goal: Generate budget reallocation recommendations to maximise ROAS across channels
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Optimisation MCP
   tools:
   - ROAS Calculator

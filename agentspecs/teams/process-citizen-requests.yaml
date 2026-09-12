@@ -29,7 +29,7 @@ orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:
   name: Citizen Services Orchestrator Agent
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
 routing_instructions: 'Route incoming citizen requests to the Intake Agent for classification and triage,
   then to the Case Processor for handling and routing, then to the Policy Analyst for impact assessment
   on relevant items, then to the Transparency Agent for audit trail and public documentation. Escalate
@@ -45,7 +45,7 @@ agents:
   name: Intake & Classification Agent
   role: initiator
   goal: Classify, triage, and route citizen submissions from web portals, email, and documents
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Citizen Portal MCP
   tools:
   - Request Classifier
@@ -58,7 +58,7 @@ agents:
   name: Case Processor Agent
   role: contributor
   goal: Process and route requests to appropriate departments with required documentation
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Case Management MCP
   tools:
   - Case Creator
@@ -71,7 +71,7 @@ agents:
   name: Policy Impact Analyst Agent
   role: contributor
   goal: Model policy outcomes across population datasets with scenario simulation
-  model: anthropic-claude-sonnet-4
+  model: anthropic:claude-sonnet-4-20250514
   mcp_server: Policy Analytics MCP
   tools:
   - Monte Carlo Simulator
@@ -85,7 +85,7 @@ agents:
   name: Transparency & Audit Agent
   role: finalizer
   goal: Generate explainable decision documentation with full audit trail for public record
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Compliance MCP
   tools:
   - Decision Explainer

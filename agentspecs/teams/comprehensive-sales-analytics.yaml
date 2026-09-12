@@ -47,7 +47,7 @@ agents:
     schema with timestamps, dimensions (region, product line, rep), and measures (revenue, pipeline, conversion).
 
     '
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: CRM Data Server
   tools:
   - get_sales_data
@@ -63,7 +63,7 @@ agents:
     or critical.
 
     '
-  model: anthropic-claude-sonnet-4
+  model: anthropic:claude-sonnet-4-20250514
   mcp_server: Analytics Server
   tools:
   - run_analysis
@@ -79,7 +79,7 @@ agents:
     for each KPI using time-series models. Highlight the top 3 improving and top 3 declining metrics.
 
     '
-  model: anthropic-claude-sonnet-4
+  model: anthropic:claude-sonnet-4-20250514
   mcp_server: Analytics Server
   tools:
   - run_analysis
@@ -96,7 +96,7 @@ agents:
     critical anomalies with a red-flag summary at the top.
 
     '
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Document Generation MCP
   tools:
   - PDF Generator

@@ -25,7 +25,7 @@ orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:
   name: Support Orchestrator Agent
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
 routing_instructions: 'Route new tickets to the Triage Agent first, then to the Categorizer, then to the
   Pattern Analyzer. Escalate P1/critical tickets immediately to human support leads.
 
@@ -39,7 +39,7 @@ agents:
   name: Triage Agent
   role: initiator
   goal: Ingest new support tickets and assess urgency level (P1-P4)
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Helpdesk MCP
   tools:
   - Ticket Reader
@@ -50,7 +50,7 @@ agents:
   name: Categorizer Agent
   role: contributor
   goal: Categorize tickets by topic, product area, and sentiment
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: NLP Pipeline MCP
   tools:
   - Topic Classifier
@@ -63,7 +63,7 @@ agents:
   name: Pattern Analyzer Agent
   role: finalizer
   goal: Identify recurring issues and generate resolution recommendations
-  model: anthropic-claude-sonnet-4
+  model: anthropic:claude-sonnet-4-20250514
   mcp_server: Analytics MCP
   tools:
   - Pattern Detector

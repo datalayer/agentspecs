@@ -29,7 +29,7 @@ orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:
   name: Compliance Orchestrator Agent
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
 routing_instructions: 'Start with Data Ingestion to pull positions and transactions, then Risk Calculator
   for metric computation, then Reconciliation Agent to cross-check figures, then Validation Agent for
   regulatory rule checks, then Report Generator for submission-ready output. Escalate any reconciliation
@@ -45,7 +45,7 @@ agents:
   name: Data Ingestion Agent
   role: initiator
   goal: Extract positions, transactions, and P&L from trading and accounting systems
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Trading Systems MCP
   tools:
   - Position Reader
@@ -57,7 +57,7 @@ agents:
   name: Risk Calculator Agent
   role: contributor
   goal: Compute Basel III/IV risk-weighted assets, capital ratios, and VaR metrics
-  model: anthropic-claude-sonnet-4
+  model: anthropic:claude-sonnet-4-20250514
   mcp_server: Risk Engine MCP
   tools:
   - RWA Calculator
@@ -71,7 +71,7 @@ agents:
   name: Reconciliation Agent
   role: contributor
   goal: Cross-check computed figures against source systems and flag discrepancies
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Reconciliation MCP
   tools:
   - Position Reconciler
@@ -84,7 +84,7 @@ agents:
   name: Validation Agent
   role: contributor
   goal: Validate all metrics against Basel III/IV, MiFID II, and SOX regulatory rules
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Compliance Rules MCP
   tools:
   - Basel Rule Validator
@@ -97,7 +97,7 @@ agents:
   name: Report Generator Agent
   role: finalizer
   goal: Generate submission-ready regulatory reports with full data lineage and audit trail
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Document Generation MCP
   tools:
   - PDF Generator
