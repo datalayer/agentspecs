@@ -30,6 +30,14 @@ tags:
   - analytics
   - kpi
 
+# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# Ids come from the closed vocabulary in agent_runtimes.types.
+delegable:
+  - id: data.acquire
+  - id: data.analyse
+  - id: data.visualise
+  - id: report.author
+
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai

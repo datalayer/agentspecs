@@ -30,6 +30,12 @@ tags:
   - refactoring
   - cleanup
 
+# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# Ids come from the closed vocabulary in agent_runtimes.types.
+delegable:
+  - id: notebook.run
+  - id: data.transform
+
 enabled: true
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai

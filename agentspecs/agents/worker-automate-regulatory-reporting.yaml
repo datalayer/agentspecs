@@ -24,6 +24,15 @@ tags:
   - compliance
   - regulatory
 
+# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# Ids come from the closed vocabulary in agent_runtimes.types.
+delegable:
+  - id: notebook.validate
+  - id: data.acquire
+  - id: data.analyse
+  - id: document.extract
+  - id: report.author
+
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai

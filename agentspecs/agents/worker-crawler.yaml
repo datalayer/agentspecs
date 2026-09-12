@@ -19,6 +19,14 @@ tags:
   - github
   - analysis
 
+# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# Ids come from the closed vocabulary in agent_runtimes.types.
+delegable:
+  - id: data.acquire
+  - id: data.analyse
+  - id: document.extract
+  - id: research.gather
+
 enabled: true
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
