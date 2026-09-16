@@ -9,7 +9,7 @@ name: Alibaba Qwen3-32B
 description: Qwen3-32B via Alibaba Cloud Model Studio - open-weight 32B model with tool calling
 provider: alibaba
 default: false
-available: true
+available: false
 tokens_limit: 16384
 
 # Hosted through datalayer-ai-inference, which holds the Model Studio

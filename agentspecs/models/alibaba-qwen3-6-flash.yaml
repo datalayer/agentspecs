@@ -9,7 +9,7 @@ name: Alibaba Qwen3.6-Flash
 description: Qwen3.6-Flash via Alibaba Cloud Model Studio - fast and low cost
 provider: alibaba
 default: false
-available: true
+available: false
 tokens_limit: 16384
 
 # Hosted through datalayer-ai-inference, which holds the Model Studio

@@ -9,7 +9,7 @@ name: Alibaba Qwen3.7-Plus
 description: Qwen3.7-Plus via Alibaba Cloud Model Studio - balanced flagship Qwen3 model
 provider: alibaba
 default: false
-available: true
+available: false
 tokens_limit: 32768
 
 # Hosted through datalayer-ai-inference, which holds the Model Studio
