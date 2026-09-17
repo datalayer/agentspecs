@@ -7,6 +7,9 @@ name: CSV
 description: >-
   Deliver results as a CSV file for easy import into spreadsheets,
   data pipelines, or other analysis tools.
+# Not offered on the platform yet: the integrations page lists it as not available.
+enabled: false
+
 icon: table
 supports_template: false
 supports_storage: true

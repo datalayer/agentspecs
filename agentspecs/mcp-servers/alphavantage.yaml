@@ -19,6 +19,9 @@ envvars:
 env:
   MAX_RESPONSE_TOKENS: "100000"
 
+# Not offered on the platform yet: the integrations page lists it as not available.
+enabled: false
+
 tags:
   - finance
   - stocks

@@ -16,8 +16,7 @@ args:
   - "${TMPDIR}"
 
 transport: stdio
-enabled: true
-
+enabled: false
 env: {}
 
 tags:

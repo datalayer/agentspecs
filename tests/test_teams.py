@@ -236,7 +236,7 @@ class TestJupyterTeam:
             "jupyter-data-analyst:0.0.1",
             "jupyter-notebook-reviewer:0.0.1",
             "jupyter-notebook-writer:0.0.1",
-            "worker-decks:0.0.1",
+            "example-decks:0.0.1",
             "jupyter-tutor:0.0.1",
             "jupyter-notebook-compactor:0.0.1",
         ]

@@ -14,6 +14,9 @@ envvars:
 dependencies:
   - PyGithub>=2.1.0
 
+# Not offered on the platform yet: the integrations page lists it as not available.
+enabled: false
+
 tags:
   - github
   - git

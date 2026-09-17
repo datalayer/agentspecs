@@ -7,6 +7,9 @@ name: Database
 description: >-
   Write results back to a SQL or NoSQL store, where the rest of the
   business already reads from rather than into a file somebody must find.
+# Not offered on the platform yet: the integrations page lists it as not available.
+enabled: false
+
 icon: database
 supports_template: false
 supports_storage: true

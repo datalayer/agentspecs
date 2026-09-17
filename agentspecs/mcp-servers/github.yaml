@@ -19,8 +19,7 @@ args:
   - "ghcr.io/github/github-mcp-server"
 
 transport: stdio
-enabled: true
-
+enabled: false
 env:
   GITHUB_PERSONAL_ACCESS_TOKEN: "${GITHUB_TOKEN}"
 

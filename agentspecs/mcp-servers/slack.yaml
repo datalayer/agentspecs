@@ -23,6 +23,9 @@ env:
   SLACK_TEAM_ID: "${SLACK_TEAM_ID}"
   SLACK_CHANNEL_IDS: "${SLACK_CHANNEL_IDS}"
 
+# Not offered on the platform yet: the integrations page lists it as not available.
+enabled: false
+
 tags:
   - communication
   - messaging

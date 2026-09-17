@@ -1,16 +1,16 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Agent Specification: Decks
+# Agent Specification: Decks (example)
 #
-# A worker that makes and steers presentations. Every one of its tools —
+# The reference deck agent: makes and steers presentations. Every one of its tools —
 # reading and writing decks as much as opening, moving through, presenting
 # and printing one — comes from the decks plugin itself, which declares them
 # as agent tools to the reactor it is mounted in; this spec names none. It
 # needs no sandbox: a deck is data, and the tools are the whole of what it
 # does.
 
-id: worker-decks
+id: example-decks
 version: 0.0.1
 name: Decks
 domain: personal-assistant

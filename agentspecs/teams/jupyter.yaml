@@ -196,7 +196,7 @@ agents:
   # page mounts — read and write decks, open and drive one — and it makes
   # nothing up: a slide says what a cell showed.
   - id: decks
-    ref: worker-decks:0.0.1
+    ref: example-decks:0.0.1
     name: Jupyter Decks
     role: contributor
     goal: >-

@@ -19,6 +19,9 @@ env:
 envvars:
   - TAVILY_API_KEY:0.0.1
 
+# Not offered on the platform yet: the integrations page lists it as not available.
+enabled: false
+
 tags:
   - search
   - research

@@ -7,6 +7,9 @@ name: Notebook
 description: >-
   Deliver results as a Jupyter notebook with executable cells,
   inline visualizations, and rich markdown narrative.
+# Not offered on the platform yet: the integrations page lists it as not available.
+enabled: false
+
 icon: file-code
 supports_template: true
 supports_storage: true

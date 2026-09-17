@@ -7,6 +7,9 @@ name: Webhook
 description: >-
   Push results to any HTTP endpoint as they are produced, so a run
   can hand its answer straight to whatever is waiting for it.
+# Not offered on the platform yet: the integrations page lists it as not available.
+enabled: false
+
 icon: globe
 supports_template: true
 supports_storage: false
