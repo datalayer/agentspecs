@@ -3,7 +3,7 @@
 ## Automated release (tags)
 
 A pushed `v*` tag publishes that version to [PyPI](https://pypi.org/project/agentspecs/)
-through [`.github/workflows/release.yml`](.github/workflows/release.yml), with trusted
+through [`.github/workflows/release.yaml`](.github/workflows/release.yaml), with trusted
 publishing: no token is stored in the repository.
 
 1. Bump `__version__` in `agentspecs/__version__.py`, open a pull request and merge it to
@@ -34,7 +34,7 @@ publisher:
 
 - Owner: `datalayer`
 - Repository name: `agentspecs`
-- Workflow name: `release.yml`
+- Workflow name: `release.yaml`
 - Environment name: `pypi`
 
 The `pypi` environment exists in the repository settings (_Settings → Environments_);

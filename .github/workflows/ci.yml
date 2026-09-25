@@ -3,7 +3,7 @@
 # BSD 3-Clause License
 
 # Builds and tests every push to main and every pull request. Publishing is
-# `release.yml`'s, on a pushed `v*` tag, and runs these same checks first.
+# `release.yaml`'s, on a pushed `v*` tag, and runs these same checks first.
 
 name: CI
 
