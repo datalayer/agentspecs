@@ -17,12 +17,12 @@ publishing: no token is stored in the repository.
    ```
 
 The workflow checks that the tag equals `__version__` (it stops otherwise), then runs
-[`ci.yml`](.github/workflows/ci.yml) — the tests on Python 3.10 to 3.13, and the build: the
+[`ci.yaml`](.github/workflows/ci.yaml) — the tests on Python 3.10 to 3.13, and the build: the
 sdist and the wheel with `python -m build`, `twine check`, the YAML specs in the wheel, and
 an import of the installed wheel. Only when all of that passes does it publish that sdist
 and wheel with `pypa/gh-action-pypi-publish`, in the `pypi` environment.
 
-The same `ci.yml` runs on every pull request and every push to `main`.
+The same `ci.yaml` runs on every pull request and every push to `main`.
 
 PyPI never accepts the same version twice: a failed run can be re-run from the Actions tab,
 but a change after a publish needs a new version and a new tag.

@@ -4,7 +4,7 @@
 
 # Publishes the release a tag names to PyPI, with no stored token: PyPI
 # trusts this workflow file (OIDC trusted publishing). The tests and the
-# build are `ci.yml`'s, run here first; its wheel and sdist are what is
+# build are `ci.yaml`'s, run here first; its wheel and sdist are what is
 # published. See RELEASE.md.
 
 name: Release
@@ -40,7 +40,7 @@ jobs:
 
   ci:
     needs: check-tag
-    uses: ./.github/workflows/ci.yml
+    uses: ./.github/workflows/ci.yaml
 
   pypi:
     needs: ci
