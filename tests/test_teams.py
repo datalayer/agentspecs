@@ -133,6 +133,19 @@ class TestExecutionOrder:
             assert sum(len(g) for g in groups) == len(team.agents)
 
 
+    def test_sequencing_is_depends_on_not_a_trigger(self):
+        # `trigger` is what starts a member from outside the team; waiting
+        # for another member is `depends_on`, which is what a runtime orders
+        # by. "On completion of ..." as a trigger reads well and runs never.
+        misplaced = [
+            f"{team.id}/{member.id}: {member.trigger}"
+            for team in list_teams()
+            for member in team.agents
+            if member.trigger.lower().startswith("on completion of")
+        ]
+        assert not misplaced, misplaced
+
+
 class TestValidation:
     def test_a_cycle_is_refused(self):
         """Caught at load, not at run — with a model loaded and a person waiting."""

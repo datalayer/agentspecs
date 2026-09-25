@@ -103,7 +103,9 @@ agents:
   - Chart Builder
   - Email Sender
   - Slack Notifier
-  trigger: 'On completion of Anomaly Detector & Trend Analyzer'
+  depends_on:
+  - sa-2
+  - sa-3
   approval: manual
 reaction_rules:
 - id: rr-sales-1

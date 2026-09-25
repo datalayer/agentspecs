@@ -57,7 +57,8 @@ agents:
   - Count Comparator
   - Discrepancy Logger
   - Shrinkage Calculator
-  trigger: 'On completion of Inventory Scanner'
+  depends_on:
+  - inv-1
   approval: auto
 - id: inv-3
   name: Demand Forecaster Agent
@@ -69,7 +70,8 @@ agents:
   - Time Series Model
   - Seasonal Analyzer
   - External Signals Fetcher
-  trigger: 'On completion of Discrepancy Auditor'
+  depends_on:
+  - inv-2
   approval: auto
 - id: inv-4
   name: Reorder Planner Agent
@@ -81,7 +83,8 @@ agents:
   - EOQ Calculator
   - Supplier Catalog
   - PO Generator
-  trigger: 'On completion of Demand Forecaster'
+  depends_on:
+  - inv-3
   approval: manual
 - id: inv-5
   name: Audit Report Agent
@@ -93,7 +96,8 @@ agents:
   - PDF Generator
   - Chart Builder
   - Email Sender
-  trigger: 'On completion of Reorder Planner'
+  depends_on:
+  - inv-4
   approval: auto
 reaction_rules:
 - id: rr-inv-1

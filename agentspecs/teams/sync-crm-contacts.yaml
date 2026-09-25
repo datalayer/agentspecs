@@ -56,7 +56,8 @@ agents:
   - Statistical Analysis
   - ML Predictor
   - Deduplicator
-  trigger: 'On completion of Data Collector'
+  depends_on:
+  - tm-1
   approval: manual
 - id: tm-3
   name: Sync Writer Agent
@@ -67,7 +68,8 @@ agents:
   tools:
   - Salesforce Connector
   - HubSpot Connector
-  trigger: 'On completion of Analyzer'
+  depends_on:
+  - tm-2
   approval: manual
 - id: tm-4
   name: Report Generator Agent
@@ -79,7 +81,8 @@ agents:
   - PDF Generator
   - Chart Builder
   - Email Sender
-  trigger: 'On completion of Sync Writer'
+  depends_on:
+  - tm-3
   approval: auto
 reaction_rules:
 - id: rr-crm-1

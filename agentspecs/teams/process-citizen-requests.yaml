@@ -65,7 +65,8 @@ agents:
   - Document Assembler
   - Department Router
   - Status Tracker
-  trigger: 'On completion of Intake Agent'
+  depends_on:
+  - cit-1
   approval: auto
 - id: cit-3
   name: Policy Impact Analyst Agent
