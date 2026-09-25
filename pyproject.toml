@@ -23,7 +23,7 @@ classifiers = [
 dependencies = [
     "agent_skills",
     "code_sandboxes",
-    "mcp[cli]>=1.0",
+    "mcp[cli]>=2.0",
     "pydantic>=2.0",
     "httpx>=0.24",
 ]

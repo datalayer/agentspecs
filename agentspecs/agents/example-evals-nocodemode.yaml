@@ -8,8 +8,9 @@ id: example-evals-nocodemode
 version: 0.0.1
 name: Example Evals Agent (No Codemode)
 description: >-
-  Evals runner variant with codemode disabled for A/B comparisons against
-  example-evals in SDK eval examples.
+  The agent the SDK eval examples evaluate (no codemode): it normalizes text (trims
+  it and uppercases it) and returns nothing else, so every eval case has one
+  unambiguous expected output. Runs with codemode disabled, for A/B comparisons against example-evals.
 
 tags:
   - workflow
@@ -17,9 +18,10 @@ tags:
   - analysis
 
 enabled: true
-model: "bedrock:us.anthropic.claude-opus-4-8"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
 
-sandbox_variant: jupyter
+sandbox_variant: jupyter-server
 
 memory: ephemeral
 
@@ -44,13 +46,17 @@ emoji: "🧪"
 color: "#0284C7"
 
 suggestions:
-  - Run the selected evaluation experiment on the configured dataset
-  - Validate experiment configuration and report missing fields
-  - Summarize run results with pass rate and latency highlights
+  - text: "hello world"
+    summary: "Uppercase a phrase"
+  - text: "  Paris  "
+    summary: "Trim and uppercase"
+  - text: "déjà vu, 3 times!"
+    summary: "Keep accents, digits and punctuation"
 
 welcome_message: >-
-  Ready to run eval experiments without codemode enabled. Configure your
-  benchmark and evaluator setup, then launch a run.
+  Send any text and get it back normalized: trimmed and in uppercase, with
+  punctuation, numbers and inner spacing kept. The eval examples score these
+  answers against their expected outputs.
 
 system_prompt: >-
   You are a strict text normalization agent used by automated evals.

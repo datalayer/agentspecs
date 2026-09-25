@@ -19,7 +19,8 @@ tags:
 
 enabled: true
 protocol: ag-ui
-model: "bedrock:us.anthropic.claude-opus-4-8"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
 
 # Memory backend
 memory: ephemeral
@@ -45,8 +46,10 @@ color: "#6366F1"
 
 # Chat suggestions
 suggestions:
-  - Help me create a simple pasta recipe.
-  - Add tomatoes to the recipe.
+  - text: Help me create a simple pasta recipe.
+    summary: "Pasta recipe"
+  - text: Add tomatoes to the recipe.
+    summary: "Add tomatoes"
 
 welcome_message: >
   Hi! Tell me what you'd like to cook and I'll build a recipe with you.

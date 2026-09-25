@@ -1,0 +1,23 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: jupyter-notebook-propose
+version: 0.0.1
+name: Jupyter Notebook (propose)
+description: Read a notebook and propose changes for a person to accept, never applying them.
+tags:
+  - frontend
+  - notebook
+  - propose
+enabled: true
+
+# A named subset of the notebook toolset. An agent takes what it needs and
+# nothing more — least privilege, said in the spec rather than hoped for.
+toolset:
+  - readCell
+  - readAllCells
+  - proposeCellUpdate
+  - runCell
+
+icon: notebook
+emoji: "📓"

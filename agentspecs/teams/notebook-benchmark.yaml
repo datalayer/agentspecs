@@ -1,0 +1,80 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Team Specification: Notebook Benchmark
+#
+# Section 17 of ORCHESTRATOR.md, the recommended first vertical slice: one
+# benchmark, three specialists, one tree. It is a team rather than three
+# separate delegations because the order matters and the supervisor has to
+# answer from all three — which is exactly what `execution_mode: sequential`
+# and `depends_on` already express, so no new concept was needed (O2-13).
+#
+# The three roles are deliberately the ones that disagree with each other.
+# A runner that also judged its own output would have nothing to review, and
+# a reviewer that had watched the run would be checking its own memory rather
+# than the evidence. Each is handed what the last produced, by reference.
+
+id: notebook-benchmark
+version: 0.0.1
+name: Notebook Benchmark Team
+description: 'Runs a notebook benchmark end to end: one agent executes it from a clean sandbox, a second
+  compares what came out against what the evalset expected, and a third checks the comparison before it
+  is published. Section 17''s vertical slice.
+
+  '
+tags:
+- benchmark
+- notebook
+- evaluation
+- orchestration
+enabled: true
+icon: beaker
+emoji: 🧪
+color: '#1ABC9C'
+agent_spec_id: jupyter-data-analyst:0.0.1
+orchestration_protocol: datalayer
+execution_mode: sequential
+supervisor:
+  name: Benchmark Supervisor
+  model: bedrock:us.anthropic.claude-sonnet-4-6
+routing_instructions: 'Place the runner first and wait for it: nothing can be analysed before the notebook
+  has run. Give the analyst the runner''s outputs and the evalset''s expectations, and the reviewer the
+  analyst''s comparison. Answer with the reviewer''s verdict and the evidence behind it, never with a
+  summary of your own that nothing produced.
+
+  '
+validation:
+  timeout: 900s
+  retry_on_failure: true
+  max_retries: 2
+agents:
+- id: runner
+  name: Benchmark Runner
+  role: initiator
+  goal: Execute the benchmark's notebook from a clean sandbox and return it with its outputs
+  model: bedrock:us.anthropic.claude-sonnet-4-6
+  tools:
+  - Notebook Executor
+  approval: auto
+- id: analyst
+  name: Benchmark Analyst
+  role: contributor
+  goal: Compare what the notebook produced against what the evalset expected, and say where and by how
+    much they differ
+  model: bedrock:us.anthropic.claude-sonnet-4-6
+  tools:
+  - Notebook Reader
+  depends_on:
+  - runner
+  approval: auto
+- id: reviewer
+  name: Benchmark Reviewer
+  role: finalizer
+  goal: Check the analyst's comparison against the notebook's own outputs and say whether the conclusion
+    is supported by the evidence
+  model: bedrock:us.anthropic.claude-sonnet-4-6
+  tools:
+  - Notebook Reader
+  depends_on:
+  - analyst
+  approval: auto

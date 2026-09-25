@@ -22,8 +22,7 @@ args:
 transport: stdio
 
 # Whether the server is enabled by default
-enabled: true
-
+enabled: false
 # Environment variable specifications
 envvars:
   - HF_TOKEN:0.0.1

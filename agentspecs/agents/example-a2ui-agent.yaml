@@ -21,7 +21,8 @@ tags:
 
 enabled: true
 protocol: ag-ui
-model: "bedrock:us.anthropic.claude-opus-4-8"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
 
 # Memory backend
 memory: ephemeral
@@ -53,10 +54,14 @@ color: "#6366F1"
 
 # Chat suggestions covering a comprehensive, real A2UI scenario.
 suggestions:
-  - Build a support ticket intake form with category, priority and a description.
-  - Create a trip booking form with destination, dates, travelers and budget.
-  - Generate a customer feedback survey with a rating slider and comments.
-  - Make a product configurator for a laptop with CPU, RAM and add-ons.
+  - text: Build a support ticket intake form with category, priority and a description.
+    summary: "Support ticket form"
+  - text: Create a trip booking form with destination, dates, travelers and budget.
+    summary: "Trip booking form"
+  - text: Generate a customer feedback survey with a rating slider and comments.
+    summary: "Feedback survey"
+  - text: Make a product configurator for a laptop with CPU, RAM and add-ons.
+    summary: "Laptop configurator"
 
 welcome_message: >
   Hi! I turn requests into interactive A2UI surfaces. Ask me to build a form,

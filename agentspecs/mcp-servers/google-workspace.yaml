@@ -21,6 +21,9 @@ env:
   GOOGLE_OAUTH_CLIENT_SECRET: "${GOOGLE_OAUTH_CLIENT_SECRET}"
   WORKSPACE_MCP_PORT: "9000"
 
+# Not offered on the platform yet: the integrations page lists it as not available.
+enabled: false
+
 tags:
   - google
   - productivity

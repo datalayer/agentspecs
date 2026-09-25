@@ -6,7 +6,7 @@
 
 id: analyze-campaign-performance
 version: 0.0.1
-name: Analyze Campaign Performance
+name: Analyze Campaign Performance Team
 description: 'A multi-agent team that unifies marketing data from Google Ads, Meta, TikTok, LinkedIn,
   GA4, CRM, and email platforms. Normalises metrics into a unified view, detects performance anomalies
   in real time, and generates budget reallocation recommendations to maximise ROAS.
@@ -28,7 +28,7 @@ orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:
   name: Campaign Analytics Orchestrator Agent
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
 routing_instructions: 'Start with Platform Connector to pull data from all ad platforms, then Metrics
   Normaliser for unified KPIs, then Anomaly Detector for real-time performance monitoring, then Budget
   Optimiser for reallocation recommendations. Escalate CPA spikes above 50% immediately.
@@ -41,9 +41,9 @@ validation:
 agents:
 - id: cp-1
   name: Platform Connector Agent
-  role: Primary · Initiator
+  role: initiator
   goal: Pull campaign data from Google Ads, Meta, TikTok, LinkedIn, GA4, and email platforms
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Ad Platforms MCP
   tools:
   - Google Ads Connector
@@ -55,53 +55,56 @@ agents:
   approval: auto
 - id: cp-2
   name: Metrics Normaliser Agent
-  role: Secondary
+  role: contributor
   goal: Normalise CPA, ROAS, CTR, and attribution across all platforms into unified view
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Analytics MCP
   tools:
   - Metric Unifier
   - Currency Converter
   - Attribution Mapper
   - Naming Convention Resolver
-  trigger: On completion of Platform Connector Agent
+  depends_on:
+  - cp-1
   approval: auto
 - id: cp-3
   name: Anomaly Detector Agent
-  role: Secondary
+  role: contributor
   goal: Monitor all KPIs for CTR drops, CPA spikes, and budget pacing issues
-  model: anthropic-claude-sonnet-4
+  model: anthropic:claude-sonnet-4-20250514
   mcp_server: Monitoring MCP
   tools:
   - Anomaly Scanner
   - Budget Pacer
   - Alert Generator
   - Campaign Pauser
-  trigger: On completion of Metrics Normaliser Agent
+  depends_on:
+  - cp-2
   approval: manual
 - id: cp-4
   name: Budget Optimiser Agent
-  role: Final
+  role: finalizer
   goal: Generate budget reallocation recommendations to maximise ROAS across channels
-  model: openai-gpt-4-1
+  model: openai:gpt-4.1
   mcp_server: Optimisation MCP
   tools:
   - ROAS Calculator
   - Budget Allocator
   - Scenario Modeller
   - Report Generator
-  trigger: On completion of Anomaly Detector Agent
+  depends_on:
+  - cp-3
   approval: manual
 reaction_rules:
 - id: rr-camp-1
-  trigger: budget_threshold_exceeded
+  trigger: 'budget_threshold_exceeded'
   action: pause_and_notify
   auto: true
   max_retries: 1
   escalate_after_retries: 1
   priority: high
 - id: rr-camp-2
-  trigger: data_quality_low
+  trigger: 'data_quality_low'
   action: retry_collection
   auto: true
   max_retries: 3

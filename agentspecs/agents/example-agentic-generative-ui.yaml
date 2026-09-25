@@ -19,7 +19,8 @@ tags:
 
 enabled: true
 protocol: ag-ui
-model: "bedrock:us.anthropic.claude-opus-4-8"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
 
 # Memory backend
 memory: ephemeral
@@ -46,8 +47,10 @@ color: "#6366F1"
 
 # Chat suggestions
 suggestions:
-  - Create a project plan for building a mobile app.
-  - Generate a marketing strategy for a new product launch.
+  - text: Create a project plan for building a mobile app.
+    summary: "Mobile app plan"
+  - text: Generate a marketing strategy for a new product launch.
+    summary: "Marketing strategy"
 
 welcome_message: >
   Hi! Give me a goal and I'll create a plan, then work through the steps.

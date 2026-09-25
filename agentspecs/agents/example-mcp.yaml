@@ -17,14 +17,19 @@ tags:
   - summarization
 
 enabled: true
-model: "bedrock:us.anthropic.claude-opus-4-8"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
 
-sandbox_variant: jupyter
+sandbox_variant: jupyter-server
 
 memory: ephemeral
 
 mcp_servers:
   - tavily:0.0.1
+
+# Approvals are the Tool Approvals example's subject; a prompt before every
+# Tavily call would only get in the way of the tools panel this example shows.
+disable_tool_approvals: true
 
 skills:
   - events:0.0.1
@@ -33,9 +38,7 @@ skills:
 tools:
   - runtime-echo:0.0.1
 
-frontend_tools:
-  - jupyter-notebook:0.0.1
-  - lexical-document:0.0.1
+frontend_tools: []
 
 environment_name: ai-agents-env
 
@@ -44,10 +47,14 @@ emoji: "🌐"
 color: "#0EA5E9"
 
 suggestions:
-  - Search the web for recent news about AI agents
-  - Find trending open-source Python projects on GitHub
-  - Research best practices for building RAG applications
-  - Compare popular JavaScript frameworks in 2024
+  - text: Search the web for recent news about AI agents
+    summary: "AI agent news"
+  - text: Find trending open-source Python projects on GitHub
+    summary: "Trending Python projects"
+  - text: Research best practices for building RAG applications
+    summary: "RAG best practices"
+  - text: Compare popular JavaScript frameworks in 2024
+    summary: "JavaScript frameworks 2024"
 
 welcome_message: >-
   MCP example agent ready. Ask me to search, extract, crawl, and research via

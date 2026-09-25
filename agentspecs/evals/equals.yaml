@@ -7,6 +7,7 @@ name: Equals
 description: Assert exact equality between expected and actual values.
 category: Comparison
 evaluator_type: case
+executable: true
 pydantic_class: EqualsEvaluator
 output_kind: boolean
 cost_tier: free

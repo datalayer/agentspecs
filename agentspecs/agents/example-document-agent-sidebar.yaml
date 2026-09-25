@@ -1,0 +1,95 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: the Document Agent Sidebar example.
+#
+# Backs `LexicalAgentSidebarExample`. The same agent as
+# `example-document-agent`, docked beside the document rather than floating
+# over it: the chat's placement is the example's business, not the agent's, so
+# the two specs deliberately say the same thing about what the agent can do.
+# Kept as a spec of its own because each example names its own, and because the
+# sidebar's suggestions are the ones a docked panel shows on open.
+
+id: example-document-agent-sidebar
+version: 0.0.1
+name: Example Document Agent Sidebar
+description: >-
+  Demonstration agent docked beside a Lexical document. Writes and edits the
+  document through frontend tools so every change lands in the live editor,
+  runs Jupyter cells embedded in it, and draws diagrams into it with Excalidraw.
+
+tags:
+  - document
+  - lexical
+  - frontend-tools
+  - drawing
+  - sidebar
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
+
+sandbox_variant: jupyter-server
+memory: ephemeral
+
+mcp_servers: []
+
+skills:
+  - events:0.0.1
+
+tools:
+  - runtime-echo:0.0.1
+
+# The document toolset, and only it. This agent edits the document in front of
+# the user; it has no notebook to act on.
+frontend_tools:
+  - lexical-document:0.0.1
+
+environment_name: ai-agents-env
+
+icon: file
+emoji: "📝"
+color: "#1F6FEB"
+
+suggestions:
+  - text: "Can you help me write a document?"
+    summary: Help me write
+  - text: >-
+      Draw a flowchart of a three-stage data pipeline — ingest, transform,
+      publish — with labelled arrows between the stages.
+    summary: Draw a diagram
+  - text: >-
+      Read the drawing in this document and add a box for a validation step
+      between ingest and transform, wired into the existing arrows.
+    summary: Edit the drawing
+  - text: "Can you summarize the content in the editor?"
+    summary: Summarize text
+
+welcome_message: >-
+  Hi! I can help you write and edit this document. Ask me to draft a section,
+  summarize what is here, or draw a diagram.
+
+system_prompt: >-
+  You are a helpful assistant that works inside a Lexical document.
+  For anything that changes the document, use the lexical frontend tools so the
+  change happens in the live editor and the reader sees it appear.
+  Diagrams are documents too: when this editor mounts the Excalidraw plugin the
+  excalidraw* tools are in your tool list, and you should draw with them rather
+  than describing a picture in prose or drawing it as ASCII art. Use
+  excalidrawInsertNode to make one; to change an existing drawing, call
+  excalidrawListDrawings for its block_id and excalidrawReadScene for its
+  contents before editing it, because element ids only come from reading the
+  scene.
+  Use executeCodeInDocument only for temporary inspection code that should not
+  become part of the document.
+
+system_prompt_codemode_addons: >-
+  Compose focused execution steps and summarize what each one showed. Prefer
+  reading the document with the frontend tools over re-deriving its contents.
+
+codemode:
+  enabled: false
+
+welcome_notebook: null
+welcome_document: null
+trigger: null

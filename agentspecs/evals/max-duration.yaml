@@ -7,6 +7,7 @@ name: Max Duration
 description: Assert response latency remains below a configured duration threshold.
 category: Performance
 evaluator_type: case
+executable: false
 pydantic_class: MaxDurationEvaluator
 output_kind: boolean_with_reason
 cost_tier: free

@@ -1,0 +1,82 @@
+---
+sidebar_position: 2
+title: Members
+---
+
+# Members
+
+`agents` is the list of members, in declaration order. Each one is an agent
+doing a job inside the team.
+
+Prefer `ref` over restating an agent. A member that names a catalogue agent
+inherits its model, tools, prompt and its own subagents; everything else here
+says what is different *about that agent in this team*.
+
+`agents` is the list of members, in declaration order.
+
+## `id` (string)
+Identity within the team. This is what `depends_on` names.
+
+## `ref` (string)
+Agent catalogue reference, `id` or `id:version`. Prefer this over restating an
+agent inline: a member that names a catalogue agent stays correct when that
+agent changes.
+
+## `role` (enum)
+What the member is *for*, structurally — about its position in the work rather
+than its subject matter, because a runtime scheduling a team cares which member
+opens the work and which closes it.
+
+| Role | Meaning |
+| --- | --- |
+| `coordinator` | Routes work to the others and decides when the team is done. |
+| `initiator` | Opens the work: takes the request and produces the first result. |
+| `contributor` | Carries the work forward a step. |
+| `reviewer` | Checks another member's output and can send it back. |
+| `finalizer` | Produces what the team hands back. |
+
+## `depends_on` (list of member ids)
+Members that must finish first. Empty means it can start immediately.
+
+Validated at load: every id must name a member of the same team, nothing may
+depend on itself, and the graph must terminate. A cycle discovered at run time
+is discovered with a model already loaded and a person waiting.
+
+## `trigger` (string)
+What starts this member from *outside* the team — an event, a schedule, a
+webhook. Distinct from `depends_on`, which is what it waits for inside. The two
+used to be one prose field, so `Event: new ticket received` and `On completion
+of the Triage Agent` were the same kind of thing to a reader and neither was
+the same kind of thing to a runtime.
+
+## `approval` (enum)
+`auto` or `manual`. Use `manual` for a member that changes something the person
+owns.
+
+## `subagents` (list)
+Specialists this member may hand work to. The same shape as `subagents` on an
+agent spec — delegation is one idea, and it should be written the same way
+wherever it appears.
+
+```yaml
+subagents:
+  - name: CellFixer
+    ref: jupyter-cell-fixer:0.0.1
+    description: >-
+      Fixes a failing cell and proves the fix by running it.
+```
+
+Each subagent needs either a `ref` or `instructions` of its own. The
+`description` is read by the delegating model when it decides whether to reach
+for this specialist, so write it for one.
+
+## Overrides
+`model`, `mcp_server` and `tools` override what the referenced agent brings.
+For a member with no `ref` they *are* the definition.
+
+
+## See also
+
+- [Execution](./execution) — how the members are run, and who decides
+- [Composition](../modularity/composition) — subagents by reference, and why
+  a reference beats a copy

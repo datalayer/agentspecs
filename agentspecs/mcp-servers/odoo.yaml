@@ -14,8 +14,7 @@ args:
   - mcp-server-odoo
 
 transport: stdio
-enabled: true
-
+enabled: false
 env:
   ODOO_URL: "${ODOO_URL}"
   ODOO_API_KEY: "${ODOO_API_KEY}"

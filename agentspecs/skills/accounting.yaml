@@ -11,6 +11,9 @@ module: agent_skills.skills.accounting
 dependencies:
   - pandas>=2.0.0
 
+# Not offered on the platform yet: the integrations page lists it as not available.
+enabled: false
+
 tags:
   - accounting
   - finance

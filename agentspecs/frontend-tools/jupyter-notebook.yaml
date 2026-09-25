@@ -8,7 +8,7 @@ description: Frontend tools for interacting with Jupyter notebooks.
 tags:
   - frontend
   - notebook
-  - jupyter
+  - jupyter-server
 enabled: true
 toolset: all
 icon: notebook

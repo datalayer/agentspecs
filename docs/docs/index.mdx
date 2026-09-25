@@ -15,23 +15,28 @@ Declarative YAML specifications for AI agents, MCP servers, skills and more...
 
 Agentspecs is the source of truth for runtime catalogs compiled into Python and TypeScript.
 
-The repository currently defines these spec families:
+The documentation has three parts, and they answer different questions.
 
-- Agentspecs
-- Hook specs
-- Team specs
-- MCP server specs
-- Skill specs
-- Tool specs
-- Environment variable specs
-- Model specs
-- Memory specs
-- Guardrail specs
-- Evaluator specs
-- Benchmark specs
-- Trigger specs
-- Output specs
-- Notification specs
+**[Agents](./agents)** — what one agent is, and everything it is made of. An
+agent spec is mostly references: to the skills it has, the tools and MCP
+servers it can reach, the model it runs on, where its memory lives, what it is
+judged by. Each of those is a catalogue of its own, documented under Agents:
+
+- Skills, Tools, MCP Servers
+- Models, Memory, Env Vars
+- Hooks, Triggers, Guardrails
+- Evals, Benchmarks, Outputs, Notifications
+
+**[Agent Teams](./agent-teams)** — several agents working on one job, plus a
+supervisor deciding what happens next. A team composes agents from the
+catalogue by reference rather than restating them, and says in data — not in
+prose — what order they run in.
+
+**[Modularity](./modularity)** — how a spec is built out of other specs, rather
+than copied from them. Extension (`extends`) for "the same agent, adjusted",
+composition (`includes`) for "this bundle, wherever needed". It sits beside the
+other two because it applies to both: a team member and an agent are composed
+by the same rules.
 
 ## Key Properties
 

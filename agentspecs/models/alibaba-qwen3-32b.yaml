@@ -1,0 +1,22 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Alibaba Qwen3-32B (Model Studio)
+
+id: "alibaba:qwen3-32b"
+version: 0.0.1
+name: Alibaba Qwen3-32B
+description: Qwen3-32B via Alibaba Cloud Model Studio - open-weight 32B model with tool calling
+provider: alibaba
+default: false
+available: false
+tokens_limit: 16384
+
+# Hosted through datalayer-ai-inference, which holds the Model Studio
+# credentials. Nothing is required in the agent runtime environment.
+required_env_vars: []
+
+capabilities:
+  - chat
+  - tools
+  - codemode

@@ -7,6 +7,9 @@ name: Document
 description: >-
   Deliver results as a structured document (PDF, DOCX, or Markdown)
   suitable for sharing, archiving, or regulatory compliance.
+# Not offered on the platform yet: the integrations page lists it as not available.
+enabled: false
+
 icon: file
 supports_template: true
 supports_storage: true

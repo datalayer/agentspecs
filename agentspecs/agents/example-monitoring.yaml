@@ -17,9 +17,10 @@ tags:
   - performance
 
 enabled: true
-model: "bedrock:us.anthropic.claude-opus-4-8"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
 
-sandbox_variant: jupyter
+sandbox_variant: jupyter-server
 
 memory: ephemeral
 
@@ -31,9 +32,7 @@ skills:
 tools:
   - runtime-echo:0.0.1
 
-frontend_tools:
-  - jupyter-notebook:0.0.1
-  - lexical-document:0.0.1
+frontend_tools: []
 
 environment_name: ai-agents-env
 
@@ -42,9 +41,12 @@ emoji: "📊"
 color: "#0EA5E9"
 
 suggestions:
-  - Show my current monitoring context summary
-  - Explain the last turn cost and total token usage
-  - Summarize recent activity and potential anomalies
+  - text: Show my current monitoring context summary
+    summary: "Monitoring summary"
+  - text: Explain the last turn cost and total token usage
+    summary: "Last turn cost and tokens"
+  - text: Summarize recent activity and potential anomalies
+    summary: "Recent activity and anomalies"
 
 welcome_message: >-
   Monitoring example agent ready. Ask for runtime activity, cost trends, and token

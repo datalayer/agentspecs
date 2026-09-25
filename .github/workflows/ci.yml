@@ -1,0 +1,76 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+#
+# BSD 3-Clause License
+
+# Builds and tests every push to main and every pull request. Publishing is
+# `release.yml`'s, on a pushed `v*` tag, and runs these same checks first.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Build the sdist and the wheel
+        run: |
+          python -m pip install --upgrade build twine
+          python -m build --outdir dist
+          twine check --strict dist/*
+
+      - name: Check the wheel carries the specs
+        run: |
+          set -euo pipefail
+          unzip -Z1 dist/*.whl > wheel-files.txt
+          grep -q '^agentspecs/agents/.*\.yaml$' wheel-files.txt
+          grep -q '^agentspecs/models/.*\.yaml$' wheel-files.txt
+          grep -q '^agentspecs/teams/.*\.yaml$' wheel-files.txt
+
+      - name: Import the built wheel
+        run: |
+          python -m venv /tmp/wheel-env
+          /tmp/wheel-env/bin/pip install dist/*.whl
+          cd /tmp
+          /tmp/wheel-env/bin/python -c "import agentspecs; from agentspecs.models import list_models; from agentspecs.teams import list_teams; print(agentspecs.__version__, len(list_models()), 'models,', len(list_teams()), 'teams')"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python
+          path: dist/*
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install
+        run: python -m pip install ".[test]"
+
+      - name: Test
+        run: python -m pytest tests -v

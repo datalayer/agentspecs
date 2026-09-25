@@ -10,8 +10,7 @@ command: eurus-mcp
 args: []
 
 transport: stdio
-enabled: true
-
+enabled: false
 env: {}
 
 tags:

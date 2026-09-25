@@ -19,7 +19,8 @@ tags:
 
 enabled: true
 protocol: ag-ui
-model: "bedrock:us.anthropic.claude-opus-4-8"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
 
 # Memory backend
 memory: ephemeral
@@ -45,8 +46,10 @@ color: "#6366F1"
 
 # Chat suggestions
 suggestions:
-  - Plan a weekend trip to Paris.
-  - Plan a birthday party for next Saturday.
+  - text: Plan a weekend trip to Paris.
+    summary: "Weekend trip to Paris"
+  - text: Plan a birthday party for next Saturday.
+    summary: "Birthday party plan"
 
 welcome_message: >
   Hi! Describe a task and I'll draft a step-by-step plan for you to review.

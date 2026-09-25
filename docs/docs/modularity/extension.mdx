@@ -1,0 +1,31 @@
+---
+sidebar_position: 2
+title: Extension
+---
+
+# Extension
+
+Inheritance, with `extends`. Reach for it when the new spec **is** the old one
+with changes — the relationship is "a kind of".
+
+A child names one parent and overrides what it needs.
+
+```yaml
+# agents/cell-fixer.yaml
+id: cell-fixer
+extends: loop-base:0.0.1
+model: "bedrock:us.anthropic.claude-sonnet-4-6"   # overrides the parent's
+system_prompt_append: >-
+  Fix the failing cell and prove the fix by running it.
+```
+
+- Single inheritance, and the chain may be **at most three deep**. A spec graph
+  nobody can read is worse than a repeated field.
+- A cycle is refused by name at generation time (`a → b → a`), not discovered at
+  runtime.
+- The reference may be versioned (`loop-base:0.0.1`) or bare (`loop-base`).
+
+Extension carries *everything* the parent declares, subagent lists included —
+which is the reason a specialist that only needs shared capability should
+[compose a fragment](./composition) instead. See [Merge semantics](./#merge-semantics)
+for what the child wins and what it appends to.

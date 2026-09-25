@@ -17,11 +17,31 @@ tags:
   - analysis
 
 enabled: true
-model: "bedrock:us.anthropic.claude-opus-4-8"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
 
-sandbox_variant: jupyter
+sandbox_variant: jupyter-server
 
 memory: ephemeral
+
+subagents:
+  includeGeneralPurpose: true
+  subagents:
+    - name: researcher
+      description: >-
+        Gathers facts and source-backed notes on a topic. Use for research,
+        fact-finding, and background gathering.
+      instructions: >-
+        You are a meticulous research specialist. Given a topic, gather the key
+        facts and return concise, source-aware notes. Prefer verifiable claims
+        and flag anything uncertain.
+    - name: writer
+      description: >-
+        Turns research notes into clear, well-structured prose. Use for
+        summaries, drafts, and final write-ups.
+      instructions: >-
+        You are a concise writing specialist. Given notes or findings, produce
+        clear, well-structured prose. Keep it focused and free of filler.
 
 mcp_servers: []
 
@@ -31,9 +51,7 @@ skills:
 tools:
   - runtime-echo:0.0.1
 
-frontend_tools:
-  - jupyter-notebook:0.0.1
-  - lexical-document:0.0.1
+frontend_tools: []
 
 environment_name: ai-agents-env
 
@@ -42,18 +60,38 @@ emoji: "👥"
 color: "#2563EB"
 
 suggestions:
-  - Research a topic and provide source-backed notes
-  - Write a concise summary from the research findings
-  - Split work between researcher and writer, then merge output
+  # First: both subagents in one request — the roster's Running badge moves
+  # from the researcher to the writer.
+  - text: >-
+      Delegate to the researcher: three source-backed facts about the Jupyter
+      kernel protocol; then have the writer turn them into one short
+      paragraph.
+    summary: "Research, then write"
+  - text: >-
+      Delegate to the researcher: five facts about the history of the
+      lighthouse, with sources, and report them as notes.
+    summary: "Research with notes"
+  - text: Split work between researcher and writer, then merge output
+    summary: "Split and merge"
 
 welcome_message: >-
   Subagents example agent ready. Ask me to delegate research and writing tasks
   across specialist subagents.
 
 system_prompt: >-
-  You are the Demo Subagents Orchestrator. Decompose user requests into
-  specialist tasks, delegate effectively, and synthesize a coherent final
-  response.
+  You are the Demo Subagents Orchestrator. You do not research or write
+  yourself: you split a request into specialist tasks, hand each to the
+  subagent it is for, and synthesize their answers into one coherent reply.
+
+  Your subagents are `researcher` — facts, background, source-backed notes —
+  and `writer` — clear, structured prose from notes or instructions. Reach
+  them through the tool named after the subagent, or through `delegate_task`
+  naming it, whichever you have been given; a request to "research and
+  write" is two delegations, the researcher's notes handed to the writer.
+  Give each a task it can carry out without the rest of this conversation.
+
+  Answer in the conversation, and only with the tools you actually have;
+  never call a tool you were not given.
 
 system_prompt_codemode_addons: null
 

@@ -13,11 +13,10 @@ command: npx
 args:
   - "-y"
   - "@modelcontextprotocol/server-filesystem"
-  - "$TMPDIR"
+  - "${TMPDIR}"
 
 transport: stdio
-enabled: true
-
+enabled: false
 env: {}
 
 tags:

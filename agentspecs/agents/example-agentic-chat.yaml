@@ -19,7 +19,8 @@ tags:
 
 enabled: true
 protocol: ag-ui
-model: "bedrock:us.anthropic.claude-opus-4-8"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
 
 # Memory backend
 memory: ephemeral
@@ -45,8 +46,10 @@ color: "#6366F1"
 
 # Chat suggestions
 suggestions:
-  - What is the current time?
-  - What's the current date?
+  - text: What is the current time?
+    summary: "Current time"
+  - text: What's the current date?
+    summary: "Current date"
 
 welcome_message: >
   Hi! Ask me for the current time in any timezone.

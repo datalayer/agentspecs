@@ -1,0 +1,56 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+#
+# BSD 3-Clause License
+
+# Publishes the release a tag names to PyPI, with no stored token: PyPI
+# trusts this workflow file (OIDC trusted publishing). The tests and the
+# build are `ci.yml`'s, run here first; its wheel and sdist are what is
+# published. See RELEASE.md.
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  check-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Check the tag names the version being released
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(python3 -c "import re;print(re.search(r'__version__\s*=\s*[\"\x27]([^\"\x27]+)', open('agentspecs/__version__.py').read())[1])")"
+          echo "tag=$tag agentspecs=$version"
+          if [ "$tag" != "$version" ]; then
+            echo "::error::Tag v$tag does not match agentspecs $version"
+            exit 1
+          fi
+
+  ci:
+    needs: check-tag
+    uses: ./.github/workflows/ci.yml
+
+  pypi:
+    needs: ci
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: python
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1

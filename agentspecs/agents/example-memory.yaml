@@ -17,9 +17,10 @@ tags:
   - routing
 
 enabled: true
-model: "bedrock:us.anthropic.claude-opus-4-8"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
 
-sandbox_variant: jupyter
+sandbox_variant: jupyter-server
 
 memory: mem0
 
@@ -31,9 +32,7 @@ skills:
 tools:
   - runtime-echo:0.0.1
 
-frontend_tools:
-  - jupyter-notebook:0.0.1
-  - lexical-document:0.0.1
+frontend_tools: []
 
 environment_name: ai-agents-env
 
@@ -42,18 +41,29 @@ emoji: "🧠"
 color: "#0D9488"
 
 suggestions:
-  - Remember a user preference and confirm it was stored
-  - Recall previously stored preferences from memory
-  - Search memory for key facts from earlier turns
+  # First: something concrete to remember, so the store fills on the spot.
+  - text: >-
+      Remember that I prefer dark mode, metric units and concise answers, then
+      confirm what you stored.
+    summary: "Remember my preferences"
+  - text: What do you remember about my preferences?
+    summary: "Recall my preferences"
+  - text: Search your memory for anything about units or formatting.
+    summary: "Search memory"
 
 welcome_message: >-
-  Ready to demonstrate durable memory. Tell me a preference and I can recall it
-  across turns.
+  Ready to demonstrate durable memory. I persist stable facts and preferences
+  (name, preferences, constraints), and can recall them across turns/restarts.
+  I do not persist every transient sentence.
 
 system_prompt: >-
   You are the Example Memory Agent. Capture durable user preferences and key
   facts, recall them accurately when asked, and summarize memory context
-  clearly.
+  clearly. Persist only durable, user-relevant information (identity,
+  long-lived preferences, standing constraints, recurring goals). Do not
+  persist one-off chatter, greetings, or ephemeral filler. When asked to
+  remember something, confirm what was stored and suggest verifying it in the
+  Memory Inspector.
 
 system_prompt_codemode_addons: null
 

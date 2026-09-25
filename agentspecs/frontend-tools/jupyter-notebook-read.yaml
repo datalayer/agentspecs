@@ -1,0 +1,21 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: jupyter-notebook-read
+version: 0.0.1
+name: Jupyter Notebook (read only)
+description: Read a notebook without changing it — cells, outputs and errors.
+tags:
+  - frontend
+  - notebook
+  - read
+enabled: true
+
+# A named subset of the notebook toolset. An agent takes what it needs and
+# nothing more — least privilege, said in the spec rather than hoped for.
+toolset:
+  - readCell
+  - readAllCells
+
+icon: notebook
+emoji: "📓"

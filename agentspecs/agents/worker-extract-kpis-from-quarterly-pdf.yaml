@@ -1,0 +1,74 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: worker-extract-kpis-from-quarterly-pdf
+version: 0.0.1
+name: Extract KPIs from Quarterly PDF
+domain: accounting
+description: >-
+  Pull revenue, margin, growth, and guidance metrics from quarterly reports
+  and output a clean KPI table with source citations.
+
+tags:
+  - accounting
+  - agent-worker
+  - data-acquisition
+  - kpi
+  - reporting
+
+# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# Ids come from the closed vocabulary in agent_runtimes.types.
+delegable:
+  - id: data.acquire
+  - id: data.extract
+  - id: data.transform
+  - id: data.analyse
+  - id: report.author
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
+sandbox_variant: jupyter-server
+memory: ephemeral
+mcp_servers: []
+skills:
+  - events:0.0.1
+tools:
+  - runtime-echo:0.0.1
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+environment_name: ai-agents-env
+icon: pulse
+emoji: "📊"
+color: "#1F883D"
+
+suggestions:
+  - text: >-
+      Use the PDF set in /home/datalayer/datasets/datalayer-nfs/placeholder to extract quarterly KPI candidates and return them in a structured table.
+    summary: "KPIs from the PDFs"
+
+welcome_message: >-
+  Hi! I can help with extract kpis from quarterly pdf. Share data, files, or context
+  and I will run the workflow end-to-end, explain what matters, and suggest
+  practical next steps.
+
+system_prompt: >-
+  You are a specialized assistant for this gallery workflow: Extract KPIs from Quarterly PDF.
+  Objective: Pull revenue, margin, growth, and guidance metrics from quarterly reports and output a clean KPI table with source citations.
+  Use the runtime tools and notebook execution environment when needed. Keep
+  outputs concise, structured, and decision-oriented. Provide clear reasoning
+  and recommended next actions.
+
+system_prompt_codemode_addons: >-
+  Compose focused execution steps, validate intermediate results, and summarize
+  outcomes after each run. Prefer efficient, reproducible code paths.
+
+codemode:
+  enabled: true
+  token_reduction: "~80%"
+  speedup: "~1.5x"
+
+welcome_notebook: null
+welcome_document: null
+trigger: null

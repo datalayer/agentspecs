@@ -7,6 +7,7 @@ name: Is Instance
 description: Validate output type against an expected Python/JSON schema type.
 category: Type Validation
 evaluator_type: case
+executable: false
 pydantic_class: IsInstanceEvaluator
 output_kind: boolean
 cost_tier: free

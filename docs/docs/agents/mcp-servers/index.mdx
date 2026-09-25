@@ -1,0 +1,216 @@
+---
+title: MCP Servers
+---
+
+# MCP Server Specifications
+
+MCP (Model Context Protocol) server specifications define how agents connect to external tools and services.
+
+## Overview
+
+MCP servers provide tools and resources to agents through a standardized protocol. Each specification defines the command to run, arguments, environment variables, and transport method.
+
+## Required Fields
+
+### `id` (string)
+Unique identifier (kebab-case, e.g., `kaggle`, `github`, `filesystem`)
+
+### `version` (string)
+Spec version (currently `0.0.1`).
+
+### `name` (string)
+Display name shown in the UI
+
+### `description` (string)
+Server capabilities description
+
+### `command` (string)
+Executable command to start the server
+```yaml
+command: python
+command: npx
+command: node
+```
+
+### `args` (list of strings)
+Command arguments including environment variable references
+```yaml
+args:
+  - "-m"
+  - "mcp_remote"
+  - "--Authorization"
+  - "Bearer ${KAGGLE_API_TOKEN}"
+```
+
+## Optional Fields
+
+### `transport` (string)
+Transport protocol (`"stdio"` or `"remote"`)
+```yaml
+transport: stdio   # Standard input/output
+transport: remote  # Remote HTTP connection
+```
+
+### `envvars` (list of strings)
+Required environment variable IDs. References specs in `envvars/` directory.
+```yaml
+envvars:
+  - KAGGLE_API_TOKEN:0.0.1
+  - GITHUB_TOKEN
+```
+
+### `env` (object)
+Environment variables to set for the server process
+```yaml
+env:
+  NODE_ENV: production
+  LOG_LEVEL: info
+```
+
+### `tags` (list of strings)
+Categorization tags
+```yaml
+tags:
+  - data
+  - kaggle
+  - datasets
+```
+
+### `icon` (string)
+UI icon identifier
+
+### `emoji` (string)
+UI emoji identifier
+
+## Environment Variable Expansion
+
+Use `${VAR_NAME}` syntax in args for environment variable expansion:
+
+```yaml
+args:
+  - "-m"
+  - "mcp_remote"
+  - "--Authorization"
+  - "Bearer ${KAGGLE_API_TOKEN}"
+  - "--accept"
+  - "application/json"
+  - "--"
+  - "https://mcp.kaggle.com"
+
+envvars:
+  - KAGGLE_API_TOKEN
+```
+
+The `${KAGGLE_API_TOKEN}` will be expanded at runtime by consuming systems.
+
+## Complete Example
+
+```yaml
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: kaggle
+version: 0.0.1
+name: Kaggle MCP Server
+description: Access Kaggle datasets, competitions, and kernels
+
+command: python
+args:
+  - "-m"
+  - "mcp_remote"
+  - "--Authorization"
+  - "Bearer ${KAGGLE_API_TOKEN}"
+  - "--accept"
+  - "application/json"
+  - "--"
+  - "https://mcp.kaggle.com"
+
+transport: remote
+
+envvars:
+  - KAGGLE_API_TOKEN:0.0.1
+
+tags:
+  - data
+  - kaggle
+  - datasets
+```
+
+## MCP Server Hierarchy
+
+```
+MCP Server Specification
+├── Basic Info (id, name, description, tags)
+├── Execution (command, args, transport)
+├── Environment
+│   ├── envvars (required environment variables)
+│   └── env (variables to set for the process)
+└── UI (icon, emoji)
+```
+
+## Available MCP Servers
+
+The following MCP servers are defined in `agentspecs/mcp-servers/`, one
+specification file each, and launched from `MCP_SERVER_CATALOG`. A test holds
+the two together with this list, because it named eight while thirteen
+existed — five servers invisible to anybody reading this page to find out
+what was available.
+
+- **`alphavantage`** - Financial market data
+- **`chart`** - Chart generation
+- **`datalayer`** - Notebooks, sandboxes and data on Datalayer itself
+- **`earthdata`** - NASA Earthdata search and access
+- **`eurus`** - Climate and reanalysis analysis
+- **`filesystem`** - Local filesystem operations
+- **`github`** - GitHub repository operations
+- **`google-workspace`** - Google Workspace integration
+- **`huggingface`** - Models, datasets, spaces and papers
+- **`kaggle`** - Kaggle datasets and competitions
+- **`odoo`** - Odoo ERP records
+- **`salesforce`** - Salesforce records
+- **`slack`** - Slack messaging
+- **`tavily`** - Web search via Tavily API
+
+### The Datalayer server is off by default
+
+Every other server here reaches something *outside* Datalayer. `datalayer`
+reaches this platform, and an agent running in a Datalayer sandbox already
+has the notebook it was given — enabling it says "this agent should also act
+on my other notebooks", which is a choice somebody makes rather than a
+default they discover.
+
+It is reached through `mcp-remote` with a bearer token from
+`DATALAYER_API_KEY`, not through the OAuth flow. `mcp-remote` can do OAuth
+2.1 with PKCE, which is right for a person at a desktop client and wrong
+here: it opens a browser and waits for a consent screen to be approved. An
+agent runtime has nobody at the keyboard.
+
+## Best Practices
+
+1. **ID Format**: Use kebab-case (`kaggle`, not `Kaggle` or `kaggle_mcp`)
+2. **Command**: Use full command names (`python`, not `py`)
+3. **Args**: Break arguments into separate list items for clarity
+4. **Environment Variables**: Always define required envvars in the `envvars` field
+5. **Variable Expansion**: Use `${VAR_NAME}` syntax consistently
+6. **Transport**: Specify `stdio` for local processes, `remote` for HTTP connections
+7. **Tags**: Use consistent tags for better categorization
+8. **Description**: Be specific about what tools and resources the server provides
+
+## Full Field Coverage
+
+Required fields:
+
+- `id`
+- `version`
+- `name`
+- `description`
+- `command`
+- `args`
+
+Common optional fields:
+
+- `transport` (`stdio` or `remote`)
+- `envvars` (prefer versioned refs)
+- `env` (process env injection)
+- `tags`
+- `icon`, `emoji`

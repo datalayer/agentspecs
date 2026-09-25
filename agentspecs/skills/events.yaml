@@ -11,6 +11,9 @@ module: agent_skills.skills.events
 dependencies:
   - httpx>=0.27.0
 
+# Not offered on the platform yet: the integrations page lists it as not available.
+enabled: false
+
 tags:
   - events
   - orchestration

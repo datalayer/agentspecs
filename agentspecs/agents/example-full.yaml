@@ -22,9 +22,10 @@ tags:
   - notebook
 
 enabled: true
-model: "bedrock:us.anthropic.claude-opus-4-8"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
 
-sandbox_variant: jupyter
+sandbox_variant: jupyter-server
 
 # Memory backend
 memory: ephemeral
@@ -65,14 +66,22 @@ color: "#6366F1"  # Indigo
 
 # Chat suggestions
 suggestions:
-  - list your tools
-  - "Search the web for the latest news on AI agents using Tavily."
-  - "List my public GitHub repositories and summarize the most active ones."
-  - "Echo with text 'hello' and reason 'audit', then share the result."
-  - "Echo 'hello world' and share the result in a short sentence."
-  - "Call the runtime_sensitive_echo tool with text 'hello' and reason 'audit', then reply with the tool result."
-  - "Call the runtime_echo tool with text 'hello world', then reply with the tool result."
-  - "Tell me a joke using your skills."
+  - text: list your tools
+    summary: "List your tools"
+  - text: "Search the web for the latest news on AI agents using Tavily."
+    summary: "AI news via Tavily"
+  - text: "List my public GitHub repositories and summarize the most active ones."
+    summary: "My GitHub repositories"
+  - text: "Echo with text 'hello' and reason 'audit', then share the result."
+    summary: "Echo with a reason"
+  - text: "Echo 'hello world' and share the result in a short sentence."
+    summary: "Echo hello world"
+  - text: "Call the runtime_sensitive_echo tool with text 'hello' and reason 'audit', then reply with the tool result."
+    summary: "Sensitive echo tool"
+  - text: "Call the runtime_echo tool with text 'hello world', then reply with the tool result."
+    summary: "Runtime echo tool"
+  - text: "Tell me a joke using your skills."
+    summary: "A joke from your skills"
 
 # Welcome message
 welcome_message: >

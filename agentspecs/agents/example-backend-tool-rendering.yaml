@@ -19,7 +19,8 @@ tags:
 
 enabled: true
 protocol: ag-ui
-model: "bedrock:us.anthropic.claude-opus-4-8"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
 
 # Memory backend
 memory: ephemeral
@@ -52,8 +53,10 @@ color: "#6366F1"
 
 # Chat suggestions
 suggestions:
-  - What's the weather like in Paris?
-  - Show me the weather forecast for Tokyo.
+  - text: What's the weather like in Paris?
+    summary: "Weather in Paris"
+  - text: Show me the weather forecast for Tokyo.
+    summary: "Tokyo forecast"
 
 welcome_message: >
   Hi! Ask me about the weather in any city.

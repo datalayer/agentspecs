@@ -1,0 +1,22 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Alibaba Qwen3.6-Plus (Model Studio)
+
+id: "alibaba:qwen3.6-plus"
+version: 0.0.1
+name: Alibaba Qwen3.6-Plus
+description: Qwen3.6-Plus via Alibaba Cloud Model Studio - balanced performance and cost
+provider: alibaba
+default: false
+available: false
+tokens_limit: 32768
+
+# Hosted through datalayer-ai-inference, which holds the Model Studio
+# credentials. Nothing is required in the agent runtime environment.
+required_env_vars: []
+
+capabilities:
+  - chat
+  - tools
+  - codemode
