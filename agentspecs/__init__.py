@@ -2,128 +2,14 @@
 #
 # BSD 3-Clause License
 
-"""Agentspecs
+"""Agentspecs: the YAML catalogue of Datalayer agents, models, tools and teams.
+
+The specs are data: the catalogues under this package (`agents`, `models`,
+`teams`, ...) are read by their consumers, `agent-runtimes` first. Importing
+the package itself must stay free of dependencies, so that
+`from agentspecs.models import list_models` works wherever it is installed.
 """
 
-from .composition.executor import CodeModeExecutor
-from .discovery.codegen import PythonCodeGenerator
-from .discovery.registry import ToolRegistry
-from .types import (
-    CodeModeConfig,
-    MCPServerConfig,
-    SearchResult,
-    ServerInfo,
-    ToolCallResult,
-    ToolDefinition,
-    ToolParameter,
-)
-from .proxy.mcp_client import MCPClient
-from .proxy.meta_tools import MetaToolProvider
+from .__version__ import __version__
 
-# Import skills functionality from agent_skills
-from agent_skills import (
-    Skill,
-    SkillDirectory,
-    SkillFile,
-    SkillsManager,
-    SimpleSkill,
-    SimpleSkillsManager,
-    SimpleSkillManager,  # Alias for backward compatibility
-    SkillManager,  # Alias for backward compatibility
-    setup_skills_directory,
-    wait_for,
-    retry,
-    run_with_timeout,
-    parallel,
-    RateLimiter,
-)
-
-from .models import (
-    AIModel as AIModel,
-    AIModels,
-    AI_MODEL_CATALOGUE,
-    DEFAULT_MODEL,
-    get_default_model,
-    get_model,
-    list_models,
-)
-from .memory import (
-    MemorySpec,
-    Memories,
-    MEMORY_CATALOGUE,
-    get_memory,
-    list_memories,
-)
-from .loops import (
-    LoopSpec,
-    LoopHuman,
-    LoopTermination,
-    Loops,
-    LOOP_CATALOGUE,
-    get_loop,
-    list_loops,
-)
-from .server import mcp as codemode_server, configure as configure_server
-from .toolset import CodemodeToolset, PYDANTIC_AI_AVAILABLE
-
-__all__ = [
-    # Core components
-    "ToolRegistry",
-    "CodeModeExecutor",
-    "PythonCodeGenerator",
-    # Proxy
-    "MCPClient",
-    "MetaToolProvider",
-    # Skills (from agent_skills)
-    "Skill",
-    "SkillsManager",
-    "SimpleSkill",
-    "SimpleSkillsManager",
-    "SimpleSkillManager",  # Alias for backward compatibility
-    "SkillManager",  # Alias for backward compatibility
-    "SkillDirectory",
-    "SkillFile",
-    "setup_skills_directory",
-    # Helpers (from agent_skills)
-    "wait_for",
-    "retry",
-    "run_with_timeout",
-    "parallel",
-    "RateLimiter",
-    # MCP Server
-    "codemode_server",
-    "configure_server",
-    # Pydantic AI Toolset
-    "CodemodeToolset",
-    "PYDANTIC_AI_AVAILABLE",
-    # AI Models
-    "AIModel",
-    "AIModels",
-    "AI_MODEL_CATALOGUE",
-    "DEFAULT_MODEL",
-    "get_default_model",
-    "get_model",
-    "list_models",
-    # Memory
-    "MemorySpec",
-    "Memories",
-    "MEMORY_CATALOGUE",
-    "get_memory",
-    "list_memories",
-    # Loops
-    "LoopSpec",
-    "LoopHuman",
-    "LoopTermination",
-    "Loops",
-    "LOOP_CATALOGUE",
-    "get_loop",
-    "list_loops",
-    # Types
-    "ToolDefinition",
-    "ToolParameter",
-    "ToolCallResult",
-    "MCPServerConfig",
-    "CodeModeConfig",
-    "SearchResult",
-    "ServerInfo",
-]
+__all__ = ["__version__"]

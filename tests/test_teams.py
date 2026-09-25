@@ -11,35 +11,19 @@ the order terminated. These are the checks that were missing.
 
 from __future__ import annotations
 
-import importlib.util
 import pathlib
-import sys
 
 import pytest
 import yaml
 
-# Loaded directly rather than as `agentspecs.teams`.
-#
-# `agentspecs/__init__.py` imports `.composition`, `.discovery`, `.proxy` and
-# `.types`, none of which are in this repository — so `import agentspecs`
-# raises before any submodule is reached, and every sibling catalogue
-# (`loops`, `memory`, `models`) is equally unimportable. That is a pre-existing
-# packaging problem and not this module's to fix here; the file under test is
-# the real one either way.
-_spec = importlib.util.spec_from_file_location(
-    "agentspecs_teams_under_test",
-    pathlib.Path(__file__).parent.parent / "agentspecs" / "teams" / "__init__.py",
+from agentspecs.teams import (
+    TEAM_CATALOGUE,
+    TeamRole,
+    TeamSpec,
+    get_team,
+    list_teams,
+    teams_using,
 )
-_TEAMS = importlib.util.module_from_spec(_spec)
-sys.modules["agentspecs_teams_under_test"] = _TEAMS
-_spec.loader.exec_module(_TEAMS)
-
-TEAM_CATALOGUE = _TEAMS.TEAM_CATALOGUE
-TeamRole = _TEAMS.TeamRole
-TeamSpec = _TEAMS.TeamSpec
-get_team = _TEAMS.get_team
-list_teams = _TEAMS.list_teams
-teams_using = _TEAMS.teams_using
 
 AGENTS_DIR = pathlib.Path(__file__).parent.parent / "agentspecs" / "agents"
 
