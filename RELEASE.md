@@ -12,8 +12,8 @@ publishing: no token is stored in the repository.
 
    ```bash
    git checkout main && git pull
-   git tag v0.0.6
-   git push origin v0.0.6
+   git tag v0.0.7
+   git push origin v0.0.7
    ```
 
 The workflow checks that the tag equals `__version__` (it stops otherwise), builds the sdist
