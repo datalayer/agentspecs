@@ -3,7 +3,9 @@
 # BSD 3-Clause License
 
 # Publishes the release a tag names to PyPI, with no stored token: PyPI
-# trusts this workflow file (OIDC trusted publishing). See RELEASE.md.
+# trusts this workflow file (OIDC trusted publishing). The tests and the
+# build are `ci.yml`'s, run here first; its wheel and sdist are what is
+# published. See RELEASE.md.
 
 name: Release
 
@@ -20,45 +22,28 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  check-tag:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
 
       - name: Check the tag names the version being released
         run: |
           set -euo pipefail
           tag="${GITHUB_REF_NAME#v}"
-          version="$(python -c "import re;print(re.search(r'__version__\s*=\s*[\"\x27]([^\"\x27]+)', open('agentspecs/__version__.py').read())[1])")"
+          version="$(python3 -c "import re;print(re.search(r'__version__\s*=\s*[\"\x27]([^\"\x27]+)', open('agentspecs/__version__.py').read())[1])")"
           echo "tag=$tag agentspecs=$version"
           if [ "$tag" != "$version" ]; then
             echo "::error::Tag v$tag does not match agentspecs $version"
             exit 1
           fi
 
-      - name: Build
-        run: |
-          python -m pip install --upgrade build
-          python -m build --outdir dist
-
-      - name: Check the wheel carries the specs
-        run: |
-          set -euo pipefail
-          unzip -Z1 dist/*.whl > wheel-files.txt
-          grep -q '^agentspecs/agents/.*\.yaml$' wheel-files.txt
-          grep -q '^agentspecs/models/.*\.yaml$' wheel-files.txt
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: python
-          path: dist/*
+  ci:
+    needs: check-tag
+    uses: ./.github/workflows/ci.yml
 
   pypi:
-    needs: build
+    needs: ci
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
