@@ -11,6 +11,7 @@ provider: cloudflare
 default: false
 available: true
 tokens_limit: 16384
+billing: standard
 
 # Hosted through datalayer-ai-inference, which holds the Cloudflare account
 # and token and routes the call through the account's AI Gateway. Nothing is
