@@ -1,0 +1,24 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Cloudflare Workers AI gpt-oss-120b
+
+id: "cloudflare:openai/gpt-oss-120b"
+version: 0.0.1
+name: Cloudflare gpt-oss-120b
+description: OpenAI gpt-oss-120b on Cloudflare Workers AI - 128k context, tool calling, standard billing
+provider: cloudflare
+default: false
+available: true
+tokens_limit: 32768
+
+# Hosted through datalayer-ai-inference, which holds the Cloudflare account
+# and token and routes the call through the account's AI Gateway. Nothing is
+# required in the agent runtime environment; a runtime calling Cloudflare
+# directly needs CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN.
+required_env_vars: []
+
+capabilities:
+  - chat
+  - tools
+  - codemode

@@ -1,0 +1,23 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Cloudflare Workers AI Llama 3.3 70B Instruct
+
+id: "cloudflare:meta/llama-3.3-70b-instruct-fp8-fast"
+version: 0.0.1
+name: Cloudflare Llama 3.3 70B
+description: Meta Llama 3.3 70B Instruct (fp8, fast) on Cloudflare Workers AI - 24k context, tool calling, standard billing
+provider: cloudflare
+default: false
+available: true
+tokens_limit: 8192
+
+# Hosted through datalayer-ai-inference, which holds the Cloudflare account
+# and token and routes the call through the account's AI Gateway. Nothing is
+# required in the agent runtime environment.
+required_env_vars: []
+
+capabilities:
+  - chat
+  - tools
+  - codemode

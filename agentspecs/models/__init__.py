@@ -49,7 +49,7 @@ def _build_enum() -> type:
     members = {}
     for spec in specs:
         # Convert id to enum name: "anthropic:claude-sonnet-4-5-20250514" -> "ANTHROPIC_CLAUDE_SONNET_4_5"
-        name = spec.id.replace(":", "_").replace("-", "_").replace(".", "_").upper()
+        name = spec.id.replace(":", "_").replace("-", "_").replace(".", "_").replace("/", "_").upper()
         # Remove version suffixes like _20250514 or _V1_0
         # Keep the name readable
         members[name] = spec.id
