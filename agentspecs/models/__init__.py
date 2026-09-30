@@ -30,6 +30,8 @@ class AIModel(BaseModel):
     )
     required_env_vars: List[str] = Field(default_factory=list, description="Required environment variable names")
     tokens_limit: Optional[int] = Field(default=None, description="Maximum output tokens the model can generate in a single run")
+    capabilities: List[str] = Field(default_factory=list, description="What the model can be trusted with: chat, tools, codemode, vision, thinking")
+    billing: Optional[str] = Field(default=None, description="How the provider bills it, when worth telling: 'standard' or 'credits'")
 
 
 def _load_model_specs() -> List[AIModel]:
@@ -49,7 +51,7 @@ def _build_enum() -> type:
     members = {}
     for spec in specs:
         # Convert id to enum name: "anthropic:claude-sonnet-4-5-20250514" -> "ANTHROPIC_CLAUDE_SONNET_4_5"
-        name = spec.id.replace(":", "_").replace("-", "_").replace(".", "_").upper()
+        name = spec.id.replace(":", "_").replace("-", "_").replace(".", "_").replace("/", "_").upper()
         # Remove version suffixes like _20250514 or _V1_0
         # Keep the name readable
         members[name] = spec.id

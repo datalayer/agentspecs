@@ -38,12 +38,13 @@ description: GPT-4.1 by OpenAI - strong general purpose model
 ```
 
 ### `provider` (string)
-The model provider. Current values: `anthropic`, `bedrock`, `azure-openai`, `openai`.
+The model provider. Current values: `anthropic`, `bedrock`, `azure-openai`, `openai`, `alibaba`, `ollama`, `cloudflare`.
 ```yaml
 provider: bedrock
 provider: openai
 provider: anthropic
 provider: azure-openai
+provider: cloudflare
 ```
 
 ## Optional Fields
@@ -129,6 +130,34 @@ Required env vars: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_RE
 | **GPT-4o** | `azure-openai:gpt-4o` | Enterprise deployment |
 
 Required env vars: `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_ENDPOINT`
+
+### Cloudflare Workers AI
+
+Models Cloudflare hosts (`@cf/…`) and the third-party models it fronts, asked for as
+`cloudflare:<vendor>/<model>` — Cloudflare's `@cf/` namespace is left out of the id and
+put back by the service that calls it. They are hosted through `datalayer-ai-inference`,
+which holds the Cloudflare account and token and sends every call through the account's
+AI Gateway, so `required_env_vars` is empty; a runtime that calls Cloudflare itself
+(`inference_provider: local`) needs `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN`
+(`CLOUDFLARE_GATEWAY`, `default` unless set).
+
+Two kinds of billing: the `@cf/` models on the account's Workers AI billing, in neurons;
+the frontier ones (GLM, Kimi) from prepaid AI Gateway credits, which is what makes them
+available without the Workers Paid plan once the gateway's *Workers AI billing* is set to
+unified.
+
+| Model | ID | Notes |
+|-------|----|-------|
+| **gpt-oss-120b** | `cloudflare:openai/gpt-oss-120b` | 128k context, tool calling |
+| **Llama 3.3 70B** | `cloudflare:meta/llama-3.3-70b-instruct-fp8-fast` | 24k context, tool calling, fast |
+| **Qwen3.8 27B** | `cloudflare:qwen/qwen3.8-27b` | 262k context, tool calling |
+| **Gemma 4 26B** | `cloudflare:google/gemma-4-26b-a4b-it` | 256k context, tool calling |
+| **GLM-5.2** | `cloudflare:zai-org/glm-5.2` | 262k context, tool calling; credits |
+| **Kimi K2.6** | `cloudflare:moonshotai/kimi-k2.6` | 262k context, tool calling; credits |
+
+The catalogue moves: `scripts/check-cloudflare-models.py` in agent-runtimes holds these
+specs to what the account's listing serves, and names the served models that have tool
+calling and no spec yet.
 
 ### OpenAI (Direct API)
 

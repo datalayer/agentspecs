@@ -1,0 +1,62 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: example-cloudflare
+version: 0.0.1
+name: Example Cloudflare Workers AI Agent
+description: >-
+  A data analyst on Cloudflare Workers AI (gpt-oss-120b), reached through
+  datalayer-ai-inference and the account's AI Gateway: a chat with a code
+  sandbox and tool calls, on a model billed by Cloudflare rather than by an
+  API key of your own.
+
+tags:
+  - workflow
+  - analysis
+  - inference
+
+enabled: true
+model: "cloudflare:openai/gpt-oss-120b"
+harness: pydantic-ai
+inference_provider: datalayer
+
+sandbox_variant: jupyter-server
+memory: ephemeral
+
+mcp_servers: []
+
+skills:
+  - events:0.0.1
+
+tools:
+  - runtime-echo:0.0.1
+
+frontend_tools: []
+
+environment_name: ai-agents-env
+
+icon: cloud
+emoji: "☁️"
+color: "#F38020"
+
+suggestions:
+  - text: Multiply 12 by 34 with a tool call, then explain which model answered and where it ran.
+    summary: "A tool call on Workers AI"
+  - text: Write and run a short Python cell that sums the squares of 1 to 10.
+    summary: "Run a code cell"
+  - text: Which Cloudflare model are you, what is its context window, and how is it billed?
+    summary: "Which model"
+
+welcome_message: >-
+  Cloudflare Workers AI demo ready. I run on gpt-oss-120b through Datalayer's
+  inference service and the account's AI Gateway; ask me for a tool call or a
+  code cell.
+
+system_prompt: >-
+  You are a data analyst running on Cloudflare Workers AI. Be concise. Use a
+  tool when a tool does the job, and say which model answered when asked.
+
+system_prompt_codemode_addons: null
+welcome_notebook: null
+welcome_document: null
+trigger: null
