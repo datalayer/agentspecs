@@ -9,6 +9,8 @@
 id: ephemeral
 version: 0.0.1
 name: Ephemeral Memory
+# Whether an agent spec is offered this memory today.
+enabled: false
 description: >
   Simple in-process memory that lives and dies with the agent. Stores
   facts, preferences, and context in a local dictionary during the agent

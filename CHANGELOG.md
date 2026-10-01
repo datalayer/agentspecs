@@ -27,6 +27,8 @@
   its agent) and `generic` (the kind of an event created with none).
 - Outputs: `csv` and `json` are enabled; the others stay listed and not offered.
 - Skills: `crawl` (Web Crawl Skill) is enabled; the others stay listed and not offered.
+- Memory: a spec says whether it is `enabled`. `mem0` is; `ephemeral`, `memu` and `simplemem`
+  stay listed and not offered.
 
 ## 0.0.10
 

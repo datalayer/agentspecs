@@ -9,6 +9,8 @@
 id: mem0
 version: 0.0.1
 name: Mem0 Memory
+# Whether an agent spec is offered this memory today.
+enabled: true
 description: >
   Universal memory layer powered by Mem0 (mem-zero). Enhances AI agents
   with an intelligent, persistent memory that remembers user preferences,
