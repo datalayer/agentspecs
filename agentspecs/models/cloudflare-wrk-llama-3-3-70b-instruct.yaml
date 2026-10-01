@@ -5,9 +5,13 @@
 
 id: "cloudflare:wrk/meta/llama-3.3-70b-instruct-fp8-fast"
 version: 0.0.1
+# The id this model had before 0.0.9 named its route; kept so it still resolves.
+aliases:
+  - "cloudflare:meta/llama-3.3-70b-instruct-fp8-fast"
 name: Cloudflare Llama 3.3 70B
 description: Meta Llama 3.3 70B Instruct (fp8, fast) on Cloudflare Workers AI - 24k context, tool calling, standard billing
 provider: cloudflare
+provider_url: "https://developers.cloudflare.com/workers-ai/models/llama-3.3-70b-instruct-fp8-fast/"
 default: false
 available: true
 tokens_limit: 8192

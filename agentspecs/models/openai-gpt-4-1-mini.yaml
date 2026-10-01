@@ -8,6 +8,7 @@ version: 0.0.1
 name: OpenAI GPT-4.1 Mini
 description: GPT-4.1 Mini by OpenAI - compact version of GPT-4.1
 provider: openai
+provider_url: "https://platform.openai.com/docs/models/gpt-4.1-mini"
 default: false
 available: false
 tokens_limit: 32768

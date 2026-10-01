@@ -8,6 +8,7 @@ version: 0.0.1
 name: Anthropic Claude Sonnet 4.5
 description: Claude Sonnet 4.5 by Anthropic - balanced performance and speed
 provider: anthropic
+provider_url: "https://www.anthropic.com/claude/sonnet"
 default: false
 available: false
 tokens_limit: 64000

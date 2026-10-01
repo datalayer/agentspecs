@@ -8,6 +8,7 @@ version: 0.0.1
 name: OpenAI GPT-4o
 description: GPT-4o by OpenAI - fast multimodal model
 provider: openai
+provider_url: "https://platform.openai.com/docs/models/gpt-4o"
 default: false
 available: false
 tokens_limit: 16384

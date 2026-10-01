@@ -1,0 +1,16 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Model Provider Specification: Cloudflare
+
+id: "cloudflare"
+version: 0.0.1
+name: Cloudflare
+description: >-
+  Cloudflare Workers AI, the models Cloudflare hosts at its edge, and AI Gateway, which sits in front of them and of the third-party models it fronts (Typesafe's Jev) with logs, caching, rate limits and prepaid credits. A model's route (`wrk`, `gtw`) says which of the two it is reached through.
+website: "https://www.cloudflare.com/developer-platform/products/workers-ai/"
+docs_url: "https://developers.cloudflare.com/workers-ai/"
+terms_url: "https://www.cloudflare.com/terms/"
+privacy_url: "https://www.cloudflare.com/privacypolicy/"
+data_usage_url: "https://developers.cloudflare.com/workers-ai/platform/data-usage/"
+hosting: cloud

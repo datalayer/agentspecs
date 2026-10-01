@@ -1,0 +1,15 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Model Provider Specification: Ollama
+
+id: "ollama"
+version: 0.0.1
+name: Ollama
+description: >-
+  Open models run on the user's own machine through Ollama's local server — no API key, no data leaving the machine; the terms and privacy below are Ollama's for its site and registry.
+website: "https://ollama.com/"
+docs_url: "https://docs.ollama.com/"
+terms_url: "https://ollama.com/terms"
+privacy_url: "https://ollama.com/privacy"
+hosting: local

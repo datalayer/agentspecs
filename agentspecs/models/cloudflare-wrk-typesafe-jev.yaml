@@ -8,6 +8,7 @@ version: 0.0.1
 name: Jev (Cloudflare Workers AI)
 description: Typesafe's typed-judgment model at Workers AI's own endpoint - noul, choice and score questions answered as calibrated probabilities; 32k context; zero data retention; billed from the account's credits, no gateway in the way
 provider: cloudflare
+provider_url: "https://docs.typesafe.ai/models"
 default: false
 available: true
 tokens_limit: null
@@ -22,6 +23,8 @@ billing: credits
 route: workers-ai
 context_window: 32000
 zero_data_retention: true
+# Workers AI's own endpoint keeps no request log of its own.
+request_logging: none
 # Cloudflare's price, checked 2026-09-30.
 pricing:
   input_usd_per_million: 0.042

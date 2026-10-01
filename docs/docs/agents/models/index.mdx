@@ -38,7 +38,7 @@ description: GPT-4.1 by OpenAI - strong general purpose model
 ```
 
 ### `provider` (string)
-The model provider. Current values: `anthropic`, `bedrock`, `azure-openai`, `openai`, `alibaba`, `ollama`, `cloudflare`.
+The model provider: the id of one of the [model-provider specs](../model-providers/) — `anthropic`, `bedrock`, `azure-openai`, `openai`, `alibaba`, `ollama`, `cloudflare`. A model naming a provider with no spec is refused when the catalogue loads.
 ```yaml
 provider: bedrock
 provider: openai
@@ -48,6 +48,14 @@ provider: cloudflare
 ```
 
 ## Optional Fields
+
+### `provider_url` (string)
+The page on the provider's website that describes this model — its model card, its
+entry in the provider's model list — so a reader can check what the spec says against
+what the provider says today.
+```yaml
+provider_url: "https://platform.openai.com/docs/models/gpt-4.1"
+```
 
 ### `default` (boolean)
 Whether this model is the system default (default: `false`). Exactly one model should have `default: true`. This model is used when an agent spec does not specify a `model` field, and when no environment override is set.
@@ -67,13 +75,19 @@ How the provider bills it, when worth telling a person choosing one: `standard` 
 provider's own billing) or `credits` (prepaid credits).
 
 ### `route` (string)
-For Cloudflare: `workers-ai` (a model Cloudflare hosts) or `ai-gateway` (a third-party model
-the gateway fronts). Other providers leave it unset.
+For Cloudflare, the endpoint the model is asked at: `workers-ai` (Workers AI's own) or
+`ai-gateway` (through the account's gateway). Set on every Cloudflare model, in step with
+the id's flavour and the file's name; a model of any other provider carries none.
 
-### `context_window`, `zero_data_retention`, `pricing`
-The tokens a request may carry; whether the provider keeps nothing once it has answered;
-the provider's list price, `{input_usd_per_million, output_usd_per_million}`, for a service
-that meters by it.
+### `context_window`, `zero_data_retention`, `request_logging`, `pricing`
+The tokens a request may carry; whether the model's provider keeps nothing once it has
+answered; where the route keeps a log of the request (`none`, `gateway`); the provider's
+list price, `{input_usd_per_million, output_usd_per_million}` — both required, never
+negative — for a service that meters by it.
+
+### `aliases` (list of strings)
+Older ids the spec answers to, kept when an id has to move so `get_model` and the
+`AIModels` enum still serve what a consumer named.
 
 ### `required_env_vars` (list of strings)
 Environment variables that must be set for the model to be available. The system checks these at runtime to determine model availability.
@@ -153,20 +167,28 @@ Required env vars: `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_ENDPOINT`
 
 ### Cloudflare: Workers AI and AI Gateway
 
-Cloudflare is two products, and a spec says which one a model is reached through, in
-`route`:
+Cloudflare is two products, and a model's `route` is the endpoint it is asked at — a
+product, not a kind of model:
 
-- **`workers-ai`** (`cloudflare-wrk-*.yaml`, ids `cloudflare:wrk/<vendor>/<model>`): a model
-  Cloudflare hosts under `@cf/…` — the `@cf/` namespace is left out of the id and put back by
-  the service that calls it. These answer at Workers AI's own endpoint and, when the
-  deployment names a gateway, through AI Gateway on top of it (logs, caching, rate limits).
-- **`ai-gateway`** (`cloudflare-gtw-*.yaml`, ids `cloudflare:gtw/<vendor>/<model>`): a
-  third-party model the gateway fronts — today Typesafe's `jev`, the typed-judgment model —
-  reached only through the gateway, which keeps the logs and bills it from the account's
-  prepaid credits.
+- **`workers-ai`** (`cloudflare-wrk-*.yaml`, ids `cloudflare:wrk/<vendor>/<model>`): Workers
+  AI's own endpoint, `api.cloudflare.com/client/v4/accounts/{account}/ai/…`. It serves the
+  models Cloudflare hosts under `@cf/…` (the namespace is left out of the id and put back
+  by the service that calls it) and the third-party models it fronts (`typesafe/jev`)
+  alike. A service may still send a `wrk` chat model through the account's gateway when
+  the deployment names one; the spec says where the model lives, the deployment how it is
+  reached.
+- **`ai-gateway`** (`cloudflare-gtw-*.yaml`, ids `cloudflare:gtw/<vendor>/<model>`): through
+  the account's AI Gateway, `gateway.ai.cloudflare.com`, which logs the call, applies
+  caching and rate limits, and bills it from the account's prepaid credits.
 
-The flavour is the second segment of the id and the file's name, so a reader tells the two
-apart at a glance. Jev is in the catalogue once per route, `cloudflare:gtw/typesafe/jev`
+The flavour is the second segment of the id and the start of the file's name, and the
+catalogue refuses a spec whose id, file name and `route` disagree, so a reader tells the
+two apart at a glance. Two fields say what a route does with the request:
+`zero_data_retention` is the model provider's retention and nothing else, `request_logging`
+(`none` or `gateway`) is where the route keeps a log — Jev through the gateway is ZDR at
+Typesafe *and* logged at the gateway. A route for sensitive data is chosen on both.
+
+Jev is in the catalogue once per route, `cloudflare:gtw/typesafe/jev`
 and `cloudflare:wrk/typesafe/jev`: the same model, asked at
 `gateway.ai.cloudflare.com/v1/{account}/{gateway}/workers-ai/run/typesafe/jev` or at
 `api.cloudflare.com/client/v4/accounts/{account}/ai/run`. Its capability is `judgments`, not
@@ -198,8 +220,12 @@ million input and output tokens); `context_window` and `zero_data_retention` say
 | **Gemma 4 26B** | `cloudflare:wrk/google/gemma-4-26b-a4b-it` | workers-ai | 256k context, tool calling |
 | **GLM-5.2** | `cloudflare:wrk/zai-org/glm-5.2` | workers-ai | 262k context, tool calling; credits |
 | **Kimi K2.6** | `cloudflare:wrk/moonshotai/kimi-k2.6` | workers-ai | 262k context, tool calling; credits |
-| **Jev (AI Gateway)** | `cloudflare:gtw/typesafe/jev` | ai-gateway | typed judgments; 32k context; zero data retention; credits |
-| **Jev (Workers AI)** | `cloudflare:wrk/typesafe/jev` | workers-ai | the same, at Workers AI's own endpoint |
+| **Jev (AI Gateway)** | `cloudflare:gtw/typesafe/jev` | ai-gateway | typed judgments; 32k context; ZDR at Typesafe, logged at the gateway; credits |
+| **Jev (Workers AI)** | `cloudflare:wrk/typesafe/jev` | workers-ai | the same at Workers AI's own endpoint; ZDR, unlogged |
+
+The six chat models were `cloudflare:<vendor>/<model>` before 0.0.9; each keeps that id in
+`aliases`, so `get_model("cloudflare:openai/gpt-oss-120b")` still answers and the `AIModels`
+enum keeps `CLOUDFLARE_OPENAI_GPT_OSS_120B` beside `CLOUDFLARE_WRK_OPENAI_GPT_OSS_120B`.
 
 The catalogue moves: `scripts/check-cloudflare-models.py` in agent-runtimes holds the
 `cloudflare-wrk-*` specs to what the account's listing serves, and names the served

@@ -8,6 +8,7 @@ version: 0.0.1
 name: Gemma 3 4B (Ollama)
 description: Gemma 3 4B running locally through Ollama - small and fast, no tool calling
 provider: ollama
+provider_url: "https://ollama.com/library/gemma3:4b"
 default: false
 available: false
 tokens_limit: 4096

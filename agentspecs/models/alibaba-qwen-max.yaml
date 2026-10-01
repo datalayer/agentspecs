@@ -8,6 +8,7 @@ version: 0.0.1
 name: Alibaba Qwen-Max
 description: Qwen-Max via Alibaba Cloud Model Studio - highest capability Qwen model
 provider: alibaba
+provider_url: "https://www.alibabacloud.com/help/en/model-studio/models"
 default: false
 available: true
 tokens_limit: 32768

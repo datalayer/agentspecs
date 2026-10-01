@@ -8,6 +8,7 @@ version: 0.0.1
 name: Llama 3.1 8B (Ollama)
 description: Meta Llama 3.1 8B running locally through Ollama - tool calling, no data leaves the machine
 provider: ollama
+provider_url: "https://ollama.com/library/llama3.1:8b"
 default: false
 available: false
 tokens_limit: 4096

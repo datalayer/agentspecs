@@ -8,6 +8,7 @@ version: 0.0.1
 name: Azure OpenAI GPT-4.1
 description: GPT-4.1 via Azure OpenAI - strong general purpose
 provider: azure-openai
+provider_url: "https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-models/concepts/models-sold-directly-by-azure"
 default: false
 available: false
 tokens_limit: 32768

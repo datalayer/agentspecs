@@ -8,6 +8,7 @@ version: 0.0.1
 name: Jev (Cloudflare AI Gateway)
 description: Typesafe's typed-judgment model through the account's AI Gateway - noul, choice and score questions answered as calibrated probabilities; 32k context; zero data retention; the gateway keeps the logs and bills from its credits
 provider: cloudflare
+provider_url: "https://docs.typesafe.ai/models"
 default: false
 available: true
 tokens_limit: null
@@ -21,6 +22,9 @@ billing: credits
 route: ai-gateway
 context_window: 32000
 zero_data_retention: true
+# Typesafe keeps nothing; the gateway in front of it does keep request logs
+# for the account. A route for sensitive data is chosen on both.
+request_logging: gateway
 # Cloudflare's price, checked 2026-09-30.
 pricing:
   input_usd_per_million: 0.042

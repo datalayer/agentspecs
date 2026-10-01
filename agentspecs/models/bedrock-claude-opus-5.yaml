@@ -15,6 +15,7 @@ version: 0.0.1
 name: Bedrock Claude Opus 5
 description: Claude Opus 5 via AWS Bedrock - the current frontier model
 provider: bedrock
+provider_url: "https://aws.amazon.com/bedrock/anthropic/"
 default: false
 # Switched off: the AWS account backing this deployment is not entitled to it.
 # Bedrock answers `AccessDeniedException` (403) — "is not available for this

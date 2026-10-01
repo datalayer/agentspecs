@@ -8,6 +8,7 @@ version: 0.0.1
 name: Qwen2.5 Coder 7B (Ollama)
 description: Qwen2.5 Coder 7B running locally through Ollama - code-focused with tool calling
 provider: ollama
+provider_url: "https://ollama.com/library/qwen2.5-coder:7b"
 default: false
 available: false
 tokens_limit: 4096

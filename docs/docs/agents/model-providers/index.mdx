@@ -1,0 +1,75 @@
+---
+title: Model Providers
+---
+
+# Model Provider Specifications
+
+A model provider is who serves a model: the vendor's own API (Anthropic, OpenAI), a cloud
+that hosts it (Amazon Bedrock, Azure OpenAI, Alibaba Cloud Model Studio, Cloudflare), or
+the user's machine (Ollama). One YAML per provider under `agentspecs/model-providers/`
+says where it lives, where its documentation is, the terms of service a call is made
+under, its privacy policy and what it says about the data a request carries — what a
+person choosing a model, or a team signing off on one, has to be able to read without
+leaving the catalogue.
+
+A model spec's `provider` names one of these, and the catalogue refuses a model whose
+provider has no spec. A model's own page on the provider's site is its `provider_url`.
+
+## Fields
+
+| Field | Meaning |
+|-------|---------|
+| `id` | What a model spec's `provider` names: `anthropic`, `bedrock`, `openai`, `azure-openai`, `alibaba`, `cloudflare`, `ollama`. The file is named for it. |
+| `name` | Display name. |
+| `description` | What the provider is, and what is worth knowing before choosing it. |
+| `website` | The provider's product page. |
+| `docs_url` | Its documentation. |
+| `terms_url` | The terms of service a call is made under. |
+| `privacy_url` | Its privacy policy. |
+| `data_usage_url` | What it says about the data a request carries (retention, training), when it has a page for it. |
+| `hosting` | `cloud` (the provider runs the model) or `local` (the user's machine). |
+
+## Example
+
+```yaml
+id: "cloudflare"
+version: 0.0.1
+name: Cloudflare
+description: >-
+  Cloudflare Workers AI, the models Cloudflare hosts at its edge, and AI Gateway, which
+  sits in front of them and of the third-party models it fronts (Typesafe's Jev) with
+  logs, caching, rate limits and prepaid credits. A model's route (`wrk`, `gtw`) says
+  which of the two it is reached through.
+website: "https://www.cloudflare.com/developer-platform/products/workers-ai/"
+docs_url: "https://developers.cloudflare.com/workers-ai/"
+terms_url: "https://www.cloudflare.com/terms/"
+privacy_url: "https://www.cloudflare.com/privacypolicy/"
+data_usage_url: "https://developers.cloudflare.com/workers-ai/platform/data-usage/"
+hosting: cloud
+```
+
+## The providers
+
+| Provider | ID | Hosting | Notes |
+|----------|----|---------|-------|
+| **Anthropic** | `anthropic` | cloud | The vendor's API for Claude. |
+| **Amazon Bedrock** | `bedrock` | cloud | Claude through AWS, with AWS credentials, in an AWS region. |
+| **OpenAI** | `openai` | cloud | The vendor's platform API; API data not used for training by default. |
+| **Azure OpenAI** | `azure-openai` | cloud | OpenAI's models sold by Azure, under the Microsoft Product Terms. |
+| **Alibaba Cloud Model Studio** | `alibaba` | cloud | The Qwen family, OpenAI-compatible. |
+| **Cloudflare** | `cloudflare` | cloud | Workers AI and AI Gateway; see the models page for the two routes. |
+| **Ollama** | `ollama` | local | Open models on the user's machine; nothing leaves it. |
+
+## Code Generation
+
+The specs generate `agent_runtimes/specs/model_providers.py` and `src/specs/modelProviders.ts`
+in agent-runtimes (`MODEL_PROVIDER_CATALOGUE`, `getModelProvider`), beside the models.
+
+## In Python
+
+```python
+from agentspecs.model_providers import MODEL_PROVIDER_CATALOGUE, get_model_provider
+
+cloudflare = get_model_provider("cloudflare")
+print(cloudflare.terms_url)
+```
