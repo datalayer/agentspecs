@@ -1,0 +1,11 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: generic
+version: 0.0.1
+name: Generic
+description: >-
+  An event with no kind of its own: what the events client and the CLI create
+  when none is named. It carries a title and a status, and no typed payload.
+kind: generic
+fields: []

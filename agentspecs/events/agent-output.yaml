@@ -1,0 +1,57 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: agent-output
+version: 0.0.1
+name: Agent Output
+description: >-
+  Emitted when an agent run produces its output: a triggered run that finished
+  (with its timing and exit status) or a chat turn that completed. The event's
+  status is the run's exit status.
+kind: agent-output
+fields:
+  - name: outputs
+    label: Outputs
+    type: string
+    required: false
+    description: The text the agent produced, or a summary of the artifacts it generated.
+  - name: exit_status
+    label: Exit Status
+    type: string
+    required: true
+    description: "Final status of the run (e.g. completed, error)."
+  - name: duration_ms
+    label: Duration (ms)
+    type: number
+    required: true
+    description: Execution time of the run or the turn, in milliseconds.
+  - name: agent_runtime_id
+    label: Agent Runtime ID
+    type: string
+    required: false
+    description: Runtime pod or instance identifier; set by a triggered run.
+  - name: agent_spec_id
+    label: Agent Spec ID
+    type: string
+    required: false
+    description: Identifier of the agent specification that ran; set by a triggered run.
+  - name: agent_id
+    label: Agent ID
+    type: string
+    required: false
+    description: Identifier of the agent in the runtime; set by a chat turn.
+  - name: started_at
+    label: Started At
+    type: string
+    required: false
+    description: ISO 8601 timestamp when the run started; set by a triggered run.
+  - name: ended_at
+    label: Ended At
+    type: string
+    required: false
+    description: ISO 8601 timestamp when the run ended; set by a triggered run.
+  - name: error_message
+    label: Error Message
+    type: string
+    required: false
+    description: Error description if the run failed.

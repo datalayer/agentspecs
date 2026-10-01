@@ -1,0 +1,46 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: agent-assigned
+version: 0.0.1
+name: Agent Assigned
+description: >-
+  Emitted when a running runtime is given its agent: the agent is created in the
+  runtime, its MCP servers started and its environment set.
+kind: agent-assigned
+fields:
+  - name: agent_runtime_id
+    label: Agent Runtime ID
+    type: string
+    required: true
+    description: Runtime pod or instance identifier.
+  - name: agent_name
+    label: Agent Name
+    type: string
+    required: true
+    description: Name of the agent assigned to the runtime.
+  - name: assignment_source
+    label: Assignment Source
+    type: string
+    required: true
+    description: What assigned the agent (e.g. the launch request, the pool).
+  - name: assigned_at
+    label: Assigned At
+    type: string
+    required: true
+    description: ISO 8601 timestamp when the agent was assigned.
+  - name: sandbox_variant
+    label: Sandbox Variant
+    type: string
+    required: false
+    description: The sandbox the agent executes code in.
+  - name: mcp_proxy_url
+    label: MCP Proxy URL
+    type: string
+    required: false
+    description: Address of the MCP proxy the agent reaches its tools through.
+  - name: env_vars_set
+    label: Env Vars Set
+    type: number
+    required: false
+    description: How many environment variables were set for the agent.

@@ -22,6 +22,9 @@
   `available: false`.
 - MCP servers: `tavily` (Tavily Search) and `earthdata` (Earthdata MCP) are enabled; the
   others stay listed and not offered.
+- Events: specs for the kinds agent-runtimes emits and had none for — `agent-output` (a
+  triggered run or a chat turn produced its output), `agent-assigned` (a runtime was given
+  its agent) and `generic` (the kind of an event created with none).
 
 ## 0.0.10
 
