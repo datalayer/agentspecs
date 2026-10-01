@@ -13,7 +13,7 @@ description: Qwen3.8 27B on Cloudflare Workers AI - 262k context, tool calling, 
 provider: cloudflare
 provider_url: "https://developers.cloudflare.com/workers-ai/models/qwen3.8-27b/"
 default: false
-available: true
+available: false
 tokens_limit: 16384
 billing: standard
 route: workers-ai

@@ -17,6 +17,9 @@
   (Crawler Agent), `jupyter-notebook-compactor` (Jupyter Notebook Compactor) and
   `example-one-trigger` (Example Once Trigger Agent). Every other agent spec stays in the
   catalogue with `enabled: false`: listed, and not offered.
+- Models: of the Cloudflare models, only Jev is offered — `cloudflare:gtw/typesafe/jev` and
+  `cloudflare:wrk/typesafe/jev`. The six Workers AI chat models stay in the catalogue with
+  `available: false`.
 
 ## 0.0.10
 

@@ -13,7 +13,7 @@ description: Z.ai GLM-5.2 on Cloudflare Workers AI - 262k context, tool calling;
 provider: cloudflare
 provider_url: "https://developers.cloudflare.com/workers-ai/models/glm-5.2/"
 default: false
-available: true
+available: false
 tokens_limit: 32768
 billing: credits
 route: workers-ai

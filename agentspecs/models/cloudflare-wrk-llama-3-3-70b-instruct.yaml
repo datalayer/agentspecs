@@ -13,7 +13,7 @@ description: Meta Llama 3.3 70B Instruct (fp8, fast) on Cloudflare Workers AI - 
 provider: cloudflare
 provider_url: "https://developers.cloudflare.com/workers-ai/models/llama-3.3-70b-instruct-fp8-fast/"
 default: false
-available: true
+available: false
 tokens_limit: 8192
 billing: standard
 route: workers-ai
