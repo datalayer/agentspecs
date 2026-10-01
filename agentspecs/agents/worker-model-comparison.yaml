@@ -63,9 +63,9 @@ color: "#EF4444"
 goal: >-
   Compare catastrophe models and scenarios and explain the drivers behind divergent results.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:

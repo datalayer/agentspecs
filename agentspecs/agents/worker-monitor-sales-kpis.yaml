@@ -73,9 +73,9 @@ goal: >-
   summarizing key performance metrics, identify trends, and flag anomalies.
   Send notifications when KPIs deviate more than 10% from targets.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Trigger configuration
 trigger:

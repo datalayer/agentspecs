@@ -17,7 +17,7 @@ tags:
   - human-approval
   - automation
 
-enabled: true
+enabled: false
 protocol: ag-ui
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai

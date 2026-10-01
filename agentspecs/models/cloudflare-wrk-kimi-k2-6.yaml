@@ -13,7 +13,7 @@ description: Moonshot Kimi K2.6 on Cloudflare Workers AI - 262k context, tool ca
 provider: cloudflare
 provider_url: "https://developers.cloudflare.com/workers-ai/models/kimi-k2.6/"
 default: false
-available: true
+available: false
 tokens_limit: 32768
 billing: credits
 route: workers-ai

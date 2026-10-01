@@ -25,7 +25,7 @@ delegable:
   - id: data.analyse
   - id: report.author
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
 sandbox_variant: jupyter-server

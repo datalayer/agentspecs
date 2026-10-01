@@ -65,9 +65,9 @@ color: "#8B5CF6"
 goal: >-
   Plan a content calendar and campaign tasks aligned to goals and channels.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:

@@ -6,6 +6,30 @@
 
 # Changelog
 
+## 0.0.11
+
+- UI plugins: what was called a *UI extension* is a **UI plugin**. One spec per plugin
+  under `agentspecs/ui-plugins/` (`a2ui`, `mcp-apps`, `mcp-ui`) — its name, what it renders,
+  the protocol's documentation and whether it is enabled.
+- Agents: the field `ui_extension` is renamed `ui_plugin` in every agent spec. **A rename
+  of a field**: a consumer that reads `ui_extension` reads nothing from 0.0.11 on.
+- Agents: four agent specs are enabled — `example-simple` (A Simple Agent), `worker-crawler`
+  (Crawler Agent), `jupyter-notebook-compactor` (Jupyter Notebook Compactor) and
+  `example-one-trigger` (Example Once Trigger Agent). Every other agent spec stays in the
+  catalogue with `enabled: false`: listed, and not offered.
+- Models: of the Cloudflare models, only Jev is offered — `cloudflare:gtw/typesafe/jev` and
+  `cloudflare:wrk/typesafe/jev`. The six Workers AI chat models stay in the catalogue with
+  `available: false`.
+- MCP servers: `tavily` (Tavily Search) and `earthdata` (Earthdata MCP) are enabled; the
+  others stay listed and not offered.
+- Events: specs for the kinds agent-runtimes emits and had none for — `agent-output` (a
+  triggered run or a chat turn produced its output), `agent-assigned` (a runtime was given
+  its agent) and `generic` (the kind of an event created with none).
+- Outputs: `csv` and `json` are enabled; the others stay listed and not offered.
+- Skills: `crawl` (Web Crawl Skill) is enabled; the others stay listed and not offered.
+- Memory: a spec says whether it is `enabled`. `mem0` is; `ephemeral`, `memu` and `simplemem`
+  stay listed and not offered.
+
 ## 0.0.10
 
 - Model providers: one spec per provider under `agentspecs/model-providers/` (Anthropic,

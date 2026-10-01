@@ -63,9 +63,9 @@ goal: >-
   balances across accounts, run AML compliance checks, flag suspicious
   transactions for human review, and generate audit-ready reports.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Trigger configuration
 trigger:

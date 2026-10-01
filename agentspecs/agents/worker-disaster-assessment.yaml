@@ -63,9 +63,9 @@ color: "#10B981"
 goal: >-
   Rapidly estimate affected areas and damage extent after a disaster and produce a response-ready assessment.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:

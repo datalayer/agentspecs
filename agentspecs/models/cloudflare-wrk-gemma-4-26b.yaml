@@ -13,7 +13,7 @@ description: Google Gemma 4 26B (a4b, instruction-tuned) on Cloudflare Workers A
 provider: cloudflare
 provider_url: "https://developers.cloudflare.com/workers-ai/models/gemma-4-26b-a4b-it/"
 default: false
-available: true
+available: false
 tokens_limit: 16384
 billing: standard
 route: workers-ai

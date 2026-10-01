@@ -8,7 +8,7 @@ description: >-
   Deliver results as a CSV file for easy import into spreadsheets,
   data pipelines, or other analysis tools.
 # Not offered on the platform yet: the integrations page lists it as not available.
-enabled: false
+enabled: true
 
 icon: table
 supports_template: false

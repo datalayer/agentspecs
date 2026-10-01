@@ -63,9 +63,9 @@ color: "#10B981"
 goal: >-
   Track crop vigor and growth over time from satellite imagery and flag fields that need attention.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:

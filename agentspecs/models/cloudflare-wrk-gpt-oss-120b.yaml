@@ -13,7 +13,7 @@ description: OpenAI gpt-oss-120b on Cloudflare Workers AI - 128k context, tool c
 provider: cloudflare
 provider_url: "https://developers.cloudflare.com/workers-ai/models/gpt-oss-120b/"
 default: false
-available: true
+available: false
 tokens_limit: 32768
 billing: standard
 route: workers-ai

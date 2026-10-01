@@ -64,9 +64,9 @@ color: "#A855F7"
 goal: >-
   Research travel options and build a personalized itinerary, comparing sources and prices.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:

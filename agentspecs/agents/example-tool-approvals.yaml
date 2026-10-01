@@ -1,6 +1,7 @@
 id: example-tool-approvals
 version: 0.0.1
 name: Example Tool Approvals
+enabled: false
 description: >
   Demonstrates per-tool approval hooks with policy requests and decision/audit
   logging.

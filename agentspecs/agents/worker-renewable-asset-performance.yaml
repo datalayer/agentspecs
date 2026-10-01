@@ -63,9 +63,9 @@ color: "#EAB308"
 goal: >-
   Compare expected vs actual generation, weather-adjust performance, and investigate underperformance.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:

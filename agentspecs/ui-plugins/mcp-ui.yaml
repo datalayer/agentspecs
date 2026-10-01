@@ -1,0 +1,13 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Plugin Specification: MCP UI
+
+id: "mcp-ui"
+version: 0.0.1
+name: MCP UI
+description: >-
+  An MCP tool answers with a UI resource — HTML, a remote page or a component — that the host renders in place of plain text.
+docs_url: "https://mcpui.dev/"
+# Whether an agent spec may name it today (`ui_plugin: mcp-ui`).
+enabled: false

@@ -1,0 +1,13 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Plugin Specification: A2UI
+
+id: "a2ui"
+version: 0.0.1
+name: A2UI
+description: >-
+  An agent describes an interface — a form, a table, a card — as a tree of components from a catalogue the host allows, and the host renders it; what the user does in it comes back to the agent as an action.
+docs_url: "https://a2ui.org/"
+# Whether an agent spec may name it today (`ui_plugin: a2ui`).
+enabled: true

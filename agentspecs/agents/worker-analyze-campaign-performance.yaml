@@ -67,9 +67,9 @@ goal: >-
   ROAS, and CTR definitions. Detect performance anomalies in real time and
   generate budget reallocation recommendations to maximise ROAS.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Evals
 evals:

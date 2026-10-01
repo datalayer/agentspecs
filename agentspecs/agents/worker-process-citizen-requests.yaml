@@ -66,9 +66,9 @@ goal: >-
   model policy impacts across population datasets with Monte Carlo simulation,
   and generate explainable, auditable decision documentation for public record.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Evals
 evals:

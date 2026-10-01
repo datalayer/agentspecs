@@ -16,7 +16,7 @@ dependencies:
   - beautifulsoup4>=4.12.0
 
 # Not offered on the platform yet: the integrations page lists it as not available.
-enabled: false
+enabled: true
 
 tags:
   - web

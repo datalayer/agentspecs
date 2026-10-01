@@ -100,9 +100,9 @@ goal: >-
   topics, sources, companies, and industries, filtering out noise and
   surfacing the most important developments in a concise summary.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Trigger configuration — run every morning
 trigger:

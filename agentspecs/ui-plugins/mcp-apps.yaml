@@ -1,0 +1,13 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Plugin Specification: MCP Apps
+
+id: "mcp-apps"
+version: 0.0.1
+name: MCP Apps
+description: >-
+  An MCP server ships an interactive app with a tool: the host renders it in a sandboxed frame beside the conversation, and the app calls the server's tools through the host.
+docs_url: "https://modelcontextprotocol.io/docs/extensions/apps"
+# Whether an agent spec may name it today (`ui_plugin: mcp-apps`).
+enabled: false

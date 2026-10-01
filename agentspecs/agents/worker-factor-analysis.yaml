@@ -62,9 +62,9 @@ color: "#3B82F6"
 goal: >-
   Analyze factor exposures and returns and explain the primary contributors.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:

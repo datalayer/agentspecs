@@ -1,0 +1,36 @@
+---
+title: UI Plugins
+---
+
+# UI Plugin Specifications
+
+A UI plugin is how an agent's answer becomes an interface rather than text: a protocol
+the host knows how to render. One YAML per plugin under `agentspecs/ui-plugins/`; an
+agent spec's `ui_plugin` names one.
+
+They were called *UI extensions*, and the agent field `ui_extension`, before 0.0.11.
+
+## Fields
+
+| Field | Meaning |
+|-------|---------|
+| `id` | What an agent spec's `ui_plugin` names: `a2ui`, `mcp-apps`, `mcp-ui`. The file is named for it. |
+| `name` | Display name. |
+| `description` | What the plugin renders, and how the user's action comes back. |
+| `docs_url` | The protocol's own documentation. |
+| `enabled` | Whether an agent spec may name it today. A plugin that is not enabled is listed, and not offered. |
+
+## The catalogue
+
+| Id | Name | Enabled |
+|----|------|---------|
+| `a2ui` | A2UI | yes |
+| `mcp-apps` | MCP Apps | no |
+| `mcp-ui` | MCP UI | no |
+
+## In an agent spec
+
+```yaml
+protocol: vercel-ai
+ui_plugin: a2ui
+```

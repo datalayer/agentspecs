@@ -10,6 +10,8 @@
 id: simplemem
 version: 0.0.1
 name: SimpleMem Lifelong Memory
+# Whether an agent spec is offered this memory today.
+enabled: false
 description: >
   Efficient lifelong memory framework based on semantic lossless compression.
   Maximizes information density and token utilization through a three-stage

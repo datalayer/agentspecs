@@ -10,6 +10,8 @@
 id: memu
 version: 0.0.1
 name: memU Proactive Memory
+# Whether an agent spec is offered this memory today.
+enabled: false
 description: >
   Proactive memory framework built for 24/7 always-on agents. Continuously
   captures and understands user intent, enabling agents that can anticipate

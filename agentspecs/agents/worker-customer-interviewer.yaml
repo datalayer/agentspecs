@@ -88,9 +88,9 @@ goal: >-
   asks relevant follow-up questions to uncover motivations and decision-making
   patterns, and produces a structured set of actionable insights.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:

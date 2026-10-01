@@ -23,7 +23,7 @@ tags:
   - viewer
   - loop
 
-enabled: true
+enabled: false
 protocol: vercel-ai
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 # The loop turns in the page by default, like the Loop Shell's agent; on a

@@ -65,9 +65,9 @@ color: "#8B5CF6"
 goal: >-
   Triage community comments and draft on-brand replies for human approval.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:

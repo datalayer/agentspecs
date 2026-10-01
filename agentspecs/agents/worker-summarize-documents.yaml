@@ -30,7 +30,7 @@ delegable:
   - id: document.extract
   - id: research.gather
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
 
@@ -66,9 +66,9 @@ goal: >-
   and named entities. Output a concise summary (max 500 words) plus metadata
   in JSON format.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Trigger configuration
 trigger:
