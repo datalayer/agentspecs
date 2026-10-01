@@ -26,6 +26,7 @@
   triggered run or a chat turn produced its output), `agent-assigned` (a runtime was given
   its agent) and `generic` (the kind of an event created with none).
 - Outputs: `csv` and `json` are enabled; the others stay listed and not offered.
+- Skills: `crawl` (Web Crawl Skill) is enabled; the others stay listed and not offered.
 
 ## 0.0.10
 
