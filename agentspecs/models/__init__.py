@@ -16,6 +16,28 @@ import yaml
 from pydantic import BaseModel, Field
 
 
+class ModelPricing(BaseModel):
+    """What the provider lists a model at, per million tokens, in dollars."""
+
+    input_usd_per_million: float = Field(default=0.0, description="Dollars per million input tokens")
+    output_usd_per_million: float = Field(default=0.0, description="Dollars per million output tokens")
+
+
+#: What a model can be trusted with. ``judgments`` is a typed-judgment model
+#: (noul, choice and score questions, answered as probabilities — Jev);
+#: ``judge`` is a chat model that may be asked those questions and made to
+#: answer in the same shape, whose probabilities are what it says they are.
+MODEL_CAPABILITIES = ("chat", "tools", "codemode", "vision", "thinking", "judgments", "judge")
+
+#: How a Cloudflare model is reached. ``workers-ai``: a model Cloudflare hosts
+#: (``@cf/…``), at Workers AI's own endpoint or through AI Gateway; billed in
+#: neurons (``billing: standard``), or from gateway credits for the frontier
+#: ones (``billing: credits``). ``ai-gateway``: a third-party model the
+#: gateway fronts (``typesafe/jev``), reachable only through the gateway and
+#: paid from its credits. Other providers leave it unset.
+MODEL_ROUTES = ("workers-ai", "ai-gateway")
+
+
 class AIModel(BaseModel):
     """Specification for an AI model."""
 
@@ -30,18 +52,28 @@ class AIModel(BaseModel):
     )
     required_env_vars: List[str] = Field(default_factory=list, description="Required environment variable names")
     tokens_limit: Optional[int] = Field(default=None, description="Maximum output tokens the model can generate in a single run")
-    capabilities: List[str] = Field(default_factory=list, description="What the model can be trusted with: chat, tools, codemode, vision, thinking")
+    capabilities: List[str] = Field(default_factory=list, description="What the model can be trusted with: chat, tools, codemode, vision, thinking, judgments, judge")
     billing: Optional[str] = Field(default=None, description="How the provider bills it, when worth telling: 'standard' or 'credits'")
+    route: Optional[str] = Field(default=None, description="How a Cloudflare model is reached: 'workers-ai' (a model Cloudflare hosts) or 'ai-gateway' (a third-party model the gateway fronts)")
+    context_window: Optional[int] = Field(default=None, description="The tokens a request may carry, input and output together")
+    zero_data_retention: Optional[bool] = Field(default=None, description="Whether the provider keeps nothing of a request once it is answered")
+    pricing: Optional[ModelPricing] = Field(default=None, description="The provider's list price per million tokens, when a service meters by it")
 
 
-def _load_model_specs() -> List[AIModel]:
+def _load_model_specs(models_dir: Optional[Path] = None) -> List[AIModel]:
     """Load all model YAML specifications from the models directory."""
-    models_dir = Path(__file__).parent
+    models_dir = models_dir or Path(__file__).parent
     specs = []
     for yaml_file in sorted(models_dir.glob("*.yaml")):
         with open(yaml_file) as f:
             data = yaml.safe_load(f)
-            specs.append(AIModel(**data))
+            spec = AIModel(**data)
+            unknown = [c for c in spec.capabilities if c not in MODEL_CAPABILITIES]
+            if unknown:
+                raise ValueError(f"{yaml_file.name}: unknown capabilities {unknown}; the vocabulary is {list(MODEL_CAPABILITIES)}")
+            if spec.route is not None and spec.route not in MODEL_ROUTES:
+                raise ValueError(f"{yaml_file.name}: unknown route {spec.route!r}; one of {list(MODEL_ROUTES)}")
+            specs.append(spec)
     return specs
 
 
