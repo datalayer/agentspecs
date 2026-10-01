@@ -44,7 +44,8 @@ class AIModel(BaseModel):
     id: str = Field(..., description="Unique model identifier (e.g., 'anthropic:claude-sonnet-4-5-20250514')")
     name: str = Field(..., description="Display name for the model")
     description: str = Field(default="", description="Model description")
-    provider: str = Field(..., description="Provider name (anthropic, openai, bedrock, azure-openai)")
+    provider: str = Field(..., description="Provider id (anthropic, openai, bedrock, azure-openai, alibaba, cloudflare, ollama): one of the model-providers specs")
+    provider_url: Optional[str] = Field(default=None, description="The page on the provider's website that describes this model")
     default: bool = Field(default=False, description="Whether this is the default model")
     available: bool = Field(
         default=False,
@@ -77,6 +78,16 @@ def _load_model_specs(models_dir: Optional[Path] = None) -> List[AIModel]:
     return specs
 
 
+def _check_providers(specs: List[AIModel]) -> None:
+    """Every model names a provider the model-providers catalogue has."""
+    from agentspecs.model_providers import MODEL_PROVIDER_CATALOGUE
+
+    known = {provider.id for provider in MODEL_PROVIDER_CATALOGUE}
+    for spec in specs:
+        if spec.provider not in known:
+            raise ValueError(f"{spec.id}: provider {spec.provider!r} has no spec under model-providers/ (known: {sorted(known)})")
+
+
 def _build_enum() -> type:
     """Build the AIModels enum dynamically from YAML specs."""
     specs = _load_model_specs()
@@ -92,6 +103,7 @@ def _build_enum() -> type:
 
 # Build the enum and catalogue at import time
 AI_MODEL_CATALOGUE: List[AIModel] = _load_model_specs()
+_check_providers(AI_MODEL_CATALOGUE)
 
 AIModels = _build_enum()
 

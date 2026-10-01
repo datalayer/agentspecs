@@ -8,6 +8,7 @@ version: 0.0.1
 name: OpenAI o3 Mini
 description: o3 Mini by OpenAI - reasoning-focused compact model
 provider: openai
+provider_url: "https://platform.openai.com/docs/models/o3-mini"
 default: false
 available: false
 tokens_limit: 100000

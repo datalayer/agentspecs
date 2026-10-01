@@ -66,3 +66,36 @@ def test_an_unknown_capability_or_route_is_refused_when_the_catalogue_loads(tmp_
     (tmp_path / "x.yaml").write_text('id: "x:y"\nversion: 0.0.1\nname: y\nprovider: x\nroute: tunnel\n')
     with pytest.raises(ValueError, match="tunnel"):
         _load_model_specs(tmp_path)
+
+
+def test_every_model_names_a_provider_the_catalogue_has_and_its_page():
+    from agentspecs.model_providers import MODEL_PROVIDER_CATALOGUE, get_model_provider
+
+    known = {provider.id for provider in MODEL_PROVIDER_CATALOGUE}
+    for model in AI_MODEL_CATALOGUE:
+        assert model.provider in known, model.id
+        assert model.provider_url and model.provider_url.startswith("https://"), model.id
+    cloudflare = get_model_provider("cloudflare")
+    assert cloudflare is not None and cloudflare.hosting == "cloud"
+    assert cloudflare.terms_url.startswith("https://") and cloudflare.privacy_url.startswith("https://")
+    assert get_model_provider("ollama").hosting == "local"
+
+
+def test_a_model_naming_an_unknown_provider_is_refused():
+    from agentspecs.models import _check_providers
+
+    with pytest.raises(ValueError, match="no spec under model-providers"):
+        _check_providers([AIModel(id="x:y", name="y", provider="nowhere")])
+
+
+def test_a_provider_file_is_named_for_its_id(tmp_path):
+    from agentspecs.model_providers import _load_provider_specs
+
+    (tmp_path / "acme.yaml").write_text('id: "acme"\nname: Acme\nhosting: cloud\n')
+    assert [p.id for p in _load_provider_specs(tmp_path)] == ["acme"]
+    (tmp_path / "other.yaml").write_text('id: "acme"\nname: Acme\n')
+    with pytest.raises(ValueError, match="named for id"):
+        _load_provider_specs(tmp_path)
+    (tmp_path / "other.yaml").write_text('id: "other"\nname: Other\nhosting: orbit\n')
+    with pytest.raises(ValueError, match="orbit"):
+        _load_provider_specs(tmp_path)

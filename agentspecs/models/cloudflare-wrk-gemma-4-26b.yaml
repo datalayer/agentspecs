@@ -8,6 +8,7 @@ version: 0.0.1
 name: Cloudflare Gemma 4 26B
 description: Google Gemma 4 26B (a4b, instruction-tuned) on Cloudflare Workers AI - 256k context, tool calling, standard billing
 provider: cloudflare
+provider_url: "https://developers.cloudflare.com/workers-ai/models/gemma-4-26b-a4b-it/"
 default: false
 available: true
 tokens_limit: 16384

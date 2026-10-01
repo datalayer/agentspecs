@@ -8,6 +8,7 @@ version: 0.0.1
 name: OpenAI GPT-4.1
 description: GPT-4.1 by OpenAI - strong general purpose model
 provider: openai
+provider_url: "https://platform.openai.com/docs/models/gpt-4.1"
 default: false
 available: false
 tokens_limit: 32768

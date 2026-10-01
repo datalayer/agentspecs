@@ -8,6 +8,7 @@ version: 0.0.1
 name: Alibaba Qwen3.6-Plus
 description: Qwen3.6-Plus via Alibaba Cloud Model Studio - balanced performance and cost
 provider: alibaba
+provider_url: "https://www.alibabacloud.com/help/en/model-studio/models"
 default: false
 available: false
 tokens_limit: 32768

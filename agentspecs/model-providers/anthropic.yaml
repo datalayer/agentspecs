@@ -1,0 +1,16 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Model Provider Specification: Anthropic
+
+id: "anthropic"
+version: 0.0.1
+name: Anthropic
+description: >-
+  Anthropic's own API for the Claude models — the vendor's endpoint, with the newest models first and the vendor's own usage policy.
+website: "https://www.anthropic.com"
+docs_url: "https://docs.claude.com/en/home"
+terms_url: "https://www.anthropic.com/legal/commercial-terms"
+privacy_url: "https://www.anthropic.com/legal/privacy"
+data_usage_url: "https://www.anthropic.com/legal/aup"
+hosting: cloud

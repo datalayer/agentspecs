@@ -8,6 +8,7 @@ version: 0.0.1
 name: Bedrock Claude Sonnet 4.5
 description: Claude Sonnet 4.5 via AWS Bedrock - balanced performance
 provider: bedrock
+provider_url: "https://aws.amazon.com/bedrock/anthropic/"
 # Not the default any more: Sonnet 4.6 is, and it is the one this deployment
 # is entitled to. Two specs claiming the default left the generated
 # DEFAULT_MODEL pointing at this one — a model marked unavailable — so every

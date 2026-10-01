@@ -1,0 +1,16 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Model Provider Specification: OpenAI
+
+id: "openai"
+version: 0.0.1
+name: OpenAI
+description: >-
+  OpenAI's platform API for the GPT and o-series models — the vendor's endpoint, under its business terms; API data is not used for training by default.
+website: "https://openai.com"
+docs_url: "https://platform.openai.com/docs/overview"
+terms_url: "https://openai.com/policies/business-terms/"
+privacy_url: "https://openai.com/policies/privacy-policy/"
+data_usage_url: "https://platform.openai.com/docs/guides/your-data"
+hosting: cloud

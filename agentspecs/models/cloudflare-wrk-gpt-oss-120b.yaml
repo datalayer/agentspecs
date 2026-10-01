@@ -8,6 +8,7 @@ version: 0.0.1
 name: Cloudflare gpt-oss-120b
 description: OpenAI gpt-oss-120b on Cloudflare Workers AI - 128k context, tool calling, standard billing
 provider: cloudflare
+provider_url: "https://developers.cloudflare.com/workers-ai/models/gpt-oss-120b/"
 default: false
 available: true
 tokens_limit: 32768

@@ -38,7 +38,7 @@ description: GPT-4.1 by OpenAI - strong general purpose model
 ```
 
 ### `provider` (string)
-The model provider. Current values: `anthropic`, `bedrock`, `azure-openai`, `openai`, `alibaba`, `ollama`, `cloudflare`.
+The model provider: the id of one of the [model-provider specs](../model-providers/) — `anthropic`, `bedrock`, `azure-openai`, `openai`, `alibaba`, `ollama`, `cloudflare`. A model naming a provider with no spec is refused when the catalogue loads.
 ```yaml
 provider: bedrock
 provider: openai
@@ -48,6 +48,14 @@ provider: cloudflare
 ```
 
 ## Optional Fields
+
+### `provider_url` (string)
+The page on the provider's website that describes this model — its model card, its
+entry in the provider's model list — so a reader can check what the spec says against
+what the provider says today.
+```yaml
+provider_url: "https://platform.openai.com/docs/models/gpt-4.1"
+```
 
 ### `default` (boolean)
 Whether this model is the system default (default: `false`). Exactly one model should have `default: true`. This model is used when an agent spec does not specify a `model` field, and when no environment override is set.

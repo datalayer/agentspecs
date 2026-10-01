@@ -8,6 +8,7 @@ version: 0.0.1
 name: Bedrock Claude Opus 4
 description: Claude Opus 4 via AWS Bedrock - highest capability
 provider: bedrock
+provider_url: "https://aws.amazon.com/bedrock/anthropic/"
 default: false
 available: false
 tokens_limit: 32000

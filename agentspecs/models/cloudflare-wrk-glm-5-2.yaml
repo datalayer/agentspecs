@@ -8,6 +8,7 @@ version: 0.0.1
 name: Cloudflare GLM-5.2
 description: Z.ai GLM-5.2 on Cloudflare Workers AI - 262k context, tool calling; a frontier model billed from AI Gateway credits
 provider: cloudflare
+provider_url: "https://developers.cloudflare.com/workers-ai/models/glm-5.2/"
 default: false
 available: true
 tokens_limit: 32768

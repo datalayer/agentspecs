@@ -1,0 +1,16 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Model Provider Specification: Azure OpenAI
+
+id: "azure-openai"
+version: 0.0.1
+name: Azure OpenAI
+description: >-
+  OpenAI's models served by Microsoft Azure (Foundry Models sold by Azure) — an Azure resource, endpoint and key, under the Microsoft Product Terms and Azure's data-privacy commitments.
+website: "https://azure.microsoft.com/en-us/products/ai-foundry/models/openai"
+docs_url: "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/overview"
+terms_url: "https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/EAEAS"
+privacy_url: "https://www.microsoft.com/en-us/privacy/privacystatement"
+data_usage_url: "https://learn.microsoft.com/en-us/legal/cognitive-services/openai/data-privacy"
+hosting: cloud

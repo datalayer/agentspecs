@@ -6,6 +6,16 @@
 
 # Changelog
 
+## 0.0.10
+
+- Model providers: one spec per provider under `agentspecs/model-providers/` (Anthropic,
+  Amazon Bedrock, OpenAI, Azure OpenAI, Alibaba Cloud Model Studio, Cloudflare, Ollama) —
+  its site, its documentation, its terms of service, its privacy policy, what it says
+  about the data a request carries, and whether it runs the model or the user's machine
+  does. `agentspecs.model_providers`; a model naming a provider with no spec is refused.
+- Models: `provider_url`, the page on the provider's site that describes the model, on
+  every spec.
+
 ## 0.0.9
 
 - Models: Jev, Typesafe's typed-judgment model, in the catalogue once per Cloudflare route —

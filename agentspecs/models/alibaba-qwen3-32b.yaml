@@ -8,6 +8,7 @@ version: 0.0.1
 name: Alibaba Qwen3-32B
 description: Qwen3-32B via Alibaba Cloud Model Studio - open-weight 32B model with tool calling
 provider: alibaba
+provider_url: "https://www.alibabacloud.com/help/en/model-studio/models"
 default: false
 available: false
 tokens_limit: 16384

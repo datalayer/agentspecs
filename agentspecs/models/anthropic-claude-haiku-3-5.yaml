@@ -8,6 +8,7 @@ version: 0.0.1
 name: Anthropic Claude Haiku 3.5
 description: Claude Haiku 3.5 by Anthropic - fast and efficient
 provider: anthropic
+provider_url: "https://www.anthropic.com/claude/haiku"
 default: false
 available: false
 tokens_limit: 8192

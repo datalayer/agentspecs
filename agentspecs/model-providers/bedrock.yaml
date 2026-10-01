@@ -1,0 +1,16 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Model Provider Specification: Amazon Bedrock
+
+id: "bedrock"
+version: 0.0.1
+name: Amazon Bedrock
+description: >-
+  AWS's managed service for foundation models, among them Anthropic's Claude — called with AWS credentials, in an AWS region, under AWS's service terms and data protection.
+website: "https://aws.amazon.com/bedrock/"
+docs_url: "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html"
+terms_url: "https://aws.amazon.com/service-terms/"
+privacy_url: "https://aws.amazon.com/privacy/"
+data_usage_url: "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html"
+hosting: cloud

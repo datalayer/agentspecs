@@ -8,6 +8,7 @@ version: 0.0.1
 name: OpenAI GPT-4o Mini
 description: GPT-4o Mini by OpenAI - compact and cost-effective
 provider: openai
+provider_url: "https://platform.openai.com/docs/models/gpt-4o-mini"
 default: false
 available: false
 tokens_limit: 16384
