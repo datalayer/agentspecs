@@ -1,17 +1,19 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# AI Model Specification: Cloudflare Kimi K2.6
+# AI Model Specification: Cloudflare Workers AI Llama 3.3 70B Instruct
 
-id: "cloudflare:moonshotai/kimi-k2.6"
+id: "cloudflare:wrk/meta/llama-3.3-70b-instruct-fp8-fast"
 version: 0.0.1
-name: Cloudflare Kimi K2.6
-description: Moonshot Kimi K2.6 on Cloudflare Workers AI - 262k context, tool calling; a frontier model billed from AI Gateway credits
+name: Cloudflare Llama 3.3 70B
+description: Meta Llama 3.3 70B Instruct (fp8, fast) on Cloudflare Workers AI - 24k context, tool calling, standard billing
 provider: cloudflare
 default: false
 available: true
-tokens_limit: 32768
-billing: credits
+tokens_limit: 8192
+billing: standard
+route: workers-ai
+context_window: 24000
 
 # Hosted through datalayer-ai-inference, which holds the Cloudflare account
 # and token and routes the call through the account's AI Gateway. Nothing is

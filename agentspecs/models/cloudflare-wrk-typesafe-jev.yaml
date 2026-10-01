@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Jev (Typesafe), at Cloudflare Workers AI
+
+id: "cloudflare:wrk/typesafe/jev"
+version: 0.0.1
+name: Jev (Cloudflare Workers AI)
+description: Typesafe's typed-judgment model at Workers AI's own endpoint - noul, choice and score questions answered as calibrated probabilities; 32k context; zero data retention; billed from the account's credits, no gateway in the way
+provider: cloudflare
+default: false
+available: true
+tokens_limit: null
+billing: credits
+# A third-party model Cloudflare fronts, not one it hosts: there is no `@cf/`
+# namespace for it. At Workers AI's own endpoint it is asked at
+# `POST https://api.cloudflare.com/client/v4/accounts/{account}/ai/run` with
+# `{"model": "typesafe/jev", "input": …}` — the model in the body, since
+# `/ai/run/<model>` is the route of Cloudflare's own `@cf/` models. No gateway
+# logs or caching. The same model through the gateway is
+# `cloudflare:gtw/typesafe/jev`.
+route: workers-ai
+context_window: 32000
+zero_data_retention: true
+# Cloudflare's price, checked 2026-09-30.
+pricing:
+  input_usd_per_million: 0.042
+  output_usd_per_million: 0.0
+
+# Asked through datalayer-ai-inference's typed-judgment endpoint
+# (`POST /api/ai-inference/v1/judgments`), which holds the account and token.
+required_env_vars: []
+
+# Not a chat model: it answers typed questions about a state, nothing else.
+capabilities:
+  - judgments

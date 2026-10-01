@@ -3,7 +3,7 @@
 
 # AI Model Specification: Cloudflare Workers AI gpt-oss-120b
 
-id: "cloudflare:openai/gpt-oss-120b"
+id: "cloudflare:wrk/openai/gpt-oss-120b"
 version: 0.0.1
 name: Cloudflare gpt-oss-120b
 description: OpenAI gpt-oss-120b on Cloudflare Workers AI - 128k context, tool calling, standard billing
@@ -12,6 +12,8 @@ default: false
 available: true
 tokens_limit: 32768
 billing: standard
+route: workers-ai
+context_window: 128000
 
 # Hosted through datalayer-ai-inference, which holds the Cloudflare account
 # and token and routes the call through the account's AI Gateway. Nothing is
@@ -23,3 +25,4 @@ capabilities:
   - chat
   - tools
   - codemode
+  - judge

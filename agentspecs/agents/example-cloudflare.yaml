@@ -16,7 +16,7 @@ tags:
   - inference
 
 enabled: true
-model: "cloudflare:openai/gpt-oss-120b"
+model: "cloudflare:wrk/openai/gpt-oss-120b"
 harness: pydantic-ai
 inference_provider: datalayer
 
