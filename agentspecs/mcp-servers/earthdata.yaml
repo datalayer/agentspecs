@@ -12,7 +12,7 @@ args:
   - "earthdata-mcp-server"
 
 transport: stdio
-enabled: false
+enabled: true
 env:
   EARTHDATA_USERNAME: ${EARTHDATA_USERNAME}
   EARTHDATA_PASSWORD: ${EARTHDATA_PASSWORD}

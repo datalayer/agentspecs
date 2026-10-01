@@ -20,6 +20,8 @@
 - Models: of the Cloudflare models, only Jev is offered — `cloudflare:gtw/typesafe/jev` and
   `cloudflare:wrk/typesafe/jev`. The six Workers AI chat models stay in the catalogue with
   `available: false`.
+- MCP servers: `tavily` (Tavily Search) and `earthdata` (Earthdata MCP) are enabled; the
+  others stay listed and not offered.
 
 ## 0.0.10
 
