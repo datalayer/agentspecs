@@ -58,9 +58,9 @@ color: "#F59E0B"
 goal: >-
   Assemble a complete, traceable audit-evidence pack for a given period or transaction set.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:

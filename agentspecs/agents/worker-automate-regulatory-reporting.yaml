@@ -70,9 +70,9 @@ goal: >-
   reconcile positions, validate against Basel III/IV, MiFID II, and SOX rules,
   and generate submission-ready compliance reports with full audit trails.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Evals
 evals:

@@ -64,9 +64,9 @@ color: "#A855F7"
 goal: >-
   Teach coding interactively with executable exercises and give clear, incremental feedback.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:

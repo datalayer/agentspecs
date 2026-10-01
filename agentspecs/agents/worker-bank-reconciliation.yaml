@@ -21,7 +21,7 @@ delegable:
   - id: data.analyse
   - id: data.transform
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
 
@@ -59,9 +59,9 @@ color: "#F59E0B"
 goal: >-
   Reconcile bank feeds against the ledger, auto-match transactions, and flag exceptions for review.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:

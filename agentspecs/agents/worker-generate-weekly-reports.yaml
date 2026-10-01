@@ -65,9 +65,9 @@ goal: >-
   Monday. Generate a structured executive report with charts, KPI summaries,
   trend analysis, and the top 3 actionable takeaways for leadership.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Trigger configuration
 trigger:

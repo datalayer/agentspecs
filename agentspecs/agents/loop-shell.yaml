@@ -14,7 +14,7 @@ tags:
   - jupyter
   - output
 
-enabled: true
+enabled: false
 protocol: vercel-ai
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 # The loop turns in the page: with the browser sandbox there is no server to

@@ -6,6 +6,18 @@
 
 # Changelog
 
+## 0.0.11
+
+- UI plugins: what was called a *UI extension* is a **UI plugin**. One spec per plugin
+  under `agentspecs/ui-plugins/` (`a2ui`, `mcp-apps`, `mcp-ui`) — its name, what it renders,
+  the protocol's documentation and whether it is enabled.
+- Agents: the field `ui_extension` is renamed `ui_plugin` in every agent spec. **A rename
+  of a field**: a consumer that reads `ui_extension` reads nothing from 0.0.11 on.
+- Agents: four agent specs are enabled — `example-simple` (A Simple Agent), `worker-crawler`
+  (Crawler Agent), `jupyter-notebook-compactor` (Jupyter Notebook Compactor) and
+  `example-one-trigger` (Example Once Trigger Agent). Every other agent spec stays in the
+  catalogue with `enabled: false`: listed, and not offered.
+
 ## 0.0.10
 
 - Model providers: one spec per provider under `agentspecs/model-providers/` (Anthropic,

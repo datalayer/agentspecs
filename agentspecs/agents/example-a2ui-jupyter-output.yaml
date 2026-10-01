@@ -13,7 +13,7 @@ tags:
   - jupyter
   - output
 
-enabled: true
+enabled: false
 protocol: vercel-ai
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai

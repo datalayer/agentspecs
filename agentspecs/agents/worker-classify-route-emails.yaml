@@ -65,9 +65,9 @@ goal: >-
   subject, account ID, product), and route to the correct department queue.
   Flag urgent items for immediate human review.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Trigger configuration
 trigger:

@@ -15,7 +15,7 @@ tags:
   - analysis
   - inference
 
-enabled: true
+enabled: false
 model: "cloudflare:wrk/openai/gpt-oss-120b"
 harness: pydantic-ai
 inference_provider: datalayer

@@ -62,9 +62,9 @@ color: "#EAB308"
 goal: >-
   Detect degradation and anomalies, predict likely failures, and prioritize maintenance work.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:

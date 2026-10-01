@@ -65,9 +65,9 @@ color: "#06B6D4"
 goal: >-
   Analyze and annotate genomic variants and produce an interpretable, provenance-tracked report.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:

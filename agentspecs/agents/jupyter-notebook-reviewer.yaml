@@ -27,7 +27,7 @@ delegable:
   - id: notebook.run
   - id: data.analyse
 
-enabled: true
+enabled: false
 protocol: vercel-ai
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: vercel-ai

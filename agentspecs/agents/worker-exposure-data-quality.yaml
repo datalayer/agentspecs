@@ -65,9 +65,9 @@ color: "#EF4444"
 goal: >-
   Cleanse and validate exposure data and geocoding, and report remaining data-quality gaps.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:

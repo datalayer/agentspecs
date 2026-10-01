@@ -68,9 +68,9 @@ goal: >-
   spreadsheets, and scanned documents. Output clean JSON and CSV with
   confidence scores for each extracted field.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Trigger configuration
 trigger:

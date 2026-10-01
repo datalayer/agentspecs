@@ -65,9 +65,9 @@ goal: >-
   sales, seasonality, and external signals. Generate margin-optimised pricing
   recommendations with confidence intervals and projected revenue impact.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Trigger configuration
 trigger:

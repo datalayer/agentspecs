@@ -59,9 +59,9 @@ color: "#F59E0B"
 goal: >-
   Prioritize overdue receivables and draft tailored collection follow-ups for human approval.
 
-# Protocols & UI Extensions
+# Protocols & UI Plugins
 protocol: vercel-ai
-ui_extension: a2ui
+ui_plugin: a2ui
 
 # Model configuration
 model_config:
