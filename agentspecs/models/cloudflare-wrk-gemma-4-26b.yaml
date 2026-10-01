@@ -5,6 +5,9 @@
 
 id: "cloudflare:wrk/google/gemma-4-26b-a4b-it"
 version: 0.0.1
+# The id this model had before 0.0.9 named its route; kept so it still resolves.
+aliases:
+  - "cloudflare:google/gemma-4-26b-a4b-it"
 name: Cloudflare Gemma 4 26B
 description: Google Gemma 4 26B (a4b, instruction-tuned) on Cloudflare Workers AI - 256k context, tool calling, standard billing
 provider: cloudflare

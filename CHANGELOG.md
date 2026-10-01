@@ -15,6 +15,21 @@
   does. `agentspecs.model_providers`; a model naming a provider with no spec is refused.
 - Models: `provider_url`, the page on the provider's site that describes the model, on
   every spec.
+- Models: the six Cloudflare chat models renamed in 0.0.9 (`cloudflare:<vendor>/<model>` →
+  `cloudflare:wrk/<vendor>/<model>`) keep their older id as an `aliases` entry: `get_model`
+  answers it and the `AIModels` enum keeps the older member with the older value, so a
+  consumer that named a model before its id moved still finds it. 0.0.9 was a catalogue
+  migration and should have said so.
+- Models: `zero_data_retention` is the model provider's retention and nothing else;
+  `request_logging` (`none` or `gateway`) says where the route keeps a log of the
+  request. Jev through AI Gateway is ZDR at Typesafe and logged at the gateway; Jev at
+  Workers AI's endpoint is ZDR and unlogged. A route for sensitive data is chosen on both.
+- Models: a `route` is Cloudflare's endpoint, not a kind of model — `workers-ai` is Workers
+  AI's own endpoint, which serves the `@cf/` models and the third-party ones it fronts
+  alike; `ai-gateway` is through the gateway. The catalogue refuses, when it loads, a
+  Cloudflare model whose id, file name and `route` disagree, a Cloudflare id with no
+  flavour, and a route on any other provider's model. `pricing` requires both prices,
+  non-negative and finite.
 
 ## 0.0.9
 
@@ -36,5 +51,5 @@
 - Models: Cloudflare Workers AI as a provider — six models (`gpt-oss-120b`, Llama 3.3 70B,
   Qwen3.8 27B, Gemma 4 26B, GLM-5.2, Kimi K2.6), asked for as `cloudflare:<vendor>/<model>`
   and hosted through datalayer-ai-inference; the docs page says how they are billed.
-- An id with a vendor segment (`cloudflare:wrk/openai/gpt-oss-120b`) gets an enum name of its own
+- An id with a vendor segment (`cloudflare:openai/gpt-oss-120b`) gets an enum name of its own
   (`CLOUDFLARE_OPENAI_GPT_OSS_120B`): the slash is replaced like the colon.

@@ -22,6 +22,9 @@ billing: credits
 route: ai-gateway
 context_window: 32000
 zero_data_retention: true
+# Typesafe keeps nothing; the gateway in front of it does keep request logs
+# for the account. A route for sensitive data is chosen on both.
+request_logging: gateway
 # Cloudflare's price, checked 2026-09-30.
 pricing:
   input_usd_per_million: 0.042

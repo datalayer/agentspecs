@@ -23,6 +23,8 @@ billing: credits
 route: workers-ai
 context_window: 32000
 zero_data_retention: true
+# Workers AI's own endpoint keeps no request log of its own.
+request_logging: none
 # Cloudflare's price, checked 2026-09-30.
 pricing:
   input_usd_per_million: 0.042

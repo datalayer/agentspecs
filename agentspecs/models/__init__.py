@@ -17,10 +17,15 @@ from pydantic import BaseModel, Field
 
 
 class ModelPricing(BaseModel):
-    """What the provider lists a model at, per million tokens, in dollars."""
+    """What the provider lists a model at, per million tokens, in dollars.
 
-    input_usd_per_million: float = Field(default=0.0, description="Dollars per million input tokens")
-    output_usd_per_million: float = Field(default=0.0, description="Dollars per million output tokens")
+    Both prices are required: a pricing block that names one and not the
+    other would make metered usage look free. An explicit ``0.0`` is a
+    price (a model with no output charge); a missing key is not.
+    """
+
+    input_usd_per_million: float = Field(..., ge=0, allow_inf_nan=False, description="Dollars per million input tokens")
+    output_usd_per_million: float = Field(..., ge=0, allow_inf_nan=False, description="Dollars per million output tokens")
 
 
 #: What a model can be trusted with. ``judgments`` is a typed-judgment model
@@ -29,13 +34,24 @@ class ModelPricing(BaseModel):
 #: answer in the same shape, whose probabilities are what it says they are.
 MODEL_CAPABILITIES = ("chat", "tools", "codemode", "vision", "thinking", "judgments", "judge")
 
-#: How a Cloudflare model is reached. ``workers-ai``: a model Cloudflare hosts
-#: (``@cf/…``), at Workers AI's own endpoint or through AI Gateway; billed in
-#: neurons (``billing: standard``), or from gateway credits for the frontier
-#: ones (``billing: credits``). ``ai-gateway``: a third-party model the
-#: gateway fronts (``typesafe/jev``), reachable only through the gateway and
-#: paid from its credits. Other providers leave it unset.
+#: Which Cloudflare endpoint a model is asked at — a product, not a kind of
+#: model. ``workers-ai``: Workers AI's own endpoint
+#: (``api.cloudflare.com/client/v4/accounts/{account}/ai/…``), which serves
+#: the models Cloudflare hosts under ``@cf/`` and the third-party ones it
+#: fronts (``typesafe/jev``) alike. ``ai-gateway``: through the account's AI
+#: Gateway (``gateway.ai.cloudflare.com``), which logs the call and bills it
+#: from prepaid credits. A Cloudflare model carries one, in its id
+#: (``cloudflare:wrk/…``, ``cloudflare:gtw/…``) and its file name
+#: (``cloudflare-wrk-*.yaml``, ``cloudflare-gtw-*.yaml``); a model of any
+#: other provider carries none.
 MODEL_ROUTES = ("workers-ai", "ai-gateway")
+ROUTE_FLAVOURS = {"wrk": "workers-ai", "gtw": "ai-gateway"}
+
+#: Where a route keeps a log of the requests it carries, apart from what
+#: the model's provider retains: ``none``, or ``gateway`` (AI Gateway keeps
+#: request and response logs for the account). A service choosing a route
+#: for sensitive data reads this beside ``zero_data_retention``.
+REQUEST_LOGGING = ("none", "gateway")
 
 
 class AIModel(BaseModel):
@@ -55,9 +71,11 @@ class AIModel(BaseModel):
     tokens_limit: Optional[int] = Field(default=None, description="Maximum output tokens the model can generate in a single run")
     capabilities: List[str] = Field(default_factory=list, description="What the model can be trusted with: chat, tools, codemode, vision, thinking, judgments, judge")
     billing: Optional[str] = Field(default=None, description="How the provider bills it, when worth telling: 'standard' or 'credits'")
-    route: Optional[str] = Field(default=None, description="How a Cloudflare model is reached: 'workers-ai' (a model Cloudflare hosts) or 'ai-gateway' (a third-party model the gateway fronts)")
+    route: Optional[str] = Field(default=None, description="Which Cloudflare endpoint the model is asked at: 'workers-ai' (Workers AI's own endpoint) or 'ai-gateway' (through the account's AI Gateway). Set on every Cloudflare model, on no other")
     context_window: Optional[int] = Field(default=None, description="The tokens a request may carry, input and output together")
-    zero_data_retention: Optional[bool] = Field(default=None, description="Whether the provider keeps nothing of a request once it is answered")
+    zero_data_retention: Optional[bool] = Field(default=None, description="Whether the model's provider keeps nothing of a request once it is answered. Says nothing of the route: see request_logging")
+    request_logging: Optional[str] = Field(default=None, description="Where the route keeps a log of the requests it carries: 'none', or 'gateway' (AI Gateway's request logs)")
+    aliases: List[str] = Field(default_factory=list, description="Older ids this spec answers to, kept so a consumer that named the model before its id moved still finds it (get_model, the AIModels enum)")
     pricing: Optional[ModelPricing] = Field(default=None, description="The provider's list price per million tokens, when a service meters by it")
 
 
@@ -74,8 +92,27 @@ def _load_model_specs(models_dir: Optional[Path] = None) -> List[AIModel]:
                 raise ValueError(f"{yaml_file.name}: unknown capabilities {unknown}; the vocabulary is {list(MODEL_CAPABILITIES)}")
             if spec.route is not None and spec.route not in MODEL_ROUTES:
                 raise ValueError(f"{yaml_file.name}: unknown route {spec.route!r}; one of {list(MODEL_ROUTES)}")
+            if spec.request_logging is not None and spec.request_logging not in REQUEST_LOGGING:
+                raise ValueError(f"{yaml_file.name}: unknown request_logging {spec.request_logging!r}; one of {list(REQUEST_LOGGING)}")
+            _check_route(yaml_file.name, spec)
             specs.append(spec)
     return specs
+
+
+def _check_route(file_name: str, spec: "AIModel") -> None:
+    """A Cloudflare model carries its route in its id, its file name and its
+    ``route``, and the three agree; a model of any other provider carries none."""
+    if spec.provider != "cloudflare":
+        if spec.route is not None:
+            raise ValueError(f"{file_name}: route is Cloudflare's; a {spec.provider} model carries none")
+        return
+    flavour = spec.id.split(":", 1)[1].split("/", 1)[0] if ":" in spec.id else ""
+    if flavour not in ROUTE_FLAVOURS:
+        raise ValueError(f"{file_name}: a Cloudflare id is cloudflare:<wrk|gtw>/<vendor>/<model>, not {spec.id!r}")
+    if spec.route != ROUTE_FLAVOURS[flavour]:
+        raise ValueError(f"{file_name}: id flavour {flavour!r} means route {ROUTE_FLAVOURS[flavour]!r}, the spec says {spec.route!r}")
+    if not file_name.startswith(f"cloudflare-{flavour}-"):
+        raise ValueError(f"{file_name}: a {flavour} model's file is named cloudflare-{flavour}-*.yaml")
 
 
 def _check_providers(specs: List[AIModel]) -> None:
@@ -94,11 +131,16 @@ def _build_enum() -> type:
     members = {}
     for spec in specs:
         # Convert id to enum name: "anthropic:claude-sonnet-4-5-20250514" -> "ANTHROPIC_CLAUDE_SONNET_4_5"
-        name = spec.id.replace(":", "_").replace("-", "_").replace(".", "_").replace("/", "_").upper()
-        # Remove version suffixes like _20250514 or _V1_0
-        # Keep the name readable
-        members[name] = spec.id
+        members[_enum_name(spec.id)] = spec.id
+        # An older id keeps its member, with the older value: what a consumer
+        # named before the id moved still means what it meant.
+        for alias in spec.aliases:
+            members.setdefault(_enum_name(alias), alias)
     return Enum("AIModels", members, type=str)
+
+
+def _enum_name(model_id: str) -> str:
+    return model_id.replace(":", "_").replace("-", "_").replace(".", "_").replace("/", "_").upper()
 
 
 # Build the enum and catalogue at import time
@@ -122,7 +164,7 @@ def get_model(model_id: str) -> Optional[AIModel]:
         The AIModel specification, or None if not found.
     """
     for model in AI_MODEL_CATALOGUE:
-        if model.id == model_id:
+        if model.id == model_id or model_id in model.aliases:
             return model
     return None
 

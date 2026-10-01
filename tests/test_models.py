@@ -4,6 +4,8 @@
 
 """The model catalogue: typed, and checked when it loads."""
 
+from pathlib import Path
+
 import pytest
 
 from agentspecs.models import (
@@ -21,14 +23,84 @@ def test_every_spec_keeps_to_the_vocabulary():
         assert model.route is None or model.route in MODEL_ROUTES, model.id
 
 
-def test_a_cloudflare_id_carries_its_flavour():
+def test_a_cloudflare_id_carries_its_flavour_and_so_does_its_file():
     """`cloudflare:wrk/…` is Workers AI, `cloudflare:gtw/…` is AI Gateway: the id, the
     file and the route agree, so a reader tells the two apart at a glance."""
-    for model in AI_MODEL_CATALOGUE:
-        if model.provider != "cloudflare":
+    import yaml
+
+    models_dir = Path(__file__).resolve().parent.parent / "agentspecs" / "models"
+    seen = 0
+    for path in sorted(models_dir.glob("*.yaml")):
+        data = yaml.safe_load(path.read_text())
+        if data["provider"] != "cloudflare":
+            assert "route" not in data, path.name
             continue
-        flavour = model.id.split(":", 1)[1].split("/", 1)[0]
-        assert (flavour, model.route) in {("wrk", "workers-ai"), ("gtw", "ai-gateway")}, model.id
+        flavour = data["id"].split(":", 1)[1].split("/", 1)[0]
+        assert (flavour, data["route"]) in {("wrk", "workers-ai"), ("gtw", "ai-gateway")}, path.name
+        assert path.name.startswith(f"cloudflare-{flavour}-"), path.name
+        seen += 1
+    assert seen == 8
+
+
+def test_the_rules_are_enforced_when_the_catalogue_loads(tmp_path):
+    from agentspecs.models import _load_model_specs
+
+    def spec(name, text):
+        for stale in tmp_path.glob("*.yaml"):
+            stale.unlink()
+        (tmp_path / name).write_text(text)
+        return _load_model_specs(tmp_path)
+
+    # A non-Cloudflare model carries no route.
+    with pytest.raises(ValueError, match="carries none"):
+        spec("openai-x.yaml", 'id: "openai:x"\nversion: 0.0.1\nname: x\nprovider: openai\nroute: workers-ai\n')
+    # A Cloudflare id names its flavour…
+    with pytest.raises(ValueError, match="cloudflare:<wrk|gtw>"):
+        spec("cloudflare-wrk-x.yaml", 'id: "cloudflare:openai/x"\nversion: 0.0.1\nname: x\nprovider: cloudflare\nroute: workers-ai\n')
+    # …which agrees with its route…
+    with pytest.raises(ValueError, match="means route"):
+        spec("cloudflare-wrk-x.yaml", 'id: "cloudflare:wrk/openai/x"\nversion: 0.0.1\nname: x\nprovider: cloudflare\nroute: ai-gateway\n')
+    # …and with its file's name.
+    with pytest.raises(ValueError, match="named cloudflare-gtw"):
+        spec("cloudflare-wrk-x.yaml", 'id: "cloudflare:gtw/openai/x"\nversion: 0.0.1\nname: x\nprovider: cloudflare\nroute: ai-gateway\n')
+    assert spec("cloudflare-gtw-x.yaml", 'id: "cloudflare:gtw/openai/x"\nversion: 0.0.1\nname: x\nprovider: cloudflare\nroute: ai-gateway\n')[0].route == "ai-gateway"
+    with pytest.raises(ValueError, match="request_logging"):
+        spec("cloudflare-gtw-x.yaml", 'id: "cloudflare:gtw/openai/x"\nversion: 0.0.1\nname: x\nprovider: cloudflare\nroute: ai-gateway\nrequest_logging: diary\n')
+
+
+def test_a_price_names_both_sides_and_is_never_negative():
+    from pydantic import ValidationError
+
+    from agentspecs.models import ModelPricing
+
+    assert ModelPricing(input_usd_per_million=0.042, output_usd_per_million=0.0).output_usd_per_million == 0.0
+    with pytest.raises(ValidationError):
+        ModelPricing(input_usd_per_million=0.042)
+    with pytest.raises(ValidationError):
+        ModelPricing(input_usd_per_million=-1, output_usd_per_million=0)
+    with pytest.raises(ValidationError):
+        ModelPricing(input_usd_per_million=float("inf"), output_usd_per_million=0)
+
+
+def test_an_older_id_still_resolves():
+    """The six chat models were `cloudflare:<vendor>/<model>` before 0.0.9 named their
+    route: the ids are kept as aliases, so `get_model` and the enum still answer them."""
+    from agentspecs.models import AIModels
+
+    spec = get_model("cloudflare:openai/gpt-oss-120b")
+    assert spec is not None and spec.id == "cloudflare:wrk/openai/gpt-oss-120b"
+    assert AIModels.CLOUDFLARE_OPENAI_GPT_OSS_120B.value == "cloudflare:openai/gpt-oss-120b"
+    assert AIModels.CLOUDFLARE_WRK_OPENAI_GPT_OSS_120B.value == "cloudflare:wrk/openai/gpt-oss-120b"
+    assert all(len(m.aliases) == 1 for m in AI_MODEL_CATALOGUE if m.provider == "cloudflare" and "typesafe" not in m.id)
+
+
+def test_retention_and_route_logging_are_told_apart():
+    """Jev keeps nothing; the gateway in front of it keeps request logs. The two
+    flavours say so separately, so a route for sensitive data is chosen on both."""
+    gateway = get_model("cloudflare:gtw/typesafe/jev")
+    workers = get_model("cloudflare:wrk/typesafe/jev")
+    assert gateway.zero_data_retention is True and gateway.request_logging == "gateway"
+    assert workers.zero_data_retention is True and workers.request_logging == "none"
 
 
 def test_jev_is_a_judgment_model_once_per_route():

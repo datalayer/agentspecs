@@ -5,6 +5,9 @@
 
 id: "cloudflare:wrk/zai-org/glm-5.2"
 version: 0.0.1
+# The id this model had before 0.0.9 named its route; kept so it still resolves.
+aliases:
+  - "cloudflare:zai-org/glm-5.2"
 name: Cloudflare GLM-5.2
 description: Z.ai GLM-5.2 on Cloudflare Workers AI - 262k context, tool calling; a frontier model billed from AI Gateway credits
 provider: cloudflare

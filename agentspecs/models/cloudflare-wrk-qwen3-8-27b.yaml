@@ -5,6 +5,9 @@
 
 id: "cloudflare:wrk/qwen/qwen3.8-27b"
 version: 0.0.1
+# The id this model had before 0.0.9 named its route; kept so it still resolves.
+aliases:
+  - "cloudflare:qwen/qwen3.8-27b"
 name: Cloudflare Qwen3.8 27B
 description: Qwen3.8 27B on Cloudflare Workers AI - 262k context, tool calling, standard billing
 provider: cloudflare
