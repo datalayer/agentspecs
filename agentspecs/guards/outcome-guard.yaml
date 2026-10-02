@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Guard Specification: Outcome Guard
+# Across runs: the Op produces the business result it exists for.
+
+id: outcome-guard
+version: 0.0.1
+name: Outcome Guard
+description: >-
+  Measures, over time, whether the Op's outputs are used as intended:
+  accepted without rework, on time, with the decision they were made for taken.
+
+# A Guard extends a guardrail: the policy it verifies, and runs within.
+extends: default-platform-user:0.0.1
+
+category: outcome
+stages:
+  - continuous
+method: human
+
+check: >-
+  Over the review period, the share of outputs accepted without rework
+  by the people they were produced for meets the Op's goal.
+
+signals:
+  - name: outcome_met
+    type: boolean
+    description: The Op met its outcome goal over the review period.
+
+required: false
+enabled: true
+
+tags:
+  - outcome
+  - value

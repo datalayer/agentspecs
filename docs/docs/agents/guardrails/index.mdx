@@ -26,3 +26,19 @@ Guardrail specs define policy and permission envelopes for agents.
 
 - Guardrails are referenced from agentspecs.
 - Keep policy IDs stable and versioned.
+
+## Guardrails and Guards
+
+A guardrail bounds what an agent may *do*; nothing in it verifies that the
+bounds held. A **[Guard](../../guards)** is that verification: it `extends` a
+guardrail — the policy it checks against — and adds what is checked, at which
+stage of an [Op](../../ops), and the signals a [Gate](../../gates) decides on.
+
+```yaml
+# guards/permission-guard.yaml
+id: permission-guard
+extends: default-platform-user:0.0.1
+category: policy-safety
+stages: [preflight]
+check: Each permission the Op's Cogs use is granted by the guardrail.
+```

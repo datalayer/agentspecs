@@ -1,0 +1,26 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Gate Specification: Low Confidence Review
+# Work a Cog is not sure of goes to a person rather than out.
+
+id: low-confidence-review
+version: 0.0.1
+name: Low Confidence Review
+description: >-
+  Routes the output to human review when the lowest confidence a Cog
+  reported is under 0.80. Low confidence is not a failure: it is where the
+  autonomy granted to the Op ends.
+
+stage: post_run
+guards:
+  - confidence-guard:0.0.1
+when: confidence < 0.80
+then: human_review_required
+otherwise: proceed
+reviewers:
+  - op-owner
+
+tags:
+  - confidence
+  - human-in-the-loop

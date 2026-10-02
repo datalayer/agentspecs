@@ -1,0 +1,84 @@
+---
+sidebar_position: 1
+title: Tracks
+---
+
+# Tracks
+
+A Track is the durable record of an [Op](../ops) or a [Cog](../cogs)
+execution: what happened, under which context, which Cogs were invoked, which
+[Guards](../guards) ran, which [Gates](../gates) were passed or failed, what
+sources were consulted, who approved, and what was produced. The idea, and the
+word, are those of the [Intelligence Hub whitepaper](https://github.com/openteams-ai/inthub-whitepaper/blob/main/whitepaper.md) (section 5.3).
+
+A Track **spec** is not a record. It says what a record has to include, for
+how long it is retained, and who may read it — a policy for evidence, which an
+Op names so that what is kept is decided before the Op runs rather than after
+something went wrong.
+
+```yaml
+# tracks/standard.yaml
+id: standard
+version: 0.0.1
+name: Standard Track
+
+retain_for: 1_years
+include:
+  - op
+  - frames_used
+  - cogs_invoked
+  - model_versions
+  - guard_results
+  - gate_decisions
+  - human_approvals
+  - final_output
+  - timestamps
+  - user_identity
+
+redact:
+  - "*Password*"
+
+feeds_memory: false
+exchangeable: false
+```
+
+## Fields
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `version`, `name`, `description` | As on every spec. |
+| `retain_for` | How long a record is kept: `90_days`, `18_months`, `7_years`. Required. |
+| `include` | What a record has to include. Required. |
+| `readers` | The roles that may read a record; empty means its Op's owner only. |
+| `redact` | Field patterns kept out of the record. |
+| `feeds_memory` | Whether corrections, overrides and failures are fed back to Organizational Memory. |
+| `exchangeable` | Whether a record may leave the Hub that produced it. Evidence is not for sale: `false`. |
+| `enabled` | Whether an Op may name it today. |
+
+## What a record may include
+
+`op`, `frames_used`, `cogs_invoked`, `input_data`, `source_documents`,
+`model_versions`, `configuration`, `guard_results`, `gate_decisions`,
+`human_approvals`, `human_edits`, `final_output`, `actions_taken`,
+`timestamps`, `user_identity`, `permissions`, `environment`, `memory_links`.
+
+Every Track includes at least `op`, `guard_results`, `gate_decisions`,
+`final_output` and `timestamps`: without these a record says neither what ran
+nor what was decided, and a spec that leaves one out is refused.
+
+## The catalogue
+
+| Id | Retained | Includes | Readers |
+| --- | --- | --- | --- |
+| `standard` | one year | what ran, under which Frames, what was found, decided and produced | the Op's owner |
+| `financial-reporting` | seven years | everything | Finance, internal audit |
+
+## In Python
+
+```python
+from agentspecs.tracks import get_track
+
+track = get_track("financial-reporting")
+track.retention_days            # 2555
+[item.value for item in track.include]
+```

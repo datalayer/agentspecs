@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Guard Specification: Schema Guard
+# After an Op runs: the output has the structure it was asked to have.
+
+id: schema-guard
+version: 0.0.1
+name: Schema Guard
+description: >-
+  Validates the structure of the output against the schema the Op's
+  output declares: required sections, fields, types.
+
+# A Guard extends a guardrail: the policy it verifies, and runs within.
+extends: default-platform-user:0.0.1
+
+category: algorithmic
+stages:
+  - post_run
+method: algorithmic
+
+check: >-
+  The output validates against its declared schema: every required
+  section and field is present and of the declared type.
+
+signals:
+  - name: schema_valid
+    type: boolean
+    description: The output conforms to its schema.
+
+required: true
+enabled: true
+
+tags:
+  - schema
+  - structure

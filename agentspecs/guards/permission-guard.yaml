@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Guard Specification: Permission Guard
+# Before an Op runs: who launched it may do what it does.
+
+id: permission-guard
+version: 0.0.1
+name: Permission Guard
+description: >-
+  Checks that the person or the system launching the Op holds every
+  permission the Op's Cogs need, as the guardrail states them.
+
+# A Guard extends a guardrail: the policy it verifies, and runs within.
+extends: default-platform-user:0.0.1
+
+category: policy-safety
+stages:
+  - preflight
+method: algorithmic
+
+check: >-
+  Each permission the Op's Cogs use is granted to the launching identity by
+  the guardrail; nothing the guardrail denies is requested.
+
+signals:
+  - name: permission_denied
+    type: boolean
+    description: A permission the Op needs is not granted.
+
+required: true
+enabled: true
+
+tags:
+  - permissions
+  - identity

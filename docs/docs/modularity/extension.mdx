@@ -32,7 +32,7 @@ for what the child wins and what it appends to.
 
 ## Beyond agents
 
-The same mechanism, and the same limits, carry the two specs that are built on
+The same mechanism, and the same limits, carry the specs that are built on
 other specs.
 
 A **[Frame](../frames)** extends a Frame — a project's extends its
@@ -56,6 +56,17 @@ frames:
   - web-research:0.0.1
 ```
 
+A **[Guard](../guards)** extends a guardrail — the policy it verifies:
+
+```yaml
+# guards/sensitive-data-guard.yaml
+id: sensitive-data-guard
+extends: restricted-viewer:0.0.1
+category: policy-safety
+stages: [in_flight, post_run]
+check: No output contains a field the guardrail denies.
+```
+
 The Cog is the agent with what it says differently; the Frames are what it
-works under. Both are resolved when the catalogues are generated, so a runtime
+works under; the Guard is the guardrail with the check that it held. All are resolved when the catalogues are generated, so a runtime
 receives one flat spec.

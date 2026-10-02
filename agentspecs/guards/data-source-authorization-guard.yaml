@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Guard Specification: Data Source Authorization Guard
+# Before an Op runs: every data source it reads is one it is allowed to read.
+
+id: data-source-authorization-guard
+version: 0.0.1
+name: Data Source Authorization Guard
+description: >-
+  Checks that each system, object and field the Op is about to read is
+  inside the data scope of the guardrail, and that no denied field is requested.
+
+# A Guard extends a guardrail: the policy it verifies, and runs within.
+extends: data-engineering-power-user:0.0.1
+
+category: policy-safety
+stages:
+  - preflight
+method: algorithmic
+
+check: >-
+  Every data source named by the run is among the guardrail's allowed
+  systems and objects; none is a denied object or matches a denied field.
+
+signals:
+  - name: unauthorized_source
+    type: boolean
+    description: A data source outside the allowed scope is requested.
+
+required: true
+enabled: true
+
+tags:
+  - data
+  - authorization

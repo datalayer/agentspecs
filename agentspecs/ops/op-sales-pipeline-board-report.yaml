@@ -1,0 +1,102 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Op Specification: Sales Pipeline Board Report
+#
+# The comprehensive example: one Cog, and everything the accountability
+# plane puts around it.
+#
+#   Frames  orient the work    — sales-pipeline, board-reporting (on the Cog)
+#   A Cog   performs the work  — cog-sales-pipeline-board-report
+#   The Op  orchestrates it    — this file
+#   Guards  verify the work    — twelve, of all seven categories, at all four stages
+#   Gates   decide             — eight, from "stop before starting" to "a person approves"
+#   A Track makes it accountable — financial-reporting, seven years
+
+id: op-sales-pipeline-board-report
+version: 0.0.1
+name: Sales Pipeline Board Report
+description: >-
+  Builds the sales pipeline report for the board: figures computed from
+  the pipeline data by the definitions the sales organization uses, checked
+  against their sources and by an independent path, reviewed by Finance,
+  and approved by a person before they reach the board.
+
+owner: Datalayer Finance <info@datalayer.io>
+
+goal: >-
+  Produce the board's sales pipeline report for the period — stage health,
+  conversion, weighted forecast, regional performance and risks — with
+  every figure traceable to the pipeline data.
+
+# The Cog that does the work. It carries its own Frames: sales-pipeline for
+# what the figures mean, board-reporting for whom they are written.
+cogs:
+  - cog-sales-pipeline-board-report:0.0.1
+
+# Applied at the workflow level, beyond what the Cog carries: the company
+# Frame orients the supervisor too.
+frames:
+  - datalayer:0.0.1
+
+supervisor:
+  model: "bedrock:us.anthropic.claude-sonnet-4-6"
+  instructions: >-
+    Run the Cog on the pipeline data of the period. Send a step back to the
+    Cog when a Gate asks for a retry or a revision, with what the Guard
+    found. Never release the report yourself: it leaves through the release
+    approval Gate.
+
+# The validation strategy. An Op is not complete without one.
+guards:
+  # Is this Op allowed and properly configured?
+  preflight:
+    - required-frame-guard:0.0.1
+    - permission-guard:0.0.1
+    - data-source-authorization-guard:0.0.1
+  # Is the work staying within policy and expected bounds?
+  in_flight:
+    - tool-use-policy-guard:0.0.1
+    - sensitive-data-guard:0.0.1
+    - confidence-guard:0.0.1
+  # Is the output correct, useful, safe and ready for action?
+  post_run:
+    - schema-guard:0.0.1
+    - source-grounding-guard:0.0.1
+    - consensus-guard:0.0.1
+    - sensitive-data-guard:0.0.1
+    - expert-sampling-guard:0.0.1
+  # Is quality improving, degrading or drifting over time?
+  continuous:
+    - regression-guard:0.0.1
+    - outcome-guard:0.0.1
+
+# Guards check; Gates decide. In the order they are met.
+gates:
+  - configuration-check:0.0.1
+  - sensitive-data-stop:0.0.1
+  - tool-violation-retry:0.0.1
+  - low-confidence-review:0.0.1
+  - unsupported-claims-revision:0.0.1
+  - consensus-disagreement-review:0.0.1
+  - release-approval:0.0.1
+  - quality-drift-review:0.0.1
+
+# What is kept, and for how long.
+track: financial-reporting:0.0.1
+
+triggers:
+  - launcher
+  - command
+  - schedule
+
+enabled: false
+
+tags:
+  - sales
+  - board
+  - reporting
+
+icon: workflow
+emoji: "📊"
+color: "#1F883D"

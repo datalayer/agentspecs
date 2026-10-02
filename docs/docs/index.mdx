@@ -15,7 +15,7 @@ Declarative YAML specifications for AI agents, MCP servers, skills and more...
 
 Agentspecs is the source of truth for runtime catalogs compiled into Python and TypeScript.
 
-The documentation has five parts, and they answer different questions.
+The documentation has nine parts, and they answer different questions.
 
 **[Agents](./agents)** — what one agent is, and everything it is made of. An
 agent spec is mostly references: to the skills it has, the tools and MCP
@@ -41,11 +41,20 @@ composed.
 and is equipped with Frames: the same agent, oriented by the context of the
 people it works for, and answerable to their Guards.
 
+**[Ops](./ops)** — the orchestrated, supervised workflow a person launches: the
+Cogs that do the work and the validation strategy that says how it is
+verified. An Op is not complete without one.
+
+**[Guards](./guards)**, **[Gates](./gates)** and **[Tracks](./tracks)** — the
+accountability plane. Guards check, and each extends a guardrail: the policy
+it verifies. Gates decide what happens on what the Guards found. Tracks say
+what evidence is kept, and for how long.
+
 **[Modularity](./modularity)** — how a spec is built out of other specs, rather
 than copied from them. Extension (`extends`) for "the same agent, adjusted",
 composition (`includes`) for "this bundle, wherever needed". It sits beside the
-others because it applies to all of them: a team member, an agent, a Frame and
-a Cog are built by the same rules.
+others because it applies to all of them: a team member, an agent, a Frame, a
+Cog and a Guard are built by the same rules.
 
 ## Key Properties
 
@@ -75,6 +84,10 @@ agentspecs/
 ├── teams/
 ├── frames/
 ├── cogs/
+├── ops/
+├── guards/
+├── gates/
+├── tracks/
 ├── mcp-servers/
 ├── skills/
 ├── tools/

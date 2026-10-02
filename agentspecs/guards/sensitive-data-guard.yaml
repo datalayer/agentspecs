@@ -1,0 +1,41 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Guard Specification: Sensitive Data Guard
+# While an Op runs and on its output: nothing sensitive is exposed.
+# Extends the most restrictive guardrail: its denied fields and its
+# redaction are what this Guard looks for.
+
+id: sensitive-data-guard
+version: 0.0.1
+name: Sensitive Data Guard
+description: >-
+  Detects personal data, credentials and the guardrail's denied fields in
+  what a Cog is about to send out, and in the final output.
+
+# A Guard extends a guardrail: the policy it verifies, and runs within.
+extends: restricted-viewer:0.0.1
+
+category: policy-safety
+stages:
+  - in_flight
+  - post_run
+method: algorithmic
+
+check: >-
+  No output, tool argument or outbound message contains a credential, a
+  field matching the guardrail's denied fields, or personal data the
+  guardrail's handling rules require to be redacted.
+
+signals:
+  - name: sensitive_data_detected
+    type: boolean
+    description: Sensitive data was found where it must not be.
+
+required: true
+enabled: true
+
+tags:
+  - privacy
+  - pii
+  - secrets

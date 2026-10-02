@@ -26,6 +26,10 @@ agentspecs/
 ├── teams/            # Team orchestration specs
 ├── frames/           # Frame specs: owned, scoped context a Cog works under
 ├── cogs/             # Cog specs: an agent, equipped with Frames
+├── ops/              # Op specs: Cogs, orchestrated, with a validation strategy
+├── guards/           # Guard specs: a check, extending a guardrail
+├── gates/            # Gate specs: what happens on what the Guards found
+├── tracks/           # Track specs: the evidence kept, and for how long
 ├── fragments/        # Capability fragments an agent includes
 ├── mcp-servers/      # MCP server specs
 ├── skills/           # Skill specs
@@ -52,6 +56,10 @@ Current YAML file counts:
 - Teams: 11
 - Frames: 5
 - Cogs: 3
+- Ops: 1
+- Guards: 12
+- Gates: 8
+- Tracks: 2
 - Fragments: 1
 - MCP servers: 14
 - Skills: 7
@@ -204,6 +212,36 @@ cog = get_resolved_cog("cog-crawler")   # the agent, the Cog's changes and its F
 cog["frame_context"]["guards"]          # what its output answers to
 ```
 
+### Ops, Guards, Gates and Tracks
+
+The execution and accountability model of the whitepaper: *Frames guide the
+work. Cogs perform the work. Ops orchestrate the work. Guards verify the work.
+Gates decide whether the work proceeds. Tracks make the work accountable.*
+
+- **Ops** (`agentspecs/ops`): `owner`, `cogs`, `frames`, `supervisor`, and a
+  validation strategy — `guards` by stage (`preflight`, `in_flight`, `post_run`,
+  `continuous`), `gates`, `track`. An Op without one is refused.
+- **Guards** (`agentspecs/guards`): **a Guard `extends` a guardrail** — the
+  policy it verifies — and adds `category` (the seven of the whitepaper),
+  `stages`, `method`, `check` and the `signals` it reports.
+- **Gates** (`agentspecs/gates`): `guards`, `when` (a condition on their
+  signals, or `always`), `then` and `otherwise` (proceed, pause, retry, human
+  review or approval, expert review, stop), `reviewers`.
+- **Tracks** (`agentspecs/tracks`): `retain_for`, `include`, `readers`,
+  `redact`; never `exchangeable`.
+
+`ops/op-sales-pipeline-board-report.yaml` is the comprehensive example: one
+Cog with its Frames, twelve Guards of all seven categories at all four stages,
+eight Gates and a seven-year Track.
+
+```python
+from agentspecs.ops import get_resolved_op
+
+op = get_resolved_op("op-sales-pipeline-board-report")
+op["guards"]["post_run"]     # each Guard, with the guardrail it extends
+op["gates"], op["track"]
+```
+
 ### MCP Servers (`agentspecs/mcp-servers`)
 
 Defines MCP integrations and process startup configuration.
@@ -269,8 +307,8 @@ Common fields:
 
 A spec is built out of other specs rather than copied from them: `extends`
 (one parent, at most three deep, cycles refused) and `includes` (fragments).
-An agent extends an agent, a Frame extends a Frame, and a Cog extends an
-agent. Lists append and are deduplicated, a child's scalar wins, and
+An agent extends an agent, a Frame extends a Frame, a Cog extends an agent,
+and a Guard extends a guardrail. Lists append and are deduplicated, a child's scalar wins, and
 `!remove` / `!replace` cover the rest. The rules are in
 [the documentation](https://agentspecs.datalayer.tech/modularity/) and applied
 by `agentspecs.compose`.
