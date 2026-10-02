@@ -24,36 +24,52 @@ The YAML files in [agentspecs/agentspecs](agentspecs) are compiled into Python a
 agentspecs/
 ├── agents/           # Agentspecs
 ├── teams/            # Team orchestration specs
+├── frames/           # Frame specs: owned, scoped context a Cog works under
+├── cogs/             # Cog specs: an agent, equipped with Frames
+├── fragments/        # Capability fragments an agent includes
 ├── mcp-servers/      # MCP server specs
 ├── skills/           # Skill specs
 ├── tools/            # Runtime tool specs
+├── frontend-tools/   # Frontend tool specs
 ├── envvars/          # Environment variable specs
 ├── models/           # Model specs
+├── model-providers/  # Model provider specs
 ├── memory/           # Memory backend specs
 ├── guardrails/       # Guardrail policy specs
 ├── evals/            # Evaluator specs
 ├── benchmarks/       # Benchmark suite specs
+├── loops/            # Loop specs
 ├── triggers/         # Trigger specs
+├── events/           # Event specs
 ├── outputs/          # Output format specs
-└── notifications/    # Notification channel specs
+├── notifications/    # Notification channel specs
+└── ui-plugins/       # UI plugin specs
 ```
 
 Current YAML file counts:
 
-- Agents: 26
-- Teams: 9
-- MCP servers: 12
-- Skills: 4
-- Tools: 3
+- Agents: 168
+- Teams: 11
+- Frames: 5
+- Cogs: 3
+- Fragments: 1
+- MCP servers: 14
+- Skills: 7
+- Tools: 18
+- Frontend tools: 6
 - Env vars: 10
-- Models: 20
+- Models: 39
+- Model providers: 7
 - Memory backends: 4
 - Guardrails: 6
 - Evals: 9
 - Benchmarks: 8
+- Loops: 4
 - Triggers: 3
-- Outputs: 8
-- Notifications: 4
+- Events: 6
+- Outputs: 9
+- Notifications: 5
+- UI plugins: 3
 
 ## Versioning
 
@@ -136,6 +152,58 @@ Common fields:
 - `agents` (team members), `reaction_rules`, `health_monitoring`
 - `notifications`, `output`
 
+### Frames (`agentspecs/frames`)
+
+Defines the context work happens in — the rules, the vocabulary, the goals, the
+style and the norms of an organization, a department, a team, a project, a role
+or a relationship — and the Guards an output has to pass. The concept is the
+[Intelligence Hub whitepaper](https://github.com/openteams-ai/inthub-whitepaper/blob/main/whitepaper.md)'s.
+
+Common fields:
+
+- `id`, `version`, `name`, `description`, `enabled`
+- `scope` (`organization`, `department`, `team`, `project`, `role`, `relationship`) and `owner` — both required
+- `extends` (the parent Frame, versioned)
+- `rules`, `terminology`, `goals`, `style`, `norms`, `process`, `architecture`, `prompts`
+- `skills`, `tools`, `mcp_servers` (versioned references)
+- `guards` (`id`, `category`, `description`, `required`)
+
+```python
+from agentspecs.frames import compose_frames, render_frames
+
+context = compose_frames(["sales-pipeline", "board-reporting"])
+print(render_frames(context))
+```
+
+### Cogs (`agentspecs/cogs`)
+
+Defines an AI worker you can hold to account: a Cog **extends an agent spec**
+and is **equipped with Frames**.
+
+Common fields:
+
+- `id`, `version`, `name`, `description`, `enabled`
+- `extends` (the agent spec, versioned) — required
+- `frames` (the Frames it works under, in order, versioned) — required
+- `kind` (`context`, `model`, `combined`)
+- any agent field, overriding or appending to the agent's
+
+```yaml
+id: cog-crawler
+version: 0.0.1
+name: Crawler Cog
+extends: worker-crawler:0.0.1
+frames:
+  - web-research:0.0.1
+```
+
+```python
+from agentspecs.cogs import get_resolved_cog
+
+cog = get_resolved_cog("cog-crawler")   # the agent, the Cog's changes and its Frames, flat
+cog["frame_context"]["guards"]          # what its output answers to
+```
+
 ### MCP Servers (`agentspecs/mcp-servers`)
 
 Defines MCP integrations and process startup configuration.
@@ -196,6 +264,16 @@ Common fields:
 - `triggers`: reusable trigger templates
 - `outputs`: output format templates/capabilities
 - `notifications`: notification channel templates
+
+## Extension and Composition
+
+A spec is built out of other specs rather than copied from them: `extends`
+(one parent, at most three deep, cycles refused) and `includes` (fragments).
+An agent extends an agent, a Frame extends a Frame, and a Cog extends an
+agent. Lists append and are deduplicated, a child's scalar wins, and
+`!remove` / `!replace` cover the rest. The rules are in
+[the documentation](https://agentspecs.datalayer.tech/modularity/) and applied
+by `agentspecs.compose`.
 
 ## Adding or Updating Specs
 

@@ -1,0 +1,28 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Cog Specification: Sales Pipeline Board Report Cog
+# The Sales Pipeline Board Report agent, under two Frames that compose: the
+# Sales Pipeline Frame for what the figures mean, the Board Reporting Frame
+# for whom they are written.
+
+id: cog-sales-pipeline-board-report
+version: 0.0.1
+name: Sales Pipeline Board Report Cog
+description: >-
+  Builds the board's sales pipeline report under the Sales Pipeline and the
+  Board Reporting Frames: figures computed by the definitions the sales
+  organization uses, written the way the board reads.
+
+extends: worker-sales-pipeline-board-report:0.0.1
+
+# In order: the subject, then the audience.
+frames:
+  - sales-pipeline:0.0.1
+  - board-reporting:0.0.1
+
+kind: context
+enabled: false
+
+tags:
+  - cog

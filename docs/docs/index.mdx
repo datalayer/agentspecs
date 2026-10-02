@@ -15,7 +15,7 @@ Declarative YAML specifications for AI agents, MCP servers, skills and more...
 
 Agentspecs is the source of truth for runtime catalogs compiled into Python and TypeScript.
 
-The documentation has three parts, and they answer different questions.
+The documentation has five parts, and they answer different questions.
 
 **[Agents](./agents)** — what one agent is, and everything it is made of. An
 agent spec is mostly references: to the skills it has, the tools and MCP
@@ -32,11 +32,20 @@ supervisor deciding what happens next. A team composes agents from the
 catalogue by reference rather than restating them, and says in data — not in
 prose — what order they run in.
 
+**[Frames](./frames)** — the context work happens in, written down: the rules,
+the vocabulary, the goals and the style of an organization, a team or a role,
+and the Guards an output has to pass. Owned, scoped, versioned, inherited and
+composed.
+
+**[Cogs](./cogs)** — AI workers you can hold to account. A Cog extends an agent
+and is equipped with Frames: the same agent, oriented by the context of the
+people it works for, and answerable to their Guards.
+
 **[Modularity](./modularity)** — how a spec is built out of other specs, rather
 than copied from them. Extension (`extends`) for "the same agent, adjusted",
 composition (`includes`) for "this bundle, wherever needed". It sits beside the
-other two because it applies to both: a team member and an agent are composed
-by the same rules.
+others because it applies to all of them: a team member, an agent, a Frame and
+a Cog are built by the same rules.
 
 ## Key Properties
 
@@ -64,6 +73,8 @@ Generated catalogs are keyed by unversioned id only (e.g. `tavily`). The `get_*`
 agentspecs/
 ├── agents/
 ├── teams/
+├── frames/
+├── cogs/
 ├── mcp-servers/
 ├── skills/
 ├── tools/

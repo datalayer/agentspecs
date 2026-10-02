@@ -43,13 +43,15 @@ jobs:
           grep -q '^agentspecs/agents/.*\.yaml$' wheel-files.txt
           grep -q '^agentspecs/models/.*\.yaml$' wheel-files.txt
           grep -q '^agentspecs/teams/.*\.yaml$' wheel-files.txt
+          grep -q '^agentspecs/frames/.*\.yaml$' wheel-files.txt
+          grep -q '^agentspecs/cogs/.*\.yaml$' wheel-files.txt
 
       - name: Import the built wheel
         run: |
           python -m venv /tmp/wheel-env
           /tmp/wheel-env/bin/pip install dist/*.whl
           cd /tmp
-          /tmp/wheel-env/bin/python -c "import agentspecs; from agentspecs.models import list_models; from agentspecs.teams import list_teams; print(agentspecs.__version__, len(list_models()), 'models,', len(list_teams()), 'teams')"
+          /tmp/wheel-env/bin/python -c "import agentspecs; from agentspecs.models import list_models; from agentspecs.teams import list_teams; from agentspecs.frames import list_frames; from agentspecs.cogs import list_cogs, get_resolved_cog; assert all(get_resolved_cog(cog.id)['frames'] for cog in list_cogs()); print(agentspecs.__version__, len(list_models()), 'models,', len(list_teams()), 'teams,', len(list_frames()), 'frames,', len(list_cogs()), 'cogs')"
 
       - uses: actions/upload-artifact@v4
         with:

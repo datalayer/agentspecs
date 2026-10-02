@@ -29,3 +29,33 @@ Extension carries *everything* the parent declares, subagent lists included —
 which is the reason a specialist that only needs shared capability should
 [compose a fragment](./composition) instead. See [Merge semantics](./#merge-semantics)
 for what the child wins and what it appends to.
+
+## Beyond agents
+
+The same mechanism, and the same limits, carry the two specs that are built on
+other specs.
+
+A **[Frame](../frames)** extends a Frame — a project's extends its
+department's, which extends the company's:
+
+```yaml
+# frames/web-research.yaml
+id: web-research
+extends: datalayer:0.0.1
+rules:
+  - Report a claim only with the address of the page it was read on.
+```
+
+A **[Cog](../cogs)** extends an agent, and is equipped with Frames:
+
+```yaml
+# cogs/cog-crawler.yaml
+id: cog-crawler
+extends: worker-crawler:0.0.1
+frames:
+  - web-research:0.0.1
+```
+
+The Cog is the agent with what it says differently; the Frames are what it
+works under. Both are resolved when the catalogues are generated, so a runtime
+receives one flat spec.

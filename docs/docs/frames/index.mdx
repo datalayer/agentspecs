@@ -1,0 +1,151 @@
+---
+sidebar_position: 1
+title: Frames
+---
+
+# Frames
+
+A Frame is the context work happens in, written down: the rules, the
+vocabulary, the goals, the style and the norms of an organization, a
+department, a team, a project, a role or a relationship — and the skills, the
+tools, the prompts and the Guards that put that context to work.
+
+It is read by people and applied by [Cogs](../cogs). The idea, and the words,
+are those of the
+[Intelligence Hub whitepaper](https://github.com/openteams-ai/inthub-whitepaper/blob/main/whitepaper.md)
+(section 4.3).
+
+A Frame is not a prompt. It has an **owner** who answers for it, a **scope** it
+applies to and nowhere else, and a **version**; it is inherited and composed
+rather than copied. One YAML per Frame under `agentspecs/frames/`, named for
+its id.
+
+```yaml
+# frames/web-research.yaml
+id: web-research
+version: 0.0.1
+name: Web Research Frame
+scope: role
+owner: Datalayer Research <info@datalayer.io>
+extends: datalayer:0.0.1
+
+rules:
+  - Report a claim only with the address of the page or the repository it was read on.
+terminology:
+  Primary source: The party a fact originates from.
+goals:
+  - Each finding rests on at least one primary source.
+skills:
+  - crawl:0.0.1
+mcp_servers:
+  - tavily:0.0.1
+guards:
+  - id: sources-cited
+    category: source-grounding
+    description: Every factual claim in the output carries a link to its source.
+    required: true
+```
+
+## Fields
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `version`, `name`, `description` | As on every spec. The file is named for the id. |
+| `scope` | What the Frame applies to: `organization`, `department`, `team`, `project`, `role` or `relationship`. Required. |
+| `owner` | The person or the group that manages the Frame and answers for it. Required: a Frame nobody owns is refused. |
+| `extends` | The parent Frame, `id` or `id:version`. Empty for a Frame that stands alone. |
+| `enabled` | Whether a Cog may name it today. |
+| `rules` | What is and is not acceptable within the scope. |
+| `terminology` | The words, names and definitions of the scope, by term. |
+| `goals` | What success looks like. |
+| `style` | Tone of voice, formatting conventions, brand expression. |
+| `norms` | The expectations about how work gets done. |
+| `process` | The business process the work follows, step by step. |
+| `architecture` | The software and system context that orients the work. |
+| `prompts` | Reusable prompt fragments (`id`, `text`) loaded into a Cog's context. |
+| `skills`, `tools`, `mcp_servers` | Capability the work depends on: references into those catalogues. A Cog under the Frame is given them. |
+| `guards` | The checks the output of work done under the Frame has to pass. |
+
+## Guards
+
+A Frame declares the checks its context implies; what runs them is a runtime's.
+
+```yaml
+guards:
+  - id: totals-reconcile
+    category: algorithmic
+    description: The totals by stage, by region and by segment each add up to the total pipeline.
+    required: true
+```
+
+`category` is one of the whitepaper's seven (section 5.5):
+
+| Category | What it verifies |
+| --- | --- |
+| `algorithmic` | An output against a deterministic rule or a known result. |
+| `source-grounding` | Claims are supported by approved evidence. |
+| `consensus` | Independent Cogs, prompts or models agree. |
+| `expert` | A person judges sampled or high-risk outputs. |
+| `policy-safety` | The work stays inside what is allowed. |
+| `regression-drift` | An update has not changed behavior unacceptably. |
+| `outcome` | The intended result is produced. |
+
+`required` says whether the output counts before the Guard has passed. A Guard
+is not a [guardrail](../agents/guardrails): a guardrail bounds what an agent
+may *do* — its permissions, its data scope, its token limits — and a Guard
+checks what it *produced*.
+
+## Inheritance
+
+A Frame inherits with `extends`, by the [extension](../modularity/extension)
+mechanism every spec uses: one parent, a chain at most three deep, a cycle
+refused by name. A project Frame extends its department's, which extends the
+company's — the chain of authority is one a person can read, and it is kept:
+a resolved Frame carries its `lineage`.
+
+| Field kind | Rule |
+| --- | --- |
+| Scalars (`name`, `description`, `scope`, `owner`, `architecture`) | the child wins; a Frame keeps its own identity and its own owner |
+| Lists (`rules`, `goals`, `style`, `norms`, `process`, `skills`, `tools`, `mcp_servers`, `tags`) | **append**, deduplicated; `!remove` and `!replace` as on an agent |
+| `terminology` | merged term by term; the child's definition wins |
+| `guards`, `prompts` | merged entry by entry, on `id`; the child's wins |
+
+## Composition
+
+Several Frames apply to one piece of work. A Cog names them in order — the
+subject, then the audience:
+
+```yaml
+frames:
+  - sales-pipeline:0.0.1
+  - board-reporting:0.0.1
+```
+
+Each is resolved, then merged onto the ones before it by the same rules. Two
+Frames that extend the same parent bring its rules once.
+
+## The catalogue
+
+| Id | Scope | Extends | What it carries |
+| --- | --- | --- | --- |
+| `datalayer` | organization | — | The company's vocabulary, voice and working rules. The root: every other Frame extends it. |
+| `web-research` | role | `datalayer` | What counts as a source, how it is cited, what a finding passes before it is reported. |
+| `sales-pipeline` | department | `datalayer` | The stages, the definitions of conversion and weighted pipeline, the checks a figure passes. |
+| `board-reporting` | relationship | `datalayer` | The voice, the structure and the standard of evidence of a document for the board. |
+| `customer-research` | team | `datalayer` | Consent, neutral questions, and insights that cite what was said. |
+
+## In Python
+
+```python
+from agentspecs.frames import compose_frames, get_resolved_frame, render_frames
+
+frame = get_resolved_frame("web-research")        # with what it inherits
+context = compose_frames(["sales-pipeline", "board-reporting"])
+context.lineage                                   # ['datalayer', 'sales-pipeline', 'board-reporting']
+[guard.id for guard in context.guards]            # every Guard the output answers to
+print(render_frames(context))                     # what is added to a Cog's instructions
+```
+
+`FRAME_CATALOGUE`, `get_frame` and `list_frames` give the Frames as they are
+written. A Frame that names no owner, an unknown scope, a parent that does not
+exist or a chain that does not end is refused when the catalogue loads.

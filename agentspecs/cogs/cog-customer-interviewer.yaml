@@ -1,0 +1,25 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Cog Specification: Customer Interviewer Cog
+# The Customer Interviewer agent, under the Customer Research Frame: consent,
+# neutral questions, and insights that cite what was said.
+
+id: cog-customer-interviewer
+version: 0.0.1
+name: Customer Interviewer Cog
+description: >-
+  Conducts adaptive customer interviews under the Customer Research Frame:
+  consent first, no leading question, and insights that each cite the
+  interviewee's own words.
+
+extends: worker-customer-interviewer:0.0.1
+
+frames:
+  - customer-research:0.0.1
+
+kind: context
+enabled: false
+
+tags:
+  - cog

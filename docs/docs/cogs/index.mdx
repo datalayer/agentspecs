@@ -1,0 +1,116 @@
+---
+sidebar_position: 1
+title: Cogs
+---
+
+# Cogs
+
+A Cog is an AI worker you can hold to account: not a bare model, but an
+assembly of model, context, tools and permissions that can be named,
+versioned, inspected and replaced. The idea, and the word, are those of the
+[Intelligence Hub whitepaper](https://github.com/openteams-ai/inthub-whitepaper/blob/main/whitepaper.md)
+(section 4.4).
+
+For now a Cogspec is two things, and the catalogue already has both.
+
+**A Cog extends an agent.** `extends` names an [agent spec](../agents), by the
+[extension](../modularity/extension) mechanism every spec uses. The Cog *is*
+that agent — its model, its harness, its skills, its tools, its prompt — with
+what the Cog says differently. Nothing of the agent is restated.
+
+**A Cog is equipped with Frames.** `frames` names the [Frames](../frames) it
+works under, in order. They are what turns an agent into a worker of a
+particular organization: its rules, its vocabulary, its style, the skills the
+work depends on, and the Guards its output has to pass.
+
+One YAML per Cog under `agentspecs/cogs/`, named for its id.
+
+```yaml
+# cogs/cog-sales-pipeline-board-report.yaml
+id: cog-sales-pipeline-board-report
+version: 0.0.1
+name: Sales Pipeline Board Report Cog
+description: >-
+  Builds the board's sales pipeline report under the Sales Pipeline and the
+  Board Reporting Frames.
+
+extends: worker-sales-pipeline-board-report:0.0.1
+
+frames:                     # in order: the subject, then the audience
+  - sales-pipeline:0.0.1
+  - board-reporting:0.0.1
+
+kind: context
+enabled: false
+
+tags:
+  - cog                     # a list appends to the agent's
+```
+
+## Fields
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `version`, `name`, `description` | As on every spec. The id is not an agent's: a Cog extends an agent, it does not replace one. |
+| `extends` | The agent spec the Cog extends, `id` or `id:version`. Required. |
+| `frames` | The Frames it works under, in order. Required, and at least one: without a Frame a Cog is the agent it extends. |
+| `kind` | What the Cog packages: `context` (the context sent to a model it points to — what a Cogspec is today), `model` or `combined`. |
+| `enabled` | Whether the Cog is offered today. |
+| any agent field | Overrides the agent's, by the [merge semantics](../modularity/#merge-semantics): a scalar replaces, a list appends, `system_prompt_append` layers onto the agent's prompt. |
+
+## What a resolved Cog is
+
+A Cog is resolved when the catalogues are generated, like every spec that
+extends another, so a runtime receives one flat spec:
+
+1. the agent it extends, with that agent's own `extends` and `includes`
+   resolved;
+2. the Cog's own fields merged onto it;
+3. its Frames, resolved and composed — their `skills`, `tools` and
+   `mcp_servers` appended to the agent's, and their context rendered onto the
+   end of the `system_prompt`.
+
+It is an agent spec with four more fields:
+
+| Field | Meaning |
+| --- | --- |
+| `agent` | The id of the agent it extends. |
+| `frames` | The Frames it names. |
+| `kind` | As written. |
+| `frame_context` | The merged context of those Frames: the `lineage` of every Frame that contributed, who owns each, and the `guards` the output answers to. |
+
+So the question a Cog exists to answer — *what did this Cog do, under which
+Frames, and what was it checked against?* — is answered by the spec itself.
+
+## The catalogue
+
+| Id | Extends | Frames | Enabled |
+| --- | --- | --- | --- |
+| `cog-crawler` | `worker-crawler` | `web-research` | yes |
+| `cog-sales-pipeline-board-report` | `worker-sales-pipeline-board-report` | `sales-pipeline`, `board-reporting` | no |
+| `cog-customer-interviewer` | `worker-customer-interviewer` | `customer-research` | no |
+
+## In Python
+
+```python
+from agentspecs.cogs import cogs_using, get_cog, get_resolved_cog
+
+get_cog("cog-crawler").frames                 # ['web-research:0.0.1'] — as written
+cog = get_resolved_cog("cog-crawler")         # flat
+cog["agent"], cog["frames"]                   # 'worker-crawler', ['web-research']
+cog["skills"]                                 # the agent's, then the Frame's
+cog["frame_context"]["lineage"]               # ['datalayer', 'web-research']
+[cog.id for cog in cogs_using("datalayer")]   # every Cog under the company Frame
+```
+
+A Cog that extends something that is not an agent, takes an agent's id, names
+no Frame or names one that does not exist is refused when the catalogue loads.
+
+## What a Cog is not, yet
+
+The whitepaper's Cog also carries governance parameters and can package model
+weights, and it normally runs inside an *Op* — the orchestrated, supervised
+workflow with its validation strategy. Here, governance is the agent's
+[guardrails](../agents/guardrails), the `model` and `combined` kinds are named
+and not built, and there is no Op spec: a Cog's Guards are declared by its
+Frames and carried in `frame_context` for a runtime to run.
