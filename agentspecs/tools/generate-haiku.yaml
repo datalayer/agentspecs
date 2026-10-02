@@ -10,6 +10,7 @@ tags:
   - ag-ui
   - generative-ui
 enabled: true
+action: read
 approval: auto
 runtime:
   language: python

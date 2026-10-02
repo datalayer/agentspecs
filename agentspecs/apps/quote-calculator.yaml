@@ -1,0 +1,113 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Quote Calculator
+# A widget: a page of inputs and outputs, no conversation. Fill in the seats
+# and the term, run, read the quote.
+#
+# Not offered today: its surface is a first draft, waiting for the page a
+# widget is rendered on, and its agent is disabled.
+
+schema: loop.app/v1
+id: quote-calculator
+version: 0.0.1
+name: Quote Calculator
+kind: widget
+description: >-
+  Computes a quote from a number of seats, a plan and a term, and shows how
+  the total is made.
+owner: Datalayer <info@datalayer.io>
+
+agent: jupyter-data-analyst:0.0.1
+instructions: >-
+  Compute the quote in code from the inputs and the price list. Show each
+  line of the calculation; never estimate a total.
+
+contents:
+  - Price list
+
+interface:
+  layout: page
+  accent: sun
+  components: [Card, Column, Row, Text, TextField, ChoicePicker, Slider, Button, Divider]
+  surface:
+    protocol: a2ui/v0.9
+    composed_by: template
+    components:
+      - id: root
+        component: Column
+        children: [title, inputs, run, result]
+      - id: title
+        component: Text
+        text: Quote
+        variant: h2
+      - id: inputs
+        component: Card
+        child: inputs-body
+      - id: inputs-body
+        component: Column
+        children: [seats, plan, term]
+      - id: seats
+        component: Slider
+        label: Seats
+        value: { path: /inputs/seats }
+        min: 1
+        max: 1000
+      - id: plan
+        component: ChoicePicker
+        label: Plan
+        value: { path: /inputs/plan }
+        options: [Team, Business, Enterprise]
+      - id: term
+        component: ChoicePicker
+        label: Term
+        value: { path: /inputs/term }
+        options: [Monthly, Annual]
+      - id: run
+        component: Button
+        child: run-label
+        variant: primary
+        action: { event: { name: run } }
+      - id: run-label
+        component: Text
+        text: Compute the quote
+      - id: result
+        component: Card
+        child: result-body
+      - id: result-body
+        component: Column
+        children: [total, lines]
+      - id: total
+        component: Text
+        text: { path: /outputs/total }
+        variant: h3
+      - id: lines
+        component: Text
+        text: { path: /outputs/lines }
+
+tests:
+  ready_at: 1.0
+  cases:
+    - ask: 50 seats, Team plan, annual.
+      expect: The total is the seats times the annual Team price of the price list, and each line is shown.
+    - ask: 0 seats.
+      expect: It refuses, and says a quote needs at least one seat.
+
+record:
+  keep_for: 90_days
+  include: [actions, outputs]
+
+deployment:
+  hosted:
+    visibility: private
+  embedded:
+    mode: inline
+    origins: []
+
+enabled: false
+
+tags:
+  - example
+  - widget
+icon: number
+emoji: "🧮"

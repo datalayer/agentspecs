@@ -26,3 +26,26 @@ tags:
 
 icon: file-directory
 emoji: 📁
+
+# What each tool does to the world (agentspecs.actions). A tool not named here is
+# unknown, and unknown is the most restricted.
+actions:
+  checked: "2026-10-02"
+  note: >-
+    Classes follow the server's own annotations; moving a file removes it from where it
+    was.
+  tools:
+    read_file: read
+    read_text_file: read
+    read_media_file: read
+    read_multiple_files: read
+    write_file: write
+    edit_file: write
+    create_directory: write
+    list_directory: read
+    list_directory_with_sizes: read
+    directory_tree: read
+    move_file: [write, delete]
+    search_files: read
+    get_file_info: read
+    list_allowed_directories: read

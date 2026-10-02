@@ -31,3 +31,134 @@ tags:
 
 icon: mail
 emoji: 📧
+
+# What each tool does to the world (agentspecs.actions). A tool not named here is
+# unknown, and unknown is the most restricted.
+actions:
+  checked: "2026-10-02"
+  note: >-
+    Classified by hand from each tool's name and annotations. A `manage_*` tool creates,
+    changes and removes, and carries each class; a calendar event invites people; a
+    Gmail filter can forward mail; sharing and publishing settings are `publish`.
+    Labelling and archiving a message is `write`: it can be undone.
+  tools:
+    start_google_auth: write
+    search_gmail_messages: read
+    get_gmail_message_content: read
+    get_gmail_messages_content_batch: read
+    get_gmail_attachment_content: read
+    send_gmail_message: send
+    draft_gmail_message: write
+    get_gmail_thread_content: read
+    get_gmail_threads_content_batch: read
+    list_gmail_labels: read
+    manage_gmail_label: [write, delete]
+    list_gmail_filters: read
+    manage_gmail_filter: [write, send, delete]
+    modify_gmail_message_labels: write
+    batch_modify_gmail_message_labels: write
+    search_drive_files: read
+    get_drive_file_content: read
+    get_drive_file_download_url: read
+    list_drive_items: read
+    create_drive_folder: write
+    create_drive_file: write
+    import_to_google_doc: write
+    import_to_google_slides: write
+    import_to_google_sheets: write
+    get_drive_file_permissions: read
+    check_drive_file_public_access: read
+    update_drive_file: write
+    get_drive_shareable_link: read
+    manage_drive_access: publish
+    copy_drive_file: write
+    set_drive_file_permissions: publish
+    list_calendars: read
+    get_events: read
+    manage_event: [write, send, delete]
+    manage_out_of_office: [write, delete]
+    manage_focus_time: [write, delete]
+    query_freebusy: read
+    create_calendar: write
+    search_docs: read
+    get_doc_content: read
+    list_docs_in_folder: read
+    create_doc: write
+    modify_doc_text: write
+    find_and_replace_doc: write
+    insert_doc_elements: write
+    insert_doc_image: write
+    update_doc_headers_footers: write
+    batch_update_doc: write
+    inspect_doc_structure: read
+    debug_docs_runtime_info: read
+    create_table_with_data: write
+    debug_table_structure: read
+    export_doc_to_pdf: write
+    update_paragraph_style: write
+    get_doc_as_markdown: read
+    manage_doc_tab: [write, delete]
+    list_document_comments: read
+    manage_document_comment: write
+    list_spreadsheets: read
+    get_spreadsheet_info: read
+    read_sheet_values: read
+    modify_sheet_values: write
+    format_sheet_range: write
+    manage_conditional_formatting: write
+    create_spreadsheet: write
+    create_sheet: write
+    list_sheet_tables: read
+    append_table_rows: write
+    manage_sheet_tab: [write, delete]
+    resize_sheet_dimensions: write
+    move_sheet_rows: write
+    manage_named_range: [write, delete]
+    list_spreadsheet_comments: read
+    manage_spreadsheet_comment: write
+    list_spaces: read
+    get_messages: read
+    send_message: send
+    search_messages: read
+    create_reaction: send
+    download_chat_attachment: read
+    create_form: write
+    get_form: read
+    set_publish_settings: publish
+    get_form_response: read
+    list_form_responses: read
+    batch_update_form: write
+    create_presentation: write
+    get_presentation: read
+    batch_update_presentation: write
+    get_page: read
+    get_page_thumbnail: read
+    list_presentation_comments: read
+    manage_presentation_comment: write
+    list_task_lists: read
+    get_task_list: read
+    manage_task_list: [write, delete]
+    list_tasks: read
+    get_task: read
+    manage_task: [write, delete]
+    list_contacts: read
+    get_contact: read
+    search_contacts: read
+    manage_contact: [write, delete]
+    list_contact_groups: read
+    get_contact_group: read
+    manage_contacts_batch: [write, delete]
+    manage_contact_group: [write, delete]
+    search_custom: read
+    get_search_engine_info: read
+    get_script_project: read
+    manage_script_content: write
+    run_script_function: [write, send, delete, publish]
+    manage_deployment: publish
+    list_script_deployments: read
+    manage_script_project: [write, delete]
+    manage_script_version: write
+    get_script_version: read
+    get_script_activity: read
+    generate_trigger_code: read
+    manage_script_trigger: [write, delete]

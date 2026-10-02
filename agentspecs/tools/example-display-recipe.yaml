@@ -10,6 +10,7 @@ tags:
   - ag-ui
   - shared-state
 enabled: true
+action: read
 approval: auto
 runtime:
   language: python

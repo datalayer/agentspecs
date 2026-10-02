@@ -6,6 +6,36 @@
 
 # Changelog
 
+## 0.0.15
+
+Applications, and what a tool does to the world.
+
+- Applications: a new spec, the **Appspec**, under `agentspecs/apps/` (`schema: loop.app/v1`).
+  An application is an agent with an interface, rules, tests and a place to run; four
+  kinds — `chat`, `widget`, `decision`, `worker` — and one spec. It stands alone: it is not
+  an Op, and Guards, Gates and a Track are optional, under `checks`.
+- Rules in four behaviours — `do_it`, `if_asked`, `ask_first`, `leave_to_me` — written in a
+  person's words (`action`) and applied to a class of action or to named tools
+  (`applies_to`). `behaviour_for` says what an application does when its agent calls a
+  tool: with no rule, reading is done and anything that acts waits for a person.
+- Connections: an application reaches nothing it does not name. Each says how far (`read`,
+  `write`), in whose name (`owner`, `user`), and optionally which tools (`only`).
+- **Action classes** (`agentspecs.actions`): `read`, `write`, `send`, `buy`, `delete`,
+  `publish`. Every tool of `tools/` now carries `action`; every MCP server carries
+  `actions`. Five servers were read off the running server and classed — Tavily, the
+  filesystem, charts, Slack and Google Workspace's 120 tools; the nine others say
+  `checked: null` and class nothing. A tool with no class is unknown, and unknown is the
+  most restricted; a server's own `readOnlyHint` is not read.
+- What is wrong is said in a sentence (`AppError`), by the name of the field; a key the
+  spec does not know is refused. `app_problems` for references that do not resolve,
+  `app_setup` for what is named and not enabled.
+- The JSON Schema of the Appspec is published at `agentspecs/apps/appspec.schema.json`,
+  and a test keeps it current.
+- Four applications, one of each kind: `web-research`, `quote-calculator`, `ship-or-fix`,
+  `inbox-triage`.
+- `agentspecs.apps`, `agentspecs.actions`. Documentation: a section for applications,
+  with the action classes and a page on when a rule is enough and when a Gate is needed.
+
 ## 0.0.14
 
 The rest of the whitepaper's execution and accountability model (#20).

@@ -1,0 +1,245 @@
+---
+sidebar_position: 1
+title: Applications
+---
+
+# Applications
+
+An application is what a person uses and relies on: an agent with an
+interface, rules, tests and a place to run. Its spec is the **Appspec**.
+
+There are four kinds, and one spec for all four:
+
+| Kind | What its user meets |
+| --- | --- |
+| `chat` | A conversation, with starters, settings, and widgets in the answers. |
+| `widget` | A page of inputs and outputs: fill, run, read. No conversation needed. |
+| `decision` | Alternatives, criteria, a ranking the user adjusts, a saved decision. |
+| `worker` | A goal, triggers, an activity feed; it reports back and asks for approval. |
+
+The spec **stands alone**. It carries its own agent, rules, tests and record in
+plain fields, so that somebody who never wrote code could read it aloud. It is
+not an [Op](../ops) and does not resolve to one. [Guards](../guards),
+[Gates](../gates) and [Tracks](../tracks) stay available under `checks`, for a
+builder who wants their rigour — and nobody has to name one.
+
+```yaml
+# apps/inbox-triage.yaml
+schema: loop.app/v1
+id: inbox-triage
+version: 0.0.1
+name: Inbox Triage
+kind: worker
+
+agent: worker-mail-triage:0.0.1
+goal: Keep my inbox sorted, draft the replies, and never send without my approval.
+
+triggers:
+  - type: event
+    event: email_received
+  - type: schedule
+    cron: "0 8 * * *"
+
+connections:
+  - server: google-workspace:0.0.1
+    access: write
+    as: user
+    only: ["*gmail*"]
+
+rules:
+  - action: Label and archive a message
+    applies_to: [google-workspace.modify_gmail_message_labels]
+    behaviour: do_it
+  - action: Send a message
+    applies_to: send
+    behaviour: ask_first
+  - action: Delete anything
+    applies_to: delete
+    behaviour: leave_to_me
+
+tests:
+  ready_at: 0.9
+  cases:
+    - ask: A newsletter arrives.
+      expect: It labels it and archives it, without asking.
+
+record:
+  keep_for: 1_years
+  include: [conversations, actions, decisions, approvals, checks]
+```
+
+## Fields
+
+| Field | Meaning |
+| --- | --- |
+| `schema` | The version of the spec itself: `loop.app/v1`. A reader refuses one it does not know. |
+| `id`, `version`, `name`, `description`, `owner` | As on every spec. |
+| `kind` | `chat`, `widget`, `decision` or `worker`. |
+| `agent` or `team` | Who does the work: an agent or a [Cog](../cogs) of the catalogue, or a team. One, and not both. |
+| `instructions`, `model`, `skills`, `tools` | What this application says differently from its agent, and adds to it. |
+| `context` | The [Frames](../frames) it works under. |
+| `contents` | The documents and datasets it answers from. |
+| `connections` | What it reaches. See below. |
+| `rules` | When it acts alone, and when it asks. See below. |
+| `interface` | What the user sees: `layout` (`chat`, `page`, `split`), `accent`, `welcome`, `starters`, `settings`, and a `surface` — a component tree over the approved catalog. |
+| `tests` | How it is verified: `cases` in plain words (`ask`, `expect`), an `evalset`, and `ready_at`, the share that has to pass. |
+| `record` | What is kept of what it did (`include`), and for how long (`keep_for`: `90_days`, `1_years`). |
+| `checks` | Optional: `guards`, `gates` and a `track` of the catalogue. |
+| `deployment` | Where it goes: `hosted` (a `visibility`, a `slug`) and `embedded` (a `mode`, the `origins` allowed). |
+| `goal`, `triggers`, `memory`, `notifications` | A worker's own: what it works toward, what starts its work, what it remembers, where an approval reaches a person. |
+| `decision` | A decision's own: the `question`, `alternatives`, `criteria`, `scenarios`, the review policy. |
+
+A key the spec does not know is refused, by name: a typing mistake does not
+become a setting that is silently ignored.
+
+## Connections
+
+An application reaches **nothing it does not name**. Its agent's own servers
+are not carried over: what the application can touch is the list under
+`connections`, and each entry says three things.
+
+| Key | Meaning |
+| --- | --- |
+| `server` | An MCP server of the catalogue. |
+| `access` | How far: `read`, or `write`. A connection that only reads carries no tool that acts. |
+| `as` | In whose name: `owner` (the builder's account, for everybody) or `user` (each user's own). |
+| `only` | Optionally, the tools it may use, by name or pattern (`*gmail*`). A tool left out is not reached at all. |
+
+## Rules
+
+A rule is written in a person's words and enforced on what a tool does.
+
+```yaml
+rules:
+  - action: Send a message        # what a person reads
+    applies_to: send              # what is enforced: a class of action, or named tools
+    behaviour: ask_first
+```
+
+Four behaviours:
+
+| Behaviour | Meaning |
+| --- | --- |
+| `do_it` | It takes the action without asking. |
+| `if_asked` | Only what the person approved in advance: an action, a scope, an end. |
+| `ask_first` | It waits for an approval. |
+| `leave_to_me` | It never does it, and hands it over. |
+
+`applies_to` is a **class of action** — `read`, `write`, `send`, `buy`,
+`delete`, `publish` — or a list of tools, `server.tool`. The classes are the
+catalogue's, written on every tool: see [action classes](#action-classes).
+
+What happens when the agent calls a tool is decided in this order:
+
+1. A tool of a server the application is not connected to, or that its
+   connection leaves out, is left to the person.
+2. A tool that acts, on a connection that only reads, is left to the person.
+3. A rule that names the tool decides.
+4. A tool nobody classed is left to the person: unknown is the most restricted.
+5. Otherwise each of its classes is decided by the rule on that class, and
+   the most restricted wins. With no rule, **reading is done, and anything that
+   acts waits for a person** — never `do_it`.
+
+```python
+from agentspecs.apps import behaviour_for, get_app, tool_behaviours
+
+triage = get_app("inbox-triage")
+behaviour_for(triage, "google-workspace.send_gmail_message")   # Behaviour.ASK_FIRST
+behaviour_for(triage, "google-workspace.search_drive_files")   # Behaviour.LEAVE_TO_ME: not gmail
+tool_behaviours(triage)                                         # every classed tool it connects to
+```
+
+## Action classes
+
+A tool's name does not say what it does, so every tool carries a class
+(`agentspecs.actions`):
+
+| Class | What the tool does |
+| --- | --- |
+| `read` | Looks, and changes nothing. |
+| `write` | Creates or changes something that can be changed back. |
+| `send` | Puts something in front of another person: a mail, a message, an invitation. |
+| `buy` | Spends money, or commits to. |
+| `delete` | Removes something. |
+| `publish` | Makes something reachable by people who could not reach it. |
+
+A tool of `agentspecs/tools` says `action: send`. An MCP server says, under
+`actions`, the class of each tool it serves, and the day those names were read
+off the running server:
+
+```yaml
+# mcp-servers/slack.yaml
+actions:
+  checked: "2026-10-02"
+  tools:
+    slack_list_channels: read
+    slack_post_message: send
+    slack_get_channel_history: read
+```
+
+A tool that does several things carries several (`manage_event: [write, send,
+delete]`) and is treated as the most restricted of them. A server nobody has
+checked yet says `checked: null` and classes nothing: its tools are unknown,
+and an application cannot write through it.
+
+What a server says of its own tools — the `readOnlyHint` of the protocol — is
+a claim by the server. It is not read: the class is the catalogue's, written
+by somebody who looked.
+
+## A rule or a Gate, a test or a Guard
+
+The plain fields and the catalogue's accountability specs answer the same
+questions at two levels of rigour. Start plain; reach for the catalogue when
+the plain field cannot say what you need.
+
+| You want to say | Plain field | From the catalogue, under `checks` |
+| --- | --- | --- |
+| *Ask me before it sends.* | A **rule**: an action class, one of four behaviours, decided at the tool call. | A **[Gate](../gates)**: a condition on what Guards measured (`confidence < 0.8`), one of nine outcomes, with named reviewers. |
+| *It should answer from the documentation.* | A **test**: an example in words, run before shipping, counted in `ready_at`. | A **[Guard](../guards)**: a check that runs on every execution, at a stage, and reports signals. |
+| *Keep what it did for a year.* | **`record`**: what to include, how long. | A **[Track](../tracks)**: an evidence policy with readers, redaction and required items. |
+
+A rule decides *whether an action is taken*; a Gate decides *whether the work
+proceeds* on what was measured. A test says *what should happen* on an
+example; a Guard checks *what did happen*, every time. An application that
+names Guards, Gates or a Track keeps its rules and tests: the catalogue's
+checks run in addition, never instead.
+
+## What is refused
+
+- An application with no `agent` and no `team`, or with both.
+- A `decision` application with no `decision`; any other kind with one.
+- A `worker` with no `goal` or no `triggers`; `triggers` on another kind.
+- Two connections to the same server; two rules on the same class or tool.
+- A reference the catalogue does not have — said by name:
+  `There is no Frame named 'nope'.`
+- A rule naming a tool of a server the application is not connected to.
+- Writing through a server whose tools nobody has classed.
+
+What an application names that is merely **not enabled** — an agent, a server —
+is not a mistake of the spec: `app_setup` lists it as something to set up.
+
+```python
+from agentspecs.apps import app_problems, app_setup, load_app
+
+app = load_app("my-app.yaml")
+app_problems(app)   # what stops it from being used; empty when nothing does
+app_setup(app)      # what is not enabled yet
+```
+
+## JSON Schema
+
+The schema of the Appspec is published beside the specs, for editors and for
+validation outside Python: `agentspecs/apps/appspec.schema.json`, written by
+`python -m agentspecs.apps` and checked by a test, so that it cannot fall
+behind the code.
+
+## The catalogue
+
+One application of each kind:
+
+| Application | Kind | Shows |
+| --- | --- | --- |
+| `web-research` | chat | A [Cog](../cogs) under a Frame; one read-only connection; no rule needed. |
+| `quote-calculator` | widget | Inputs, a run button and a result on a component surface. |
+| `ship-or-fix` | decision | Criteria measured by a run and judged by a model, with scenarios. |
+| `inbox-triage` | worker | Triggers, a scoped connection in each user's name, and the four behaviours. |
