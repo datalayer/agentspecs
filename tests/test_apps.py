@@ -22,7 +22,9 @@ from agentspecs.actions import (
     ActionClass,
     ActionError,
     classes_from,
+    MAX_SAFE_INTEGER,
     classes_of,
+    is_comparable,
     is_pattern,
     is_read_only,
     matches,
@@ -207,6 +209,28 @@ def test_a_pattern_means_the_same_wherever_it_is_read() -> None:
     assert server_tool_classes(server, "make_it") == (ActionClass.WRITE,)
 
 
+def test_a_number_is_compared_only_where_every_reader_holds_it_exactly() -> None:
+    assert MAX_SAFE_INTEGER == 2**53 - 1
+    assert all(is_comparable(value) for value in ("word", True, 0, -3, 2.5, 1e-9, MAX_SAFE_INTEGER, -MAX_SAFE_INTEGER))
+    # 2**53 and 2**53 + 1 are one number to JavaScript and two to Python.
+    for value in (MAX_SAFE_INTEGER + 1, MAX_SAFE_INTEGER + 2, -(MAX_SAFE_INTEGER + 1), 1e20, 1e300, float("inf"), float("nan")):
+        assert not is_comparable(value), value
+    assert not is_comparable(None) and not is_comparable(["x"])
+
+    def server(value: object) -> dict:
+        entry = {"class": "write", "when": [{"argument": "amount", "equals": value, "class": "buy"}]}
+        return {"id": "s", "actions": {"tools": {"pay": entry}}}
+
+    assert server_actions_problems(server(MAX_SAFE_INTEGER)) == []
+    assert any("holds exactly" in problem for problem in server_actions_problems(server(MAX_SAFE_INTEGER + 2)))
+    assert any("holds exactly" in problem for problem in server_actions_problems(server(float("inf"))))
+    # An argument beyond the range equals nothing, as it would in JavaScript — and not its neighbour.
+    exact = server(MAX_SAFE_INTEGER)
+    assert server_tool_classes(exact, "pay", {"amount": MAX_SAFE_INTEGER}) == (ActionClass.WRITE, ActionClass.BUY)
+    assert server_tool_classes(exact, "pay", {"amount": MAX_SAFE_INTEGER + 1}) == (ActionClass.WRITE,)
+    assert server_tool_classes(server(3), "pay", {"amount": 3.0}) == (ActionClass.WRITE, ActionClass.BUY)
+
+
 def test_a_word_that_is_not_a_class_is_refused() -> None:
     with pytest.raises(ActionError, match="not an action class"):
         classes_from("destroy")
@@ -272,6 +296,27 @@ def test_an_application_is_written_the_same_way_every_time() -> None:
         declared = [AppSpec.model_fields[name].alias or name for name in order]
         assert keys == [key for key in declared if key in keys], identity
         assert dump_app(parse_app(written)) == written, identity
+    # What the spec does not declare the keys of is written in one order too.
+    forward = {
+        "question": "Which?",
+        "scenarios": [{"name": "S", "weights": {"Cost": 1, "Accuracy": 2}}],
+    }
+    backward = {
+        "question": "Which?",
+        "scenarios": [{"weights": {"Accuracy": 2, "Cost": 1}, "name": "S"}],
+    }
+    tree = [
+        {"id": "root", "component": "Column", "children": ["go"]},
+        {"id": "go", "component": "Button", "variant": "primary", "action": {"event": {"name": "run", "context": {"b": 1, "a": 2}}}},
+    ]
+    reversed_tree = [dict(reversed(list(component.items()))) for component in tree]
+    reversed_tree[1]["action"] = {"event": {"context": {"a": 2, "b": 1}, "name": "run"}}
+    one = dump_app(app(kind="decision", decision=forward, interface={"surface": {"components": tree}}))
+    other = dump_app(app(kind="decision", decision=backward, interface={"surface": {"components": reversed_tree}}))
+    assert json.dumps(one) == json.dumps(other)
+    assert list(one["decision"]["scenarios"][0]["weights"]) == ["Accuracy", "Cost"]
+    assert list(one["interface"]["surface"]["components"][1]) == ["id", "component", "action", "variant"]
+    assert list(one["interface"]["surface"]["components"][1]["action"]["event"]) == ["context", "name"]
     # The layout of its kind says nothing its kind does not: it is not written.
     triage = dump_app(APP_CATALOGUE["inbox-triage"])
     assert "layout" not in triage["interface"]

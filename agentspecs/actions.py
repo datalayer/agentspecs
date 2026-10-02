@@ -145,6 +145,28 @@ def matches(name: str, pattern: str) -> bool:
 #: What an argument can be compared with: a word, a number, true or false.
 Scalar = (str, int, float, bool)
 
+#: The largest whole number every reader holds exactly: JavaScript's, 2**53 - 1.
+MAX_SAFE_INTEGER = 9007199254740991
+
+
+def is_comparable(value: Any) -> bool:
+    """Whether a value is one every reader compares the same way.
+
+    A word, true or false, or a number that is finite and — when it is whole —
+    held exactly by a JavaScript number. Beyond that, two different integers
+    are one number to JavaScript and two to Python, and a rule would be decided
+    one way here and another there.
+    """
+    if isinstance(value, (str, bool)):
+        return True
+    if isinstance(value, int):
+        return abs(value) <= MAX_SAFE_INTEGER
+    if isinstance(value, float):
+        if value != value or value in (float("inf"), float("-inf")):
+            return False
+        return not value.is_integer() or abs(value) <= MAX_SAFE_INTEGER
+    return False
+
 
 class Condition:
     """An argument that makes a tool do something more: `when` it holds, the tool is also of `classes`."""
@@ -185,7 +207,8 @@ def _same(value: Any, wanted: Any) -> bool:
         return value.strip().lower() == wanted.strip().lower()
     if isinstance(value, bool) or isinstance(wanted, bool):
         return isinstance(value, bool) and isinstance(wanted, bool) and value is wanted
-    return bool(value == wanted)
+    # A number no reader holds exactly is equal to nothing.
+    return is_comparable(value) and is_comparable(wanted) and bool(value == wanted)
 
 
 def _entry(value: Any, *, where: str) -> Tuple[Classes, Tuple[Condition, ...]]:
@@ -205,8 +228,14 @@ def _entry(value: Any, *, where: str) -> Tuple[Classes, Tuple[Condition, ...]]:
         equals, includes = condition.get("equals"), condition.get("includes")
         if (equals is None) == (includes is None):
             raise ActionError(f"{where}: a `when` says what the argument `equals`, or what it `includes`")
-        if any(not isinstance(item, Scalar) for item in (*_listed(equals), *_listed(includes))):
-            raise ActionError(f"{where}: a `when` compares an argument with a word, a number, true or false")
+        for item in (*_listed(equals), *_listed(includes)):
+            if not isinstance(item, Scalar):
+                raise ActionError(f"{where}: a `when` compares an argument with a word, a number, true or false")
+            if not is_comparable(item):
+                raise ActionError(
+                    f"{where}: {item!r} is not a number every reader holds exactly: "
+                    f"a whole number is at most {MAX_SAFE_INTEGER}, and a number is finite"
+                )
         conditions.append(
             Condition(
                 str(condition["argument"]),
@@ -367,8 +396,10 @@ __all__ = [
     "ActionError",
     "Classes",
     "Condition",
+    "MAX_SAFE_INTEGER",
     "classes_from",
     "classes_of",
+    "is_comparable",
     "is_pattern",
     "is_read_only",
     "matches",

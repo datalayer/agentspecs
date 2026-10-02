@@ -1054,8 +1054,11 @@ def dump_app(app: AppSpec) -> Dict[str, Any]:
 
     The spec's own keys, in the order the spec declares them, `schema`
     first; nothing written that is at its default — the layout of its kind
-    included, since it says nothing its kind does not. The same application
-    always writes the same document.
+    included, since it says nothing its kind does not. Where the spec does
+    not declare the keys — a scenario's weights, a component of a surface —
+    they are written in alphabetical order, a component's `id` and what it
+    is first. The same application always writes the same document, whatever
+    order it was read in.
     """
     data = json.loads(app.model_dump_json(by_alias=True, exclude_defaults=True))
     interface = data.get("interface") or {}
@@ -1063,7 +1066,29 @@ def dump_app(app: AppSpec) -> Dict[str, Any]:
         del interface["layout"]
         if not interface:
             del data["interface"]
+    # What the spec does not declare the keys of is written in one order too.
+    surface = interface.get("surface") or {}
+    if "components" in surface:
+        surface["components"] = [_component(component) for component in surface["components"]]
+    for scenario in (data.get("decision") or {}).get("scenarios") or []:
+        if "weights" in scenario:
+            scenario["weights"] = _sorted(scenario["weights"])
     return {"schema": app.schema_, **{key: value for key, value in data.items() if key != "schema"}}
+
+
+def _sorted(value: Any) -> Any:
+    """A value with the keys of every mapping in it in alphabetical order."""
+    if isinstance(value, dict):
+        return {key: _sorted(value[key]) for key in sorted(value)}
+    if isinstance(value, list):
+        return [_sorted(item) for item in value]
+    return value
+
+
+def _component(component: Mapping[str, Any]) -> Dict[str, Any]:
+    """A component of a surface as it is written: its `id`, what it is, then the rest in alphabetical order."""
+    rest = {key: value for key, value in component.items() if key not in ("id", "component")}
+    return {"id": component.get("id"), "component": component.get("component"), **_sorted(rest)}
 
 
 def json_schema() -> Dict[str, Any]:
