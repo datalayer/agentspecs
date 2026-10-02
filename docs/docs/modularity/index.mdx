@@ -51,7 +51,8 @@ single field** — an unresolved `extends` would arrive somewhere that cannot
 understand it.
 
 Fragments are applied first and `extends` second, so a parent can override what
-a fragment brought in.
+a fragment brought in — including with `!replace` and `!remove`, which reach
+the entries of the child's fragments.
 
 ## Merge semantics
 

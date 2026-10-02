@@ -121,8 +121,11 @@ frames:
   - board-reporting:0.0.1
 ```
 
-Each is resolved, then merged onto the ones before it by the same rules. Two
-Frames that extend the same parent bring its rules once.
+Every Frame that contributes — the named ones and those they inherit from — is
+merged **once**, from the root down and in the order the Frames are named, by
+the same rules. Two Frames that extend the same parent bring its rules once;
+and when the first of them redefines a term or a Guard of that parent, that
+definition stands if the second says nothing about it.
 
 ## The catalogue
 
@@ -140,6 +143,7 @@ Frames that extend the same parent bring its rules once.
 from agentspecs.frames import compose_frames, get_resolved_frame, render_frames
 
 frame = get_resolved_frame("web-research")        # with what it inherits
+frame.lineage                                     # ['datalayer'] — computed, never written
 context = compose_frames(["sales-pipeline", "board-reporting"])
 context.lineage                                   # ['datalayer', 'sales-pipeline', 'board-reporting']
 [guard.id for guard in context.guards]            # every Guard the output answers to

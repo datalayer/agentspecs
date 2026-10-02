@@ -16,6 +16,8 @@ import pytest
 import yaml
 from pydantic import ValidationError
 
+from agentspecs import cogs as cogs_module
+from agentspecs.compose import resolve_spec
 from agentspecs.cogs import (
     COG_CATALOGUE,
     CogError,
@@ -37,6 +39,7 @@ from agentspecs.frames import (
     get_frame,
     get_resolved_frame,
     list_frames,
+    load_raw_frames,
     merge_lists,
     render_frames,
     resolve_frame,
@@ -165,6 +168,17 @@ class TestAFrameInherits:
         with pytest.raises(FrameError, match="deeper than 3"):
             resolve_frame(frames["a"], frames)
 
+    def test_a_resolved_frame_carries_its_lineage(self):
+        # The chain of authority, on the Frame itself rather than beside it.
+        assert get_resolved_frame("web-research").lineage == ["datalayer"]
+        assert get_resolved_frame("datalayer").lineage == []
+        assert get_frame("web-research").lineage == []
+
+    def test_lineage_is_computed_not_written(self, tmp_path):
+        (tmp_path / "f.yaml").write_text(yaml.safe_dump({**_frame("f"), "lineage": ["x"]}))
+        with pytest.raises(FrameError, match="computed"):
+            load_raw_frames(tmp_path)
+
     def test_a_parent_that_does_not_exist_is_named(self):
         frames = {"a": _frame("a", extends="ghost:0.0.1")}
         with pytest.raises(FrameError, match="ghost:0.0.1"):
@@ -182,6 +196,22 @@ class TestFramesCompose:
         assert [guard.id for guard in context.guards].count("no-secrets") == 1
         assert {"totals-reconcile", "summary-first"} <= {guard.id for guard in context.guards}
         assert set(context.owners) == set(context.lineage)
+
+    def test_a_shared_parent_contributes_once_so_a_sibling_does_not_undo_an_override(self):
+        guard = {"id": "g", "category": "expert", "required": True}
+        frames = {
+            "p": _frame("p", terminology={"Deal": "the parent's"}, guards=[{**guard, "description": "the parent's"}], rules=["r"]),
+            "a": _frame("a", extends="p", terminology={"Deal": "a's"}, guards=[{**guard, "description": "a's"}]),
+            "b": _frame("b", extends="p", terminology={"Lead": "b's"}),
+        }
+        context = compose_frames(["a", "b"], frames)
+        # `b` says nothing about Deal or about the Guard: what `a` said stands.
+        assert context.terminology == {"Deal": "a's", "Lead": "b's"}
+        assert [guard.description for guard in context.guards] == ["a's"]
+        assert context.rules == ["r"]
+        assert context.lineage == ["p", "a", "b"]
+        # And the order the Frames are named in is the order they win in.
+        assert compose_frames(["b", "a"], frames).terminology["Deal"] == "a's"
 
     def test_the_same_frame_twice_is_refused(self):
         with pytest.raises(FrameError, match="named twice"):
@@ -268,6 +298,26 @@ class TestACogResolves:
         assert "One page of summary first" in cog["system_prompt"]
         assert cog["system_prompt"].count("Never put a secret") == 1
 
+    def test_a_kind_that_cannot_be_resolved_is_refused_rather_than_resolved_as_context(self):
+        cog = {"id": "c", "name": "C", "extends": "worker-crawler", "frames": ["web-research"]}
+        assert resolve_cog({**cog, "kind": "context"})["kind"] == "context"
+        for kind in ("model", "combined"):
+            with pytest.raises(CogError, match="cannot be resolved yet"):
+                resolve_cog({**cog, "kind": kind})
+
+    def test_the_catalogues_are_read_once_and_a_resolved_cog_is_the_callers(self, monkeypatch):
+        get_resolved_cog("cog-crawler")
+        reads = []
+        monkeypatch.setattr(cogs_module, "_load_dir", lambda folder: reads.append(folder) or {})
+        monkeypatch.setattr(cogs_module, "load_raw_frames", lambda folder=None: reads.append(folder) or {})
+        first = get_resolved_cog("cog-crawler")
+        assert reads == []
+        # Changing what came back does not change the catalogue behind it.
+        first["suggestions"].clear()
+        first["tags"].append("mine")
+        again = get_resolved_cog("cog-crawler")
+        assert again["suggestions"] and "mine" not in again["tags"]
+
     def test_a_cog_with_no_frame_is_refused(self):
         with pytest.raises(ValidationError, match="at least one Frame"):
             resolve_cog({"id": "c", "name": "C", "extends": "worker-crawler", "frames": []})
@@ -281,3 +331,57 @@ class TestACogResolves:
     def test_a_cog_naming_a_frame_that_does_not_exist_is_refused_by_name(self):
         with pytest.raises(CogError, match="ghost"):
             resolve_cog({"id": "c", "name": "C", "extends": "worker-crawler", "frames": ["ghost"]})
+
+
+class TestExtensionOverFragments:
+    """A parent is applied over a child's fragments: its markers reach them."""
+
+    FRAGMENTS = {"f": {"id": "f", "tools": ["fragment-tool:0.0.1", "shared:0.0.1"]}}
+
+    def test_a_parent_that_replaces_a_list_replaces_what_a_fragment_brought(self):
+        specs = {
+            "parent": {"id": "parent", "tools": ["!replace", "parent-tool:0.0.1"]},
+            "child": {"id": "child", "extends": "parent", "includes": ["f"], "tools": ["child-tool:0.0.1"]},
+        }
+        resolved = resolve_spec(specs["child"], specs, self.FRAGMENTS)
+        assert resolved["tools"] == ["parent-tool:0.0.1", "child-tool:0.0.1"]
+
+    def test_a_parent_that_removes_an_entry_removes_it_from_a_fragment_too(self):
+        specs = {
+            "parent": {"id": "parent", "tools": ["!remove shared", "parent-tool:0.0.1"]},
+            "child": {"id": "child", "extends": "parent", "includes": ["f"]},
+        }
+        resolved = resolve_spec(specs["child"], specs, self.FRAGMENTS)
+        assert resolved["tools"] == ["fragment-tool:0.0.1", "parent-tool:0.0.1"]
+
+    def test_a_marker_of_a_grandparent_reaches_them_as_well(self):
+        specs = {
+            "grand": {"id": "grand", "tools": ["!replace", "grand-tool:0.0.1"]},
+            "parent": {"id": "parent", "extends": "grand", "tools": ["parent-tool:0.0.1"]},
+            "child": {"id": "child", "extends": "parent", "includes": ["f"]},
+        }
+        resolved = resolve_spec(specs["child"], specs, self.FRAGMENTS)
+        assert resolved["tools"] == ["grand-tool:0.0.1", "parent-tool:0.0.1"]
+
+    def test_a_marker_a_parent_brings_through_its_own_fragment_reaches_them_too(self):
+        fragments = {
+            **self.FRAGMENTS,
+            "strict": {"id": "strict", "tools": ["!remove shared"]},
+            "only": {"id": "only", "tools": ["!replace", "only-tool:0.0.1"]},
+        }
+        specs = {
+            "parent": {"id": "parent", "includes": ["strict:0.0.1"]},
+            "bare": {"id": "bare", "includes": ["only"]},
+            "child": {"id": "child", "extends": "parent", "includes": ["f"]},
+            "other": {"id": "other", "extends": "bare", "includes": ["f"]},
+        }
+        assert resolve_spec(specs["child"], specs, fragments)["tools"] == ["fragment-tool:0.0.1"]
+        assert resolve_spec(specs["other"], specs, fragments)["tools"] == ["only-tool:0.0.1"]
+
+    def test_without_a_marker_a_fragment_and_a_parent_both_contribute(self):
+        specs = {
+            "parent": {"id": "parent", "tools": ["parent-tool:0.0.1"]},
+            "child": {"id": "child", "extends": "parent", "includes": ["f"]},
+        }
+        resolved = resolve_spec(specs["child"], specs, self.FRAGMENTS)
+        assert resolved["tools"] == ["fragment-tool:0.0.1", "shared:0.0.1", "parent-tool:0.0.1"]

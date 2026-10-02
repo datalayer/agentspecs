@@ -6,6 +6,25 @@
 
 # Changelog
 
+## 0.0.13
+
+What the review of 0.0.12 asked.
+
+- Frames: composing several Frames merges every contributor **once**, from the root down.
+  0.0.12 merged each named Frame already resolved, so a parent two Frames share was replayed
+  for the second, and its copy of a term or a Guard undid what the first had said about it.
+- Frames: a resolved Frame carries its `lineage` (`get_resolved_frame(...).lineage`), as the
+  documentation said. `lineage` is computed; a spec that writes one is refused.
+- Cogs: a Cog of kind `model` or `combined` is refused when resolved. 0.0.12 resolved it as a
+  `context` Cog, which is not what it says it is.
+- Cogs: the agent, fragment and Frame catalogues are read once. 0.0.12 parsed every agent
+  YAML again for each `resolve_cog` and each `get_resolved_cog`. What is returned is a copy.
+- Extension: a parent's `!replace` and `!remove` reach what the child's fragments brought in
+  — the documented order, fragments first and the parent second — whether the parent says
+  them itself or brings them in through a fragment of its own. Before, the parent's
+  markers were consumed when the parent was resolved, and a fragment's entries survived a
+  parent that replaced the list.
+
 ## 0.0.12
 
 - Frames: a new spec, under `agentspecs/frames/`. A Frame is the context work happens in,

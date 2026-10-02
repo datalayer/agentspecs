@@ -54,7 +54,7 @@ tags:
 | `id`, `version`, `name`, `description` | As on every spec. The id is not an agent's: a Cog extends an agent, it does not replace one. |
 | `extends` | The agent spec the Cog extends, `id` or `id:version`. Required. |
 | `frames` | The Frames it works under, in order. Required, and at least one: without a Frame a Cog is the agent it extends. |
-| `kind` | What the Cog packages: `context` (the context sent to a model it points to — what a Cogspec is today), `model` or `combined`. |
+| `kind` | What the Cog packages. `context` — the context sent to a model it points to — is what a Cogspec is today. `model` and `combined` are named and **refused when resolved**: they package model weights, which a Cogspec does not describe yet. |
 | `enabled` | Whether the Cog is offered today. |
 | any agent field | Overrides the agent's, by the [merge semantics](../modularity/#merge-semantics): a scalar replaces, a list appends, `system_prompt_append` layers onto the agent's prompt. |
 
@@ -104,7 +104,8 @@ cog["frame_context"]["lineage"]               # ['datalayer', 'web-research']
 ```
 
 A Cog that extends something that is not an agent, takes an agent's id, names
-no Frame or names one that does not exist is refused when the catalogue loads.
+no Frame, names one that does not exist or is of a kind that cannot be
+resolved is refused when the catalogue loads.
 
 ## What a Cog is not, yet
 

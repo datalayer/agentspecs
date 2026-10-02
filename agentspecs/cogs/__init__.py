@@ -31,6 +31,7 @@ Guards it answers to.
 
 from __future__ import annotations
 
+import copy
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -55,10 +56,16 @@ class CogKind(str, Enum):
     """The data and the context sent to a model it points to. What a Cogspec is today."""
 
     MODEL = "model"
-    """The model itself, deployed to generate from inputs."""
+    """The model itself, deployed to generate from inputs. Named, and not resolvable yet."""
 
     COMBINED = "combined"
-    """Model and context together: an isolated worker with everything it needs."""
+    """Model and context together. Named, and not resolvable yet."""
+
+
+#: The kinds `resolve_cog` knows how to resolve. The others package model
+#: weights, which a Cogspec does not describe yet: resolving one as a context
+#: Cog would hand back something plausible and wrong.
+RESOLVABLE_KINDS = frozenset({CogKind.CONTEXT})
 
 
 class CogSpec(BaseModel):
@@ -110,6 +117,19 @@ def _load_dir(directory: Path) -> Dict[str, Dict[str, Any]]:
     return specs
 
 
+#: This package's own catalogues, read once. They do not change while the
+#: process runs, and reading them is every agent YAML of the repository.
+_DEFAULTS: Dict[str, Dict[str, Dict[str, Any]]] = {}
+
+
+def _default_catalogue(name: str) -> Dict[str, Dict[str, Any]]:
+    """One of this package's catalogues — `agents`, `fragments`, `frames` — by id."""
+    if name not in _DEFAULTS:
+        folder = _ROOT / name
+        _DEFAULTS[name] = load_raw_frames(folder) if name == "frames" else _load_dir(folder)
+    return _DEFAULTS[name]
+
+
 def load_raw_cogs(directory: Optional[Path] = None) -> Dict[str, Dict[str, Any]]:
     """Every Cog YAML of a directory as plain data, by id, unresolved."""
     folder = directory or Path(__file__).parent
@@ -145,18 +165,24 @@ def resolve_cog(
     agents, fragments, frames
         The catalogues to resolve against, by id; this package's when omitted.
     """
-    agents = agents if agents is not None else _load_dir(_ROOT / "agents")
-    fragments = fragments if fragments is not None else _load_dir(_ROOT / "fragments")
-    frames = frames if frames is not None else load_raw_frames(_ROOT / "frames")
+    agents = agents if agents is not None else _default_catalogue("agents")
+    fragments = fragments if fragments is not None else _default_catalogue("fragments")
+    frames = frames if frames is not None else _default_catalogue("frames")
     spec = CogSpec(**cog)
 
+    if spec.kind not in RESOLVABLE_KINDS:
+        raise CogError(
+            f"Cog {spec.id!r} is of kind {spec.kind.value!r}, which cannot be resolved yet: "
+            "only a `context` Cog — an agent equipped with Frames — can"
+        )
     if spec.id in agents:
         raise CogError(f"Cog {spec.id!r} has the id of an agent: a Cog extends an agent, it does not replace one")
     agent_id = _id_of(spec.extends)
     if agent_id not in agents:
         raise CogError(f"Cog {spec.id!r} extends {spec.extends!r}, which is not an agent spec")
     try:
-        flat = resolve_spec(cog, agents, fragments)
+        # A copy: the catalogues are shared, and a resolved spec is the caller's.
+        flat = copy.deepcopy(resolve_spec(cog, agents, fragments))
         context: FrameContext = compose_frames(spec.frames, frames)
     except (CompositionError, FrameError) as error:
         raise CogError(f"Cog {spec.id!r}: {error}") from error
@@ -230,6 +256,7 @@ __all__ = [
     "CogError",
     "CogKind",
     "CogSpec",
+    "RESOLVABLE_KINDS",
     "cogs_using",
     "get_cog",
     "get_resolved_cog",
