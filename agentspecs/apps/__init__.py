@@ -40,7 +40,6 @@ named tools. The words are read by people; the classes are what is enforced.
 
 from __future__ import annotations
 
-import fnmatch
 import json
 import re
 from enum import Enum
@@ -55,6 +54,8 @@ from ..actions import (
     ActionError,
     classes_from,
     classes_of,
+    is_pattern,
+    matches,
     server_tool_conditions,
     split_ref,
 )
@@ -183,14 +184,15 @@ class AppConnection(_Strict):
     only: List[str] = Field(
         default_factory=list,
         description=(
-            "The tools of the server the application may use, by name or pattern (`*gmail*`); "
-            "all of them when empty. A tool left out is not reached at all"
+            "The tools of the server the application may use, by name or pattern (`*gmail*`: "
+            "`*` is any run of characters, `?` any one); all of them when empty. "
+            "A tool left out is not reached at all"
         ),
     )
 
     def reaches(self, tool_name: str) -> bool:
         """Whether the connection lets the application use a tool of its server."""
-        return not self.only or any(fnmatch.fnmatchcase(tool_name, pattern) for pattern in self.only)
+        return not self.only or any(matches(tool_name, pattern) for pattern in self.only)
 
 
 class AppRule(_Strict):
@@ -946,7 +948,7 @@ def tool_behaviours(app: AppSpec) -> Dict[str, Behaviour]:
         spec = _catalogue("mcp-servers").get(identity) or {}
         for name, value in ((spec.get("actions") or {}).get("tools") or {}).items():
             ref = f"{identity}.{name}"
-            if any(mark in name for mark in "*?["):
+            if is_pattern(name):
                 found = classes_from(value.get("class") if isinstance(value, dict) else value)
                 behaviours[ref] = (
                     Behaviour.LEAVE_TO_ME
@@ -979,7 +981,7 @@ def tool_escalations(app: AppSpec) -> Dict[str, List[Dict[str, Any]]]:
         identity = _id_of(connection.server)
         spec = _catalogue("mcp-servers").get(identity) or {}
         for name in (spec.get("actions") or {}).get("tools") or {}:
-            if any(mark in name for mark in "*?["):
+            if is_pattern(name):
                 continue
             ref = f"{identity}.{name}"
             plain = behaviour_for(app, ref, arguments={})
@@ -1048,8 +1050,20 @@ def load_apps(directory: Optional[Path] = None) -> Dict[str, AppSpec]:
 
 
 def dump_app(app: AppSpec) -> Dict[str, Any]:
-    """An application as the plain data its YAML holds: the spec's own keys, nothing left at its default."""
-    return json.loads(app.model_dump_json(by_alias=True, exclude_defaults=True)) | {"schema": app.schema_}
+    """An application as the plain data its file holds.
+
+    The spec's own keys, in the order the spec declares them, `schema`
+    first; nothing written that is at its default — the layout of its kind
+    included, since it says nothing its kind does not. The same application
+    always writes the same document.
+    """
+    data = json.loads(app.model_dump_json(by_alias=True, exclude_defaults=True))
+    interface = data.get("interface") or {}
+    if interface.get("layout") == DEFAULT_LAYOUTS[app.kind].value:
+        del interface["layout"]
+        if not interface:
+            del data["interface"]
+    return {"schema": app.schema_, **{key: value for key, value in data.items() if key != "schema"}}
 
 
 def json_schema() -> Dict[str, Any]:

@@ -113,7 +113,7 @@ are not carried over: what the application can touch is the list under
 | `server` | An MCP server of the catalogue. |
 | `access` | How far: `read`, or `write`. A connection that only reads carries no tool that acts. |
 | `as` | In whose name: `owner` (the builder's account, for everybody) or `user` (each user's own). |
-| `only` | Optionally, the tools it may use, by name or pattern (`*gmail*`). A tool left out is not reached at all. |
+| `only` | Optionally, the tools it may use, by name or pattern (`*gmail*`): `*` is any run of characters, `?` any one, and nothing else is special. A tool left out is not reached at all. |
 
 ## Rules
 
@@ -219,7 +219,7 @@ manage_gmail_label:
   class: write
   when:
     - argument: action
-      equals: delete              # or a list: any of them
+      equals: delete              # or a list: any of them. A word, a number, true or false
       class: delete
 ```
 

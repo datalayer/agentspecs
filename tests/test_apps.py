@@ -23,7 +23,9 @@ from agentspecs.actions import (
     ActionError,
     classes_from,
     classes_of,
+    is_pattern,
     is_read_only,
+    matches,
     server_actions_problems,
     server_specs,
     server_tool_classes,
@@ -163,6 +165,9 @@ def test_a_condition_is_read_or_refused() -> None:
         {"class": "write", "when": [{"argument": "action", "equals": "x", "includes": ["x"], "class": "delete"}]},
         {"class": "write", "when": [{"equals": "x", "class": "delete"}]},
         {"class": "write", "unless": []},
+        # An argument is compared with a word, a number, true or false: not with a list or a mapping.
+        {"class": "write", "when": [{"argument": "mode", "equals": [{"kind": "delete"}], "class": "delete"}]},
+        {"class": "write", "when": [{"argument": "ids", "includes": [["TRASH"]], "class": "delete"}]},
     ):
         assert server_actions_problems({"id": "s", "actions": {"tools": {"manage": wrong}}}) != []
 
@@ -181,6 +186,25 @@ def test_an_exact_name_wins_over_a_pattern_and_a_default_answers_the_rest() -> N
     assert server_tool_classes(server, "get_thing") == (ActionClass.READ,)
     assert server_tool_classes(server, "get_and_delete") == (ActionClass.DELETE,)
     assert server_tool_classes(server, "other") == (ActionClass.WRITE,)
+
+
+def test_a_pattern_means_the_same_wherever_it_is_read() -> None:
+    assert matches("search_gmail_messages", "*gmail*")
+    assert not matches("search_drive_files", "*gmail*")
+    assert matches("get_a", "get_?") and not matches("get_ab", "get_?")
+    # Nothing but `*` and `?` is special: a dot, a bracket and a brace are themselves.
+    assert matches("a.b", "a.b") and not matches("axb", "a.b")
+    assert matches("a[1]", "a[1]") and not matches("a1", "a[1]")
+    assert matches("a[!b]c", "a[!b]c") and not matches("axc", "a[!b]c")
+    assert matches("[", "[") and matches("a{b}", "a{b}")
+    # Case counts.
+    assert not matches("Search", "search")
+    assert is_pattern("generate_*") and is_pattern("get_?")
+    assert not is_pattern("a[1]") and not is_pattern("plain_name")
+    server = {"id": "s", "actions": {"tools": {"get[1]": "read", "make_*": "write"}}}
+    assert server_tool_classes(server, "get[1]") == (ActionClass.READ,)
+    assert server_tool_classes(server, "get1") == ()
+    assert server_tool_classes(server, "make_it") == (ActionClass.WRITE,)
 
 
 def test_a_word_that_is_not_a_class_is_refused() -> None:
@@ -239,10 +263,32 @@ def test_each_kind_has_its_layout_unless_it_says_another() -> None:
     assert app(interface={"layout": "split"}).layout is Layout.SPLIT
 
 
-def test_an_application_survives_being_written_and_read_again() -> None:
+def test_an_application_is_written_the_same_way_every_time() -> None:
+    order = list(AppSpec.model_fields)
     for identity, found in APP_CATALOGUE.items():
-        assert parse_app(dump_app(found)) == found, identity
-        assert parse_app(yaml.safe_load(yaml.safe_dump(dump_app(found)))) == found, identity
+        written = dump_app(found)
+        keys = list(written)
+        assert keys[0] == "schema", identity
+        declared = [AppSpec.model_fields[name].alias or name for name in order]
+        assert keys == [key for key in declared if key in keys], identity
+        assert dump_app(parse_app(written)) == written, identity
+    # The layout of its kind says nothing its kind does not: it is not written.
+    triage = dump_app(APP_CATALOGUE["inbox-triage"])
+    assert "layout" not in triage["interface"]
+    assert dump_app(app(interface={"layout": "chat"})).get("interface") is None
+    assert dump_app(app(interface={"layout": "split"}))["interface"] == {"layout": "split"}
+
+
+def test_an_application_survives_being_written_and_read_again() -> None:
+    def said(found: AppSpec) -> dict:
+        """What an application says, its layout as it is laid out rather than as it was written."""
+        data = found.model_dump()
+        data["interface"]["layout"] = found.layout
+        return data
+
+    for identity, found in APP_CATALOGUE.items():
+        assert said(parse_app(dump_app(found))) == said(found), identity
+        assert said(parse_app(yaml.safe_load(yaml.safe_dump(dump_app(found))))) == said(found), identity
 
 
 def test_a_decision_application_carries_the_whole_decision() -> None:

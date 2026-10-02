@@ -39,8 +39,9 @@ Where the class is written:
 
 - a tool of ``agentspecs/tools`` says ``action: send``;
 - an MCP server of ``agentspecs/mcp-servers`` says, under ``actions``, the
-  class of each tool it serves, by name or by a pattern (``search_*``), and the
-  day those names were read off the running server (``checked``).
+  class of each tool it serves, by name or by a pattern (``search_*``: ``*``
+  is any run of characters, ``?`` any one, and nothing else is special), and
+  the day those names were read off the running server (``checked``).
 
 **A tool with no class is unknown, and unknown is the most restricted**: it
 is never taken for a reader. What a server says of its own tools — the
@@ -50,7 +51,6 @@ here: the class is the catalogue's, written by somebody who looked.
 
 from __future__ import annotations
 
-import fnmatch
 import re
 from enum import Enum
 from pathlib import Path
@@ -125,6 +125,27 @@ def tool_classes(tool: Mapping[str, Any]) -> Classes:
     return classes_from(tool.get("action"), where=f"tool {tool.get('id', '?')!r}")
 
 
+def is_pattern(name: str) -> bool:
+    """Whether a tool name is a pattern: it stands for several."""
+    return "*" in name or "?" in name
+
+
+def matches(name: str, pattern: str) -> bool:
+    """Whether a name matches a pattern: `*` is any run of characters, `?` any one.
+
+    Nothing else is special — no bracket expressions — and case counts, so
+    that the same pattern means the same thing wherever it is read.
+    """
+    expression = "".join(
+        ".*" if character == "*" else "." if character == "?" else re.escape(character) for character in pattern
+    )
+    return re.fullmatch(expression, name, flags=re.DOTALL) is not None
+
+
+#: What an argument can be compared with: a word, a number, true or false.
+Scalar = (str, int, float, bool)
+
+
 class Condition:
     """An argument that makes a tool do something more: `when` it holds, the tool is also of `classes`."""
 
@@ -184,6 +205,8 @@ def _entry(value: Any, *, where: str) -> Tuple[Classes, Tuple[Condition, ...]]:
         equals, includes = condition.get("equals"), condition.get("includes")
         if (equals is None) == (includes is None):
             raise ActionError(f"{where}: a `when` says what the argument `equals`, or what it `includes`")
+        if any(not isinstance(item, Scalar) for item in (*_listed(equals), *_listed(includes))):
+            raise ActionError(f"{where}: a `when` compares an argument with a word, a number, true or false")
         conditions.append(
             Condition(
                 str(condition["argument"]),
@@ -209,7 +232,7 @@ def _server_entry(server: Mapping[str, Any], tool_name: str) -> Tuple[Classes, T
     if tool_name in tools:
         return _entry(tools[tool_name], where=where)
     for pattern, value in tools.items():
-        if any(mark in pattern for mark in "*?[") and fnmatch.fnmatchcase(tool_name, pattern):
+        if is_pattern(pattern) and matches(tool_name, pattern):
             return _entry(value, where=where)
     return classes_from(actions.get("default"), where=where), ()
 
@@ -346,7 +369,9 @@ __all__ = [
     "Condition",
     "classes_from",
     "classes_of",
+    "is_pattern",
     "is_read_only",
+    "matches",
     "server_actions_problems",
     "server_specs",
     "server_tool_classes",

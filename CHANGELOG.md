@@ -6,6 +6,18 @@
 
 # Changelog
 
+## 0.0.16
+
+What three implementations of the same decision need in order to agree.
+
+- A pattern (`*gmail*`, `generate_*`) means the same thing wherever it is read: `*` is any
+  run of characters, `?` any one, and nothing else is special — no bracket expressions,
+  which Python and JavaScript read differently. `agentspecs.actions.matches`, `is_pattern`.
+- A condition compares an argument with a word, a number, true or false; a list or a
+  mapping is refused, since equality of those is not the same in every language.
+- `dump_app` writes an application the same way every time: `schema` first, then the keys
+  in the order the spec declares them, and not the layout when it is its kind's own.
+
 ## 0.0.15
 
 Applications, and what a tool does to the world.
