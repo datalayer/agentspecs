@@ -27,6 +27,7 @@ from agentspecs.actions import (
     server_actions_problems,
     server_specs,
     server_tool_classes,
+    server_tool_conditions,
     split_ref,
     tool_classes,
     tool_specs,
@@ -54,6 +55,7 @@ from agentspecs.apps import (
     schema_text,
     strictest,
     tool_behaviours,
+    tool_escalations,
 )
 
 APPS_DIR = pathlib.Path(__file__).parent.parent / "agentspecs" / "apps"
@@ -111,11 +113,58 @@ def test_classes_are_read_by_reference() -> None:
 
 
 def test_a_tool_that_does_several_things_carries_each() -> None:
-    assert set(classes_of("google-workspace.manage_event")) == {
+    # An event is created, and its guests are invited: both, at once.
+    assert set(classes_of("google-workspace.manage_event", {"action": "create"})) == {
         ActionClass.WRITE,
+        ActionClass.SEND,
+    }
+    assert set(classes_of("google-workspace.manage_drive_access")) == {
+        ActionClass.PUBLISH,
         ActionClass.SEND,
         ActionClass.DELETE,
     }
+
+
+def test_what_a_tool_does_can_depend_on_what_it_is_asked() -> None:
+    label = "google-workspace.modify_gmail_message_labels"
+    # Archiving is a write; the same tool trashes when the label is TRASH.
+    assert classes_of(label, {"remove_label_ids": ["INBOX"]}) == (ActionClass.WRITE,)
+    assert classes_of(label, {"add_label_ids": ["STARRED"]}) == (ActionClass.WRITE,)
+    assert classes_of(label, {"add_label_ids": ["STARRED", "trash"]}) == (ActionClass.WRITE, ActionClass.DELETE)
+    # Nobody said what it is asked: everything it can do.
+    assert classes_of(label) == (ActionClass.WRITE, ActionClass.DELETE)
+    assert classes_of(label, {}) == (ActionClass.WRITE,)
+    manage = "google-workspace.manage_gmail_label"
+    assert classes_of(manage, {"action": "create"}) == (ActionClass.WRITE,)
+    assert classes_of(manage, {"action": "delete"}) == (ActionClass.WRITE, ActionClass.DELETE)
+    drive = "google-workspace.update_drive_file"
+    assert classes_of(drive, {"trashed": True}) == (ActionClass.WRITE, ActionClass.DELETE)
+    assert classes_of(drive, {"trashed": False}) == (ActionClass.WRITE,)
+    # True is not 1: an argument is compared as what it is.
+    assert classes_of(drive, {"trashed": 1}) == (ActionClass.WRITE,)
+
+
+def test_a_condition_is_read_or_refused() -> None:
+    server = {
+        "id": "s",
+        "actions": {
+            "tools": {
+                "manage": {"class": "write", "when": [{"argument": "action", "equals": ["delete", "clear"], "class": "delete"}]}
+            }
+        },
+    }
+    assert server_tool_classes(server, "manage", {"action": "clear"}) == (ActionClass.WRITE, ActionClass.DELETE)
+    assert server_tool_classes(server, "manage", {"other": "delete"}) == (ActionClass.WRITE,)
+    assert [condition.as_data() for condition in server_tool_conditions(server, "manage")] == [
+        {"argument": "action", "classes": ["delete"], "equals": ["delete", "clear"]}
+    ]
+    for wrong in (
+        {"class": "write", "when": [{"argument": "action", "class": "delete"}]},
+        {"class": "write", "when": [{"argument": "action", "equals": "x", "includes": ["x"], "class": "delete"}]},
+        {"class": "write", "when": [{"equals": "x", "class": "delete"}]},
+        {"class": "write", "unless": []},
+    ):
+        assert server_actions_problems({"id": "s", "actions": {"tools": {"manage": wrong}}}) != []
 
 
 def test_an_unknown_tool_has_no_class_and_is_never_a_reader() -> None:
@@ -144,13 +193,13 @@ def test_a_word_that_is_not_a_class_is_refused() -> None:
 
 def test_the_mail_tools_are_classed_as_a_person_would() -> None:
     read = classes_of("google-workspace.search_gmail_messages")
-    label = classes_of("google-workspace.modify_gmail_message_labels")
+    label = classes_of("google-workspace.modify_gmail_message_labels", {"remove_label_ids": ["INBOX"]})
     draft = classes_of("google-workspace.draft_gmail_message")
     assert read == (ActionClass.READ,)
     assert label == draft == (ActionClass.WRITE,)
     # A filter can forward mail: it is not a plain write.
     assert ActionClass.SEND in classes_of("google-workspace.manage_gmail_filter")
-    assert classes_of("google-workspace.set_drive_file_permissions") == (ActionClass.PUBLISH,)
+    assert ActionClass.PUBLISH in classes_of("google-workspace.set_drive_file_permissions")
 
 
 # --- the catalogue ----------------------------------------------------------------------
@@ -240,7 +289,17 @@ def test_a_decision_application_carries_the_whole_decision() -> None:
             "both apply to 'send'",
         ),
         ({"rules": [{"action": "Send", "applies_to": [], "behaviour": "do_it"}]}, "applies to a class"),
+        (
+            {"rules": [{"action": "Send", "applies_to": ["google-workspace.send_gmail_message"], "behaviour": "ask_first"},
+                       {"action": "Mail", "applies_to": ["google-workspace:0.0.1.send_gmail_message"], "behaviour": "do_it"}]},
+            "both apply to 'google-workspace.send_gmail_message'",
+        ),
         ({"rules": [{"action": "Send", "applies_to": "send", "behaviour": "maybe"}]}, "rules.0.behaviour"),
+        ({"emoji": "mail"}, "is one emoji"),
+        ({"emoji": ""}, "is one emoji"),
+        ({"permissions": {"spaces": [{"space": "a"}, {"space": "a"}]}}, "same Space twice"),
+        ({"permissions": {"network": True}}, "permissions.network is not a field"),
+        ({"permissions": {"computer": {"shell": "yes please"}}}, "permissions.computer.shell"),
     ],
 )
 def test_what_is_wrong_is_refused_in_a_sentence(changes: dict, says: str) -> None:
@@ -270,6 +329,31 @@ def test_a_reference_that_does_not_resolve_is_a_problem_said_in_words() -> None:
     assert any("not connected to 'tavily'" in problem for problem in problems)
 
 
+def test_a_gate_reads_a_guard_the_application_runs() -> None:
+    alone = app_problems(app(checks={"gates": ["low-confidence-review:0.0.1"]}))
+    assert any("reads the Guard 'confidence-guard:0.0.1'" in problem for problem in alone)
+    together = app(checks={"gates": ["low-confidence-review"], "guards": ["confidence-guard"]})
+    assert app_problems(together) == []
+
+
+def test_a_decision_is_judged_by_a_model_that_answers_judgments() -> None:
+    def deciding(model: str) -> AppSpec:
+        return app(kind="decision", decision={"question": "Which?", "judgment_model": model})
+
+    assert app_problems(deciding("cloudflare:gtw/typesafe/jev")) == []
+    assert any("to judge with" in problem for problem in app_problems(deciding("typesafe/jev")))
+    chat_model = "bedrock:us.anthropic.claude-sonnet-4-6"
+    assert any("does not answer typed judgments" in problem for problem in app_problems(deciding(chat_model)))
+
+
+def test_a_rule_names_a_tool_its_connection_reaches() -> None:
+    scoped = app(
+        connections=[{"server": "google-workspace", "access": "write", "only": ["*gmail*"]}],
+        rules=[{"action": "Search the Drive", "applies_to": ["google-workspace.search_drive_files"], "behaviour": "do_it"}],
+    )
+    assert any("leaves out" in problem for problem in app_problems(scoped))
+
+
 def test_writing_through_a_server_nobody_classed_is_a_problem() -> None:
     problems = app_problems(app(connections=[{"server": "github", "access": "write"}]))
     assert any("nobody has classed" in problem for problem in problems)
@@ -285,6 +369,25 @@ def test_a_directory_whose_application_does_not_resolve_is_refused(tmp_path: pat
     (tmp_path / "broken.yaml").write_text(yaml.safe_dump({"id": "other", "name": "X", "kind": "chat"}))
     with pytest.raises(AppError, match="named for id 'broken'"):
         load_apps(tmp_path)
+
+
+def test_an_application_has_a_face_and_reaches_nothing_it_was_not_granted() -> None:
+    plain = app()
+    # Until its builder picks one, the eyes.
+    assert plain.emoji == "\U0001f440"
+    assert plain.permissions.spaces == []
+    computer = plain.permissions.computer
+    assert (computer.browse, computer.files, computer.shell) == (False, False, False)
+    granted = app(
+        emoji="\U0001f4ec",
+        permissions={"spaces": [{"space": "support", "access": "write"}], "computer": {"browse": True}},
+    )
+    assert granted.emoji == "\U0001f4ec"
+    assert granted.permissions.spaces[0].access is Access.WRITE
+    assert granted.permissions.computer.browse and not granted.permissions.computer.shell
+    # Every application of the catalogue has a face of its own.
+    faces = [found.emoji for found in APP_CATALOGUE.values()]
+    assert len(set(faces)) == len(faces) and "\U0001f440" not in faces
 
 
 # --- what a rule decides ----------------------------------------------------------------
@@ -327,8 +430,27 @@ def test_a_rule_that_names_a_tool_wins_over_the_rule_on_its_class() -> None:
             {"action": "Label", "applies_to": ["google-workspace:0.0.1.modify_gmail_message_labels"], "behaviour": "do_it"},
         ]
     )
-    assert behaviour_for(ruled, "google-workspace.modify_gmail_message_labels") is Behaviour.DO_IT
+    label = "google-workspace.modify_gmail_message_labels"
+    assert behaviour_for(ruled, label, arguments={"remove_label_ids": ["INBOX"]}) is Behaviour.DO_IT
     assert behaviour_for(ruled, "google-workspace.draft_gmail_message") is Behaviour.ASK_FIRST
+
+
+def test_a_rule_that_names_a_tool_does_not_cover_what_its_arguments_make_it_do_besides() -> None:
+    label = "google-workspace.modify_gmail_message_labels"
+    ruled = app(rules=[{"action": "Label and archive", "applies_to": [label], "behaviour": "do_it"}])
+    # Labelling is done. Trashing is a deletion, and no rule lets it: it waits for a person.
+    assert behaviour_for(ruled, label, arguments={"add_label_ids": ["STARRED"]}) is Behaviour.DO_IT
+    assert behaviour_for(ruled, label, arguments={"add_label_ids": ["TRASH"]}) is Behaviour.ASK_FIRST
+    # Nobody said what it is asked: the worst it can do.
+    assert behaviour_for(ruled, label) is Behaviour.ASK_FIRST
+    forbidden = app(
+        rules=[
+            {"action": "Label and archive", "applies_to": [label], "behaviour": "do_it"},
+            {"action": "Delete", "applies_to": "delete", "behaviour": "leave_to_me"},
+        ]
+    )
+    assert behaviour_for(forbidden, label, arguments={"add_label_ids": ["TRASH"]}) is Behaviour.LEAVE_TO_ME
+    assert behaviour_for(forbidden, label, arguments={"remove_label_ids": ["INBOX"]}) is Behaviour.DO_IT
 
 
 def test_a_tool_nobody_classed_is_left_to_the_person_unless_a_rule_names_it() -> None:
@@ -364,15 +486,49 @@ def test_inbox_triage_reads_and_drafts_alone_sends_on_approval_and_deletes_nothi
     assert decided["modify_gmail_message_labels"] is Behaviour.DO_IT
     assert decided["draft_gmail_message"] is Behaviour.DO_IT
     assert decided["send_gmail_message"] is Behaviour.ASK_FIRST
-    assert decided["manage_gmail_filter"] is Behaviour.LEAVE_TO_ME
-    assert decided["manage_gmail_label"] is Behaviour.LEAVE_TO_ME
+    # Creating a filter or a label is asked; deleting one is never done.
+    assert decided["manage_gmail_filter"] is Behaviour.ASK_FIRST
+    assert decided["manage_gmail_label"] is Behaviour.ASK_FIRST
+    for tool, arguments in (
+        ("manage_gmail_label", {"action": "delete"}),
+        ("manage_gmail_filter", {"action": "delete"}),
+        ("modify_gmail_message_labels", {"add_label_ids": ["TRASH"]}),
+        ("batch_modify_gmail_message_labels", {"add_label_ids": ["SPAM"]}),
+    ):
+        assert behaviour_for(triage, f"google-workspace.{tool}", arguments=arguments) is Behaviour.LEAVE_TO_ME, tool
+    # And it says so: where what a tool is asked changes what it does.
+    escalations = tool_escalations(triage)
+    assert escalations["google-workspace.modify_gmail_message_labels"] == [
+        {"argument": "add_label_ids", "classes": ["delete"], "includes": ["TRASH", "SPAM"], "behaviour": "leave_to_me"}
+    ]
     # Nothing outside the mailbox is reached, and nothing it reaches sends by itself.
     reached = {name for name, behaviour in decided.items() if behaviour is not Behaviour.LEAVE_TO_ME}
     assert reached and all("gmail" in name for name in reached)
     alone = {name for name, behaviour in decided.items() if behaviour is Behaviour.DO_IT}
     for name in alone:
-        classes = set(classes_of(f"google-workspace.{name}"))
+        classes = set(classes_of(f"google-workspace.{name}", {}))
         assert classes <= {ActionClass.READ, ActionClass.WRITE}, name
+    # No argument of any call makes it delete, publish or buy by itself.
+    for ref in tool_behaviours(triage):
+        for condition in server_tool_conditions(server_specs()["google-workspace"], ref.split(".")[1]):
+            values = condition.includes or condition.equals
+            arguments = {condition.argument: [values[0]] if condition.includes else values[0]}
+            assert behaviour_for(triage, ref, arguments=arguments) is not Behaviour.DO_IT, ref
+
+
+def test_a_server_classed_by_a_pattern_is_reported_by_that_pattern(monkeypatch: pytest.MonkeyPatch) -> None:
+    from agentspecs import apps as module
+
+    servers = dict(module._catalogue("mcp-servers"))
+    servers["drawer"] = {"id": "drawer", "actions": {"checked": "2026-10-02", "tools": {"generate_*": "read", "erase_*": "delete"}}}
+    monkeypatch.setitem(module._CATALOGUES, "mcp-servers", servers)
+    reader = app(connections=[{"server": "drawer", "access": "read"}])
+    assert tool_behaviours(reader) == {
+        "drawer.generate_*": Behaviour.DO_IT,
+        "drawer.erase_*": Behaviour.LEAVE_TO_ME,
+    }
+    writer = app(connections=[{"server": "drawer", "access": "write"}])
+    assert tool_behaviours(writer)["drawer.erase_*"] is Behaviour.ASK_FIRST
 
 
 def test_web_research_only_reads() -> None:
@@ -397,6 +553,8 @@ def test_the_schema_names_the_fields_as_the_yaml_does() -> None:
     )
     assert "as" in schema["$defs"]["AppConnection"]["properties"]
     assert schema["additionalProperties"] is False
+    # A validator outside Python refuses another version too.
+    assert schema["properties"]["schema"]["const"] == APP_SCHEMA
     assert json.loads(SCHEMA_PATH.read_text())["$id"].endswith(f"{APP_SCHEMA}.json")
 
 

@@ -15,8 +15,25 @@ of the catalogue carries a **class**:
 - ``delete`` — removes something;
 - ``publish`` — makes something reachable by people who could not reach it.
 
-A tool that can do several of these (``manage_event`` creates, invites and
-deletes) carries several, and is treated as the most restricted of them.
+A tool that does several of these at once (a calendar event is created and
+its guests are invited) carries several, and is treated as the most restricted
+of them.
+
+What a tool does can also depend on **what it is asked**: Gmail's label tool
+archives a message, and trashes it when the label is ``TRASH``. Such a tool
+says its class, and ``when`` an argument makes it another:
+
+.. code-block:: yaml
+
+    modify_gmail_message_labels:
+      class: write
+      when:
+        - argument: add_label_ids
+          includes: [TRASH, SPAM]
+          class: delete
+
+With the arguments of a call, its classes are those of that call. Without
+them — nobody said what it is asked — they are everything it *can* do.
 
 Where the class is written:
 
@@ -37,7 +54,7 @@ import fnmatch
 import re
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple, Union
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 import yaml
 
@@ -108,21 +125,119 @@ def tool_classes(tool: Mapping[str, Any]) -> Classes:
     return classes_from(tool.get("action"), where=f"tool {tool.get('id', '?')!r}")
 
 
-def server_tool_classes(server: Mapping[str, Any], tool_name: str) -> Classes:
-    """The classes of one tool of an MCP server spec; empty when the spec does not say.
+class Condition:
+    """An argument that makes a tool do something more: `when` it holds, the tool is also of `classes`."""
 
-    An exact name wins over a pattern, and the first pattern that matches
-    wins over the next; ``default`` answers for what nothing matched.
-    """
+    __slots__ = ("argument", "classes", "equals", "includes")
+
+    def __init__(self, argument: str, classes: Classes, equals: Sequence[Any], includes: Sequence[Any]) -> None:
+        self.argument = argument
+        self.classes = classes
+        self.equals = tuple(equals)
+        self.includes = tuple(includes)
+
+    def holds(self, arguments: Mapping[str, Any]) -> bool:
+        """Whether the arguments of a call make the condition true."""
+        if self.argument not in arguments:
+            return False
+        value = arguments[self.argument]
+        if self.equals and any(_same(value, wanted) for wanted in self.equals):
+            return True
+        if self.includes:
+            values = value if isinstance(value, (list, tuple, set)) else [value]
+            return any(_same(item, wanted) for item in values for wanted in self.includes)
+        return False
+
+    def as_data(self) -> Dict[str, Any]:
+        """The condition as plain data."""
+        data: Dict[str, Any] = {"argument": self.argument, "classes": [item.value for item in self.classes]}
+        if self.equals:
+            data["equals"] = list(self.equals)
+        if self.includes:
+            data["includes"] = list(self.includes)
+        return data
+
+
+def _same(value: Any, wanted: Any) -> bool:
+    """Whether an argument's value is the one a condition names; words are compared whatever their case."""
+    if isinstance(value, str) and isinstance(wanted, str):
+        return value.strip().lower() == wanted.strip().lower()
+    if isinstance(value, bool) or isinstance(wanted, bool):
+        return isinstance(value, bool) and isinstance(wanted, bool) and value is wanted
+    return bool(value == wanted)
+
+
+def _entry(value: Any, *, where: str) -> Tuple[Classes, Tuple[Condition, ...]]:
+    """One tool's entry as (its classes, the conditions that add to them)."""
+    if not isinstance(value, Mapping):
+        return classes_from(value, where=where), ()
+    unknown = sorted(set(value) - {"class", "when"})
+    if unknown:
+        raise ActionError(f"{where}: an entry says `class` and `when`, not {', '.join(unknown)}")
+    conditions: List[Condition] = []
+    for condition in value.get("when") or []:
+        extra = sorted(set(condition) - {"argument", "equals", "includes", "class"})
+        if extra or not condition.get("argument") or "class" not in condition:
+            raise ActionError(
+                f"{where}: a `when` names an `argument`, what it `equals` or `includes`, and a `class`"
+            )
+        equals, includes = condition.get("equals"), condition.get("includes")
+        if (equals is None) == (includes is None):
+            raise ActionError(f"{where}: a `when` says what the argument `equals`, or what it `includes`")
+        conditions.append(
+            Condition(
+                str(condition["argument"]),
+                classes_from(condition["class"], where=where),
+                _listed(equals),
+                _listed(includes),
+            )
+        )
+    return classes_from(value.get("class"), where=where), tuple(conditions)
+
+
+def _listed(value: Any) -> List[Any]:
+    if value is None:
+        return []
+    return list(value) if isinstance(value, (list, tuple)) else [value]
+
+
+def _server_entry(server: Mapping[str, Any], tool_name: str) -> Tuple[Classes, Tuple[Condition, ...]]:
+    """The entry that answers for a tool of a server: its name, a pattern, or the default."""
     actions = server.get("actions") or {}
     tools = actions.get("tools") or {}
     where = f"MCP server {server.get('id', '?')!r}, tool {tool_name!r}"
     if tool_name in tools:
-        return classes_from(tools[tool_name], where=where)
+        return _entry(tools[tool_name], where=where)
     for pattern, value in tools.items():
         if any(mark in pattern for mark in "*?[") and fnmatch.fnmatchcase(tool_name, pattern):
-            return classes_from(value, where=where)
-    return classes_from(actions.get("default"), where=where)
+            return _entry(value, where=where)
+    return classes_from(actions.get("default"), where=where), ()
+
+
+def server_tool_classes(
+    server: Mapping[str, Any],
+    tool_name: str,
+    arguments: Optional[Mapping[str, Any]] = None,
+) -> Classes:
+    """The classes of one tool of an MCP server spec; empty when the spec does not say.
+
+    An exact name wins over a pattern, and the first pattern that matches
+    wins over the next; ``default`` answers for what nothing matched.
+
+    With the ``arguments`` of a call, the classes of that call. Without them,
+    everything the tool can do: nobody said what it is asked.
+    """
+    base, conditions = _server_entry(server, tool_name)
+    classes = list(base)
+    for condition in conditions:
+        if arguments is None or condition.holds(arguments):
+            classes.extend(item for item in condition.classes if item not in classes)
+    return tuple(classes)
+
+
+def server_tool_conditions(server: Mapping[str, Any], tool_name: str) -> Tuple[Condition, ...]:
+    """The conditions under which a tool of a server does more than its own class."""
+    return _server_entry(server, tool_name)[1]
 
 
 def _load(directory: Path) -> Dict[str, Dict[str, Any]]:
@@ -172,6 +287,7 @@ def split_ref(ref: str) -> Tuple[Optional[str], str]:
 
 def classes_of(
     ref: str,
+    arguments: Optional[Mapping[str, Any]] = None,
     *,
     tools: Optional[Mapping[str, Mapping[str, Any]]] = None,
     servers: Optional[Mapping[str, Mapping[str, Any]]] = None,
@@ -179,14 +295,16 @@ def classes_of(
     """The classes of a tool, by reference; empty when nothing says.
 
     ``server.tool`` is a tool of an MCP server; a bare id is a tool of the
-    tools catalogue. Versions (``id:0.0.1``) are accepted on either.
+    tools catalogue. Versions (``id:0.0.1``) are accepted on either. With the
+    ``arguments`` of a call, the classes of that call; without them,
+    everything the tool can do.
     """
     server_id, tool_name = split_ref(ref)
     if server_id is None:
         tool = (tools if tools is not None else tool_specs()).get(_id_of(tool_name))
         return tool_classes(tool) if tool else ()
     server = (servers if servers is not None else server_specs()).get(_id_of(server_id))
-    return server_tool_classes(server, tool_name) if server else ()
+    return server_tool_classes(server, tool_name, arguments) if server else ()
 
 
 def _id_of(ref: str) -> str:
@@ -205,13 +323,15 @@ def server_actions_problems(server: Mapping[str, Any]) -> List[str]:
     unknown = sorted(set(actions) - {"checked", "default", "tools", "note"})
     if unknown:
         problems.append(f"MCP server {identity!r}: `actions` does not know {', '.join(unknown)}")
-    values: List[Union[str, List[str], None]] = list((actions.get("tools") or {}).values())
-    values.append(actions.get("default"))
-    for value in values:
+    for name, value in (actions.get("tools") or {}).items():
         try:
-            classes_from(value, where=f"MCP server {identity!r}")
+            _entry(value, where=f"MCP server {identity!r}, tool {name!r}")
         except ActionError as error:
             problems.append(str(error))
+    try:
+        classes_from(actions.get("default"), where=f"MCP server {identity!r}")
+    except ActionError as error:
+        problems.append(str(error))
     if actions.get("checked") and not actions.get("tools"):
         problems.append(f"MCP server {identity!r} was checked and names no tool")
     return problems
@@ -223,12 +343,14 @@ __all__ = [
     "ActionClass",
     "ActionError",
     "Classes",
+    "Condition",
     "classes_from",
     "classes_of",
     "is_read_only",
     "server_actions_problems",
     "server_specs",
     "server_tool_classes",
+    "server_tool_conditions",
     "split_ref",
     "tool_classes",
     "tool_specs",

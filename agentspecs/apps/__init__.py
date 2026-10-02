@@ -21,9 +21,12 @@ What it says:
 - **who does the work** — ``agent`` (an agent or a Cog of the catalogue) or
   ``team``, with the ``instructions`` and ``model`` this application changes;
 - **what it works under and knows** — ``context`` (Frames) and ``contents``;
+- **who it is** — its ``name``, and its ``emoji``: the face it is known by
+  wherever it appears;
 - **what it reaches** — ``connections``: an MCP server, how far (``read`` or
-  ``write``), and in whose name (the builder's, or each user's). An
-  application reaches nothing it does not name here;
+  ``write``), and in whose name (the builder's, or each user's); and
+  ``permissions``: the Spaces it reads or writes, and what it may do on its
+  own computer. An application reaches nothing it does not name here;
 - **when it acts alone, and when it asks** — ``rules``, in four behaviours;
 - **what the user sees** — ``interface``;
 - **how it is verified** — ``tests``;
@@ -50,8 +53,9 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_valida
 from ..actions import (
     ActionClass,
     ActionError,
+    classes_from,
     classes_of,
-    server_tool_classes,
+    server_tool_conditions,
     split_ref,
 )
 
@@ -401,6 +405,38 @@ class AppChecks(_Strict):
     track: str = Field(default="", description="A Track, `id` or `id:version`")
 
 
+# --- what else it may reach -------------------------------------------------------------
+
+
+class AppSpaceGrant(_Strict):
+    """A Space the application may reach."""
+
+    space: str = Field(..., description="The Space, by its handle or its id")
+    access: Access = Field(default=Access.READ, description="`read`, or `write`")
+
+
+class AppComputer(_Strict):
+    """What the application may do on its own computer. Each is off until it is turned on."""
+
+    browse: bool = Field(default=False, description="Open pages in a browser")
+    files: bool = Field(default=False, description="Read and write files")
+    shell: bool = Field(default=False, description="Run commands")
+
+
+class AppPermissions(_Strict):
+    """What the application may reach beside its connections. Nothing, unless said."""
+
+    spaces: List[AppSpaceGrant] = Field(default_factory=list, description="The Spaces it reads or writes")
+    computer: AppComputer = Field(default_factory=AppComputer, description="Its computer: browse, files, shell")
+
+    @model_validator(mode="after")
+    def _grants_a_space_once(self) -> "AppPermissions":
+        spaces = [grant.space for grant in self.spaces]
+        if len(set(spaces)) != len(spaces):
+            raise ValueError("the application is granted the same Space twice")
+        return self
+
+
 # --- where it goes ----------------------------------------------------------------------
 
 
@@ -594,6 +630,10 @@ class AppSpec(_Strict):
     contents: List[str] = Field(default_factory=list, description="The documents and datasets it answers from")
     connections: List[AppConnection] = Field(default_factory=list, description="What it reaches")
     rules: List[AppRule] = Field(default_factory=list, description="When it acts alone, and when it asks")
+    permissions: AppPermissions = Field(
+        default_factory=AppPermissions,
+        description="What else it may reach: Spaces, its computer. Nothing, unless said",
+    )
 
     interface: AppInterface = Field(default_factory=AppInterface, description="What the user sees")
     tests: AppTests = Field(default_factory=AppTests, description="How it is verified")
@@ -611,7 +651,18 @@ class AppSpec(_Strict):
     enabled: bool = Field(default=True, description="Whether it is offered today")
     tags: List[str] = Field(default_factory=list)
     icon: str = Field(default="apps", description="Icon identifier")
-    emoji: str = Field(default="\U0001f440", description="Emoji representation")
+    emoji: str = Field(
+        default="\U0001f440",
+        description="Its face: one emoji, shown wherever the application appears",
+    )
+
+    @field_validator("emoji")
+    @classmethod
+    def _is_a_face(cls, emoji: str) -> str:
+        face = emoji.strip()
+        if not face or len(face) > 16 or any(character.isalnum() or character.isspace() for character in face):
+            raise ValueError("an application's `emoji` is one emoji, its face")
+        return face
 
     @field_validator("schema_")
     @classmethod
@@ -652,7 +703,7 @@ class AppSpec(_Strict):
             raise ValueError("two rules have the same action")
         seen: Dict[str, str] = {}
         for rule in self.rules:
-            for target in rule.targets:
+            for target in (_normal(item) for item in rule.targets):
                 if target in seen:
                     raise ValueError(
                         f"the rules {seen[target]!r} and {rule.action!r} both apply to {target!r}: keep one"
@@ -694,50 +745,68 @@ DEFAULT_BEHAVIOURS = {
 }
 
 
+def _normal(target: str) -> str:
+    """What a rule applies to, versions aside: `send`, `server.tool`, or a tool id."""
+    if target in _CLASS_NAMES:
+        return target
+    server, name = split_ref(target)
+    return f"{_id_of(server)}.{name}" if server is not None else name
+
+
 def behaviour_for(
     app: AppSpec,
     tool: str,
     *,
+    arguments: Optional[Mapping[str, Any]] = None,
     classes: Optional[Sequence[ActionClass]] = None,
 ) -> Behaviour:
     """What an application does when its agent calls a tool.
 
     ``tool`` is ``server.tool`` for a tool of an MCP server, or the id of a
     tool of the catalogue. Its classes are the catalogue's, unless given.
+    What a tool does can depend on what it is asked: with the ``arguments``
+    of the call, the decision is for that call; without them, for the worst
+    the tool can do.
 
     In order:
 
     1. a tool of a server the application is not connected to, or that its
        connection leaves out (``only``), is left to the person: an
        application reaches nothing it does not name;
-    2. a tool that acts, on a connection that only reads, is left to the person;
-    3. a rule that names the tool decides;
+    2. a tool that can act, on a connection that only reads, is left to the person;
+    3. a rule that names the tool decides what the tool does of its own — and
+       what the arguments make it do *besides* is still decided by its class:
+       *label a message: do it* does not become *trash it: do it*;
     4. a tool nobody classed is left to the person: unknown is the most restricted;
     5. otherwise each of its classes is decided by the rule on that class, or
        by :data:`DEFAULT_BEHAVIOURS`, and the most restricted wins.
     """
     server, name = split_ref(tool)
-    found = tuple(classes) if classes is not None else classes_of(tool)
+    if classes is not None:
+        own, besides, possible = tuple(classes), (), tuple(classes)
+    else:
+        possible = classes_of(tool)
+        own = classes_of(tool, {})
+        now = possible if arguments is None else classes_of(tool, arguments)
+        besides = tuple(item for item in now if item not in own)
     if server is not None:
         connection = app.connection(server)
         if connection is None or not connection.reaches(name):
             return Behaviour.LEAVE_TO_ME
-        if connection.access is Access.READ and any(item is not ActionClass.READ for item in found):
+        if connection.access is Access.READ and any(item is not ActionClass.READ for item in possible):
             return Behaviour.LEAVE_TO_ME
+    by_class = {item: rule.behaviour for rule in app.rules for item in rule.classes}
+
+    def decided(items: Sequence[ActionClass]) -> List[Behaviour]:
+        return [by_class.get(item, DEFAULT_BEHAVIOURS[item]) for item in items]
+
     wanted = f"{_id_of(server)}.{name}" if server is not None else name
     for rule in app.rules:
-        if any(_same_tool(named, wanted) for named in rule.tools):
-            return rule.behaviour
-    if not found:
+        if any(_normal(named) == wanted for named in rule.tools):
+            return strictest([rule.behaviour, *decided(besides)])
+    if not own and not besides:
         return Behaviour.LEAVE_TO_ME
-    by_class = {item: rule.behaviour for rule in app.rules for item in rule.classes}
-    return strictest([by_class.get(item, DEFAULT_BEHAVIOURS[item]) for item in found])
-
-
-def _same_tool(named: str, wanted: str) -> bool:
-    """Whether a rule's tool reference is the tool being called, versions aside."""
-    server, name = split_ref(named)
-    return (f"{_id_of(server)}.{name}" if server is not None else name) == wanted
+    return strictest(decided((*own, *besides)))
 
 
 # --- the catalogues it draws from ---------------------------------------------------
@@ -801,11 +870,25 @@ def app_problems(app: AppSpec) -> List[str]:
     for what, catalogue, ref in _refs(app):
         if _id_of(ref) not in _catalogue(catalogue):
             problems.append(f"There is no {what} named {ref!r}.")
-    if app.model:
-        from ..models import get_model
+    from ..models import get_model
 
-        if get_model(app.model) is None:
-            problems.append(f"There is no model named {app.model!r}.")
+    if app.model and get_model(app.model) is None:
+        problems.append(f"There is no model named {app.model!r}.")
+    if app.decision is not None and app.decision.judgment_model:
+        judge = get_model(app.decision.judgment_model)
+        if judge is None:
+            problems.append(f"There is no model named {app.decision.judgment_model!r} to judge with.")
+        elif "judgments" not in judge.capabilities:
+            problems.append(f"The model {app.decision.judgment_model!r} does not answer typed judgments.")
+    run = {_id_of(guard) for guard in app.checks.guards}
+    for ref in app.checks.gates:
+        gate = _catalogue("gates").get(_id_of(ref))
+        for guard in (gate or {}).get("guards") or []:
+            if _id_of(guard) not in run:
+                problems.append(
+                    f"The Gate {ref!r} reads the Guard {guard!r}, which the application does not run: "
+                    "add it under `checks.guards`."
+                )
     for rule in app.rules:
         for tool in rule.tools:
             server, name = split_ref(tool)
@@ -815,6 +898,10 @@ def app_problems(app: AppSpec) -> List[str]:
             elif app.connection(server) is None:
                 problems.append(
                     f"The rule {rule.action!r} names {tool!r}, and the application is not connected to {server!r}."
+                )
+            elif not app.connection(server).reaches(name):  # type: ignore[union-attr]
+                problems.append(
+                    f"The rule {rule.action!r} names {tool!r}, which the connection to {server!r} leaves out (`only`)."
                 )
     for connection in app.connections:
         if connection.access is Access.READ:
@@ -846,18 +933,63 @@ def app_setup(app: AppSpec) -> List[str]:
 
 
 def tool_behaviours(app: AppSpec) -> Dict[str, Behaviour]:
-    """What the application does about every classed tool of the servers it connects to."""
+    """What the application does about every classed tool of the servers it connects to.
+
+    For each tool in its plain use — no argument that makes it do more; see
+    :func:`tool_escalations` for those. A server that classes its tools by a
+    pattern (``generate_*``) is reported by that pattern: the names it stands
+    for are only known at run time, and each is decided then.
+    """
     behaviours: Dict[str, Behaviour] = {}
+    for connection in app.connections:
+        identity = _id_of(connection.server)
+        spec = _catalogue("mcp-servers").get(identity) or {}
+        for name, value in ((spec.get("actions") or {}).get("tools") or {}).items():
+            ref = f"{identity}.{name}"
+            if any(mark in name for mark in "*?["):
+                found = classes_from(value.get("class") if isinstance(value, dict) else value)
+                behaviours[ref] = (
+                    Behaviour.LEAVE_TO_ME
+                    if connection.access is Access.READ and any(item is not ActionClass.READ for item in found)
+                    else _by_classes(app, found)
+                )
+            else:
+                behaviours[ref] = behaviour_for(app, ref, arguments={})
+    return behaviours
+
+
+def _by_classes(app: AppSpec, found: Sequence[ActionClass]) -> Behaviour:
+    """What the rules on classes decide for a tool of these classes."""
+    if not found:
+        return Behaviour.LEAVE_TO_ME
+    by_class = {item: rule.behaviour for rule in app.rules for item in rule.classes}
+    return strictest([by_class.get(item, DEFAULT_BEHAVIOURS[item]) for item in found])
+
+
+def tool_escalations(app: AppSpec) -> Dict[str, List[Dict[str, Any]]]:
+    """Where what a tool is asked changes what the application does about it.
+
+    By tool: each condition that makes it do more than its plain use, and
+    what the application does then — *labels a message: do it; when the label
+    is TRASH: left to the person*. Only the conditions that change the
+    decision are listed.
+    """
+    escalations: Dict[str, List[Dict[str, Any]]] = {}
     for connection in app.connections:
         identity = _id_of(connection.server)
         spec = _catalogue("mcp-servers").get(identity) or {}
         for name in (spec.get("actions") or {}).get("tools") or {}:
             if any(mark in name for mark in "*?["):
                 continue
-            behaviours[f"{identity}.{name}"] = behaviour_for(
-                app, f"{identity}.{name}", classes=server_tool_classes(spec, name)
-            )
-    return behaviours
+            ref = f"{identity}.{name}"
+            plain = behaviour_for(app, ref, arguments={})
+            for condition in server_tool_conditions(spec, name):
+                values = condition.includes or condition.equals
+                arguments = {condition.argument: [values[0]] if condition.includes else values[0]}
+                then = behaviour_for(app, ref, arguments=arguments)
+                if then is not plain:
+                    escalations.setdefault(ref, []).append({**condition.as_data(), "behaviour": then.value})
+    return escalations
 
 
 # --- reading, and the schema ------------------------------------------------------------
@@ -923,6 +1055,13 @@ def dump_app(app: AppSpec) -> Dict[str, Any]:
 def json_schema() -> Dict[str, Any]:
     """The JSON Schema of the Appspec, for editors and for validation outside Python."""
     schema = AppSpec.model_json_schema(by_alias=True)
+    # A validator outside Python refuses another version, as `parse_app` does.
+    schema["properties"]["schema"] = {
+        "description": "The version of the spec itself",
+        "title": "Schema",
+        **({"const": APP_SCHEMA} if len(KNOWN_SCHEMAS) == 1 else {"enum": list(KNOWN_SCHEMAS)}),
+        "default": APP_SCHEMA,
+    }
     schema["$schema"] = "https://json-schema.org/draft/2020-12/schema"
     schema["$id"] = f"https://agentspecs.datalayer.tech/schemas/{APP_SCHEMA}.json"
     schema["title"] = "Appspec"
@@ -964,6 +1103,7 @@ __all__ = [
     "Access",
     "ActsAs",
     "AppChecks",
+    "AppComputer",
     "AppConnection",
     "AppCriterion",
     "AppDecision",
@@ -971,10 +1111,12 @@ __all__ = [
     "AppError",
     "AppInterface",
     "AppKind",
+    "AppPermissions",
     "AppRecord",
     "AppRule",
     "AppScenario",
     "AppSetting",
+    "AppSpaceGrant",
     "AppSpec",
     "AppStarter",
     "AppSurface",
@@ -1006,4 +1148,5 @@ __all__ = [
     "schema_text",
     "strictest",
     "tool_behaviours",
+    "tool_escalations",
 ]

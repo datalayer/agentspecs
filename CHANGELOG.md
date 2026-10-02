@@ -18,6 +18,9 @@ Applications, and what a tool does to the world.
   person's words (`action`) and applied to a class of action or to named tools
   (`applies_to`). `behaviour_for` says what an application does when its agent calls a
   tool: with no rule, reading is done and anything that acts waits for a person.
+- Identity and permissions: an application has a face (`emoji`, 👀 until one is chosen) and
+  `permissions` — the Spaces it reads or writes, and its computer (browse, files, shell),
+  each off until it is turned on.
 - Connections: an application reaches nothing it does not name. Each says how far (`read`,
   `write`), in whose name (`owner`, `user`), and optionally which tools (`only`).
 - **Action classes** (`agentspecs.actions`): `read`, `write`, `send`, `buy`, `delete`,
@@ -26,6 +29,12 @@ Applications, and what a tool does to the world.
   filesystem, charts, Slack and Google Workspace's 120 tools; the nine others say
   `checked: null` and class nothing. A tool with no class is unknown, and unknown is the
   most restricted; a server's own `readOnlyHint` is not read.
+- What a tool does can depend on what it is asked: a tool says its class, and `when` an
+  argument makes it another (`add_label_ids` including `TRASH`, `action: delete`).
+  `classes_of` and `behaviour_for` take the `arguments` of a call; without them they
+  answer for the worst the tool can do. A rule that names a tool decides what the tool
+  does of its own, and what its arguments make it do besides is still decided by its
+  class. `tool_escalations` lists where that changes the decision.
 - What is wrong is said in a sentence (`AppError`), by the name of the field; a key the
   spec does not know is refused. `app_problems` for references that do not resolve,
   `app_setup` for what is named and not enabled.

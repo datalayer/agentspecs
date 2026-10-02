@@ -61,6 +61,32 @@
       "title": "AppChecks",
       "type": "object"
     },
+    "AppComputer": {
+      "additionalProperties": false,
+      "description": "What the application may do on its own computer. Each is off until it is turned on.",
+      "properties": {
+        "browse": {
+          "default": false,
+          "description": "Open pages in a browser",
+          "title": "Browse",
+          "type": "boolean"
+        },
+        "files": {
+          "default": false,
+          "description": "Read and write files",
+          "title": "Files",
+          "type": "boolean"
+        },
+        "shell": {
+          "default": false,
+          "description": "Run commands",
+          "title": "Shell",
+          "type": "boolean"
+        }
+      },
+      "title": "AppComputer",
+      "type": "object"
+    },
     "AppConnection": {
       "additionalProperties": false,
       "description": "Something the application reaches.",
@@ -315,6 +341,26 @@
       "title": "AppKind",
       "type": "string"
     },
+    "AppPermissions": {
+      "additionalProperties": false,
+      "description": "What the application may reach beside its connections. Nothing, unless said.",
+      "properties": {
+        "computer": {
+          "$ref": "#/$defs/AppComputer",
+          "description": "Its computer: browse, files, shell"
+        },
+        "spaces": {
+          "description": "The Spaces it reads or writes",
+          "items": {
+            "$ref": "#/$defs/AppSpaceGrant"
+          },
+          "title": "Spaces",
+          "type": "array"
+        }
+      },
+      "title": "AppPermissions",
+      "type": "object"
+    },
     "AppRecord": {
       "additionalProperties": false,
       "description": "What is kept of what the application did, and for how long.",
@@ -476,6 +522,27 @@
         "label"
       ],
       "title": "AppSetting",
+      "type": "object"
+    },
+    "AppSpaceGrant": {
+      "additionalProperties": false,
+      "description": "A Space the application may reach.",
+      "properties": {
+        "access": {
+          "$ref": "#/$defs/Access",
+          "default": "read",
+          "description": "`read`, or `write`"
+        },
+        "space": {
+          "description": "The Space, by its handle or its id",
+          "title": "Space",
+          "type": "string"
+        }
+      },
+      "required": [
+        "space"
+      ],
+      "title": "AppSpaceGrant",
       "type": "object"
     },
     "AppStarter": {
@@ -827,7 +894,7 @@
     },
     "emoji": {
       "default": "\ud83d\udc40",
-      "description": "Emoji representation",
+      "description": "Its face: one emoji, shown wherever the application appears",
       "title": "Emoji",
       "type": "string"
     },
@@ -899,6 +966,10 @@
       "title": "Owner",
       "type": "string"
     },
+    "permissions": {
+      "$ref": "#/$defs/AppPermissions",
+      "description": "What else it may reach: Spaces, its computer. Nothing, unless said"
+    },
     "record": {
       "$ref": "#/$defs/AppRecord",
       "description": "What is kept of what it did"
@@ -912,10 +983,10 @@
       "type": "array"
     },
     "schema": {
+      "const": "loop.app/v1",
       "default": "loop.app/v1",
       "description": "The version of the spec itself",
-      "title": "Schema",
-      "type": "string"
+      "title": "Schema"
     },
     "skills": {
       "description": "Skills it adds to its agent's",

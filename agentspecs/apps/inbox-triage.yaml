@@ -3,7 +3,8 @@
 
 # Application Specification: Inbox Triage
 # A worker: it sorts new mail, drafts the replies, and proposes what to send.
-# It sends nothing without an approval, and deletes nothing at all.
+# It sends nothing without an approval, and deletes nothing at all: the tool
+# that labels a message can also trash it, and trashing is left to the person.
 #
 # Not offered today: its agent and the Google Workspace server are disabled.
 

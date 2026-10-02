@@ -74,6 +74,7 @@ record:
 | --- | --- |
 | `schema` | The version of the spec itself: `loop.app/v1`. A reader refuses one it does not know. |
 | `id`, `version`, `name`, `description`, `owner` | As on every spec. |
+| `emoji` | Its face: one emoji, shown wherever the application appears — an approval, an activity line, a card. 👀 until one is chosen. |
 | `kind` | `chat`, `widget`, `decision` or `worker`. |
 | `agent` or `team` | Who does the work: an agent or a [Cog](../cogs) of the catalogue, or a team. One, and not both. |
 | `instructions`, `model`, `skills`, `tools` | What this application says differently from its agent, and adds to it. |
@@ -81,6 +82,7 @@ record:
 | `contents` | The documents and datasets it answers from. |
 | `connections` | What it reaches. See below. |
 | `rules` | When it acts alone, and when it asks. See below. |
+| `permissions` | What else it may reach: `spaces` (a Space, `read` or `write`) and its `computer` (`browse`, `files`, `shell`, each off). Nothing, unless said. |
 | `interface` | What the user sees: `layout` (`chat`, `page`, `split`), `accent`, `welcome`, `starters`, `settings`, and a `surface` — a component tree over the approved catalog. |
 | `tests` | How it is verified: `cases` in plain words (`ask`, `expect`), an `evalset`, and `ready_at`, the share that has to pass. |
 | `record` | What is kept of what it did (`include`), and for how long (`keep_for`: `90_days`, `1_years`). |
@@ -91,6 +93,14 @@ record:
 
 A key the spec does not know is refused, by name: a typing mistake does not
 become a setting that is silently ignored.
+
+## Identity and permissions
+
+An application is somebody: a `name`, a face (`emoji`), a colour
+(`interface.accent`), an `owner`. And it may do only what it was granted —
+`connections`, `rules` and `permissions` are the whole of it. Nothing granted
+is implied: an empty list reaches nothing, and its agent's own servers are not
+carried over.
 
 ## Connections
 
@@ -133,8 +143,10 @@ What happens when the agent calls a tool is decided in this order:
 
 1. A tool of a server the application is not connected to, or that its
    connection leaves out, is left to the person.
-2. A tool that acts, on a connection that only reads, is left to the person.
-3. A rule that names the tool decides.
+2. A tool that can act, on a connection that only reads, is left to the person.
+3. A rule that names the tool decides what the tool does of its own. What its
+   arguments make it do *besides* is still decided by its class: *label a
+   message: do it* does not become *trash it: do it*.
 4. A tool nobody classed is left to the person: unknown is the most restricted.
 5. Otherwise each of its classes is decided by the rule on that class, and
    the most restricted wins. With no rule, **reading is done, and anything that
@@ -146,8 +158,18 @@ from agentspecs.apps import behaviour_for, get_app, tool_behaviours
 triage = get_app("inbox-triage")
 behaviour_for(triage, "google-workspace.send_gmail_message")   # Behaviour.ASK_FIRST
 behaviour_for(triage, "google-workspace.search_drive_files")   # Behaviour.LEAVE_TO_ME: not gmail
-tool_behaviours(triage)                                         # every classed tool it connects to
+
+label = "google-workspace.modify_gmail_message_labels"
+behaviour_for(triage, label, arguments={"remove_label_ids": ["INBOX"]})   # DO_IT: archiving
+behaviour_for(triage, label, arguments={"add_label_ids": ["TRASH"]})      # LEAVE_TO_ME: deleting
+behaviour_for(triage, label)                                               # LEAVE_TO_ME: the worst it can do
+
+tool_behaviours(triage)     # every classed tool it connects to, in its plain use
+tool_escalations(triage)    # where what a tool is asked changes the decision
 ```
+
+Pass the `arguments` of the call when there is a call: without them, the
+decision is for the worst the tool can do.
 
 ## Action classes
 
@@ -177,10 +199,35 @@ actions:
     slack_get_channel_history: read
 ```
 
-A tool that does several things carries several (`manage_event: [write, send,
-delete]`) and is treated as the most restricted of them. A server nobody has
-checked yet says `checked: null` and classes nothing: its tools are unknown,
-and an application cannot write through it.
+A tool that does several things at once carries several — an event is
+created *and* its guests are invited: `[write, send]` — and is treated as the
+most restricted of them.
+
+What a tool does can also depend on **what it is asked**. Gmail's label tool
+archives a message, and trashes it when the label is `TRASH`; a `manage_*`
+tool deletes when its action is `delete`. Such a tool says its class, and
+`when` an argument makes it another:
+
+```yaml
+modify_gmail_message_labels:
+  class: write
+  when:
+    - argument: add_label_ids
+      includes: [TRASH, SPAM]     # any of these among the argument's values
+      class: delete
+manage_gmail_label:
+  class: write
+  when:
+    - argument: action
+      equals: delete              # or a list: any of them
+      class: delete
+```
+
+With the arguments of a call, the tool's classes are those of that call.
+Without them — nobody said what it is asked — they are everything it can do.
+
+A server nobody has checked yet says `checked: null` and classes nothing: its
+tools are unknown, and an application cannot write through it.
 
 What a server says of its own tools — the `readOnlyHint` of the protocol — is
 a claim by the server. It is not read: the class is the catalogue's, written
@@ -212,7 +259,10 @@ checks run in addition, never instead.
 - Two connections to the same server; two rules on the same class or tool.
 - A reference the catalogue does not have — said by name:
   `There is no Frame named 'nope'.`
-- A rule naming a tool of a server the application is not connected to.
+- A rule naming a tool of a server the application is not connected to, or
+  that its connection leaves out.
+- A Gate reading a Guard the application does not run.
+- A decision judged by a model that does not answer typed judgments.
 - Writing through a server whose tools nobody has classed.
 
 What an application names that is merely **not enabled** — an agent, a server —

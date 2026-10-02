@@ -22,7 +22,7 @@ contents:
 
 decision:
   question: Which agent configuration should we ship?
-  judgment_model: typesafe/jev
+  judgment_model: "cloudflare:gtw/typesafe/jev"
   min_confidence: 0.6
   criteria:
     - name: Pass rate
