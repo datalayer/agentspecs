@@ -6,6 +6,22 @@
 
 # Changelog
 
+## 0.0.16
+
+What three implementations of the same decision need in order to agree.
+
+- A pattern (`*gmail*`, `generate_*`) means the same thing wherever it is read: `*` is any
+  run of characters, `?` any one, and nothing else is special — no bracket expressions,
+  which Python and JavaScript read differently. `agentspecs.actions.matches`, `is_pattern`.
+- A condition compares an argument with a word, a number, true or false; a list or a
+  mapping is refused, since equality of those is not the same in every language.
+  A whole number beyond 2**53 - 1, and a number that is not finite, are refused too, and
+  an argument beyond that range equals nothing: JavaScript holds no such integer exactly.
+- `dump_app` writes an application the same way every time: `schema` first, then the keys
+  in the order the spec declares them, and not the layout when it is its kind's own. A
+  scenario's weights and the components of a surface, whose keys the spec does not
+  declare, are written in alphabetical order, a component's `id` and what it is first.
+
 ## 0.0.15
 
 Applications, and what a tool does to the world.

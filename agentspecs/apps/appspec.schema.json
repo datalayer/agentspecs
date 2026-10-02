@@ -102,7 +102,7 @@
           "description": "In whose name: `owner` (the builder's account) or `user` (each user's own)"
         },
         "only": {
-          "description": "The tools of the server the application may use, by name or pattern (`*gmail*`); all of them when empty. A tool left out is not reached at all",
+          "description": "The tools of the server the application may use, by name or pattern (`*gmail*`: `*` is any run of characters, `?` any one); all of them when empty. A tool left out is not reached at all",
           "items": {
             "type": "string"
           },
