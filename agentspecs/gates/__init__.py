@@ -146,8 +146,10 @@ class GateSpec(BaseModel):
 
     @model_validator(mode="after")
     def _is_decidable(self) -> "GateSpec":
-        if self.then in HUMAN_ACTIONS and not self.reviewers:
-            raise ValueError(f"Gate {self.id!r} decides {self.then.value}: it names the `reviewers` it goes to")
+        # Either branch can hand the decision to a person.
+        for action in (self.then, self.otherwise):
+            if action in HUMAN_ACTIONS and not self.reviewers:
+                raise ValueError(f"Gate {self.id!r} decides {action.value}: it names the `reviewers` it goes to")
         if GateAction.RETRY in (self.then, self.otherwise) and self.max_retries < 1:
             raise ValueError(f"Gate {self.id!r} decides retry: it says `max_retries`, at least 1")
         if self.when != ALWAYS and not self.guards:

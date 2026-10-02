@@ -40,7 +40,7 @@ reviewers:
 | `when` | The condition, on the signals its Guards report. `always` for a Gate every run goes through. Required. |
 | `then` | What happens when the condition holds. Required. |
 | `otherwise` | What happens when it does not; `proceed` by default. |
-| `reviewers` | The roles the decision is handed to. Required when a person decides. |
+| `reviewers` | The roles the decision is handed to. Required when either `then` or `otherwise` hands it to a person. |
 | `max_retries` | How many times `retry` may be decided. Required, at least 1, when it can be. |
 | `enabled` | Whether an Op may name it today. |
 

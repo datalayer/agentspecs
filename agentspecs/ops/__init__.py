@@ -166,8 +166,10 @@ def resolve_op(op: Dict[str, Any]) -> Dict[str, Any]:
     - ``gates``: each Gate, with the signals it reads;
     - ``track``: the Track, with its retention in days.
 
-    Refused: a Cog, Frame, Guard, Gate or Track that does not exist or is not
-    enabled; a Guard named at a stage it does not run at; a Gate that reads a
+    Refused: a Cog, Frame, Guard, Gate or Track that does not exist; a Guard,
+    Gate or Track that is not enabled; a Cog that is not enabled when the Op
+    is (a draft Op may name a draft Cog); a Guard named at a stage it does not
+    run at; Gates listed out of the order of the stages; a Gate that reads a
     Guard the Op does not run, or decides at a stage where none of its Guards
     has run yet.
     """
@@ -184,6 +186,11 @@ def resolve_op(op: Dict[str, Any]) -> Dict[str, Any]:
             if raw is None:
                 raise OpError(f"Op {spec.id!r} names Cog {ref!r}, which is not defined")
             cog = resolve_cog(raw)
+            if spec.enabled and not cog["enabled"]:
+                raise OpError(
+                    f"Op {spec.id!r} is enabled and names Cog {cog['id']!r}, which is not: "
+                    "an Op that is offered has workers that are"
+                )
             cogs.append({"id": cog["id"], "agent": cog["agent"], "frames": cog["frames"], "kind": cog["kind"]})
             contexts.append(cog["frame_context"])
     except (FrameError, CogError) as error:
@@ -219,12 +226,20 @@ def resolve_op(op: Dict[str, Any]) -> Dict[str, Any]:
 
     order = list(GuardStage)
     gates: List[Dict[str, Any]] = []
+    met: Optional[GateSpec] = None
     for ref in spec.gates:
         gate: Optional[GateSpec] = GATE_CATALOGUE.get(id_of(ref))
         if gate is None:
             raise OpError(f"Op {spec.id!r} names Gate {ref!r}, which is not defined")
         if not gate.enabled:
             raise OpError(f"Op {spec.id!r} names Gate {ref!r}, which is not enabled")
+        # The list is the order the Gates are met in: a stage never comes back.
+        if met is not None and order.index(gate.stage) < order.index(met.stage):
+            raise OpError(
+                f"Op {spec.id!r}: Gate {gate.id!r} decides at {gate.stage.value} and is listed "
+                f"after {met.id!r}, which decides at {met.stage.value}"
+            )
+        met = gate
         for guard_ref in gate.guards:
             stages = ran_by.get(id_of(guard_ref))
             if not stages:

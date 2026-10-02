@@ -24,7 +24,7 @@ from __future__ import annotations
 import re
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -103,9 +103,12 @@ class TrackSpec(BaseModel):
         default=False,
         description="Whether corrections, overrides and failures are fed back to Organizational Memory",
     )
-    exchangeable: bool = Field(
+    exchangeable: Literal[False] = Field(
         default=False,
-        description="Whether a record may leave the Hub that produced it. Evidence is not for sale: false.",
+        description=(
+            "Whether a record may leave the Hub that produced it. Evidence is not "
+            "for sale: `false` is the only value a Track accepts."
+        ),
     )
     enabled: bool = Field(default=True, description="Whether an Op may name it today")
     tags: List[str] = Field(default_factory=list)

@@ -137,7 +137,11 @@ auditor need without a second lookup:
 ## What is refused
 
 - An Op with no owner, no Cog, no post-run Guard, no Gate or no Track.
-- A Cog, a Frame, a Guard, a Gate or a Track that does not exist or is not enabled.
+- A Cog, a Frame, a Guard, a Gate or a Track that does not exist; a Guard, a
+  Gate or a Track that is not enabled.
+- An enabled Op naming a Cog that is not: an Op that is offered has workers
+  that are. A draft Op may name a draft Cog.
+- Gates listed out of the order of the stages.
 - A Guard named at a stage it does not run at.
 - A Gate that reads a Guard the Op does not run, or that decides at a stage
   where none of its Guards has run yet.

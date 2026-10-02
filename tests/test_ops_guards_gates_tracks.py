@@ -173,6 +173,10 @@ class TestAGateDecides:
         with pytest.raises(ValidationError, match="reviewers"):
             GateSpec(**_gate(then="human_review_required"))
         assert GateSpec(**_gate(then="human_review_required", reviewers=["op-owner"])).reviewers == ["op-owner"]
+        # Whichever branch hands over.
+        with pytest.raises(ValidationError, match="decides human_approval_required"):
+            GateSpec(**_gate(then="pause", otherwise="human_approval_required"))
+        assert GateSpec(**_gate(then="pause", otherwise="stop_and_escalate", reviewers=["op-owner"]))
 
     def test_a_gate_that_retries_says_how_often_and_one_that_decides_nothing_is_refused(self):
         with pytest.raises(ValidationError, match="max_retries"):
@@ -201,6 +205,9 @@ class TestATrackKeepsEvidence:
 
     def test_evidence_is_not_for_sale(self):
         assert all(track.exchangeable is False for track in list_tracks())
+        assert TrackSpec(**_track(exchangeable=False)).exchangeable is False
+        with pytest.raises(ValidationError):
+            TrackSpec(**_track(exchangeable=True))
 
     def test_a_retention_is_read_or_refused(self):
         assert retention_days("90_days") == 90
@@ -311,6 +318,26 @@ class TestAnOpIsNotCompleteWithoutItsValidation:
         guards["post_run"] = [ref for ref in guards["post_run"] if not ref.startswith("consensus-guard")]
         with pytest.raises(OpError, match="reads Guard 'consensus-guard:0.0.1', which the Op does not run"):
             resolve_op(self._op(guards=guards))
+
+    def test_gates_are_listed_in_the_order_of_the_stages(self):
+        gates = list(_raw("ops", OP)["gates"])
+        gates.insert(0, gates.pop())  # the continuous Gate, before the pre-flight one
+        with pytest.raises(
+            OpError,
+            match="Gate 'configuration-check' decides at preflight and is listed after 'quality-drift-review'",
+        ):
+            resolve_op(self._op(gates=gates))
+        # Two Gates of one stage may be in either order.
+        gates = list(_raw("ops", OP)["gates"])
+        gates[1], gates[2] = gates[2], gates[1]
+        assert resolve_op(self._op(gates=gates))["gates"][1]["id"] == "tool-violation-retry"
+
+    def test_an_op_that_is_offered_has_workers_that_are(self):
+        # The example is a draft, as its Cog is: that resolves.
+        assert get_resolved_op(OP)["enabled"] is False
+        with pytest.raises(OpError, match="is enabled and names Cog 'cog-sales-pipeline-board-report', which is not"):
+            resolve_op(self._op(enabled=True))
+        assert resolve_op(self._op(enabled=True, cogs=["cog-crawler:0.0.1"]))["enabled"] is True
 
     def test_a_gate_does_not_decide_before_its_guard_has_run(self):
         guards = dict(_raw("ops", OP)["guards"])
