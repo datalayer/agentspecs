@@ -147,6 +147,13 @@ class FrameSpec(BaseModel):
         default="",
         description="The parent Frame, `id` or `id:version`; empty for a Frame that stands alone",
     )
+    lineage: List[str] = Field(
+        default_factory=list,
+        description=(
+            "The Frames it inherits from, nearest parent first: the chain of "
+            "authority. Computed when a Frame is resolved, never written in a spec."
+        ),
+    )
     tags: List[str] = Field(default_factory=list)
     enabled: bool = Field(default=True, description="Whether a Cog may name it today")
 
@@ -351,9 +358,12 @@ def compose_frames(
 ) -> FrameContext:
     """The one context several Frames make, in the order they are named.
 
-    Each is resolved, then merged onto the ones before it by the rules of
-    inheritance: lists append and are deduplicated — so a parent two Frames
-    share brings its rules once — and a later Frame's term or guard wins.
+    Every Frame that contributes — the named ones and those they inherit
+    from — is merged once, from the root down and in the order the Frames are
+    named, by the rules of inheritance: lists append and are deduplicated, and
+    a later Frame's term or Guard wins. A parent two Frames share contributes
+    once, so what the first of them says about a term of that parent stands
+    when the second says nothing.
     """
     catalogue = frames if frames is not None else _RAW_FRAMES
     merged: Dict[str, Any] = {}
@@ -366,16 +376,26 @@ def compose_frames(
         if identity in named:
             raise FrameError(f"Frame {identity!r} is named twice")
         named.append(identity)
+        # Each contributor is merged once, as it is written, from the root
+        # down. Merging every named Frame *resolved* would replay a shared
+        # parent for each of its children, and its copy of a term or a Guard
+        # would undo what an earlier Frame had said about it.
         for contributor in [*reversed(frame["lineage"]), identity]:
-            if contributor not in lineage:
-                lineage.append(contributor)
-        text = str(frame.get("architecture") or "").strip()
-        if text and text not in architecture:
-            architecture.append(text)
-        merged = merge_frames(
-            merged,
-            {key: value for key, value in frame.items() if key in LIST_FIELDS or key in ("terminology", "guards", "prompts")},
-        )
+            if contributor in lineage:
+                continue
+            lineage.append(contributor)
+            written = catalogue[contributor]
+            text = str(written.get("architecture") or "").strip()
+            if text and text not in architecture:
+                architecture.append(text)
+            merged = merge_frames(
+                merged,
+                {
+                    key: value
+                    for key, value in written.items()
+                    if key in LIST_FIELDS or key in ("terminology", "guards", "prompts")
+                },
+            )
     merged.pop("tags", None)
     return FrameContext(
         frames=named,
@@ -451,6 +471,8 @@ def load_raw_frames(directory: Optional[Path] = None) -> Dict[str, Dict[str, Any
         data = yaml.safe_load(path.read_text()) or {}
         if data.get("id") != path.stem:
             raise FrameError(f"{path.name}: the file is named for id {path.stem!r}, the spec says {data.get('id')!r}")
+        if "lineage" in data:
+            raise FrameError(f"{path.name}: `lineage` is computed from `extends`, not written")
         raw[path.stem] = data
     return raw
 
@@ -475,12 +497,11 @@ def get_frame(frame_id: str) -> Optional[FrameSpec]:
 
 
 def get_resolved_frame(frame_id: str) -> Optional[FrameSpec]:
-    """A Frame with everything it inherits flattened into it, or None."""
+    """A Frame with everything it inherits flattened into it, and its `lineage`, or None."""
     frame = _RAW_FRAMES.get(_key_of(frame_id))
     if frame is None:
         return None
-    resolved = resolve_frame(frame, _RAW_FRAMES)
-    return FrameSpec(**{key: value for key, value in resolved.items() if key != "lineage"})
+    return FrameSpec(**resolve_frame(frame, _RAW_FRAMES))
 
 
 def frame_lineage(frame_id: str) -> List[str]:
