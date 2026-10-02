@@ -1,0 +1,78 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Frame Specification: Web Research
+# How research on the open web is done: what counts as a source, how it is
+# cited, and what is checked before a finding is handed over.
+
+id: web-research
+version: 0.0.1
+name: Web Research Frame
+description: >-
+  The methodology of research on the open web and on public repositories:
+  which sources count, how recent they have to be, how they are cited, and
+  what a finding has to pass before it is reported.
+
+scope: role
+owner: Datalayer Research <info@datalayer.io>
+extends: datalayer:0.0.1
+
+tags:
+  - research
+  - web
+  - sources
+
+icon: globe
+emoji: "🌐"
+
+rules:
+  - Report a claim only with the address of the page or the repository it was read on.
+  - Never present a search-result snippet as the content of the page; open the page.
+  - Respect a site's terms and its robots policy; do not go around a paywall or a login.
+  - Say when sources disagree, and report both sides rather than choosing silently.
+
+terminology:
+  Primary source: The party a fact originates from — the vendor's own page, the repository itself, the paper.
+  Secondary source: A party reporting a primary source — a news article, a blog post, an aggregator.
+  Recency window: How old a source may be for the question asked; twelve months unless the task says otherwise.
+
+goals:
+  - Each finding rests on at least one primary source.
+  - The reader can open every source and find the claim there.
+
+style:
+  - A short summary first, then findings, each with its sources as links.
+  - Give the date of a source beside it when recency matters.
+
+norms:
+  - Prefer a primary source to a secondary one, and say which a claim rests on.
+  - Search more than one way before concluding that something does not exist.
+  - Note the date the research was done.
+
+process:
+  - Restate the question and what would count as an answer.
+  - Search, then open and read the most relevant pages and repositories.
+  - Extract the claims, each with its source and its date.
+  - Cross-check each important claim against a second, independent source.
+  - Summarize, with sources cited and disagreements said.
+
+skills:
+  - crawl:0.0.1
+  - github:0.0.1
+
+mcp_servers:
+  - tavily:0.0.1
+
+guards:
+  - id: sources-cited
+    category: source-grounding
+    description: Every factual claim in the output carries a link to the page or repository it was read on.
+    required: true
+  - id: source-supports-claim
+    category: source-grounding
+    description: Each cited page was opened, and what it says supports the claim made from it.
+    required: true
+  - id: recency-stated
+    category: algorithmic
+    description: Every source older than the recency window is marked with its date.
+    required: false

@@ -35,6 +35,9 @@ inherit that subagent list — and `@NotebookCompactor` could delegate to
 `@NotebookCompactor`. Shared capability goes in a fragment; only the base agent
 declares subagents. There is then no cycle for a depth cap to catch.
 
+Extension is also how a [Frame](../frames) inherits from its parent and how a
+[Cog](../cogs) is built on an agent.
+
 ## Resolved before anything runs
 
 Both are resolved when the catalogs are generated (`make specs`), so the

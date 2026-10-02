@@ -1,0 +1,60 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Frame Specification: Board Reporting
+# What a document written for the board looks like, whatever its subject. A
+# relationship Frame: it is about the audience, and composes with the Frame of
+# the subject.
+
+id: board-reporting
+version: 0.0.1
+name: Board Reporting Frame
+description: >-
+  The voice, the structure and the standard of evidence of a document written
+  for the board of directors. Composes with the Frame of the subject reported
+  on.
+
+scope: relationship
+owner: Datalayer Finance <info@datalayer.io>
+extends: datalayer:0.0.1
+
+tags:
+  - board
+  - reporting
+  - executive
+
+icon: project-roadmap
+emoji: "🏛️"
+
+rules:
+  - State a risk as plainly as a result; never soften a miss.
+  - Present a forecast as a forecast, with the assumption it rests on.
+  - Keep individual employees and named customers out of the report unless the board asked for them.
+
+goals:
+  - A director who reads only the first page knows the state, the risks and the decision asked for.
+
+style:
+  - One page of summary first — the state, three to five key figures, the risks, the asks.
+  - Figures in tables, with the period and the comparison beside each.
+  - No jargon a director outside the function would not know; define a term at its first use.
+  - Neutral and factual; no superlatives.
+
+norms:
+  - Round to what the decision needs, and keep the units and the currency on every figure.
+  - Compare each key figure with the target and with the previous period.
+  - End with what is asked of the board, or say that nothing is.
+
+guards:
+  - id: summary-first
+    category: algorithmic
+    description: The report opens with a summary of at most one page, with the key figures, the risks and the asks.
+    required: true
+  - id: forecast-labelled
+    category: policy-safety
+    description: Every forward-looking figure is labelled as a forecast and carries its assumption.
+    required: true
+  - id: finance-review
+    category: expert
+    description: A person from Finance reviews the figures before the report is sent to the board.
+    required: true

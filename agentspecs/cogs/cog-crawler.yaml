@@ -1,0 +1,32 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Cog Specification: Crawler Cog
+# The Crawler Agent, oriented by the Web Research Frame: the same worker, held
+# to the organization's standard of sourcing.
+
+id: cog-crawler
+version: 0.0.1
+name: Crawler Cog
+description: >-
+  Researches the web and public repositories under the Web Research Frame:
+  every finding rests on a source that was opened, is cited, and is checked
+  before it is reported.
+
+# A Cog extends an agent...
+extends: worker-crawler:0.0.1
+
+# ...and is equipped with Frames.
+frames:
+  - web-research:0.0.1
+
+kind: context
+enabled: true
+
+tags:
+  - cog
+
+welcome_message: >
+  Hi! I'm the Crawler Cog. I research the web and GitHub under the Web Research
+  Frame: I open what I cite, I say which sources are primary, and I tell you
+  where sources disagree.

@@ -6,6 +6,30 @@
 
 # Changelog
 
+## 0.0.12
+
+- Frames: a new spec, under `agentspecs/frames/`. A Frame is the context work happens in,
+  written down — rules, terminology, goals, style, norms, process, architecture, prompts —
+  with the skills, tools and MCP servers the work depends on and the **Guards** its output
+  has to pass, in the whitepaper's seven categories. It names its `scope` (organization,
+  department, team, project, role or relationship) and its `owner`, both required. The
+  concept is the Intelligence Hub whitepaper's.
+- Frames inherit with `extends`, by the extension mechanism agents use — one parent, three
+  deep at most, a cycle refused by name — and several compose in order. Five Frames:
+  `datalayer` (the company Frame, the root), `web-research`, `sales-pipeline`,
+  `board-reporting` and `customer-research`.
+- Cogs: a new spec, under `agentspecs/cogs/`. A Cog **extends an agent spec** and is
+  **equipped with Frames**. Resolved, it is the agent with the Cog's changes, the Frames'
+  skills, tools and MCP servers added to the agent's and their context rendered onto its
+  system prompt, plus `agent`, `frames`, `kind` and `frame_context` (the lineage, the
+  owners and the Guards). Three Cogs: `cog-crawler` (extends `worker-crawler`, enabled),
+  `cog-sales-pipeline-board-report` and `cog-customer-interviewer`.
+- `agentspecs.frames` and `agentspecs.cogs` load, validate and resolve the two catalogues;
+  `agentspecs.compose` is the `extends` / `includes` resolution, which lived only in
+  agent-runtimes' code generation.
+- Documentation: Frames and Cogs each have a section; Extension says how both use it; the
+  README lists every catalogue with its current count.
+
 ## 0.0.11
 
 - UI plugins: what was called a *UI extension* is a **UI plugin**. One spec per plugin

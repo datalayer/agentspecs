@@ -1,0 +1,71 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Frame Specification: Sales Pipeline
+# The vocabulary and the arithmetic of a sales pipeline, so that two reports
+# on the same data say the same thing.
+
+id: sales-pipeline
+version: 0.0.1
+name: Sales Pipeline Frame
+description: >-
+  How the sales organization names, measures and reports its pipeline: the
+  stages, the definitions of conversion and weighted forecast, and the checks
+  a pipeline figure has to pass.
+
+scope: department
+owner: Datalayer Sales <info@datalayer.io>
+extends: datalayer:0.0.1
+
+tags:
+  - sales
+  - pipeline
+  - forecast
+
+icon: graph
+emoji: "📈"
+
+rules:
+  - Compute every figure from the pipeline data in the sandbox; never estimate one.
+  - Never change, drop or impute a deal to make totals agree; report the discrepancy.
+  - Name a customer or a deal owner only when the audience of the report is internal.
+
+terminology:
+  Pipeline: The open opportunities, each at a stage, with an amount and an expected close date.
+  Stage: Where an opportunity stands, from first qualification to closed won or closed lost.
+  Stage conversion: The share of opportunities that entered a stage and moved on to the next.
+  Weighted pipeline: The sum of each open opportunity's amount multiplied by its stage's probability of closing.
+  Coverage: Weighted or total open pipeline divided by the target of the period.
+  Slippage: Opportunities whose expected close date moved out of the period.
+
+goals:
+  - Stage health and the risk to the forecast are visible at a glance.
+  - A figure in the report is the same figure whoever computes it.
+
+norms:
+  - State the period, the currency and the date of the data on every report.
+  - Give a rate with its numerator and its denominator.
+  - Break a total down by region and by segment when the data carries them.
+
+process:
+  - Load the pipeline data and check it — stages known, amounts positive, dates valid, no duplicate opportunity.
+  - Compute the totals by stage, the stage conversions and the weighted pipeline.
+  - Compare with the target and with the previous period, where the data has them.
+  - Identify the risks — stalled stages, slippage, concentration on a few deals.
+
+skills:
+  - events:0.0.1
+
+guards:
+  - id: totals-reconcile
+    category: algorithmic
+    description: The totals by stage, by region and by segment each add up to the total pipeline.
+    required: true
+  - id: definitions-applied
+    category: policy-safety
+    description: Conversion, weighted pipeline and coverage are computed as this Frame defines them.
+    required: true
+  - id: data-quality-reported
+    category: algorithmic
+    description: Rows excluded from a figure, and why, are counted and reported.
+    required: true
