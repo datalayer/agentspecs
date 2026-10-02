@@ -363,6 +363,21 @@ class TestExtensionOverFragments:
         resolved = resolve_spec(specs["child"], specs, self.FRAGMENTS)
         assert resolved["tools"] == ["grand-tool:0.0.1", "parent-tool:0.0.1"]
 
+    def test_a_marker_a_parent_brings_through_its_own_fragment_reaches_them_too(self):
+        fragments = {
+            **self.FRAGMENTS,
+            "strict": {"id": "strict", "tools": ["!remove shared"]},
+            "only": {"id": "only", "tools": ["!replace", "only-tool:0.0.1"]},
+        }
+        specs = {
+            "parent": {"id": "parent", "includes": ["strict:0.0.1"]},
+            "bare": {"id": "bare", "includes": ["only"]},
+            "child": {"id": "child", "extends": "parent", "includes": ["f"]},
+            "other": {"id": "other", "extends": "bare", "includes": ["f"]},
+        }
+        assert resolve_spec(specs["child"], specs, fragments)["tools"] == ["fragment-tool:0.0.1"]
+        assert resolve_spec(specs["other"], specs, fragments)["tools"] == ["only-tool:0.0.1"]
+
     def test_without_a_marker_a_fragment_and_a_parent_both_contribute(self):
         specs = {
             "parent": {"id": "parent", "tools": ["parent-tool:0.0.1"]},

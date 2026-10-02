@@ -20,7 +20,8 @@ What the review of 0.0.12 asked.
 - Cogs: the agent, fragment and Frame catalogues are read once. 0.0.12 parsed every agent
   YAML again for each `resolve_cog` and each `get_resolved_cog`. What is returned is a copy.
 - Extension: a parent's `!replace` and `!remove` reach what the child's fragments brought in
-  — the documented order, fragments first and the parent second. Before, the parent's
+  — the documented order, fragments first and the parent second — whether the parent says
+  them itself or brings them in through a fragment of its own. Before, the parent's
   markers were consumed when the parent was resolved, and a fragment's entries survived a
   parent that replaced the list.
 
