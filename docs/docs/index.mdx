@@ -15,7 +15,7 @@ Declarative YAML specifications for AI agents, MCP servers, skills and more...
 
 Agentspecs is the source of truth for runtime catalogs compiled into Python and TypeScript.
 
-The documentation has nine parts, and they answer different questions.
+The documentation has ten parts, and they answer different questions.
 
 **[Agents](./agents)** — what one agent is, and everything it is made of. An
 agent spec is mostly references: to the skills it has, the tools and MCP
@@ -49,6 +49,11 @@ verified. An Op is not complete without one.
 accountability plane. Guards check, and each extends a guardrail: the policy
 it verifies. Gates decide what happens on what the Guards found. Tracks say
 what evidence is kept, and for how long.
+
+**[Applications](./apps)** — what a person uses and relies on: an agent with an
+interface, rules, tests and a place to run. One spec, the Appspec, for a chat,
+a widget, a decision and an always-on worker; rules written in a person's
+words and enforced on what each tool does.
 
 **[Modularity](./modularity)** — how a spec is built out of other specs, rather
 than copied from them. Extension (`extends`) for "the same agent, adjusted",

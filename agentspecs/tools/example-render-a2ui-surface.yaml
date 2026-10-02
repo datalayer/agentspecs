@@ -11,6 +11,7 @@ tags:
   - a2ui
   - generative-ui
 enabled: true
+action: read
 approval: auto
 runtime:
   language: python

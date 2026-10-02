@@ -1,0 +1,99 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Ship or Fix
+# A decision: which agent configuration to ship, on the evidence of a
+# benchmark run. Three criteria are measured by the run, two are judgments.
+
+schema: loop.app/v1
+id: ship-or-fix
+version: 0.0.1
+name: Ship or Fix
+kind: decision
+description: >-
+  Which agent configuration should we ship, on the evidence of a benchmark
+  run? For an AI platform team, after every run.
+owner: Datalayer <info@datalayer.io>
+
+agent: jupyter-data-analyst:0.0.1
+
+contents:
+  - "The benchmark run: task results, traces, cost and latency"
+
+decision:
+  question: Which agent configuration should we ship?
+  judgment_model: "cloudflare:gtw/typesafe/jev"
+  min_confidence: 0.6
+  criteria:
+    - name: Pass rate
+      kind: metric
+      weight: 3
+      instructions: Share of tasks passed, from the run.
+      direction: higher
+      measure: pass_rate
+    - name: Cost per task
+      kind: metric
+      weight: 1
+      instructions: Credits spent per task, from the run; lower is better.
+      direction: lower
+      measure: cost_per_task
+    - name: Latency
+      kind: metric
+      weight: 1
+      instructions: Median time per task, from the run; lower is better.
+      direction: lower
+      measure: seconds_per_task
+    - name: Failure severity
+      kind: score
+      weight: 2
+      instructions: How bad are the failures of this configuration?
+      options:
+        - "Blocking: a wrong number somebody would act on"
+        - "Degraded: a usable answer with a flaw to work around"
+        - "Cosmetic: a format, a label, nothing that changes the answer"
+      direction: higher
+    - name: Formatting failures block shipping
+      kind: noul
+      weight: 1
+      instructions: >-
+        Are the formatting failures of this configuration blocking for the
+        people who read its answers?
+      direction: lower
+  scenarios:
+    - name: Quality first
+      weights:
+        Pass rate: 4
+        Cost per task: 0
+        Latency: 0
+        Failure severity: 3
+        Formatting failures block shipping: 1
+    - name: Cost first
+      weights:
+        Pass rate: 2
+        Cost per task: 4
+        Latency: 2
+        Failure severity: 1
+        Formatting failures block shipping: 0
+
+interface:
+  layout: page
+  accent: green
+  components: [Card, Column, Row, List, Tabs, Text, Slider, ChoicePicker, TextField, Button]
+
+tests:
+  ready_at: 0.8
+
+record:
+  keep_for: 1_years
+  include: [decisions, sources, checks]
+
+deployment:
+  hosted:
+    visibility: private
+
+tags:
+  - example
+  - decision
+  - benchmarks
+icon: checklist
+emoji: "🚢"

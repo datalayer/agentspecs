@@ -10,6 +10,7 @@ tags:
   - ag-ui
   - human-in-the-loop
 enabled: true
+action: read
 approval: auto
 runtime:
   language: python

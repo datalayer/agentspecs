@@ -9,6 +9,7 @@ tags:
   - runtime
   - utility
 enabled: true
+action: read
 approval: auto
 runtime:
   language: python

@@ -10,6 +10,7 @@ tags:
   - approval
   - mail
 enabled: true
+action: send
 approval: manual
 runtime:
   language: python

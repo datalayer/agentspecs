@@ -31,3 +31,236 @@ tags:
 
 icon: mail
 emoji: 📧
+
+# What each tool does to the world (agentspecs.actions). A tool not named here is
+# unknown, and unknown is the most restricted.
+actions:
+  checked: "2026-10-02"
+  note: >-
+    Classified by hand from each tool's description, arguments and annotations. A tool
+    that does several things at once carries each class: an event invites its guests, a
+    comment is read by everybody the document is shared with, a filter can forward mail.
+    A tool whose effect depends on what it is asked says `when`: a `manage_*` tool
+    deletes when its action is `delete`; the label tools archive a message, and trash it
+    when the label is TRASH or SPAM.
+  tools:
+    start_google_auth: write
+    search_gmail_messages: read
+    get_gmail_message_content: read
+    get_gmail_messages_content_batch: read
+    get_gmail_attachment_content: [read, write]
+    send_gmail_message: send
+    draft_gmail_message: write
+    get_gmail_thread_content: read
+    get_gmail_threads_content_batch: read
+    list_gmail_labels: read
+    manage_gmail_label:
+      class: write
+      when:
+        - argument: action
+          equals: delete
+          class: delete
+    list_gmail_filters: read
+    manage_gmail_filter:
+      class: [write, send]
+      when:
+        - argument: action
+          equals: [delete, update]
+          class: delete
+    modify_gmail_message_labels:
+      class: write
+      when:
+        - argument: add_label_ids
+          includes: [TRASH, SPAM]
+          class: delete
+    batch_modify_gmail_message_labels:
+      class: write
+      when:
+        - argument: add_label_ids
+          includes: [TRASH, SPAM]
+          class: delete
+    search_drive_files: read
+    get_drive_file_content: read
+    get_drive_file_download_url: read
+    list_drive_items: read
+    create_drive_folder: write
+    create_drive_file: write
+    import_to_google_doc: write
+    import_to_google_slides: write
+    import_to_google_sheets: write
+    get_drive_file_permissions: read
+    check_drive_file_public_access: read
+    update_drive_file:
+      class: write
+      when:
+        - argument: trashed
+          equals: true
+          class: delete
+    get_drive_shareable_link: read
+    manage_drive_access: [publish, send, delete]
+    copy_drive_file: write
+    set_drive_file_permissions: [publish, write]
+    list_calendars: read
+    get_events: read
+    manage_event:
+      class: [write, send]
+      when:
+        - argument: action
+          equals: delete
+          class: delete
+    manage_out_of_office:
+      class: [write, send]
+      when:
+        - argument: action
+          equals: delete
+          class: delete
+    manage_focus_time:
+      class: [write, send]
+      when:
+        - argument: action
+          equals: delete
+          class: delete
+    query_freebusy: read
+    create_calendar: write
+    search_docs: read
+    get_doc_content: read
+    list_docs_in_folder: read
+    create_doc: write
+    modify_doc_text: write
+    find_and_replace_doc: write
+    insert_doc_elements: write
+    insert_doc_image: write
+    update_doc_headers_footers: write
+    batch_update_doc: [write, delete]
+    inspect_doc_structure: read
+    debug_docs_runtime_info: read
+    create_table_with_data: write
+    debug_table_structure: read
+    export_doc_to_pdf: write
+    update_paragraph_style: write
+    get_doc_as_markdown: read
+    manage_doc_tab:
+      class: write
+      when:
+        - argument: action
+          equals: delete
+          class: delete
+    list_document_comments: read
+    manage_document_comment: [write, send]
+    list_spreadsheets: read
+    get_spreadsheet_info: read
+    read_sheet_values: read
+    modify_sheet_values: write
+    format_sheet_range: write
+    manage_conditional_formatting:
+      class: write
+      when:
+        - argument: action
+          equals: delete
+          class: delete
+    create_spreadsheet: write
+    create_sheet: write
+    list_sheet_tables: read
+    append_table_rows: write
+    manage_sheet_tab:
+      class: write
+      when:
+        - argument: action
+          equals: delete
+          class: delete
+    resize_sheet_dimensions: [write, delete]
+    move_sheet_rows: [write, delete]
+    manage_named_range:
+      class: write
+      when:
+        - argument: action
+          equals: delete
+          class: delete
+    list_spreadsheet_comments: read
+    manage_spreadsheet_comment: [write, send]
+    list_spaces: read
+    get_messages: read
+    send_message: [send, write]
+    search_messages: read
+    create_reaction: send
+    download_chat_attachment: [read, write]
+    create_form: write
+    get_form: read
+    set_publish_settings: publish
+    get_form_response: read
+    list_form_responses: read
+    batch_update_form: [write, delete]
+    create_presentation: write
+    get_presentation: read
+    batch_update_presentation: [write, delete]
+    get_page: read
+    get_page_thumbnail: read
+    list_presentation_comments: read
+    manage_presentation_comment: [write, send]
+    list_task_lists: read
+    get_task_list: read
+    manage_task_list:
+      class: write
+      when:
+        - argument: action
+          equals: [delete, clear_completed]
+          class: delete
+    list_tasks: read
+    get_task: read
+    manage_task:
+      class: write
+      when:
+        - argument: action
+          equals: delete
+          class: delete
+    list_contacts: read
+    get_contact: read
+    search_contacts: read
+    manage_contact:
+      class: write
+      when:
+        - argument: action
+          equals: delete
+          class: delete
+    list_contact_groups: read
+    get_contact_group: read
+    manage_contacts_batch:
+      class: write
+      when:
+        - argument: action
+          equals: delete
+          class: delete
+    manage_contact_group:
+      class: write
+      when:
+        - argument: action
+          equals: delete
+          class: delete
+    search_custom: read
+    get_search_engine_info: read
+    get_script_project: read
+    manage_script_content: [write, delete]
+    run_script_function: [write, send, delete, publish]
+    manage_deployment:
+      class: publish
+      when:
+        - argument: action
+          equals: delete
+          class: delete
+    list_script_deployments: read
+    manage_script_project:
+      class: write
+      when:
+        - argument: action
+          equals: delete
+          class: delete
+    manage_script_version: write
+    get_script_version: read
+    get_script_activity: read
+    generate_trigger_code: read
+    manage_script_trigger:
+      class: write
+      when:
+        - argument: action
+          equals: delete
+          class: delete

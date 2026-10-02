@@ -30,6 +30,7 @@ agentspecs/
 ├── guards/           # Guard specs: a check, extending a guardrail
 ├── gates/            # Gate specs: what happens on what the Guards found
 ├── tracks/           # Track specs: the evidence kept, and for how long
+├── apps/             # Application specs (Appspec): a chat, a widget, a decision, a worker
 ├── fragments/        # Capability fragments an agent includes
 ├── mcp-servers/      # MCP server specs
 ├── skills/           # Skill specs
@@ -60,6 +61,7 @@ Current YAML file counts:
 - Guards: 12
 - Gates: 8
 - Tracks: 2
+- Applications: 4
 - Fragments: 1
 - MCP servers: 14
 - Skills: 7
@@ -240,6 +242,28 @@ from agentspecs.ops import get_resolved_op
 op = get_resolved_op("op-sales-pipeline-board-report")
 op["guards"]["post_run"]     # each Guard, with the guardrail it extends
 op["gates"], op["track"]
+```
+
+### Applications (`agentspecs/apps`)
+
+An application is what a person uses: an agent with an interface, rules, tests
+and a place to run. One spec — the **Appspec**, `schema: loop.app/v1` — for a
+`chat`, a `widget`, a `decision` and a `worker`. It stands alone: `agent`,
+`connections`, `rules`, `interface`, `tests`, `record` and `deployment` in
+plain fields; Guards, Gates and a Track optional, under `checks`.
+
+A rule is written in a person's words and enforced on what a tool does:
+`applies_to` is an **action class** — `read`, `write`, `send`, `buy`, `delete`,
+`publish` — or named tools, and `behaviour` is `do_it`, `if_asked`, `ask_first`
+or `leave_to_me`. Every tool of `tools/` carries its class (`action:`), and
+every MCP server says the class of each tool it serves (`actions:`); a tool
+nobody classed is unknown, and unknown is the most restricted.
+
+```python
+from agentspecs.apps import behaviour_for, get_app
+
+triage = get_app("inbox-triage")
+behaviour_for(triage, "google-workspace.send_gmail_message")   # ask_first
 ```
 
 ### MCP Servers (`agentspecs/mcp-servers`)

@@ -23,3 +23,38 @@ tags:
 
 icon: graph
 emoji: 📊
+
+# What each tool does to the world (agentspecs.actions). A tool not named here is
+# unknown, and unknown is the most restricted.
+actions:
+  checked: "2026-10-02"
+  note: >-
+    Every tool draws a chart from the data it is given, and returns it.
+  tools:
+    generate_area_chart: read
+    generate_bar_chart: read
+    generate_boxplot_chart: read
+    generate_column_chart: read
+    generate_district_map: read
+    generate_dual_axes_chart: read
+    generate_fishbone_diagram: read
+    generate_flow_diagram: read
+    generate_funnel_chart: read
+    generate_histogram_chart: read
+    generate_line_chart: read
+    generate_liquid_chart: read
+    generate_mind_map: read
+    generate_network_graph: read
+    generate_organization_chart: read
+    generate_path_map: read
+    generate_pie_chart: read
+    generate_pin_map: read
+    generate_radar_chart: read
+    generate_sankey_chart: read
+    generate_scatter_chart: read
+    generate_treemap_chart: read
+    generate_venn_chart: read
+    generate_violin_chart: read
+    generate_waterfall_chart: read
+    generate_word_cloud_chart: read
+    generate_spreadsheet: read
