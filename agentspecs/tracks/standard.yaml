@@ -1,0 +1,37 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Track Specification: Standard
+# What every Op keeps, for a year: enough to say what ran and what it
+# decided.
+
+id: standard
+version: 0.0.1
+name: Standard Track
+description: >-
+  The record of an ordinary Op: what ran, under which Frames, what the
+  Guards found and the Gates decided, and what was produced. Kept one year.
+
+retain_for: 1_years
+include:
+  - op
+  - frames_used
+  - cogs_invoked
+  - model_versions
+  - guard_results
+  - gate_decisions
+  - human_approvals
+  - final_output
+  - timestamps
+  - user_identity
+
+redact:
+  - "*Password*"
+  - "*Secret*"
+  - "*Token*"
+
+feeds_memory: false
+exchangeable: false
+
+tags:
+  - default

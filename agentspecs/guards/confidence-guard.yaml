@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Guard Specification: Confidence Guard
+# While an Op runs: how sure each Cog is of what it produced.
+
+id: confidence-guard
+version: 0.0.1
+name: Confidence Guard
+description: >-
+  Collects the confidence each Cog reports on its result, and the lowest
+  of them for the run, so that a Gate can route unsure work to a person.
+
+# A Guard extends a guardrail: the policy it verifies, and runs within.
+extends: default-platform-user:0.0.1
+
+category: algorithmic
+stages:
+  - in_flight
+  - post_run
+method: algorithmic
+
+check: >-
+  Each Cog result carries a confidence between 0 and 1; the Guard reports
+  the lowest, and fails when a result carries none.
+
+signals:
+  - name: confidence
+    type: number
+    description: The lowest confidence a Cog reported, between 0 and 1.
+
+required: true
+enabled: true
+
+tags:
+  - confidence

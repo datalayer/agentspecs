@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Guard Specification: Consensus Guard
+# After an Op runs: independent paths agree on what matters.
+
+id: consensus-guard
+version: 0.0.1
+name: Consensus Guard
+description: >-
+  Recomputes the key figures by an independent path — another Cog, or the
+  same Cog on another model — and measures how far the two disagree.
+
+# A Guard extends a guardrail: the policy it verifies, and runs within.
+extends: default-platform-user:0.0.1
+
+category: consensus
+stages:
+  - post_run
+method: cog
+
+check: >-
+  The key figures of the output are recomputed independently; the Guard
+  reports the share of them on which the two paths disagree.
+
+signals:
+  - name: consensus_disagreement
+    type: number
+    description: The share of key figures on which independent paths disagree, between 0 and 1.
+
+required: true
+enabled: true
+
+tags:
+  - consensus
+  - verification

@@ -1,0 +1,123 @@
+---
+sidebar_position: 1
+title: Guards
+---
+
+# Guards
+
+A Guard is a reusable verification and protection component: it checks whether
+the output or the action of a Cog or an Op is correct, safe, policy-compliant
+and ready for use. Guards check; [Gates](../gates) decide. The idea, and the
+word, are those of the [Intelligence Hub whitepaper](https://github.com/openteams-ai/inthub-whitepaper/blob/main/whitepaper.md) (section 5.1).
+
+## A Guard extends a guardrail
+
+A [guardrail](../agents/guardrails) is a policy: what may be read, written,
+executed and sent, how much, and how data is handled. It bounds what an agent
+may do — and nothing in it verifies that the bounds held. A Guard is that
+verification.
+
+`extends` names the guardrail, by the [extension](../modularity/extension)
+mechanism every spec uses. The resolved Guard carries the guardrail's policy —
+the standard it checks against, and the bounds it runs within when the Guard
+is itself a Cog or a person — with what the Guard adds.
+
+```yaml
+# guards/sensitive-data-guard.yaml
+id: sensitive-data-guard
+version: 0.0.1
+name: Sensitive Data Guard
+
+extends: restricted-viewer:0.0.1     # the guardrail: its denied fields, its redaction
+
+category: policy-safety
+stages:
+  - in_flight
+  - post_run
+method: algorithmic
+
+check: >-
+  No output, tool argument or outbound message contains a credential, a field
+  matching the guardrail's denied fields, or personal data the guardrail's
+  handling rules require to be redacted.
+
+signals:
+  - name: sensitive_data_detected
+    type: boolean
+    description: Sensitive data was found where it must not be.
+
+required: true
+```
+
+## Fields
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `version`, `name`, `description` | As on every spec. |
+| `extends` | The guardrail the Guard extends. Required. |
+| `category` | Which of the seven categories it is. Required. |
+| `stages` | The stages of an Op it may run at: `preflight`, `in_flight`, `post_run`, `continuous`. Required. |
+| `method` | How the check is made: `algorithmic` (code), `cog` (a Cog judges), `human` (a person judges). |
+| `check` | What is verified, written so that code, a Cog or a person can run it. Required. |
+| `signals` | What it reports beside pass or fail — `name`, `type` (`boolean`, `number`, `string`) — for a Gate's condition to read. |
+| `required` | Whether the work counts only once the Guard has passed. |
+| `enabled` | Whether an Op may name it today. |
+| any guardrail field | Overrides the guardrail's, by the [merge semantics](../modularity/#merge-semantics). |
+
+## Categories and stages
+
+| Category | What it verifies |
+| --- | --- |
+| `algorithmic` | An output against a deterministic rule or a known result. |
+| `source-grounding` | Claims are supported by approved evidence. |
+| `consensus` | Independent Cogs, prompts or models agree. |
+| `expert` | A person judges sampled or high-risk outputs. |
+| `policy-safety` | The work stays inside what is allowed. |
+| `regression-drift` | An update has not changed behavior unacceptably. |
+| `outcome` | The intended result is produced. |
+
+| Stage | The question |
+| --- | --- |
+| `preflight` | Is this Op allowed and properly configured? |
+| `in_flight` | Is the work staying within policy and expected bounds? |
+| `post_run` | Is the output correct, useful, safe and ready for action? |
+| `continuous` | Is quality improving, degrading or drifting over time? |
+
+## The catalogue
+
+| Id | Category | Stages | Method | Extends |
+| --- | --- | --- | --- | --- |
+| `required-frame-guard` | policy-safety | preflight | algorithmic | `default-platform-user` |
+| `permission-guard` | policy-safety | preflight | algorithmic | `default-platform-user` |
+| `data-source-authorization-guard` | policy-safety | preflight | algorithmic | `data-engineering-power-user` |
+| `tool-use-policy-guard` | policy-safety | in_flight | algorithmic | `default-platform-user` |
+| `sensitive-data-guard` | policy-safety | in_flight, post_run | algorithmic | `restricted-viewer` |
+| `confidence-guard` | algorithmic | in_flight, post_run | algorithmic | `default-platform-user` |
+| `schema-guard` | algorithmic | post_run | algorithmic | `default-platform-user` |
+| `source-grounding-guard` | source-grounding | post_run | cog | `default-platform-user` |
+| `consensus-guard` | consensus | post_run | cog | `default-platform-user` |
+| `expert-sampling-guard` | expert | post_run | human | `default-platform-user` |
+| `regression-guard` | regression-drift | continuous | algorithmic | `data-engineering-power-user` |
+| `outcome-guard` | outcome | continuous | human | `default-platform-user` |
+
+## Guards declared by a Frame
+
+A [Frame](../frames) declares, inline, the checks its own context implies
+(`totals-reconcile` on the Sales Pipeline Frame). They travel with the Frame
+and reach an Op through its Cogs, as `frame_guards`. A Guard of this catalogue
+is the reusable kind: it extends a guardrail, reports signals, and is named by
+an Op at a stage.
+
+## In Python
+
+```python
+from agentspecs.guards import get_resolved_guard, guards_extending
+
+guard = get_resolved_guard("sensitive-data-guard")
+guard["guardrail"]                      # 'restricted-viewer'
+guard["data_handling"]["pii_action"]    # 'redact' — the guardrail's policy
+[g.id for g in guards_extending("restricted-viewer")]
+```
+
+A Guard that extends nothing, or something that is not a guardrail, names no
+stage or no check is refused when the catalogue loads.

@@ -1,0 +1,24 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Gate Specification: Consensus Disagreement Review
+# When independent paths disagree, an expert decides which is right.
+
+id: consensus-disagreement-review
+version: 0.0.1
+name: Consensus Disagreement Review
+description: >-
+  Escalates to an expert when independent recomputations disagree on more
+  than a quarter of the key figures.
+
+stage: post_run
+guards:
+  - consensus-guard:0.0.1
+when: consensus_disagreement > 0.25
+then: expert_review_required
+otherwise: proceed
+reviewers:
+  - subject-matter-expert
+
+tags:
+  - consensus

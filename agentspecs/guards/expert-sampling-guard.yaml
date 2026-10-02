@@ -1,0 +1,39 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Guard Specification: Expert Sampling Guard
+# After an Op runs: a person who knows the subject looks at the output.
+
+id: expert-sampling-guard
+version: 0.0.1
+name: Expert Sampling Guard
+description: >-
+  Routes the output — every one of a high-risk Op, a sample of the
+  others — to a named expert, and records what they decided.
+
+# A Guard extends a guardrail: the policy it verifies, and runs within.
+extends: default-platform-user:0.0.1
+
+category: expert
+stages:
+  - post_run
+method: human
+
+check: >-
+  An expert in the subject reads the output and its evidence, and
+  approves it, edits it or sends it back.
+
+signals:
+  - name: expert_approved
+    type: boolean
+    description: The expert approved the output.
+  - name: high_risk
+    type: boolean
+    description: The output is of a kind every instance of which is reviewed.
+
+required: true
+enabled: true
+
+tags:
+  - expert
+  - review

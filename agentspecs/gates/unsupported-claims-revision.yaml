@@ -1,0 +1,24 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Gate Specification: Unsupported Claims Revision
+# An output that says more than its evidence waits for a revision.
+
+id: unsupported-claims-revision
+version: 0.0.1
+name: Unsupported Claims Revision
+description: >-
+  Pauses the Op and asks for a revision when the output is not valid
+  against its schema or carries a claim or a figure its sources do not
+  support.
+
+stage: post_run
+guards:
+  - schema-guard:0.0.1
+  - source-grounding-guard:0.0.1
+when: schema_valid == false or unsupported_claims > 0
+then: pause
+otherwise: proceed
+
+tags:
+  - evidence

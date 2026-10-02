@@ -1,0 +1,166 @@
+---
+sidebar_position: 1
+title: Ops
+---
+
+# Ops
+
+An Op is the orchestrated, supervised AI workflow a person launches: "close
+the books", "qualify this lead", "build the board's pipeline report". It is
+the level at which knowledge workers think about their job. The idea, and the
+word, are those of the [Intelligence Hub whitepaper](https://github.com/openteams-ai/inthub-whitepaper/blob/main/whitepaper.md) (sections 4.5 and 5.6).
+
+An Op composes what the catalogue already has, by reference:
+
+- **[Cogs](../cogs)** do the work, each carrying its own Frames;
+- **[Frames](../frames)** applied at the workflow level orient the Op as a whole;
+- a **supervisor** coordinates the Cogs;
+- and a **validation strategy** says how the work is verified: the
+  **[Guards](../guards)** run at each stage of its life, the
+  **[Gates](../gates)** that decide whether it proceeds, and the
+  **[Track](../tracks)** kept as evidence.
+
+> Frames guide the work. Cogs perform the work. Ops orchestrate the work.
+> Guards verify the work. Gates decide whether the work proceeds. Tracks make
+> the work accountable.
+
+**An Op is not complete unless it declares how its work will be verified.** A
+spec with no post-run Guard, no Gate or no Track is refused.
+
+One YAML per Op under `agentspecs/ops/`, named for its id.
+
+## Fields
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `version`, `name`, `description` | As on every spec. |
+| `owner` | The person or the group accountable for the outcome. Required. |
+| `goal` | What a run is asked to achieve. |
+| `cogs` | The Cogs that do the work. Required, at least one. |
+| `frames` | Frames applied at the workflow level, beyond what the Cogs carry. |
+| `supervisor` | What coordinates the Cogs: a `model` and its `instructions`. Required. |
+| `guards` | The Guards, by stage: `preflight`, `in_flight`, `post_run`, `continuous`. At least one post-run Guard. |
+| `gates` | The Gates that decide whether the work proceeds, in the order they are met. At least one. |
+| `track` | The Track kept as evidence. Required. |
+| `triggers` | How it is invoked: `launcher`, `command`, `button`, `schedule`. |
+| `enabled` | Whether the Op is offered today. |
+
+## A comprehensive example
+
+`op-sales-pipeline-board-report` puts everything around one Cog.
+
+| | What | Which |
+| --- | --- | --- |
+| **Frames** orient the work | 3 | `datalayer` at the workflow level; `sales-pipeline` and `board-reporting` on the Cog |
+| **A Cog** performs the work | 1 | `cog-sales-pipeline-board-report`, which extends the agent `worker-sales-pipeline-board-report` |
+| **Guards** verify the work | 12 | of all seven categories, at all four stages, each extending a guardrail |
+| **Gates** decide | 8 | from "stop before starting" to "a person approves the release" |
+| **A Track** makes it accountable | 1 | `financial-reporting`: the full record, seven years |
+
+```yaml
+# ops/op-sales-pipeline-board-report.yaml
+id: op-sales-pipeline-board-report
+version: 0.0.1
+name: Sales Pipeline Board Report
+owner: Datalayer Finance <info@datalayer.io>
+
+cogs:
+  - cog-sales-pipeline-board-report:0.0.1
+
+frames:
+  - datalayer:0.0.1
+
+supervisor:
+  model: "bedrock:us.anthropic.claude-sonnet-4-6"
+  instructions: >-
+    Run the Cog on the pipeline data of the period. Never release the report
+    yourself: it leaves through the release approval Gate.
+
+guards:
+  preflight:            # Is this Op allowed and properly configured?
+    - required-frame-guard:0.0.1
+    - permission-guard:0.0.1
+    - data-source-authorization-guard:0.0.1
+  in_flight:            # Is the work staying within policy and bounds?
+    - tool-use-policy-guard:0.0.1
+    - sensitive-data-guard:0.0.1
+    - confidence-guard:0.0.1
+  post_run:             # Is the output correct, safe and ready for action?
+    - schema-guard:0.0.1
+    - source-grounding-guard:0.0.1
+    - consensus-guard:0.0.1
+    - sensitive-data-guard:0.0.1
+    - expert-sampling-guard:0.0.1
+  continuous:           # Is quality improving, degrading or drifting?
+    - regression-guard:0.0.1
+    - outcome-guard:0.0.1
+
+gates:
+  - configuration-check:0.0.1            # preflight: stop and escalate
+  - sensitive-data-stop:0.0.1            # in flight: stop and escalate
+  - tool-violation-retry:0.0.1           # in flight: retry, twice
+  - low-confidence-review:0.0.1          # confidence < 0.80: human review
+  - unsupported-claims-revision:0.0.1    # pause for a revision
+  - consensus-disagreement-review:0.0.1  # disagreement > 0.25: expert review
+  - release-approval:0.0.1               # always: a person approves
+  - quality-drift-review:0.0.1           # continuous: expert review
+
+track: financial-reporting:0.0.1
+```
+
+A run, read through it: the three pre-flight Guards check that the Frames are
+there, that whoever launched the Op may run it and that the pipeline data is an
+authorized source — otherwise the first Gate stops the Op before any work. The
+Cog computes the figures in its sandbox under its two Frames while three
+Guards watch its tool calls, what it sends out and how sure it is. The output
+is validated against its schema, each figure is traced to its computation, the
+key figures are recomputed by an independent path, and Finance reviews it. The
+Gates turn what the Guards found into decisions — a revision, a review, a stop
+— and the last one requires a person to approve the release whatever was
+found. The Track keeps all of it for seven years.
+
+## What a resolved Op is
+
+Like every spec built on others, an Op is resolved when the catalogues are
+generated. The result keeps the Op's own fields and adds what a runtime and an
+auditor need without a second lookup:
+
+| Field | Meaning |
+| --- | --- |
+| `cogs` | Each Cog's id, the agent it extends, its Frames and its kind. |
+| `frames`, `lineage` | The workflow-level Frames, and every Frame that orients the Op: those and the ones its Cogs carry. |
+| `guards` | By stage, each Guard resolved with the guardrail it extends. |
+| `frame_guards` | The checks the Frames themselves declare. |
+| `gates` | Each Gate, with the signals it reads. |
+| `track` | The Track, with its retention in days. |
+
+## What is refused
+
+- An Op with no owner, no Cog, no post-run Guard, no Gate or no Track.
+- A Cog, a Frame, a Guard, a Gate or a Track that does not exist; a Guard, a
+  Gate or a Track that is not enabled.
+- An enabled Op naming a Cog that is not: an Op that is offered has workers
+  that are. A draft Op may name a draft Cog.
+- Gates listed out of the order of the stages.
+- A Guard named at a stage it does not run at.
+- A Gate that reads a Guard the Op does not run, or that decides at a stage
+  where none of its Guards has run yet.
+
+## In Python
+
+```python
+from agentspecs.ops import get_resolved_op, ops_using
+
+op = get_resolved_op("op-sales-pipeline-board-report")
+op["lineage"]                                   # ['datalayer', 'sales-pipeline', 'board-reporting']
+[guard["id"] for guard in op["guards"]["post_run"]]
+[(gate["id"], gate["then"]) for gate in op["gates"]]
+op["track"]["retention_days"]                   # 2555
+[op.id for op in ops_using("schema-guard")]     # the Ops that run a Guard
+```
+
+## What an Op is not, yet
+
+The spec declares the workflow and its validation; nothing here runs it. The
+whitepaper's Op also carries integration logic and a packaging manifest, and
+can invoke other Ops; those are not specified.

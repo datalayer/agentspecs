@@ -1,0 +1,29 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Gate Specification: Quality Drift Review
+# Across runs: an Op whose results drift, or that stopped producing its
+# outcome, is put before an expert.
+
+id: quality-drift-review
+version: 0.0.1
+name: Quality Drift Review
+description: >-
+  Puts the Op before an expert when more than one golden run in ten changed
+  after an update, or when the Op missed its outcome goal over the review
+  period.
+
+stage: continuous
+guards:
+  - regression-guard:0.0.1
+  - outcome-guard:0.0.1
+when: regression_rate > 0.10 or outcome_met == false
+then: expert_review_required
+otherwise: proceed
+reviewers:
+  - op-owner
+  - subject-matter-expert
+
+tags:
+  - drift
+  - outcome

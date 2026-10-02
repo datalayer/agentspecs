@@ -1,0 +1,24 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Gate Specification: Sensitive Data Stop
+# Sensitive data where it must not be ends the Op, before anything leaves.
+
+id: sensitive-data-stop
+version: 0.0.1
+name: Sensitive Data Stop
+description: >-
+  Stops the Op and tells the data protection officer when sensitive data is
+  detected in what a Cog is about to send out, or in the output.
+
+stage: in_flight
+guards:
+  - sensitive-data-guard:0.0.1
+when: sensitive_data_detected
+then: stop_and_escalate
+otherwise: proceed
+reviewers:
+  - data-protection-officer
+
+tags:
+  - privacy

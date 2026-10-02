@@ -6,6 +6,34 @@
 
 # Changelog
 
+## 0.0.14
+
+The rest of the whitepaper's execution and accountability model (#20).
+
+- Guards: a new spec, under `agentspecs/guards/`. **A Guard extends a guardrail** — the
+  policy it verifies — by the extension mechanism, and adds its `category` (the seven of
+  the whitepaper), the `stages` of an Op it runs at (pre-flight, in-flight, post-run,
+  continuous), its `method` (code, a Cog, a person), what it `check`s and the `signals` it
+  reports. Resolved, it carries the guardrail's permissions, data scope and handling, and
+  limits. Twelve Guards, of every category and stage.
+- Gates: a new spec, under `agentspecs/gates/`. A Gate reads `guards`, and decides: `when`
+  a condition on their signals holds (or `always`), `then` one of nine actions — proceed,
+  pause, retry, more validation, human review, human approval, expert review, stop, stop
+  and escalate. A condition that cannot be read, or reads a signal no Guard reports, is
+  refused; a Gate that hands over to a person names its `reviewers`. Eight Gates.
+- Tracks: a new spec, under `agentspecs/tracks/`: what a record has to `include`, how long
+  it is retained (`retain_for`), who may read it. Never exchangeable. `standard` (one year)
+  and `financial-reporting` (everything, seven years).
+- Ops: a new spec, under `agentspecs/ops/`: an owner, the Cogs that do the work, workflow
+  Frames, a supervisor, and a **validation strategy** — Guards by stage, Gates, a Track. An
+  Op with no post-run Guard, no Gate or no Track is refused, as is one whose Gate reads a
+  Guard it does not run or decides before that Guard has run.
+- `op-sales-pipeline-board-report` is the comprehensive example: one Cog with its Frames,
+  twelve Guards, eight Gates and a seven-year Track.
+- `agentspecs.ops`, `agentspecs.guards`, `agentspecs.gates`, `agentspecs.tracks`.
+- Documentation: a section for each, the example walked through under Ops, and what a
+  Guard adds to a guardrail on the guardrails page.
+
 ## 0.0.13
 
 What the review of 0.0.12 asked.

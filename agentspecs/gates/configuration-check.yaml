@@ -1,0 +1,27 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Gate Specification: Configuration Check
+# Before any work: an Op that is not allowed, or not properly configured,
+# does not start.
+
+id: configuration-check
+version: 0.0.1
+name: Configuration Check
+description: >-
+  Stops an Op before it starts when a Frame it requires is missing, a
+  permission is not granted or a data source is not authorized.
+
+stage: preflight
+guards:
+  - required-frame-guard:0.0.1
+  - permission-guard:0.0.1
+  - data-source-authorization-guard:0.0.1
+when: frames_missing or permission_denied or unauthorized_source
+then: stop_and_escalate
+otherwise: proceed
+reviewers:
+  - op-owner
+
+tags:
+  - preflight

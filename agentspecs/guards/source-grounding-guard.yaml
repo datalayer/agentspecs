@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Guard Specification: Source Grounding Guard
+# After an Op runs: what the output claims is in the evidence.
+
+id: source-grounding-guard
+version: 0.0.1
+name: Source Grounding Guard
+description: >-
+  Checks each claim and each figure of the output against the sources and
+  the computations the run used: a figure traces to the code that produced it.
+
+# A Guard extends a guardrail: the policy it verifies, and runs within.
+extends: default-platform-user:0.0.1
+
+category: source-grounding
+stages:
+  - post_run
+method: cog
+
+check: >-
+  Every factual claim cites a source that supports it, and every figure
+  equals the value computed in the sandbox from the authorized data.
+
+signals:
+  - name: unsupported_claims
+    type: number
+    description: How many claims or figures have no supporting source or computation.
+
+required: true
+enabled: true
+
+tags:
+  - sources
+  - evidence

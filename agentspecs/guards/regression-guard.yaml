@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Guard Specification: Regression Guard
+# Across runs: an update has not changed what the Op produces.
+
+id: regression-guard
+version: 0.0.1
+name: Regression Guard
+description: >-
+  Replays a golden set of past runs after a model, a Frame, a Cog or the
+  Op itself changes, and compares the results with the validated ones.
+
+# A Guard extends a guardrail: the policy it verifies, and runs within.
+extends: data-engineering-power-user:0.0.1
+
+category: regression-drift
+stages:
+  - continuous
+method: algorithmic
+
+check: >-
+  On the golden set, the share of runs whose output departs from the
+  validated one stays under the threshold the Op's owner set.
+
+signals:
+  - name: regression_rate
+    type: number
+    description: The share of golden runs whose output changed, between 0 and 1.
+
+required: false
+enabled: true
+
+tags:
+  - regression
+  - drift

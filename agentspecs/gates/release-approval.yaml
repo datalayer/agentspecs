@@ -1,0 +1,28 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Gate Specification: Release Approval
+# Nothing leaves without a person approving it. A Gate every run goes
+# through: the last point at which somebody can decline, edit or stop.
+
+id: release-approval
+version: 0.0.1
+name: Release Approval
+description: >-
+  Requires a person to approve the output before it is released to its
+  audience, whatever the Guards found. The expert's review is recorded
+  beside the approval.
+
+stage: post_run
+guards:
+  - expert-sampling-guard:0.0.1
+when: always
+then: human_approval_required
+otherwise: stop
+reviewers:
+  - op-owner
+  - finance
+
+tags:
+  - approval
+  - human-in-the-loop

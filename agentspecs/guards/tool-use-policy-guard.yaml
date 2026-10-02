@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Guard Specification: Tool Use Policy Guard
+# While an Op runs: its Cogs call only the tools they declare, within limits.
+
+id: tool-use-policy-guard
+version: 0.0.1
+name: Tool Use Policy Guard
+description: >-
+  Watches each tool call a Cog makes: the tool is one the Cog declares,
+  and the calls stay within the guardrail's tool limits.
+
+# A Guard extends a guardrail: the policy it verifies, and runs within.
+extends: default-platform-user:0.0.1
+
+category: policy-safety
+stages:
+  - in_flight
+method: algorithmic
+
+check: >-
+  Every tool called is declared by the calling Cog; the number of calls,
+  the rows queried and the query runtime stay within the guardrail's limits.
+
+signals:
+  - name: tool_violation
+    type: boolean
+    description: An undeclared tool was called, or a tool limit was exceeded.
+
+required: true
+enabled: true
+
+tags:
+  - tools
+  - limits

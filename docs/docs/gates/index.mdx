@@ -1,0 +1,100 @@
+---
+sidebar_position: 1
+title: Gates
+---
+
+# Gates
+
+A Gate is a decision point in an [Op](../ops): the results of one or more
+[Guards](../guards) determine what happens next. Guards check; Gates decide.
+The idea, and the word, are those of the [Intelligence Hub whitepaper](https://github.com/openteams-ai/inthub-whitepaper/blob/main/whitepaper.md) (section 5.2).
+
+Not every failure is the same — some need a correction, some a review, some an
+escalation, some a stop — and a Gate writes that decision into the workflow.
+It is also where the autonomy an Op was granted ends: the point at which a
+person can interpret an output, decline it, override it or stop the work.
+
+```yaml
+# gates/low-confidence-review.yaml
+id: low-confidence-review
+version: 0.0.1
+name: Low Confidence Review
+
+stage: post_run
+guards:
+  - confidence-guard:0.0.1
+when: confidence < 0.80
+then: human_review_required
+otherwise: proceed
+reviewers:
+  - op-owner
+```
+
+## Fields
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `version`, `name`, `description` | As on every spec. |
+| `stage` | The stage of an Op the decision is made at. |
+| `guards` | The Guards whose results the Gate reads. |
+| `when` | The condition, on the signals its Guards report. `always` for a Gate every run goes through. Required. |
+| `then` | What happens when the condition holds. Required. |
+| `otherwise` | What happens when it does not; `proceed` by default. |
+| `reviewers` | The roles the decision is handed to. Required when either `then` or `otherwise` hands it to a person. |
+| `max_retries` | How many times `retry` may be decided. Required, at least 1, when it can be. |
+| `enabled` | Whether an Op may name it today. |
+
+## Conditions
+
+A condition is a signal on its own — true when the Guard reported it — or a
+comparison of one with a number, `true`, `false` or a word; several are joined
+by `and` or `or`.
+
+```yaml
+when: sensitive_data_detected
+when: confidence < 0.80
+when: schema_valid == false or unsupported_claims > 0
+when: vendor_risk == high
+when: always
+```
+
+It is deliberately not a language: nothing is evaluated here, and a condition
+that does not read this way is refused, as is one that reads a signal none of
+the Gate's Guards reports.
+
+## Actions
+
+| Action | What it decides |
+| --- | --- |
+| `proceed` | The work goes on. |
+| `pause` | The work waits for a revision. |
+| `retry` | The step is run again, possibly by another Cog. |
+| `additional_validation` | More Guards are run before deciding. |
+| `human_review_required` | A person reviews the output before it is used. |
+| `human_approval_required` | A person approves before the action is taken. |
+| `expert_review_required` | A named expert reviews. |
+| `stop` | The Op ends. |
+| `stop_and_escalate` | The Op ends and somebody is told. |
+
+## The catalogue
+
+| Id | Stage | When | Then |
+| --- | --- | --- | --- |
+| `configuration-check` | preflight | a Frame is missing, a permission denied or a source unauthorized | `stop_and_escalate` |
+| `sensitive-data-stop` | in_flight | `sensitive_data_detected` | `stop_and_escalate` |
+| `tool-violation-retry` | in_flight | `tool_violation` | `retry` (twice) |
+| `low-confidence-review` | post_run | `confidence < 0.80` | `human_review_required` |
+| `unsupported-claims-revision` | post_run | `schema_valid == false or unsupported_claims > 0` | `pause` |
+| `consensus-disagreement-review` | post_run | `consensus_disagreement > 0.25` | `expert_review_required` |
+| `release-approval` | post_run | `always` | `human_approval_required` |
+| `quality-drift-review` | continuous | `regression_rate > 0.10 or outcome_met == false` | `expert_review_required` |
+
+## In Python
+
+```python
+from agentspecs.gates import get_gate, signals_of
+
+gate = get_gate("low-confidence-review")
+gate.then, gate.signals             # GateAction.HUMAN_REVIEW_REQUIRED, ['confidence']
+signals_of("schema_valid == false or unsupported_claims > 0")
+```
