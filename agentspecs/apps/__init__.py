@@ -896,12 +896,16 @@ def _agent_of(app: AppSpec) -> Optional[Dict[str, Any]]:
 
 
 def component_named(name: str) -> Optional[Dict[str, Any]]:
-    """The catalog's component a layout names (LOOP C-13): by its id, or by the
-    A2UI type it renders as. None when the catalog has none."""
-    catalogue = _catalogue("components")
-    if name in catalogue:
-        return catalogue[name]
-    return next((spec for spec in catalogue.values() if spec.get("a2ui") == name), None)
+    """The component a layout names (LOOP C-13), from the catalogs of the UI
+    plugins an application may use (`ui-plugins/*.yaml`, `components`), by the
+    name a surface gives it. None when no enabled plugin renders it."""
+    for plugin in _catalogue("ui-plugins").values():
+        if not plugin.get("enabled"):
+            continue
+        for component in plugin.get("components") or []:
+            if component["id"] == name:
+                return component
+    return None
 
 
 def app_problems(app: AppSpec) -> List[str]:

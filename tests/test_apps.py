@@ -90,7 +90,9 @@ def test_every_tool_of_the_catalogue_has_a_class() -> None:
 
 
 def test_every_server_says_what_its_tools_do_or_that_nobody_looked() -> None:
-    problems = [problem for server in server_specs().values() for problem in server_actions_problems(server)]
+    problems = [
+        problem for server in server_specs().values() for problem in server_actions_problems(server)
+    ]
     assert problems == []
     for identity, server in server_specs().items():
         actions = server["actions"]
@@ -106,7 +108,10 @@ def test_a_server_that_was_checked_classes_every_tool_it_names() -> None:
 
 def test_a_tool_reference_is_a_server_and_a_tool_or_a_tool_alone() -> None:
     assert split_ref("tavily.tavily_search") == ("tavily", "tavily_search")
-    assert split_ref("google-workspace:0.0.1.send_gmail_message") == ("google-workspace", "send_gmail_message")
+    assert split_ref("google-workspace:0.0.1.send_gmail_message") == (
+        "google-workspace",
+        "send_gmail_message",
+    )
     assert split_ref("runtime-send-mail") == (None, "runtime-send-mail")
     assert split_ref("runtime-send-mail:0.0.1") == (None, "runtime-send-mail")
 
@@ -137,7 +142,10 @@ def test_what_a_tool_does_can_depend_on_what_it_is_asked() -> None:
     # Archiving is a write; the same tool trashes when the label is TRASH.
     assert classes_of(label, {"remove_label_ids": ["INBOX"]}) == (ActionClass.WRITE,)
     assert classes_of(label, {"add_label_ids": ["STARRED"]}) == (ActionClass.WRITE,)
-    assert classes_of(label, {"add_label_ids": ["STARRED", "trash"]}) == (ActionClass.WRITE, ActionClass.DELETE)
+    assert classes_of(label, {"add_label_ids": ["STARRED", "trash"]}) == (
+        ActionClass.WRITE,
+        ActionClass.DELETE,
+    )
     # Nobody said what it is asked: everything it can do.
     assert classes_of(label) == (ActionClass.WRITE, ActionClass.DELETE)
     assert classes_of(label, {}) == (ActionClass.WRITE,)
@@ -156,23 +164,40 @@ def test_a_condition_is_read_or_refused() -> None:
         "id": "s",
         "actions": {
             "tools": {
-                "manage": {"class": "write", "when": [{"argument": "action", "equals": ["delete", "clear"], "class": "delete"}]}
+                "manage": {
+                    "class": "write",
+                    "when": [
+                        {"argument": "action", "equals": ["delete", "clear"], "class": "delete"}
+                    ],
+                }
             }
         },
     }
-    assert server_tool_classes(server, "manage", {"action": "clear"}) == (ActionClass.WRITE, ActionClass.DELETE)
+    assert server_tool_classes(server, "manage", {"action": "clear"}) == (
+        ActionClass.WRITE,
+        ActionClass.DELETE,
+    )
     assert server_tool_classes(server, "manage", {"other": "delete"}) == (ActionClass.WRITE,)
     assert [condition.as_data() for condition in server_tool_conditions(server, "manage")] == [
         {"argument": "action", "classes": ["delete"], "equals": ["delete", "clear"]}
     ]
     for wrong in (
         {"class": "write", "when": [{"argument": "action", "class": "delete"}]},
-        {"class": "write", "when": [{"argument": "action", "equals": "x", "includes": ["x"], "class": "delete"}]},
+        {
+            "class": "write",
+            "when": [{"argument": "action", "equals": "x", "includes": ["x"], "class": "delete"}],
+        },
         {"class": "write", "when": [{"equals": "x", "class": "delete"}]},
         {"class": "write", "unless": []},
         # An argument is compared with a word, a number, true or false: not with a list or a mapping.
-        {"class": "write", "when": [{"argument": "mode", "equals": [{"kind": "delete"}], "class": "delete"}]},
-        {"class": "write", "when": [{"argument": "ids", "includes": [["TRASH"]], "class": "delete"}]},
+        {
+            "class": "write",
+            "when": [{"argument": "mode", "equals": [{"kind": "delete"}], "class": "delete"}],
+        },
+        {
+            "class": "write",
+            "when": [{"argument": "ids", "includes": [["TRASH"]], "class": "delete"}],
+        },
     ):
         assert server_actions_problems({"id": "s", "actions": {"tools": {"manage": wrong}}}) != []
 
@@ -187,7 +212,10 @@ def test_an_unknown_tool_has_no_class_and_is_never_a_reader() -> None:
 
 
 def test_an_exact_name_wins_over_a_pattern_and_a_default_answers_the_rest() -> None:
-    server = {"id": "s", "actions": {"default": "write", "tools": {"get_*": "read", "get_and_delete": "delete"}}}
+    server = {
+        "id": "s",
+        "actions": {"default": "write", "tools": {"get_*": "read", "get_and_delete": "delete"}},
+    }
     assert server_tool_classes(server, "get_thing") == (ActionClass.READ,)
     assert server_tool_classes(server, "get_and_delete") == (ActionClass.DELETE,)
     assert server_tool_classes(server, "other") == (ActionClass.WRITE,)
@@ -214,24 +242,51 @@ def test_a_pattern_means_the_same_wherever_it_is_read() -> None:
 
 def test_a_number_is_compared_only_where_every_reader_holds_it_exactly() -> None:
     assert MAX_SAFE_INTEGER == 2**53 - 1
-    assert all(is_comparable(value) for value in ("word", True, 0, -3, 2.5, 1e-9, MAX_SAFE_INTEGER, -MAX_SAFE_INTEGER))
+    assert all(
+        is_comparable(value)
+        for value in ("word", True, 0, -3, 2.5, 1e-9, MAX_SAFE_INTEGER, -MAX_SAFE_INTEGER)
+    )
     # 2**53 and 2**53 + 1 are one number to JavaScript and two to Python.
-    for value in (MAX_SAFE_INTEGER + 1, MAX_SAFE_INTEGER + 2, -(MAX_SAFE_INTEGER + 1), 1e20, 1e300, float("inf"), float("nan")):
+    for value in (
+        MAX_SAFE_INTEGER + 1,
+        MAX_SAFE_INTEGER + 2,
+        -(MAX_SAFE_INTEGER + 1),
+        1e20,
+        1e300,
+        float("inf"),
+        float("nan"),
+    ):
         assert not is_comparable(value), value
     assert not is_comparable(None) and not is_comparable(["x"])
 
     def server(value: object) -> dict:
-        entry = {"class": "write", "when": [{"argument": "amount", "equals": value, "class": "buy"}]}
+        entry = {
+            "class": "write",
+            "when": [{"argument": "amount", "equals": value, "class": "buy"}],
+        }
         return {"id": "s", "actions": {"tools": {"pay": entry}}}
 
     assert server_actions_problems(server(MAX_SAFE_INTEGER)) == []
-    assert any("holds exactly" in problem for problem in server_actions_problems(server(MAX_SAFE_INTEGER + 2)))
-    assert any("holds exactly" in problem for problem in server_actions_problems(server(float("inf"))))
+    assert any(
+        "holds exactly" in problem
+        for problem in server_actions_problems(server(MAX_SAFE_INTEGER + 2))
+    )
+    assert any(
+        "holds exactly" in problem for problem in server_actions_problems(server(float("inf")))
+    )
     # An argument beyond the range equals nothing, as it would in JavaScript — and not its neighbour.
     exact = server(MAX_SAFE_INTEGER)
-    assert server_tool_classes(exact, "pay", {"amount": MAX_SAFE_INTEGER}) == (ActionClass.WRITE, ActionClass.BUY)
-    assert server_tool_classes(exact, "pay", {"amount": MAX_SAFE_INTEGER + 1}) == (ActionClass.WRITE,)
-    assert server_tool_classes(server(3), "pay", {"amount": 3.0}) == (ActionClass.WRITE, ActionClass.BUY)
+    assert server_tool_classes(exact, "pay", {"amount": MAX_SAFE_INTEGER}) == (
+        ActionClass.WRITE,
+        ActionClass.BUY,
+    )
+    assert server_tool_classes(exact, "pay", {"amount": MAX_SAFE_INTEGER + 1}) == (
+        ActionClass.WRITE,
+    )
+    assert server_tool_classes(server(3), "pay", {"amount": 3.0}) == (
+        ActionClass.WRITE,
+        ActionClass.BUY,
+    )
 
 
 def test_a_word_that_is_not_a_class_is_refused() -> None:
@@ -239,12 +294,17 @@ def test_a_word_that_is_not_a_class_is_refused() -> None:
         classes_from("destroy")
     assert server_actions_problems({"id": "s"}) != []
     assert server_actions_problems({"id": "s", "actions": {"tools": {"x": "destroy"}}}) != []
-    assert server_actions_problems({"id": "s", "actions": {"checked": "2026-10-02", "tools": {}}}) != []
+    assert (
+        server_actions_problems({"id": "s", "actions": {"checked": "2026-10-02", "tools": {}}})
+        != []
+    )
 
 
 def test_the_mail_tools_are_classed_as_a_person_would() -> None:
     read = classes_of("google-workspace.search_gmail_messages")
-    label = classes_of("google-workspace.modify_gmail_message_labels", {"remove_label_ids": ["INBOX"]})
+    label = classes_of(
+        "google-workspace.modify_gmail_message_labels", {"remove_label_ids": ["INBOX"]}
+    )
     draft = classes_of("google-workspace.draft_gmail_message")
     assert read == (ActionClass.READ,)
     assert label == draft == (ActionClass.WRITE,)
@@ -310,16 +370,35 @@ def test_an_application_is_written_the_same_way_every_time() -> None:
     }
     tree = [
         {"id": "root", "component": "Column", "children": ["go"]},
-        {"id": "go", "component": "Button", "variant": "primary", "action": {"event": {"name": "run", "context": {"b": 1, "a": 2}}}},
+        {
+            "id": "go",
+            "component": "Button",
+            "variant": "primary",
+            "action": {"event": {"name": "run", "context": {"b": 1, "a": 2}}},
+        },
     ]
     reversed_tree = [dict(reversed(list(component.items()))) for component in tree]
     reversed_tree[1]["action"] = {"event": {"context": {"a": 2, "b": 1}, "name": "run"}}
-    one = dump_app(app(kind="decision", decision=forward, interface={"surface": {"components": tree}}))
-    other = dump_app(app(kind="decision", decision=backward, interface={"surface": {"components": reversed_tree}}))
+    one = dump_app(
+        app(kind="decision", decision=forward, interface={"surface": {"components": tree}})
+    )
+    other = dump_app(
+        app(
+            kind="decision", decision=backward, interface={"surface": {"components": reversed_tree}}
+        )
+    )
     assert json.dumps(one) == json.dumps(other)
     assert list(one["decision"]["scenarios"][0]["weights"]) == ["Accuracy", "Cost"]
-    assert list(one["interface"]["surface"]["components"][1]) == ["id", "component", "action", "variant"]
-    assert list(one["interface"]["surface"]["components"][1]["action"]["event"]) == ["context", "name"]
+    assert list(one["interface"]["surface"]["components"][1]) == [
+        "id",
+        "component",
+        "action",
+        "variant",
+    ]
+    assert list(one["interface"]["surface"]["components"][1]["action"]["event"]) == [
+        "context",
+        "name",
+    ]
     # The layout of its kind says nothing its kind does not: it is not written.
     triage = dump_app(APP_CATALOGUE["inbox-triage"])
     assert "layout" not in triage["interface"]
@@ -336,7 +415,9 @@ def test_an_application_survives_being_written_and_read_again() -> None:
 
     for identity, found in APP_CATALOGUE.items():
         assert said(parse_app(dump_app(found))) == said(found), identity
-        assert said(parse_app(yaml.safe_load(yaml.safe_dump(dump_app(found))))) == said(found), identity
+        assert said(parse_app(yaml.safe_load(yaml.safe_dump(dump_app(found))))) == said(found), (
+            identity
+        )
 
 
 def test_a_decision_application_carries_the_whole_decision() -> None:
@@ -371,24 +452,53 @@ def test_a_decision_application_carries_the_whole_decision() -> None:
         ({"deployment": {"embedded": {"origins": ["example.com/page"]}}}, "is not an origin"),
         ({"deployment": {"hosted": {"slug": "My App"}}}, "in an address"),
         ({"interface": {"accent": "red"}}, "interface.accent"),
-        ({"interface": {"surface": {"components": [{"id": "a", "component": "Text"}]}}}, "starts from the component"),
         (
-            {"rules": [{"action": "Send", "applies_to": "send", "behaviour": "ask_first"},
-                       {"action": "send", "applies_to": "delete", "behaviour": "ask_first"}]},
+            {"interface": {"surface": {"components": [{"id": "a", "component": "Text"}]}}},
+            "starts from the component",
+        ),
+        (
+            {
+                "rules": [
+                    {"action": "Send", "applies_to": "send", "behaviour": "ask_first"},
+                    {"action": "send", "applies_to": "delete", "behaviour": "ask_first"},
+                ]
+            },
             "same action",
         ),
         (
-            {"rules": [{"action": "Send", "applies_to": "send", "behaviour": "ask_first"},
-                       {"action": "Mail", "applies_to": ["send"], "behaviour": "do_it"}]},
+            {
+                "rules": [
+                    {"action": "Send", "applies_to": "send", "behaviour": "ask_first"},
+                    {"action": "Mail", "applies_to": ["send"], "behaviour": "do_it"},
+                ]
+            },
             "both apply to 'send'",
         ),
-        ({"rules": [{"action": "Send", "applies_to": [], "behaviour": "do_it"}]}, "applies to a class"),
         (
-            {"rules": [{"action": "Send", "applies_to": ["google-workspace.send_gmail_message"], "behaviour": "ask_first"},
-                       {"action": "Mail", "applies_to": ["google-workspace:0.0.1.send_gmail_message"], "behaviour": "do_it"}]},
+            {"rules": [{"action": "Send", "applies_to": [], "behaviour": "do_it"}]},
+            "applies to a class",
+        ),
+        (
+            {
+                "rules": [
+                    {
+                        "action": "Send",
+                        "applies_to": ["google-workspace.send_gmail_message"],
+                        "behaviour": "ask_first",
+                    },
+                    {
+                        "action": "Mail",
+                        "applies_to": ["google-workspace:0.0.1.send_gmail_message"],
+                        "behaviour": "do_it",
+                    },
+                ]
+            },
             "both apply to 'google-workspace.send_gmail_message'",
         ),
-        ({"rules": [{"action": "Send", "applies_to": "send", "behaviour": "maybe"}]}, "rules.0.behaviour"),
+        (
+            {"rules": [{"action": "Send", "applies_to": "send", "behaviour": "maybe"}]},
+            "rules.0.behaviour",
+        ),
         ({"emoji": "mail"}, "is one emoji"),
         ({"emoji": ""}, "is one emoji"),
         ({"avatar": "an astronaut"}, "named as its drawing is"),
@@ -415,22 +525,28 @@ def test_a_worker_trigger_says_when() -> None:
 
 
 def test_a_reference_that_does_not_resolve_is_a_problem_said_in_words() -> None:
-    assert app_problems(app(agent="no-such-agent")) == ["There is no agent or Cog named 'no-such-agent'."]
+    assert app_problems(app(agent="no-such-agent")) == [
+        "There is no agent or Cog named 'no-such-agent'."
+    ]
     assert "There is no Frame named 'nope'." in app_problems(app(context=["nope"]))
     assert "There is no model named 'nope'." in app_problems(app(model="nope"))
     assert "There is no Guard named 'nope'." in app_problems(app(checks={"guards": ["nope"]}))
     problems = app_problems(
-        app(rules=[{"action": "Search", "applies_to": ["tavily.tavily_search"], "behaviour": "do_it"}])
+        app(
+            rules=[
+                {"action": "Search", "applies_to": ["tavily.tavily_search"], "behaviour": "do_it"}
+            ]
+        )
     )
     assert any("not connected to 'tavily'" in problem for problem in problems)
 
 
-def test_a_component_is_the_catalogs_by_id_or_by_its_a2ui_type() -> None:
-    """LOOP C-13: one catalog — what a layout names resolves, or is refused."""
+def test_a_component_is_one_a_ui_plugin_renders() -> None:
+    """LOOP C-13: the UI plugins' catalogs — what a layout names resolves, or is refused."""
     from agentspecs.apps import component_named
 
-    assert component_named("table")["id"] == "table"  # type: ignore[index]
-    assert component_named("ChoicePicker")["id"] == "select"  # type: ignore[index]
+    assert component_named("Table")["standard"] is False  # type: ignore[index]
+    assert component_named("ChoicePicker")["standard"] is True  # type: ignore[index]
     assert component_named("Marquee") is None
     refused = app(interface={"components": ["Text", "Marquee"]})
     assert app_problems(refused) == ["There is no component named 'Marquee' in the catalog."]
@@ -444,7 +560,9 @@ def test_a_component_is_the_catalogs_by_id_or_by_its_a2ui_type() -> None:
             }
         }
     )
-    assert app_problems(surface) == ["The surface's 'ticker' is a 'Marquee', which the catalog does not have."]
+    assert app_problems(surface) == [
+        "The surface's 'ticker' is a 'Marquee', which the catalog does not have."
+    ]
 
 
 def test_a_gate_reads_a_guard_the_application_runs() -> None:
@@ -461,13 +579,22 @@ def test_a_decision_is_judged_by_a_model_that_answers_judgments() -> None:
     assert app_problems(deciding("cloudflare:gtw/typesafe/jev")) == []
     assert any("to judge with" in problem for problem in app_problems(deciding("typesafe/jev")))
     chat_model = "bedrock:us.anthropic.claude-sonnet-4-6"
-    assert any("does not answer typed judgments" in problem for problem in app_problems(deciding(chat_model)))
+    assert any(
+        "does not answer typed judgments" in problem
+        for problem in app_problems(deciding(chat_model))
+    )
 
 
 def test_a_rule_names_a_tool_its_connection_reaches() -> None:
     scoped = app(
         connections=[{"server": "google-workspace", "access": "write", "only": ["*gmail*"]}],
-        rules=[{"action": "Search the Drive", "applies_to": ["google-workspace.search_drive_files"], "behaviour": "do_it"}],
+        rules=[
+            {
+                "action": "Search the Drive",
+                "applies_to": ["google-workspace.search_drive_files"],
+                "behaviour": "do_it",
+            }
+        ],
     )
     assert any("leaves out" in problem for problem in app_problems(scoped))
 
@@ -484,7 +611,9 @@ def test_a_directory_whose_application_does_not_resolve_is_refused(tmp_path: pat
     )
     with pytest.raises(AppError, match="There is no agent or Cog named"):
         load_apps(tmp_path)
-    (tmp_path / "broken.yaml").write_text(yaml.safe_dump({"id": "other", "name": "X", "kind": "chat"}))
+    (tmp_path / "broken.yaml").write_text(
+        yaml.safe_dump({"id": "other", "name": "X", "kind": "chat"})
+    )
     with pytest.raises(AppError, match="named for id 'broken'"):
         load_apps(tmp_path)
 
@@ -498,7 +627,10 @@ def test_an_application_has_a_face_and_reaches_nothing_it_was_not_granted() -> N
     assert (computer.browse, computer.files, computer.shell) == (False, False, False)
     granted = app(
         emoji="\U0001f4ec",
-        permissions={"spaces": [{"space": "support", "access": "write"}], "computer": {"browse": True}},
+        permissions={
+            "spaces": [{"space": "support", "access": "write"}],
+            "computer": {"browse": True},
+        },
     )
     assert granted.emoji == "\U0001f4ec"
     assert granted.permissions.spaces[0].access is Access.WRITE
@@ -542,13 +674,19 @@ def test_reading_needs_no_rule_and_anything_that_acts_waits_for_a_person() -> No
 
 @pytest.mark.parametrize("action", list(ActionClass))
 @pytest.mark.parametrize("behaviour", list(Behaviour))
-def test_a_rule_on_a_class_decides_every_tool_of_that_class(action: ActionClass, behaviour: Behaviour) -> None:
-    ruled = app(rules=[{"action": "The rule", "applies_to": action.value, "behaviour": behaviour.value}])
+def test_a_rule_on_a_class_decides_every_tool_of_that_class(
+    action: ActionClass, behaviour: Behaviour
+) -> None:
+    ruled = app(
+        rules=[{"action": "The rule", "applies_to": action.value, "behaviour": behaviour.value}]
+    )
     assert behaviour_for(ruled, "google-workspace.some_tool", classes=[action]) is behaviour
 
 
 def test_a_tool_of_several_classes_takes_the_most_restricted() -> None:
-    assert strictest([Behaviour.DO_IT, Behaviour.ASK_FIRST, Behaviour.IF_ASKED]) is Behaviour.ASK_FIRST
+    assert (
+        strictest([Behaviour.DO_IT, Behaviour.ASK_FIRST, Behaviour.IF_ASKED]) is Behaviour.ASK_FIRST
+    )
     ruled = app(
         rules=[
             {"action": "Write", "applies_to": "write", "behaviour": "do_it"},
@@ -564,7 +702,11 @@ def test_a_rule_that_names_a_tool_wins_over_the_rule_on_its_class() -> None:
     ruled = app(
         rules=[
             {"action": "Write", "applies_to": "write", "behaviour": "ask_first"},
-            {"action": "Label", "applies_to": ["google-workspace:0.0.1.modify_gmail_message_labels"], "behaviour": "do_it"},
+            {
+                "action": "Label",
+                "applies_to": ["google-workspace:0.0.1.modify_gmail_message_labels"],
+                "behaviour": "do_it",
+            },
         ]
     )
     label = "google-workspace.modify_gmail_message_labels"
@@ -574,10 +716,14 @@ def test_a_rule_that_names_a_tool_wins_over_the_rule_on_its_class() -> None:
 
 def test_a_rule_that_names_a_tool_does_not_cover_what_its_arguments_make_it_do_besides() -> None:
     label = "google-workspace.modify_gmail_message_labels"
-    ruled = app(rules=[{"action": "Label and archive", "applies_to": [label], "behaviour": "do_it"}])
+    ruled = app(
+        rules=[{"action": "Label and archive", "applies_to": [label], "behaviour": "do_it"}]
+    )
     # Labelling is done. Trashing is a deletion, and no rule lets it: it waits for a person.
     assert behaviour_for(ruled, label, arguments={"add_label_ids": ["STARRED"]}) is Behaviour.DO_IT
-    assert behaviour_for(ruled, label, arguments={"add_label_ids": ["TRASH"]}) is Behaviour.ASK_FIRST
+    assert (
+        behaviour_for(ruled, label, arguments={"add_label_ids": ["TRASH"]}) is Behaviour.ASK_FIRST
+    )
     # Nobody said what it is asked: the worst it can do.
     assert behaviour_for(ruled, label) is Behaviour.ASK_FIRST
     forbidden = app(
@@ -586,13 +732,27 @@ def test_a_rule_that_names_a_tool_does_not_cover_what_its_arguments_make_it_do_b
             {"action": "Delete", "applies_to": "delete", "behaviour": "leave_to_me"},
         ]
     )
-    assert behaviour_for(forbidden, label, arguments={"add_label_ids": ["TRASH"]}) is Behaviour.LEAVE_TO_ME
-    assert behaviour_for(forbidden, label, arguments={"remove_label_ids": ["INBOX"]}) is Behaviour.DO_IT
+    assert (
+        behaviour_for(forbidden, label, arguments={"add_label_ids": ["TRASH"]})
+        is Behaviour.LEAVE_TO_ME
+    )
+    assert (
+        behaviour_for(forbidden, label, arguments={"remove_label_ids": ["INBOX"]})
+        is Behaviour.DO_IT
+    )
 
 
 def test_a_tool_nobody_classed_is_left_to_the_person_unless_a_rule_names_it() -> None:
     assert behaviour_for(app(), "google-workspace.a_tool_added_tomorrow") is Behaviour.LEAVE_TO_ME
-    named = app(rules=[{"action": "New", "applies_to": ["google-workspace.a_tool_added_tomorrow"], "behaviour": "ask_first"}])
+    named = app(
+        rules=[
+            {
+                "action": "New",
+                "applies_to": ["google-workspace.a_tool_added_tomorrow"],
+                "behaviour": "ask_first",
+            }
+        ]
+    )
     assert behaviour_for(named, "google-workspace.a_tool_added_tomorrow") is Behaviour.ASK_FIRST
 
 
@@ -600,7 +760,9 @@ def test_an_application_reaches_nothing_it_does_not_name() -> None:
     # Not connected: even a search is left to the person.
     assert behaviour_for(app(), "tavily.tavily_search") is Behaviour.LEAVE_TO_ME
     # Connected, but the connection leaves the tool out.
-    scoped = app(connections=[{"server": "google-workspace", "access": "write", "only": ["*gmail*"]}])
+    scoped = app(
+        connections=[{"server": "google-workspace", "access": "write", "only": ["*gmail*"]}]
+    )
     assert behaviour_for(scoped, "google-workspace.search_gmail_messages") is Behaviour.DO_IT
     assert behaviour_for(scoped, "google-workspace.search_drive_files") is Behaviour.LEAVE_TO_ME
 
@@ -632,14 +794,24 @@ def test_inbox_triage_reads_and_drafts_alone_sends_on_approval_and_deletes_nothi
         ("modify_gmail_message_labels", {"add_label_ids": ["TRASH"]}),
         ("batch_modify_gmail_message_labels", {"add_label_ids": ["SPAM"]}),
     ):
-        assert behaviour_for(triage, f"google-workspace.{tool}", arguments=arguments) is Behaviour.LEAVE_TO_ME, tool
+        assert (
+            behaviour_for(triage, f"google-workspace.{tool}", arguments=arguments)
+            is Behaviour.LEAVE_TO_ME
+        ), tool
     # And it says so: where what a tool is asked changes what it does.
     escalations = tool_escalations(triage)
     assert escalations["google-workspace.modify_gmail_message_labels"] == [
-        {"argument": "add_label_ids", "classes": ["delete"], "includes": ["TRASH", "SPAM"], "behaviour": "leave_to_me"}
+        {
+            "argument": "add_label_ids",
+            "classes": ["delete"],
+            "includes": ["TRASH", "SPAM"],
+            "behaviour": "leave_to_me",
+        }
     ]
     # Nothing outside the mailbox is reached, and nothing it reaches sends by itself.
-    reached = {name for name, behaviour in decided.items() if behaviour is not Behaviour.LEAVE_TO_ME}
+    reached = {
+        name for name, behaviour in decided.items() if behaviour is not Behaviour.LEAVE_TO_ME
+    }
     assert reached and all("gmail" in name for name in reached)
     alone = {name for name, behaviour in decided.items() if behaviour is Behaviour.DO_IT}
     for name in alone:
@@ -647,17 +819,24 @@ def test_inbox_triage_reads_and_drafts_alone_sends_on_approval_and_deletes_nothi
         assert classes <= {ActionClass.READ, ActionClass.WRITE}, name
     # No argument of any call makes it delete, publish or buy by itself.
     for ref in tool_behaviours(triage):
-        for condition in server_tool_conditions(server_specs()["google-workspace"], ref.split(".")[1]):
+        for condition in server_tool_conditions(
+            server_specs()["google-workspace"], ref.split(".")[1]
+        ):
             values = condition.includes or condition.equals
             arguments = {condition.argument: [values[0]] if condition.includes else values[0]}
             assert behaviour_for(triage, ref, arguments=arguments) is not Behaviour.DO_IT, ref
 
 
-def test_a_server_classed_by_a_pattern_is_reported_by_that_pattern(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_server_classed_by_a_pattern_is_reported_by_that_pattern(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     from agentspecs import apps as module
 
     servers = dict(module._catalogue("mcp-servers"))
-    servers["drawer"] = {"id": "drawer", "actions": {"checked": "2026-10-02", "tools": {"generate_*": "read", "erase_*": "delete"}}}
+    servers["drawer"] = {
+        "id": "drawer",
+        "actions": {"checked": "2026-10-02", "tools": {"generate_*": "read", "erase_*": "delete"}},
+    }
     monkeypatch.setitem(module._CATALOGUES, "mcp-servers", servers)
     reader = app(connections=[{"server": "drawer", "access": "read"}])
     assert tool_behaviours(reader) == {
@@ -679,15 +858,25 @@ def test_web_research_only_reads() -> None:
 
 
 def test_the_published_schema_is_the_one_the_code_writes() -> None:
-    assert SCHEMA_PATH.read_text() == schema_text(), "run `python -m agentspecs.apps` to write it again"
+    assert SCHEMA_PATH.read_text() == schema_text(), (
+        "run `python -m agentspecs.apps` to write it again"
+    )
 
 
 def test_the_schema_names_the_fields_as_the_yaml_does() -> None:
     schema = json_schema()
     assert schema["title"] == "Appspec"
-    assert {"schema", "id", "kind", "agent", "connections", "rules", "interface", "tests", "record"} <= set(
-        schema["properties"]
-    )
+    assert {
+        "schema",
+        "id",
+        "kind",
+        "agent",
+        "connections",
+        "rules",
+        "interface",
+        "tests",
+        "record",
+    } <= set(schema["properties"])
     assert "as" in schema["$defs"]["AppConnection"]["properties"]
     assert schema["additionalProperties"] is False
     # A validator outside Python refuses another version too.
