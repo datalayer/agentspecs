@@ -6,6 +6,12 @@
 
 # Changelog
 
+## 0.0.17
+
+An application's face, chosen as a person's is on their profile.
+
+- `avatar` and `banner` on the Appspec: each the name of a drawing (`AstronautIcon`, `SvgTutorialsHero`) from the sets people choose theirs from. Neither is required: the `emoji` stands for the avatar, and where only text goes; the id seeds the banner. A name must be written as a drawing's name is — a capital letter, then letters and digits (`AstronautIcon`) — or it is refused; the JSON Schema carries the same pattern.
+
 ## 0.0.16
 
 What three implementations of the same decision need in order to agree.

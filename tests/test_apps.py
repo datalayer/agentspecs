@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+import re
 
 import pytest
 import yaml
@@ -388,6 +389,8 @@ def test_a_decision_application_carries_the_whole_decision() -> None:
         ({"rules": [{"action": "Send", "applies_to": "send", "behaviour": "maybe"}]}, "rules.0.behaviour"),
         ({"emoji": "mail"}, "is one emoji"),
         ({"emoji": ""}, "is one emoji"),
+        ({"avatar": "an astronaut"}, "named as its drawing is"),
+        ({"banner": "svg-terms-hero"}, "named as its drawing is"),
         ({"permissions": {"spaces": [{"space": "a"}, {"space": "a"}]}}, "same Space twice"),
         ({"permissions": {"network": True}}, "permissions.network is not a field"),
         ({"permissions": {"computer": {"shell": "yes please"}}}, "permissions.computer.shell"),
@@ -479,6 +482,25 @@ def test_an_application_has_a_face_and_reaches_nothing_it_was_not_granted() -> N
     # Every application of the catalogue has a face of its own.
     faces = [found.emoji for found in APP_CATALOGUE.values()]
     assert len(set(faces)) == len(faces) and "\U0001f440" not in faces
+
+
+def test_an_application_chooses_its_avatar_and_banner_as_a_person_does() -> None:
+    plain = app()
+    # Unchosen: the emoji stands for the avatar, the id seeds the banner —
+    # and nothing is written for either.
+    assert (plain.avatar, plain.banner) == ("", "")
+    assert "avatar" not in dump_app(plain) and "banner" not in dump_app(plain)
+    chosen = app(avatar=" AstronautIcon ", banner="SvgTutorialsHero")
+    assert (chosen.avatar, chosen.banner) == ("AstronautIcon", "SvgTutorialsHero")
+    written = list(dump_app(chosen))
+    # Beside its emoji, in the order the spec declares them.
+    assert written.index("avatar") == written.index("banner") - 1
+    assert parse_app(dump_app(chosen)) == chosen
+    # A validator outside Python checks the same shape.
+    pattern = re.compile(json_schema()["properties"]["avatar"]["pattern"])
+    assert pattern.match("AstronautIcon") and pattern.match("") and pattern.match(" AstronautIcon ")
+    assert not pattern.match("an astronaut")
+    assert json_schema()["properties"]["banner"]["pattern"] == pattern.pattern
 
 
 # --- what a rule decides ----------------------------------------------------------------
