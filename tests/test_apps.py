@@ -674,3 +674,18 @@ def test_the_schema_names_the_fields_as_the_yaml_does() -> None:
 def test_every_application_file_is_named_for_its_id() -> None:
     for path in APPS_DIR.glob("*.yaml"):
         assert yaml.safe_load(path.read_text())["id"] == path.stem
+
+
+def test_the_reference_says_every_field_and_is_the_one_in_the_docs() -> None:
+    from agentspecs.apps.reference import REFERENCE_PATH, reference_markdown
+
+    page = reference_markdown()
+    schema = json_schema()
+    for name in schema["properties"]:
+        assert f"| `{name}`" in page, name
+    for name, spec in schema["$defs"].items():
+        assert name in page, name
+    # Every example comes from an application the spec reads.
+    assert "### `connections`" in page and "### `rules`" in page
+    if REFERENCE_PATH.exists():
+        assert REFERENCE_PATH.read_text() == page, "run `python -m agentspecs.apps`"
