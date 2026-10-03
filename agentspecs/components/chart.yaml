@@ -1,0 +1,53 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Component Specification: Chart
+
+id: chart
+version: 0.0.1
+name: Chart
+description: 'Numbers drawn: a bar, a line, a scatter of what the application measured.'
+category: data
+emoji: 📊
+properties:
+  type: object
+  required:
+  - kind
+  - x
+  - y
+  properties:
+    title:
+      type: string
+      title: Title
+      description: What the chart shows, above it.
+    kind:
+      type: string
+      title: Kind
+      description: How the numbers are drawn.
+      enum:
+      - bar
+      - line
+      - scatter
+      - area
+      default: bar
+    x:
+      type: string
+      title: Across
+      description: The field along the bottom.
+    y:
+      type: string
+      title: Up
+      description: The field measured.
+    series:
+      type: string
+      title: Series
+      description: A field whose values are drawn apart.
+bindings:
+  shows:
+  - points
+  sends: []
+events: []
+example:
+  kind: bar
+  x: model
+  y: pass rate

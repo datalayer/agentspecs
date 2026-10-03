@@ -1,0 +1,46 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Component Specification: Chat
+
+id: chat
+version: 0.0.1
+name: Chat
+description: 'The conversation with the application: its welcome, its starters, the composer.'
+category: conversation
+emoji: 💬
+properties:
+  type: object
+  properties:
+    welcome:
+      type: string
+      title: Welcome
+      description: What it says before anyone writes.
+    placeholder:
+      type: string
+      title: Composer hint
+      description: Shown in the composer while it is empty.
+      default: Ask anything
+    starters:
+      type: array
+      title: Starters
+      description: Questions offered before the first message.
+      maxItems: 6
+      items:
+        type: string
+    show_tools:
+      type: boolean
+      title: Shows its tools
+      description: The tool calls are shown as they happen.
+      default: true
+bindings:
+  shows:
+  - messages
+  sends:
+  - message
+events:
+- send
+example:
+  welcome: Ask me to research anything.
+  starters:
+  - What changed in Python 3.13?

@@ -1,0 +1,53 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Component Specification: Slider
+
+id: slider
+version: 0.0.1
+name: Slider
+description: 'A number chosen along a range: a weight, a budget, a threshold.'
+category: input
+emoji: 🎚️
+a2ui: Slider
+properties:
+  type: object
+  required:
+  - label
+  - min
+  - max
+  properties:
+    label:
+      type: string
+      title: Label
+      description: What the person reads beside it.
+    min:
+      type: number
+      title: Lowest
+      description: Its smallest value.
+    max:
+      type: number
+      title: Highest
+      description: Its largest value.
+    step:
+      type: number
+      title: Step
+      description: How far one move goes.
+      exclusiveMinimum: 0
+      default: 1
+    default:
+      type: number
+      title: Starts at
+      description: Its value before anyone moves it.
+bindings:
+  shows: []
+  sends:
+  - value
+events:
+- change
+example:
+  label: Weight of cost
+  min: 0
+  max: 1
+  step: 0.1
+  default: 0.5

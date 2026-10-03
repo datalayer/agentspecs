@@ -1,0 +1,49 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Component Specification: Select
+
+id: select
+version: 0.0.1
+name: Select
+description: One choice, or several, among options the builder lists or the data gives.
+category: input
+emoji: 🔽
+a2ui: ChoicePicker
+properties:
+  type: object
+  required:
+  - label
+  properties:
+    label:
+      type: string
+      title: Label
+      description: What the person reads beside it.
+    options:
+      type: array
+      title: Options
+      description: The choices, when they are not bound to data.
+      items:
+        type: string
+    multiple:
+      type: boolean
+      title: Several
+      description: More than one may be chosen.
+      default: false
+    required:
+      type: boolean
+      title: Required
+      description: A choice must be made before sending.
+      default: false
+bindings:
+  shows:
+  - options
+  sends:
+  - value
+events:
+- change
+example:
+  label: Model
+  options:
+  - Sonnet
+  - Haiku

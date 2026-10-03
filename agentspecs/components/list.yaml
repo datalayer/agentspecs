@@ -1,0 +1,37 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Component Specification: List
+
+id: list
+version: 0.0.1
+name: List
+description: 'Items one after the other, each drawn by the same children: results, alternatives, steps.'
+category: layout
+emoji: 📃
+a2ui: List
+properties:
+  type: object
+  properties:
+    direction:
+      type: string
+      title: Direction
+      description: Down or across.
+      enum:
+      - vertical
+      - horizontal
+      default: vertical
+    empty:
+      type: string
+      title: When empty
+      description: What it says when there is nothing to list.
+      default: Nothing yet.
+bindings:
+  shows:
+  - items
+  sends:
+  - selected
+events:
+- select
+example:
+  empty: No alternative yet.

@@ -425,6 +425,28 @@ def test_a_reference_that_does_not_resolve_is_a_problem_said_in_words() -> None:
     assert any("not connected to 'tavily'" in problem for problem in problems)
 
 
+def test_a_component_is_the_catalogs_by_id_or_by_its_a2ui_type() -> None:
+    """LOOP C-13: one catalog — what a layout names resolves, or is refused."""
+    from agentspecs.apps import component_named
+
+    assert component_named("table")["id"] == "table"  # type: ignore[index]
+    assert component_named("ChoicePicker")["id"] == "select"  # type: ignore[index]
+    assert component_named("Marquee") is None
+    refused = app(interface={"components": ["Text", "Marquee"]})
+    assert app_problems(refused) == ["There is no component named 'Marquee' in the catalog."]
+    surface = app(
+        interface={
+            "surface": {
+                "components": [
+                    {"id": "root", "component": "Column", "children": ["ticker"]},
+                    {"id": "ticker", "component": "Marquee"},
+                ]
+            }
+        }
+    )
+    assert app_problems(surface) == ["The surface's 'ticker' is a 'Marquee', which the catalog does not have."]
+
+
 def test_a_gate_reads_a_guard_the_application_runs() -> None:
     alone = app_problems(app(checks={"gates": ["low-confidence-review:0.0.1"]}))
     assert any("reads the Guard 'confidence-guard:0.0.1'" in problem for problem in alone)

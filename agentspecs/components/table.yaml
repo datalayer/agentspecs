@@ -1,0 +1,52 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Component Specification: Table
+
+id: table
+version: 0.0.1
+name: Table
+description: Rows the application found or keeps, with the columns the builder chooses.
+category: data
+emoji: 📋
+properties:
+  type: object
+  required:
+  - columns
+  properties:
+    title:
+      type: string
+      title: Title
+      description: What the table is, above it.
+    columns:
+      type: array
+      title: Columns
+      description: The columns, in order.
+      minItems: 1
+      items:
+        type: string
+    page_size:
+      type: integer
+      title: Rows per page
+      description: How many rows show at once.
+      minimum: 1
+      maximum: 500
+      default: 20
+    selectable:
+      type: boolean
+      title: Selectable
+      description: A row may be chosen, and its choice sent.
+      default: false
+bindings:
+  shows:
+  - rows
+  sends:
+  - selected
+events:
+- select
+example:
+  title: Runs
+  columns:
+  - model
+  - pass rate
+  - cost

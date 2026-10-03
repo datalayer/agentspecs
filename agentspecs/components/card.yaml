@@ -1,0 +1,34 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Component Specification: Card
+
+id: card
+version: 0.0.1
+name: Card
+description: 'A framed group: what belongs together, set apart.'
+category: layout
+emoji: 🗂️
+a2ui: Card
+properties:
+  type: object
+  properties:
+    title:
+      type: string
+      title: Title
+      description: What the card holds, at its top.
+    padding:
+      type: string
+      title: Padding
+      description: The space inside its frame.
+      enum:
+      - small
+      - medium
+      - large
+      default: medium
+bindings:
+  shows: []
+  sends: []
+events: []
+example:
+  title: Your quote

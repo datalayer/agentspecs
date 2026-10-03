@@ -895,6 +895,15 @@ def _agent_of(app: AppSpec) -> Optional[Dict[str, Any]]:
     return _catalogue("cogs").get(identity) or _catalogue("agents").get(identity)
 
 
+def component_named(name: str) -> Optional[Dict[str, Any]]:
+    """The catalog's component a layout names (LOOP C-13): by its id, or by the
+    A2UI type it renders as. None when the catalog has none."""
+    catalogue = _catalogue("components")
+    if name in catalogue:
+        return catalogue[name]
+    return next((spec for spec in catalogue.values() if spec.get("a2ui") == name), None)
+
+
 def app_problems(app: AppSpec) -> List[str]:
     """What stops an application from being used, in sentences; empty when nothing does.
 
@@ -917,6 +926,16 @@ def app_problems(app: AppSpec) -> List[str]:
             problems.append(f"There is no model named {app.decision.judgment_model!r} to judge with.")
         elif "judgments" not in judge.capabilities:
             problems.append(f"The model {app.decision.judgment_model!r} does not answer typed judgments.")
+    # The components it may use, and the ones its surface uses, are the catalog's (C-13).
+    for name in app.interface.components:
+        if component_named(name) is None:
+            problems.append(f"There is no component named {name!r} in the catalog.")
+    if app.interface.surface is not None:
+        for node in app.interface.surface.components:
+            if component_named(str(node["component"])) is None:
+                problems.append(
+                    f"The surface's {node['id']!r} is a {node['component']!r}, which the catalog does not have."
+                )
     run = {_id_of(guard) for guard in app.checks.guards}
     for ref in app.checks.gates:
         gate = _catalogue("gates").get(_id_of(ref))

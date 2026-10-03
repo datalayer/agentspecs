@@ -1,0 +1,40 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Component Specification: Evidence
+
+id: evidence
+version: 0.0.1
+name: Evidence
+description: 'What an answer rests on: the sources opened, the passages cited, each with its link.'
+category: data
+emoji: 🔎
+a2ui: Card
+properties:
+  type: object
+  properties:
+    title:
+      type: string
+      title: Title
+      description: Above the sources.
+      default: Sources
+    show_passages:
+      type: boolean
+      title: Shows passages
+      description: Each source with the passage cited from it.
+      default: true
+    max_items:
+      type: integer
+      title: Most shown
+      description: How many sources show before *more*.
+      minimum: 1
+      maximum: 50
+      default: 5
+bindings:
+  shows:
+  - sources
+  sends: []
+events:
+- open
+example:
+  title: What this rests on

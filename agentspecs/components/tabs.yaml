@@ -1,0 +1,40 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Component Specification: Tabs
+
+id: tabs
+version: 0.0.1
+name: Tabs
+description: Several views of one place, one shown at a time.
+category: layout
+emoji: 📑
+a2ui: Tabs
+properties:
+  type: object
+  required:
+  - tabs
+  properties:
+    tabs:
+      type: array
+      title: Tabs
+      description: The tab titles, in order.
+      minItems: 1
+      items:
+        type: string
+    selected:
+      type: integer
+      title: Opens on
+      description: The tab shown first, counting from 0.
+      minimum: 0
+      default: 0
+bindings:
+  shows: []
+  sends:
+  - selected
+events:
+- select
+example:
+  tabs:
+  - Evidence
+  - Comparison
