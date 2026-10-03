@@ -6,6 +6,10 @@
 
 # Changelog
 
+## 0.0.18
+
+- The Appspec reference, generated from its JSON Schema (`agentspecs.apps.reference`): every field, what it means, its default, the parts and the choices, and an example of each field taken from an application of the catalogue. `python -m agentspecs.apps` writes it to the documentation beside the schema, and a test keeps the two the same.
+
 ## 0.0.17
 
 An application's face, chosen as a person's is on their profile.

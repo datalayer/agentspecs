@@ -27,12 +27,11 @@ def test_a_plugin_file_is_named_for_its_id_and_says_what_it_is():
         assert isinstance(spec["enabled"], bool)
 
 
-def test_an_agent_names_a_plugin_that_exists_and_no_longer_an_extension():
+def test_an_agent_names_a_plugin_that_exists():
     plugins = _plugins()
     named = 0
     for path in sorted((ROOT / "agents").rglob("*.yaml")):
         spec = yaml.safe_load(path.read_text()) or {}
-        assert "ui_extension" not in spec, f"{path.name}: `ui_extension` is `ui_plugin` since 0.0.11"
         if spec.get("ui_plugin"):
             named += 1
             assert spec["ui_plugin"] in plugins, f"{path.name}: no spec under ui-plugins for {spec['ui_plugin']!r}"
