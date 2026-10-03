@@ -842,6 +842,18 @@
       "title": "Agent",
       "type": "string"
     },
+    "avatar": {
+      "default": "",
+      "description": "Its avatar, by name: a drawing of the set people choose theirs from on their profile. Its emoji stands for it when unsaid, and where only text goes",
+      "title": "Avatar",
+      "type": "string"
+    },
+    "banner": {
+      "default": "",
+      "description": "Its banner, by name, from the set people choose theirs from on their profile. The one its id seeds when unsaid",
+      "title": "Banner",
+      "type": "string"
+    },
     "checks": {
       "$ref": "#/$defs/AppChecks",
       "description": "Optional checks from the catalogue"
