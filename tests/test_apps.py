@@ -14,16 +14,18 @@ from __future__ import annotations
 import json
 import pathlib
 import re
+from pathlib import Path
 
 import pytest
 import yaml
 
+import agentspecs.apps
 from agentspecs.actions import (
     ACTING,
+    MAX_SAFE_INTEGER,
     ActionClass,
     ActionError,
     classes_from,
-    MAX_SAFE_INTEGER,
     classes_of,
     is_comparable,
     is_pattern,
@@ -685,7 +687,17 @@ def test_the_reference_says_every_field_and_is_the_one_in_the_docs() -> None:
         assert f"| `{name}`" in page, name
     for name, spec in schema["$defs"].items():
         assert name in page, name
-    # Every example comes from an application the spec reads.
-    assert "### `connections`" in page and "### `rules`" in page
+    # An example of every field…
+    for name in schema["properties"]:
+        assert f"### `{name}`" in page, f"no example of {name}"
+    # …and the ones written for the reference are ones the spec accepts.
+    from agentspecs.apps.reference import EXTRA_EXAMPLES
+
+    base = yaml.safe_load((Path(agentspecs.apps.__file__).parent / "web-research.yaml").read_text())
+    for key, value in EXTRA_EXAMPLES.items():
+        document = {**base, key: value}
+        if key == "team":
+            document.pop("agent")
+        parse_app(document)
     if REFERENCE_PATH.exists():
         assert REFERENCE_PATH.read_text() == page, "run `python -m agentspecs.apps`"

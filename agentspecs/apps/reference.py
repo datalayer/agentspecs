@@ -13,8 +13,9 @@ from what the spec accepts, nor show an example the spec would refuse.
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional
+from typing import Any, Dict, List, Optional
 
 import yaml
 
@@ -62,15 +63,42 @@ def _cell(text: str) -> str:
     return " ".join(str(text or "").split()).replace("|", "\\|")
 
 
-def _examples() -> Dict[str, Any]:
-    """For each top-level field, the value the first catalogue application sets."""
-    from agentspecs.apps import APP_CATALOGUE, dump_app
+#: For what no application of the catalogue sets, an example the spec accepts
+#: (a test reads each one into an application of the catalogue).
+EXTRA_EXAMPLES: Dict[str, Any] = {
+    "team": "analyze-support-tickets:0.0.1",
+    "model": "bedrock:us.anthropic.claude-sonnet-4-6",
+    "skills": ["crawl:0.0.1"],
+    "tools": ["current-time:0.0.1"],
+    "permissions": {
+        "spaces": [{"space": "support", "access": "read"}],
+        "computer": {"browse": True},
+    },
+    "checks": {
+        "guards": ["confidence-guard:0.0.1"],
+        "gates": ["low-confidence-review"],
+    },
+    "avatar": "AstronautIcon",
+    "banner": "SvgTutorialsHero",
+}
 
-    examples: Dict[str, Any] = {}
-    for application in APP_CATALOGUE.values():
-        for key, value in dump_app(application).items():
-            examples.setdefault(key, value)
-    return examples
+
+def _catalogue_files() -> List[Path]:
+    return sorted((Path(__file__).resolve().parent).glob("*.yaml"))
+
+
+def examples() -> Dict[str, Any]:
+    """For each top-level field, an example: as an application of the catalogue
+    writes it — its file, not its dump, which leaves out what is at its
+    default — and otherwise one of :data:`EXTRA_EXAMPLES`."""
+    found: Dict[str, Any] = {}
+    for path in _catalogue_files():
+        document = yaml.safe_load(path.read_text()) or {}
+        for key, value in document.items():
+            found.setdefault(key, value)
+    for key, value in EXTRA_EXAMPLES.items():
+        found.setdefault(key, value)
+    return found
 
 
 def _table(properties: Mapping[str, Any], required: List[str]) -> List[str]:
@@ -111,7 +139,7 @@ def reference_markdown(schema: Optional[Mapping[str, Any]] = None) -> str:
         "Each from an application of the catalogue, as its file writes it.",
         "",
     ]
-    for name, value in _examples().items():
+    for name, value in examples().items():
         lines += [f"### `{name}`", "", "```yaml", yaml.safe_dump({name: value}, sort_keys=False, allow_unicode=True).rstrip(), "```", ""]
     objects = {name: spec for name, spec in definitions.items() if spec.get("properties")}
     choices = {name: spec for name, spec in definitions.items() if "enum" in spec}
@@ -126,6 +154,6 @@ def reference_markdown(schema: Optional[Mapping[str, Any]] = None) -> str:
         lines += ["## Choices", "", "| Name | Values |", "| --- | --- |"]
         for name, spec in choices.items():
             values = ", ".join(f"`{value}`" for value in spec["enum"] if value != "")
-            lines.append(f"| <a id=\"{name.lower()}\"></a>{name} | {values} |")
+            lines.append(f'| <a id="{name.lower()}"></a>{name} | {values} |')
         lines.append("")
     return "\n".join(lines).rstrip() + "\n"
