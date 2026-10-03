@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+import re
 
 import pytest
 import yaml
@@ -495,6 +496,11 @@ def test_an_application_chooses_its_avatar_and_banner_as_a_person_does() -> None
     # Beside its emoji, in the order the spec declares them.
     assert written.index("avatar") == written.index("banner") - 1
     assert parse_app(dump_app(chosen)) == chosen
+    # A validator outside Python checks the same shape.
+    pattern = re.compile(json_schema()["properties"]["avatar"]["pattern"])
+    assert pattern.match("AstronautIcon") and pattern.match("") and pattern.match(" AstronautIcon ")
+    assert not pattern.match("an astronaut")
+    assert json_schema()["properties"]["banner"]["pattern"] == pattern.pattern
 
 
 # --- what a rule decides ----------------------------------------------------------------

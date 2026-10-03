@@ -21,10 +21,9 @@ What it says:
 - **who does the work** — ``agent`` (an agent or a Cog of the catalogue) or
   ``team``, with the ``instructions`` and ``model`` this application changes;
 - **what it works under and knows** — ``context`` (Frames) and ``contents``;
-- **who it is** — its ``name``, and its ``emoji``: the face it is known by,
-  drawn as an ``avatar`` with a ``banner`` when it chooses them, as a person
-  does on their profile
-  wherever it appears;
+- **who it is** — its ``name``, and its ``emoji``: the face it is known by
+  wherever it appears; optionally an ``avatar`` and a ``banner``, drawings
+  chosen by name as a person chooses theirs on their profile;
 - **what it reaches** — ``connections``: an MCP server, how far (``read`` or
   ``write``), and in whose name (the builder's, or each user's); and
   ``permissions``: the Spaces it reads or writes, and what it may do on its
@@ -69,6 +68,13 @@ APP_SCHEMA = "loop.app/v1"
 
 #: Every version of the spec this package reads.
 KNOWN_SCHEMAS = (APP_SCHEMA,)
+
+#: How an avatar or a banner is named: as its drawing is, ``AstronautIcon``.
+DRAWING_NAME = r"[A-Z][A-Za-z0-9]{0,63}"
+
+#: What a validator outside Python checks an avatar or a banner against:
+#: nothing, or a drawing's name, around the spaces Python lets go.
+_DRAWING_SCHEMA = {"pattern": rf"^\s*({DRAWING_NAME})?\s*$"}
 
 #: The share of test conversations that has to pass for an application to be ready.
 DEFAULT_READY_AT = 0.8
@@ -665,6 +671,7 @@ class AppSpec(_Strict):
             "Its avatar, by name: a drawing of the set people choose theirs from on their profile. "
             "Its emoji stands for it when unsaid, and where only text goes"
         ),
+        json_schema_extra=_DRAWING_SCHEMA,
     )
     banner: str = Field(
         default="",
@@ -672,6 +679,7 @@ class AppSpec(_Strict):
             "Its banner, by name, from the set people choose theirs from on their profile. "
             "The one its id seeds when unsaid"
         ),
+        json_schema_extra=_DRAWING_SCHEMA,
     )
 
     @field_validator("emoji")
@@ -689,7 +697,7 @@ class AppSpec(_Strict):
         # PRINCIPAL_BANNERS): this says a name is one, the interface whether
         # it is in them — and draws the emoji, or the seeded banner, if not.
         name = name.strip()
-        if name and not re.fullmatch(r"[A-Z][A-Za-z0-9]{0,63}", name):
+        if name and not re.fullmatch(DRAWING_NAME, name):
             raise ValueError("an avatar or a banner is named as its drawing is, `AstronautIcon`")
         return name
 
