@@ -285,11 +285,24 @@ behind the code.
 
 ## The catalogue
 
-One application of each kind:
+The eleven examples, each a spec of its own. Two are written in Python: their
+`app.py` sits in a folder named for the example (`apps/customer-interview/app.py`),
+and their spec is the one `loop apps build` writes from it (agent-runtimes'
+application API). Only `web-research` runs on what is enabled today, and was
+run live; the others name an agent that is not enabled, so they pass their
+checks but have not run. *Support desk*, *Customer interview*, *Report from a
+file* and *Weekly pipeline report* say so at their top.
 
-| Application | Kind | Shows |
-| --- | --- | --- |
-| `web-research` | chat | A [Cog](../cogs) under a Frame; one read-only connection; no rule needed. |
-| `quote-calculator` | widget | Inputs, a run button and a result on a component surface. |
-| `ship-or-fix` | decision | Criteria measured by a run and judged by a model, with scenarios. |
-| `inbox-triage` | worker | Triggers, a scoped connection in each user's name, and the four behaviours. |
+| Application | Kind | Built with | Shows |
+| --- | --- | --- | --- |
+| `ship-or-fix` | decision | Canvas | Criteria measured by a run and judged by a model, with scenarios. |
+| `supplier-comparison` | decision | Canvas | Typed judgments and a review policy. |
+| `data-quality` | decision | Spec | An application reviewed as a YAML file. |
+| `model-choice` | decision | Canvas | A decision filled from a benchmark run. |
+| `support-desk` | chat | Canvas | Starters, a setting, answers from the documents it was given; a page bound to a chat's question and answer. |
+| `web-research` | chat | Spec | A [Cog](../cogs) under a Frame; one read-only connection; no rule needed. |
+| `customer-interview` | chat | Python | Consent asked first, a step per answer, insights saved from a button, a structured result. |
+| `quote-calculator` | widget | Canvas | Inputs, a run button and a result on a component surface. |
+| `report-from-a-file` | widget | Python | A file asked by the code, analysed in the sandbox, the report kept as an output. |
+| `pipeline-report` | worker | Spec | A weekly schedule, the Guards, Gates and Track of `op-sales-pipeline-board-report`, an approval before sending. |
+| `inbox-triage` | worker | Spec | Triggers, a scoped connection in each user's name, and the four behaviours. |

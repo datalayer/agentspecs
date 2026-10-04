@@ -6,6 +6,17 @@
 
 # Changelog
 
+## 0.0.22
+
+The eleven examples of LOOP §9 are in the catalogue: four more applications (LOOP E-01, E-02, E-14).
+
+- *Support desk* (`support-desk`), a chat on the document Q&A agent: starters, a product setting, answers from the documents it was given with the passage cited, and a page composed on the Canvas bound to what a chat publishes (`/question`, `/answer`, `/status`, `/inputs/product`) with a button that sends a question and one that starts over.
+- *Customer interview* (`customer-interview`), a chat written in Python: `apps/customer-interview/app.py` asks for consent first, then what to learn, answers each message in a step, saves an insight from a button and records a structured result. Its spec is the one `loop apps build` writes from it.
+- *Report from a file* (`report-from-a-file`), a widget written in Python: `apps/report-from-a-file/app.py` asks for a CSV, has the Jupyter data analyst report on it in the sandbox and keeps the report as an output; its page binds the report's kind and question at `/inputs/<id>`, the report at `/output`.
+- *Weekly pipeline report* (`pipeline-report`), the rigorous worker: every Monday, the Sales Pipeline Board Report Cog under the twelve Guards, eight Gates and the Financial Reporting Track of `op-sales-pipeline-board-report`, with a rule that asks before anything is sent; its page binds a worker's `/goal`, `/activity`, `/report`, `/status` and `/draft`.
+- Each of the four says at its top what was verified and what was not: all pass the instant checks and their pages are valid A2UI v0.9; none has run live, since each names an agent that is not enabled.
+- Tests: the catalogue holds the eleven, each of its kind, with faces of their own; the Python examples sit beside a built spec; the weekly report runs the Op's checks and asks before sending. The reference's examples now come from *Customer interview*, the first application by id.
+
 ## 0.0.21
 
 The *Quote Calculator* is valid A2UI v0.9 and bound to what a widget's page publishes (LOOP R-01, C-04).

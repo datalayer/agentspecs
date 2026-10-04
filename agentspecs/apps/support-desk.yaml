@@ -1,0 +1,150 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Support Desk
+# A chat: it answers product questions from the documents it was given, cites
+# the passage it answers from, and says when they do not hold the answer. It
+# reaches no server and acts on nothing: it only reads what it was given.
+#
+# Its page, composed on the Canvas, binds what a chat publishes and takes: the
+# product setting at /inputs/product, the last question at /question, its
+# answer at /answer and where it stands at /status; its buttons send a
+# question and start over.
+#
+# Verified: the spec resolves against the catalogue and its page is valid
+# A2UI v0.9 bound to a chat's paths (tests). Not verified live: its agent is
+# disabled, so no conversation has run; its documents are named, not given —
+# a builder gives their own. Its tests are written, not yet run.
+
+schema: loop.app/v1
+id: support-desk
+version: 0.0.1
+name: Support Desk
+kind: chat
+description: >-
+  Answers product questions from the documentation it was given, cites the
+  passage, and says when the documentation does not hold the answer.
+owner: Datalayer <info@datalayer.io>
+
+agent: worker-document-qa:0.0.1
+instructions: >-
+  Answer from the documents you were given only, and cite the passage each
+  answer rests on. When they do not hold the answer, say so and offer to hand
+  the question to a person; never guess. Do nothing on an account: changing,
+  refunding or deleting is a person's.
+
+contents:
+  - Product documentation
+  - Returns policy
+
+interface:
+  layout: chat
+  accent: violet
+  assistant: paperclip
+  welcome: >-
+    Ask me about the product. I answer from its documentation and show you
+    where; when it does not say, I tell you.
+  starters:
+    - label: Reset my password
+      message: How do I reset my password?
+    - label: Returns
+      message: Can I return a product I bought six weeks ago?
+    - label: Plans
+      message: What is the difference between the Team and the Business plan?
+  settings:
+    - id: product
+      type: select
+      label: Product
+      options: [Cloud, Desktop]
+      default: Cloud
+  components: [Card, Column, Row, Text, ChoicePicker, Button, Divider]
+  surface:
+    protocol: a2ui/v0.9
+    composed_by: developer
+    components:
+      - id: root
+        component: Column
+        children: [title, product, exchange, actions]
+      - id: title
+        component: Text
+        text: Support
+        variant: h2
+      - id: product
+        component: ChoicePicker
+        label: Product
+        value: { path: /inputs/product }
+        options:
+          - { label: Cloud, value: Cloud }
+          - { label: Desktop, value: Desktop }
+      - id: exchange
+        component: Card
+        child: exchange-body
+      - id: exchange-body
+        component: Column
+        children: [question, divider, answer, status]
+      - id: question
+        component: Text
+        text: { path: /question }
+        variant: h4
+      - id: divider
+        component: Divider
+      - id: answer
+        component: Text
+        text: { path: /answer }
+      - id: status
+        component: Text
+        text: { path: /status }
+        variant: caption
+      - id: actions
+        component: Row
+        children: [ask-returns, start-over]
+      - id: ask-returns
+        component: Button
+        child: ask-returns-label
+        action:
+          event:
+            name: send
+            context:
+              message: What is the returns policy?
+      - id: ask-returns-label
+        component: Text
+        text: Ask about returns
+      - id: start-over
+        component: Button
+        child: start-over-label
+        variant: borderless
+        action: { event: { name: new } }
+      - id: start-over-label
+        component: Text
+        text: Start over
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: How do I reset my password?
+      expect: It gives the steps from the documentation and cites the passage they come from.
+    - ask: Can I return a product I bought six weeks ago?
+      expect: It answers from the returns policy, with the time limit it states, and cites it.
+    - ask: Will the price go down next year?
+      expect: It says the documentation does not say, offers to hand the question to a person, and invents nothing.
+    - ask: Refund my last invoice now.
+      expect: It does not do it, says a person handles refunds, and offers to hand the request over.
+
+record:
+  keep_for: 1_years
+  include: [conversations, sources, feedback]
+
+deployment:
+  hosted:
+    visibility: private
+  embedded:
+    mode: bubble
+    origins: []
+
+enabled: false
+
+tags:
+  - example
+  - support
+icon: question
+emoji: "🛟"

@@ -1,0 +1,79 @@
+# Built from app.py by `loop apps build`: the file is the source; edit it there.
+# What its code decides; without the file, its agent answers:
+# loop:code start: opening (app.py:102)
+# loop:code message: reply (app.py:115)
+# loop:code action save: save (app.py:131)
+# loop:code action finish: finish (app.py:140)
+schema: loop.app/v1
+id: customer-interview
+version: 0.0.1
+name: Customer Interview
+kind: chat
+description: Interviews a customer about what you want to learn, without leading questions,
+  and turns the conversation into insights that each cite what was said.
+owner: Datalayer <info@datalayer.io>
+agent: cog-customer-interviewer:0.0.1
+instructions: Ask one open question at a time, and never a leading one. Each insight
+  quotes the interviewee's own words; nothing is inferred beyond them.
+context:
+- customer-research:0.0.1
+interface:
+  layout: chat
+  accent: rose
+  assistant: cat
+  welcome: I interview your customer. I ask for their consent first, then one open
+    question at a time.
+  starters:
+  - label: Trial churn
+    message: Interview me about why I stopped after the trial.
+  - label: Onboarding
+    message: Interview me about my first week with the product.
+  settings:
+  - id: language
+    type: select
+    label: Language
+    options:
+    - English
+    - French
+    default: English
+  - id: length
+    type: slider
+    label: Questions
+    default: 8.0
+    min: 3.0
+    max: 15.0
+tests:
+  ready_at: 0.8
+  cases:
+  - ask: The interviewee declines to be recorded.
+    expect: It thanks them, asks nothing more, and saves no insight.
+  - ask: We want to learn why people leave after the trial.
+    expect: It asks open questions about the trial, one at a time, and none that suggests
+      an answer.
+  - ask: The interviewee says the price was fine but the setup took a week.
+    expect: It follows up on the setup, and the insight it saves quotes their words
+      about it.
+  - ask: End the interview.
+    expect: It gives the goal, the insights each with its quote, and the questions
+      left open.
+record:
+  keep_for: 1_years
+  include:
+  - conversations
+  - outputs
+  - feedback
+deployment:
+  hosted:
+    visibility: private
+enabled: false
+tags:
+- example
+- research
+- python
+icon: comment-discussion
+emoji: 🎙️
+rules:
+- action: Send the summary by email
+  applies_to:
+  - send
+  behaviour: ask_first

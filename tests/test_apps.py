@@ -321,7 +321,7 @@ def test_the_catalogue_has_one_application_of_each_kind() -> None:
     assert get_app("web-research") is APP_CATALOGUE["web-research"]
     assert get_app("web-research:0.0.1") is APP_CATALOGUE["web-research"]
     assert get_app("nope") is None
-    assert [found.id for found in list_apps(AppKind.WORKER)] == ["inbox-triage"]
+    assert [found.id for found in list_apps(AppKind.WORKER)] == ["inbox-triage", "pipeline-report"]
 
 
 def test_every_application_resolves_its_references() -> None:
@@ -415,9 +415,9 @@ def test_an_application_survives_being_written_and_read_again() -> None:
 
     for identity, found in APP_CATALOGUE.items():
         assert said(parse_app(dump_app(found))) == said(found), identity
-        assert said(parse_app(yaml.safe_load(yaml.safe_dump(dump_app(found))))) == said(found), (
-            identity
-        )
+        assert said(parse_app(yaml.safe_load(yaml.safe_dump(dump_app(found))))) == said(
+            found
+        ), identity
 
 
 def test_a_decision_application_carries_the_whole_decision() -> None:
@@ -485,6 +485,60 @@ def test_the_four_decision_templates_are_in_the_catalogue() -> None:
         "Fastest that works",
     ]
     assert model.scenarios[1].weights["Cost per task"] == 4
+
+
+#: LOOP §9: the eleven examples, each with its kind.
+EXAMPLES = {
+    "ship-or-fix": AppKind.DECISION,
+    "supplier-comparison": AppKind.DECISION,
+    "data-quality": AppKind.DECISION,
+    "model-choice": AppKind.DECISION,
+    "support-desk": AppKind.CHAT,
+    "web-research": AppKind.CHAT,
+    "customer-interview": AppKind.CHAT,
+    "quote-calculator": AppKind.WIDGET,
+    "report-from-a-file": AppKind.WIDGET,
+    "pipeline-report": AppKind.WORKER,
+    "inbox-triage": AppKind.WORKER,
+}
+
+
+def test_the_eleven_examples_are_in_the_catalogue() -> None:
+    """LOOP E-01: every example of §9, of its kind, with its face its own."""
+    assert {identity: found.kind for identity, found in APP_CATALOGUE.items()} == EXAMPLES
+    faces = [found.emoji for found in APP_CATALOGUE.values()]
+    assert len(set(faces)) == len(faces)
+    for identity in ["support-desk", "customer-interview", "report-from-a-file", "pipeline-report"]:
+        found = APP_CATALOGUE[identity]
+        assert 3 <= len(found.tests.cases) <= 5, identity
+        assert found.interface.assistant is not None, identity
+
+
+def test_the_python_examples_sit_beside_their_spec() -> None:
+    """LOOP E-02: an example built in Python keeps its `app.py` in a folder named
+    for it, and its spec is the one `loop apps build` wrote from it."""
+    built = sorted(path.parent.name for path in APPS_DIR.glob("*/app.py"))
+    assert built == ["customer-interview", "report-from-a-file"]
+    for identity in built:
+        text = (APPS_DIR / f"{identity}.yaml").read_text()
+        assert text.startswith("# Built from app.py by `loop apps build`"), identity
+        assert "# loop:code " in text, identity
+
+
+def test_the_weekly_pipeline_report_runs_the_op_s_checks_and_asks_before_sending() -> None:
+    """The rigorous worker: the Guards, Gates and Track of the Sales Pipeline Board
+    Report Op, a weekly schedule, and nothing sent without a person."""
+    report = APP_CATALOGUE["pipeline-report"]
+    op = yaml.safe_load(
+        (APPS_DIR.parent / "ops" / "op-sales-pipeline-board-report.yaml").read_text()
+    )
+    guards = {guard for stage in op["guards"].values() for guard in stage}
+    assert set(report.checks.guards) == guards
+    assert report.checks.gates == op["gates"]
+    assert report.checks.track == op["track"]
+    assert report.agent == op["cogs"][0]
+    assert [trigger.cron for trigger in report.triggers] == ["0 7 * * 1"]
+    assert behaviour_for(report, "runtime-send-mail") is Behaviour.ASK_FIRST
 
 
 def test_an_application_embeds_in_four_modes() -> None:
@@ -958,9 +1012,9 @@ def test_web_research_only_reads() -> None:
 
 
 def test_the_published_schema_is_the_one_the_code_writes() -> None:
-    assert SCHEMA_PATH.read_text() == schema_text(), (
-        "run `python -m agentspecs.apps` to write it again"
-    )
+    assert (
+        SCHEMA_PATH.read_text() == schema_text()
+    ), "run `python -m agentspecs.apps` to write it again"
 
 
 def test_the_schema_names_the_fields_as_the_yaml_does() -> None:
