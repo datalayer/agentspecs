@@ -45,3 +45,30 @@ emoji: "💬"
 
 - Use stable IDs and bump `version` for breaking changes.
 - Use explicit tool refs (`id:version`) from agentspecs when present.
+
+## Decide
+
+`decide` asks Jev typed questions about a text and gives back the typed answers. It is
+*A Simple Agent*'s (`example-simple`) one tool beside `runtime-echo`, and any agent may
+list it (`tools: [decide:0.0.1]`).
+
+- **What it is asked.** A `state` (the text the questions are about) and one or more
+  questions, each named and typed: `noul` (does a statement hold — answered with its
+  probability), `choice` (which of at least two named options — with a probability per
+  option and a confidence) or `score` (which step of a rubric of at least two, lowest
+  first — with a probability per step and a confidence).
+- **Where it goes.** `POST /api/ai-inference/v1/decisions` on datalayer-ai-inference,
+  with model `cloudflare:wrk/typesafe/jev`, and the token the runtime calls its models
+  with. A runtime with no such token is refused in a sentence and asks nothing.
+- **Its class** is `read`: it reaches nothing but ai-inference and changes nothing.
+
+```yaml
+id: decide
+version: 0.0.1
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.decisions
+  method: decide
+```

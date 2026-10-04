@@ -65,8 +65,8 @@ default: true
 
 ### `capabilities` (list of strings)
 What the model can be trusted with, from a closed vocabulary: `chat`, `tools`, `codemode`,
-`vision`, `thinking`, `judgments` (a typed-judgment model: noul, choice and score questions
-answered as probabilities), `judge` (a chat model that may be asked those questions and
+`vision`, `thinking`, `decisions` (a typed-decision model: noul, choice and score questions
+answered as probabilities), `decider` (a chat model that may be asked those questions and
 made to answer in the same shape). A spec naming another word is refused when the
 catalogue loads.
 
@@ -191,10 +191,10 @@ Typesafe *and* logged at the gateway. A route for sensitive data is chosen on bo
 Jev is in the catalogue once per route, `cloudflare:gtw/typesafe/jev`
 and `cloudflare:wrk/typesafe/jev`: the same model, asked at
 `gateway.ai.cloudflare.com/v1/{account}/{gateway}/workers-ai/run/typesafe/jev` or at
-`api.cloudflare.com/client/v4/accounts/{account}/ai/run`. Its capability is `judgments`, not
+`api.cloudflare.com/client/v4/accounts/{account}/ai/run`. Its capability is `decisions`, not
 `chat`: it answers `noul`, `choice` and `score` questions about a state as calibrated
-probabilities, through `datalayer-ai-inference`'s `POST /api/ai-inference/v1/judgments`,
-and a picker of chat models must leave it out. A chat model with the `judge` capability
+probabilities, through `datalayer-ai-inference`'s `POST /api/ai-inference/v1/decisions`,
+and a picker of chat models must leave it out. A chat model with the `decider` capability
 (`gpt-oss-120b`, Claude Sonnet 4.6) may be asked the same questions and made to answer in
 the same shape, for comparing with Jev on the same cases; its probabilities are what it
 says they are.
@@ -214,13 +214,13 @@ million input and output tokens); `context_window` and `zero_data_retention` say
 
 | Model | ID | Route | Notes |
 |-------|----|-------|-------|
-| **gpt-oss-120b** | `cloudflare:wrk/openai/gpt-oss-120b` | workers-ai | 128k context, tool calling; a judge |
+| **gpt-oss-120b** | `cloudflare:wrk/openai/gpt-oss-120b` | workers-ai | 128k context, tool calling; a decider |
 | **Llama 3.3 70B** | `cloudflare:wrk/meta/llama-3.3-70b-instruct-fp8-fast` | workers-ai | 24k context, tool calling, fast |
 | **Qwen3.8 27B** | `cloudflare:wrk/qwen/qwen3.8-27b` | workers-ai | 262k context, tool calling |
 | **Gemma 4 26B** | `cloudflare:wrk/google/gemma-4-26b-a4b-it` | workers-ai | 256k context, tool calling |
 | **GLM-5.2** | `cloudflare:wrk/zai-org/glm-5.2` | workers-ai | 262k context, tool calling; credits |
 | **Kimi K2.6** | `cloudflare:wrk/moonshotai/kimi-k2.6` | workers-ai | 262k context, tool calling; credits |
-| **Jev (AI Gateway)** | `cloudflare:gtw/typesafe/jev` | ai-gateway | typed judgments; 32k context; ZDR at Typesafe, logged at the gateway; credits |
+| **Jev (AI Gateway)** | `cloudflare:gtw/typesafe/jev` | ai-gateway | typed decisions; 32k context; ZDR at Typesafe, logged at the gateway; credits |
 | **Jev (Workers AI)** | `cloudflare:wrk/typesafe/jev` | workers-ai | the same at Workers AI's own endpoint; ZDR, unlogged |
 
 The six chat models were `cloudflare:<vendor>/<model>` before 0.0.9; each keeps that id in

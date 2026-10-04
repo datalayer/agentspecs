@@ -90,7 +90,7 @@ model: "anthropic:claude-opus-4-20250514"
 ```
 
 ### `model_additionals` (list of strings, optional)
-Other models of the catalogue the agent may be switched to, beside its `model`. Each is a model's `id` in `models/`; an id the catalogue does not know is refused, and so is a typed-judgment model (`capabilities: [judgments]`), which runs no chat.
+Other models of the catalogue the agent may be switched to, beside its `model`. Each is a model's `id` in `models/`; an id the catalogue does not know is refused, and so is a typed-decision model (`capabilities: [decisions]`), which runs no chat.
 ```yaml
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 model_additionals:

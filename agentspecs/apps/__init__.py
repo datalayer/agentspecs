@@ -421,6 +421,13 @@ class AppRecord(_Strict):
         default_factory=lambda: [RecordItem.CONVERSATIONS, RecordItem.ACTIONS, RecordItem.APPROVALS],
         description="What is kept",
     )
+    suggest_tests: bool = Field(
+        default=False,
+        description=(
+            "Whether its conversations may be used to suggest tests: a few, sampled from "
+            "those kept while it is on, proposed to its builder; off unless said"
+        ),
+    )
 
     @field_validator("keep_for")
     @classmethod
@@ -588,12 +595,12 @@ class CriterionKind(str, Enum):
 
 
 class AppCriterion(_Strict):
-    """What an alternative is judged on."""
+    """What an alternative is weighed on."""
 
     name: str = Field(..., description="Its name")
     kind: CriterionKind = Field(default=CriterionKind.METRIC, description="`metric`, `noul`, `choice`, `score`")
     weight: float = Field(default=1, ge=0, description="How much it counts")
-    instructions: str = Field(default="", description="What a judgment model is asked, or how a metric is computed")
+    instructions: str = Field(default="", description="What a decision model is asked, or how a metric is computed")
     options: List[str] = Field(default_factory=list, description="For a choice or a score: from the worst to the best")
     direction: str = Field(default="higher", pattern="^(higher|lower)$", description="Whether more counts for, or against")
     measure: str = Field(
@@ -607,7 +614,7 @@ class AppCriterion(_Strict):
         if self.kind in (CriterionKind.CHOICE, CriterionKind.SCORE) and len(self.options) < 2:
             raise ValueError(f"give {self.name!r} at least two options, from the worst to the best")
         if self.kind is not CriterionKind.METRIC and not self.instructions.strip():
-            raise ValueError(f"say what is judged for {self.name!r}")
+            raise ValueError(f"say what is asked for {self.name!r}")
         return self
 
 
@@ -623,15 +630,15 @@ class AppDecision(_Strict):
 
     question: str = Field(..., description="The question it answers")
     alternatives: List[str] = Field(default_factory=list, description="What is chosen between")
-    criteria: List[AppCriterion] = Field(default_factory=list, description="What each is judged on")
+    criteria: List[AppCriterion] = Field(default_factory=list, description="What each is weighed on")
     min_confidence: float = Field(
         default=0,
         ge=0,
         le=1,
-        description="A judgment less confident than this is put to the reader",
+        description="An answer less confident than this is put to the reader",
     )
     scenarios: List[AppScenario] = Field(default_factory=list, description="Named sets of weights")
-    judgment_model: str = Field(default="", description="The model that answers the judgments")
+    decision_model: str = Field(default="", description="The model that answers the decision's typed questions")
 
     @model_validator(mode="after")
     def _can_rank(self) -> "AppDecision":
@@ -959,12 +966,12 @@ def app_problems(app: AppSpec) -> List[str]:
 
     if app.model and get_model(app.model) is None:
         problems.append(f"There is no model named {app.model!r}.")
-    if app.decision is not None and app.decision.judgment_model:
-        judge = get_model(app.decision.judgment_model)
-        if judge is None:
-            problems.append(f"There is no model named {app.decision.judgment_model!r} to judge with.")
-        elif "judgments" not in judge.capabilities:
-            problems.append(f"The model {app.decision.judgment_model!r} does not answer typed judgments.")
+    if app.decision is not None and app.decision.decision_model:
+        decider = get_model(app.decision.decision_model)
+        if decider is None:
+            problems.append(f"There is no model named {app.decision.decision_model!r} to decide with.")
+        elif "decisions" not in decider.capabilities:
+            problems.append(f"The model {app.decision.decision_model!r} does not answer typed decisions.")
     # The components it may use, and the ones its surface uses, are the catalog's (C-13).
     for name in app.interface.components:
         if component_named(name) is None:

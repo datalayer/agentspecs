@@ -4,7 +4,7 @@
 # Application Specification: Supplier Comparison
 # A decision: which supplier to choose for a set of orders, on the evidence of
 # the order history, the price lists and the delivery records. Three criteria
-# are measured, one is a judgment, and one says what is missing.
+# are measured, one is asked of a decision model, and one says what is missing.
 
 schema: loop.app/v1
 id: supplier-comparison
@@ -25,7 +25,7 @@ contents:
 
 decision:
   question: Which supplier should we choose for these orders?
-  judgment_model: "cloudflare:gtw/typesafe/jev"
+  decision_model: "cloudflare:gtw/typesafe/jev"
   min_confidence: 0
   criteria:
     - name: Price

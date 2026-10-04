@@ -3,8 +3,8 @@
 
 # Application Specification: Model Choice
 # A decision: which chat model a use case runs on, from what a benchmark run
-# measured and what a judge reads in the answers. Three criteria are measured
-# by the run, two are judgments, and one says what is missing.
+# measured and what a decision model reads in the answers. Three criteria are measured
+# by the run, two are asked of a decision model, and one says what is missing.
 
 schema: loop.app/v1
 id: model-choice
@@ -14,7 +14,7 @@ kind: decision
 description: >-
   Which chat model should this use case run on? For a team choosing a model
   for one job — a summarizer, a classifier, an agent — from what a benchmark
-  run measured and what a judge reads in the answers.
+  run measured and what a decision model reads in the answers.
 owner: Datalayer <info@datalayer.io>
 
 agent: jupyter-data-analyst:0.0.1
@@ -25,7 +25,7 @@ contents:
 
 decision:
   question: Which chat model should this use case run on?
-  judgment_model: "cloudflare:gtw/typesafe/jev"
+  decision_model: "cloudflare:gtw/typesafe/jev"
   min_confidence: 0.6
   criteria:
     - name: Pass rate

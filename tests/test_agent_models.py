@@ -27,7 +27,7 @@ def _agents():
 
 
 def test_an_additional_model_is_a_chat_model_of_the_catalogue():
-    """An id the catalogue does not know is refused, and so is a typed-judgment
+    """An id the catalogue does not know is refused, and so is a typed-decision
     model (Jev), which answers typed questions and runs no chat."""
     seen = 0
     for name, agent in _agents():
@@ -40,7 +40,7 @@ def test_an_additional_model_is_a_chat_model_of_the_catalogue():
             model = get_model(model_id)
             assert model is not None, f"{name}: {model_id} is not in the models catalogue"
             assert model.id == model_id, f"{name}: {model_id} is an alias of {model.id}"
-            assert "judgments" not in model.capabilities, f"{name}: {model_id}"
+            assert "decisions" not in model.capabilities, f"{name}: {model_id}"
         assert agent.get("model") not in additionals, f"{name}: its own model is not additional"
         assert len(set(additionals)) == len(additionals), name
     assert seen > 0

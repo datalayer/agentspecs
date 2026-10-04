@@ -1,0 +1,27 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Typed decisions asked of Jev on Workers AI, through datalayer-ai-inference's
+# `POST /api/ai-inference/v1/decisions`, with the token the runtime calls its
+# models with. It reaches nothing but ai-inference: a reader.
+
+id: decide
+version: 0.0.1
+name: Decide
+description: >-
+  Ask Jev typed questions about a text — noul (does a statement hold, with its
+  probability), choice (one of named options) or score (a step on a rubric) —
+  and get the typed answers back, through datalayer-ai-inference.
+tags:
+  - runtime
+  - decisions
+  - jev
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.decisions
+  method: decide
+icon: law
+emoji: "⚖️"

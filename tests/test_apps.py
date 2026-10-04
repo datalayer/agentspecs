@@ -431,7 +431,7 @@ def test_a_decision_application_carries_the_whole_decision() -> None:
 
 def test_the_four_decision_templates_are_in_the_catalogue() -> None:
     """LOOP E-01: the landing's four templates, each an Appspec of its own — the
-    Jupyter data analyst, the decision's ten components, typed judgments."""
+    Jupyter data analyst, the decision's ten components, typed decisions."""
     ship = APP_CATALOGUE["ship-or-fix"]
     templates = ["ship-or-fix", "supplier-comparison", "data-quality", "model-choice"]
     for identity in templates:
@@ -441,7 +441,7 @@ def test_the_four_decision_templates_are_in_the_catalogue() -> None:
         assert found.interface.components == ship.interface.components, identity
         assert (
             found.decision is not None
-            and found.decision.judgment_model == "cloudflare:gtw/typesafe/jev"
+            and found.decision.decision_model == "cloudflare:gtw/typesafe/jev"
         )
         assert " For " in found.description, identity
         assert found.contents, identity
@@ -771,15 +771,15 @@ def test_a_gate_reads_a_guard_the_application_runs() -> None:
     assert app_problems(together) == []
 
 
-def test_a_decision_is_judged_by_a_model_that_answers_judgments() -> None:
+def test_a_decision_is_asked_of_a_model_that_answers_decisions() -> None:
     def deciding(model: str) -> AppSpec:
-        return app(kind="decision", decision={"question": "Which?", "judgment_model": model})
+        return app(kind="decision", decision={"question": "Which?", "decision_model": model})
 
     assert app_problems(deciding("cloudflare:gtw/typesafe/jev")) == []
-    assert any("to judge with" in problem for problem in app_problems(deciding("typesafe/jev")))
+    assert any("to decide with" in problem for problem in app_problems(deciding("typesafe/jev")))
     chat_model = "bedrock:us.anthropic.claude-sonnet-4-6"
     assert any(
-        "does not answer typed judgments" in problem
+        "does not answer typed decisions" in problem
         for problem in app_problems(deciding(chat_model))
     )
 
@@ -1111,3 +1111,16 @@ def test_the_reference_says_every_field_and_is_the_one_in_the_docs() -> None:
         parse_app(document)
     if REFERENCE_PATH.exists():
         assert REFERENCE_PATH.read_text() == page, "run `python -m agentspecs.apps`"
+
+
+# --- whether its conversations may suggest tests (LOOP V-16) ----------------------------
+
+
+def test_conversations_suggest_no_test_unless_said() -> None:
+    assert app().record.suggest_tests is False
+    assert "suggest_tests" not in dump_app(app()).get("record", {})
+    allowed = app(record={"suggest_tests": True})
+    assert allowed.record.suggest_tests is True
+    assert dump_app(allowed)["record"]["suggest_tests"] is True
+    with pytest.raises(AppError, match="record.suggest_tests"):
+        app(record={"suggest_tests": "yes please"})

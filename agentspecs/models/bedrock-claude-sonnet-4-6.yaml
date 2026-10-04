@@ -19,10 +19,10 @@ required_env_vars:
   - AWS_SECRET_ACCESS_KEY
   - AWS_DEFAULT_REGION
 
-# Asked the typed judgment questions and made to answer in the adapter's
+# Asked the typed decision questions and made to answer in the adapter's
 # shape, for comparing with Jev on the same cases; its probabilities are
 # what it says they are.
 capabilities:
   - chat
   - tools
-  - judge
+  - decider

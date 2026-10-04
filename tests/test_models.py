@@ -103,12 +103,12 @@ def test_retention_and_route_logging_are_told_apart():
     assert workers.zero_data_retention is True and workers.request_logging == "none"
 
 
-def test_jev_is_a_judgment_model_once_per_route():
+def test_jev_is_a_decision_model_once_per_route():
     gateway = get_model("cloudflare:gtw/typesafe/jev")
     workers = get_model("cloudflare:wrk/typesafe/jev")
     for jev in (gateway, workers):
         assert jev is not None
-        assert jev.capabilities == ["judgments"]
+        assert jev.capabilities == ["decisions"]
         assert jev.billing == "credits"
         assert jev.context_window == 32000
         assert jev.zero_data_retention is True
@@ -116,15 +116,15 @@ def test_jev_is_a_judgment_model_once_per_route():
     assert gateway.route == "ai-gateway" and workers.route == "workers-ai"
 
 
-def test_the_judges_are_chat_models():
-    judges = [m for m in AI_MODEL_CATALOGUE if "judge" in m.capabilities]
-    assert {m.id for m in judges} == {"cloudflare:wrk/openai/gpt-oss-120b", "bedrock:us.anthropic.claude-sonnet-4-6"}
-    assert all("chat" in m.capabilities for m in judges)
+def test_the_deciders_are_chat_models():
+    deciders = [m for m in AI_MODEL_CATALOGUE if "decider" in m.capabilities]
+    assert {m.id for m in deciders} == {"cloudflare:wrk/openai/gpt-oss-120b", "bedrock:us.anthropic.claude-sonnet-4-6"}
+    assert all("chat" in m.capabilities for m in deciders)
 
 
-def test_a_chat_picker_leaves_the_judgment_models_out():
+def test_a_chat_picker_leaves_the_decision_models_out():
     chat = [m for m in AI_MODEL_CATALOGUE if "chat" in m.capabilities]
-    assert not any("judgments" in m.capabilities for m in chat)
+    assert not any("decisions" in m.capabilities for m in chat)
 
 
 def test_an_unknown_capability_or_route_is_refused_when_the_catalogue_loads(tmp_path):

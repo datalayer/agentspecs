@@ -3,7 +3,7 @@
 
 # Application Specification: Data Quality Investigation
 # A decision: which anomalies of a dataset to fix first, before it is used for
-# a decision. Two criteria are measured in the sandbox, one is a judgment, and
+# a decision. Two criteria are measured in the sandbox, one is asked of a decision model, and
 # one says what kind of anomaly it is.
 
 schema: loop.app/v1
@@ -23,7 +23,7 @@ contents:
 
 decision:
   question: Which anomalies in this dataset should we fix first?
-  judgment_model: "cloudflare:gtw/typesafe/jev"
+  decision_model: "cloudflare:gtw/typesafe/jev"
   min_confidence: 0
   criteria:
     - name: Rows affected

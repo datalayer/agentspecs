@@ -231,7 +231,7 @@ contents:
 ```yaml
 decision:
   question: Which anomalies in this dataset should we fix first?
-  judgment_model: cloudflare:gtw/typesafe/jev
+  decision_model: cloudflare:gtw/typesafe/jev
   min_confidence: 0
   criteria:
   - name: Rows affected
@@ -421,14 +421,14 @@ Something the application reaches.
 
 ### AppCriterion
 
-What an alternative is judged on.
+What an alternative is weighed on.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
 | `name` (required) | text | Its name | — |
 | `kind` | [CriterionKind](#criterionkind) | `metric`, `noul`, `choice`, `score` | `"metric"` |
 | `weight` | number | How much it counts | `1` |
-| `instructions` | text | What a judgment model is asked, or how a metric is computed | empty |
+| `instructions` | text | What a decision model is asked, or how a metric is computed | empty |
 | `options` | list of text | For a choice or a score: from the worst to the best | — |
 | `direction` | text | Whether more counts for, or against | `"higher"` |
 | `measure` | text | For a metric: what a benchmark run fills it from | empty |
@@ -441,10 +441,10 @@ What a decision application decides.
 | --- | --- | --- | --- |
 | `question` (required) | text | The question it answers | — |
 | `alternatives` | list of text | What is chosen between | — |
-| `criteria` | list of [AppCriterion](#appcriterion) | What each is judged on | — |
-| `min_confidence` | number | A judgment less confident than this is put to the reader | `0` |
+| `criteria` | list of [AppCriterion](#appcriterion) | What each is weighed on | — |
+| `min_confidence` | number | An answer less confident than this is put to the reader | `0` |
 | `scenarios` | list of [AppScenario](#appscenario) | Named sets of weights | — |
-| `judgment_model` | text | The model that answers the judgments | empty |
+| `decision_model` | text | The model that answers the decision's typed questions | empty |
 
 ### AppDeployment
 
@@ -487,6 +487,7 @@ What is kept of what the application did, and for how long.
 | --- | --- | --- | --- |
 | `keep_for` | text | How long: `90_days`, `18_months`, `1_years` | `"1_years"` |
 | `include` | list of [RecordItem](#recorditem) | What is kept | — |
+| `suggest_tests` | true or false | Whether its conversations may be used to suggest tests: a few, sampled from those kept while it is on, proposed to its builder; off unless said | `false` |
 
 ### AppRule
 
