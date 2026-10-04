@@ -6,6 +6,8 @@
 
 # Changelog
 
+Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
+
 ## 0.0.25
 
 An agent may be switched to other models than its own.
@@ -18,6 +20,8 @@ An agent may be switched to other models than its own.
 
 A composed page is shown, and a rule is written one way (LOOP R-01, E-01).
 
+LOOP boxes: R-01, E-01 — [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
 - *Support desk*'s layout is `page`, the page with the composer over it: agent-runtimes draws a `chat` layout as the conversation alone, so its page composed on the Canvas was no longer shown.
 - `app_problems` says when a chat, a widget or a worker composes a page its layout does not show: "Its page is composed but its layout is chat, the conversation alone: choose page or split to show it." — agent-runtimes' `surfaceUnshown` sentence. No catalogue application does.
 - `dump_app` writes a rule on one class of action alone (`applies_to: send`), as a person writes it and as agent-runtimes' TypeScript writer does; *Customer interview* and *Report from a file* are rebuilt from their `app.py` so.
@@ -27,6 +31,8 @@ A composed page is shown, and a rule is written one way (LOOP R-01, E-01).
 
 How an example was built is in the catalogue (LOOP E-05).
 
+LOOP boxes: E-05 — [Applications](https://agentspecs.datalayer.tech/apps).
+
 - A surface's `composed_by` takes `canvas`: its page was composed by a person on the Canvas. *Support desk*, the Canvas example, says it; it said `developer`, as the two examples written in Python do.
 - An example written in Python is the one with an `app.py` in the folder named for it; one composed on the Canvas says `composed_by: canvas`; any other was written as a spec.
 - Tests: *Support desk* is the one example composed on the Canvas, and it has no `app.py`.
@@ -34,6 +40,8 @@ How an example was built is in the catalogue (LOOP E-05).
 ## 0.0.22
 
 The eleven examples of LOOP §9 are in the catalogue: four more applications (LOOP E-01, E-02, E-14).
+
+LOOP boxes: E-01, E-02, E-14 — [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
 
 - *Support desk* (`support-desk`), a chat on the document Q&A agent: starters, a product setting, answers from the documents it was given with the passage cited, and a page composed on the Canvas bound to what a chat publishes (`/question`, `/answer`, `/status`, `/inputs/product`) with a button that sends a question and one that starts over.
 - *Customer interview* (`customer-interview`), a chat written in Python: `apps/customer-interview/app.py` asks for consent first, then what to learn, answers each message in a step, saves an insight from a button and records a structured result. Its spec is the one `loop apps build` writes from it.
@@ -46,6 +54,8 @@ The eleven examples of LOOP §9 are in the catalogue: four more applications (LO
 
 The *Quote Calculator* is valid A2UI v0.9 and bound to what a widget's page publishes (LOOP R-01, C-04).
 
+LOOP boxes: R-01, C-04; the documentation of UI plugins and the catalog of visual components, G-05 — [UI Plugins](https://agentspecs.datalayer.tech/agents/ui-plugins), [Components](https://agentspecs.datalayer.tech/agents/ui-plugins/components).
+
 - Its `ChoicePicker` options are `{label, value}`, as A2UI v0.9 requires, not plain strings.
 - Its seats, plan and term are its settings (`interface.settings`), written at `/inputs/<id>`; its answer is read at `/output` and where it stands at `/status`, the paths the runtime publishes a widget's page at. It bound `/outputs/total` and `/outputs/lines`, which nothing publishes.
 - A test validates every block of every catalogue application's surface that is an A2UI basic component against A2UI v0.9's basic catalog and common types (kept beside it, as `@a2ui/web_core` ships them), and that a block writing under `/inputs` writes one of the application's settings.
@@ -54,11 +64,25 @@ The *Quote Calculator* is valid A2UI v0.9 and bound to what a widget's page publ
 
 The landing's four decision templates, each an application of the catalogue, and the floating assistant in the Appspec (LOOP E-01, D-07, T-24).
 
+LOOP boxes: E-01, D-07, T-24 — [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
 - Three decision applications beside *Ship or fix*: *Supplier comparison* (`supplier-comparison`), *Data quality investigation* (`data-quality`) and *Model choice* (`model-choice`), each on the Jupyter data analyst with the decision's ten components, typed judgments by `cloudflare:gtw/typesafe/jev`, and the question, contents, criteria, confidence and scenarios of its template.
 - `deployment.embedded.mode` takes a fourth mode, `assistant`: a character on the page that speaks in a balloon.
 - `interface.assistant` names the character the application's floating assistant shows: `paperclip`, `wizard`, `cat` or `eyes`, the characters Datalayer's plugin contributes. Another name is refused; when unsaid, the paper clip.
 
+## 0.0.19
+
+The catalog of visual components (LOOP C-13).
+
+LOOP boxes: C-13 — [UI Plugins](https://agentspecs.datalayer.tech/agents/ui-plugins), [Components](https://agentspecs.datalayer.tech/agents/ui-plugins/components).
+
+- Every component a UI plugin renders, with its properties as a JSON Schema, its bindings and its events: A2UI's basic catalog by its names, Datalayer's own as its custom catalog, hosted by the UI plugins rather than in a place of its own.
+- An Appspec's components and its surface are checked against the catalog: `app_problems` refuses a component the catalog does not have.
+- UI plugins by that name only: nothing mentions or checks what they were called before.
+
 ## 0.0.18
+
+LOOP boxes: S-07 — [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
 
 - The Appspec reference, generated from its JSON Schema (`agentspecs.apps.reference`): every field, what it means, its default, the parts and the choices, and an example of each field taken from an application of the catalogue. `python -m agentspecs.apps` writes it to the documentation beside the schema, and a test keeps the two the same.
 
@@ -66,11 +90,15 @@ The landing's four decision templates, each an application of the catalogue, and
 
 An application's face, chosen as a person's is on their profile.
 
+LOOP boxes: I-07 (in part), I-11 — [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
 - `avatar` and `banner` on the Appspec: each the name of a drawing (`AstronautIcon`, `SvgTutorialsHero`) from the sets people choose theirs from. Neither is required: the `emoji` stands for the avatar, and where only text goes; the id seeds the banner. A name must be written as a drawing's name is — a capital letter, then letters and digits (`AstronautIcon`) — or it is refused; the JSON Schema carries the same pattern.
 
 ## 0.0.16
 
 What three implementations of the same decision need in order to agree.
+
+LOOP boxes: F-07, and R-05's rule decision, in part — [Applications](https://agentspecs.datalayer.tech/apps).
 
 - A pattern (`*gmail*`, `generate_*`) means the same thing wherever it is read: `*` is any
   run of characters, `?` any one, and nothing else is special — no bracket expressions,
@@ -87,6 +115,8 @@ What three implementations of the same decision need in order to agree.
 ## 0.0.15
 
 Applications, and what a tool does to the world.
+
+LOOP boxes: F-01, F-02, F-06, F-10, F-11, I-01 — [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
 
 - Applications: a new spec, the **Appspec**, under `agentspecs/apps/` (`schema: loop.app/v1`).
   An application is an agent with an interface, rules, tests and a place to run; four
