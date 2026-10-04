@@ -133,6 +133,5 @@ icon: file
 emoji: 📑
 rules:
 - action: Send the report by email
-  applies_to:
-  - send
+  applies_to: send
   behaviour: leave_to_me

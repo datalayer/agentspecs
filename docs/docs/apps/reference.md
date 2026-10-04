@@ -215,8 +215,7 @@ emoji: 🎙️
 ```yaml
 rules:
 - action: Send the summary by email
-  applies_to:
-  - send
+  applies_to: send
   behaviour: ask_first
 ```
 

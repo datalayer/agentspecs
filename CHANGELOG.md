@@ -6,6 +6,15 @@
 
 # Changelog
 
+## 0.0.24
+
+A composed page is shown, and a rule is written one way (LOOP R-01, E-01).
+
+- *Support desk*'s layout is `page`, the page with the composer over it: agent-runtimes draws a `chat` layout as the conversation alone, so its page composed on the Canvas was no longer shown.
+- `app_problems` says when a chat, a widget or a worker composes a page its layout does not show: "Its page is composed but its layout is chat, the conversation alone: choose page or split to show it." — agent-runtimes' `surfaceUnshown` sentence. No catalogue application does.
+- `dump_app` writes a rule on one class of action alone (`applies_to: send`), as a person writes it and as agent-runtimes' TypeScript writer does; *Customer interview* and *Report from a file* are rebuilt from their `app.py` so.
+- Tests: the problem is said for a chat layout and not for `page` or `split`; a lone class is written alone, named tools and several classes as a list.
+
 ## 0.0.23
 
 How an example was built is in the catalogue (LOOP E-05).

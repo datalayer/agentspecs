@@ -38,7 +38,7 @@ contents:
   - Returns policy
 
 interface:
-  layout: chat
+  layout: page
   accent: violet
   assistant: paperclip
   welcome: >-

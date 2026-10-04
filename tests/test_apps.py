@@ -720,16 +720,47 @@ def test_a_component_is_one_a_ui_plugin_renders() -> None:
     assert app_problems(refused) == ["There is no component named 'Marquee' in the catalog."]
     surface = app(
         interface={
+            "layout": "page",
             "surface": {
                 "components": [
                     {"id": "root", "component": "Column", "children": ["ticker"]},
                     {"id": "ticker", "component": "Marquee"},
                 ]
-            }
+            },
         }
     )
     assert app_problems(surface) == [
         "The surface's 'ticker' is a 'Marquee', which the catalog does not have."
+    ]
+
+
+def test_a_page_composed_for_the_conversation_alone_is_a_problem() -> None:
+    """A `chat` layout draws the conversation alone: a surface composed for it is not shown,
+    which is said as agent-runtimes' `surfaceUnshown` says it; no catalogue app does it."""
+    page = {"surface": {"components": [{"id": "root", "component": "Text", "text": "Hello"}]}}
+    unshown = "Its page is composed but its layout is chat, the conversation alone: choose page or split to show it."
+    assert app_problems(app(interface=page)) == [unshown]
+    assert app_problems(app(interface={**page, "layout": "page"})) == []
+    assert app_problems(app(interface={**page, "layout": "split"})) == []
+    assert app_problems(app(kind="widget", interface={**page, "layout": "chat"})) == [unshown]
+    for identity, found in APP_CATALOGUE.items():
+        if found.interface.surface is not None and found.interface.surface.components:
+            assert found.layout is not Layout.CHAT, identity
+    assert APP_CATALOGUE["support-desk"].layout is Layout.PAGE
+
+
+def test_a_rule_on_one_class_of_action_is_written_alone() -> None:
+    """As a person writes it, and as agent-runtimes' TypeScript writer does."""
+    rules = [
+        {"action": "Send", "applies_to": ["send"], "behaviour": "ask_first"},
+        {"action": "Draft", "applies_to": ["google-workspace.draft"], "behaviour": "do_it"},
+        {"action": "Write", "applies_to": ["write", "publish"], "behaviour": "ask_first"},
+    ]
+    written = dump_app(app(rules=rules))["rules"]
+    assert [rule["applies_to"] for rule in written] == [
+        "send",
+        ["google-workspace.draft"],
+        ["write", "publish"],
     ]
 
 

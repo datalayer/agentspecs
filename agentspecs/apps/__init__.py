@@ -975,6 +975,17 @@ def app_problems(app: AppSpec) -> List[str]:
                 problems.append(
                     f"The surface's {node['id']!r} is a {node['component']!r}, which the catalog does not have."
                 )
+        # A `chat` layout is the conversation alone: a page composed for it is not drawn.
+        if (
+            app.agent
+            and app.kind is not AppKind.DECISION
+            and app.layout is Layout.CHAT
+            and app.interface.surface.components
+        ):
+            problems.append(
+                "Its page is composed but its layout is chat, the conversation alone: "
+                "choose page or split to show it."
+            )
     run = {_id_of(guard) for guard in app.checks.guards}
     for ref in app.checks.gates:
         gate = _catalogue("gates").get(_id_of(ref))
@@ -1154,6 +1165,11 @@ def dump_app(app: AppSpec) -> Dict[str, Any]:
     order it was read in.
     """
     data = json.loads(app.model_dump_json(by_alias=True, exclude_defaults=True))
+    # One target is written alone when it is a class of action, as a person would.
+    for rule in data.get("rules") or []:
+        targets = rule["applies_to"]
+        if isinstance(targets, list) and len(targets) == 1 and targets[0] in _CLASS_NAMES:
+            rule["applies_to"] = targets[0]
     interface = data.get("interface") or {}
     if interface.get("layout") == DEFAULT_LAYOUTS[app.kind].value:
         del interface["layout"]
