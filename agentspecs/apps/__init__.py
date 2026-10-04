@@ -159,6 +159,23 @@ DEFAULT_LAYOUTS = {
 }
 
 
+class AssistantCharacter(str, Enum):
+    """The character an application's floating assistant shows (LOOP T-24):
+    one of those a UI plugin contributes. Datalayer's are these four."""
+
+    PAPERCLIP = "paperclip"
+    """A paper clip of our own."""
+
+    WIZARD = "wizard"
+    """A wizard: a starred hat, a white beard."""
+
+    CAT = "cat"
+    """A cat."""
+
+    EYES = "eyes"
+    """The L👀P eyes."""
+
+
 class Accent(str, Enum):
     """The one colour of an application; everything else is neutral."""
 
@@ -329,6 +346,13 @@ class AppInterface(_Strict):
         description="The components of the catalog the surface may use; the kind's own when empty",
     )
     surface: Optional[AppSurface] = Field(default=None, description="The component tree, when there is one")
+    assistant: Optional[AssistantCharacter] = Field(
+        default=None,
+        description=(
+            "The character its floating assistant shows: `paperclip`, `wizard`, `cat` or `eyes`. "
+            "The paper clip when unsaid; a person may choose another in their settings"
+        ),
+    )
 
     @model_validator(mode="after")
     def _names_are_distinct(self) -> "AppInterface":
@@ -464,8 +488,16 @@ class EmbedMode(str, Enum):
     """How an application sits in another product's page."""
 
     INLINE = "inline"
+    """The application in the page."""
+
     BUBBLE = "bubble"
+    """A floating button that opens it: the copilot pattern."""
+
     PANEL = "panel"
+    """A side panel."""
+
+    ASSISTANT = "assistant"
+    """A character on the page that speaks in a balloon (LOOP §6.9)."""
 
 
 class HostedDeployment(_Strict):
@@ -488,7 +520,7 @@ _ORIGIN = re.compile(r"^https://[A-Za-z0-9.-]+(?::\d+)?$|^http://(?:localhost|12
 class EmbeddedDeployment(_Strict):
     """The application inside another product's page."""
 
-    mode: EmbedMode = Field(default=EmbedMode.INLINE, description="`inline`, `bubble` or `panel`")
+    mode: EmbedMode = Field(default=EmbedMode.INLINE, description="`inline`, `bubble`, `panel` or `assistant`")
     origins: List[str] = Field(default_factory=list, description="The origins allowed to embed it")
 
     @field_validator("origins")
@@ -1220,6 +1252,7 @@ __all__ = [
     "AppTestCase",
     "AppTests",
     "AppTrigger",
+    "AssistantCharacter",
     "Behaviour",
     "CriterionKind",
     "EmbedMode",

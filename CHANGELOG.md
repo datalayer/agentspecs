@@ -6,6 +6,14 @@
 
 # Changelog
 
+## 0.0.20
+
+The landing's four decision templates, each an application of the catalogue, and the floating assistant in the Appspec (LOOP E-01, D-07, T-24).
+
+- Three decision applications beside *Ship or fix*: *Supplier comparison* (`supplier-comparison`), *Data quality investigation* (`data-quality`) and *Model choice* (`model-choice`), each on the Jupyter data analyst with the decision's ten components, typed judgments by `cloudflare:gtw/typesafe/jev`, and the question, contents, criteria, confidence and scenarios of its template.
+- `deployment.embedded.mode` takes a fourth mode, `assistant`: a character on the page that speaks in a balloon.
+- `interface.assistant` names the character the application's floating assistant shows: `paperclip`, `wizard`, `cat` or `eyes`, the characters Datalayer's plugin contributes. Another name is refused; when unsaid, the paper clip.
+
 ## 0.0.18
 
 - The Appspec reference, generated from its JSON Schema (`agentspecs.apps.reference`): every field, what it means, its default, the parts and the choices, and an example of each field taken from an application of the catalogue. `python -m agentspecs.apps` writes it to the documentation beside the schema, and a test keeps the two the same.

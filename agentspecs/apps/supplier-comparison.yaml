@@ -1,0 +1,88 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Supplier Comparison
+# A decision: which supplier to choose for a set of orders, on the evidence of
+# the order history, the price lists and the delivery records. Three criteria
+# are measured, one is a judgment, and one says what is missing.
+
+schema: loop.app/v1
+id: supplier-comparison
+version: 0.0.1
+name: Supplier Comparison
+kind: decision
+description: >-
+  Which supplier should we choose for these orders? For an operations or
+  procurement lead, at each sourcing round.
+owner: Datalayer <info@datalayer.io>
+
+agent: jupyter-data-analyst:0.0.1
+
+contents:
+  - Order history
+  - Supplier price lists
+  - Delivery records
+
+decision:
+  question: Which supplier should we choose for these orders?
+  judgment_model: "cloudflare:gtw/typesafe/jev"
+  min_confidence: 0
+  criteria:
+    - name: Price
+      kind: metric
+      weight: 2
+      instructions: Total cost of the orders at each supplier’s prices.
+      direction: lower
+    - name: Delivery reliability
+      kind: metric
+      weight: 2
+      instructions: Share of past deliveries on time, from the delivery records.
+      direction: higher
+    - name: Capacity
+      kind: metric
+      weight: 1
+      instructions: Whether the supplier’s capacity covers the ordered volume.
+      direction: higher
+    - name: Fit with requirements
+      kind: score
+      weight: 2
+      instructions: How well does this supplier fit the stated requirements?
+      options:
+        - "None: meets none of the stated requirements"
+        - "Some: meets a few, misses the important ones"
+        - "Most: meets the important ones, misses a few"
+        - "All: meets every stated requirement"
+      direction: higher
+    - name: Missing information
+      kind: choice
+      weight: 0
+      instructions: What is missing to decide on this supplier?
+      options:
+        - "Capacity: a capacity figure is missing"
+        - "Delivery: a delivery record is missing"
+        - "Price: a price is missing"
+        - "Nothing: everything needed is there"
+      direction: higher
+
+interface:
+  layout: page
+  accent: green
+  components: [Card, Column, Row, List, Tabs, Text, Slider, ChoicePicker, TextField, Button]
+
+tests:
+  ready_at: 0.8
+
+record:
+  keep_for: 1_years
+  include: [decisions, sources, checks]
+
+deployment:
+  hosted:
+    visibility: private
+
+tags:
+  - example
+  - decision
+  - procurement
+icon: package
+emoji: "🚚"

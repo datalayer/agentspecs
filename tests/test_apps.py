@@ -429,6 +429,106 @@ def test_a_decision_application_carries_the_whole_decision() -> None:
     assert decision.min_confidence == 0.6
 
 
+def test_the_four_decision_templates_are_in_the_catalogue() -> None:
+    """LOOP E-01: the landing's four templates, each an Appspec of its own — the
+    Jupyter data analyst, the decision's ten components, typed judgments."""
+    ship = APP_CATALOGUE["ship-or-fix"]
+    templates = ["ship-or-fix", "supplier-comparison", "data-quality", "model-choice"]
+    for identity in templates:
+        found = APP_CATALOGUE[identity]
+        assert found.kind is AppKind.DECISION, identity
+        assert found.agent == "jupyter-data-analyst:0.0.1", identity
+        assert found.interface.components == ship.interface.components, identity
+        assert (
+            found.decision is not None
+            and found.decision.judgment_model == "cloudflare:gtw/typesafe/jev"
+        )
+        assert " For " in found.description, identity
+        assert found.contents, identity
+    supplier = APP_CATALOGUE["supplier-comparison"].decision
+    assert supplier is not None
+    assert [(c.name, c.kind.value, c.weight) for c in supplier.criteria] == [
+        ("Price", "metric", 2),
+        ("Delivery reliability", "metric", 2),
+        ("Capacity", "metric", 1),
+        ("Fit with requirements", "score", 2),
+        ("Missing information", "choice", 0),
+    ]
+    assert supplier.criteria[0].direction == "lower"
+    assert (supplier.min_confidence, supplier.scenarios) == (0, [])
+    quality = APP_CATALOGUE["data-quality"].decision
+    assert quality is not None
+    assert [(c.name, c.kind.value, c.weight) for c in quality.criteria] == [
+        ("Rows affected", "metric", 2),
+        ("Effect on the result", "metric", 3),
+        ("Kind of anomaly", "choice", 0),
+        ("Safe to correct automatically", "noul", 1),
+    ]
+    assert [option.split(":")[0] for option in quality.criteria[2].options] == [
+        "Genuine",
+        "Outlier",
+        "Unit",
+        "Missing",
+        "Duplicate",
+    ]
+    model = APP_CATALOGUE["model-choice"].decision
+    assert model is not None
+    assert [(c.name, c.weight, c.measure) for c in model.criteria if c.kind.value == "metric"] == [
+        ("Pass rate", 3, "pass_rate"),
+        ("Cost per task", 2, "cost_per_task"),
+        ("Latency", 2, "seconds_per_task"),
+    ]
+    assert model.min_confidence == 0.6
+    assert [scenario.name for scenario in model.scenarios] == [
+        "Quality first",
+        "Cheapest that works",
+        "Fastest that works",
+    ]
+    assert model.scenarios[1].weights["Cost per task"] == 4
+
+
+def test_an_application_embeds_in_four_modes() -> None:
+    """LOOP D-07: inline, bubble, panel, and the assistant — a character that speaks in a balloon."""
+    from agentspecs.apps import EmbedMode
+
+    assert [mode.value for mode in EmbedMode] == ["inline", "bubble", "panel", "assistant"]
+    embedded = app(
+        deployment={"embedded": {"mode": "assistant", "origins": ["https://example.com"]}}
+    )
+    assert embedded.deployment.embedded is not None
+    assert embedded.deployment.embedded.mode is EmbedMode.ASSISTANT
+    assert json_schema()["$defs"]["EmbedMode"]["enum"] == ["inline", "bubble", "panel", "assistant"]
+    with pytest.raises(AppError, match="deployment.embedded.mode"):
+        app(deployment={"embedded": {"mode": "popup"}})
+
+
+def test_an_application_names_the_character_of_its_assistant() -> None:
+    """LOOP T-24: one of the characters Datalayer's plugin contributes, or none."""
+    from agentspecs.apps import AssistantCharacter
+
+    plain = app()
+    assert plain.interface.assistant is None
+    assert "interface" not in dump_app(plain)
+    wizard = app(interface={"assistant": "wizard"})
+    assert wizard.interface.assistant is AssistantCharacter.WIZARD
+    assert dump_app(wizard)["interface"] == {"assistant": "wizard"}
+    assert parse_app(dump_app(wizard)) == wizard
+    assert [character.value for character in AssistantCharacter] == [
+        "paperclip",
+        "wizard",
+        "cat",
+        "eyes",
+    ]
+    assert json_schema()["$defs"]["AssistantCharacter"]["enum"] == [
+        "paperclip",
+        "wizard",
+        "cat",
+        "eyes",
+    ]
+    with pytest.raises(AppError, match="interface.assistant"):
+        app(interface={"assistant": "clippy"})
+
+
 # --- what the spec refuses ------------------------------------------------------------
 
 

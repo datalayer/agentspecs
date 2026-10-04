@@ -1,0 +1,79 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Data Quality Investigation
+# A decision: which anomalies of a dataset to fix first, before it is used for
+# a decision. Two criteria are measured in the sandbox, one is a judgment, and
+# one says what kind of anomaly it is.
+
+schema: loop.app/v1
+id: data-quality
+version: 0.0.1
+name: Data Quality Investigation
+kind: decision
+description: >-
+  Which anomalies in this dataset should we fix first? For a data team, before
+  a dataset is used for a decision.
+owner: Datalayer <info@datalayer.io>
+
+agent: jupyter-data-analyst:0.0.1
+
+contents:
+  - The dataset under investigation
+
+decision:
+  question: Which anomalies in this dataset should we fix first?
+  judgment_model: "cloudflare:gtw/typesafe/jev"
+  min_confidence: 0
+  criteria:
+    - name: Rows affected
+      kind: metric
+      weight: 2
+      instructions: How many rows the anomaly touches, from a validation run in the sandbox.
+      direction: higher
+    - name: Effect on the result
+      kind: metric
+      weight: 3
+      instructions: How far the headline figures move when the anomaly is corrected.
+      direction: higher
+    - name: Kind of anomaly
+      kind: choice
+      weight: 0
+      instructions: What is this anomaly?
+      options:
+        - "Genuine: a real extreme, to keep"
+        - "Outlier: a value far from the rest, to check"
+        - "Unit: a unit mismatch"
+        - "Missing: a missing value"
+        - "Duplicate: the same row twice"
+      direction: higher
+    - name: Safe to correct automatically
+      kind: noul
+      weight: 1
+      instructions: >-
+        Can the proposed correction be applied without a person checking each
+        row?
+      direction: higher
+
+interface:
+  layout: page
+  accent: green
+  components: [Card, Column, Row, List, Tabs, Text, Slider, ChoicePicker, TextField, Button]
+
+tests:
+  ready_at: 0.8
+
+record:
+  keep_for: 1_years
+  include: [decisions, sources, checks]
+
+deployment:
+  hosted:
+    visibility: private
+
+tags:
+  - example
+  - decision
+  - data-quality
+icon: filter
+emoji: "🧹"
