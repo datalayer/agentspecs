@@ -6,6 +6,14 @@
 
 # Changelog
 
+## 0.0.21
+
+The *Quote Calculator* is valid A2UI v0.9 and bound to what a widget's page publishes (LOOP R-01, C-04).
+
+- Its `ChoicePicker` options are `{label, value}`, as A2UI v0.9 requires, not plain strings.
+- Its seats, plan and term are its settings (`interface.settings`), written at `/inputs/<id>`; its answer is read at `/output` and where it stands at `/status`, the paths the runtime publishes a widget's page at. It bound `/outputs/total` and `/outputs/lines`, which nothing publishes.
+- A test validates every block of every catalogue application's surface that is an A2UI basic component against A2UI v0.9's basic catalog and common types (kept beside it, as `@a2ui/web_core` ships them), and that a block writing under `/inputs` writes one of the application's settings.
+
 ## 0.0.20
 
 The landing's four decision templates, each an application of the catalogue, and the floating assistant in the Appspec (LOOP E-01, D-07, T-24).
@@ -33,7 +41,7 @@ What three implementations of the same decision need in order to agree.
   which Python and JavaScript read differently. `agentspecs.actions.matches`, `is_pattern`.
 - A condition compares an argument with a word, a number, true or false; a list or a
   mapping is refused, since equality of those is not the same in every language.
-  A whole number beyond 2**53 - 1, and a number that is not finite, are refused too, and
+  A whole number beyond 2\*\*53 - 1, and a number that is not finite, are refused too, and
   an argument beyond that range equals nothing: JavaScript holds no such integer exactly.
 - `dump_app` writes an application the same way every time: `schema` first, then the keys
   in the order the spec declares them, and not the layout when it is its kind's own. A

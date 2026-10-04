@@ -5,8 +5,9 @@
 # A widget: a page of inputs and outputs, no conversation. Fill in the seats
 # and the term, run, read the quote.
 #
-# Not offered today: its surface is a first draft, waiting for the page a
-# widget is rendered on, and its agent is disabled.
+# Its surface binds what a widget's page publishes and takes: each setting at
+# /inputs/<id>, what it gave at /output, where it stands at /status. Not
+# offered today: its agent is disabled.
 
 schema: loop.app/v1
 id: quote-calculator
@@ -29,6 +30,23 @@ contents:
 interface:
   layout: page
   accent: sun
+  settings:
+    - id: seats
+      type: slider
+      label: Seats
+      min: 1
+      max: 1000
+      default: 10
+    - id: plan
+      type: select
+      label: Plan
+      options: [Team, Business, Enterprise]
+      default: Team
+    - id: term
+      type: select
+      label: Term
+      options: [Monthly, Annual]
+      default: Annual
   components: [Card, Column, Row, Text, TextField, ChoicePicker, Slider, Button, Divider]
   surface:
     protocol: a2ui/v0.9
@@ -57,12 +75,17 @@ interface:
         component: ChoicePicker
         label: Plan
         value: { path: /inputs/plan }
-        options: [Team, Business, Enterprise]
+        options:
+          - { label: Team, value: Team }
+          - { label: Business, value: Business }
+          - { label: Enterprise, value: Enterprise }
       - id: term
         component: ChoicePicker
         label: Term
         value: { path: /inputs/term }
-        options: [Monthly, Annual]
+        options:
+          - { label: Monthly, value: Monthly }
+          - { label: Annual, value: Annual }
       - id: run
         component: Button
         child: run-label
@@ -76,14 +99,14 @@ interface:
         child: result-body
       - id: result-body
         component: Column
-        children: [total, lines]
-      - id: total
+        children: [status, output]
+      - id: status
         component: Text
-        text: { path: /outputs/total }
-        variant: h3
-      - id: lines
+        text: { path: /status }
+        variant: caption
+      - id: output
         component: Text
-        text: { path: /outputs/lines }
+        text: { path: /output }
 
 tests:
   ready_at: 1.0

@@ -33,7 +33,7 @@ pydantic-ai = [
   "pydantic-graph>=1.94.0",
   "pydantic-ai-slim>=1.94.0",
 ]
-test = ["ipykernel", "jsonschema>=4", "jupyter_server>=1.6,<3", "pytest>=7.0", "pytest-asyncio>=0.21"]
+test = ["ipykernel", "jsonschema>=4.18", "jupyter_server>=1.6,<3", "pytest>=7.0", "pytest-asyncio>=0.21"]
 lint = ["mdformat>0.7", "mdformat-gfm>=0.3.5", "ruff"]
 typing = ["mypy>=0.990"]
 
