@@ -85,7 +85,7 @@ record:
 | `permissions` | What else it may reach: `spaces` (a Space, `read` or `write`) and its `computer` (`browse`, `files`, `shell`, each off). Nothing, unless said. |
 | `interface` | What the user sees: `layout` (`chat`, `page`, `split`), `accent`, `welcome`, `starters`, `settings`, and a `surface` — a component tree over the approved catalog. |
 | `tests` | How it is verified: `cases` in plain words (`ask`, `expect`), an `evalset`, and `ready_at`, the share that has to pass. |
-| `record` | What is kept of what it did (`include`), and for how long (`keep_for`: `90_days`, `1_years`). |
+| `record` | What is kept of what it did (`include`), for how long (`keep_for`: `90_days`, `1_years`), and whether its conversations may be used to suggest tests (`suggest_tests`, off unless said: only conversations kept while it is on are sampled). |
 | `checks` | Optional: `guards`, `gates` and a `track` of the catalogue. |
 | `deployment` | Where it goes: `hosted` (a `visibility`, a `slug`) and `embedded` (a `mode`, the `origins` allowed). |
 | `goal`, `triggers`, `memory`, `notifications` | A worker's own: what it works toward, what starts its work, what it remembers, where an approval reaches a person. |
