@@ -468,7 +468,7 @@ What the user sees.
 | `settings` | list of [AppSetting](#appsetting) | What the user may set | — |
 | `components` | list of text | The components of the catalog the surface may use; the kind's own when empty | — |
 | `surface` | [AppSurface](#appsurface) | The component tree, when there is one | empty |
-| `assistant` | [AssistantCharacter](#assistantcharacter) | The character its floating assistant shows: `paperclip`, `wizard`, `cat` or `eyes`. The paper clip when unsaid; a person may choose another in their settings | empty |
+| `assistant` | text | The character its floating assistant shows, by the id a plugin contributes it under (lowercase letters and digits, words joined by a hyphen): Datalayer's are `paperclip`, `wizard`, `cat` and `eyes`. The paper clip when unsaid; an id no enabled plugin contributes is refused where the plugins are known, the runtime and the page. Said here, it wins over a person's own choice in their settings | empty |
 
 ### AppPermissions
 
@@ -609,7 +609,6 @@ The application at an address of its own.
 | <a id="access"></a>Access | `read`, `write` |
 | <a id="actsas"></a>ActsAs | `owner`, `user` |
 | <a id="appkind"></a>AppKind | `chat`, `widget`, `decision`, `worker` |
-| <a id="assistantcharacter"></a>AssistantCharacter | `paperclip`, `wizard`, `cat`, `eyes` |
 | <a id="behaviour"></a>Behaviour | `do_it`, `if_asked`, `ask_first`, `leave_to_me` |
 | <a id="criterionkind"></a>CriterionKind | `metric`, `noul`, `choice`, `score` |
 | <a id="embedmode"></a>EmbedMode | `inline`, `bubble`, `panel`, `assistant` |

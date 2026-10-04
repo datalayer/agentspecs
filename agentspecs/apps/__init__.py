@@ -76,6 +76,11 @@ DRAWING_NAME = r"[A-Z][A-Za-z0-9]{0,63}"
 #: nothing, or a drawing's name, around the spaces Python lets go.
 _DRAWING_SCHEMA = {"pattern": rf"^\s*({DRAWING_NAME})?\s*$"}
 
+#: How the character of a floating assistant is named (LOOP T-24): by the id
+#: a UI plugin contributes it under, ``paperclip`` or ``acme-owl``. Which ids
+#: exist is known only where the plugins are, the runtime and the page.
+ASSISTANT_CHARACTER_ID = r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*"
+
 #: The share of test conversations that has to pass for an application to be ready.
 DEFAULT_READY_AT = 0.8
 
@@ -157,23 +162,6 @@ DEFAULT_LAYOUTS = {
     AppKind.DECISION: Layout.PAGE,
     AppKind.WORKER: Layout.SPLIT,
 }
-
-
-class AssistantCharacter(str, Enum):
-    """The character an application's floating assistant shows (LOOP T-24):
-    one of those a UI plugin contributes. Datalayer's are these four."""
-
-    PAPERCLIP = "paperclip"
-    """A paper clip of our own."""
-
-    WIZARD = "wizard"
-    """A wizard: a starred hat, a white beard."""
-
-    CAT = "cat"
-    """A cat."""
-
-    EYES = "eyes"
-    """The L👀P eyes."""
 
 
 class Accent(str, Enum):
@@ -349,11 +337,16 @@ class AppInterface(_Strict):
         description="The components of the catalog the surface may use; the kind's own when empty",
     )
     surface: Optional[AppSurface] = Field(default=None, description="The component tree, when there is one")
-    assistant: Optional[AssistantCharacter] = Field(
+    assistant: Optional[str] = Field(
         default=None,
+        max_length=64,
+        pattern=rf"^{ASSISTANT_CHARACTER_ID}$",
         description=(
-            "The character its floating assistant shows: `paperclip`, `wizard`, `cat` or `eyes`. "
-            "The paper clip when unsaid; a person may choose another in their settings"
+            "The character its floating assistant shows, by the id a plugin contributes it under "
+            "(lowercase letters and digits, words joined by a hyphen): Datalayer's are `paperclip`, "
+            "`wizard`, `cat` and `eyes`. The paper clip when unsaid; an id no enabled plugin "
+            "contributes is refused where the plugins are known, the runtime and the page. Said "
+            "here, it wins over a person's own choice in their settings"
         ),
     )
 
@@ -1249,6 +1242,7 @@ def list_apps(kind: Optional[AppKind] = None) -> List[AppSpec]:
 __all__ = [
     "APP_CATALOGUE",
     "APP_SCHEMA",
+    "ASSISTANT_CHARACTER_ID",
     "DEFAULT_BEHAVIOURS",
     "DEFAULT_LAYOUTS",
     "DEFAULT_READY_AT",
@@ -1278,7 +1272,6 @@ __all__ = [
     "AppTestCase",
     "AppTests",
     "AppTrigger",
-    "AssistantCharacter",
     "Behaviour",
     "CriterionKind",
     "EmbedMode",

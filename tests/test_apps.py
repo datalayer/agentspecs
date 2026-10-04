@@ -42,6 +42,7 @@ from agentspecs.actions import (
 from agentspecs.apps import (
     APP_CATALOGUE,
     APP_SCHEMA,
+    ASSISTANT_CHARACTER_ID,
     DEFAULT_BEHAVIOURS,
     SCHEMA_PATH,
     Access,
@@ -571,30 +572,25 @@ def test_an_application_embeds_in_four_modes() -> None:
 
 
 def test_an_application_names_the_character_of_its_assistant() -> None:
-    """LOOP T-24: one of the characters Datalayer's plugin contributes, or none."""
-    from agentspecs.apps import AssistantCharacter
+    """LOOP T-24: any character an enabled plugin contributes, by id, or none.
 
+    Which ids exist is known where the plugins are, the runtime and the page:
+    the spec takes any id of the right shape, a plugin's own as Datalayer's."""
     plain = app()
     assert plain.interface.assistant is None
     assert "interface" not in dump_app(plain)
-    wizard = app(interface={"assistant": "wizard"})
-    assert wizard.interface.assistant is AssistantCharacter.WIZARD
-    assert dump_app(wizard)["interface"] == {"assistant": "wizard"}
-    assert parse_app(dump_app(wizard)) == wizard
-    assert [character.value for character in AssistantCharacter] == [
-        "paperclip",
-        "wizard",
-        "cat",
-        "eyes",
-    ]
-    assert json_schema()["$defs"]["AssistantCharacter"]["enum"] == [
-        "paperclip",
-        "wizard",
-        "cat",
-        "eyes",
-    ]
-    with pytest.raises(AppError, match="interface.assistant"):
-        app(interface={"assistant": "clippy"})
+    for character in ("wizard", "owl", "acme-owl-2"):
+        named = app(interface={"assistant": character})
+        assert named.interface.assistant == character
+        assert dump_app(named)["interface"] == {"assistant": character}
+        assert parse_app(dump_app(named)) == named
+    assert "AssistantCharacter" not in json_schema()["$defs"]
+    assistant = json_schema()["$defs"]["AppInterface"]["properties"]["assistant"]["anyOf"][0]
+    assert assistant["pattern"] == f"^{ASSISTANT_CHARACTER_ID}$"
+    assert assistant["maxLength"] == 64
+    for wrong in ("Clippy", "acme owl", "-owl", "owl-", "acme--owl", "acme.owl", "o" * 65, ""):
+        with pytest.raises(AppError, match="interface.assistant"):
+            app(interface={"assistant": wrong})
 
 
 # --- what the spec refuses ------------------------------------------------------------

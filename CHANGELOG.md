@@ -8,6 +8,15 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.27
+
+An application's floating assistant may show a character a plugin contributes (LOOP T-24).
+
+LOOP boxes: T-24 — [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `interface.assistant` takes any character id of the right shape — lowercase letters and digits, words joined by a hyphen, at most 64 characters — not only Datalayer's four: which characters exist is what the enabled plugins contribute to `loop.assistant.character`, known by the runtime and the page, which refuse an id no enabled plugin gives with a sentence. The `AssistantCharacter` enum is gone; `ASSISTANT_CHARACTER_ID` is the shape. The Appspec JSON Schema and the reference are written again.
+- Said in the spec, the character wins over the one a person chose in their settings.
+
 ## 0.0.26
 
 "Decision", never "judgment": the typed questions Jev answers are decisions, in the catalogue's words and on the wire; and *A Simple Agent* decides with Jev.
