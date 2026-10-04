@@ -548,7 +548,7 @@ The component tree the user meets, over the approved catalog (A2UI).
 | --- | --- | --- | --- |
 | `protocol` | text | The protocol the tree is written in | `"a2ui/v0.9"` |
 | `components` | list of mapping | The components, as the protocol's `updateComponents` carries them | — |
-| `composed_by` | text | Who composed it: a model's id, `developer`, `template` | empty |
+| `composed_by` | text | Who composed it: a model's id, `canvas` (a person on the Canvas), `developer`, `template` | empty |
 | `composed_at` | text | When, as an ISO date | empty |
 
 ### AppTestCase

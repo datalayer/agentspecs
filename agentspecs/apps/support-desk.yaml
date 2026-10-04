@@ -60,7 +60,7 @@ interface:
   components: [Card, Column, Row, Text, ChoicePicker, Button, Divider]
   surface:
     protocol: a2ui/v0.9
-    composed_by: developer
+    composed_by: canvas
     components:
       - id: root
         component: Column

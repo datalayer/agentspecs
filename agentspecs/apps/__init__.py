@@ -315,7 +315,10 @@ class AppSurface(_Strict):
         default_factory=list,
         description="The components, as the protocol's `updateComponents` carries them",
     )
-    composed_by: str = Field(default="", description="Who composed it: a model's id, `developer`, `template`")
+    composed_by: str = Field(
+        default="",
+        description="Who composed it: a model's id, `canvas` (a person on the Canvas), `developer`, `template`",
+    )
     composed_at: str = Field(default="", description="When, as an ISO date")
 
     @field_validator("components")

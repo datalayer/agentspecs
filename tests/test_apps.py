@@ -525,6 +525,20 @@ def test_the_python_examples_sit_beside_their_spec() -> None:
         assert "# loop:code " in text, identity
 
 
+def test_the_canvas_example_says_its_page_was_composed_on_the_canvas() -> None:
+    """LOOP E-05: how an example was built is in the catalogue. An example built in
+    Python has its `app.py`; one whose page was composed on the Canvas says
+    `composed_by: canvas`; *Support desk* is the Canvas example."""
+    on_canvas = sorted(
+        identity
+        for identity, found in APP_CATALOGUE.items()
+        if found.interface.surface is not None and found.interface.surface.composed_by == "canvas"
+    )
+    assert on_canvas == ["support-desk"]
+    in_python = {path.parent.name for path in APPS_DIR.glob("*/app.py")}
+    assert not in_python & set(on_canvas)
+
+
 def test_the_weekly_pipeline_report_runs_the_op_s_checks_and_asks_before_sending() -> None:
     """The rigorous worker: the Guards, Gates and Track of the Sales Pipeline Board
     Report Op, a weekly schedule, and nothing sent without a person."""

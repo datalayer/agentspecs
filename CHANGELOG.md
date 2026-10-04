@@ -6,6 +6,14 @@
 
 # Changelog
 
+## 0.0.23
+
+How an example was built is in the catalogue (LOOP E-05).
+
+- A surface's `composed_by` takes `canvas`: its page was composed by a person on the Canvas. *Support desk*, the Canvas example, says it; it said `developer`, as the two examples written in Python do.
+- An example written in Python is the one with an `app.py` in the folder named for it; one composed on the Canvas says `composed_by: canvas`; any other was written as a spec.
+- Tests: *Support desk* is the one example composed on the Canvas, and it has no `app.py`.
+
 ## 0.0.22
 
 The eleven examples of LOOP §9 are in the catalogue: four more applications (LOOP E-01, E-02, E-14).
