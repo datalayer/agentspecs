@@ -8,25 +8,78 @@ A UI plugin is how an agent's answer becomes an interface rather than text: a pr
 the host knows how to render. One YAML per plugin under `agentspecs/ui-plugins/`; an
 agent spec's `ui_plugin` names one.
 
-A plugin hosts the catalog of visual components it renders: A2UI hosts its basic catalog and Datalayer's own components (LOOP C-13).
+A plugin hosts **the catalog of visual components** it renders (LOOP C-13): A2UI hosts
+the 18 components of its v0.9 basic catalog and Datalayer's own six. The catalog is one
+for the three editors of an application — the Appspec, the Canvas and Python — and a
+component the catalog does not have is reached by none of them. Every component, with
+its properties, bindings, events and an example, is listed in
+[the catalog of visual components](./components.md), generated from the plugins' files.
 
 ## Fields
 
 | Field | Meaning |
 |-------|---------|
 | `id` | What an agent spec's `ui_plugin` names: `a2ui`, `mcp-apps`, `mcp-ui`. The file is named for it. |
+| `version` | The spec's version. |
 | `name` | Display name. |
 | `description` | What the plugin renders, and how the user's action comes back. |
 | `docs_url` | The protocol's own documentation. |
-| `enabled` | Whether an agent spec may name it today. A plugin that is not enabled is listed, and not offered. |
+| `enabled` | Whether an agent spec may name it today. A plugin that is not enabled is listed, and not offered — and its components are not in the catalog. |
+| `catalog` | The catalog its components are written in: `a2ui/v0.9`. |
+| `components` | The visual components it renders; see below. |
 
 ## The catalogue
 
-| Id | Name | Enabled |
-|----|------|---------|
-| `a2ui` | A2UI | yes |
-| `mcp-apps` | MCP Apps | no |
-| `mcp-ui` | MCP UI | no |
+| Id | Name | Enabled | Components |
+|----|------|---------|------------|
+| `a2ui` | A2UI | yes | 18 standard, 6 of Datalayer's own |
+| `mcp-apps` | MCP Apps | no | none of its own yet |
+| `mcp-ui` | MCP UI | no | none of its own yet |
+
+## A component
+
+Each entry of a plugin's `components`:
+
+| Field | Meaning |
+|-------|---------|
+| `id` | The name a surface gives it, as the protocol names it: `Text`, `ChoicePicker`, `Table`. |
+| `name` | What a builder reads on the palette: *Select* for `ChoicePicker`. |
+| `category` | `text`, `input`, `action`, `data`, `conversation`, `media` or `layout`. |
+| `emoji` | Its face on the palette. |
+| `description` | What it is for, in a sentence. |
+| `standard` | `true` for a component of the protocol's own catalog: its properties are the protocol's, and not copied here. |
+| `properties` | For Datalayer's own: its properties as a JSON Schema (an object; each property with a `title`, a `description`, its type, and its default, bounds and choices when it has them). The Canvas draws the component's properties form from it, with `@datalayer/primer-rjsf`. |
+| `bindings` | For Datalayer's own: what it can be bound to — what it `shows` (the rows of a table, the points of a chart) and what it `sends` (the row selected, the files given). |
+| `events` | What it reports: `select`, `upload`, `send`, `open`, `submit`. |
+| `example` | A configuration of it, valid against its `properties`. |
+
+```yaml
+# agentspecs/ui-plugins/a2ui.yaml (one of Datalayer's own)
+- id: Table
+  name: Table
+  category: data
+  emoji: 📋
+  description: Rows the application found or keeps, with the columns the builder chooses.
+  standard: false
+  properties:
+    type: object
+    required: [columns]
+    properties:
+      columns: { type: array, title: Columns, description: The columns, in order., minItems: 1, items: { type: string } }
+      page_size: { type: integer, title: Rows per page, description: How many rows show at once., minimum: 1, maximum: 500, default: 20 }
+  bindings:
+    shows: [rows]
+    sends: [selected]
+  events: [select]
+  example:
+    columns: [model, pass rate, cost]
+```
+
+The tests (`tests/test_ui_plugin_components.py`) hold that A2UI's standard components
+are exactly its basic catalog, that each component says what it is, that each of
+Datalayer's own has a valid JSON Schema whose every property is titled and described,
+bindings and events, and an example its schema accepts — and that
+[the catalog's page](./components.md) is the one `python -m agentspecs.ui_plugins` writes.
 
 ## In an agent spec
 
@@ -34,3 +87,66 @@ A plugin hosts the catalog of visual components it renders: A2UI hosts its basic
 protocol: vercel-ai
 ui_plugin: a2ui
 ```
+
+## In an Appspec: how a surface names a component
+
+An application's `interface` lists the components its surface may use, and its
+`surface` is a tree of them, written as A2UI's `updateComponents` carries them: each
+node has an `id` and names its `component` by the catalog's `id`, and the tree starts
+from the node whose `id` is `root`. A node's other keys are the component's properties.
+
+```yaml
+# agentspecs/apps/quote-calculator.yaml (abridged)
+interface:
+  layout: page
+  accent: sun
+  components: [Card, Column, Text, Slider, Button]
+  surface:
+    protocol: a2ui/v0.9
+    components:
+      - id: root
+        component: Column
+        children: [title, seats, run]
+      - id: title
+        component: Text
+        text: Quote
+        variant: h2
+      - id: seats
+        component: Slider
+        label: Seats
+        value: { path: /inputs/seats }
+        min: 1
+        max: 1000
+      - id: run
+        component: Button
+        child: run-label
+        variant: primary
+        action: { event: { name: run } }
+      - id: run-label
+        component: Text
+        text: Compute the quote
+```
+
+`app_problems` (`agentspecs.apps`) refuses an application that names a component the
+catalog does not have — in `interface.components`, or as the `component` of a node of
+its surface — in a sentence each:
+
+```python
+from agentspecs.apps import app_problems, load_app
+
+app_problems(load_app("apps/my-app.yaml"))
+# ["There is no component named 'Gauge' in the catalog.",
+#  "The surface's 'speed' is a 'Gauge', which the catalog does not have."]
+```
+
+A component is in the catalog when an **enabled** plugin renders it
+(`agentspecs.apps.component_named`). What is not checked yet: a node's properties
+against its component's JSON Schema, and a version per component.
+
+## In Python and TypeScript
+
+Agent Runtimes generates the plugins into its catalogues with `make specs`:
+`UI_PLUGIN_CATALOGUE`, and `COMPONENT_CATALOGUE` with `get_component` /
+`list_components` in Python (`agent_runtimes.specs.ui_plugins`) and `getComponent` /
+`listComponents` in TypeScript (`src/specs/uiPlugins.ts`) — the components of the
+enabled plugins, by the name a surface gives them.

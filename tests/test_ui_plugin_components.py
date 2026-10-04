@@ -88,3 +88,23 @@ def test_a_wrong_value_is_refused_by_the_schema():
         except jsonschema.ValidationError:
             continue
         raise AssertionError(f"{wrong} should be refused")
+
+
+def test_the_catalogue_page_says_every_component_and_is_the_one_in_the_docs():
+    """The documentation's page of components is generated from the plugins
+    (LOOP G-05): it names every component, and for Datalayer's own every
+    property, binding and event; the page in the docs is the generated one."""
+    from agentspecs.ui_plugins import CATALOGUE_PATH, catalogue_markdown
+
+    page = catalogue_markdown()
+    for name, spec in _components().items():
+        assert f"`{name}`" in page, name
+        if spec["standard"]:
+            continue
+        assert f"### `{name}`" in page, name
+        for field_name in spec["properties"]["properties"]:
+            assert f"| `{field_name}`" in page, f"{name}.{field_name}"
+        for value in [*spec["bindings"]["shows"], *spec["bindings"]["sends"], *spec["events"]]:
+            assert f"`{value}`" in page, f"{name}: {value}"
+    if CATALOGUE_PATH.exists():
+        assert CATALOGUE_PATH.read_text() == page, "run `python -m agentspecs.ui_plugins`"
