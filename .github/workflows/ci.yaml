@@ -80,3 +80,23 @@ jobs:
 
       - name: Test
         run: python -m pytest tests -v
+
+  # The documentation builds on every pull request, as it is published: a page
+  # that does not compile, or a link to a page or a heading that does not
+  # exist, fails it (onBrokenLinks and onBrokenMarkdownLinks throw).
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Build the docs
+        env:
+          NODE_OPTIONS: '--max-old-space-size=8192'
+        run: |
+          cd docs
+          npm install --no-audit --no-fund
+          npm run build

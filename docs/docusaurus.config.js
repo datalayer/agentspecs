@@ -10,12 +10,15 @@ module.exports = {
   url: 'https://agentspecs.datalayer.tech',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'datalayer',
   projectName: 'datalayer',
   markdown: {
     mermaid: true,
+    // A link to a page that does not exist fails the build (LOOP G-10).
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
   },
   plugins: [
     '@docusaurus/theme-live-codeblock',
