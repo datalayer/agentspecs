@@ -89,6 +89,15 @@ model: "openai:gpt-4.1"
 model: "anthropic:claude-opus-4-20250514"
 ```
 
+### `model_additionals` (list of strings, optional)
+Other models of the catalogue the agent may be switched to, beside its `model`. Each is a model's `id` in `models/`; an id the catalogue does not know is refused, and so is a typed-judgment model (`capabilities: [judgments]`), which runs no chat.
+```yaml
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model_additionals:
+  - "alibaba:qwen-max"
+```
+A runtime offers the agent's `model` and those of its `model_additionals` its inference can run: routed through datalayer-ai-inference, those the service lists at `GET /api/ai-inference/v1/models` when the runtime starts. The chat's model menu and the `loop` CLI's `/models` show that list, and a switch to a model outside it is refused. The enabled agents list as additionals the chat models datalayer-ai-inference serves from the catalogue.
+
 ### `icon` (string)
 UI icon identifier (e.g., `"trending-up"`, `"code"`, `"database"`)
 
@@ -99,7 +108,7 @@ UI emoji identifier (e.g., `"📈"`, `"💻"`, `"🔍"`)
 Hex color code for UI theming
 ```yaml
 color: "#3B82F6"  # Blue
-color: "#10B981"  # Green  
+color: "#10B981"  # Green
 color: "#F59E0B"  # Amber
 color: "#6366F1"  # Indigo
 ```
@@ -189,6 +198,7 @@ Commonly used fields:
 
 - `enabled`
 - `model`
+- `model_additionals`
 - `sandbox_variant`
 - `memory`
 - `mcp_servers` (use `id:version` refs)
@@ -230,7 +240,7 @@ Generated catalogs are keyed by unversioned id only (e.g. `crawler`). The `getAg
 5. **Suggestions**: Provide 3-5 concrete, actionable examples
 6. **Colors**: Use hex codes consistently based on agent type:
    - Blue (`#3B82F6`): Data and information
-   - Green (`#10B981`): Web and networking  
+   - Green (`#10B981`): Web and networking
    - Indigo (`#6366F1`): Development and code
    - Amber (`#F59E0B`): Finance and analytics
    - Pink (`#EC4899`): Communication and workflow

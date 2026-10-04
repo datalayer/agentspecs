@@ -6,6 +6,14 @@
 
 # Changelog
 
+## 0.0.25
+
+An agent may be switched to other models than its own.
+
+- `model_additionals`, optional on an agent: the other models of the catalogue it may be switched to, beside its `model`, each a catalogue `id` (not an alias) and a chat model, never a typed-judgment one. agent-runtimes offers those its inference serves, as datalayer-ai-inference lists them at startup.
+- The four enabled agents (*A Simple Agent*, *Example Once Trigger Agent*, *Jupyter Notebook Compactor*, *Crawler Agent*) list `alibaba:qwen-max`: with their own `bedrock:us.anthropic.claude-sonnet-4-6`, the chat models datalayer-ai-inference serves from the catalogue.
+- Tests: an additional model is a chat model of the catalogue, not the agent's own, listed once; every enabled agent lists what datalayer-ai-inference serves. Documented with the agent fields.
+
 ## 0.0.24
 
 A composed page is shown, and a rule is written one way (LOOP R-01, E-01).
