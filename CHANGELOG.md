@@ -14,7 +14,6 @@ Each version names the LOOP boxes it carries — the plan's ids, as its commits 
 
 - Models: the capability `judgments` is `decisions` (Jev, `cloudflare:gtw/typesafe/jev` and `cloudflare:wrk/typesafe/jev`), and `judge` is `decider` (a chat model that may be asked the same typed questions: `gpt-oss-120b`, Claude Sonnet 4.6). A spec naming `judgments` or `judge` is refused when the catalogue loads: no alias is kept.
 - Apps: a decision's `judgment_model` is `decision_model`; the four decision applications say it so. `app_problems` says "… to decide with" and "… does not answer typed decisions". The Appspec JSON Schema is written again.
-- Apps: `record.suggest_tests` (LOOP V-16), off unless said: whether an application's conversations may be used to suggest tests to its builder. Tested and documented in the Appspec reference.
 - Apps: `record.suggest_tests` (LOOP V-16), off unless said: whether an application's conversations may be used to suggest tests to its builder — only those kept while it is on are sampled. Documented under Applications and in the reference.
 - datalayer-ai-inference's typed-decision endpoint is `POST /api/ai-inference/v1/decisions`, as the Jev specs say.
 - Tools: `decide` (`action: read`), which asks Jev typed questions — `noul`, `choice`, `score` — through datalayer-ai-inference's `POST /decisions` with the runtime's ai-inference token, bound to `agent_runtimes.tools.decisions.decide`. Documented under Tools.
