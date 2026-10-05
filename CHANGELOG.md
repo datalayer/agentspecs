@@ -8,6 +8,12 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.33
+
+The examples' `tests.verified` sentences without a builder's word (LOOP E-14): *the past orders*, *a run already recorded*, *nothing has stopped for an approval*, *measured for it*.
+
+LOOP boxes: E-14 — [Applications](https://agentspecs.datalayer.tech/apps).
+
 ## 0.0.32
 
 What the examples say they verified, in a Maker's words (LOOP E-14).

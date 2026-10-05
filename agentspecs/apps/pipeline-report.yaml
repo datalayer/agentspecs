@@ -170,7 +170,7 @@ tests:
     live: []
     recorded: []
     unverified:
-      - "Its agent is switched off in the catalogue: no report has been built, no schedule has fired and no Gate has run."
+      - "Its agent is switched off in the catalogue: no report has been built, no schedule has fired and nothing has stopped for an approval."
       - "The pipeline export is named, not given."
       - "Its tests have not been run."
 
