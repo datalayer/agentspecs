@@ -134,7 +134,7 @@ app = Application.from_spec(
             "verified": {
                 "live": [],
                 "recorded": [
-                    "Its code runs in process in agent-runtimes' tests with a scripted "
+                    "Its code runs in process in Datalayer's own tests with a scripted "
                     "model: a CSV asked for and reported on, a PDF refused, a file given "
                     "on its page answering what its code asks.",
                 ],

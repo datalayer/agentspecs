@@ -1,9 +1,9 @@
 # Built from app.py by `loop apps build`: the file is the source; edit it there.
 # What its code decides; without the file, its agent answers:
-# loop:code start: opening (app.py:113)
-# loop:code message: reply (app.py:126)
-# loop:code action save: save (app.py:142)
-# loop:code action finish: finish (app.py:151)
+# loop:code start: opening (app.py:112)
+# loop:code message: reply (app.py:125)
+# loop:code action save: save (app.py:141)
+# loop:code action finish: finish (app.py:150)
 schema: loop.app/v1
 id: customer-interview
 version: 0.0.1
@@ -59,14 +59,13 @@ tests:
   verified:
     live:
     - 'Tried signed out in the browser from its example''s page (2026-10-04): the
-      model answered its starters. Its code did not run there: the browser runs its
-      spec.'
+      model answered. Its Python code did not run there.'
     recorded:
-    - 'Its code runs in process in agent-runtimes'' tests with a scripted model: consent
+    - 'Its code runs in process in Datalayer''s own tests with a scripted model: consent
       asked, a refusal honoured, a reply per message, an insight saved, the result
       recorded.'
     unverified:
-    - 'Its Cog is switched off in the catalogue: its code has not run with a real
+    - 'Its agent is switched off in the catalogue: its code has not run with a real
       model, and its tests have not been run.'
 record:
   keep_for: 1_years

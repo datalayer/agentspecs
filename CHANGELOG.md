@@ -8,6 +8,14 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.32
+
+What the examples say they verified, in a Maker's words (LOOP E-14).
+
+LOOP boxes: E-14 — [Applications](https://agentspecs.datalayer.tech/apps).
+
+- Apps: the `tests.verified` sentences of *Web Research*, *Customer Interview*, *Report from a File* and *Weekly Pipeline Report* say what a person reads on the Studio's examples — an agent, not a Cog; what it suggests you ask, not its starters; Datalayer's own tests.
+
 ## 0.0.31
 
 Marks: every MCP server, skill, tool and frontend tool set has an icon that names its package, and an emoji; an Odoo accounting server through the Datalayer MCP server.

@@ -57,7 +57,7 @@ tests:
   verified:
     live:
       - "Answered live on r1, in the Studio's Preview and from the terminal (2026-10-03), on Tavily."
-      - "Drawn in the Preview signed in, with its page, its starters and its setting (2026-10-04)."
+      - "Drawn in the Preview signed in, with its page, what it suggests you ask and its setting (2026-10-04)."
     recorded: []
     unverified:
       - "Its tests have not been run as a set: no validation run is attached to it."
