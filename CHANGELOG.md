@@ -8,6 +8,14 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.29
+
+The Datalayer MCP server's tools, classed: what an application's connection to Datalayer reaches through the gateway (LOOP I-12).
+
+LOOP boxes: I-12, F-10 — [Applications](https://agentspecs.datalayer.tech/apps).
+
+- MCP servers: `datalayer` classes each of the 144 tools the Datalayer MCP gateway serves (`checked: 2026-10-05`), read off the gateway's own table of what it serves, every toolset included: reading notebooks, Spaces, the library, Contents, Earthdata and Odoo is `read`; editing a notebook, running code, Odoo's records and the books are `write`; removing a cell, a record or a sandbox `delete`; launching a sandbox `buy`, a snapshot of one `write` and `buy`; sharing one `publish`. The gateway grants an application's connection to Datalayer the tools these classes allow at its level — a connection that reads, only the tools that only read — as the runtime gives them (`gives`).
+
 ## 0.0.28
 
 An organization's Frames: its version of a catalogue Frame, and Frames of its own (LOOP U-31, U-32).
