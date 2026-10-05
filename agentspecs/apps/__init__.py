@@ -671,7 +671,10 @@ class AppSpec(_Strict):
     skills: List[str] = Field(default_factory=list, description="Skills it adds to its agent's")
     tools: List[str] = Field(default_factory=list, description="Tools of the catalogue it adds to its agent's")
 
-    context: List[str] = Field(default_factory=list, description="The Frames it works under")
+    context: List[str] = Field(
+        default_factory=list,
+        description="The Frames it works under: the catalogue's, or its organization's own (`org-…`)",
+    )
     contents: List[str] = Field(default_factory=list, description="The documents and datasets it answers from")
     connections: List[AppConnection] = Field(default_factory=list, description="What it reaches")
     rules: List[AppRule] = Field(default_factory=list, description="When it acts alone, and when it asks")
@@ -943,17 +946,32 @@ def component_named(name: str) -> Optional[Dict[str, Any]]:
     return None
 
 
-def app_problems(app: AppSpec) -> List[str]:
+def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = None) -> List[str]:
     """What stops an application from being used, in sentences; empty when nothing does.
 
     Every reference resolves, every rule applies to something the application
     can reach, and what it asks of the catalogue's Gates is run by its Guards.
+
+    A context of an organization's own (``org-…``, LOOP U-32) is not the
+    catalogue's: it resolves among ``organization_frames``, the ids of the
+    organization the application belongs to, and is refused when they are not
+    known — no organization was said.
     """
+    from ..frames import is_organization_frame
+
     problems: List[str] = []
     if app.agent and _agent_of(app) is None:
         problems.append(f"There is no agent or Cog named {app.agent!r}.")
     for what, catalogue, ref in _refs(app):
-        if _id_of(ref) not in _catalogue(catalogue):
+        if catalogue == "frames" and is_organization_frame(ref):
+            if organization_frames is None:
+                problems.append(
+                    f"{ref!r} is a context of an organization's own: "
+                    "it is checked with the organization the application belongs to, which was not said."
+                )
+            elif _id_of(ref) not in organization_frames:
+                problems.append(f"Its organization has no context named {ref!r}.")
+        elif _id_of(ref) not in _catalogue(catalogue):
             problems.append(f"There is no {what} named {ref!r}.")
     from ..models import get_model
 

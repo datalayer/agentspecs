@@ -693,6 +693,16 @@ def test_a_reference_that_does_not_resolve_is_a_problem_said_in_words() -> None:
         "There is no agent or Cog named 'no-such-agent'."
     ]
     assert "There is no Frame named 'nope'." in app_problems(app(context=["nope"]))
+    # An organization's own context resolves among its organization's (LOOP U-32).
+    assert app_problems(app(context=["org-house-style"]), ["org-house-style"]) == []
+    assert app_problems(app(context=["org-house-style"]), []) == [
+        "Its organization has no context named 'org-house-style'."
+    ]
+    assert app_problems(app(context=["org-house-style"])) == [
+        "'org-house-style' is a context of an organization's own: it is checked with the "
+        "organization the application belongs to, which was not said."
+    ]
+    assert "There is no Frame named 'nope'." in app_problems(app(context=["nope"]), ["org-house-style"])
     assert "There is no model named 'nope'." in app_problems(app(model="nope"))
     assert "There is no Guard named 'nope'." in app_problems(app(checks={"guards": ["nope"]}))
     problems = app_problems(

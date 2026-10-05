@@ -26,7 +26,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `model` | text | The model, when it is not the organization's default | empty |
 | `skills` | list of text | Skills it adds to its agent's | — |
 | `tools` | list of text | Tools of the catalogue it adds to its agent's | — |
-| `context` | list of text | The Frames it works under | — |
+| `context` | list of text | The Frames it works under: the catalogue's, or its organization's own (`org-…`) | — |
 | `contents` | list of text | The documents and datasets it answers from | — |
 | `connections` | list of [AppConnection](#appconnection) | What it reaches | — |
 | `rules` | list of [AppRule](#apprule) | When it acts alone, and when it asks | — |

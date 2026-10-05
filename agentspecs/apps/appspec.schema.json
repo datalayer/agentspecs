@@ -899,7 +899,7 @@
       "type": "array"
     },
     "context": {
-      "description": "The Frames it works under",
+      "description": "The Frames it works under: the catalogue's, or its organization's own (`org-\u2026`)",
       "items": {
         "type": "string"
       },

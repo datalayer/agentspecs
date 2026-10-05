@@ -463,6 +463,15 @@ def render_frames(context: FrameContext) -> str:
 # ---------------------------------------------------------------------------
 
 
+#: How an organization's own Frame is named: never a catalogue id.
+ORGANIZATION_FRAME_PREFIX = "org-"
+
+
+def is_organization_frame(ref: str) -> bool:
+    """Whether a reference names an organization's own Frame rather than the catalogue's."""
+    return _key_of(str(ref)).startswith(ORGANIZATION_FRAME_PREFIX)
+
+
 def load_raw_frames(directory: Optional[Path] = None) -> Dict[str, Dict[str, Any]]:
     """Every Frame YAML of a directory as plain data, by id, unresolved."""
     folder = directory or Path(__file__).parent
@@ -471,6 +480,11 @@ def load_raw_frames(directory: Optional[Path] = None) -> Dict[str, Dict[str, Any
         data = yaml.safe_load(path.read_text()) or {}
         if data.get("id") != path.stem:
             raise FrameError(f"{path.name}: the file is named for id {path.stem!r}, the spec says {data.get('id')!r}")
+        if is_organization_frame(path.stem):
+            raise FrameError(
+                f"{path.name}: an id starting with {ORGANIZATION_FRAME_PREFIX!r} is an organization's own Frame, "
+                "never the catalogue's"
+            )
         if "lineage" in data:
             raise FrameError(f"{path.name}: `lineage` is computed from `extends`, not written")
         raw[path.stem] = data
@@ -515,9 +529,92 @@ def list_frames() -> List[FrameSpec]:
     return list(FRAME_CATALOGUE.values())
 
 
+# ---------------------------------------------------------------------------
+# An organization's Frames (LOOP U-21, U-31, U-32)
+# ---------------------------------------------------------------------------
+
+#: What an organization writes of a Frame: its rules, its words and its voice.
+ORGANIZATION_FRAME_PARTS = ("rules", "terminology", "style")
+
+
+def _flat(frame: Dict[str, Any]) -> Dict[str, Any]:
+    """A resolved Frame standing alone: what it inherits is in it, and it extends nothing."""
+    return {key: value for key, value in frame.items() if key not in ("extends", "lineage")}
+
+
+def _parts_of(identity: str, version: Any) -> Dict[str, Any]:
+    if not isinstance(version, dict):
+        raise FrameError(f"The organization's {identity!r} is not an object")
+    rules, terminology, style = (version.get(part) for part in ORGANIZATION_FRAME_PARTS)
+    if (
+        not isinstance(rules, list)
+        or not isinstance(style, list)
+        or not isinstance(terminology, dict)
+        or not all(
+            isinstance(line, str) for line in [*rules, *style, *terminology, *terminology.values()]
+        )
+    ):
+        raise FrameError(
+            f"The organization's {identity!r} is not rules and style as sentences and terminology as words and meanings"
+        )
+    return {"rules": list(rules), "terminology": dict(terminology), "style": list(style)}
+
+
+def frames_with_organization(
+    versions: Dict[str, Any],
+    *,
+    owner: str,
+    frames: Optional[Dict[str, Dict[str, Any]]] = None,
+) -> Dict[str, Dict[str, Any]]:
+    """The catalogue as an organization reads it: its versions in place of the catalogue's, and its own Frames beside.
+
+    ``versions`` is what the organization keeps (IAM's ``frames``), by id.
+
+    - A catalogue id: the organization's rules, terminology and style replace
+      the three of that Frame as it is resolved — what it inherits included,
+      as the Studio's Context page shows it — and the rest stays the
+      catalogue's. It then stands alone; a Frame that builds on it keeps the
+      catalogue's version of what it inherits, as the page shows that one too.
+    - An id starting with ``org-``: a Frame of the organization's own, with its
+      ``name`` and ``description``, for the whole organization, managed by
+      ``owner``.
+    - Any other id is a version of a Frame the catalogue no longer has, and is
+      left out: an application naming it is refused by its checks.
+
+    The result is what `compose_frames` reads in place of the catalogue.
+    """
+    catalogue = frames if frames is not None else _RAW_FRAMES
+    changed = {identity for identity in versions if identity in catalogue}
+    read: Dict[str, Dict[str, Any]] = dict(catalogue)
+    for identity, written in catalogue.items():
+        resolved = resolve_frame(written, catalogue)
+        if identity in changed:
+            read[identity] = {**_flat(resolved), **_parts_of(identity, versions[identity])}
+        elif changed.intersection(resolved["lineage"]):
+            read[identity] = _flat(resolved)
+    for identity, version in versions.items():
+        if not is_organization_frame(identity):
+            continue
+        parts = _parts_of(identity, version)
+        name, description = version.get("name"), version.get("description")
+        if not isinstance(name, str) or not name.strip() or not isinstance(description, str):
+            raise FrameError(f"The organization's own {identity!r} has no name or description")
+        read[identity] = {
+            "id": identity,
+            "name": name.strip(),
+            "description": description.strip(),
+            "scope": FrameScope.ORGANIZATION.value,
+            "owner": owner,
+            **parts,
+        }
+    return read
+
+
 __all__ = [
     "FRAME_CATALOGUE",
     "MAX_EXTENDS_DEPTH",
+    "ORGANIZATION_FRAME_PARTS",
+    "ORGANIZATION_FRAME_PREFIX",
     "FrameContext",
     "FrameError",
     "FrameGuard",
@@ -527,8 +624,10 @@ __all__ = [
     "GuardCategory",
     "compose_frames",
     "frame_lineage",
+    "frames_with_organization",
     "get_frame",
     "get_resolved_frame",
+    "is_organization_frame",
     "list_frames",
     "load_frames",
     "load_raw_frames",

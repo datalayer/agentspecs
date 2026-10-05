@@ -36,8 +36,10 @@ from agentspecs.frames import (
     GuardCategory,
     compose_frames,
     frame_lineage,
+    frames_with_organization,
     get_frame,
     get_resolved_frame,
+    is_organization_frame,
     list_frames,
     load_raw_frames,
     merge_lists,
@@ -385,3 +387,74 @@ class TestExtensionOverFragments:
         }
         resolved = resolve_spec(specs["child"], specs, self.FRAGMENTS)
         assert resolved["tools"] == ["fragment-tool:0.0.1", "shared:0.0.1", "parent-tool:0.0.1"]
+
+
+# ---------------------------------------------------------------------------
+# An organization's Frames (LOOP U-31, U-32)
+# ---------------------------------------------------------------------------
+
+_VERSION = {
+    "rules": ["Say the quarter."],
+    "terminology": {"ARR": "What recurs in a year."},
+    "style": ["Short."],
+}
+
+
+class TestOrganizationFrames:
+    def test_no_catalogue_frame_looks_like_an_organization_s_own(self):
+        assert not [frame.id for frame in list_frames() if is_organization_frame(frame.id)]
+        assert is_organization_frame("org-house-style") and is_organization_frame(
+            "org-house-style:0.0.1"
+        )
+        assert not is_organization_frame("datalayer")
+
+    def test_the_catalogue_refuses_an_organization_id(self, tmp_path):
+        (tmp_path / "org-x.yaml").write_text(yaml.safe_dump(_frame("org-x")))
+        with pytest.raises(FrameError, match="organization's own Frame"):
+            load_raw_frames(tmp_path)
+
+    def test_a_version_replaces_the_three_of_the_resolved_frame_and_stands_alone(self):
+        frames = frames_with_organization({"board-reporting": _VERSION}, owner="Acme")
+        context = compose_frames(["board-reporting"], frames)
+        assert context.rules == ["Say the quarter."]
+        assert context.terminology == {"ARR": "What recurs in a year."}
+        assert context.style == ["Short."]
+        assert context.lineage == ["board-reporting"]
+        # The rest stays the catalogue's, what it inherits included.
+        assert context.goals == get_resolved_frame("board-reporting").goals
+        assert {guard.id for guard in context.guards} == {
+            guard.id for guard in get_resolved_frame("board-reporting").guards
+        }
+
+    def test_a_frame_building_on_a_changed_one_keeps_the_catalogue_s(self):
+        frames = frames_with_organization({"datalayer": _VERSION}, owner="Acme")
+        context = compose_frames(["board-reporting"], frames)
+        assert context.rules == get_resolved_frame("board-reporting").rules
+        assert compose_frames(["datalayer"], frames).rules == ["Say the quarter."]
+
+    def test_nothing_changed_is_the_catalogue(self):
+        assert render_frames(
+            compose_frames(["web-research"], frames_with_organization({}, owner="Acme"))
+        ) == (render_frames(compose_frames(["web-research"])))
+
+    def test_an_own_frame_is_for_the_whole_organization_and_composes(self):
+        own = {**_VERSION, "name": "House style", "description": "How Acme writes."}
+        frames = frames_with_organization({"org-house-style": own}, owner="Acme")
+        context = compose_frames(["web-research", "org-house-style"], frames)
+        assert "Say the quarter." in context.rules
+        assert context.names["org-house-style"] == "House style"
+        assert context.owners["org-house-style"] == "Acme"
+        assert "House style — owned by Acme" in render_frames(context)
+
+    def test_an_own_frame_without_a_name_is_refused(self):
+        with pytest.raises(FrameError, match="no name"):
+            frames_with_organization({"org-x": _VERSION}, owner="Acme")
+
+    def test_a_version_of_the_wrong_shape_is_refused(self):
+        with pytest.raises(FrameError, match="not rules and style"):
+            frames_with_organization(
+                {"datalayer": {"rules": "one", "terminology": {}, "style": []}}, owner="Acme"
+            )
+
+    def test_a_version_of_a_frame_the_catalogue_no_longer_has_is_left_out(self):
+        assert "gone" not in frames_with_organization({"gone": _VERSION}, owner="Acme")

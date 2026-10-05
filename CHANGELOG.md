@@ -8,6 +8,16 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.28
+
+An organization's Frames: its version of a catalogue Frame, and Frames of its own (LOOP U-31, U-32).
+
+LOOP boxes: U-31, U-32 — [Frames](https://agentspecs.datalayer.tech/frames), [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- Frames: `frames_with_organization(versions, owner=...)` gives the catalogue as an organization reads it — the versions it keeps (Datalayer IAM's `frames`) — for `compose_frames`: its rules, terminology and style in place of a Frame's three as resolved, the Frame then standing alone (one that builds on it keeps the catalogue's version of what it inherits); and its own Frames, with an id starting with `org-` (`ORGANIZATION_FRAME_PREFIX`, `is_organization_frame`), a name and a description, for the whole organization. A version of the wrong shape, or an own Frame with no name, is refused; a version of a Frame the catalogue no longer has is left out.
+- Frames: a catalogue Frame whose id starts with `org-` is refused when the catalogue loads.
+- Apps: `app_problems(app, organization_frames=[...])` checks an `org-…` context against the Frames of the organization the application belongs to: one it does not have is refused (*Its organization has no context named …*), and so is any when no organization is said. The `context` field says so; the Appspec JSON Schema and the reference are written again.
+
 ## 0.0.27
 
 An application's floating assistant may show a character a plugin contributes (LOOP T-24).
