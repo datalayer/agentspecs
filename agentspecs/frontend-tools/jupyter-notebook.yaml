@@ -11,5 +11,5 @@ tags:
   - jupyter-server
 enabled: true
 toolset: all
-icon: notebook
+icon: "@datalayer/icons-react:jupyter"
 emoji: "📓"

@@ -298,6 +298,27 @@ Common fields:
 - `runtime.language`, `runtime.package`, `runtime.method`
 - `tags`, `icon`, `emoji`
 
+### Frontend Tools (`agentspecs/frontend-tools`)
+
+Names tools that run on the page rather than on the runtime, a set at a time: the
+notebook's, the Lexical document's, the decks'.
+
+Common fields:
+
+- `id`, `version`, `name`, `description`, `enabled`
+- `toolset` (the names of the tools of the set)
+- `tags`, `icon`, `emoji`
+
+### Marks: `icon` and `emoji`
+
+An MCP server, a skill, a tool and a frontend tool set each have an icon and an emoji
+(`agentspecs.marks`, its JSON Schema `MARKS_SCHEMA`, checked by `tests/test_marks.py`).
+The icon says the package it is in: `<package>:<name>`, the package one of
+`@datalayer/icons-react` and `@primer/octicons-react`, the name in kebab case as that
+package names it — `@datalayer/icons-react:odoo`, `@primer/octicons-react:mark-github`.
+A page draws the icon, the emoji where there is no icon, and nothing where there is
+neither.
+
 ### Env Vars (`agentspecs/envvars`)
 
 Defines environment variable metadata.

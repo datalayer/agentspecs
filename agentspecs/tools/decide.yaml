@@ -23,5 +23,5 @@ runtime:
   language: python
   package: agent_runtimes.tools.decisions
   method: decide
-icon: law
+icon: "@primer/octicons-react:law"
 emoji: "⚖️"

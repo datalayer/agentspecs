@@ -16,5 +16,5 @@ runtime:
   language: python
   package: agent_runtimes.examples.tools.ag_ui
   method: get_weather
-icon: sun
+icon: "@primer/octicons-react:sun"
 emoji: "🌤️"

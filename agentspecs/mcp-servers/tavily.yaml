@@ -27,7 +27,7 @@ tags:
   - research
   - web
 
-icon: search
+icon: "@primer/octicons-react:search"
 emoji: 🔍
 
 # What each tool does to the world (agentspecs.actions). A tool not named here is

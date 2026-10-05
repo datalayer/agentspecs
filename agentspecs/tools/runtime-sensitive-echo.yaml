@@ -15,5 +15,5 @@ runtime:
   language: python
   package: agent_runtimes.examples.tools
   method: runtime_sensitive_echo
-icon: shield
+icon: "@primer/octicons-react:shield"
 emoji: "🛡️"

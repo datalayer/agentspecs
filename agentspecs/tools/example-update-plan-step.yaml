@@ -16,5 +16,5 @@ runtime:
   language: python
   package: agent_runtimes.examples.tools.ag_ui
   method: update_plan_step
-icon: checklist
+icon: "@primer/octicons-react:checklist"
 emoji: "✅"

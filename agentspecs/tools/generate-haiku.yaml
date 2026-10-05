@@ -16,5 +16,5 @@ runtime:
   language: python
   package: agent_runtimes.examples.tools.ag_ui
   method: generate_haiku
-icon: pencil
+icon: "@primer/octicons-react:pencil"
 emoji: "🖋️"

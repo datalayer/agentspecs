@@ -16,5 +16,5 @@ runtime:
   language: python
   package: agent_runtimes.examples.tools
   method: runtime_send_mail
-icon: mail
+icon: "@primer/octicons-react:mail"
 emoji: "📧"

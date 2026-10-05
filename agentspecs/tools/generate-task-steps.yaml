@@ -16,5 +16,5 @@ runtime:
   language: python
   package: agent_runtimes.examples.tools.ag_ui
   method: generate_task_steps
-icon: tasklist
-emoji: "🧑‍⚖️"
+icon: "@primer/octicons-react:tasklist"
+emoji: "🙋"

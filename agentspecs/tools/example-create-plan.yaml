@@ -16,5 +16,5 @@ runtime:
   language: python
   package: agent_runtimes.examples.tools.ag_ui
   method: create_plan
-icon: list-unordered
+icon: "@primer/octicons-react:list-unordered"
 emoji: "📋"

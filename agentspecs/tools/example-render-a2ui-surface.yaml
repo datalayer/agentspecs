@@ -17,5 +17,5 @@ runtime:
   language: python
   package: agent_runtimes.examples.tools.a2ui
   method: render_a2ui_surface
-icon: browser
+icon: "@primer/octicons-react:browser"
 emoji: "🎛️"

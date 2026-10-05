@@ -24,7 +24,7 @@ tags:
   - local
   - storage
 
-icon: file-directory
+icon: "@primer/octicons-react:file-directory"
 emoji: 📁
 
 # What each tool does to the world (agentspecs.actions). A tool not named here is

@@ -8,6 +8,16 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.31
+
+Marks: every MCP server, skill, tool and frontend tool set has an icon that names its package, and an emoji; an Odoo accounting server through the Datalayer MCP server.
+
+Pages: [MCP servers](https://agentspecs.datalayer.tech/agents/mcp-servers), [Skills](https://agentspecs.datalayer.tech/agents/skills), [Tools](https://agentspecs.datalayer.tech/agents/tools).
+
+- Marks (`agentspecs.marks`): an `icon` is `<package>:<name>` — the package one of `@datalayer/icons-react` and `@primer/octicons-react`, the name in kebab case as that package names it (`@datalayer/icons-react:odoo`, `@primer/octicons-react:mark-github`) — so a page loads the icon from the right package. `MARKS_SCHEMA` (JSON Schema), `icon_problem`, `emoji_problem`, `marks_problems` and `parse_icon` say it; a bare name is refused. The 47 entries of `mcp-servers`, `skills`, `tools` and `frontend-tools` say theirs: the brands from the Datalayer icons (Datalayer, GitHub, Google, Kaggle, Slack, Odoo, Jupyter for the notebook tool sets), the rest octicons. `notebook` and `brain` were never octicons and are gone. A page draws the icon, the emoji where there is no icon, and nothing where there is neither.
+- MCP servers: `odoo-accounting` is the Datalayer MCP server with its `odoo-accounting` toolset alone (`https://mcp.datalayer.run/mcp?only=odoo-accounting`, through `mcp-remote`, with `DATALAYER_API_KEY`): invoices, bills, journal entries, reconciliations, bank lines and tax returns. Its 49 tools classed as `datalayer` classes them; off by default; icon `@datalayer/icons-react:odoo`.
+- Tools: every entry of `tools` runs on the runtime, in Python; the ones that run on the page are `frontend-tools`. The README and the Tools page say so.
+
 ## 0.0.30
 
 Each example says what was verified, and how (LOOP E-14); *Report from a File* takes its file on its page (LOOP E-01).

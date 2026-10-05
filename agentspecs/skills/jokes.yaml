@@ -17,5 +17,5 @@ tags:
   - humor
   - demo
 
-icon: smiley
+icon: "@primer/octicons-react:smiley"
 emoji: 😄

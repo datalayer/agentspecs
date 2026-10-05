@@ -22,7 +22,7 @@ Tool specs define runtime-callable tools and their implementation bindings.
 - `runtime.package`
 - `runtime.method`
 - `tags`
-- `icon`, `emoji`
+- `icon`, `emoji` (`icon` is `<package>:<name>`)
 
 ## Example
 
@@ -37,9 +37,20 @@ runtime:
   language: python
   package: agent_runtimes.examples.tools
   method: runtime_echo
-icon: comment
+icon: "@primer/octicons-react:comment"
 emoji: "💬"
 ```
+
+`icon` says its package: `<package>:<kebab-case name>`, the package one of
+`@datalayer/icons-react` and `@primer/octicons-react` (see
+[MCP servers](../mcp-servers/#icon-string)). `emoji` is drawn where there is no icon.
+
+## Tools and frontend tools
+
+Every tool here runs on the runtime, in Python (`runtime.package`, `runtime.method`) —
+`decide`, `runtime-echo` and the `ag-ui` examples alike, even those whose result the page
+draws. A tool that runs on the page is a frontend tool: `agentspecs/frontend-tools` names
+those, a set at a time (`toolset`), with the same marks.
 
 ## Notes
 

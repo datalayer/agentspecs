@@ -71,10 +71,15 @@ tags:
 ```
 
 ### `icon` (string)
-UI icon identifier
+Where the icon is: `<package>:<name>`, the package one of `@datalayer/icons-react` and
+`@primer/octicons-react`, the name the icon's own in kebab case as that package names it —
+`@datalayer/icons-react:odoo` (the Datalayer icons' `odoo.svg`, `OdooIcon`),
+`@primer/octicons-react:mark-github` (`MarkGithubIcon`). A bare name is refused
+(`agentspecs.marks`, `MARKS_SCHEMA`). A page draws it where it shows this entry — a list
+of the catalogue, a call in the chat — and loads only that package.
 
 ### `emoji` (string)
-UI emoji identifier
+Drawn where there is no icon; where there is neither, nothing is.
 
 ## Complete Example
 

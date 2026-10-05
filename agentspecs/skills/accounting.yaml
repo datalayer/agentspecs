@@ -20,5 +20,5 @@ tags:
   - reconciliation
   - close
 
-icon: book
+icon: "@primer/octicons-react:book"
 emoji: "🧮"

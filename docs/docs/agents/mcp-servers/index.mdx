@@ -77,10 +77,15 @@ tags:
 ```
 
 ### `icon` (string)
-UI icon identifier
+Where the icon is: `<package>:<name>`, the package one of `@datalayer/icons-react` and
+`@primer/octicons-react`, the name the icon's own in kebab case as that package names it —
+`@datalayer/icons-react:odoo` (the Datalayer icons' `odoo.svg`, `OdooIcon`),
+`@primer/octicons-react:mark-github` (`MarkGithubIcon`). A bare name is refused
+(`agentspecs.marks`, `MARKS_SCHEMA`). A page draws it where it shows this entry — a list
+of the catalogue, a call in the chat — and loads only that package.
 
 ### `emoji` (string)
-UI emoji identifier
+Drawn where there is no icon; where there is neither, nothing is.
 
 ## Environment Variable Expansion
 
@@ -134,6 +139,9 @@ tags:
   - data
   - kaggle
   - datasets
+
+icon: "@datalayer/icons-react:kaggle"
+emoji: "🏆"
 ```
 
 ## MCP Server Hierarchy
@@ -167,9 +175,21 @@ what was available.
 - **`huggingface`** - Models, datasets, spaces and papers
 - **`kaggle`** - Kaggle datasets and competitions
 - **`odoo`** - Odoo ERP records
+- **`odoo-accounting`** - Odoo accounting through the Datalayer MCP server
 - **`salesforce`** - Salesforce records
 - **`slack`** - Slack messaging
 - **`tavily`** - Web search via Tavily API
+
+### Odoo accounting, through the Datalayer server
+
+`odoo-accounting` is the `datalayer` server with one toolset: the same hosted
+gateway and bridge, reached at `https://mcp.datalayer.run/mcp?only=odoo-accounting`.
+`only=` asks for that toolset alone — invoices, vendor bills, journal entries,
+reconciliations, bank lines, exchange rates and tax returns — so an agent given
+both servers never sees one tool twice. The gateway reaches Odoo with the
+`DATALAYER_ODOO_URL` and `DATALAYER_ODOO_API_KEY` kept in the person's Datalayer
+environment; the runtime holds only `DATALAYER_API_KEY`. Its tools are classed as
+`datalayer` classes them. It is off by default: it writes to somebody's books.
 
 ### The Datalayer server is off by default
 

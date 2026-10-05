@@ -16,5 +16,5 @@ runtime:
   language: python
   package: agent_runtimes.examples.tools.ag_ui
   method: current_time
-icon: clock
+icon: "@primer/octicons-react:clock"
 emoji: "🕒"

@@ -16,5 +16,5 @@ runtime:
   language: python
   package: agent_runtimes.examples.tools.ag_ui
   method: display_recipe
-icon: book
+icon: "@primer/octicons-react:book"
 emoji: "🍳"
