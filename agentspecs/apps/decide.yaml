@@ -19,7 +19,7 @@ description: >-
 owner: Datalayer <info@datalayer.io>
 
 agent: example-simple:0.0.1
-tools:
+backend_tools:
   - decide:0.0.1
 instructions: >-
   Answer every question about a text by asking a typed decision with the decide

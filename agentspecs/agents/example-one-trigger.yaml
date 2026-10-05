@@ -37,7 +37,7 @@ skills:
   - events:0.0.1
 
 # Runtime tools
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 frontend_tools: []
 

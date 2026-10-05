@@ -36,7 +36,7 @@ skills:
   - jokes:0.0.1
   - datalayer-whoami:1.0.0
 
-tools: []
+backend_tools: []
 
 frontend_tools: []
 

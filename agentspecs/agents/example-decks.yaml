@@ -47,7 +47,7 @@ skills: []
 # given one. `decks` names that toolset (`frontend-tools/decks.yaml`) so the
 # spec says which page it sits beside — the same set `worker-pitcher` names;
 # the handlers never come from here. See reactor.datalayer.tech/agent-tools.
-tools: []
+backend_tools: []
 frontend_tools:
   - decks:0.0.1
 

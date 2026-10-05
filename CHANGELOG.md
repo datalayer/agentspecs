@@ -8,6 +8,16 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.36
+
+The `tools` catalogue is `backend-tools`, beside `frontend-tools`: the tools that run on the runtime, named as such.
+
+Pages: [Backend Tools](https://agentspecs.datalayer.tech/agents/backend-tools), [Agents](https://agentspecs.datalayer.tech/agents), [Frames](https://agentspecs.datalayer.tech/frames), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `agentspecs/tools` is `agentspecs/backend-tools`. Every one of its nineteen tools runs on the runtime, in Python (`runtime.package`, `runtime.method`) — `display-recipe`, `generate-haiku` and the other `example-*` tools too, whose results the page draws but which the runtime runs — so none moved to `frontend-tools`.
+- The field that names them is `backend_tools`, as `frontend_tools` names the page's: on an agent (146 agents), an application (`AppSpec.backend_tools`; *Decide*), a Frame (`FrameSpec.backend_tools`, `FrameContext.backend_tools`) and in composition (`LIST_FIELDS`, a Cog's Frames). No alias: `tools` is refused — by `resolve_spec` for an agent, a Cog or a fragment, by `FrameSpec`, and by the Appspec, which forbids an unknown field. A rule naming a tool by id looks it up in `backend-tools`; `agentspecs.actions` reads its classes there; the marks cover `backend-tools`. A team member's `tools` (the names of the tools a member is drawn with) is unchanged.
+- The Appspec JSON Schema and reference written again; the README and the docs say `backend_tools`.
+
 ## 0.0.35
 
 *Decide*, an example application that answers by asking Jev typed decisions.

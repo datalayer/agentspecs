@@ -31,7 +31,7 @@ mcp_servers:
   - odoo:0.0.1
 skills:
   - accounting:0.0.1
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 frontend_tools:
   - jupyter-notebook:0.0.1

@@ -69,7 +69,7 @@ EXTRA_EXAMPLES: Dict[str, Any] = {
     "team": "analyze-support-tickets:0.0.1",
     "model": "bedrock:us.anthropic.claude-sonnet-4-6",
     "skills": ["crawl:0.0.1"],
-    "tools": ["current-time:0.0.1"],
+    "backend_tools": ["current-time:0.0.1"],
     "permissions": {
         "spaces": [{"space": "support", "access": "read"}],
         "computer": {"browse": True},

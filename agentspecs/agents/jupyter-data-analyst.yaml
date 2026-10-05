@@ -61,7 +61,7 @@ sandbox_variant: jupyter-server
 memory: ephemeral
 mcp_servers: []
 skills: []
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 
 # The same fragment the other notebook specialists use, so the analyst sees the

@@ -1,11 +1,12 @@
 ---
 sidebar_position: 1
-title: Tools
+title: Backend Tools
 ---
 
-# Tool Specifications
+# Backend Tool Specifications
 
-Tool specs define runtime-callable tools and their implementation bindings.
+Backend tool specs (`agentspecs/backend-tools`) define the tools that run on the runtime,
+in Python, and their implementation bindings. An agent lists them under `backend_tools`.
 
 ## Required Fields
 
@@ -45,7 +46,7 @@ emoji: "💬"
 `@datalayer/icons-react` and `@primer/octicons-react` (see
 [MCP servers](../mcp-servers/#icon-string)). `emoji` is drawn where there is no icon.
 
-## Tools and frontend tools
+## Backend tools and frontend tools
 
 Every tool here runs on the runtime, in Python (`runtime.package`, `runtime.method`) —
 `decide`, `runtime-echo` and the `ag-ui` examples alike, even those whose result the page
@@ -61,7 +62,7 @@ those, a set at a time (`toolset`), with the same marks.
 
 `decide` asks Jev typed questions about a text and gives back the typed answers. It is
 *A Simple Agent*'s (`example-simple`) one tool beside `runtime-echo`, and any agent may
-list it (`tools: [decide:0.0.1]`).
+list it (`backend_tools: [decide:0.0.1]`).
 
 - **What it is asked.** A `state` (the text the questions are about) and one or more
   questions, each named and typed: `noul` (does a statement hold — answered with its

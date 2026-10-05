@@ -77,7 +77,7 @@ record:
 | `emoji` | Its face: one emoji, shown wherever the application appears — an approval, an activity line, a card. 👀 until one is chosen. |
 | `kind` | `chat`, `widget`, `decision` or `worker`. |
 | `agent` or `team` | Who does the work: an agent or a [Cog](../cogs) of the catalogue, or a team. One, and not both. |
-| `instructions`, `model`, `skills`, `tools` | What this application says differently from its agent, and adds to it. |
+| `instructions`, `model`, `skills`, `backend_tools` | What this application says differently from its agent, and adds to it. |
 | `context` | The [Frames](../frames) it works under: the catalogue's, or its organization's own (`org-…`). |
 | `contents` | The documents and datasets it answers from. |
 | `connections` | What it reaches. See below. |
@@ -185,7 +185,7 @@ A tool's name does not say what it does, so every tool carries a class
 | `delete` | Removes something. |
 | `publish` | Makes something reachable by people who could not reach it. |
 
-A tool of `agentspecs/tools` says `action: send`. An MCP server says, under
+A backend tool of `agentspecs/backend-tools` says `action: send`. An MCP server says, under
 `actions`, the class of each tool it serves, and the day those names were read
 off the running server:
 

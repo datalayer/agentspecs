@@ -907,6 +907,14 @@
       "title": "Avatar",
       "type": "string"
     },
+    "backend_tools": {
+      "description": "Backend tools of the catalogue it adds to its agent's",
+      "items": {
+        "type": "string"
+      },
+      "title": "Backend Tools",
+      "type": "array"
+    },
     "banner": {
       "default": "",
       "description": "Its banner, by name, from the set people choose theirs from on their profile. The one its id seeds when unsaid",
@@ -1084,14 +1092,6 @@
     "tests": {
       "$ref": "#/$defs/AppTests",
       "description": "How it is verified"
-    },
-    "tools": {
-      "description": "Tools of the catalogue it adds to its agent's",
-      "items": {
-        "type": "string"
-      },
-      "title": "Tools",
-      "type": "array"
     },
     "triggers": {
       "description": "For a worker: what starts its work",

@@ -688,7 +688,9 @@ class AppSpec(_Strict):
     instructions: str = Field(default="", description="What this application tells its agent, on top of its own")
     model: str = Field(default="", description="The model, when it is not the organization's default")
     skills: List[str] = Field(default_factory=list, description="Skills it adds to its agent's")
-    tools: List[str] = Field(default_factory=list, description="Tools of the catalogue it adds to its agent's")
+    backend_tools: List[str] = Field(
+        default_factory=list, description="Backend tools of the catalogue it adds to its agent's"
+    )
 
     context: List[str] = Field(
         default_factory=list,
@@ -935,7 +937,7 @@ def _refs(app: AppSpec) -> List[Tuple[str, str, str]]:
     refs += [("Frame", "frames", ref) for ref in app.context]
     refs += [("MCP server", "mcp-servers", connection.server) for connection in app.connections]
     refs += [("skill", "skills", ref) for ref in app.skills]
-    refs += [("tool", "tools", ref) for ref in app.tools]
+    refs += [("backend tool", "backend-tools", ref) for ref in app.backend_tools]
     refs += [("Guard", "guards", ref) for ref in app.checks.guards]
     refs += [("Gate", "gates", ref) for ref in app.checks.gates]
     if app.checks.track:
@@ -1036,7 +1038,7 @@ def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = No
         for tool in rule.tools:
             server, name = split_ref(tool)
             if server is None:
-                if _id_of(name) not in _catalogue("tools"):
+                if _id_of(name) not in _catalogue("backend-tools"):
                     problems.append(f"The rule {rule.action!r} names the tool {tool!r}, which the catalogue does not have.")
             elif app.connection(server) is None:
                 problems.append(

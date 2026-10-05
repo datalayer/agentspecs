@@ -37,7 +37,7 @@ them — nobody said what it is asked — they are everything it *can* do.
 
 Where the class is written:
 
-- a tool of ``agentspecs/tools`` says ``action: send``;
+- a backend tool of ``agentspecs/backend-tools`` says ``action: send``;
 - an MCP server of ``agentspecs/mcp-servers`` says, under ``actions``, the
   class of each tool it serves, by name or by a pattern (``search_*``: ``*``
   is any run of characters, ``?`` any one, and nothing else is special), and
@@ -121,7 +121,7 @@ def is_read_only(classes: Sequence[ActionClass]) -> bool:
 
 
 def tool_classes(tool: Mapping[str, Any]) -> Classes:
-    """The classes of a tool spec of ``agentspecs/tools``: its ``action``."""
+    """The classes of a backend tool spec of ``agentspecs/backend-tools``: its ``action``."""
     return classes_from(tool.get("action"), where=f"tool {tool.get('id', '?')!r}")
 
 
@@ -308,7 +308,7 @@ _SERVERS: Dict[str, Dict[str, Any]] = {}
 def tool_specs() -> Dict[str, Dict[str, Any]]:
     """This package's tools, as plain data, read once."""
     if not _TOOLS:
-        _TOOLS.update(_load(_ROOT / "tools"))
+        _TOOLS.update(_load(_ROOT / "backend-tools"))
     return _TOOLS
 
 

@@ -85,7 +85,11 @@ class TestTheFrameCatalogue:
 
     @pytest.mark.parametrize("frame", list_frames(), ids=lambda frame: frame.id)
     def test_every_reference_of_a_frame_is_in_its_catalogue(self, frame: FrameSpec):
-        for field, folder in (("skills", "skills"), ("tools", "tools"), ("mcp_servers", "mcp-servers")):
+        for field, folder in (
+            ("skills", "skills"),
+            ("backend_tools", "backend-tools"),
+            ("mcp_servers", "mcp-servers"),
+        ):
             for ref in getattr(frame, field):
                 assert ref in _ids(folder), f"{frame.id}: {field} names {ref!r}, which is not in {folder}"
         if frame.extends:
@@ -338,38 +342,38 @@ class TestACogResolves:
 class TestExtensionOverFragments:
     """A parent is applied over a child's fragments: its markers reach them."""
 
-    FRAGMENTS = {"f": {"id": "f", "tools": ["fragment-tool:0.0.1", "shared:0.0.1"]}}
+    FRAGMENTS = {"f": {"id": "f", "backend_tools": ["fragment-tool:0.0.1", "shared:0.0.1"]}}
 
     def test_a_parent_that_replaces_a_list_replaces_what_a_fragment_brought(self):
         specs = {
-            "parent": {"id": "parent", "tools": ["!replace", "parent-tool:0.0.1"]},
-            "child": {"id": "child", "extends": "parent", "includes": ["f"], "tools": ["child-tool:0.0.1"]},
+            "parent": {"id": "parent", "backend_tools": ["!replace", "parent-tool:0.0.1"]},
+            "child": {"id": "child", "extends": "parent", "includes": ["f"], "backend_tools": ["child-tool:0.0.1"]},
         }
         resolved = resolve_spec(specs["child"], specs, self.FRAGMENTS)
-        assert resolved["tools"] == ["parent-tool:0.0.1", "child-tool:0.0.1"]
+        assert resolved["backend_tools"] == ["parent-tool:0.0.1", "child-tool:0.0.1"]
 
     def test_a_parent_that_removes_an_entry_removes_it_from_a_fragment_too(self):
         specs = {
-            "parent": {"id": "parent", "tools": ["!remove shared", "parent-tool:0.0.1"]},
+            "parent": {"id": "parent", "backend_tools": ["!remove shared", "parent-tool:0.0.1"]},
             "child": {"id": "child", "extends": "parent", "includes": ["f"]},
         }
         resolved = resolve_spec(specs["child"], specs, self.FRAGMENTS)
-        assert resolved["tools"] == ["fragment-tool:0.0.1", "parent-tool:0.0.1"]
+        assert resolved["backend_tools"] == ["fragment-tool:0.0.1", "parent-tool:0.0.1"]
 
     def test_a_marker_of_a_grandparent_reaches_them_as_well(self):
         specs = {
-            "grand": {"id": "grand", "tools": ["!replace", "grand-tool:0.0.1"]},
-            "parent": {"id": "parent", "extends": "grand", "tools": ["parent-tool:0.0.1"]},
+            "grand": {"id": "grand", "backend_tools": ["!replace", "grand-tool:0.0.1"]},
+            "parent": {"id": "parent", "extends": "grand", "backend_tools": ["parent-tool:0.0.1"]},
             "child": {"id": "child", "extends": "parent", "includes": ["f"]},
         }
         resolved = resolve_spec(specs["child"], specs, self.FRAGMENTS)
-        assert resolved["tools"] == ["grand-tool:0.0.1", "parent-tool:0.0.1"]
+        assert resolved["backend_tools"] == ["grand-tool:0.0.1", "parent-tool:0.0.1"]
 
     def test_a_marker_a_parent_brings_through_its_own_fragment_reaches_them_too(self):
         fragments = {
             **self.FRAGMENTS,
-            "strict": {"id": "strict", "tools": ["!remove shared"]},
-            "only": {"id": "only", "tools": ["!replace", "only-tool:0.0.1"]},
+            "strict": {"id": "strict", "backend_tools": ["!remove shared"]},
+            "only": {"id": "only", "backend_tools": ["!replace", "only-tool:0.0.1"]},
         }
         specs = {
             "parent": {"id": "parent", "includes": ["strict:0.0.1"]},
@@ -377,16 +381,16 @@ class TestExtensionOverFragments:
             "child": {"id": "child", "extends": "parent", "includes": ["f"]},
             "other": {"id": "other", "extends": "bare", "includes": ["f"]},
         }
-        assert resolve_spec(specs["child"], specs, fragments)["tools"] == ["fragment-tool:0.0.1"]
-        assert resolve_spec(specs["other"], specs, fragments)["tools"] == ["only-tool:0.0.1"]
+        assert resolve_spec(specs["child"], specs, fragments)["backend_tools"] == ["fragment-tool:0.0.1"]
+        assert resolve_spec(specs["other"], specs, fragments)["backend_tools"] == ["only-tool:0.0.1"]
 
     def test_without_a_marker_a_fragment_and_a_parent_both_contribute(self):
         specs = {
-            "parent": {"id": "parent", "tools": ["parent-tool:0.0.1"]},
+            "parent": {"id": "parent", "backend_tools": ["parent-tool:0.0.1"]},
             "child": {"id": "child", "extends": "parent", "includes": ["f"]},
         }
         resolved = resolve_spec(specs["child"], specs, self.FRAGMENTS)
-        assert resolved["tools"] == ["fragment-tool:0.0.1", "shared:0.0.1", "parent-tool:0.0.1"]
+        assert resolved["backend_tools"] == ["fragment-tool:0.0.1", "shared:0.0.1", "parent-tool:0.0.1"]
 
 
 # ---------------------------------------------------------------------------
@@ -458,3 +462,16 @@ class TestOrganizationFrames:
 
     def test_a_version_of_a_frame_the_catalogue_no_longer_has_is_left_out(self):
         assert "gone" not in frames_with_organization({"gone": _VERSION}, owner="Acme")
+
+
+def test_the_old_tools_field_is_refused():
+    """`tools` is `backend_tools` now, beside `frontend_tools`: an old spec says so and stops."""
+    import pytest
+
+    from agentspecs.compose import CompositionError, resolve_spec
+    from agentspecs.frames import FrameSpec
+
+    with pytest.raises(CompositionError, match="backend_tools"):
+        resolve_spec({"id": "old", "tools": ["runtime-echo:0.0.1"]}, {}, {})
+    with pytest.raises(ValueError, match="backend_tools"):
+        FrameSpec.model_validate({"id": "old", "tools": ["runtime-echo:0.0.1"]})

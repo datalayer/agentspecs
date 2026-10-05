@@ -4,7 +4,7 @@
 
 """The marks of a catalogue entry: the icon and the emoji a page shows beside it.
 
-An MCP server, a skill, a tool and a frontend tool set each carry two marks. A page draws
+An MCP server, a skill, a backend tool and a frontend tool set each carry two marks. A page draws
 the icon where it can, the emoji where there is no icon, and nothing where there is neither.
 
 An icon is a reference that says where to find it, so that a page loads the right package
@@ -35,7 +35,7 @@ ICON_PATTERN = (
 )
 
 #: The catalogues whose entries carry marks, by their folder under ``agentspecs/``.
-MARKED_CATALOGUES: tuple[str, ...] = ("mcp-servers", "skills", "tools", "frontend-tools")
+MARKED_CATALOGUES: tuple[str, ...] = ("mcp-servers", "skills", "backend-tools", "frontend-tools")
 
 #: The two marks, as a JSON Schema fragment for an entry of a marked catalogue.
 MARKS_SCHEMA: dict[str, Any] = {

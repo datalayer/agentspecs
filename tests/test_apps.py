@@ -532,7 +532,7 @@ def test_the_examples_are_in_the_catalogue() -> None:
 def test_decide_answers_by_asking_typed_decisions_and_deciding_is_a_read() -> None:
     """Decide: its agent asks Jev typed decisions with ``decide``, done without asking."""
     found = APP_CATALOGUE["decide"]
-    assert "decide:0.0.1" in found.tools
+    assert "decide:0.0.1" in found.backend_tools
     assert behaviour_for(found, "decide") is Behaviour.DO_IT
     assert classes_of("decide") == (ActionClass.READ,)
     assert "typed decision" in (found.instructions or "")

@@ -25,7 +25,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `instructions` | text | What this application tells its agent, on top of its own | empty |
 | `model` | text | The model, when it is not the organization's default | empty |
 | `skills` | list of text | Skills it adds to its agent's | — |
-| `tools` | list of text | Tools of the catalogue it adds to its agent's | — |
+| `backend_tools` | list of text | Backend tools of the catalogue it adds to its agent's | — |
 | `context` | list of text | The Frames it works under: the catalogue's, or its organization's own (`org-…`) | — |
 | `contents` | list of text | The documents and datasets it answers from | — |
 | `connections` | list of [AppConnection](#appconnection) | What it reaches | — |
@@ -275,10 +275,10 @@ decision:
     direction: higher
 ```
 
-### `tools`
+### `backend_tools`
 
 ```yaml
-tools:
+backend_tools:
 - decide:0.0.1
 ```
 

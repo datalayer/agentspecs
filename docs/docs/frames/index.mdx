@@ -63,7 +63,7 @@ guards:
 | `process` | The business process the work follows, step by step. |
 | `architecture` | The software and system context that orients the work. |
 | `prompts` | Reusable prompt fragments (`id`, `text`) loaded into a Cog's context. |
-| `skills`, `tools`, `mcp_servers` | Capability the work depends on: references into those catalogues. A Cog under the Frame is given them. |
+| `skills`, `backend_tools`, `mcp_servers` | Capability the work depends on: references into those catalogues. A Cog under the Frame is given them. |
 | `guards` | The checks the output of work done under the Frame has to pass. |
 
 ## Guards
@@ -106,7 +106,7 @@ a resolved Frame carries its `lineage`.
 | Field kind | Rule |
 | --- | --- |
 | Scalars (`name`, `description`, `scope`, `owner`, `architecture`) | the child wins; a Frame keeps its own identity and its own owner |
-| Lists (`rules`, `goals`, `style`, `norms`, `process`, `skills`, `tools`, `mcp_servers`, `tags`) | **append**, deduplicated; `!remove` and `!replace` as on an agent |
+| Lists (`rules`, `goals`, `style`, `norms`, `process`, `skills`, `backend_tools`, `mcp_servers`, `tags`) | **append**, deduplicated; `!remove` and `!replace` as on an agent |
 | `terminology` | merged term by term; the child's definition wins |
 | `guards`, `prompts` | merged entry by entry, on `id`; the child's wins |
 

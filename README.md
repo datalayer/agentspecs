@@ -143,7 +143,7 @@ Common fields:
 
 - `id`, `version`, `name`, `description`, `enabled`
 - `model`, `sandbox_variant`, `memory`
-- `mcp_servers`, `skills`, `tools`
+- `mcp_servers`, `skills`, `backend_tools`, `frontend_tools`
 - `environment_name`
 - `icon`, `emoji`, `color`
 - `suggestions`, `welcome_message`, `welcome_notebook`, `welcome_document`
@@ -175,7 +175,7 @@ Common fields:
 - `scope` (`organization`, `department`, `team`, `project`, `role`, `relationship`) and `owner` — both required
 - `extends` (the parent Frame, versioned)
 - `rules`, `terminology`, `goals`, `style`, `norms`, `process`, `architecture`, `prompts`
-- `skills`, `tools`, `mcp_servers` (versioned references)
+- `skills`, `backend_tools`, `mcp_servers` (versioned references)
 - `guards` (`id`, `category`, `description`, `required`)
 
 ```python
@@ -287,9 +287,11 @@ Common fields:
 - `envvars`, `optional_env_vars`, `dependencies`
 - `tags`, `icon`, `emoji`
 
-### Tools (`agentspecs/tools`)
+### Backend Tools (`agentspecs/backend-tools`)
 
-Defines runtime tool metadata and implementation binding.
+Defines the tools that run on the runtime, in Python: their metadata and implementation
+binding. An agent names them under `backend_tools`, as it names the page's under
+`frontend_tools`; the old `tools` field is refused.
 
 Common fields:
 
@@ -300,7 +302,7 @@ Common fields:
 
 ### Frontend Tools (`agentspecs/frontend-tools`)
 
-Names tools that run on the page rather than on the runtime, a set at a time: the
+Names tools that run on the page rather than on the runtime (`frontend_tools` of an agent), a set at a time: the
 notebook's, the Lexical document's, the decks'.
 
 Common fields:
@@ -311,7 +313,7 @@ Common fields:
 
 ### Marks: `icon` and `emoji`
 
-An MCP server, a skill, a tool and a frontend tool set each have an icon and an emoji
+An MCP server, a skill, a backend tool and a frontend tool set each have an icon and an emoji
 (`agentspecs.marks`, its JSON Schema `MARKS_SCHEMA`, checked by `tests/test_marks.py`).
 The icon says the package it is in: `<package>:<name>`, the package one of
 `@datalayer/icons-react` and `@primer/octicons-react`, the name in kebab case as that

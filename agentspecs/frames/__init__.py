@@ -40,7 +40,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
 import yaml
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 #: How deep a chain of `extends` may go: the limit agent specs have.
 MAX_EXTENDS_DEPTH = 3
@@ -59,7 +59,7 @@ LIST_FIELDS = (
     "norms",
     "process",
     "skills",
-    "tools",
+    "backend_tools",
     "mcp_servers",
 )
 
@@ -184,9 +184,9 @@ class FrameSpec(BaseModel):
         default_factory=list,
         description="Skills the work depends on, `id` or `id:version` in the skill catalogue",
     )
-    tools: List[str] = Field(
+    backend_tools: List[str] = Field(
         default_factory=list,
-        description="Tools the Frame expects to be available, in the tool catalogue",
+        description="Backend tools the Frame expects to be available, in the backend tool catalogue",
     )
     mcp_servers: List[str] = Field(
         default_factory=list,
@@ -208,6 +208,15 @@ class FrameSpec(BaseModel):
         default_factory=list,
         description="The business process the work follows, step by step",
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def _says_backend_tools(cls, data: Any) -> Any:
+        if isinstance(data, dict) and "tools" in data:
+            raise ValueError(
+                "a Frame says `backend_tools`, not `tools`: the tools that run on the runtime"
+            )
+        return data
 
     @field_validator("owner")
     @classmethod
@@ -345,7 +354,7 @@ class FrameContext(BaseModel):
     norms: List[str] = Field(default_factory=list)
     process: List[str] = Field(default_factory=list)
     skills: List[str] = Field(default_factory=list)
-    tools: List[str] = Field(default_factory=list)
+    backend_tools: List[str] = Field(default_factory=list)
     mcp_servers: List[str] = Field(default_factory=list)
     guards: List[FrameGuard] = Field(default_factory=list)
     prompts: List[FramePrompt] = Field(default_factory=list)
