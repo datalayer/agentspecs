@@ -8,6 +8,16 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.42
+
+The floating assistant's balloon: the whole conversation, or only what it says or does now (LOOP T-23).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- Appspec: `interface.balloon` — `history` (every message, scrolled, the composer last) or `current` (only what it says or does now: the answer being written, or the tool it calls). The page's own when unsaid: `history` for the floating chat, `current` for a team's members. `BalloonDisplay` in the JSON Schema.
+- Refused: any other word (`interface.balloon`).
+- Tests: `test_apps.py` (both displays round-tripped, the schema's enum, the refusals).
+
 ## 0.0.41
 
 Output formats: what an application's answers come in, by media type (LOOP H-29).

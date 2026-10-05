@@ -324,6 +324,16 @@ class AppSurface(_Strict):
         return components
 
 
+class BalloonDisplay(str, Enum):
+    """How a floating assistant's balloon shows the conversation (LOOP T-23)."""
+
+    HISTORY = "history"
+    """Every message, scrolled, the composer last."""
+
+    CURRENT = "current"
+    """Only what it says or does now: the answer being written, or the tool it calls."""
+
+
 class VoiceInput(str, Enum):
     """How a person talks to the application (VOICE.md VO-10, VO-12)."""
 
@@ -416,6 +426,15 @@ class AppInterface(_Strict):
             "`wizard`, `cat` and `eyes`. The paper clip when unsaid; an id no enabled plugin "
             "contributes is refused where the plugins are known, the runtime and the page. Said "
             "here, it wins over a person's own choice in their settings"
+        ),
+    )
+    balloon: Optional[BalloonDisplay] = Field(
+        default=None,
+        description=(
+            "How its floating assistant's balloon shows the conversation: `history` (every "
+            "message, scrolled, the composer last) or `current` (only what it says or does now, "
+            "the answer being written or the tool it calls, in one balloon). The page's own "
+            "when unsaid: `history` for the floating chat"
         ),
     )
     voice: AppVoice = Field(
@@ -1457,6 +1476,7 @@ __all__ = [
     "AppVoice",
     "Behaviour",
     "CriterionKind",
+    "BalloonDisplay",
     "EmbedMode",
     "EmbeddedDeployment",
     "HostedDeployment",

@@ -50,6 +50,7 @@ from agentspecs.apps import (
     AppError,
     AppKind,
     AppSpec,
+    BalloonDisplay,
     Behaviour,
     Layout,
     app_problems,
@@ -665,6 +666,26 @@ def test_an_application_names_the_character_of_its_assistant() -> None:
     for wrong in ("Clippy", "acme owl", "-owl", "owl-", "acme--owl", "acme.owl", "o" * 65, ""):
         with pytest.raises(AppError, match="interface.assistant"):
             app(interface={"assistant": wrong})
+
+
+def test_an_application_says_how_its_balloon_shows_the_conversation() -> None:
+    """LOOP T-23: the whole history, or only what it says or does now; the page's own when unsaid."""
+    plain = app()
+    assert plain.interface.balloon is None
+    assert "interface" not in dump_app(plain)
+    assert [display.value for display in BalloonDisplay] == ["history", "current"]
+    for display in ("history", "current"):
+        said = app(interface={"balloon": display})
+        assert said.interface.balloon == BalloonDisplay(display)
+        assert dump_app(said)["interface"] == {"balloon": display}
+        assert parse_app(dump_app(said)) == said
+    schema = json_schema()
+    assert schema["$defs"]["BalloonDisplay"]["enum"] == ["history", "current"]
+    balloon = schema["$defs"]["AppInterface"]["properties"]["balloon"]
+    assert balloon["anyOf"][0] == {"$ref": "#/$defs/BalloonDisplay"}
+    for wrong in ("latest", "History", "", "both"):
+        with pytest.raises(AppError, match="interface.balloon"):
+            app(interface={"balloon": wrong})
 
 
 # --- what the spec refuses ------------------------------------------------------------
