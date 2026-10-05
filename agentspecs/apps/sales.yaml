@@ -11,7 +11,7 @@
 # person's browser (the in-browser target that the Preview and `loop` use):
 # its agent's instructions and model turn there. Its one tool, ask_accounting,
 # is the team's A2A link to Accounting. Its request and answer are text, as
-# Accounting's agent card says (skill `financial-report`). Its own agent's
+# Accounting's agent card says (its one skill, `accounting`). Its own agent's
 # runtime tools do not exist in a browser.
 
 schema: loop.app/v1

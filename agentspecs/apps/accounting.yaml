@@ -12,8 +12,8 @@
 # A member of the team `sales-and-accounting`. It runs on a runtime (a cloud
 # runtime on Datalayer, or a local one while developing), served over A2A
 # with fasta2a at `/api/v1/a2a/agents/accounting/`. Its agent card offers
-# one skill, `financial-report`: a request in words in, the report in words
-# out.
+# one skill, named for it (`accounting`): a request in words in, the report
+# in words out.
 
 schema: loop.app/v1
 id: accounting
