@@ -7,7 +7,7 @@ id: kokoro-82m
 version: 0.0.1
 name: Kokoro 82M
 description: >-
-  Text to speech on Datalayer's servers (ai-agents-speech), on CPU: hexgrad's
+  Text to speech on Datalayer's servers (datalayer-speech, on r1), on CPU: hexgrad's
   Kokoro-82M v1.0 exported to ONNX, in full precision, with the voices
   file that holds its 54 voices, run by kokoro-onnx. Its phonemes come from
   eSpeak NG (GPL-3.0), which runs on the server and is never sent to a browser

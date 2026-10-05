@@ -82,7 +82,7 @@ entries:
   - {name: whisper-base, kind: model, licence: MIT, where: browser, status: used, source: https://huggingface.co/openai/whisper-base}
   - {name: silero-vad, kind: model, licence: MIT, where: browser, status: used, source: https://github.com/snakers4/silero-vad}
 
-  # --- on the server (ai-agents-speech), used -----------------------------------------
+  # --- on the server (datalayer-speech), used ------------------------------------------
   - {name: kokoro-82m, kind: model, licence: Apache-2.0, where: server, status: used, source: https://huggingface.co/hexgrad/Kokoro-82M}
   - name: kokoro-onnx
     kind: library

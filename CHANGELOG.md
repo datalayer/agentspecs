@@ -8,6 +8,10 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.40
+
+- The speech service is named `datalayer-speech` (on r1) in the voice catalogue and the licence register; nothing else changes.
+
 ## 0.0.39
 
 - `agentspecs.speech.transcriber_for` prefers `moonshine-tiny-en` to `moonshine-base-en` for English: on the recorded fixtures it heard better (WER 3.3% against 4.9%, agent-runtimes `tests/voice`, 2026-10-05) at half the download (VOICE.md VO-05).
