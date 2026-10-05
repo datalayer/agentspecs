@@ -162,6 +162,18 @@ tests:
   - ask: End the interview.
     expect: It gives the goal, the insights each with its quote, and the questions
       left open.
+  verified:
+    live:
+    - 'Tried signed out in the browser from its example''s page (2026-10-04): the
+      model answered its starters. Its code did not run there: the browser runs its
+      spec.'
+    recorded:
+    - 'Its code runs in process in agent-runtimes'' tests with a scripted model: consent
+      asked, a refusal honoured, a reply per message, an insight saved, the result
+      recorded.'
+    unverified:
+    - 'Its Cog is switched off in the catalogue: its code has not run with a real
+      model, and its tests have not been run.'
 ```
 
 ### `record`
@@ -569,6 +581,7 @@ How the application is verified.
 | `ready_at` | number | The share of tests that has to pass for the application to be ready | `0.8` |
 | `evalset` | text | An evalset its runs validate against, when one is chosen | empty |
 | `cases` | list of [AppTestCase](#apptestcase) | Its test conversations | — |
+| `verified` | [AppVerified](#appverified) | What was verified live, what runs on recorded data, and what is not verified yet | — |
 
 ### AppTrigger
 
@@ -582,6 +595,16 @@ What starts a worker's work.
 | `at` | text | For once: when, as an ISO date | empty |
 | `description` | text | What it is, in words: `Every morning at 8` | empty |
 | `prompt` | text | What the worker is told when it fires | empty |
+
+### AppVerified
+
+What was verified, and how, each in a sentence a person reads (LOOP E-14). An example says it on its card and on its page: what was tried live, what runs on recorded data instead, and what is not verified yet. Said by whoever tried it; nothing here is computed.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `live` | list of text | What was tried live, where and when | — |
+| `recorded` | list of text | What runs on recorded data, not on live calls | — |
+| `unverified` | list of text | What is not verified yet | — |
 
 ### EmbeddedDeployment
 

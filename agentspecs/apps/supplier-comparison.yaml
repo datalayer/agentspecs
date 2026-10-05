@@ -71,6 +71,13 @@ interface:
 
 tests:
   ready_at: 0.8
+  verified:
+    live:
+      - "Decided in the Studio signed in (2026-10-04): alternatives added, metrics filled, the ranking recomputed, Assess all answered by the decision model, an alternative chosen and the decision saved; on its public run page and embedded too."
+    recorded:
+      - "Its measured criteria are filled from the order history, the price lists and the delivery records you give it, not fetched live."
+    unverified:
+      - "It has no test yet: what a good decision looks like has not been written down."
 
 record:
   keep_for: 1_years

@@ -115,6 +115,13 @@ tests:
       expect: The total is the seats times the annual Team price of the price list, and each line is shown.
     - ask: 0 seats.
       expect: It refuses, and says a quote needs at least one seat.
+  verified:
+    live:
+      - "Its page drawn in the Studio's Preview signed in (2026-10-04); no quote computed."
+    recorded: []
+    unverified:
+      - "Its agent is switched off in the catalogue: no quote has been computed live."
+      - "Its tests have not been run."
 
 record:
   keep_for: 90_days

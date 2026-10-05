@@ -368,6 +368,21 @@ class AppTestCase(_Strict):
     expect: str = Field(..., description="What it should do")
 
 
+class AppVerified(_Strict):
+    """What was verified, and how, each in a sentence a person reads (LOOP E-14).
+
+    An example says it on its card and on its page: what was tried live,
+    what runs on recorded data instead, and what is not verified yet. Said
+    by whoever tried it; nothing here is computed.
+    """
+
+    live: List[str] = Field(default_factory=list, description="What was tried live, where and when")
+    recorded: List[str] = Field(
+        default_factory=list, description="What runs on recorded data, not on live calls"
+    )
+    unverified: List[str] = Field(default_factory=list, description="What is not verified yet")
+
+
 class AppTests(_Strict):
     """How the application is verified."""
 
@@ -379,6 +394,10 @@ class AppTests(_Strict):
     )
     evalset: str = Field(default="", description="An evalset its runs validate against, when one is chosen")
     cases: List[AppTestCase] = Field(default_factory=list, description="Its test conversations")
+    verified: AppVerified = Field(
+        default_factory=lambda: AppVerified(),
+        description="What was verified live, what runs on recorded data, and what is not verified yet",
+    )
 
 
 class RecordItem(str, Enum):

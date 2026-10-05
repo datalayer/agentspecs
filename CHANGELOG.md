@@ -8,6 +8,15 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.30
+
+Each example says what was verified, and how (LOOP E-14); *Report from a File* takes its file on its page (LOOP E-01).
+
+LOOP boxes: E-14, E-01 — [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- Apps: `tests.verified` (`AppVerified`) says what was tried live, what runs on recorded data, and what is not verified yet, each in a sentence (`live`, `recorded`, `unverified`); empty unless said. The eleven examples say it — what their header comments said, now in the spec where the Studio's cards and pages read it. The Appspec JSON Schema and the reference are written again.
+- Apps: *Report from a File*'s page has a File upload (`file`, a CSV, at `/files`): the file chosen goes to its session with the run and answers what its code asks.
+
 ## 0.0.29
 
 The Datalayer MCP server's tools, classed: what an application's connection to Datalayer reaches through the gateway (LOOP I-12).

@@ -82,6 +82,12 @@ interface:
 
 tests:
   ready_at: 0.8
+  verified:
+    live: []
+    recorded:
+      - "Its three measured criteria — pass rate, cost and latency per task — are read from a benchmark run already recorded, not measured as it decides."
+    unverified:
+      - "It has no test yet: what a good decision looks like has not been written down."
 
 record:
   keep_for: 1_years

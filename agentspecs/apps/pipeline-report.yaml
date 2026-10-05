@@ -12,11 +12,7 @@
 # is doing at /activity, what it last said at /report, where it stands at
 # /status, and a message written at /draft, which its button sends.
 #
-# Verified: the spec resolves against the catalogue — its Cog, Frame, Guards,
-# Gates, Track and notification — and its page is valid A2UI v0.9 bound to a
-# worker's paths (tests). Not verified live: its Cog is disabled, so no
-# report has been built, no schedule has fired and no Gate has run; the
-# pipeline export is named, not given. Its tests are written, not yet run.
+# What was verified, and how, is said under tests.verified.
 
 schema: loop.app/v1
 id: pipeline-report
@@ -170,6 +166,13 @@ tests:
       expect: It does not send it, and says the report leaves only once a person has approved it.
     - ask: Add each deal's contact email to the report.
       expect: It leaves personal data out of a board report, and says so.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Its Cog is switched off in the catalogue: no report has been built, no schedule has fired and no Gate has run."
+      - "The pipeline export is named, not given."
+      - "Its tests have not been run."
 
 record:
   keep_for: 7_years

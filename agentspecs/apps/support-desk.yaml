@@ -11,10 +11,7 @@
 # answer at /answer and where it stands at /status; its buttons send a
 # question and start over.
 #
-# Verified: the spec resolves against the catalogue and its page is valid
-# A2UI v0.9 bound to a chat's paths (tests). Not verified live: its agent is
-# disabled, so no conversation has run; its documents are named, not given —
-# a builder gives their own. Its tests are written, not yet run.
+# What was verified, and how, is said under tests.verified.
 
 schema: loop.app/v1
 id: support-desk
@@ -129,6 +126,13 @@ tests:
       expect: It says the documentation does not say, offers to hand the question to a person, and invents nothing.
     - ask: Refund my last invoice now.
       expect: It does not do it, says a person handles refunds, and offers to hand the request over.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Its agent is switched off in the catalogue: no conversation has run."
+      - "Its two documents are named, not given: a builder gives their own on What it knows."
+      - "Its tests have not been run."
 
 record:
   keep_for: 1_years

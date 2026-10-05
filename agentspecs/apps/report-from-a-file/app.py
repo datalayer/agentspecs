@@ -8,23 +8,17 @@ Run it: it asks for a CSV file, has its agent analyse it
 in the sandbox — in code, never by estimation — and gives back a report,
 kept in its record as an output to download.
 
-Its page binds what a widget publishes and takes: the report's kind and its
-question at /inputs/<id>, the report at /output and where it stands at
-/status; its button runs it.
+Its page binds what a widget publishes and takes: the file chosen at /files,
+the report's kind and its question at /inputs/<id>, the report at /output and
+where it stands at /status; its button runs it, and the file chosen answers
+what its code asks (``session.ask``).
 
 Its Appspec, ``report-from-a-file.yaml`` beside this folder, is what
 ``loop apps build`` writes from this file; agent-runtimes' tests build it
 again and compare, so that the two never drift.
 
-Verified: the spec it builds resolves against the catalogue, its page is
-valid A2UI v0.9 bound to a widget's paths, and the build is the committed
-spec; its code runs in process with a scripted model — a CSV asked for and
-reported on, a PDF refused (agent-runtimes' ``test_apps_examples.py``). Not
-verified live: its agent is disabled; the file is asked by
-the code (``session.ask``), which reaches a person in this process or the
-terminal only, until the session API exists — the page has no upload of its
-own yet; the report is kept in the record, and no download link is drawn.
-Its tests are written, not yet run.
+What was verified, and how, is said in its spec (``tests.verified``), on its
+card and on its page.
 """
 
 from agent_runtimes.loop.apps import Application, FileQuestion, Session, UploadedFile
@@ -33,7 +27,15 @@ SURFACE = [
     {"id": "root", "component": "Column", "children": ["title", "inputs", "run", "result"]},
     {"id": "title", "component": "Text", "text": "Report from a file", "variant": "h2"},
     {"id": "inputs", "component": "Card", "child": "inputs-body"},
-    {"id": "inputs-body", "component": "Column", "children": ["report", "question"]},
+    {"id": "inputs-body", "component": "Column", "children": ["file", "report", "question"]},
+    {
+        "id": "file",
+        "component": "FileUpload",
+        "label": "The CSV",
+        "accept": [".csv"],
+        "max_mb": 25,
+        "files": {"path": "/files"},
+    },
     {
         "id": "report",
         "component": "ChoicePicker",
@@ -58,7 +60,7 @@ SURFACE = [
         "variant": "primary",
         "action": {"event": {"name": "run"}},
     },
-    {"id": "run-label", "component": "Text", "text": "Choose a file and run"},
+    {"id": "run-label", "component": "Text", "text": "Run"},
     {"id": "result", "component": "Card", "child": "result-body"},
     {"id": "result-body", "component": "Column", "children": ["status", "output"]},
     {"id": "status", "component": "Text", "text": {"path": "/status"}, "variant": "caption"},
@@ -86,7 +88,15 @@ app = Application.from_spec(
             "layout": "page",
             "accent": "sky",
             "assistant": "wizard",
-            "components": ["Card", "Column", "Text", "TextField", "ChoicePicker", "Button"],
+            "components": [
+                "Card",
+                "Column",
+                "Text",
+                "TextField",
+                "ChoicePicker",
+                "FileUpload",
+                "Button",
+            ],
             "surface": {
                 "protocol": "a2ui/v0.9",
                 "composed_by": "developer",
@@ -121,6 +131,19 @@ app = Application.from_spec(
                     ),
                 },
             ],
+            "verified": {
+                "live": [],
+                "recorded": [
+                    "Its code runs in process in agent-runtimes' tests with a scripted "
+                    "model: a CSV asked for and reported on, a PDF refused, a file given "
+                    "on its page answering what its code asks.",
+                ],
+                "unverified": [
+                    "Its agent is switched off in the catalogue: no real model has "
+                    "written a report, and its tests have not been run.",
+                    "The report is kept in its record; no download link is drawn yet.",
+                ],
+            },
         },
         "record": {"keep_for": "90_days", "include": ["actions", "outputs"]},
         "deployment": {

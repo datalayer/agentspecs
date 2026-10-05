@@ -12,13 +12,8 @@ Its Appspec, ``customer-interview.yaml`` beside this folder, is what
 ``loop apps build`` writes from this file; agent-runtimes' tests build it
 again and compare, so that the two never drift.
 
-Verified: the spec it builds resolves against the catalogue, and the build
-is the committed spec; its code runs in process with a scripted model —
-consent asked, a refusal honoured, a reply per message, an insight saved, the
-result recorded (agent-runtimes' ``test_apps_examples.py``). Not verified
-live: its Cog is disabled, and a Python application is not reached from a
-browser or run on a runtime until the session API exists; no real model has
-answered it. Its tests are written, not yet run.
+What was verified, and how, is said in its spec (``tests.verified``), on its
+card and on its page.
 """
 
 from agent_runtimes.loop.apps import Application, ChoiceQuestion, Session
@@ -80,6 +75,22 @@ app = Application.from_spec(
                     ),
                 },
             ],
+            "verified": {
+                "live": [
+                    "Tried signed out in the browser from its example's page "
+                    "(2026-10-04): the model answered its starters. Its code did not "
+                    "run there: the browser runs its spec.",
+                ],
+                "recorded": [
+                    "Its code runs in process in agent-runtimes' tests with a scripted "
+                    "model: consent asked, a refusal honoured, a reply per message, an "
+                    "insight saved, the result recorded.",
+                ],
+                "unverified": [
+                    "Its Cog is switched off in the catalogue: its code has not run "
+                    "with a real model, and its tests have not been run.",
+                ],
+            },
         },
         "record": {
             "keep_for": "1_years",

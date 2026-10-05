@@ -331,6 +331,19 @@ def test_every_application_resolves_its_references() -> None:
         assert found.schema_ == APP_SCHEMA
 
 
+def test_every_example_says_what_was_verified_and_how() -> None:
+    # LOOP E-14: what was tried live, what runs on recorded data, what is not
+    # verified yet — each example says at least one, in sentences.
+    for identity, found in APP_CATALOGUE.items():
+        verified = found.tests.verified
+        said = verified.live + verified.recorded + verified.unverified
+        assert said, identity
+        assert all(sentence.strip().endswith((".", ")")) for sentence in said), identity
+    # An application that says nothing of it says nothing: lists, empty.
+    blank = parse_app({"id": "x", "name": "X", "kind": "chat", "agent": "example-simple"})
+    assert blank.tests.verified.live == blank.tests.verified.unverified == []
+
+
 def test_what_is_not_enabled_is_said_as_setup_and_not_as_a_mistake() -> None:
     # The chat that only searches the web runs on what is enabled today.
     assert app_setup(APP_CATALOGUE["web-research"]) == []
