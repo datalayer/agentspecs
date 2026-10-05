@@ -386,6 +386,13 @@ class AppVoice(_Strict):
     )
 
 
+#: A media type as an output names it: `type/subtype`, lowercase, no parameters.
+MEDIA_TYPE = re.compile(r"[a-z0-9][a-z0-9.+-]*/[a-z0-9][a-z0-9.+-]*")
+
+#: The outputs an answer in words comes in; an application's first output is one.
+TEXT_OUTPUTS = ("text/plain", "text/markdown")
+
+
 class AppInterface(_Strict):
     """What the user sees."""
 
@@ -415,6 +422,19 @@ class AppInterface(_Strict):
         default_factory=lambda: AppVoice(),
         description="Its voice: whether it listens and speaks, with which voice, in which language (off unless said)",
     )
+    outputs: List[str] = Field(
+        default_factory=list,
+        json_schema_extra={
+            "items": {"type": "string", "pattern": f"^{MEDIA_TYPE.pattern}$"},
+            "uniqueItems": True,
+        },
+        description=(
+            "The formats its answers come in, by media type, words first: `text/markdown`, "
+            "then `application/x-ipynb+json` for a Jupyter notebook. Over A2A, its agent "
+            "card's output modes; a caller asks for some of them (`acceptedOutputModes`). "
+            "Plain text alone when unsaid"
+        ),
+    )
 
     @model_validator(mode="after")
     def _names_are_distinct(self) -> "AppInterface":
@@ -422,6 +442,23 @@ class AppInterface(_Strict):
         if len(set(identities)) != len(identities):
             raise ValueError("two settings have the same id")
         return self
+
+    @field_validator("outputs")
+    @classmethod
+    def _outputs_are_media_types(cls, outputs: List[str]) -> List[str]:
+        for output in outputs:
+            if not MEDIA_TYPE.fullmatch(output):
+                raise ValueError(
+                    f"{output!r} is not a media type, `type/subtype` in lowercase: `text/markdown`"
+                )
+        if len(set(outputs)) != len(outputs):
+            raise ValueError("an output is named twice")
+        if outputs and outputs[0] not in TEXT_OUTPUTS:
+            raise ValueError(
+                "its answers come in words first: "
+                "the first output is `text/plain` or `text/markdown`"
+            )
+        return outputs
 
 
 # --- how it is verified, and what is kept -------------------------------------------
@@ -1001,6 +1038,19 @@ def _catalogue(name: str) -> Dict[str, Dict[str, Any]]:
     return _CATALOGUES[name]
 
 
+def output_media_types() -> List[str]:
+    """Every media type the outputs catalogue gives (its `mime_types`), each once.
+
+    What an application's `interface.outputs` may name.
+    """
+    found: List[str] = []
+    for spec in _catalogue("outputs").values():
+        for media_type in spec.get("mime_types") or []:
+            if media_type not in found:
+                found.append(str(media_type))
+    return found
+
+
 def _is_off(spec: Mapping[str, Any]) -> bool:
     """Whether a spec of the catalogue says it is not offered today."""
     return spec.get("enabled") is False or spec.get("available") is False
@@ -1087,6 +1137,14 @@ def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = No
         from ..speech import voice_problems
 
         problems.extend(voice_problems(voice.voice, voice.language))
+    # Its outputs are formats the outputs catalogue gives.
+    known = output_media_types()
+    for output in app.interface.outputs:
+        if output not in known:
+            problems.append(
+                f"Its output {output!r} is no format of the outputs catalogue: "
+                f"{', '.join(sorted(known))}."
+            )
     # The components it may use, and the ones its surface uses, are the catalog's (C-13).
     for name in app.interface.components:
         if component_named(name) is None:
@@ -1369,7 +1427,9 @@ __all__ = [
     "DEFAULT_LAYOUTS",
     "DEFAULT_READY_AT",
     "KNOWN_SCHEMAS",
+    "MEDIA_TYPE",
     "SCHEMA_PATH",
+    "TEXT_OUTPUTS",
     "Accent",
     "Access",
     "ActsAs",
@@ -1418,6 +1478,7 @@ __all__ = [
     "load_app",
     "load_apps",
     "load_raw_apps",
+    "output_media_types",
     "parse_app",
     "retention_days",
     "schema_text",

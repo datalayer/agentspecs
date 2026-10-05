@@ -1206,3 +1206,49 @@ def test_conversations_suggest_no_test_unless_said() -> None:
     assert dump_app(allowed)["record"]["suggest_tests"] is True
     with pytest.raises(AppError, match="record.suggest_tests"):
         app(record={"suggest_tests": "yes please"})
+
+
+# --- outputs --------------------------------------------------------------------------
+
+
+def test_outputs_are_plain_text_alone_unless_said() -> None:
+    assert app().interface.outputs == []
+
+
+def test_accounting_answers_in_markdown_and_a_notebook() -> None:
+    accounting = get_app("accounting")
+    assert accounting is not None
+    assert accounting.interface.outputs == ["text/markdown", "application/x-ipynb+json"]
+    assert app_problems(accounting) == []
+    # Written back as it was read.
+    assert dump_app(accounting)["interface"]["outputs"] == [
+        "text/markdown",
+        "application/x-ipynb+json",
+    ]
+
+
+@pytest.mark.parametrize(
+    "outputs, refusal",
+    [
+        (["notebook"], "'notebook' is not a media type"),
+        (["Text/Markdown"], "is not a media type"),
+        (["text/markdown; charset=utf-8"], "is not a media type"),
+        (["text/markdown", "text/markdown"], "an output is named twice"),
+        (["application/x-ipynb+json"], "words first"),
+        ("text/markdown", "valid list"),
+    ],
+)
+def test_an_output_that_is_not_a_media_type_is_refused(outputs: object, refusal: str) -> None:
+    with pytest.raises(AppError, match=re.escape(refusal)):
+        app(interface={"outputs": outputs})
+
+
+def test_an_output_the_catalogue_does_not_give_is_a_problem() -> None:
+    from agentspecs.apps import output_media_types
+
+    assert "application/x-ipynb+json" in output_media_types()
+    found = app(interface={"outputs": ["text/plain", "application/x-unknown"]})
+    assert any(
+        "'application/x-unknown' is no format of the outputs catalogue" in p
+        for p in app_problems(found)
+    )

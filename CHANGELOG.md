@@ -8,6 +8,17 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.41
+
+Output formats: what an application's answers come in, by media type (LOOP H-29).
+
+Pages: [Applications, Outputs](https://agentspecs.datalayer.tech/apps#outputs), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- Appspec: `interface.outputs` — the media types its answers come in, words first (`text/plain` or `text/markdown`), then any other format, such as `application/x-ipynb+json` for a Jupyter notebook. Plain text alone when unsaid. Served over A2A, they are its agent card's output modes, and a caller accepts some of them with each request (`acceptedOutputModes`).
+- Refused: an output that is not a media type (`type/subtype`, lowercase, no parameters), one named twice, outputs that do not start with words; and, among `app_problems`, an output the outputs catalogue does not give (`output_media_types()`, the catalogue's `mime_types`). The JSON Schema carries the pattern.
+- Accounting answers in Markdown and in a Jupyter notebook (`text/markdown`, `application/x-ipynb+json`).
+- Tests: `test_apps.py` (Accounting's outputs round-tripped, every refusal).
+
 ## 0.0.40
 
 - The speech service is named `datalayer-speech` (on r1) in the voice catalogue and the licence register; nothing else changes.

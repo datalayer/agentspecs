@@ -150,6 +150,9 @@ interface:
   assistant: wizard
   welcome: 'Ask me for a report from the books: open invoices, aged balances, a trial
     balance or a customer''s ledger. I read Odoo; I change nothing.'
+  outputs:
+  - text/markdown
+  - application/x-ipynb+json
   starters:
   - label: Open invoices
     message: List the customer invoices that are still open, with the total due.
@@ -479,6 +482,7 @@ What the user sees.
 | `surface` | [AppSurface](#appsurface) | The component tree, when there is one | empty |
 | `assistant` | text | The character its floating assistant shows, by the id a plugin contributes it under (lowercase letters and digits, words joined by a hyphen): Datalayer's are `paperclip`, `wizard`, `cat` and `eyes`. The paper clip when unsaid; an id no enabled plugin contributes is refused where the plugins are known, the runtime and the page. Said here, it wins over a person's own choice in their settings | empty |
 | `voice` | [AppVoice](#appvoice) | Its voice: whether it listens and speaks, with which voice, in which language (off unless said) | — |
+| `outputs` | list of text | The formats its answers come in, by media type, words first: `text/markdown`, then `application/x-ipynb+json` for a Jupyter notebook. Over A2A, its agent card's output modes; a caller asks for some of them (`acceptedOutputModes`). Plain text alone when unsaid | — |
 
 ### AppPermissions
 

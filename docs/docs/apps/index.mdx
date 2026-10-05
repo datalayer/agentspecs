@@ -83,7 +83,7 @@ record:
 | `connections` | What it reaches. See below. |
 | `rules` | When it acts alone, and when it asks. See below. |
 | `permissions` | What else it may reach: `spaces` (a Space, `read` or `write`) and its `computer` (`browse`, `files`, `shell`, each off). Nothing, unless said. |
-| `interface` | What the user sees: `layout` (`chat`, `page`, `split`), `accent`, `welcome`, `starters`, `settings`, a `surface` — a component tree over the approved catalog — and `assistant`, the character of its floating assistant by the id a plugin contributes it under (`paperclip`, `wizard`, `cat`, `eyes` are Datalayer's; an id no enabled plugin gives is refused by the runtime and the page). Said here, it wins over the person's own choice. |
+| `interface` | What the user sees: `layout` (`chat`, `page`, `split`), `accent`, `welcome`, `starters`, `settings`, a `surface` — a component tree over the approved catalog — and `assistant`, the character of its floating assistant by the id a plugin contributes it under (`paperclip`, `wizard`, `cat`, `eyes` are Datalayer's; an id no enabled plugin gives is refused by the runtime and the page). Said here, it wins over the person's own choice. And `outputs`, the formats its answers come in — see below. |
 | `tests` | How it is verified: `cases` in plain words (`ask`, `expect`), an `evalset`, `ready_at`, the share that has to pass, and `verified` — what was tried live, what runs on recorded data, and what is not verified yet, each in a sentence (`live`, `recorded`, `unverified`); every example of the catalogue says it, and the Studio's examples show it on their cards and pages. |
 | `record` | What is kept of what it did (`include`), for how long (`keep_for`: `90_days`, `1_years`), and whether its conversations may be used to suggest tests (`suggest_tests`, off unless said: only conversations kept while it is on are sampled). |
 | `checks` | Optional: `guards`, `gates` and a `track` of the catalogue. |
@@ -114,6 +114,28 @@ are not carried over: what the application can touch is the list under
 | `access` | How far: `read`, or `write`. A connection that only reads carries no tool that acts. |
 | `as` | In whose name: `owner` (the builder's account, for everybody) or `user` (each user's own). |
 | `only` | Optionally, the tools it may use, by name or pattern (`*gmail*`): `*` is any run of characters, `?` any one, and nothing else is special. A tool left out is not reached at all. |
+
+## Outputs
+
+An application answers in words. `interface.outputs` says, by media type, the
+formats its answers may also come in — words first:
+
+```yaml
+interface:
+  outputs:
+    - text/markdown
+    - application/x-ipynb+json   # a Jupyter notebook
+```
+
+Served over A2A, they are its agent card's output modes (`defaultOutputModes`,
+and its skill's `outputModes`). A caller says which of them it accepts with
+each request (`acceptedOutputModes`), and what is not words comes back as an
+artifact of that media type beside the text: the runtime gives its agent a way
+to write it only when the caller accepts it. Plain text alone when unsaid.
+
+Each output is a media type the [outputs catalogue](https://github.com/datalayer/agentspecs/tree/main/agentspecs/outputs)
+gives (`output_media_types()`), named once, and the first is `text/plain` or
+`text/markdown`.
 
 ## Rules
 
@@ -264,6 +286,7 @@ checks run in addition, never instead.
 - A Gate reading a Guard the application does not run.
 - A decision asked of a model that does not answer typed decisions.
 - Writing through a server whose tools nobody has classed.
+- An output that is not a media type, or that the outputs catalogue does not give; one named twice; outputs that do not start with words (`text/plain` or `text/markdown`).
 
 What an application names that is merely **not enabled** — an agent, a server —
 is not a mistake of the spec: `app_setup` lists it as something to set up.
