@@ -478,6 +478,7 @@ What the user sees.
 | `components` | list of text | The components of the catalog the surface may use; the kind's own when empty | — |
 | `surface` | [AppSurface](#appsurface) | The component tree, when there is one | empty |
 | `assistant` | text | The character its floating assistant shows, by the id a plugin contributes it under (lowercase letters and digits, words joined by a hyphen): Datalayer's are `paperclip`, `wizard`, `cat` and `eyes`. The paper clip when unsaid; an id no enabled plugin contributes is refused where the plugins are known, the runtime and the page. Said here, it wins over a person's own choice in their settings | empty |
+| `voice` | [AppVoice](#appvoice) | Its voice: whether it listens and speaks, with which voice, in which language (off unless said) | — |
 
 ### AppPermissions
 
@@ -603,6 +604,19 @@ What was verified, and how, each in a sentence a person reads (LOOP E-14). An ex
 | `recorded` | list of text | What runs on recorded data, not on live calls | — |
 | `unverified` | list of text | What is not verified yet | — |
 
+### AppVoice
+
+Its voice (VOICE.md VO-41): whether it listens, whether it speaks, with which voice, in which language. Off unless said. What is said becomes a message, and what is heard is the answer the conversation shows: the text stays the truth.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `enabled` | true or false | Whether it has a voice at all; off unless said | `false` |
+| `input` | [VoiceInput](#voiceinput) | `off`, `push_to_talk` (hold a key or the microphone, speak, let go) or `hands_free` | `"push_to_talk"` |
+| `output` | [VoiceOutput](#voiceoutput) | When its answers are heard: `off`, `on_request` (a Read aloud on each answer) or `always` | `"on_request"` |
+| `voice` | text | The voice it speaks with, an id of the voice catalogue (`kokoro-af-heart`); the language's first when unsaid | empty |
+| `language` | text | The language it listens and speaks in, BCP 47 (`en-US`, `fr-FR`); the person's when unsaid | empty |
+| `where` | [VoiceWhere](#voicewhere) | Where its speech runs: `auto`, `device` (the person's browser) or `server` (Datalayer's) | `"auto"` |
+
 ### EmbeddedDeployment
 
 The application inside another product's page.
@@ -633,7 +647,10 @@ The application at an address of its own.
 | <a id="criterionkind"></a>CriterionKind | `metric`, `noul`, `choice`, `score` |
 | <a id="embedmode"></a>EmbedMode | `inline`, `bubble`, `panel`, `assistant` |
 | <a id="layout"></a>Layout | `chat`, `page`, `split` |
-| <a id="recorditem"></a>RecordItem | `conversations`, `actions`, `decisions`, `approvals`, `checks`, `sources`, `outputs`, `feedback` |
+| <a id="recorditem"></a>RecordItem | `conversations`, `actions`, `decisions`, `approvals`, `checks`, `sources`, `outputs`, `feedback`, `audio` |
 | <a id="settingtype"></a>SettingType | `select`, `text`, `toggle`, `slider`, `number` |
 | <a id="triggertype"></a>TriggerType | `schedule`, `event`, `once` |
 | <a id="visibility"></a>Visibility | `private`, `invited`, `organization`, `link`, `public` |
+| <a id="voiceinput"></a>VoiceInput | `off`, `push_to_talk`, `hands_free` |
+| <a id="voiceoutput"></a>VoiceOutput | `off`, `on_request`, `always` |
+| <a id="voicewhere"></a>VoiceWhere | `auto`, `device`, `server` |

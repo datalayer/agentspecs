@@ -324,6 +324,68 @@ class AppSurface(_Strict):
         return components
 
 
+class VoiceInput(str, Enum):
+    """How a person talks to the application (VOICE.md VO-10, VO-12)."""
+
+    OFF = "off"
+    PUSH_TO_TALK = "push_to_talk"
+    HANDS_FREE = "hands_free"
+
+
+class VoiceOutput(str, Enum):
+    """When its answers are heard (VO-21)."""
+
+    OFF = "off"
+    ON_REQUEST = "on_request"
+    ALWAYS = "always"
+
+
+class VoiceWhere(str, Enum):
+    """Where its speech runs: in the person's browser, on Datalayer's servers, or the better of the two (§5)."""
+
+    AUTO = "auto"
+    DEVICE = "device"
+    SERVER = "server"
+
+
+#: A language as BCP 47 writes it, as far as voices need: `en`, `en-US`, `fr-FR`.
+VOICE_LANGUAGE = r"[a-z]{2,3}(?:-[A-Z]{2})?"
+
+
+class AppVoice(_Strict):
+    """Its voice (VOICE.md VO-41): whether it listens, whether it speaks, with which voice, in which language.
+
+    Off unless said. What is said becomes a message, and what is heard is the
+    answer the conversation shows: the text stays the truth.
+    """
+
+    enabled: bool = Field(default=False, description="Whether it has a voice at all; off unless said")
+    input: VoiceInput = Field(
+        default=VoiceInput.PUSH_TO_TALK,
+        description="`off`, `push_to_talk` (hold a key or the microphone, speak, let go) or `hands_free`",
+    )
+    output: VoiceOutput = Field(
+        default=VoiceOutput.ON_REQUEST,
+        description="When its answers are heard: `off`, `on_request` (a Read aloud on each answer) or `always`",
+    )
+    voice: str = Field(
+        default="",
+        description=(
+            "The voice it speaks with, an id of the voice catalogue (`kokoro-af-heart`); "
+            "the language's first when unsaid"
+        ),
+    )
+    language: str = Field(
+        default="",
+        pattern=rf"^(?:{VOICE_LANGUAGE})?$",
+        description="The language it listens and speaks in, BCP 47 (`en-US`, `fr-FR`); the person's when unsaid",
+    )
+    where: VoiceWhere = Field(
+        default=VoiceWhere.AUTO,
+        description="Where its speech runs: `auto`, `device` (the person's browser) or `server` (Datalayer's)",
+    )
+
+
 class AppInterface(_Strict):
     """What the user sees."""
 
@@ -348,6 +410,10 @@ class AppInterface(_Strict):
             "contributes is refused where the plugins are known, the runtime and the page. Said "
             "here, it wins over a person's own choice in their settings"
         ),
+    )
+    voice: AppVoice = Field(
+        default_factory=lambda: AppVoice(),
+        description="Its voice: whether it listens and speaks, with which voice, in which language (off unless said)",
     )
 
     @model_validator(mode="after")
@@ -411,6 +477,8 @@ class RecordItem(str, Enum):
     SOURCES = "sources"
     OUTPUTS = "outputs"
     FEEDBACK = "feedback"
+    AUDIO = "audio"
+    """What was said aloud, as sound: off unless named, never for a public deployment (VOICE.md VO-42)."""
 
 
 _RETENTION = re.compile(r"^(?P<count>[1-9]\d*)_(?P<unit>day|days|month|months|year|years)$")
@@ -791,6 +859,15 @@ class AppSpec(_Strict):
                 raise ValueError("a worker says what starts its work, under `triggers`")
         elif self.triggers:
             raise ValueError(f"a {self.kind.value} application starts when somebody opens it: `triggers` are a worker's")
+        if RecordItem.AUDIO in self.record.include:
+            hosted = self.deployment.hosted
+            if hosted is not None and hosted.visibility is Visibility.PUBLIC:
+                raise ValueError(
+                    "a public application keeps no audio: remove `audio` from `record.include`, "
+                    "or open it to fewer people"
+                )
+            if not self.interface.voice.enabled or self.interface.voice.input is VoiceInput.OFF:
+                raise ValueError("an application keeps audio only when it listens: turn `interface.voice` on")
         servers = [_id_of(connection.server) for connection in self.connections]
         if len(set(servers)) != len(servers):
             raise ValueError("the application connects to the same server twice")
@@ -1004,6 +1081,12 @@ def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = No
             problems.append(f"There is no model named {app.decision.decision_model!r} to decide with.")
         elif "decisions" not in decider.capabilities:
             problems.append(f"The model {app.decision.decision_model!r} does not answer typed decisions.")
+    # Its voice is one of the catalogue's, and speaks its language (VOICE.md VO-41).
+    voice = app.interface.voice
+    if voice.enabled and voice.output is not VoiceOutput.OFF and voice.voice:
+        from ..speech import voice_problems
+
+        problems.extend(voice_problems(voice.voice, voice.language))
     # The components it may use, and the ones its surface uses, are the catalog's (C-13).
     for name in app.interface.components:
         if component_named(name) is None:
@@ -1311,6 +1394,7 @@ __all__ = [
     "AppTestCase",
     "AppTests",
     "AppTrigger",
+    "AppVoice",
     "Behaviour",
     "CriterionKind",
     "EmbedMode",
@@ -1321,6 +1405,9 @@ __all__ = [
     "SettingType",
     "TriggerType",
     "Visibility",
+    "VoiceInput",
+    "VoiceOutput",
+    "VoiceWhere",
     "app_problems",
     "app_setup",
     "behaviour_for",

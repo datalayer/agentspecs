@@ -8,6 +8,19 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.38
+
+Voice, its foundations (VOICE.md, Phase V0): the voice catalogue, the licence register, and an application's voice.
+
+Pages: [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `agentspecs/voices` (VO-40): three Kokoro voices for the first languages, English and French (decision 12) — `kokoro-af-heart` (en-US), `kokoro-bf-emma` (en-GB), `kokoro-ff-siwis` (fr-FR, with the SIWIS database's CC BY 4.0 attribution). Each names its engine, its model, the engine's own name for it, its languages (BCP 47), where it may run, the licence of its weights and of its data, and a sample.
+- `agentspecs/speech-models` (VO-40, VO-03): `moonshine-tiny-en`, `moonshine-base-en` (MIT, the browser's English), `whisper-base` (MIT, the browser's French), `silero-vad` (MIT, as `@ricky0123/vad-web` 0.0.31 ships it) and `kokoro-82m` (Apache-2.0, on ai-agents). Every file pinned by its SHA-256 and its size, with the revision it was copied from, so that nothing is fetched from a third party's hub at run time.
+- `agentspecs/speech-licences.yaml` (VO-01): the register — every library, model, voice and dataset weighed, the browser packages' dependencies among them, with its licence and source; `allowed` (MIT, Apache-2.0, BSD, 0BSD, ISC, CC0, CC BY 4.0) and `server_only` (GPL and LGPL, run on Datalayer's servers and never sent to a browser, decision 1). Not yet reviewed by counsel.
+- `agentspecs.speech`: the catalogue, typed and checked when it loads — a voice or a model whose weights, data or code carry a licence on neither list is refused with a sentence (VO-04); `list_voices`, `get_voice`, `list_speech_models`, `transcriber_for` (Moonshine where it hears the language, Whisper otherwise, decision 3), `voice_problems`. Imports only pydantic and yaml, so the speech service reads it alone.
+- Appspec: `interface.voice` (VO-41) — `enabled` (off unless said), `input` (`off`, `push_to_talk`, `hands_free`), `output` (`off`, `on_request`, `always`), `voice`, `language` (BCP 47) and `where` (`auto`, `device`, `server`); a voice not in the catalogue, or not speaking the language, is one of `app_problems`. `audio` as a record item (VO-42), kept only by an application that listens and refused for a public one.
+- Tests: `test_speech.py` (non-commercial voices and models refused, GPL kept off the browser, every file pinned, English and French heard and spoken, the register naming everything used, the Appspec's voice round-tripped and checked).
+
 ## 0.0.37
 
 A team of two applications working over A2A: *Sales*, in the person's browser, asks *Accounting*, on a runtime, for financial reports read from Odoo.

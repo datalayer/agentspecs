@@ -1,0 +1,30 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Speech model: Silero VAD, voice activity in the browser (VOICE.md §4.5)
+
+id: silero-vad
+version: 0.0.1
+name: Silero VAD
+description: >-
+  Where speech starts and ends in what the microphone heard, in the browser:
+  Silero VAD (about 2 MB), the build @ricky0123/vad-web 0.0.31 ships and runs
+  on onnxruntime-web. Push-to-talk keeps the speech it finds and drops the rest.
+task: vad
+engine: vad-web
+dtype: fp32
+languages: []
+where: [device]
+streaming: true
+licence:
+  weights: MIT
+  code: ISC
+attribution: ""
+source:
+  upstream: https://github.com/snakers4/silero-vad
+  repository: https://www.npmjs.com/package/@ricky0123/vad-web
+  revision: 0.0.31
+files:
+  - path: silero_vad_legacy.onnx
+    sha256: a35ebf52fd3ce5f1469b2a36158dba761bc47b973ea3382b3186ca15b1f5af28
+    size: 1807522
