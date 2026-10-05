@@ -8,6 +8,14 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.35
+
+*Decide*, an example application that answers by asking Jev typed decisions.
+
+LOOP boxes: E-01 — [Applications](https://agentspecs.datalayer.tech/apps).
+
+- Apps: `decide` (chat): `example-simple` with the `decide` tool — yes or no (`noul`) with its probability, one of named options (`choice`) or a step on a scale (`score`), each with its confidence, asked of `cloudflare:wrk/typesafe/jev` through datalayer-ai-inference. Its instructions say it answers by asking a typed decision; its starters are decision questions; its one rule says deciding is a read, done without asking. The reference's `tools` example is now its own.
+
 ## 0.0.34
 
 The `loops` catalogue is now `strategies`: its control-loop reasoning strategies (human-in-the-loop, OODA, plan → execute → critic, data analysis) no longer share a name with LOOP and its applications.

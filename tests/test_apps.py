@@ -501,7 +501,7 @@ def test_the_four_decision_templates_are_in_the_catalogue() -> None:
     assert model.scenarios[1].weights["Cost per task"] == 4
 
 
-#: LOOP §9: the eleven examples, each with its kind.
+#: LOOP §9: the eleven examples, and Decide, each with its kind.
 EXAMPLES = {
     "ship-or-fix": AppKind.DECISION,
     "supplier-comparison": AppKind.DECISION,
@@ -509,6 +509,7 @@ EXAMPLES = {
     "model-choice": AppKind.DECISION,
     "support-desk": AppKind.CHAT,
     "web-research": AppKind.CHAT,
+    "decide": AppKind.CHAT,
     "customer-interview": AppKind.CHAT,
     "quote-calculator": AppKind.WIDGET,
     "report-from-a-file": AppKind.WIDGET,
@@ -517,8 +518,8 @@ EXAMPLES = {
 }
 
 
-def test_the_eleven_examples_are_in_the_catalogue() -> None:
-    """LOOP E-01: every example of §9, of its kind, with its face its own."""
+def test_the_examples_are_in_the_catalogue() -> None:
+    """LOOP E-01: every example of §9, and Decide, of its kind, with its face its own."""
     assert {identity: found.kind for identity, found in APP_CATALOGUE.items()} == EXAMPLES
     faces = [found.emoji for found in APP_CATALOGUE.values()]
     assert len(set(faces)) == len(faces)
@@ -526,6 +527,17 @@ def test_the_eleven_examples_are_in_the_catalogue() -> None:
         found = APP_CATALOGUE[identity]
         assert 3 <= len(found.tests.cases) <= 5, identity
         assert found.interface.assistant is not None, identity
+
+
+def test_decide_answers_by_asking_typed_decisions_and_deciding_is_a_read() -> None:
+    """Decide: its agent asks Jev typed decisions with ``decide``, done without asking."""
+    found = APP_CATALOGUE["decide"]
+    assert "decide:0.0.1" in found.tools
+    assert behaviour_for(found, "decide") is Behaviour.DO_IT
+    assert classes_of("decide") == (ActionClass.READ,)
+    assert "typed decision" in (found.instructions or "")
+    assert len(found.interface.starters) == 3
+    assert app_problems(found) == []
 
 
 def test_the_python_examples_sit_beside_their_spec() -> None:

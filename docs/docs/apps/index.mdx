@@ -285,7 +285,7 @@ behind the code.
 
 ## The catalogue
 
-The eleven examples, each a spec of its own. Two are written in Python: their
+The eleven examples, and *Decide*, each a spec of its own. Two are written in Python: their
 `app.py` sits in a folder named for the example (`apps/customer-interview/app.py`),
 and their spec is the one `loop apps build` writes from it (agent-runtimes'
 application API). Only `web-research` runs on what is enabled today, and was
@@ -301,6 +301,7 @@ file* and *Weekly pipeline report* say so at their top.
 | `model-choice` | decision | Canvas | A decision filled from a benchmark run. |
 | `support-desk` | chat | Canvas | Starters, a setting, answers from the documents it was given; a page bound to a chat's question and answer. |
 | `web-research` | chat | Spec | A [Cog](../cogs) under a Frame; one read-only connection; no rule needed. |
+| `decide` | chat | Spec | Answers by asking Jev typed decisions with the `decide` tool — yes or no, a choice, a score — each with its confidence; deciding is a read, done without asking. |
 | `customer-interview` | chat | Python | Consent asked first, a step per answer, insights saved from a button, a structured result. |
 | `quote-calculator` | widget | Canvas | Inputs, a run button and a result on a component surface. |
 | `report-from-a-file` | widget | Python | A file asked by the code, analysed in the sandbox, the report kept as an output. |

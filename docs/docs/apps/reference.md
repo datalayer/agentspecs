@@ -275,6 +275,13 @@ decision:
     direction: higher
 ```
 
+### `tools`
+
+```yaml
+tools:
+- decide:0.0.1
+```
+
 ### `goal`
 
 ```yaml
@@ -365,13 +372,6 @@ model: bedrock:us.anthropic.claude-sonnet-4-6
 ```yaml
 skills:
 - crawl:0.0.1
-```
-
-### `tools`
-
-```yaml
-tools:
-- current-time:0.0.1
 ```
 
 ### `permissions`
