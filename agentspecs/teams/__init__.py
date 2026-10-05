@@ -6,7 +6,7 @@
 
 A *team* is several agents working on one job. This module defines the
 ``TeamSpec`` Pydantic class and the helpers for loading team definitions from
-YAML, the same way ``loops``, ``memory`` and ``models`` do for theirs — teams
+YAML, the same way ``strategies``, ``memory`` and ``models`` do for theirs — teams
 were the one catalogue with no schema at all, which meant nothing checked them
 and nothing could load them.
 

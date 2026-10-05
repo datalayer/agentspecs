@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Loop Specification: Plan → Execute → Critic Loop
+# Strategy Specification: Plan → Execute → Critic Loop
 # A three-role control loop that iteratively improves output quality. A planner
 # proposes steps, an executor runs them, and a critic reviews the result and
 # decides whether to continue refining or stop. Useful for analysis where

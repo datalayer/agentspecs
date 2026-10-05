@@ -8,6 +8,12 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.34
+
+The `loops` catalogue is now `strategies`: its control-loop reasoning strategies (human-in-the-loop, OODA, plan → execute → critic, data analysis) no longer share a name with LOOP and its applications.
+
+- `agentspecs.loops` → `agentspecs.strategies`: `StrategySpec`, `StrategyHuman`, `StrategyTermination`, `STRATEGY_CATALOGUE`, `Strategies`, `get_strategy`, `list_strategies`. The ids stay. No alias: `agentspecs.loops` is gone.
+
 ## 0.0.33
 
 The examples' `tests.verified` sentences without a builder's word (LOOP E-14): *the past orders*, *a run already recorded*, *nothing has stopped for an approval*, *measured for it*.

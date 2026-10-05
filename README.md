@@ -43,7 +43,7 @@ agentspecs/
 ├── guardrails/       # Guardrail policy specs
 ├── evals/            # Evaluator specs
 ├── benchmarks/       # Benchmark suite specs
-├── loops/            # Loop specs
+├── strategies/       # Strategy specs (control-loop reasoning)
 ├── triggers/         # Trigger specs
 ├── events/           # Event specs
 ├── outputs/          # Output format specs
@@ -74,7 +74,7 @@ Current YAML file counts:
 - Guardrails: 6
 - Evals: 9
 - Benchmarks: 8
-- Loops: 4
+- Strategies: 4
 - Triggers: 3
 - Events: 6
 - Outputs: 9
