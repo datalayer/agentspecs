@@ -89,7 +89,7 @@ def test_the_first_languages_are_heard_and_spoken():
         assert speech.list_voices(language), language
         heard = speech.transcriber_for(language, "device")
         assert heard is not None and heard.task == "stt", language
-    assert speech.transcriber_for("en").id.startswith("moonshine-")
+    assert speech.transcriber_for("en").id == "moonshine-tiny-en"
     assert speech.transcriber_for("fr").id == "whisper-base"
 
 

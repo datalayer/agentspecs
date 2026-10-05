@@ -344,7 +344,9 @@ def transcriber_for(language: str, where: str = "device") -> Optional[SpeechMode
         for model in list_speech_models("stt")
         if where in model.where and base in model.languages
     ]
-    for preferred in ("moonshine-base-en", "moonshine-tiny-en"):
+    # Tiny first: on the fixtures it heard better than base (WER 3.3% against
+    # 4.9%, agent-runtimes tests/voice, 2026-10-05), at half the download.
+    for preferred in ("moonshine-tiny-en", "moonshine-base-en"):
         for model in hearing:
             if model.id == preferred:
                 return model
