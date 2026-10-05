@@ -1,0 +1,91 @@
+---
+sidebar_position: 4
+title: Teams of applications
+---
+
+# Teams of applications
+
+A team can compose [applications](../apps) as well as agents. A member names
+one with `app` instead of `ref`, and is then that application: its agent, its
+connections, its rules and its interface, as the application catalogue holds
+them. Nothing about the application is restated in the team, so its rules
+still decide every tool call and its connections are still all it reaches.
+
+Three fields say how such a team runs:
+
+| Field | On | Meaning |
+| --- | --- | --- |
+| `app` | a member, the supervisor | An application of the catalogue, `id` or `id:version`. A member is an agent (`ref`) or an application (`app`), not both. |
+| `runs_in` | a member | Where its loop turns: `browser`, in the person's page (the in-browser target that the Preview and `loop` use), or `runtime`, on a runtime (a cloud runtime on Datalayer, or a local one). Unsaid, wherever the team runs. |
+| `talks_to` | a member | The members it asks directly while it works, each `{member, over}`. `over` is `a2a`: the member asked is served over A2A, and its agent card says what it may be asked and how it answers. |
+| `entry` | the team | The member a person talks to, by its id: the team's front door. Unsaid, the supervisor answers first. |
+
+`talks_to` is not `depends_on`. `depends_on` orders work: a member waits for
+another to finish. A link says who may ask whom while the work runs, in either
+order and as often as needed. Both are checked when the team loads: a link or
+an entry naming no member is refused, and so is a member that talks to itself.
+
+## Sales and Accounting
+
+`sales-and-accounting` is two applications. A person talks to Sales in their
+browser. Sales asks Accounting, which runs on a runtime, for the report over
+A2A, and hands over what Accounting answers. Accounting reads the Odoo books
+through the `odoo-accounting` toolset of the Datalayer MCP gateway, and only
+reads them.
+
+```yaml
+id: sales-and-accounting
+name: Sales and Accounting
+orchestration_protocol: a2a
+execution_mode: supervisor
+supervisor:
+  name: Sales
+  app: sales:0.0.1
+entry: sales
+agents:
+  - id: sales
+    app: sales:0.0.1
+    role: initiator
+    runs_in: browser
+    talks_to:
+      - member: accounting
+        over: a2a
+  - id: accounting
+    app: accounting:0.0.1
+    role: contributor
+    runs_in: runtime
+```
+
+What each application brings:
+
+- **Sales** (`apps/sales.yaml`) is a chat with no connection and no rule. Its
+  instructions say it asks Accounting for every figure and never invents,
+  estimates or completes one. Its assistant is the paper clip.
+- **Accounting** (`apps/accounting.yaml`) connects to `odoo-accounting` at
+  *Can read*, in its owner's name. Its rules read the books without asking
+  and ask first before anything that would change them. Because the
+  connection only reads, no tool that writes is reached at all. Its
+  assistant is the wizard.
+
+## From Python
+
+```python
+from agentspecs.teams import get_team
+
+team = get_team("sales-and-accounting")
+team.entry                       # 'sales'
+team.referenced_apps()           # ['sales:0.0.1', 'accounting:0.0.1']
+team.member("sales").talks_to    # [TeamLink(member='accounting', over=TeamProtocol.A2A)]
+team.member("accounting").runs_in  # TeamPlace.RUNTIME
+```
+
+`referenced_apps()` lists every application the team names, its members and
+its supervisor, so a host can check that it has them before it runs the team.
+`referenced_agents()` lists the agents, as before.
+
+## Running it
+
+agent-runtimes serves an application of a team over A2A with fasta2a
+(`loop apps run apps/accounting.yaml --cloud --a2a`), and its
+`AgentA2ATeamExample` puts the two on screen as Office Assistant characters,
+with the A2A exchange shown as it happens.

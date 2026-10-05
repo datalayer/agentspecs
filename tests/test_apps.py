@@ -46,6 +46,7 @@ from agentspecs.apps import (
     DEFAULT_BEHAVIOURS,
     SCHEMA_PATH,
     Access,
+    ActsAs,
     AppError,
     AppKind,
     AppSpec,
@@ -429,9 +430,9 @@ def test_an_application_survives_being_written_and_read_again() -> None:
 
     for identity, found in APP_CATALOGUE.items():
         assert said(parse_app(dump_app(found))) == said(found), identity
-        assert said(parse_app(yaml.safe_load(yaml.safe_dump(dump_app(found))))) == said(
-            found
-        ), identity
+        assert said(parse_app(yaml.safe_load(yaml.safe_dump(dump_app(found))))) == said(found), (
+            identity
+        )
 
 
 def test_a_decision_application_carries_the_whole_decision() -> None:
@@ -501,7 +502,7 @@ def test_the_four_decision_templates_are_in_the_catalogue() -> None:
     assert model.scenarios[1].weights["Cost per task"] == 4
 
 
-#: LOOP §9: the eleven examples, and Decide, each with its kind.
+#: LOOP §9: the eleven examples, Decide, and the team of Sales and Accounting, each with its kind.
 EXAMPLES = {
     "ship-or-fix": AppKind.DECISION,
     "supplier-comparison": AppKind.DECISION,
@@ -510,6 +511,8 @@ EXAMPLES = {
     "support-desk": AppKind.CHAT,
     "web-research": AppKind.CHAT,
     "decide": AppKind.CHAT,
+    "sales": AppKind.CHAT,
+    "accounting": AppKind.CHAT,
     "customer-interview": AppKind.CHAT,
     "quote-calculator": AppKind.WIDGET,
     "report-from-a-file": AppKind.WIDGET,
@@ -538,6 +541,52 @@ def test_decide_answers_by_asking_typed_decisions_and_deciding_is_a_read() -> No
     assert "typed decision" in (found.instructions or "")
     assert len(found.interface.starters) == 3
     assert app_problems(found) == []
+
+
+def test_sales_reports_what_accounting_answers_and_reaches_nothing() -> None:
+    """Sales: a chat in the browser that asks Accounting, over A2A, and connects to nothing."""
+    found = APP_CATALOGUE["sales"]
+    assert found.connections == [] and found.rules == [] and found.backend_tools == []
+    assert "ask_accounting" in found.instructions
+    assert "Never invent" in found.instructions
+    assert found.interface.assistant == "paperclip"
+    assert len(found.interface.starters) == 3
+    assert 3 <= len(found.tests.cases) <= 5
+    assert app_problems(found) == []
+
+
+def test_accounting_only_reads_the_books_and_asks_before_anything_that_would_change_them() -> None:
+    """Accounting: Odoo's accounting toolset at *Can read*; writing waits for a person."""
+    found = APP_CATALOGUE["accounting"]
+    assert [(c.server, c.access, c.acts_as) for c in found.connections] == [
+        ("odoo-accounting:0.0.1", Access.READ, ActsAs.OWNER)
+    ]
+    assert {rule.action: rule.behaviour for rule in found.rules} == {
+        "Read the books": Behaviour.DO_IT,
+        "Change the books": Behaviour.ASK_FIRST,
+    }
+    assert "Never write to Odoo" in found.instructions
+    # Every tool that reads is done alone; none that writes is reached at all.
+    behaviours = tool_behaviours(found)
+    assert behaviours
+    for ref, behaviour in behaviours.items():
+        if is_read_only(classes_of(ref)):
+            assert behaviour is Behaviour.DO_IT, ref
+        else:
+            assert behaviour is Behaviour.LEAVE_TO_ME, ref
+    assert (
+        behaviour_for(found, "odoo-accounting.odoo_accounting_post_invoice")
+        is Behaviour.LEAVE_TO_ME
+    )
+    assert behaviour_for(found, "odoo-accounting.odoo_accounting_trial_balance") is Behaviour.DO_IT
+    # Its face is another Office Assistant than the one at the sales desk.
+    assert found.interface.assistant == "wizard"
+    assert found.interface.assistant != APP_CATALOGUE["sales"].interface.assistant
+    assert app_problems(found) == []
+    assert app_setup(found) == [
+        "The agent 'worker-accountant:0.0.1' is not enabled.",
+        "The MCP server 'odoo-accounting:0.0.1' is not enabled.",
+    ]
 
 
 def test_the_python_examples_sit_beside_their_spec() -> None:
@@ -727,7 +776,9 @@ def test_a_reference_that_does_not_resolve_is_a_problem_said_in_words() -> None:
         "'org-house-style' is a context of an organization's own: it is checked with the "
         "organization the application belongs to, which was not said."
     ]
-    assert "There is no Frame named 'nope'." in app_problems(app(context=["nope"]), ["org-house-style"])
+    assert "There is no Frame named 'nope'." in app_problems(
+        app(context=["nope"]), ["org-house-style"]
+    )
     assert "There is no model named 'nope'." in app_problems(app(model="nope"))
     assert "There is no Guard named 'nope'." in app_problems(app(checks={"guards": ["nope"]}))
     problems = app_problems(
@@ -1088,9 +1139,9 @@ def test_web_research_only_reads() -> None:
 
 
 def test_the_published_schema_is_the_one_the_code_writes() -> None:
-    assert (
-        SCHEMA_PATH.read_text() == schema_text()
-    ), "run `python -m agentspecs.apps` to write it again"
+    assert SCHEMA_PATH.read_text() == schema_text(), (
+        "run `python -m agentspecs.apps` to write it again"
+    )
 
 
 def test_the_schema_names_the_fields_as_the_yaml_does() -> None:

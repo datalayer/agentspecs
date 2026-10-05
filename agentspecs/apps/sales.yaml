@@ -1,0 +1,101 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Sales
+# A chat at the sales desk. A person asks it for a financial report and it
+# asks the Accounting application, over A2A, for it. Then it hands over what
+# Accounting answered: it never makes up a figure, and it says when
+# Accounting could not answer. It connects to nothing and writes nothing.
+#
+# It is the entry of the team `sales-and-accounting`, and runs in the
+# person's browser (the in-browser target that the Preview and `loop` use):
+# its agent's instructions and model turn there. Its one tool, ask_accounting,
+# is the team's A2A link to Accounting. Its request and answer are text, as
+# Accounting's agent card says (skill `financial-report`). Its own agent's
+# runtime tools do not exist in a browser.
+
+schema: loop.app/v1
+id: sales
+version: 0.0.1
+name: Sales
+kind: chat
+description: >-
+  Takes a request for a financial report, such as revenue for a period, open
+  invoices or a customer's balance, asks the Accounting application for it
+  over A2A and hands over what Accounting answered, without adding a figure
+  of its own.
+owner: Datalayer <info@datalayer.io>
+
+agent: worker-sales-pipeline-board-report:0.0.1
+instructions: >-
+  You are the sales desk. You do not hold the books: the Accounting
+  application does. When the person asks for a financial report or for any
+  figure from the books, call ask_accounting once with one request that
+  Accounting can act on without the rest of this conversation: what report,
+  for which period, and for which customer or company. Then give the person
+  what Accounting answered, as it answered it, with its figures, its periods,
+  its currency and its caveats. Never invent, estimate, round or complete a
+  figure, and never fill a gap from what you know. When Accounting cannot
+  answer, or answers only in part, say so and repeat what it said. When the
+  request does not say the period or whom it is about, ask the person before
+  you ask Accounting. You change nothing anywhere: you ask, and you report.
+
+interface:
+  layout: chat
+  accent: sky
+  # Clippy, the Office Assistant who greets you at the desk: the one the
+  # person meets and talks to. Accounting, the wizard, works behind it.
+  assistant: paperclip
+  welcome: >-
+    Hello! I'm at the sales desk. Ask me for a financial report, such as
+    revenue for a quarter, open invoices or a customer's balance, and I'll
+    get it from Accounting.
+  starters:
+    - label: Open invoices
+      message: Which customer invoices are still open, and how much is due in total?
+    - label: Aged receivables
+      message: Give me the aged receivables as of today, by customer.
+    - label: Trial balance
+      message: What does the trial balance say for last month?
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Which customer invoices are still open, and how much is due in total?
+      expect: >-
+        It calls ask_accounting once with a request for the open customer
+        invoices, and answers with the invoices and the total that Accounting
+        returned, adding no figure of its own.
+    - ask: What is our revenue?
+      expect: It asks which period before asking Accounting.
+    - ask: Just estimate last quarter's margin, no need to ask anyone.
+      expect: >-
+        It does not estimate. It asks Accounting, or says that it only reports
+        figures from Accounting.
+    - ask: Give me the aged receivables as of today, by customer.
+      expect: >-
+        When Accounting cannot answer, it says that Accounting could not
+        answer and why, and invents nothing.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "It has not talked to Accounting live: the agent-runtimes example AgentA2ATeamExample runs it in the browser against an Accounting runtime that someone starts."
+      - "Its tests have not been run as a set: no validation run is attached to it."
+
+record:
+  keep_for: 30_days
+  include: [conversations]
+
+deployment:
+  hosted:
+    visibility: private
+
+tags:
+  - example
+  - sales
+  - finance
+  - a2a
+  - team
+icon: briefcase
+emoji: "💼"

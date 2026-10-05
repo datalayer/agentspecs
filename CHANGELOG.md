@@ -8,6 +8,17 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.37
+
+A team of two applications working over A2A: *Sales*, in the person's browser, asks *Accounting*, on a runtime, for financial reports read from Odoo.
+
+Pages: [Teams of applications](https://agentspecs.datalayer.tech/agent-teams/applications), [Members](https://agentspecs.datalayer.tech/agent-teams/members), [Execution](https://agentspecs.datalayer.tech/agent-teams/execution), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- Apps: `sales` (chat) takes a request for a financial report, asks Accounting with its `ask_accounting` tool (the team's A2A link) and hands over what Accounting answered. Its instructions say it never invents, estimates or completes a figure. It has no connection and no rule, and its assistant is the paper clip. `accounting` (chat) answers report requests from the Odoo books through `odoo-accounting` at *Can read*, in its owner's name, so no tool that writes is reached. Its rules read the books without asking (*Read the books*) and ask first before anything that would change them (*Change the books*: write, delete). Its instructions say it never writes to Odoo, and its assistant is the wizard.
+- Teams: a member may be an application (`app`, in place of `ref`; not both), say where its loop turns (`runs_in`: `browser` or `runtime`) and whom it asks while it works (`talks_to`: `{member, over: a2a}`). A team says the member a person talks to (`entry`), and a supervisor may be an application (`app`). Links and the entry name members, and a member does not talk to itself; all of this is checked at load. `TeamSpec.referenced_apps()` lists the applications a team names. New enums and models: `TeamPlace`, `TeamProtocol`, `TeamLink`.
+- Teams: `sales-and-accounting`, with Sales as its entry and supervisor (in the browser) and Accounting on a runtime, linked over A2A.
+- The Appspec reference is written again; its examples now come from `accounting`, the first application in alphabetical order.
+
 ## 0.0.36
 
 The `tools` catalogue is `backend-tools`, beside `frontend-tools`: the tools that run on the runtime, named as such.

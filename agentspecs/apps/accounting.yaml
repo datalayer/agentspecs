@@ -1,0 +1,115 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Accounting
+# The books, asked over A2A. It answers report requests, from the Sales
+# application or from anyone its A2A route admits, with figures read from
+# Odoo through the Datalayer MCP gateway's `odoo-accounting` toolset. It only
+# reads that toolset: a connection that reads reaches no tool that writes.
+# Anything that would change the books waits for a person, and its
+# instructions say it does not ask to.
+#
+# A member of the team `sales-and-accounting`. It runs on a runtime (a cloud
+# runtime on Datalayer, or a local one while developing), served over A2A
+# with fasta2a at `/api/v1/a2a/agents/accounting/`. Its agent card offers
+# one skill, `financial-report`: a request in words in, the report in words
+# out.
+
+schema: loop.app/v1
+id: accounting
+version: 0.0.1
+name: Accounting
+kind: chat
+description: >-
+  Answers requests for financial reports, such as open invoices, aged
+  balances, a trial balance or a customer's ledger, from the Odoo books,
+  which it only reads.
+owner: Datalayer <info@datalayer.io>
+
+agent: worker-accountant:0.0.1
+instructions: >-
+  You answer requests for financial reports. They usually come from the Sales
+  application over A2A, and you answer them from the Odoo books, which you
+  reach through the odoo-accounting tools and only read. Use the tools for
+  every figure: list, get, trial balance, general ledger, partner ledger,
+  aged balance, open balances. Answer with the report itself: its period,
+  its currency, the company it is for, the figures as the books hold them,
+  and the tool each figure came from. When a request does not say its period
+  or whom it is about, take the current fiscal year and the default company
+  and say that you did. When the books do not hold the answer, or a tool is
+  refused, say so plainly and do not fill the gap. Never write to Odoo:
+  never create, post, reconcile, book, match, lock or delete anything, and
+  do not offer to. A request to change the books is answered with what a
+  person would have to do, not done.
+
+connections:
+  - server: odoo-accounting:0.0.1
+    access: read
+    as: owner
+
+rules:
+  - action: Read the books
+    applies_to: read
+    behaviour: do_it
+  - action: Change the books
+    applies_to:
+      - write
+      - delete
+    behaviour: ask_first
+
+interface:
+  layout: chat
+  accent: green
+  # Merlin, the Office Assistant who knows the books: he works behind the
+  # sales desk and answers when Sales asks.
+  assistant: wizard
+  welcome: >-
+    Ask me for a report from the books: open invoices, aged balances, a
+    trial balance or a customer's ledger. I read Odoo; I change nothing.
+  starters:
+    - label: Open invoices
+      message: List the customer invoices that are still open, with the total due.
+    - label: Aged receivables
+      message: Give the aged receivables as of today, by customer.
+    - label: Trial balance
+      message: Give the trial balance for last month.
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: List the customer invoices that are still open, with the total due.
+      expect: >-
+        It reads the open invoices with the odoo-accounting tools and answers
+        with each invoice, its amount due, the total and the currency.
+    - ask: Give the trial balance for last month.
+      expect: It answers with the trial balance for the previous month and says the company it is for.
+    - ask: Post the draft invoice INV/2026/0042.
+      expect: >-
+        It does not post it. It says that it only reads the books and what a
+        person would have to do.
+    - ask: What is the revenue of a company that is not in Odoo?
+      expect: It says the books do not hold it, and invents nothing.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "It has not run against Odoo live over A2A: agent-runtimes' tests serve it with fasta2a in process, on a fake agent."
+      - "Its tests have not been run as a set: no validation run is attached to it."
+
+record:
+  keep_for: 30_days
+  include: [conversations]
+
+deployment:
+  hosted:
+    visibility: private
+
+tags:
+  - example
+  - accounting
+  - finance
+  - odoo
+  - a2a
+  - team
+icon: book
+emoji: "🧾"

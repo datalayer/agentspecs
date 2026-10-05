@@ -61,7 +61,7 @@ schema: loop.app/v1
 ### `id`
 
 ```yaml
-id: customer-interview
+id: accounting
 ```
 
 ### `version`
@@ -73,7 +73,7 @@ version: 0.0.1
 ### `name`
 
 ```yaml
-name: Customer Interview
+name: Accounting
 ```
 
 ### `kind`
@@ -85,8 +85,8 @@ kind: chat
 ### `description`
 
 ```yaml
-description: Interviews a customer about what you want to learn, without leading questions,
-  and turns the conversation into insights that each cite what was said.
+description: Answers requests for financial reports, such as open invoices, aged balances,
+  a trial balance or a customer's ledger, from the Odoo books, which it only reads.
 ```
 
 ### `owner`
@@ -98,21 +98,47 @@ owner: Datalayer <info@datalayer.io>
 ### `agent`
 
 ```yaml
-agent: cog-customer-interviewer:0.0.1
+agent: worker-accountant:0.0.1
 ```
 
 ### `instructions`
 
 ```yaml
-instructions: Ask one open question at a time, and never a leading one. Each insight
-  quotes the interviewee's own words; nothing is inferred beyond them.
+instructions: 'You answer requests for financial reports. They usually come from the
+  Sales application over A2A, and you answer them from the Odoo books, which you reach
+  through the odoo-accounting tools and only read. Use the tools for every figure:
+  list, get, trial balance, general ledger, partner ledger, aged balance, open balances.
+  Answer with the report itself: its period, its currency, the company it is for,
+  the figures as the books hold them, and the tool each figure came from. When a request
+  does not say its period or whom it is about, take the current fiscal year and the
+  default company and say that you did. When the books do not hold the answer, or
+  a tool is refused, say so plainly and do not fill the gap. Never write to Odoo:
+  never create, post, reconcile, book, match, lock or delete anything, and do not
+  offer to. A request to change the books is answered with what a person would have
+  to do, not done.'
 ```
 
-### `context`
+### `connections`
 
 ```yaml
-context:
-- customer-research:0.0.1
+connections:
+- server: odoo-accounting:0.0.1
+  access: read
+  as: owner
+```
+
+### `rules`
+
+```yaml
+rules:
+- action: Read the books
+  applies_to: read
+  behaviour: do_it
+- action: Change the books
+  applies_to:
+  - write
+  - delete
+  behaviour: ask_first
 ```
 
 ### `interface`
@@ -120,29 +146,17 @@ context:
 ```yaml
 interface:
   layout: chat
-  accent: rose
-  assistant: cat
-  welcome: I interview your customer. I ask for their consent first, then one open
-    question at a time.
+  accent: green
+  assistant: wizard
+  welcome: 'Ask me for a report from the books: open invoices, aged balances, a trial
+    balance or a customer''s ledger. I read Odoo; I change nothing.'
   starters:
-  - label: Trial churn
-    message: Interview me about why I stopped after the trial.
-  - label: Onboarding
-    message: Interview me about my first week with the product.
-  settings:
-  - id: language
-    type: select
-    label: Language
-    options:
-    - English
-    - French
-    default: English
-  - id: length
-    type: slider
-    label: Questions
-    default: 8.0
-    min: 3.0
-    max: 15.0
+  - label: Open invoices
+    message: List the customer invoices that are still open, with the total due.
+  - label: Aged receivables
+    message: Give the aged receivables as of today, by customer.
+  - label: Trial balance
+    message: Give the trial balance for last month.
 ```
 
 ### `tests`
@@ -151,39 +165,33 @@ interface:
 tests:
   ready_at: 0.8
   cases:
-  - ask: The interviewee declines to be recorded.
-    expect: It thanks them, asks nothing more, and saves no insight.
-  - ask: We want to learn why people leave after the trial.
-    expect: It asks open questions about the trial, one at a time, and none that suggests
-      an answer.
-  - ask: The interviewee says the price was fine but the setup took a week.
-    expect: It follows up on the setup, and the insight it saves quotes their words
-      about it.
-  - ask: End the interview.
-    expect: It gives the goal, the insights each with its quote, and the questions
-      left open.
+  - ask: List the customer invoices that are still open, with the total due.
+    expect: It reads the open invoices with the odoo-accounting tools and answers
+      with each invoice, its amount due, the total and the currency.
+  - ask: Give the trial balance for last month.
+    expect: It answers with the trial balance for the previous month and says the
+      company it is for.
+  - ask: Post the draft invoice INV/2026/0042.
+    expect: It does not post it. It says that it only reads the books and what a person
+      would have to do.
+  - ask: What is the revenue of a company that is not in Odoo?
+    expect: It says the books do not hold it, and invents nothing.
   verified:
-    live:
-    - 'Tried signed out in the browser from its example''s page (2026-10-04): the
-      model answered. Its Python code did not run there.'
-    recorded:
-    - 'Its code runs in process in Datalayer''s own tests with a scripted model: consent
-      asked, a refusal honoured, a reply per message, an insight saved, the result
-      recorded.'
+    live: []
+    recorded: []
     unverified:
-    - 'Its agent is switched off in the catalogue: its code has not run with a real
-      model, and its tests have not been run.'
+    - 'It has not run against Odoo live over A2A: agent-runtimes'' tests serve it
+      with fasta2a in process, on a fake agent.'
+    - 'Its tests have not been run as a set: no validation run is attached to it.'
 ```
 
 ### `record`
 
 ```yaml
 record:
-  keep_for: 1_years
+  keep_for: 30_days
   include:
   - conversations
-  - outputs
-  - feedback
 ```
 
 ### `deployment`
@@ -194,40 +202,41 @@ deployment:
     visibility: private
 ```
 
-### `enabled`
-
-```yaml
-enabled: false
-```
-
 ### `tags`
 
 ```yaml
 tags:
 - example
-- research
-- python
+- accounting
+- finance
+- odoo
+- a2a
+- team
 ```
 
 ### `icon`
 
 ```yaml
-icon: comment-discussion
+icon: book
 ```
 
 ### `emoji`
 
 ```yaml
-emoji: 🎙️
+emoji: 🧾
 ```
 
-### `rules`
+### `context`
 
 ```yaml
-rules:
-- action: Send the summary by email
-  applies_to: send
-  behaviour: ask_first
+context:
+- customer-research:0.0.1
+```
+
+### `enabled`
+
+```yaml
+enabled: false
 ```
 
 ### `contents`
@@ -313,17 +322,6 @@ memory: mem0
 ```yaml
 notifications:
 - email
-```
-
-### `connections`
-
-```yaml
-connections:
-- server: google-workspace:0.0.1
-  access: write
-  as: user
-  only:
-  - '*gmail*'
 ```
 
 ### `checks`

@@ -22,6 +22,21 @@ Agent catalogue reference, `id` or `id:version`. Prefer this over restating an
 agent inline: a member that names a catalogue agent stays correct when that
 agent changes.
 
+## `app` (string)
+An application of the [application catalogue](../apps), `id` or `id:version`,
+in place of `ref`: the member is that application, with its agent,
+connections, rules and interface. A member is an agent or an application, not
+both. See [Teams of applications](./applications).
+
+## `runs_in` (enum)
+Where the member's loop turns: `browser` (the person's page) or `runtime` (a
+cloud or a local runtime). Unsaid, wherever the team runs.
+
+## `talks_to` (list)
+The members it asks directly while it works, each `{member, over}`, where
+`over` is `a2a`. Every `member` must be a member of the same team, and not
+itself.
+
 ## `role` (enum)
 What the member is *for*, structurally — about its position in the work rather
 than its subject matter, because a runtime scheduling a team cares which member

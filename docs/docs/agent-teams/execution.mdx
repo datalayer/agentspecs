@@ -28,13 +28,14 @@ ran.
 | --- | --- |
 | `name` | Display name. Required. |
 | `ref` | Agent catalogue reference. A supervisor is an agent like any other. |
+| `app` | Application catalogue reference, in a [team of applications](./applications): the one that decides who is asked next. Not with `ref`. |
 | `model` | Model id, overriding the referenced agent's. |
 | `goal` | What the supervisor is accountable for across the whole run. |
 | `instructions` | Supervision prompt, for a supervisor defined only here. Ignored when `ref` is set. |
 | `approval` | `auto` or `manual` — whether a person signs off the routing decisions. |
 | `can_terminate` | Whether it may end the run before every member has gone. `false` makes it a router only. |
 
-A supervisor needs either a `ref` or a `model` and `instructions` of its own —
+A supervisor needs a `ref`, an `app`, or a `model` and `instructions` of its own —
 it cannot be a name with nothing behind it.
 
 ```yaml

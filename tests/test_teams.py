@@ -132,7 +132,6 @@ class TestExecutionOrder:
             groups = team.execution_order()
             assert sum(len(g) for g in groups) == len(team.agents)
 
-
     def test_sequencing_is_depends_on_not_a_trigger(self):
         # `trigger` is what starts a member from outside the team; waiting
         # for another member is `depends_on`, which is what a runtime orders
@@ -161,24 +160,16 @@ class TestValidation:
 
     def test_self_dependency_is_refused(self):
         with pytest.raises(ValueError, match="depends on itself"):
-            TeamSpec(
-                **_minimal(agents=[{"id": "a", "ref": "x:0.0.1", "depends_on": ["a"]}])
-            )
+            TeamSpec(**_minimal(agents=[{"id": "a", "ref": "x:0.0.1", "depends_on": ["a"]}]))
 
     def test_dependency_on_a_stranger_is_refused(self):
         with pytest.raises(ValueError, match="not a member"):
-            TeamSpec(
-                **_minimal(
-                    agents=[{"id": "a", "ref": "x:0.0.1", "depends_on": ["nobody"]}]
-                )
-            )
+            TeamSpec(**_minimal(agents=[{"id": "a", "ref": "x:0.0.1", "depends_on": ["nobody"]}]))
 
     def test_duplicate_member_ids_are_refused(self):
         with pytest.raises(ValueError, match="duplicate member"):
             TeamSpec(
-                **_minimal(
-                    agents=[{"id": "a", "ref": "x:0.0.1"}, {"id": "a", "ref": "y:0.0.1"}]
-                )
+                **_minimal(agents=[{"id": "a", "ref": "x:0.0.1"}, {"id": "a", "ref": "y:0.0.1"}])
             )
 
     def test_a_team_needs_a_supervisor(self):
@@ -255,3 +246,72 @@ class TestJupyterTeam:
         assert team.member("analyst").role is TeamRole.INITIATOR
         assert team.member("compactor").role is TeamRole.FINALIZER
         assert team.member("writer").role is TeamRole.FINALIZER
+
+
+APPS_DIR = pathlib.Path(__file__).parent.parent / "agentspecs" / "apps"
+
+
+class TestTeamsOfApplications:
+    """A team may compose applications.
+
+    Sales, in the browser, asks Accounting, on a runtime, over A2A.
+    """
+
+    def test_every_referenced_application_exists(self):
+        known = {yaml.safe_load(path.read_text())["id"] for path in APPS_DIR.glob("*.yaml")}
+        dangling = [
+            (team.id, ref)
+            for team in TEAM_CATALOGUE
+            for ref in team.referenced_apps()
+            if ref.split(":")[0] not in known
+        ]
+        assert not dangling, f"teams reference applications that do not exist: {dangling}"
+
+    def test_sales_and_accounting_talk_over_a2a_with_sales_at_the_door(self):
+        from agentspecs.teams import TeamPlace, TeamProtocol
+
+        team = get_team("sales-and-accounting")
+        assert team is not None
+        assert team.entry == "sales"
+        assert team.supervisor.app == "sales:0.0.1"
+        assert team.referenced_apps() == ["sales:0.0.1", "accounting:0.0.1"]
+        assert team.referenced_agents() == []
+        sales, accounting = team.member("sales"), team.member("accounting")
+        assert sales.runs_in is TeamPlace.BROWSER
+        assert accounting.runs_in is TeamPlace.RUNTIME
+        assert [(link.member, link.over) for link in sales.talks_to] == [
+            ("accounting", TeamProtocol.A2A)
+        ]
+        assert accounting.talks_to == []
+        assert sales.display_name == "sales"
+
+    def test_the_applications_validate(self):
+        """`loop apps validate`, the checks it makes of the spec, for each member."""
+        from agentspecs.apps import APP_CATALOGUE, app_problems
+
+        team = get_team("sales-and-accounting")
+        for ref in team.referenced_apps():
+            assert app_problems(APP_CATALOGUE[ref.split(":")[0]]) == [], ref
+
+    def test_a_member_is_an_agent_or_an_application_not_both(self):
+        with pytest.raises(ValueError, match="not both"):
+            TeamSpec(**_minimal(agents=[{"id": "a", "ref": "x:0.0.1", "app": "sales"}]))
+        with pytest.raises(ValueError, match="not both"):
+            TeamSpec(**_minimal(supervisor={"name": "S", "ref": "x", "app": "sales"}))
+
+    def test_a_link_and_the_entry_name_members(self):
+        apps = [{"id": "a", "app": "sales"}, {"id": "b", "app": "accounting"}]
+        with pytest.raises(ValueError, match="talks to 'c'"):
+            TeamSpec(**_minimal(agents=[{**apps[0], "talks_to": [{"member": "c"}]}, apps[1]]))
+        with pytest.raises(ValueError, match="talks to itself"):
+            TeamSpec(**_minimal(agents=[{**apps[0], "talks_to": [{"member": "a"}]}, apps[1]]))
+        with pytest.raises(ValueError, match="enters at 'z'"):
+            TeamSpec(**_minimal(agents=apps, entry="z"))
+        with pytest.raises(ValueError):
+            TeamSpec(
+                **_minimal(
+                    agents=[{**apps[0], "talks_to": [{"member": "b", "over": "smoke"}]}, apps[1]]
+                )
+            )
+        with pytest.raises(ValueError):
+            TeamSpec(**_minimal(agents=[{**apps[0], "runs_in": "moon"}, apps[1]]))

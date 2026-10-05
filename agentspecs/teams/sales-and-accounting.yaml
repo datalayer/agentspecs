@@ -1,0 +1,73 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Team Specification: Sales and Accounting
+# Two applications working as a team over A2A. A person talks to Sales, in
+# their browser. Sales asks Accounting, on a runtime, for the report, and
+# hands over what Accounting answers. Accounting reads the Odoo books and
+# changes nothing.
+
+id: sales-and-accounting
+version: 0.0.1
+name: Sales and Accounting
+description: >-
+  A sales desk in the browser that gets financial reports from an accounting
+  application on a runtime, over A2A. Sales takes the request and reports the
+  answer; Accounting reads the Odoo books and answers.
+tags:
+  - example
+  - sales
+  - accounting
+  - finance
+  - a2a
+  - odoo
+enabled: true
+icon: people
+emoji: "🤝"
+color: "#0969da"
+
+orchestration_protocol: a2a
+execution_mode: supervisor
+# Sales decides when Accounting is asked, and what the person is told: it is
+# the team's supervisor and its front door.
+supervisor:
+  name: Sales
+  app: sales:0.0.1
+  can_terminate: true
+entry: sales
+routing_instructions: >-
+  Sales asks Accounting for every figure from the books, one request each
+  time, and reports what Accounting answers without adding to it.
+
+suggestions:
+  - text: Which customer invoices are still open, and how much is due in total?
+    emoji: "🧾"
+  - text: Give me the aged receivables as of today, by customer.
+    emoji: "⏳"
+  - text: What does the trial balance say for last month?
+    emoji: "⚖️"
+
+delegation:
+  max_depth: 1
+  allow_peer_delegation: true
+
+validation:
+  timeout: 300s
+
+agents:
+  - id: sales
+    app: sales:0.0.1
+    role: initiator
+    runs_in: browser
+    goal: >-
+      Take the person's request for a financial report, ask Accounting for it,
+      and hand over what Accounting answered.
+    talks_to:
+      - member: accounting
+        over: a2a
+  - id: accounting
+    app: accounting:0.0.1
+    role: contributor
+    runs_in: runtime
+    goal: >-
+      Answer report requests from the Odoo books, read only, over A2A.
