@@ -26,6 +26,7 @@ from agentspecs.actions import (
     ActionClass,
     ActionError,
     classes_from,
+    forwards_outside,
     classes_of,
     is_comparable,
     is_pattern,
@@ -1078,6 +1079,48 @@ def test_a_connection_that_only_reads_carries_no_tool_that_acts() -> None:
     assert behaviour_for(reader, "google-workspace.search_gmail_messages") is Behaviour.DO_IT
     # The rule says do it; the connection says it cannot.
     assert behaviour_for(reader, "google-workspace.send_gmail_message") is Behaviour.LEAVE_TO_ME
+
+
+def test_a_forward_outside_the_organization_publishes() -> None:
+    send = "google-workspace.send_gmail_message"
+    mailbox = {"user_google_email": "eric@datalayer.io"}
+    # A reply, to anybody, is a send.
+    assert classes_of(send, {**mailbox, "to": "client@acme.com", "thread_id": "t1"}) == (ActionClass.SEND,)
+    # A forward inside the organization is a send.
+    inside = {**mailbox, "to": "Ana <ana@datalayer.io>", "forward_message_id": "m1"}
+    assert classes_of(send, inside) == (ActionClass.SEND,)
+    # A forward with anybody outside, whichever field names them, also publishes.
+    for outside in (
+        {**inside, "to": "lawyer@firm.com"},
+        {**inside, "cc": ["ana@datalayer.io", "lawyer@firm.com"]},
+        {**inside, "bcc": "ana@datalayer.io, x@gmail.com"},
+    ):
+        assert classes_of(send, outside) == (ActionClass.SEND, ActionClass.PUBLISH), outside
+    # Fails closed: a forward that does not say its mailbox is outside.
+    assert forwards_outside("google-workspace", "send_gmail_message", {"to": "ana@datalayer.io", "forward_message_id": "m1"})
+    # Another tool, or no call, is not told anything.
+    assert not forwards_outside("google-workspace", "draft_gmail_message", {**inside, "to": "x@y.z"})
+    assert classes_of(send) == (ActionClass.SEND,)
+
+
+def test_inbox_triage_forwards_outside_nothing_and_leaves_it_to_me() -> None:
+    triage = APP_CATALOGUE["inbox-triage"]
+    send = "google-workspace.send_gmail_message"
+    mailbox = {"user_google_email": "eric@datalayer.io"}
+    assert behaviour_for(triage, send, arguments={**mailbox, "to": "client@acme.com", "thread_id": "t"}) is Behaviour.ASK_FIRST
+    forward = {**mailbox, "forward_message_id": "m1"}
+    assert behaviour_for(triage, send, arguments={**forward, "to": "ana@datalayer.io"}) is Behaviour.ASK_FIRST
+    assert behaviour_for(triage, send, arguments={**forward, "to": "lawyer@firm.com"}) is Behaviour.LEAVE_TO_ME
+    # Its rules say the four behaviours, with the defaults of the plan (LOOP W-04).
+    said = {rule.action: rule.behaviour for rule in triage.rules}
+    assert said["Label and archive a message"] is Behaviour.DO_IT
+    assert said["Draft a reply"] is Behaviour.DO_IT
+    assert said["Send a message"] is Behaviour.ASK_FIRST
+    assert said["Delete anything"] is Behaviour.LEAVE_TO_ME
+    assert said["Forward outside the organization, share or publish anything"] is Behaviour.LEAVE_TO_ME
+    # When a message arrives, it is told what to do.
+    [arrives] = [trigger for trigger in triage.triggers if trigger.event == "email_received"]
+    assert "Send nothing yourself" in arrives.prompt
 
 
 def test_inbox_triage_reads_and_drafts_alone_sends_on_approval_and_deletes_nothing() -> None:

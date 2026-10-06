@@ -42,7 +42,9 @@ actions:
     comment is read by everybody the document is shared with, a filter can forward mail.
     A tool whose effect depends on what it is asked says `when`: a `manage_*` tool
     deletes when its action is `delete`; the label tools archive a message, and trash it
-    when the label is TRASH or SPAM.
+    when the label is TRASH or SPAM. A send that forwards a message (`forward_message_id`)
+    to somebody outside the domain of the mailbox it sends from also publishes: that is
+    told from the call (agentspecs.actions.FORWARDING), not written here.
   tools:
     start_google_auth: write
     search_gmail_messages: read

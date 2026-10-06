@@ -230,6 +230,22 @@ tool_escalations(triage)    # where what a tool is asked changes the decision
 Pass the `arguments` of the call when there is a call: without them, the
 decision is for the worst the tool can do.
 
+**A forward outside the organization publishes.** Gmail's send tool forwards a
+message when the call names one (`forward_message_id`). When one of its
+recipients — `to`, `cc` or `bcc` — is outside the domain of the mailbox it
+sends from (`user_google_email`), or the mailbox is not said, the call is
+`publish` besides `send`: it makes the message reachable by people who could
+not reach it. A reply is not a forward. This is told from the call
+(`agentspecs.actions.FORWARDING`), not written in the server's spec, so it
+holds only with the call's arguments:
+
+```python
+send = "google-workspace.send_gmail_message"
+mailbox = {"user_google_email": "eric@datalayer.io", "forward_message_id": "m1"}
+behaviour_for(triage, send, arguments={**mailbox, "to": "ana@datalayer.io"})   # ASK_FIRST: a send
+behaviour_for(triage, send, arguments={**mailbox, "to": "lawyer@firm.com"})    # LEAVE_TO_ME: it publishes
+```
+
 ## Action classes
 
 A tool's name does not say what it does, so every tool carries a class

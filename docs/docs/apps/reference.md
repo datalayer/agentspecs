@@ -309,6 +309,8 @@ triggers:
 - type: event
   event: email_received
   description: When a message arrives
+  prompt: A message arrived. Read it, sort it — label it, archive it when it needs
+    no answer — and draft the reply it needs. Send nothing yourself.
 - type: schedule
   cron: 0 8 * * *
   description: Every morning at 8

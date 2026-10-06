@@ -35,6 +35,14 @@ says its class, and ``when`` an argument makes it another:
 With the arguments of a call, its classes are those of that call. Without
 them — nobody said what it is asked — they are everything it *can* do.
 
+One thing a call does is told from two of its arguments at once, and is
+written here rather than in a spec: a mail **forwarded outside the
+organization** (``FORWARDING``). Gmail's send tool forwards a message when it
+names one (``forward_message_id``); when one of its recipients is outside the
+domain of the mailbox it sends from (``user_google_email``) — or the mailbox
+is not said — the call also ``publish``-es: it makes the message reachable by
+people who could not reach it. A reply is not a forward.
+
 Where the class is written:
 
 - a backend tool of ``agentspecs/backend-tools`` says ``action: send``;
@@ -52,6 +60,8 @@ here: the class is the catalogue's, written by somebody who looked.
 from __future__ import annotations
 
 import re
+from dataclasses import dataclass
+from email.utils import getaddresses
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
@@ -284,7 +294,66 @@ def server_tool_classes(
     for condition in conditions:
         if arguments is None or condition.holds(arguments):
             classes.extend(item for item in condition.classes if item not in classes)
+    # A forward outside the organization is told from the call (LOOP W-04).
+    if (
+        arguments is not None
+        and classes
+        and ActionClass.PUBLISH not in classes
+        and forwards_outside(str(server.get("id") or ""), tool_name, arguments)
+    ):
+        classes.append(ActionClass.PUBLISH)
     return tuple(classes)
+
+
+@dataclass(frozen=True)
+class Forwarding:
+    """Where a call of a tool that forwards mail says what it forwards, from where, and to whom."""
+
+    message: str
+    """The argument naming the message forwarded; a call without it does not forward."""
+
+    mailbox: str
+    """The argument holding the address of the mailbox it sends from."""
+
+    recipients: Tuple[str, ...]
+    """The arguments holding its recipients."""
+
+
+#: The tools that forward a message, by (server, tool).
+FORWARDING: Dict[Tuple[str, str], Forwarding] = {
+    ("google-workspace", "send_gmail_message"): Forwarding(
+        message="forward_message_id",
+        mailbox="user_google_email",
+        recipients=("to", "cc", "bcc"),
+    ),
+}
+
+
+def addresses(value: Any) -> List[str]:
+    """The mail addresses an argument holds — one, several separated by commas, or a list — in lower case."""
+    items = value if isinstance(value, (list, tuple)) else [value]
+    words = [str(item) for item in items if isinstance(item, str) and item.strip()]
+    return [address.strip().lower() for _, address in getaddresses(words) if "@" in address]
+
+
+def _domain(address: str) -> str:
+    return address.rpartition("@")[2].strip().lower()
+
+
+def forwards_outside(server: str, tool_name: str, arguments: Mapping[str, Any]) -> bool:
+    """Whether a call forwards a message to somebody outside the organization.
+
+    The organization is the domain of the mailbox the call sends from. Fails
+    closed: a forward that does not say its mailbox is outside.
+    """
+    forwarding = FORWARDING.get((server, tool_name))
+    if forwarding is None or not str(arguments.get(forwarding.message) or "").strip():
+        return False
+    home = addresses(arguments.get(forwarding.mailbox))
+    recipients = [address for name in forwarding.recipients for address in addresses(arguments.get(name))]
+    if not home:
+        return True
+    return any(_domain(address) != _domain(home[0]) for address in recipients)
 
 
 def server_tool_conditions(server: Mapping[str, Any], tool_name: str) -> Tuple[Condition, ...]:
@@ -396,9 +465,13 @@ __all__ = [
     "ActionError",
     "Classes",
     "Condition",
+    "FORWARDING",
+    "Forwarding",
     "MAX_SAFE_INTEGER",
+    "addresses",
     "classes_from",
     "classes_of",
+    "forwards_outside",
     "is_comparable",
     "is_pattern",
     "is_read_only",

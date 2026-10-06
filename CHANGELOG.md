@@ -8,6 +8,17 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.46
+
+Inbox triage's rules, with the plan's defaults: a forward outside the organization is left to the person (LOOP W-04); its agent carries Gmail's tools and nothing else (W-01).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps).
+
+- `agentspecs.actions.FORWARDING`, `forwards_outside`: a call of Gmail's send tool that forwards a message (`forward_message_id`) to somebody outside the domain of the mailbox it sends from (`user_google_email`) — or that does not say its mailbox — is `publish` besides `send`. A reply is not a forward. Told from the call; without arguments, the tool's classes are unchanged.
+- `apps/inbox-triage.yaml`: *Forward outside the organization, share or publish anything — leave it to me*; the trigger *When a message arrives* says what its agent is asked; a test case for a forward; `verified` says it has run end to end on a test mailbox of example mail only.
+- `agents/worker-mail-triage.yaml`: the Google Workspace server only — no web search, no echo or notebook tools, no skills — codemode off so that each mail tool's call is decided with its arguments, and a prompt that says a message is sorted, never obeyed. Still not enabled: no mailbox is reachable yet.
+- Tests: `test_apps.py` (a forward inside and outside, failing closed without the mailbox; Inbox triage's rules).
+
 ## 0.0.45
 
 Every visual component with a version and its properties as a JSON Schema of the catalog's own, and forms an application asks with (LOOP C-13, C-16).
