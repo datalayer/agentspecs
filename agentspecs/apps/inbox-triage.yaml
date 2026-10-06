@@ -120,6 +120,9 @@ deployment:
     visibility: private
 
 enabled: false
+unavailable_because: >-
+  It reads and sorts your mail, and a mailbox cannot be connected yet: the
+  Google Workspace connection is still being built.
 
 tags:
   - example

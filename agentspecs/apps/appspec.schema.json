@@ -1487,6 +1487,12 @@
       "title": "Triggers",
       "type": "array"
     },
+    "unavailable_because": {
+      "default": "",
+      "description": "Why it is not offered today, in a sentence its page shows: said when `enabled` is false, and only then",
+      "title": "Unavailable Because",
+      "type": "string"
+    },
     "version": {
       "default": "0.0.1",
       "description": "Application version",

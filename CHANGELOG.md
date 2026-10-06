@@ -8,6 +8,18 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.51
+
+The examples' agents, enabled where they work (LOOP E-01, decided 2026-10-06).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `unavailable_because`: why an application is not offered today, in a sentence its page shows. An application with `enabled: false` says it, one that is offered does not; either way round is refused. JSON Schema and reference regenerated.
+- Agents enabled, each with the models ai-inference serves beside its own (`model_additionals`): `jupyter-data-analyst`, `worker-document-qa`, `worker-customer-interviewer` and the Cog `cog-customer-interviewer`. What they need is enabled or built: no MCP server, the notebook and document tools, the documents tool on Contents, a Frame.
+- Examples switched on: *Quote Calculator*, *Report from a File*, *Customer Interview*, *Support Desk* — and *Ship or Fix*, *Supplier Comparison*, *Data Quality*, *Model Choice*, whose agent is now enabled. Their `tests.verified` no longer say the agent is off; none has run live yet.
+- Examples kept off, each saying why: *Inbox Triage* (the mailbox connection, W-02, is not built) and *Weekly Pipeline Report* (ten of its twelve Guards are not run yet, so the Gates before the board cannot pass).
+- Tests: `test_apps.py`.
+
 ## 0.0.50
 
 Commands and modes in the composer (LOOP P-19).

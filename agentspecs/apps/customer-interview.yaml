@@ -1,9 +1,9 @@
 # Built from app.py by `loop apps build`: the file is the source; edit it there.
 # What its code decides; without the file, its agent answers:
-# loop:code start: opening (app.py:112)
-# loop:code message: reply (app.py:125)
-# loop:code action save: save (app.py:141)
-# loop:code action finish: finish (app.py:150)
+# loop:code start: opening (app.py:111)
+# loop:code message: reply (app.py:124)
+# loop:code action save: save (app.py:140)
+# loop:code action finish: finish (app.py:149)
 schema: loop.app/v1
 id: customer-interview
 version: 0.0.1
@@ -65,8 +65,8 @@ tests:
       asked, a refusal honoured, a reply per message, an insight saved, the result
       recorded.'
     unverified:
-    - 'Its agent is switched off in the catalogue: its code has not run with a real
-      model, and its tests have not been run.'
+    - 'Its code has not run with a real model: its agent was switched on in the catalogue
+      on 2026-10-06, and its tests have not been run.'
 record:
   keep_for: 1_years
   include:
@@ -76,7 +76,6 @@ record:
 deployment:
   hosted:
     visibility: private
-enabled: false
 tags:
 - example
 - research

@@ -130,7 +130,7 @@ tests:
     live: []
     recorded: []
     unverified:
-      - "Its agent is switched off in the catalogue: no conversation has run."
+      - "No conversation has run: its agent was switched on in the catalogue on 2026-10-06 and has not answered yet."
       - "Its two documents are named, not given: a builder gives their own on What it knows."
       - "Its tests have not been run."
 
@@ -144,8 +144,6 @@ deployment:
   embedded:
     mode: bubble
     origins: []
-
-enabled: false
 
 tags:
   - example

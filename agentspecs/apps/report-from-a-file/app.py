@@ -139,8 +139,8 @@ app = Application.from_spec(
                     "on its page answering what its code asks.",
                 ],
                 "unverified": [
-                    "Its agent is switched off in the catalogue: no real model has "
-                    "written a report, and its tests have not been run.",
+                    "No real model has written a report: its agent was switched on in "
+                    "the catalogue on 2026-10-06, and its tests have not been run.",
                     "The report is kept in its record; no download link is drawn yet.",
                 ],
             },
@@ -150,7 +150,6 @@ app = Application.from_spec(
             "hosted": {"visibility": "private"},
             "embedded": {"mode": "inline", "origins": []},
         },
-        "enabled": False,
         "tags": ["example", "widget", "python"],
         "icon": "file",
         "emoji": "📑",

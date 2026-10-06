@@ -90,6 +90,7 @@ record:
 | `deployment` | Where it goes: `hosted` (a `visibility`, a `slug`, `character_alone`) and `embedded` (a `mode`, the `origins` allowed, and `host`: what the host page passes it and the functions of the host it may call). |
 | `goal`, `triggers`, `memory`, `notifications` | A worker's own: what it works toward, what starts its work, what it remembers, where an approval reaches a person. |
 | `decision` | A decision's own: the `question`, `alternatives`, `criteria`, `scenarios`, the review policy. |
+| `enabled`, `unavailable_because` | Whether it is offered today, `true` unless said; and, when it is not, why, in a sentence its page shows. One that is not offered says why; one that is says nothing. |
 
 A key the spec does not know is refused, by name: a typing mistake does not
 become a setting that is silently ignored.
@@ -466,10 +467,12 @@ behind the code.
 The eleven examples, and *Decide*, each a spec of its own. Two are written in Python: their
 `app.py` sits in a folder named for the example (`apps/customer-interview/app.py`),
 and their spec is the one `loop apps build` writes from it (agent-runtimes'
-application API). Only `web-research` runs on what is enabled today, and was
-run live; the others name an agent that is not enabled, so they pass their
-checks but have not run. *Support desk*, *Customer interview*, *Report from a
-file* and *Weekly pipeline report* say so at their top.
+application API). An example is offered where its agent works: what it needs
+is enabled today, and nothing it needs is missing (since 0.0.51). Two are not,
+and each says why under `unavailable_because`: *Inbox triage*, whose mailbox
+cannot be connected yet, and *Weekly pipeline report*, ten of whose twelve
+Guards are not run yet, so the Gates before the board cannot pass. What each
+was tried on is said under `tests.verified`.
 
 | Application | Kind | Built with | Shows |
 | --- | --- | --- | --- |

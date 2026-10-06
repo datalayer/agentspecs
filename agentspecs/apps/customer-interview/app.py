@@ -86,8 +86,8 @@ app = Application.from_spec(
                     "insight saved, the result recorded.",
                 ],
                 "unverified": [
-                    "Its agent is switched off in the catalogue: its code has not run "
-                    "with a real model, and its tests have not been run.",
+                    "Its code has not run with a real model: its agent was switched on "
+                    "in the catalogue on 2026-10-06, and its tests have not been run.",
                 ],
             },
         },
@@ -96,7 +96,6 @@ app = Application.from_spec(
             "include": ["conversations", "outputs", "feedback"],
         },
         "deployment": {"hosted": {"visibility": "private"}},
-        "enabled": False,
         "tags": ["example", "research", "python"],
         "icon": "comment-discussion",
         "emoji": "🎙️",

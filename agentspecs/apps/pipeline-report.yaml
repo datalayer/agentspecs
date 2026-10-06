@@ -183,6 +183,9 @@ deployment:
     visibility: private
 
 enabled: false
+unavailable_because: >-
+  Ten of the twelve checks it names before a report reaches the board cannot
+  run yet, so no report it builds could pass them and be sent.
 
 tags:
   - example

@@ -1170,6 +1170,13 @@ class AppSpec(_Strict):
     decision: Optional[AppDecision] = Field(default=None, description="For a decision: what it decides")
 
     enabled: bool = Field(default=True, description="Whether it is offered today")
+    unavailable_because: str = Field(
+        default="",
+        description=(
+            "Why it is not offered today, in a sentence its page shows: "
+            "said when `enabled` is false, and only then"
+        ),
+    )
     tags: List[str] = Field(default_factory=list)
     icon: str = Field(default="apps", description="Icon identifier")
     emoji: str = Field(
@@ -1232,6 +1239,12 @@ class AppSpec(_Strict):
     def _holds_together(self) -> "AppSpec":
         if bool(self.agent) == bool(self.team):
             raise ValueError("an application names who does the work: an `agent`, or a `team`, and not both")
+        if not self.enabled and not self.unavailable_because.strip():
+            raise ValueError("an application that is not offered says why, under `unavailable_because`")
+        if self.enabled and self.unavailable_because.strip():
+            raise ValueError(
+                "an application offered today is available: remove `unavailable_because`, or set `enabled: false`"
+            )
         if self.kind is AppKind.DECISION and self.decision is None:
             raise ValueError("a decision application says what it decides, under `decision`")
         if self.kind is not AppKind.DECISION and self.decision is not None:

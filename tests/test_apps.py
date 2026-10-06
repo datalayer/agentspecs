@@ -363,6 +363,27 @@ def test_what_is_not_enabled_is_said_as_setup_and_not_as_a_mistake() -> None:
     ]
 
 
+def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() -> None:
+    """LOOP E-01, decided 2026-10-06: an example whose agent needs nothing missing is on;
+    the others stay off, each saying why in a sentence its page shows."""
+    off = {identity: spec for identity, spec in APP_CATALOGUE.items() if not spec.enabled}
+    assert sorted(off) == ["inbox-triage", "pipeline-report"]
+    for identity, spec in off.items():
+        assert spec.unavailable_because.strip().endswith("."), identity
+    for identity in ("quote-calculator", "report-from-a-file", "customer-interview", "support-desk"):
+        spec = APP_CATALOGUE[identity]
+        assert spec.enabled and spec.unavailable_because == "", identity
+        assert app_setup(spec) == [], identity
+    # Off without a reason, or a reason on one that is offered, is refused.
+    with pytest.raises(AppError, match="says why, under `unavailable_because`"):
+        app(enabled=False)
+    with pytest.raises(AppError, match="remove `unavailable_because`"):
+        app(unavailable_because="Not yet.")
+    assert app(enabled=False, unavailable_because="Not yet.").unavailable_because == "Not yet."
+    with pytest.raises(AppError, match="unavailable_becuase"):
+        app(enabled=False, unavailable_becuase="Not yet.")
+
+
 def test_each_kind_has_its_layout_unless_it_says_another() -> None:
     assert APP_CATALOGUE["web-research"].layout is Layout.CHAT
     assert APP_CATALOGUE["inbox-triage"].layout is Layout.SPLIT

@@ -42,6 +42,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `notifications` | list of text | Where an approval reaches a person | — |
 | `decision` | [AppDecision](#appdecision) | For a decision: what it decides | empty |
 | `enabled` | true or false | Whether it is offered today | `true` |
+| `unavailable_because` | text | Why it is not offered today, in a sentence its page shows: said when `enabled` is false, and only then | empty |
 | `tags` | list of text |  | — |
 | `icon` | text | Icon identifier | `"apps"` |
 | `emoji` | text | Its face: one emoji, shown wherever the application appears | `"👀"` |
@@ -238,12 +239,6 @@ context:
 - customer-research:0.0.1
 ```
 
-### `enabled`
-
-```yaml
-enabled: false
-```
-
 ### `contents`
 
 ```yaml
@@ -329,6 +324,19 @@ memory: mem0
 ```yaml
 notifications:
 - email
+```
+
+### `enabled`
+
+```yaml
+enabled: false
+```
+
+### `unavailable_because`
+
+```yaml
+unavailable_because: 'It reads and sorts your mail, and a mailbox cannot be connected
+  yet: the Google Workspace connection is still being built.'
 ```
 
 ### `checks`
