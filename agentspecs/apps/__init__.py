@@ -1164,6 +1164,30 @@ def component_named(name: str) -> Optional[Dict[str, Any]]:
     return None
 
 
+def form_problems(node: Mapping[str, Any]) -> List[str]:
+    """What stops a Form block from asking (LOOP C-16), in sentences.
+
+    A form is what an application asks of a person — a quote's parameters, an
+    approval's reason — as the JSON Schema of its fields: an object whose
+    fields are named, each required one among them, so that the page draws it
+    and the runtime checks what it receives against the same schema.
+    """
+    said = f"The form {node['id']!r}"
+    schema = node.get("schema")
+    if not isinstance(schema, Mapping):
+        return [f"{said} has no fields: its schema is the JSON Schema of what it asks."]
+    if schema.get("type") != "object" or not isinstance(schema.get("properties"), Mapping) or not schema["properties"]:
+        return [f"{said} asks for no named field: its schema is an object with properties."]
+    problems = []
+    for name, field in schema["properties"].items():
+        if not isinstance(field, Mapping):
+            problems.append(f"{said}'s field {name!r} is not a schema.")
+    missing = [name for name in schema.get("required") or [] if name not in schema["properties"]]
+    if missing:
+        problems.append(f"{said} requires {', '.join(repr(name) for name in missing)}, which it does not ask.")
+    return problems
+
+
 def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = None) -> List[str]:
     """What stops an application from being used, in sentences; empty when nothing does.
 
@@ -1225,6 +1249,8 @@ def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = No
                 problems.append(
                     f"The surface's {node['id']!r} is a {node['component']!r}, which the catalog does not have."
                 )
+            elif node["component"] == "Form":
+                problems += form_problems(node)
         # A `chat` layout is the conversation alone: a page composed for it is not drawn.
         if (
             app.agent
@@ -1545,6 +1571,7 @@ __all__ = [
     "app_setup",
     "behaviour_for",
     "dump_app",
+    "form_problems",
     "get_app",
     "kept_record",
     "json_schema",

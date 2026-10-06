@@ -8,6 +8,17 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.45
+
+Every visual component with a version and its properties as a JSON Schema of the catalog's own, and forms an application asks with (LOOP C-13, C-16).
+
+Pages: [Components](https://agentspecs.datalayer.tech/agents/ui-plugins/components), [Applications](https://agentspecs.datalayer.tech/apps).
+
+- `ui-plugins/a2ui.yaml`: every component has a `version` (A2UI's standard ones `0.9.0`, Datalayer's own `1.0.0`) and its `properties` as a JSON Schema — the eighteen standard ones too, as what a builder sets of them, their names, required ones, choices and defaults A2UI's, kept in step by a test against A2UI's basic catalog.
+- `form_problems(node)`: a Form block's schema is an object of named fields, each required one among them; `app_problems` says it on the surface.
+- The components page lists every component with its version and properties.
+- Tests: `test_ui_plugin_components.py` (a version and a schema for every component, the standard ones as A2UI's), `test_apps.py` (a form's refusals).
+
 ## 0.0.44
 
 What an application's record keeps, as its record or its Track says (LOOP R-07).

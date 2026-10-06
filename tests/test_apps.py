@@ -1313,3 +1313,32 @@ def test_a_track_the_catalogue_does_not_have_is_said() -> None:
 
     with pytest.raises(AppError, match="There is no Track named 'ghost'"):
         kept_record("1_years", [], "ghost")
+
+
+def test_a_form_asks_named_fields() -> None:
+    """LOOP C-16: a Form block is the JSON Schema of what it asks — an object
+    whose fields are named, each required one among them."""
+
+    def page(form: dict) -> AppSpec:
+        return app(
+            interface={
+                "layout": "page",
+                "surface": {
+                    "components": [
+                        {"id": "root", "component": "Column", "children": ["quote"]},
+                        {"id": "quote", "component": "Form", **form},
+                    ]
+                },
+            }
+        )
+
+    seats = {"type": "object", "required": ["seats"], "properties": {"seats": {"type": "integer", "minimum": 1}}}
+    assert app_problems(page({"schema": seats})) == []
+    assert app_problems(page({})) == ["The form 'quote' has no fields: its schema is the JSON Schema of what it asks."]
+    assert app_problems(page({"schema": {"type": "string"}})) == [
+        "The form 'quote' asks for no named field: its schema is an object with properties."
+    ]
+    assert app_problems(page({"schema": {**seats, "required": ["seats", "reason"]}})) == [
+        "The form 'quote' requires 'reason', which it does not ask."
+    ]
+

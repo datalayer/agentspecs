@@ -6,14 +6,17 @@
 
 One catalog for the spec, the Canvas and Python, hosted by the UI plugins:
 A2UI's standard components by the names A2UI gives them, and Datalayer's own,
-whose properties are a JSON Schema a properties form is drawn from
-(`@datalayer/primer-rjsf`, C-14): valid, an object, each property titled and
-described, and its example valid against it.
+each with its version and its properties as a JSON Schema a properties form
+is drawn from (`@datalayer/primer-rjsf`, C-14): valid, an object, each
+property titled and described; a standard one's as A2UI's, Datalayer's own
+with an example valid against it.
 """
 
 from __future__ import annotations
 
+import json
 import pathlib
+import re
 
 import jsonschema
 import yaml
@@ -63,21 +66,58 @@ def test_a_component_says_what_it_is():
         assert spec["category"] in CATEGORIES, name
 
 
-def test_datalayers_own_have_properties_a_form_is_drawn_from():
+def test_every_component_has_a_version_and_properties_a_form_is_drawn_from():
     for name, spec in _components().items():
-        if spec["standard"]:
-            # A2UI's own properties are A2UI's: not copied here.
-            assert "properties" not in spec, name
-            continue
+        assert re.fullmatch(r"\d+\.\d+\.\d+", str(spec["version"])), name
         schema = spec["properties"]
         jsonschema.Draft202012Validator.check_schema(schema)
         assert schema["type"] == "object", name
         for field_name, field in schema["properties"].items():
             assert field.get("title") and field.get("description"), f"{name}.{field_name}"
         assert set(schema.get("required", [])) <= set(schema["properties"]), name
+        if spec["standard"]:
+            continue
         assert set(spec["bindings"]) == {"shows", "sends"}, name
         assert isinstance(spec["events"], list), name
         jsonschema.validate(spec["example"], schema)
+
+
+def _a2ui_properties(component: dict) -> tuple[dict, list]:
+    properties: dict = {}
+    required: list = []
+    for part in component.get("allOf", [component]):
+        properties.update(part.get("properties", {}))
+        required += part.get("required", [])
+    properties.pop("component", None)
+    return properties, [name for name in required if name != "component"]
+
+
+def _a2ui_choices(prop: dict) -> list | None:
+    if "enum" in prop:
+        return prop["enum"]
+    for option in prop.get("oneOf", []):
+        if "enum" in option:
+            return option["enum"]
+    return None
+
+
+def test_a_standard_components_properties_are_a2uis():
+    """The catalog's own schema of a standard component names what A2UI's does —
+    every property, the required ones, each choice and default — so that the
+    form, the spec and Python cannot offer what the renderer does not draw."""
+    basic = json.loads(
+        (pathlib.Path(__file__).parent / "a2ui_v0_9" / "basic_catalog.json").read_text()
+    )["components"]
+    for name, spec in _components().items():
+        if not spec["standard"]:
+            continue
+        theirs, required = _a2ui_properties(basic[name])
+        ours = spec["properties"]
+        assert set(ours["properties"]) == set(theirs), name
+        assert sorted(ours.get("required", [])) == sorted(required), name
+        for field_name, field in ours["properties"].items():
+            assert field.get("enum") == _a2ui_choices(theirs[field_name]), f"{name}.{field_name}"
+            assert field.get("default") == theirs[field_name].get("default"), f"{name}.{field_name}"
 
 
 def test_a_wrong_value_is_refused_by_the_schema():
@@ -99,9 +139,12 @@ def test_the_catalogue_page_says_every_component_and_is_the_one_in_the_docs():
     page = catalogue_markdown()
     for name, spec in _components().items():
         assert f"`{name}`" in page, name
+        assert f"### `{name}`" in page, name
+        assert f"version {spec['version']}" in page, name
+        for field_name in spec["properties"]["properties"]:
+            assert f"| `{field_name}`" in page, f"{name}.{field_name}"
         if spec["standard"]:
             continue
-        assert f"### `{name}`" in page, name
         for field_name in spec["properties"]["properties"]:
             assert f"| `{field_name}`" in page, f"{name}.{field_name}"
         for value in [*spec["bindings"]["shows"], *spec["bindings"]["sends"], *spec["events"]]:

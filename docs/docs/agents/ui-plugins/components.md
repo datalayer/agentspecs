@@ -19,40 +19,907 @@ Every visual component a UI plugin renders, by the name a surface gives it. A co
 
 An agent describes an interface — a form, a table, a card — as a tree of components from a catalogue the host allows, and the host renders it; what the user does in it comes back to the agent as an action.
 
-Catalog `a2ui/v0.9`: 18 standard components, whose properties are the protocol's own ([A2UI](https://a2ui.org/)), and 6 of Datalayer's own, whose properties are a JSON Schema the Canvas draws a properties form from.
+Catalog `a2ui/v0.9`: 18 standard components, named and drawn as the protocol says ([A2UI](https://a2ui.org/)), and 6 of Datalayer's own. Every one has a version and its properties as a JSON Schema of the catalog's: what a builder sets, the Canvas draws a properties form from, and Python calls typed.
 
-| Id | Name | Category | Standard | What it is for |
-| --- | --- | --- | --- | --- |
-| `Text` | 🔤 Text | text | yes | Words on the page: a heading, a paragraph, the answer — plain or Markdown. |
-| `Image` | 🖼️ Image | media | yes | A picture: a chart rendered elsewhere, a logo, a photo. |
-| `Icon` | 🔣 Icon | media | yes | A small drawing that says what something is: a check, a warning, a link. |
-| `Video` | 🎬 Video | media | yes | A film played in place. |
-| `AudioPlayer` | 🔊 Audio | media | yes | A sound played in place: a recording, a summary read aloud. |
-| `Row` | ➡️ Row | layout | yes | Children side by side, left to right. |
-| `Column` | ⬇️ Column | layout | yes | Children one under the other. |
-| `List` | 📃 List | layout | yes | Items one after the other, each drawn by the same children: results, alternatives, steps. |
-| `Card` | 🗂️ Card | layout | yes | A framed group: what belongs together, set apart. |
-| `Tabs` | 📑 Tabs | layout | yes | Several views of one place, one shown at a time. |
-| `Divider` | ➖ Divider | layout | yes | A line between what comes before and after. |
-| `Modal` | 🪟 Modal | layout | yes | A window over the page, opened by a trigger: details, a confirmation. |
-| `Button` | 🔘 Button | action | yes | An action the person takes: send, run, approve. One filled button per screen. |
-| `TextField` | ⌨️ Input | input | yes | A field the person types in: a word, a sentence, a number, a date. |
-| `CheckBox` | ☑️ Checkbox | input | yes | Yes or no: an option on or off, a consent given. |
-| `ChoicePicker` | 🔽 Select | input | yes | One choice, or several, among options the builder lists or the data gives. |
-| `Slider` | 🎚️ Slider | input | yes | A number chosen along a range: a weight, a budget, a threshold. |
-| `DateTimeInput` | 📅 Date and time | input | yes | A date, a time, or both, chosen from a calendar. |
-| [`Table`](#table) | 📋 Table | data | no | Rows the application found or keeps, with the columns the builder chooses. |
-| [`Chart`](#chart) | 📊 Chart | data | no | Numbers drawn: a bar, a line, a scatter of what the application measured. |
-| [`FileUpload`](#fileupload) | 📎 File upload | input | no | A file the person gives the application: a document to read, a sheet to check. |
-| [`Chat`](#chat) | 💬 Chat | conversation | no | The conversation with the application: its welcome, its starters, the composer. |
-| [`Evidence`](#evidence) | 🔎 Evidence | data | no | What an answer rests on: the sources opened, the passages cited, each with its link. |
-| [`Form`](#form) | 🧾 Form | input | no | Several fields asked at once, from a JSON Schema, checked as they are filled and again when they arrive (drawn with @datalayer/primer-rjsf). |
+| Id | Name | Category | Version | Standard | What it is for |
+| --- | --- | --- | --- | --- | --- |
+| [`Text`](#text) | 🔤 Text | text | 0.9.0 | yes | Words on the page: a heading, a paragraph, the answer — plain or Markdown. |
+| [`Image`](#image) | 🖼️ Image | media | 0.9.0 | yes | A picture: a chart rendered elsewhere, a logo, a photo. |
+| [`Icon`](#icon) | 🔣 Icon | media | 0.9.0 | yes | A small drawing that says what something is: a check, a warning, a link. |
+| [`Video`](#video) | 🎬 Video | media | 0.9.0 | yes | A film played in place. |
+| [`AudioPlayer`](#audioplayer) | 🔊 Audio | media | 0.9.0 | yes | A sound played in place: a recording, a summary read aloud. |
+| [`Row`](#row) | ➡️ Row | layout | 0.9.0 | yes | Children side by side, left to right. |
+| [`Column`](#column) | ⬇️ Column | layout | 0.9.0 | yes | Children one under the other. |
+| [`List`](#list) | 📃 List | layout | 0.9.0 | yes | Items one after the other, each drawn by the same children: results, alternatives, steps. |
+| [`Card`](#card) | 🗂️ Card | layout | 0.9.0 | yes | A framed group: what belongs together, set apart. |
+| [`Tabs`](#tabs) | 📑 Tabs | layout | 0.9.0 | yes | Several views of one place, one shown at a time. |
+| [`Divider`](#divider) | ➖ Divider | layout | 0.9.0 | yes | A line between what comes before and after. |
+| [`Modal`](#modal) | 🪟 Modal | layout | 0.9.0 | yes | A window over the page, opened by a trigger: details, a confirmation. |
+| [`Button`](#button) | 🔘 Button | action | 0.9.0 | yes | An action the person takes: send, run, approve. One filled button per screen. |
+| [`TextField`](#textfield) | ⌨️ Input | input | 0.9.0 | yes | A field the person types in: a word, a sentence, a number, a date. |
+| [`CheckBox`](#checkbox) | ☑️ Checkbox | input | 0.9.0 | yes | Yes or no: an option on or off, a consent given. |
+| [`ChoicePicker`](#choicepicker) | 🔽 Select | input | 0.9.0 | yes | One choice, or several, among options the builder lists or the data gives. |
+| [`Slider`](#slider) | 🎚️ Slider | input | 0.9.0 | yes | A number chosen along a range: a weight, a budget, a threshold. |
+| [`DateTimeInput`](#datetimeinput) | 📅 Date and time | input | 0.9.0 | yes | A date, a time, or both, chosen from a calendar. |
+| [`Table`](#table) | 📋 Table | data | 1.0.0 | no | Rows the application found or keeps, with the columns the builder chooses. |
+| [`Chart`](#chart) | 📊 Chart | data | 1.0.0 | no | Numbers drawn: a bar, a line, a scatter of what the application measured. |
+| [`FileUpload`](#fileupload) | 📎 File upload | input | 1.0.0 | no | A file the person gives the application: a document to read, a sheet to check. |
+| [`Chat`](#chat) | 💬 Chat | conversation | 1.0.0 | no | The conversation with the application: its welcome, its starters, the composer. |
+| [`Evidence`](#evidence) | 🔎 Evidence | data | 1.0.0 | no | What an answer rests on: the sources opened, the passages cited, each with its link. |
+| [`Form`](#form) | 🧾 Form | input | 1.0.0 | no | Several fields asked at once, from a JSON Schema, checked as they are filled and again when they arrive (drawn with @datalayer/primer-rjsf). |
+
+## A2UI: standard components
+
+### `Text`
+
+🔤 **Text** · text · version 0.9.0 — Words on the page: a heading, a paragraph, the answer — plain or Markdown.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `text` (required) | text | **Words**. What it says, plain or in simple Markdown. | — |
+| `variant` | `h1` \| `h2` \| `h3` \| `h4` \| `h5` \| `caption` \| `body` | **Style**. A heading of a level, a caption, or body text. | `"body"` |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "text"
+  ],
+  "properties": {
+    "text": {
+      "type": "string",
+      "title": "Words",
+      "description": "What it says, plain or in simple Markdown."
+    },
+    "variant": {
+      "type": "string",
+      "title": "Style",
+      "description": "A heading of a level, a caption, or body text.",
+      "enum": [
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "caption",
+        "body"
+      ],
+      "default": "body"
+    }
+  }
+}
+```
+
+### `Image`
+
+🖼️ **Image** · media · version 0.9.0 — A picture: a chart rendered elsewhere, a logo, a photo.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `url` (required) | text | **Address**. Where the picture is. | — |
+| `description` | text | **Description**. What it shows, for those who cannot see it. | — |
+| `fit` | `contain` \| `cover` \| `fill` \| `none` \| `scaleDown` | **Fit**. How it is resized to its place. | `"fill"` |
+| `variant` | `icon` \| `avatar` \| `smallFeature` \| `mediumFeature` \| `largeFeature` \| `header` | **Size**. An icon, an avatar, a feature or a header. | `"mediumFeature"` |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "url"
+  ],
+  "properties": {
+    "url": {
+      "type": "string",
+      "title": "Address",
+      "description": "Where the picture is."
+    },
+    "description": {
+      "type": "string",
+      "title": "Description",
+      "description": "What it shows, for those who cannot see it."
+    },
+    "fit": {
+      "type": "string",
+      "title": "Fit",
+      "description": "How it is resized to its place.",
+      "enum": [
+        "contain",
+        "cover",
+        "fill",
+        "none",
+        "scaleDown"
+      ],
+      "default": "fill"
+    },
+    "variant": {
+      "type": "string",
+      "title": "Size",
+      "description": "An icon, an avatar, a feature or a header.",
+      "enum": [
+        "icon",
+        "avatar",
+        "smallFeature",
+        "mediumFeature",
+        "largeFeature",
+        "header"
+      ],
+      "default": "mediumFeature"
+    }
+  }
+}
+```
+
+### `Icon`
+
+🔣 **Icon** · media · version 0.9.0 — A small drawing that says what something is: a check, a warning, a link.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `name` (required) | `accountCircle` \| `add` \| `arrowBack` \| `arrowForward` \| `attachFile` \| `calendarToday` \| `call` \| `camera` \| `check` \| `close` \| `delete` \| `download` \| `edit` \| `event` \| `error` \| `fastForward` \| `favorite` \| `favoriteOff` \| `folder` \| `help` \| `home` \| `info` \| `locationOn` \| `lock` \| `lockOpen` \| `mail` \| `menu` \| `moreVert` \| `moreHoriz` \| `notificationsOff` \| `notifications` \| `pause` \| `payment` \| `person` \| `phone` \| `photo` \| `play` \| `print` \| `refresh` \| `rewind` \| `search` \| `send` \| `settings` \| `share` \| `shoppingCart` \| `skipNext` \| `skipPrevious` \| `star` \| `starHalf` \| `starOff` \| `stop` \| `upload` \| `visibility` \| `visibilityOff` \| `volumeDown` \| `volumeMute` \| `volumeOff` \| `volumeUp` \| `warning` | **Icon**. Which drawing, by its name. | — |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "name"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Icon",
+      "description": "Which drawing, by its name.",
+      "enum": [
+        "accountCircle",
+        "add",
+        "arrowBack",
+        "arrowForward",
+        "attachFile",
+        "calendarToday",
+        "call",
+        "camera",
+        "check",
+        "close",
+        "delete",
+        "download",
+        "edit",
+        "event",
+        "error",
+        "fastForward",
+        "favorite",
+        "favoriteOff",
+        "folder",
+        "help",
+        "home",
+        "info",
+        "locationOn",
+        "lock",
+        "lockOpen",
+        "mail",
+        "menu",
+        "moreVert",
+        "moreHoriz",
+        "notificationsOff",
+        "notifications",
+        "pause",
+        "payment",
+        "person",
+        "phone",
+        "photo",
+        "play",
+        "print",
+        "refresh",
+        "rewind",
+        "search",
+        "send",
+        "settings",
+        "share",
+        "shoppingCart",
+        "skipNext",
+        "skipPrevious",
+        "star",
+        "starHalf",
+        "starOff",
+        "stop",
+        "upload",
+        "visibility",
+        "visibilityOff",
+        "volumeDown",
+        "volumeMute",
+        "volumeOff",
+        "volumeUp",
+        "warning"
+      ]
+    }
+  }
+}
+```
+
+### `Video`
+
+🎬 **Video** · media · version 0.9.0 — A film played in place.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `url` (required) | text | **Address**. Where the film is. | — |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "url"
+  ],
+  "properties": {
+    "url": {
+      "type": "string",
+      "title": "Address",
+      "description": "Where the film is."
+    }
+  }
+}
+```
+
+### `AudioPlayer`
+
+🔊 **Audio** · media · version 0.9.0 — A sound played in place: a recording, a summary read aloud.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `url` (required) | text | **Address**. Where the sound is. | — |
+| `description` | text | **Description**. What it is: a title or a summary. | — |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "url"
+  ],
+  "properties": {
+    "url": {
+      "type": "string",
+      "title": "Address",
+      "description": "Where the sound is."
+    },
+    "description": {
+      "type": "string",
+      "title": "Description",
+      "description": "What it is: a title or a summary."
+    }
+  }
+}
+```
+
+### `Row`
+
+➡️ **Row** · layout · version 0.9.0 — Children side by side, left to right.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `children` (required) | list of text | **Blocks**. The blocks inside it, by id, left to right. | — |
+| `justify` | `center` \| `end` \| `spaceAround` \| `spaceBetween` \| `spaceEvenly` \| `start` \| `stretch` | **Spacing**. How the blocks share the width. | `"start"` |
+| `align` | `start` \| `center` \| `end` \| `stretch` | **Alignment**. How the blocks line up top to bottom. | `"stretch"` |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "children"
+  ],
+  "properties": {
+    "children": {
+      "type": "array",
+      "title": "Blocks",
+      "description": "The blocks inside it, by id, left to right.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "justify": {
+      "type": "string",
+      "title": "Spacing",
+      "description": "How the blocks share the width.",
+      "enum": [
+        "center",
+        "end",
+        "spaceAround",
+        "spaceBetween",
+        "spaceEvenly",
+        "start",
+        "stretch"
+      ],
+      "default": "start"
+    },
+    "align": {
+      "type": "string",
+      "title": "Alignment",
+      "description": "How the blocks line up top to bottom.",
+      "enum": [
+        "start",
+        "center",
+        "end",
+        "stretch"
+      ],
+      "default": "stretch"
+    }
+  }
+}
+```
+
+### `Column`
+
+⬇️ **Column** · layout · version 0.9.0 — Children one under the other.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `children` (required) | list of text | **Blocks**. The blocks inside it, by id, top to bottom. | — |
+| `justify` | `start` \| `center` \| `end` \| `spaceBetween` \| `spaceAround` \| `spaceEvenly` \| `stretch` | **Spacing**. How the blocks share the height. | `"start"` |
+| `align` | `center` \| `end` \| `start` \| `stretch` | **Alignment**. How the blocks line up left to right. | `"stretch"` |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "children"
+  ],
+  "properties": {
+    "children": {
+      "type": "array",
+      "title": "Blocks",
+      "description": "The blocks inside it, by id, top to bottom.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "justify": {
+      "type": "string",
+      "title": "Spacing",
+      "description": "How the blocks share the height.",
+      "enum": [
+        "start",
+        "center",
+        "end",
+        "spaceBetween",
+        "spaceAround",
+        "spaceEvenly",
+        "stretch"
+      ],
+      "default": "start"
+    },
+    "align": {
+      "type": "string",
+      "title": "Alignment",
+      "description": "How the blocks line up left to right.",
+      "enum": [
+        "center",
+        "end",
+        "start",
+        "stretch"
+      ],
+      "default": "stretch"
+    }
+  }
+}
+```
+
+### `List`
+
+📃 **List** · layout · version 0.9.0 — Items one after the other, each drawn by the same children: results, alternatives, steps.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `children` (required) | list of text | **Blocks**. The blocks inside it, by id, or the template repeated over a list. | — |
+| `direction` | `vertical` \| `horizontal` | **Direction**. One under the other, or side by side. | `"vertical"` |
+| `align` | `start` \| `center` \| `end` \| `stretch` | **Alignment**. How the items line up across. | `"stretch"` |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "children"
+  ],
+  "properties": {
+    "children": {
+      "type": "array",
+      "title": "Blocks",
+      "description": "The blocks inside it, by id, or the template repeated over a list.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "direction": {
+      "type": "string",
+      "title": "Direction",
+      "description": "One under the other, or side by side.",
+      "enum": [
+        "vertical",
+        "horizontal"
+      ],
+      "default": "vertical"
+    },
+    "align": {
+      "type": "string",
+      "title": "Alignment",
+      "description": "How the items line up across.",
+      "enum": [
+        "start",
+        "center",
+        "end",
+        "stretch"
+      ],
+      "default": "stretch"
+    }
+  }
+}
+```
+
+### `Card`
+
+🗂️ **Card** · layout · version 0.9.0 — A framed group: what belongs together, set apart.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `child` (required) | text | **Block**. The one block inside it, by id; a Row or Column for several. | — |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "child"
+  ],
+  "properties": {
+    "child": {
+      "type": "string",
+      "title": "Block",
+      "description": "The one block inside it, by id; a Row or Column for several."
+    }
+  }
+}
+```
+
+### `Tabs`
+
+📑 **Tabs** · layout · version 0.9.0 — Several views of one place, one shown at a time.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `tabs` (required) | list of mapping (minItems 1) | **Tabs**. Each tab's title and the block it shows, by id. | — |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "tabs"
+  ],
+  "properties": {
+    "tabs": {
+      "type": "array",
+      "title": "Tabs",
+      "description": "Each tab's title and the block it shows, by id.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "title",
+          "child"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "child": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### `Divider`
+
+➖ **Divider** · layout · version 0.9.0 — A line between what comes before and after.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `axis` | `horizontal` \| `vertical` | **Direction**. Across or up and down. | `"horizontal"` |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "axis": {
+      "type": "string",
+      "title": "Direction",
+      "description": "Across or up and down.",
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "default": "horizontal"
+    }
+  }
+}
+```
+
+### `Modal`
+
+🪟 **Modal** · layout · version 0.9.0 — A window over the page, opened by a trigger: details, a confirmation.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `trigger` (required) | text | **Opened by**. The block that opens it, by id: a button. | — |
+| `content` (required) | text | **Shows**. The block shown inside it, by id. | — |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "trigger",
+    "content"
+  ],
+  "properties": {
+    "trigger": {
+      "type": "string",
+      "title": "Opened by",
+      "description": "The block that opens it, by id: a button."
+    },
+    "content": {
+      "type": "string",
+      "title": "Shows",
+      "description": "The block shown inside it, by id."
+    }
+  }
+}
+```
+
+### `Button`
+
+🔘 **Button** · action · version 0.9.0 — An action the person takes: send, run, approve. One filled button per screen.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `child` (required) | text | **Label**. The block on it, by id: a Text for its words. | — |
+| `variant` | `default` \| `primary` \| `borderless` | **Style**. Primary for the one main action, borderless for a link. | `"default"` |
+| `action` (required) | mapping | **Does**. What pressing it sends, by name, with what it reads. | — |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "child",
+    "action"
+  ],
+  "properties": {
+    "child": {
+      "type": "string",
+      "title": "Label",
+      "description": "The block on it, by id: a Text for its words."
+    },
+    "variant": {
+      "type": "string",
+      "title": "Style",
+      "description": "Primary for the one main action, borderless for a link.",
+      "enum": [
+        "default",
+        "primary",
+        "borderless"
+      ],
+      "default": "default"
+    },
+    "action": {
+      "type": "object",
+      "title": "Does",
+      "description": "What pressing it sends, by name, with what it reads."
+    }
+  }
+}
+```
+
+### `TextField`
+
+⌨️ **Input** · input · version 0.9.0 — A field the person types in: a word, a sentence, a number, a date.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `label` (required) | text | **Label**. What the person reads beside it. | — |
+| `value` | text | **Value**. What is typed in it. | — |
+| `variant` | `longText` \| `number` \| `shortText` \| `obscured` | **Kind**. A short or long text, a number, or hidden as typed. | `"shortText"` |
+| `validationRegexp` | text | **Pattern**. A regular expression what is typed must match. | — |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "label"
+  ],
+  "properties": {
+    "label": {
+      "type": "string",
+      "title": "Label",
+      "description": "What the person reads beside it."
+    },
+    "value": {
+      "type": "string",
+      "title": "Value",
+      "description": "What is typed in it."
+    },
+    "variant": {
+      "type": "string",
+      "title": "Kind",
+      "description": "A short or long text, a number, or hidden as typed.",
+      "enum": [
+        "longText",
+        "number",
+        "shortText",
+        "obscured"
+      ],
+      "default": "shortText"
+    },
+    "validationRegexp": {
+      "type": "string",
+      "title": "Pattern",
+      "description": "A regular expression what is typed must match."
+    }
+  }
+}
+```
+
+### `CheckBox`
+
+☑️ **Checkbox** · input · version 0.9.0 — Yes or no: an option on or off, a consent given.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `label` (required) | text | **Label**. What the person reads beside it. | — |
+| `value` (required) | true or false | **Value**. Whether it is ticked. | — |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "label",
+    "value"
+  ],
+  "properties": {
+    "label": {
+      "type": "string",
+      "title": "Label",
+      "description": "What the person reads beside it."
+    },
+    "value": {
+      "type": "boolean",
+      "title": "Value",
+      "description": "Whether it is ticked."
+    }
+  }
+}
+```
+
+### `ChoicePicker`
+
+🔽 **Select** · input · version 0.9.0 — One choice, or several, among options the builder lists or the data gives.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `label` | text | **Label**. What the person reads above the options. | — |
+| `variant` | `multipleSelection` \| `mutuallyExclusive` | **Choice**. One of the options, or several. | `"mutuallyExclusive"` |
+| `options` (required) | list of mapping | **Options**. What may be chosen: the words read and the value sent. | — |
+| `value` (required) | list of text | **Value**. The values chosen. | — |
+| `displayStyle` | `checkbox` \| `chips` | **Shown as**. Checkboxes or chips. | `"checkbox"` |
+| `filterable` | true or false | **Searchable**. A search field above the options. | `false` |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "options",
+    "value"
+  ],
+  "properties": {
+    "label": {
+      "type": "string",
+      "title": "Label",
+      "description": "What the person reads above the options."
+    },
+    "variant": {
+      "type": "string",
+      "title": "Choice",
+      "description": "One of the options, or several.",
+      "enum": [
+        "multipleSelection",
+        "mutuallyExclusive"
+      ],
+      "default": "mutuallyExclusive"
+    },
+    "options": {
+      "type": "array",
+      "title": "Options",
+      "description": "What may be chosen: the words read and the value sent.",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "value"
+        ],
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "value": {
+      "type": "array",
+      "title": "Value",
+      "description": "The values chosen.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "displayStyle": {
+      "type": "string",
+      "title": "Shown as",
+      "description": "Checkboxes or chips.",
+      "enum": [
+        "checkbox",
+        "chips"
+      ],
+      "default": "checkbox"
+    },
+    "filterable": {
+      "type": "boolean",
+      "title": "Searchable",
+      "description": "A search field above the options.",
+      "default": false
+    }
+  }
+}
+```
+
+### `Slider`
+
+🎚️ **Slider** · input · version 0.9.0 — A number chosen along a range: a weight, a budget, a threshold.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `label` | text | **Label**. What the person reads beside it. | — |
+| `min` | number | **Least**. The smallest value. | `0` |
+| `max` (required) | number | **Most**. The largest value. | — |
+| `value` (required) | number | **Value**. The value chosen. | — |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "value",
+    "max"
+  ],
+  "properties": {
+    "label": {
+      "type": "string",
+      "title": "Label",
+      "description": "What the person reads beside it."
+    },
+    "min": {
+      "type": "number",
+      "title": "Least",
+      "description": "The smallest value.",
+      "default": 0
+    },
+    "max": {
+      "type": "number",
+      "title": "Most",
+      "description": "The largest value."
+    },
+    "value": {
+      "type": "number",
+      "title": "Value",
+      "description": "The value chosen."
+    }
+  }
+}
+```
+
+### `DateTimeInput`
+
+📅 **Date and time** · input · version 0.9.0 — A date, a time, or both, chosen from a calendar.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `value` (required) | text | **Value**. The date or time chosen, in ISO 8601. | — |
+| `enableDate` | true or false | **Date**. A date may be chosen. | `false` |
+| `enableTime` | true or false | **Time**. A time may be chosen. | `false` |
+| `min` | text | **Earliest**. The earliest that may be chosen, in ISO 8601. | — |
+| `max` | text | **Latest**. The latest that may be chosen, in ISO 8601. | — |
+| `label` | text | **Label**. What the person reads beside it. | — |
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "value"
+  ],
+  "properties": {
+    "value": {
+      "type": "string",
+      "title": "Value",
+      "description": "The date or time chosen, in ISO 8601."
+    },
+    "enableDate": {
+      "type": "boolean",
+      "title": "Date",
+      "description": "A date may be chosen.",
+      "default": false
+    },
+    "enableTime": {
+      "type": "boolean",
+      "title": "Time",
+      "description": "A time may be chosen.",
+      "default": false
+    },
+    "min": {
+      "type": "string",
+      "title": "Earliest",
+      "description": "The earliest that may be chosen, in ISO 8601."
+    },
+    "max": {
+      "type": "string",
+      "title": "Latest",
+      "description": "The latest that may be chosen, in ISO 8601."
+    },
+    "label": {
+      "type": "string",
+      "title": "Label",
+      "description": "What the person reads beside it."
+    }
+  }
+}
+```
 
 ## A2UI: Datalayer's own components
 
 ### `Table`
 
-📋 **Table** · data — Rows the application found or keeps, with the columns the builder chooses.
+📋 **Table** · data · version 1.0.0 — Rows the application found or keeps, with the columns the builder chooses.
 
 | Property | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -118,7 +985,7 @@ columns:
 
 ### `Chart`
 
-📊 **Chart** · data — Numbers drawn: a bar, a line, a scatter of what the application measured.
+📊 **Chart** · data · version 1.0.0 — Numbers drawn: a bar, a line, a scatter of what the application measured.
 
 | Property | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -189,7 +1056,7 @@ y: pass rate
 
 ### `FileUpload`
 
-📎 **File upload** · input — A file the person gives the application: a document to read, a sheet to check.
+📎 **File upload** · input · version 1.0.0 — A file the person gives the application: a document to read, a sheet to check.
 
 | Property | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -254,7 +1121,7 @@ accept:
 
 ### `Chat`
 
-💬 **Chat** · conversation — The conversation with the application: its welcome, its starters, the composer.
+💬 **Chat** · conversation · version 1.0.0 — The conversation with the application: its welcome, its starters, the composer.
 
 | Property | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -313,7 +1180,7 @@ starters:
 
 ### `Evidence`
 
-🔎 **Evidence** · data — What an answer rests on: the sources opened, the passages cited, each with its link.
+🔎 **Evidence** · data · version 1.0.0 — What an answer rests on: the sources opened, the passages cited, each with its link.
 
 | Property | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -363,7 +1230,7 @@ title: What this rests on
 
 ### `Form`
 
-🧾 **Form** · input — Several fields asked at once, from a JSON Schema, checked as they are filled and again when they arrive (drawn with @datalayer/primer-rjsf).
+🧾 **Form** · input · version 1.0.0 — Several fields asked at once, from a JSON Schema, checked as they are filled and again when they arrive (drawn with @datalayer/primer-rjsf).
 
 | Property | Type | Meaning | Default |
 | --- | --- | --- | --- |

@@ -137,6 +137,43 @@ Each output is a media type the [outputs catalogue](https://github.com/datalayer
 gives (`output_media_types()`), named once, and the first is `text/plain` or
 `text/markdown`.
 
+## Forms
+
+What an application needs from a person — a quote's parameters, an approval's
+reason — is asked with a **Form** block on its surface: the JSON Schema of its
+fields, an object whose fields are named.
+
+```yaml
+interface:
+  layout: page
+  surface:
+    components:
+      - id: root
+        component: Column
+        children: [quote]
+      - id: quote
+        component: Form
+        title: The quote
+        schema:
+          type: object
+          required: [seats]
+          properties:
+            seats: {type: integer, minimum: 1, title: Seats}
+        values: {path: /quote}
+        action:
+          event:
+            name: send
+            context: {values: {path: /quote}}
+```
+
+The page draws it with `@datalayer/primer-rjsf` and sends nothing its schema
+refuses; the runtime checks what it receives against the same schema before
+the application acts on it. A form whose schema is not an object of named
+fields, or that requires a field it does not ask, is refused
+(`form_problems`). Every component of the [catalog](../agents/ui-plugins/components),
+standard or Datalayer's own, has its version and its properties as a JSON
+Schema.
+
 ## Rules
 
 A rule is written in a person's words and enforced on what a tool does.
@@ -315,6 +352,7 @@ kept_record(app.record.keep_for, app.record.include, app.checks.track)
 - A decision asked of a model that does not answer typed decisions.
 - Writing through a server whose tools nobody has classed.
 - An output that is not a media type, or that the outputs catalogue does not give; one named twice; outputs that do not start with words (`text/plain` or `text/markdown`).
+- A component the catalog does not have; a Form whose schema is not an object of named fields, or that requires a field it does not ask.
 
 What an application names that is merely **not enabled** — an agent, a server —
 is not a mistake of the spec: `app_setup` lists it as something to set up.

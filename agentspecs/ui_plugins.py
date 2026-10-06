@@ -6,8 +6,10 @@
 
 Generated from the UI plugins (`ui-plugins/*.yaml`, `components`) so that the
 page cannot list a component the catalogue does not have, nor miss one it has:
-each plugin and the components it renders, and for Datalayer's own their
-properties as a JSON Schema, their bindings, their events and an example.
+each plugin and the components it renders, each with its version and its
+properties as a JSON Schema — A2UI's standard ones as the catalog says what a
+builder sets of them, Datalayer's own with their bindings, their events and an
+example.
 ``python -m agentspecs.ui_plugins`` writes it.
 """
 
@@ -66,8 +68,8 @@ def _component(component: Mapping[str, Any]) -> List[str]:
     lines = [
         f"### `{component['id']}`",
         "",
-        f"{component.get('emoji', '')} **{_cell(component['name'])}** · {_cell(component['category'])} — "
-        f"{_cell(component['description'])}",
+        f"{component.get('emoji', '')} **{_cell(component['name'])}** · {_cell(component['category'])} · "
+        f"version {_cell(component['version'])} — {_cell(component['description'])}",
         "",
         "| Property | Type | Meaning | Default |",
         "| --- | --- | --- | --- |",
@@ -77,12 +79,15 @@ def _component(component: Mapping[str, Any]) -> List[str]:
         title = prop.get("title", "")
         meaning = f"**{_cell(title)}**. {_cell(prop.get('description', ''))}" if title else _cell(prop.get("description"))
         lines.append(f"| {field} | {_cell(_type(prop))} | {meaning} | {_cell(_default(prop))} |")
+    lines.append("")
+    if not component.get("standard"):
+        lines += [
+            f"- **Shows**: {_names(list(bindings.get('shows') or []))}.",
+            f"- **Sends**: {_names(list(bindings.get('sends') or []))}.",
+            f"- **Events**: {_names(list(component.get('events') or []))}.",
+            "",
+        ]
     lines += [
-        "",
-        f"- **Shows**: {_names(list(bindings.get('shows') or []))}.",
-        f"- **Sends**: {_names(list(bindings.get('sends') or []))}.",
-        f"- **Events**: {_names(list(component.get('events') or []))}.",
-        "",
         "Its properties, as a JSON Schema:",
         "",
         "```json",
@@ -140,24 +145,27 @@ def catalogue_markdown() -> str:
             "",
             _cell(plugin.get("description")),
             "",
-            f"Catalog `{plugin.get('catalog')}`: {len(standard)} standard components, whose properties are the "
-            f"protocol's own ([{_cell(plugin['name'])}]({plugin['docs_url']})), and {len(own)} of Datalayer's own, "
-            "whose properties are a JSON Schema the Canvas draws a properties form from.",
+            f"Catalog `{plugin.get('catalog')}`: {len(standard)} standard components, named and drawn as the "
+            f"protocol says ([{_cell(plugin['name'])}]({plugin['docs_url']})), and {len(own)} of Datalayer's own. "
+            "Every one has a version and its properties as a JSON Schema of the catalog's: what a builder sets, "
+            "the Canvas draws a properties form from, and Python calls typed.",
             "",
-            "| Id | Name | Category | Standard | What it is for |",
-            "| --- | --- | --- | --- | --- |",
+            "| Id | Name | Category | Version | Standard | What it is for |",
+            "| --- | --- | --- | --- | --- | --- |",
         ]
         for component in components:
-            anchor = f"[`{component['id']}`](#{component['id'].lower()})" if not component.get("standard") else f"`{component['id']}`"
+            anchor = f"[`{component['id']}`](#{component['id'].lower()})"
             lines.append(
                 f"| {anchor} | {component.get('emoji', '')} {_cell(component['name'])} | {_cell(component['category'])} | "
-                f"{'yes' if component.get('standard') else 'no'} | {_cell(component['description'])} |"
+                f"{_cell(component['version'])} | {'yes' if component.get('standard') else 'no'} | "
+                f"{_cell(component['description'])} |"
             )
         lines.append("")
-        if own:
-            lines += [f"## {_cell(plugin['name'])}: Datalayer's own components", ""]
-            for component in own:
-                lines += _component(component)
+        for title, group in (("standard components", standard), ("Datalayer's own components", own)):
+            if group:
+                lines += [f"## {_cell(plugin['name'])}: {title}", ""]
+                for component in group:
+                    lines += _component(component)
     return "\n".join(lines).rstrip() + "\n"
 
 
