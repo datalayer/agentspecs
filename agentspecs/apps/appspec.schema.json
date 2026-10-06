@@ -22,6 +22,19 @@
       "title": "Access",
       "type": "string"
     },
+    "ActionClass": {
+      "description": "What a tool does to the world.",
+      "enum": [
+        "read",
+        "write",
+        "send",
+        "buy",
+        "delete",
+        "publish"
+      ],
+      "title": "ActionClass",
+      "type": "string"
+    },
     "ActsAs": {
       "description": "In whose name a connection acts.",
       "enum": [
@@ -33,8 +46,16 @@
     },
     "AppChecks": {
       "additionalProperties": false,
-      "description": "Optional: checks from the catalogue, for a builder who wants them.",
+      "description": "Optional: checks from the catalogue, for a builder who wants them \u2014 and its code's own.",
       "properties": {
+        "code": {
+          "description": "Checks written in its code (`@app.check`), each run at its stage (LOOP P-06)",
+          "items": {
+            "$ref": "#/$defs/AppCodeCheck"
+          },
+          "title": "Code",
+          "type": "array"
+        },
         "gates": {
           "description": "Gates, `id` or `id:version`",
           "items": {
@@ -59,6 +80,35 @@
         }
       },
       "title": "AppChecks",
+      "type": "object"
+    },
+    "AppCodeCheck": {
+      "additionalProperties": false,
+      "description": "A check written in the application's code (LOOP P-06): `@app.check`.\n\nRun at its stage beside the built-in checks and the catalogue's Guards;\nwhat it refuses is said in its own sentence. Without its file nothing\nruns it, and validation says so.",
+      "properties": {
+        "description": {
+          "description": "What it checks, in a sentence a person reads",
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "name": {
+          "description": "The function of its code that checks, by name",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+          "title": "Name",
+          "type": "string"
+        },
+        "on": {
+          "$ref": "#/$defs/CheckStage",
+          "description": "`answer` or `tool_call`: where it runs"
+        }
+      },
+      "required": [
+        "name",
+        "on",
+        "description"
+      ],
+      "title": "AppCodeCheck",
       "type": "object"
     },
     "AppCommand": {
@@ -732,11 +782,18 @@
     },
     "AppTestCase": {
       "additionalProperties": false,
-      "description": "An example of what the application should do, in plain words.",
+      "description": "An example of what the application should do, in plain words.\n\nWhen plain words are not enough, its code decides it (LOOP P-06): `code`\nnames the function of the application's `app.py` that is given the\nconversation and says whether it passed \u2014 `@app.test` writes it. `expect`\nstill says it in words: without its file, the case is judged by them.",
       "properties": {
         "ask": {
           "description": "What it is asked",
           "title": "Ask",
+          "type": "string"
+        },
+        "code": {
+          "default": "",
+          "description": "The function of its code that decides the case, by name, when words are not enough; `expect` says it in words",
+          "pattern": "^(?:[A-Za-z_][A-Za-z0-9_]*)?$",
+          "title": "Code",
           "type": "string"
         },
         "expect": {
@@ -811,6 +868,46 @@
         "variant"
       ],
       "title": "AppTheme",
+      "type": "object"
+    },
+    "AppTool": {
+      "additionalProperties": false,
+      "description": "A tool of the application's own, written in its code (LOOP P-06): `@app.tool`.\n\nIts agent calls it as any tool; the rules decide each call by what it\n`does` \u2014 a rule may name it, by its name alone \u2014 and the Canvas lists it.\nWithout its file the agent is not given it.",
+      "properties": {
+        "description": {
+          "description": "What it does, for the agent: when to call it",
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "does": {
+          "description": "What it does, by class of action (`read`, `write`, `send`\u2026): what the rules decide",
+          "items": {
+            "$ref": "#/$defs/ActionClass"
+          },
+          "minItems": 1,
+          "title": "Does",
+          "type": "array"
+        },
+        "name": {
+          "description": "Its name: what the agent calls, and a rule names",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+          "title": "Name",
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": true,
+          "description": "The JSON Schema of its arguments, an object; none when unsaid",
+          "title": "Parameters",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "does"
+      ],
+      "title": "AppTool",
       "type": "object"
     },
     "AppTrigger": {
@@ -950,6 +1047,15 @@
         "leave_to_me"
       ],
       "title": "Behaviour",
+      "type": "string"
+    },
+    "CheckStage": {
+      "description": "Where a check of its code runs (LOOP P-06), as the built-in checks do (R-06).",
+      "enum": [
+        "answer",
+        "tool_call"
+      ],
+      "title": "CheckStage",
       "type": "string"
     },
     "CriterionKind": {
@@ -1392,6 +1498,14 @@
     "tests": {
       "$ref": "#/$defs/AppTests",
       "description": "How it is verified"
+    },
+    "tools": {
+      "description": "Tools of its own, written in its code (`@app.tool`): the agent calls them, rules decide them",
+      "items": {
+        "$ref": "#/$defs/AppTool"
+      },
+      "title": "Tools",
+      "type": "array"
     },
     "triggers": {
       "description": "For a worker: what starts its work",

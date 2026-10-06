@@ -26,6 +26,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `model` | text | The model, when it is not the organization's default | empty |
 | `skills` | list of text | Skills it adds to its agent's | — |
 | `backend_tools` | list of text | Backend tools of the catalogue it adds to its agent's | — |
+| `tools` | list of [AppTool](#apptool) | Tools of its own, written in its code (`@app.tool`): the agent calls them, rules decide them | — |
 | `context` | list of text | The Frames it works under: the catalogue's, or its organization's own (`org-…`) | — |
 | `contents` | list of text | The documents and datasets it answers from | — |
 | `connections` | list of [AppConnection](#appconnection) | What it reaches | — |
@@ -387,6 +388,23 @@ skills:
 - crawl:0.0.1
 ```
 
+### `tools`
+
+```yaml
+tools:
+- name: lookup_order
+  description: Find an order by its number.
+  parameters:
+    type: object
+    properties:
+      number:
+        type: string
+    required:
+    - number
+  does:
+  - read
+```
+
 ### `permissions`
 
 ```yaml
@@ -414,13 +432,24 @@ banner: SvgTutorialsHero
 
 ### AppChecks
 
-Optional: checks from the catalogue, for a builder who wants them.
+Optional: checks from the catalogue, for a builder who wants them — and its code's own.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
 | `guards` | list of text | Guards, `id` or `id:version` | — |
 | `gates` | list of text | Gates, `id` or `id:version` | — |
 | `track` | text | A Track, `id` or `id:version` | empty |
+| `code` | list of [AppCodeCheck](#appcodecheck) | Checks written in its code (`@app.check`), each run at its stage (LOOP P-06) | — |
+
+### AppCodeCheck
+
+A check written in the application's code (LOOP P-06): `@app.check`. Run at its stage beside the built-in checks and the catalogue's Guards; what it refuses is said in its own sentence. Without its file nothing runs it, and validation says so.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `name` (required) | text | The function of its code that checks, by name | — |
+| `on` (required) | [CheckStage](#checkstage) | `answer` or `tool_call`: where it runs | — |
+| `description` (required) | text | What it checks, in a sentence a person reads | — |
 
 ### AppCommand
 
@@ -602,12 +631,13 @@ The component tree the user meets, over the approved catalog (A2UI).
 
 ### AppTestCase
 
-An example of what the application should do, in plain words.
+An example of what the application should do, in plain words. When plain words are not enough, its code decides it (LOOP P-06): `code` names the function of the application's `app.py` that is given the conversation and says whether it passed — `@app.test` writes it. `expect` still says it in words: without its file, the case is judged by them.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
 | `ask` (required) | text | What it is asked | — |
 | `expect` (required) | text | What it should do | — |
+| `code` | text | The function of its code that decides the case, by name, when words are not enough; `expect` says it in words | empty |
 
 ### AppTests
 
@@ -628,6 +658,17 @@ The theme an application runs in by default (LOOP T-30).
 | --- | --- | --- | --- |
 | `variant` (required) | [ThemeVariant](#themevariant) | The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun` or `loop` | — |
 | `mode` | [ThemeMode](#thememode) | `light`, `dark` or `auto` (the device's); the person's own when unsaid | empty |
+
+### AppTool
+
+A tool of the application's own, written in its code (LOOP P-06): `@app.tool`. Its agent calls it as any tool; the rules decide each call by what it `does` — a rule may name it, by its name alone — and the Canvas lists it. Without its file the agent is not given it.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `name` (required) | text | Its name: what the agent calls, and a rule names | — |
+| `description` (required) | text | What it does, for the agent: when to call it | — |
+| `parameters` | mapping | The JSON Schema of its arguments, an object; none when unsaid | — |
+| `does` (required) | list of [ActionClass](#actionclass) | What it does, by class of action (`read`, `write`, `send`…): what the rules decide | — |
 
 ### AppTrigger
 
@@ -710,10 +751,12 @@ The application at an address of its own.
 | --- | --- |
 | <a id="accent"></a>Accent | `green`, `rose`, `sky`, `lime`, `sun`, `violet` |
 | <a id="access"></a>Access | `read`, `write` |
+| <a id="actionclass"></a>ActionClass | `read`, `write`, `send`, `buy`, `delete`, `publish` |
 | <a id="actsas"></a>ActsAs | `owner`, `user` |
 | <a id="appkind"></a>AppKind | `chat`, `widget`, `decision`, `worker` |
 | <a id="balloondisplay"></a>BalloonDisplay | `history`, `current` |
 | <a id="behaviour"></a>Behaviour | `do_it`, `if_asked`, `ask_first`, `leave_to_me` |
+| <a id="checkstage"></a>CheckStage | `answer`, `tool_call` |
 | <a id="criterionkind"></a>CriterionKind | `metric`, `noul`, `choice`, `score` |
 | <a id="embedmode"></a>EmbedMode | `inline`, `bubble`, `panel`, `assistant` |
 | <a id="layout"></a>Layout | `chat`, `page`, `split` |

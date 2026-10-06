@@ -8,6 +8,18 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.54
+
+What an application's code declares (LOOP P-06): its own tools, its code's checks, and tests its code decides — in the spec, so that the Canvas shows them and validation runs them.
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (Written in its code), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `tools`: tools of its own, written in its code (`@app.tool`) — a `name`, a `description` for the agent, `parameters` as the JSON Schema of an object, and what it `does` by class of action. `behaviour_for` decides a call by what it does, or by a rule that names it by its name alone; `app_problems` accepts such a rule. `AppSpec.tool(name)`.
+- `checks.code`: checks written in its code (`@app.check`), each a `name`, where it runs (`on`: `answer` or `tool_call`, `CheckStage`) and a `description` in words.
+- `tests.cases[].code`: the function of its code that decides a case; `expect` still says it in words.
+- Refused: names that are not Python names, a name said twice, a tool named as a backend tool the application names, a tool that does not say what it does.
+- JSON Schema and reference regenerated. Tests: `test_apps.py`.
+
 ## 0.0.53
 
 Settings are a form (LOOP C-16, decided 2026-10-06: one form kind).

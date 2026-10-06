@@ -70,6 +70,18 @@ EXTRA_EXAMPLES: Dict[str, Any] = {
     "model": "bedrock:us.anthropic.claude-sonnet-4-6",
     "skills": ["crawl:0.0.1"],
     "backend_tools": ["current-time:0.0.1"],
+    "tools": [
+        {
+            "name": "lookup_order",
+            "description": "Find an order by its number.",
+            "parameters": {
+                "type": "object",
+                "properties": {"number": {"type": "string"}},
+                "required": ["number"],
+            },
+            "does": ["read"],
+        }
+    ],
     "permissions": {
         "spaces": [{"space": "support", "access": "read"}],
         "computer": {"browse": True},

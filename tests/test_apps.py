@@ -1620,3 +1620,75 @@ def test_the_catalogue_settings_are_forms() -> None:
             assert field.get("title"), f"{identity}: {name} has no title"
             assert "default" in field, f"{identity}: {name} has no default"
             jsonschema.validate(field["default"], field)
+
+
+# --- what its code declares (LOOP P-06) -------------------------------------------------
+
+
+def test_an_application_declares_tools_of_its_own_that_the_rules_decide() -> None:
+    """LOOP P-06: `@app.tool` — a tool written in its code, named, said in what it does, ruled by name."""
+    plain = app()
+    assert plain.tools == [] and plain.tool("lookup") is None
+    lookup = {
+        "name": "lookup_order",
+        "description": "Find an order by its number.",
+        "parameters": {"type": "object", "properties": {"number": {"type": "string"}}, "required": ["number"]},
+        "does": ["read"],
+    }
+    refund = {"name": "refund", "description": "Refund an order.", "does": ["write", "buy"]}
+    said = app(tools=[lookup, refund])
+    assert dump_app(said)["tools"] == [lookup, refund]
+    assert parse_app(dump_app(said)) == said
+    assert said.tool("refund") is not None and said.tool("refund").parameters == {"type": "object", "properties": {}}
+    # What it does decides it, as a tool of the catalogue's classes does.
+    assert behaviour_for(said, "lookup_order") is Behaviour.DO_IT
+    assert behaviour_for(said, "refund") is Behaviour.ASK_FIRST
+    # A rule names it by its name alone, and is not refused.
+    ruled = app(tools=[refund], rules=[{"action": "Refund", "applies_to": ["refund"], "behaviour": "do_it"}])
+    assert behaviour_for(ruled, "refund") is Behaviour.DO_IT
+    assert app_problems(ruled) == []
+    unknown = app(rules=[{"action": "Refund", "applies_to": ["refund"], "behaviour": "do_it"}])
+    assert any("refund" in problem for problem in app_problems(unknown))
+    for wrong, said_why in (
+        ({**refund, "name": "two words"}, "tools.0.name"),
+        ({**refund, "does": []}, "tools.0.does"),
+        ({**refund, "does": ["read", "read"]}, "each thing it does once"),
+        ({**refund, "description": ""}, "tools.0.description"),
+        ({**refund, "parameters": {"type": "string"}}, "JSON Schema of an object"),
+        ({**refund, "does": ["fly"]}, "tools.0.does"),
+        ({k: v for k, v in refund.items() if k != "does"}, "tools.0.does"),
+    ):
+        with pytest.raises(AppError, match=re.escape(said_why)):
+            app(tools=[wrong])
+    with pytest.raises(AppError, match="two of its tools have the same name"):
+        app(tools=[refund, refund])
+    with pytest.raises(AppError, match="has the name of a backend tool"):
+        app(tools=[{**refund, "name": "current_time"}], backend_tools=["current_time"])
+
+
+def test_an_application_declares_checks_and_tests_written_in_its_code() -> None:
+    """LOOP P-06: `@app.check` at a stage, `@app.test` deciding a case: declared by name, said in words."""
+    plain = app()
+    assert plain.checks.code == []
+    check = {"name": "no_prices", "on": "answer", "description": "It never quotes a price."}
+    said = app(checks={"code": [check, {"name": "small_refunds", "on": "tool_call", "description": "Refunds stay small."}]})
+    assert dump_app(said)["checks"]["code"][0] == check
+    assert parse_app(dump_app(said)) == said
+    assert [item.on.value for item in said.checks.code] == ["answer", "tool_call"]
+    with pytest.raises(AppError, match="checks.code.0.on"):
+        app(checks={"code": [{**check, "on": "start"}]})
+    with pytest.raises(AppError, match="checks.code.0.description"):
+        app(checks={"code": [{**check, "description": ""}]})
+    with pytest.raises(AppError, match="two checks of its code have the same name"):
+        app(checks={"code": [check, check]})
+    case = {"ask": "Interview me.", "expect": "It never asks a leading question.", "code": "no_leading_question"}
+    tested = app(tests={"cases": [case, {"ask": "Hi", "expect": "It greets."}]})
+    assert dump_app(tested)["tests"]["cases"] == [case, {"ask": "Hi", "expect": "It greets."}]
+    assert tested.tests.cases[1].code == ""
+    with pytest.raises(AppError, match="tests.cases.0.code"):
+        app(tests={"cases": [{**case, "code": "not a name"}]})
+    with pytest.raises(AppError, match="decided by the same function"):
+        app(tests={"cases": [case, {**case, "ask": "Again."}]})
+    schema = json_schema()["$defs"]
+    assert schema["CheckStage"]["enum"] == ["answer", "tool_call"]
+    assert set(schema["AppTool"]["required"]) == {"name", "description", "does"}

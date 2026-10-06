@@ -659,11 +659,30 @@ class AppInterface(_Strict):
 # --- how it is verified, and what is kept -------------------------------------------
 
 
+#: The name of a function of an application's code: what `code` and a code
+#: check name, and what an application's own tool is called (LOOP P-06).
+CODE_NAME = r"[A-Za-z_][A-Za-z0-9_]*"
+
+
 class AppTestCase(_Strict):
-    """An example of what the application should do, in plain words."""
+    """An example of what the application should do, in plain words.
+
+    When plain words are not enough, its code decides it (LOOP P-06): `code`
+    names the function of the application's `app.py` that is given the
+    conversation and says whether it passed — `@app.test` writes it. `expect`
+    still says it in words: without its file, the case is judged by them.
+    """
 
     ask: str = Field(..., description="What it is asked")
     expect: str = Field(..., description="What it should do")
+    code: str = Field(
+        default="",
+        pattern=rf"^(?:{CODE_NAME})?$",
+        description=(
+            "The function of its code that decides the case, by name, when words are not enough; "
+            "`expect` says it in words"
+        ),
+    )
 
 
 class AppVerified(_Strict):
@@ -804,12 +823,76 @@ def kept_record(keep_for: str, include: Sequence[Any], track: str = "") -> KeptR
     return KeptRecord(days=found.retention_days, include=tuple(dict.fromkeys(kept)), track=found.id)
 
 
+class CheckStage(str, Enum):
+    """Where a check of its code runs (LOOP P-06), as the built-in checks do (R-06)."""
+
+    ANSWER = "answer"
+    """On every answer, before it is given: one it refuses is asked again."""
+
+    TOOL_CALL = "tool_call"
+    """On every tool call the rules let through: one it refuses is stopped."""
+
+
+class AppCodeCheck(_Strict):
+    """A check written in the application's code (LOOP P-06): `@app.check`.
+
+    Run at its stage beside the built-in checks and the catalogue's Guards;
+    what it refuses is said in its own sentence. Without its file nothing
+    runs it, and validation says so.
+    """
+
+    name: str = Field(..., pattern=rf"^{CODE_NAME}$", description="The function of its code that checks, by name")
+    on: CheckStage = Field(..., description="`answer` or `tool_call`: where it runs")
+    description: str = Field(..., min_length=1, description="What it checks, in a sentence a person reads")
+
+
 class AppChecks(_Strict):
-    """Optional: checks from the catalogue, for a builder who wants them."""
+    """Optional: checks from the catalogue, for a builder who wants them — and its code's own."""
 
     guards: List[str] = Field(default_factory=list, description="Guards, `id` or `id:version`")
     gates: List[str] = Field(default_factory=list, description="Gates, `id` or `id:version`")
     track: str = Field(default="", description="A Track, `id` or `id:version`")
+    code: List[AppCodeCheck] = Field(
+        default_factory=list,
+        description="Checks written in its code (`@app.check`), each run at its stage (LOOP P-06)",
+    )
+
+
+class AppTool(_Strict):
+    """A tool of the application's own, written in its code (LOOP P-06): `@app.tool`.
+
+    Its agent calls it as any tool; the rules decide each call by what it
+    `does` — a rule may name it, by its name alone — and the Canvas lists it.
+    Without its file the agent is not given it.
+    """
+
+    name: str = Field(
+        ..., pattern=rf"^{CODE_NAME}$", description="Its name: what the agent calls, and a rule names"
+    )
+    description: str = Field(..., min_length=1, description="What it does, for the agent: when to call it")
+    parameters: Dict[str, Any] = Field(
+        default_factory=lambda: {"type": "object", "properties": {}},
+        description="The JSON Schema of its arguments, an object; none when unsaid",
+    )
+    does: List[ActionClass] = Field(
+        ...,
+        min_length=1,
+        description="What it does, by class of action (`read`, `write`, `send`…): what the rules decide",
+    )
+
+    @field_validator("parameters")
+    @classmethod
+    def _is_an_object(cls, parameters: Dict[str, Any]) -> Dict[str, Any]:
+        if parameters.get("type") != "object" or not isinstance(parameters.get("properties", {}), dict):
+            raise ValueError("a tool's `parameters` are the JSON Schema of an object, its arguments its properties")
+        return parameters
+
+    @field_validator("does")
+    @classmethod
+    def _each_once(cls, does: List[ActionClass]) -> List[ActionClass]:
+        if len(set(does)) != len(does):
+            raise ValueError("a tool says each thing it does once")
+        return does
 
 
 # --- what else it may reach -------------------------------------------------------------
@@ -1134,6 +1217,10 @@ class AppSpec(_Strict):
         default_factory=list, description="Backend tools of the catalogue it adds to its agent's"
     )
 
+    tools: List[AppTool] = Field(
+        default_factory=list,
+        description="Tools of its own, written in its code (`@app.tool`): the agent calls them, rules decide them",
+    )
     context: List[str] = Field(
         default_factory=list,
         description="The Frames it works under: the catalogue's, or its organization's own (`org-…`)",
@@ -1261,6 +1348,21 @@ class AppSpec(_Strict):
         actions = [rule.action.lower() for rule in self.rules]
         if len(set(actions)) != len(actions):
             raise ValueError("two rules have the same action")
+        # What its code declares is known by name (LOOP P-06): each name once.
+        tools = [tool.name for tool in self.tools]
+        if len(set(tools)) != len(tools):
+            raise ValueError("two of its tools have the same name")
+        catalogued = sorted(set(tools) & {_id_of(ref) for ref in self.backend_tools})
+        if catalogued:
+            raise ValueError(
+                f"its tool {catalogued[0]!r} has the name of a backend tool it names: call one of them otherwise"
+            )
+        checks = [check.name for check in self.checks.code]
+        if len(set(checks)) != len(checks):
+            raise ValueError("two checks of its code have the same name")
+        decided = [case.code for case in self.tests.cases if case.code]
+        if len(set(decided)) != len(decided):
+            raise ValueError("two tests are decided by the same function of its code")
         seen: Dict[str, str] = {}
         for rule in self.rules:
             for target in (_normal(item) for item in rule.targets):
@@ -1275,6 +1377,13 @@ class AppSpec(_Strict):
     def layout(self) -> Layout:
         """How it is laid out: what it says, or its kind's own."""
         return self.interface.layout or DEFAULT_LAYOUTS[self.kind]
+
+    def tool(self, name: str) -> Optional[AppTool]:
+        """Its own tool of that name (LOOP P-06), or None."""
+        for tool in self.tools:
+            if tool.name == name:
+                return tool
+        return None
 
     def connection(self, server: str) -> Optional[AppConnection]:
         """Its connection to a server, or None."""
@@ -1322,8 +1431,10 @@ def behaviour_for(
 ) -> Behaviour:
     """What an application does when its agent calls a tool.
 
-    ``tool`` is ``server.tool`` for a tool of an MCP server, or the id of a
-    tool of the catalogue. Its classes are the catalogue's, unless given.
+    ``tool`` is ``server.tool`` for a tool of an MCP server, the id of a
+    tool of the catalogue, or the name of one of its own tools (LOOP P-06).
+    Its classes are the catalogue's — or, for its own, what it says it
+    ``does`` — unless given.
     What a tool does can depend on what it is asked: with the ``arguments``
     of the call, the decision is for that call; without them, for the worst
     the tool can do.
@@ -1342,6 +1453,10 @@ def behaviour_for(
        by :data:`DEFAULT_BEHAVIOURS`, and the most restricted wins.
     """
     server, name = split_ref(tool)
+    # Its own tool does what it says it does (LOOP P-06).
+    own_tool = app.tool(name) if server is None and classes is None else None
+    if own_tool is not None:
+        classes = own_tool.does
     if classes is not None:
         own, besides, possible = tuple(classes), (), tuple(classes)
     else:
@@ -1564,7 +1679,7 @@ def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = No
         for tool in rule.tools:
             server, name = split_ref(tool)
             if server is None:
-                if tool in host_tools:
+                if tool in host_tools or app.tool(tool) is not None:
                     continue
                 if _id_of(name) not in _catalogue("backend-tools"):
                     problems.append(f"The rule {rule.action!r} names the tool {tool!r}, which the catalogue does not have.")
@@ -1831,6 +1946,7 @@ __all__ = [
     "Access",
     "ActsAs",
     "AppChecks",
+    "AppCodeCheck",
     "AppComputer",
     "AppConnection",
     "AppCriterion",
@@ -1852,9 +1968,12 @@ __all__ = [
     "AppSurface",
     "AppTestCase",
     "AppTests",
+    "AppTool",
     "AppTrigger",
     "AppVoice",
     "Behaviour",
+    "CODE_NAME",
+    "CheckStage",
     "CriterionKind",
     "AppTheme",
     "BalloonDisplay",
