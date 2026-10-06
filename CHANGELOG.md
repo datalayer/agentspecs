@@ -8,6 +8,16 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.43
+
+What the two team examples say was tried, in a Maker's words (LOOP E-01).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- *Accounting*: answered live over A2A on a developer's machine (2026-10-06), from the Odoo books, read only — and said what did not pass: the list of invoices failed, and one column total was wrong.
+- *Sales*: its sentence of what is not tried yet names no builder's word.
+- The reference written again from *Accounting*.
+
 ## 0.0.42
 
 The floating assistant's balloon: the whole conversation, or only what it says or does now (LOOP T-23).

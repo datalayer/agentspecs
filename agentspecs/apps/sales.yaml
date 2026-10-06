@@ -80,7 +80,7 @@ tests:
     live: []
     recorded: []
     unverified:
-      - "It has not talked to Accounting live: the agent-runtimes example AgentA2ATeamExample runs it in the browser against an Accounting runtime that someone starts."
+      - "It has not talked to Accounting live yet: a developer's example runs it in the browser, against an Accounting that someone starts."
       - "Its tests have not been run as a set: no validation run is attached to it."
 
 record:
