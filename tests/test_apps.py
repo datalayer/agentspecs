@@ -53,6 +53,8 @@ from agentspecs.apps import (
     AppSpec,
     BalloonDisplay,
     Behaviour,
+    ThemeMode,
+    ThemeVariant,
     Layout,
     app_problems,
     app_setup,
@@ -735,6 +737,26 @@ def test_an_application_says_how_its_balloon_shows_the_conversation() -> None:
     for wrong in ("latest", "History", "", "both"):
         with pytest.raises(AppError, match="interface.balloon"):
             app(interface={"balloon": wrong})
+
+
+def test_an_application_names_the_theme_it_runs_in_by_default() -> None:
+    """LOOP T-30: a theme of Appearance's and, optionally, a colour mode; the person's own when unsaid."""
+    plain = app()
+    assert plain.interface.theme is None
+    assert "interface" not in dump_app(plain)
+    assert [variant.value for variant in ThemeVariant] == [
+        "datalayer", "spatial", "lovely", "matrix", "earth", "sand", "ivory", "sun", "loop",
+    ]
+    assert [mode.value for mode in ThemeMode] == ["light", "dark", "auto"]
+    for theme in ({"variant": "earth"}, {"variant": "matrix", "mode": "dark"}, {"variant": "loop", "mode": "auto"}):
+        said = app(interface={"theme": theme})
+        assert said.interface.theme is not None
+        assert said.interface.theme.variant == ThemeVariant(theme["variant"])
+        assert dump_app(said)["interface"] == {"theme": theme}
+        assert parse_app(dump_app(said)) == said
+    for wrong in ({"variant": "neon"}, {"variant": "Earth"}, {}, {"variant": "sun", "mode": "night"}, {"variant": "sun", "accent": "sky"}, "earth"):
+        with pytest.raises(AppError, match="interface.theme"):
+            app(interface={"theme": wrong})
 
 
 # --- what the spec refuses ------------------------------------------------------------

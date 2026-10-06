@@ -324,6 +324,42 @@ class AppSurface(_Strict):
         return components
 
 
+class ThemeVariant(str, Enum):
+    """A theme of Datalayer's, as Appearance names it (LOOP T-30)."""
+
+    DATALAYER = "datalayer"
+    SPATIAL = "spatial"
+    LOVELY = "lovely"
+    MATRIX = "matrix"
+    EARTH = "earth"
+    SAND = "sand"
+    IVORY = "ivory"
+    SUN = "sun"
+    LOOP = "loop"
+
+
+class ThemeMode(str, Enum):
+    """The colour mode a theme is worn in: `auto` follows the device."""
+
+    LIGHT = "light"
+    DARK = "dark"
+    AUTO = "auto"
+
+
+class AppTheme(_Strict):
+    """The theme an application runs in by default (LOOP T-30)."""
+
+    variant: ThemeVariant = Field(
+        description=(
+            "The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun` or `loop`"
+        ),
+    )
+    mode: Optional[ThemeMode] = Field(
+        default=None,
+        description="`light`, `dark` or `auto` (the device's); the person's own when unsaid",
+    )
+
+
 class BalloonDisplay(str, Enum):
     """How a floating assistant's balloon shows the conversation (LOOP T-23)."""
 
@@ -408,6 +444,14 @@ class AppInterface(_Strict):
 
     layout: Optional[Layout] = Field(default=None, description="`chat`, `page` or `split`; the kind's own when unsaid")
     accent: Accent = Field(default=Accent.GREEN, description="The application's one colour")
+    theme: Optional[AppTheme] = Field(
+        default=None,
+        description=(
+            "The theme it runs in by default, at its address, embedded, in the Studio's Preview and as an "
+            "example: a `variant` and, optionally, a colour `mode`. The person's own when unsaid. Its "
+            "`accent` colours the `loop` theme only"
+        ),
+    )
     welcome: str = Field(default="", description="What the application says first")
     starters: List[AppStarter] = Field(default_factory=list, description="First messages offered to the user")
     settings: List[AppSetting] = Field(default_factory=list, description="What the user may set")
@@ -1658,6 +1702,7 @@ __all__ = [
     "AppVoice",
     "Behaviour",
     "CriterionKind",
+    "AppTheme",
     "BalloonDisplay",
     "EmbedMode",
     "EmbeddedDeployment",
@@ -1665,6 +1710,8 @@ __all__ = [
     "Layout",
     "RecordItem",
     "SettingType",
+    "ThemeMode",
+    "ThemeVariant",
     "TriggerType",
     "Visibility",
     "VoiceInput",

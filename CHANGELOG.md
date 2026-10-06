@@ -8,6 +8,15 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.49
+
+The theme an application runs in by default (LOOP T-30).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `interface.theme` (`AppTheme`): `variant`, one of Appearance's themes (`ThemeVariant`: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop`), and `mode` (`ThemeMode`: `light`, `dark`, `auto`), the person's own when unsaid. Unsaid, the application follows the person's theme. Its `accent` colours the `loop` theme only. A variant or a mode not listed is refused, as is a key it does not know.
+- Tests: `test_apps.py`.
+
 ## 0.0.48
 
 The host page and an embedded application talk to each other (LOOP D-10): the values the page passes it and the functions of the page it may call, named in its Appspec, each a tool a rule decides.

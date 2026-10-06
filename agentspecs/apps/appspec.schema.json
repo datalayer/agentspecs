@@ -357,6 +357,18 @@
           "default": null,
           "description": "The component tree, when there is one"
         },
+        "theme": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AppTheme"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The theme it runs in by default, at its address, embedded, in the Studio's Preview and as an example: a `variant` and, optionally, a colour `mode`. The person's own when unsaid. Its `accent` colours the `loop` theme only"
+        },
         "voice": {
           "$ref": "#/$defs/AppVoice",
           "description": "Its voice: whether it listens and speaks, with which voice, in which language (off unless said)"
@@ -705,6 +717,33 @@
       "title": "AppTests",
       "type": "object"
     },
+    "AppTheme": {
+      "additionalProperties": false,
+      "description": "The theme an application runs in by default (LOOP T-30).",
+      "properties": {
+        "mode": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ThemeMode"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "`light`, `dark` or `auto` (the device's); the person's own when unsaid"
+        },
+        "variant": {
+          "$ref": "#/$defs/ThemeVariant",
+          "description": "The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun` or `loop`"
+        }
+      },
+      "required": [
+        "variant"
+      ],
+      "title": "AppTheme",
+      "type": "object"
+    },
     "AppTrigger": {
       "additionalProperties": false,
       "description": "What starts a worker's work.",
@@ -1012,6 +1051,32 @@
         "number"
       ],
       "title": "SettingType",
+      "type": "string"
+    },
+    "ThemeMode": {
+      "description": "The colour mode a theme is worn in: `auto` follows the device.",
+      "enum": [
+        "light",
+        "dark",
+        "auto"
+      ],
+      "title": "ThemeMode",
+      "type": "string"
+    },
+    "ThemeVariant": {
+      "description": "A theme of Datalayer's, as Appearance names it (LOOP T-30).",
+      "enum": [
+        "datalayer",
+        "spatial",
+        "lovely",
+        "matrix",
+        "earth",
+        "sand",
+        "ivory",
+        "sun",
+        "loop"
+      ],
+      "title": "ThemeVariant",
       "type": "string"
     },
     "TriggerType": {

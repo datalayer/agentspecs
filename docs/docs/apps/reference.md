@@ -479,6 +479,7 @@ What the user sees.
 | --- | --- | --- | --- |
 | `layout` | [Layout](#layout) | `chat`, `page` or `split`; the kind's own when unsaid | empty |
 | `accent` | [Accent](#accent) | The application's one colour | `"green"` |
+| `theme` | [AppTheme](#apptheme) | The theme it runs in by default, at its address, embedded, in the Studio's Preview and as an example: a `variant` and, optionally, a colour `mode`. The person's own when unsaid. Its `accent` colours the `loop` theme only | empty |
 | `welcome` | text | What the application says first | empty |
 | `starters` | list of [AppStarter](#appstarter) | First messages offered to the user | — |
 | `settings` | list of [AppSetting](#appsetting) | What the user may set | — |
@@ -590,6 +591,15 @@ How the application is verified.
 | `cases` | list of [AppTestCase](#apptestcase) | Its test conversations | — |
 | `verified` | [AppVerified](#appverified) | What was verified live, what runs on recorded data, and what is not verified yet | — |
 
+### AppTheme
+
+The theme an application runs in by default (LOOP T-30).
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `variant` (required) | [ThemeVariant](#themevariant) | The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun` or `loop` | — |
+| `mode` | [ThemeMode](#thememode) | `light`, `dark` or `auto` (the device's); the person's own when unsaid | empty |
+
 ### AppTrigger
 
 What starts a worker's work.
@@ -680,6 +690,8 @@ The application at an address of its own.
 | <a id="layout"></a>Layout | `chat`, `page`, `split` |
 | <a id="recorditem"></a>RecordItem | `conversations`, `actions`, `decisions`, `approvals`, `checks`, `sources`, `outputs`, `feedback`, `audio` |
 | <a id="settingtype"></a>SettingType | `select`, `text`, `toggle`, `slider`, `number` |
+| <a id="thememode"></a>ThemeMode | `light`, `dark`, `auto` |
+| <a id="themevariant"></a>ThemeVariant | `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop` |
 | <a id="triggertype"></a>TriggerType | `schedule`, `event`, `once` |
 | <a id="visibility"></a>Visibility | `private`, `invited`, `organization`, `link`, `public` |
 | <a id="voiceinput"></a>VoiceInput | `off`, `push_to_talk`, `hands_free` |
