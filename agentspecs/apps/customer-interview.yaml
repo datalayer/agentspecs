@@ -1,9 +1,9 @@
 # Built from app.py by `loop apps build`: the file is the source; edit it there.
 # What its code decides; without the file, its agent answers:
-# loop:code start: opening (app.py:111)
-# loop:code message: reply (app.py:124)
-# loop:code action save: save (app.py:140)
-# loop:code action finish: finish (app.py:149)
+# loop:code start: opening (app.py:116)
+# loop:code message: reply (app.py:129)
+# loop:code action save: save (app.py:145)
+# loop:code action finish: finish (app.py:154)
 schema: loop.app/v1
 id: customer-interview
 version: 0.0.1
@@ -29,19 +29,21 @@ interface:
   - label: Onboarding
     message: Interview me about my first week with the product.
   settings:
-  - id: language
-    type: select
-    label: Language
-    options:
-    - English
-    - French
-    default: English
-  - id: length
-    type: slider
-    label: Questions
-    default: 8.0
-    min: 3.0
-    max: 15.0
+    type: object
+    properties:
+      language:
+        type: string
+        title: Language
+        enum:
+        - English
+        - French
+        default: English
+      length:
+        type: integer
+        title: Questions
+        minimum: 3
+        maximum: 15
+        default: 8
 tests:
   ready_at: 0.8
   cases:

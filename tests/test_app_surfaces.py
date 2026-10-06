@@ -81,7 +81,8 @@ def test_a_surface_s_basic_components_are_valid_a2ui_v0_9(app_id: str):
 def test_a_surface_writes_its_inputs_where_its_settings_are(app_id: str):
     app = APPS[app_id]
     assert app.interface.surface is not None
-    settings = {f"/inputs/{setting.id}" for setting in app.interface.settings}
+    fields = (app.interface.settings or {}).get("properties") or {}
+    settings = {f"/inputs/{name}" for name in fields}
     for node in app.interface.surface.components:
         for path in _paths(node):
             if path.startswith("/inputs"):

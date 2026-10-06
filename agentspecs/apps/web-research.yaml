@@ -39,11 +39,9 @@ interface:
     - label: Check a claim
       message: Is it true that most data science projects never reach production? Find the primary source.
   settings:
-    - id: depth
-      type: select
-      label: How far to look
-      options: [Quick, Thorough]
-      default: Quick
+    type: object
+    properties:
+      depth: {type: string, title: How far to look, enum: [Quick, Thorough], default: Quick}
 
 tests:
   ready_at: 0.8

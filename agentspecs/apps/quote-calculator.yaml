@@ -30,22 +30,11 @@ interface:
   layout: page
   accent: sun
   settings:
-    - id: seats
-      type: slider
-      label: Seats
-      min: 1
-      max: 1000
-      default: 10
-    - id: plan
-      type: select
-      label: Plan
-      options: [Team, Business, Enterprise]
-      default: Team
-    - id: term
-      type: select
-      label: Term
-      options: [Monthly, Annual]
-      default: Annual
+    type: object
+    properties:
+      seats: {type: integer, title: Seats, minimum: 1, maximum: 1000, default: 10}
+      plan: {type: string, title: Plan, enum: [Team, Business, Enterprise], default: Team}
+      term: {type: string, title: Term, enum: [Monthly, Annual], default: Annual}
   components: [Card, Column, Row, Text, TextField, ChoicePicker, Slider, Button, Divider]
   surface:
     protocol: a2ui/v0.9

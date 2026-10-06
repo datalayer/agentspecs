@@ -49,11 +49,9 @@ interface:
     - label: Plans
       message: What is the difference between the Team and the Business plan?
   settings:
-    - id: product
-      type: select
-      label: Product
-      options: [Cloud, Desktop]
-      default: Cloud
+    type: object
+    properties:
+      product: {type: string, title: Product, enum: [Cloud, Desktop], default: Cloud}
   components: [Card, Column, Row, Text, ChoicePicker, Button, Divider]
   surface:
     protocol: a2ui/v0.9

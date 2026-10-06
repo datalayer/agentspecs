@@ -1586,3 +1586,37 @@ def test_a_form_asks_named_fields() -> None:
         "The form 'quote' requires 'reason', which it does not ask."
     ]
 
+
+
+def test_settings_are_a_form() -> None:
+    """LOOP C-16, one form kind: an application's settings are the JSON Schema
+    of a form, checked as a Form block's are (`form_problems`); the old list of
+    settings is refused, not read."""
+    tone = {"type": "string", "title": "Tone", "enum": ["warm", "dry"], "default": "warm"}
+    spec = app(interface={"settings": {"type": "object", "properties": {"tone": tone}}})
+    assert spec.interface.settings["properties"]["tone"] == tone
+    assert app(interface={}).interface.settings is None
+    with pytest.raises(AppError, match="not a list of settings"):
+        app(interface={"settings": [{"id": "tone", "type": "select", "label": "Tone", "options": ["warm", "dry"]}]})
+    with pytest.raises(AppError, match="The form 'settings' asks for no named field"):
+        app(interface={"settings": {"type": "object", "properties": {}}})
+    with pytest.raises(AppError, match="The form 'settings' requires 'depth', which it does not ask"):
+        app(interface={"settings": {"type": "object", "required": ["depth"], "properties": {"tone": tone}}})
+
+
+def test_the_catalogue_settings_are_forms() -> None:
+    """Every application of the catalogue with settings says them as a form, each
+    field with a title and a default its own schema takes."""
+    import jsonschema
+
+    from agentspecs.apps import list_apps
+
+    with_settings = {spec.id: spec.interface.settings for spec in list_apps() if spec.interface.settings}
+    assert {"quote-calculator", "support-desk", "web-research", "customer-interview", "report-from-a-file"} <= set(
+        with_settings
+    )
+    for identity, form in with_settings.items():
+        for name, field in form["properties"].items():
+            assert field.get("title"), f"{identity}: {name} has no title"
+            assert "default" in field, f"{identity}: {name} has no default"
+            jsonschema.validate(field["default"], field)

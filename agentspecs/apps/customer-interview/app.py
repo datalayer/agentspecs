@@ -103,8 +103,13 @@ app = Application.from_spec(
 )
 app.starter("Trial churn", "Interview me about why I stopped after the trial.")
 app.starter("Onboarding", "Interview me about my first week with the product.")
-app.setting("language", "select", "Language", options=["English", "French"], default="English")
-app.setting("length", "slider", "Questions", default=8, min=3, max=15)
+app.setting(
+    "language",
+    {"type": "string", "title": "Language", "enum": ["English", "French"], "default": "English"},
+)
+app.setting(
+    "length", {"type": "integer", "title": "Questions", "minimum": 3, "maximum": 15, "default": 8}
+)
 app.rule("Send the summary by email", applies_to="send", behaviour="ask_first")
 
 

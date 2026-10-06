@@ -8,6 +8,16 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.53
+
+Settings are a form (LOOP C-16, decided 2026-10-06: one form kind).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (Settings), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `interface.settings` is the JSON Schema of a form, an object of named fields, each with its `title` and its `default` — checked as a Form block's schema is (`form_problems`, as the form `'settings'`). Drawn with `@datalayer/primer-rjsf` beside the conversation and on a deployment's Ship card; the runtime checks what a run is given against it.
+- **Breaking:** the list of settings (`id`, `type`, `label`, `options`, `default`, `min`, `max`) is refused, not read; `AppSetting` and `SettingType` are gone. The catalogue's applications with settings migrated: *Quote Calculator*, *Support Desk*, *Web Research*, *Customer Interview*, *Report from a File* (the last two built from their `app.py`, whose `app.setting(name, field)` takes a field's JSON Schema).
+- JSON Schema and reference regenerated. Tests: `test_apps.py`, `test_app_surfaces.py`.
+
 ## 0.0.52
 
 *Inbox Triage*'s recorded run said in a Maker's words (LOOP E-01): its sentence names Datalayer's own tests, not the package and test file they are in, since the gallery and the example's pages show it.

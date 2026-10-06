@@ -357,36 +357,6 @@ class AppMode(_Strict):
         raise KeyError(f"The mode {self.id!r} has no option {wanted!r}.")
 
 
-class SettingType(str, Enum):
-    """What a setting is set with."""
-
-    SELECT = "select"
-    TEXT = "text"
-    TOGGLE = "toggle"
-    SLIDER = "slider"
-    NUMBER = "number"
-
-
-class AppSetting(_Strict):
-    """Something the user may set for their session."""
-
-    id: str = Field(..., description="The name the application reads it by")
-    type: SettingType = Field(..., description="`select`, `text`, `toggle`, `slider` or `number`")
-    label: str = Field(..., description="What the user reads")
-    options: List[str] = Field(default_factory=list, description="For a select: its options")
-    default: Optional[Union[str, bool, float]] = Field(default=None, description="Its value at the start")
-    min: Optional[float] = Field(default=None, description="For a slider or a number: the least")
-    max: Optional[float] = Field(default=None, description="For a slider or a number: the most")
-
-    @model_validator(mode="after")
-    def _is_settable(self) -> "AppSetting":
-        if self.type is SettingType.SELECT and len(self.options) < 2:
-            raise ValueError(f"the setting {self.id!r} is a select: give it at least two options")
-        if self.type is not SettingType.SELECT and self.options:
-            raise ValueError(f"the setting {self.id!r} is not a select: it has no options")
-        return self
-
-
 class AppSurface(_Strict):
     """The component tree the user meets, over the approved catalog (A2UI)."""
 
@@ -557,7 +527,15 @@ class AppInterface(_Strict):
             "told to the agent and its model run on (LOOP P-19)"
         ),
     )
-    settings: List[AppSetting] = Field(default_factory=list, description="What the user may set")
+    settings: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description=(
+            "What the user may set: the JSON Schema of a form, an object of named fields, each with "
+            "its `title` and its `default` (LOOP C-16). Drawn with `@datalayer/primer-rjsf` beside "
+            "the conversation and on a deployment's Ship card, its values go with every run and are "
+            "checked by the runtime against the same schema. None when unsaid"
+        ),
+    )
     components: List[str] = Field(
         default_factory=list,
         description="The components of the catalog the surface may use; the kind's own when empty",
@@ -602,11 +580,23 @@ class AppInterface(_Strict):
         ),
     )
 
+    @field_validator("settings", mode="before")
+    @classmethod
+    def _settings_are_a_form(cls, value: Any) -> Any:
+        if isinstance(value, list):
+            raise ValueError(
+                "interface.settings is the JSON Schema of a form, an object of named fields "
+                "(LOOP C-16), not a list of settings: say each one as a property, its title "
+                "and its default"
+            )
+        return value
+
     @model_validator(mode="after")
     def _names_are_distinct(self) -> "AppInterface":
-        identities = [setting.id for setting in self.settings]
-        if len(set(identities)) != len(identities):
-            raise ValueError("two settings have the same id")
+        if self.settings is not None:
+            problems = form_problems({"id": "settings", "schema": self.settings})
+            if problems:
+                raise ValueError(" ".join(problems))
         names = [command.name for command in self.commands]
         if len(set(names)) != len(names):
             raise ValueError("two commands have the same name")
@@ -1460,7 +1450,9 @@ def form_problems(node: Mapping[str, Any]) -> List[str]:
     A form is what an application asks of a person — a quote's parameters, an
     approval's reason — as the JSON Schema of its fields: an object whose
     fields are named, each required one among them, so that the page draws it
-    and the runtime checks what it receives against the same schema.
+    and the runtime checks what it receives against the same schema. An
+    application's settings are one such form (``interface.settings``, checked
+    as the form ``'settings'``): what a run is given, and a deployment set.
     """
     said = f"The form {node['id']!r}"
     schema = node.get("schema")
@@ -1854,7 +1846,6 @@ __all__ = [
     "AppRecord",
     "AppRule",
     "AppScenario",
-    "AppSetting",
     "AppSpaceGrant",
     "AppSpec",
     "AppStarter",
@@ -1872,7 +1863,6 @@ __all__ = [
     "HostedDeployment",
     "Layout",
     "RecordItem",
-    "SettingType",
     "ThemeMode",
     "ThemeVariant",
     "TriggerType",

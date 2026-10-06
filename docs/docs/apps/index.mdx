@@ -175,6 +175,29 @@ fields, or that requires a field it does not ask, is refused
 standard or Datalayer's own, has its version and its properties as a JSON
 Schema.
 
+### Settings
+
+What a person may set — a quote's plan, an interview's language — is a form of
+the same kind: `interface.settings` is the JSON Schema of an object of named
+fields, each with its `title` and its `default`.
+
+```yaml
+interface:
+  settings:
+    type: object
+    properties:
+      seats: {type: integer, title: Seats, minimum: 1, maximum: 1000, default: 10}
+      plan: {type: string, title: Plan, enum: [Team, Business, Enterprise], default: Team}
+```
+
+The page draws it with `@datalayer/primer-rjsf` beside the conversation, and
+its values go with every run; a deployment's own values are set with the same
+form on its Ship card. The runtime checks what a run is given against the
+schema, and refuses a field the form does not have. The schema is checked as a
+Form's is (`form_problems`, as the form `'settings'`). The list of settings of
+earlier versions (`id`, `type`, `label`, `options`) is refused: say each one as
+a property.
+
 ## Commands and modes
 
 What a person picks in the composer (LOOP P-19). **Commands** are slash

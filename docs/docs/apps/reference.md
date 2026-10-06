@@ -502,7 +502,7 @@ What the user sees.
 | `starters` | list of [AppStarter](#appstarter) | First messages offered to the user | — |
 | `commands` | list of [AppCommand](#appcommand) | Slash commands the user picks in the composer: typing `/` lists them (LOOP P-19) | — |
 | `modes` | list of [AppMode](#appmode) | Mode switches in the composer: the option picked goes with every run, its instructions told to the agent and its model run on (LOOP P-19) | — |
-| `settings` | list of [AppSetting](#appsetting) | What the user may set | — |
+| `settings` | mapping | What the user may set: the JSON Schema of a form, an object of named fields, each with its `title` and its `default` (LOOP C-16). Drawn with `@datalayer/primer-rjsf` beside the conversation and on a deployment's Ship card, its values go with every run and are checked by the runtime against the same schema. None when unsaid | empty |
 | `components` | list of text | The components of the catalog the surface may use; the kind's own when empty | — |
 | `surface` | [AppSurface](#appsurface) | The component tree, when there is one | empty |
 | `assistant` | text | The character its floating assistant shows, by the id a plugin contributes it under (lowercase letters and digits, words joined by a hyphen): Datalayer's are `paperclip`, `wizard`, `cat` and `eyes`. The paper clip when unsaid; an id no enabled plugin contributes is refused where the plugins are known, the runtime and the page. Said here, it wins over a person's own choice in their settings | empty |
@@ -570,20 +570,6 @@ A named set of weights: one way of looking at the same findings.
 | --- | --- | --- | --- |
 | `name` (required) | text | Its name | — |
 | `weights` | mapping of number | By criterion name | — |
-
-### AppSetting
-
-Something the user may set for their session.
-
-| Field | Type | Meaning | Default |
-| --- | --- | --- | --- |
-| `id` (required) | text | The name the application reads it by | — |
-| `type` (required) | [SettingType](#settingtype) | `select`, `text`, `toggle`, `slider` or `number` | — |
-| `label` (required) | text | What the user reads | — |
-| `options` | list of text | For a select: its options | — |
-| `default` | text or true or false or number | Its value at the start | empty |
-| `min` | number | For a slider or a number: the least | empty |
-| `max` | number | For a slider or a number: the most | empty |
 
 ### AppSpaceGrant
 
@@ -732,7 +718,6 @@ The application at an address of its own.
 | <a id="embedmode"></a>EmbedMode | `inline`, `bubble`, `panel`, `assistant` |
 | <a id="layout"></a>Layout | `chat`, `page`, `split` |
 | <a id="recorditem"></a>RecordItem | `conversations`, `actions`, `decisions`, `approvals`, `checks`, `sources`, `outputs`, `feedback`, `audio` |
-| <a id="settingtype"></a>SettingType | `select`, `text`, `toggle`, `slider`, `number` |
 | <a id="thememode"></a>ThemeMode | `light`, `dark`, `auto` |
 | <a id="themevariant"></a>ThemeVariant | `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop` |
 | <a id="triggertype"></a>TriggerType | `schedule`, `event`, `once` |

@@ -155,8 +155,11 @@ app = Application.from_spec(
         "emoji": "📑",
     }
 )
-app.setting("report", "select", "Report", options=["Summary", "Full"], default="Summary")
-app.setting("question", "text", "What to look at", default="")
+app.setting(
+    "report",
+    {"type": "string", "title": "Report", "enum": ["Summary", "Full"], "default": "Summary"},
+)
+app.setting("question", {"type": "string", "title": "What to look at", "default": ""})
 app.rule("Send the report by email", applies_to="send", behaviour="leave_to_me")
 
 

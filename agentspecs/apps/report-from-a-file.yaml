@@ -1,6 +1,6 @@
 # Built from app.py by `loop apps build`: the file is the source; edit it there.
 # What its code decides; without the file, its agent answers:
-# loop:code message: run (app.py:163)
+# loop:code message: run (app.py:166)
 schema: loop.app/v1
 id: report-from-a-file
 version: 0.0.1
@@ -100,17 +100,19 @@ interface:
       text:
         path: /output
   settings:
-  - id: report
-    type: select
-    label: Report
-    options:
-    - Summary
-    - Full
-    default: Summary
-  - id: question
-    type: text
-    label: What to look at
-    default: ''
+    type: object
+    properties:
+      report:
+        type: string
+        title: Report
+        enum:
+        - Summary
+        - Full
+        default: Summary
+      question:
+        type: string
+        title: What to look at
+        default: ''
 tests:
   ready_at: 0.8
   cases:
