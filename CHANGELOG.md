@@ -8,6 +8,10 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.52
+
+*Inbox Triage*'s recorded run said in a Maker's words (LOOP E-01): its sentence names Datalayer's own tests, not the package and test file they are in, since the gallery and the example's pages show it.
+
 ## 0.0.51
 
 The examples' agents, enabled where they work (LOOP E-01, decided 2026-10-06).

@@ -106,7 +106,7 @@ tests:
     live:
       - "Its page drawn in the Studio's Preview signed in (2026-10-04); no mail read."
     recorded:
-      - "Run end to end on a test mailbox of example mail, a scripted model in place of its agent's (agent-runtimes test_inbox_triage.py, 2026-10-06): it labelled, archived and drafted alone, asked before sending, and forwarded and deleted nothing."
+      - "Run end to end in Datalayer's own tests on a test mailbox of example mail, a scripted model in place of its agent's (2026-10-06): it labelled, archived and drafted alone, asked before sending, and forwarded and deleted nothing."
     unverified:
       - "Its agent and the Google Workspace server are switched off in the catalogue: no real mail has been read, drafted or sent."
       - "Its tests have not been run against its own model."
