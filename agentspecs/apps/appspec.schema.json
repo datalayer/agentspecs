@@ -472,6 +472,18 @@
           "default": null,
           "description": "The theme it runs in by default, at its address, embedded, in the Studio's Preview and as an example: a `variant` and, optionally, a colour `mode`. The person's own when unsaid. Its `accent` colours the `loop` theme only"
         },
+        "uploads": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AppUploads"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "What a person may send in the composer without being asked \u2014 images, files, audio \u2014 by kind, each with its largest size, and how many at once (LOOP P-21). None when unsaid: the composer offers no attachment, and a file sent with a message is refused"
+        },
         "voice": {
           "$ref": "#/$defs/AppVoice",
           "description": "Its voice: whether it listens and speaks, with which voice, in which language (off unless said)"
@@ -953,6 +965,59 @@
         "type"
       ],
       "title": "AppTrigger",
+      "type": "object"
+    },
+    "AppUploadKind": {
+      "additionalProperties": false,
+      "description": "A kind of file a person may send, and how large (LOOP P-21).",
+      "properties": {
+        "max_mb": {
+          "default": 10,
+          "description": "The largest file of this kind, in megabytes; 25 at most",
+          "exclusiveMinimum": 0,
+          "maximum": 25,
+          "title": "Max Mb",
+          "type": "number"
+        },
+        "type": {
+          "description": "A media type (`application/pdf`), a family of them (`image/*`, `audio/*`) or an extension (`.csv`), lowercase",
+          "pattern": "^(?:[a-z0-9][a-z0-9.+-]*/(?:\\*|[a-z0-9][a-z0-9.+-]*)|\\.[a-z0-9][a-z0-9_+-]*)$",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "AppUploadKind",
+      "type": "object"
+    },
+    "AppUploads": {
+      "additionalProperties": false,
+      "description": "What a person may send in the composer without being asked (LOOP P-21): images, files, audio.\n\nA file of a kind it does not name, larger than its kind takes, or one too\nmany is refused, in a sentence \u2014 by the page before it is sent, and by the\nruntime when it is sent all the same.",
+      "properties": {
+        "kinds": {
+          "description": "The kinds of file it takes, each with its largest size",
+          "items": {
+            "$ref": "#/$defs/AppUploadKind"
+          },
+          "minItems": 1,
+          "title": "Kinds",
+          "type": "array"
+        },
+        "max_files": {
+          "default": 5,
+          "description": "The most files sent with one message",
+          "maximum": 20,
+          "minimum": 1,
+          "title": "Max Files",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kinds"
+      ],
+      "title": "AppUploads",
       "type": "object"
     },
     "AppVerified": {

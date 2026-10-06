@@ -84,7 +84,7 @@ record:
 | `connections` | What it reaches. See below. |
 | `rules` | When it acts alone, and when it asks. See below. |
 | `permissions` | What else it may reach: `spaces` (a Space, `read` or `write`) and its `computer` (`browse`, `files`, `shell`, each off). Nothing, unless said. |
-| `interface` | What the user sees: `layout` (`chat`, `page`, `split`), `accent`, `theme` — the theme it runs in by default, a `variant` of Appearance's (`datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop`) and optionally a `mode` (`light`, `dark`, `auto`), the person's own when unsaid; its `accent` colours the `loop` theme only — `welcome`, `starters`, `commands` and `modes` (see below), `settings`, a `surface` — a component tree over the approved catalog — and `assistant`, the character of its floating assistant by the id a plugin contributes it under (`paperclip`, `wizard`, `cat`, `eyes` are Datalayer's; an id no enabled plugin gives is refused by the runtime and the page). Said here, it wins over the person's own choice. `balloon` says how that assistant's balloon shows the conversation: `history`, every message, scrolled, with the composer last, or `current`, only what it says or does now — the answer being written, or the tool it calls ("Using list_invoices…") — in one balloon that replaces its words as the turn goes on; the page's own when unsaid, `history` for the floating chat. And `outputs`, the formats its answers come in — see below. |
+| `interface` | What the user sees: `layout` (`chat`, `page`, `split`), `accent`, `theme` — the theme it runs in by default, a `variant` of Appearance's (`datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop`) and optionally a `mode` (`light`, `dark`, `auto`), the person's own when unsaid; its `accent` colours the `loop` theme only — `welcome`, `starters`, `commands` and `modes` (see below), `uploads` — what a person may send without being asked (see below) — `settings`, a `surface` — a component tree over the approved catalog — and `assistant`, the character of its floating assistant by the id a plugin contributes it under (`paperclip`, `wizard`, `cat`, `eyes` are Datalayer's; an id no enabled plugin gives is refused by the runtime and the page). Said here, it wins over the person's own choice. `balloon` says how that assistant's balloon shows the conversation: `history`, every message, scrolled, with the composer last, or `current`, only what it says or does now — the answer being written, or the tool it calls ("Using list_invoices…") — in one balloon that replaces its words as the turn goes on; the page's own when unsaid, `history` for the floating chat. And `outputs`, the formats its answers come in — see below. |
 | `tests` | How it is verified: `cases` in plain words (`ask`, `expect`, and `code` when a function of its code decides one), an `evalset`, `ready_at`, the share that has to pass, and `verified` — what was tried live, what runs on recorded data, and what is not verified yet, each in a sentence (`live`, `recorded`, `unverified`); every example of the catalogue says it, and the Studio's examples show it on their cards and pages. |
 | `record` | What is kept of what it did (`include`), for how long (`keep_for`: `90_days`, `1_years`), and whether its conversations may be used to suggest tests (`suggest_tests`, off unless said: only conversations kept while it is on are sampled). |
 | `checks` | Optional: `guards`, `gates` and a `track` of the catalogue, and `code`, the checks written in its code. |
@@ -236,6 +236,37 @@ run that names a mode or an option the application does not have is refused.
 `command_prompt(command, words)` is what a command sends, and
 `interface.mode_effect(chosen)` what a run in the modes chosen is told and
 the model it runs on.
+
+## What a person sends
+
+What a person may send in the composer without being asked for it — an
+image, a file, a recording (LOOP P-21). `uploads` names the kinds of file it
+takes, each with the largest it takes in megabytes (`max_mb`, 10 unless said,
+25 at most), and how many go with one message (`max_files`, 5 unless said).
+A kind is a media type (`application/pdf`), a family of them (`image/*`,
+`audio/*`) or an extension (`.csv`), lowercase.
+
+```yaml
+interface:
+  uploads:
+    kinds:
+      - type: image/*
+        max_mb: 5
+      - type: application/pdf
+      - type: .csv
+        max_mb: 2
+    max_files: 3
+```
+
+Without `uploads` the composer offers no attachment, and a file sent with a
+message is refused. A file of a kind it does not name, larger than its kind
+takes, or one file too many is refused in a sentence — by the page before it
+is sent, and by the runtime when it is sent all the same. What a block of its
+page asks for (a File upload, with its own `accept` and `max_mb`) and what its
+code asks for (`session.ask` with a file) are asked, and answered by their own
+limits. `uploads.refusal(app_name, name, media_type, size)` and
+`uploads.too_many(app_name, count)` say the sentences; `upload_kind_takes(kind,
+name, media_type)` whether a kind takes a file.
 
 ## Rules
 

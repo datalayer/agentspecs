@@ -45,6 +45,7 @@ from agentspecs.apps import (
     APP_SCHEMA,
     ASSISTANT_CHARACTER_ID,
     DEFAULT_BEHAVIOURS,
+    MAX_UPLOAD_MB,
     SCHEMA_PATH,
     Access,
     ActsAs,
@@ -70,6 +71,7 @@ from agentspecs.apps import (
     strictest,
     tool_behaviours,
     tool_escalations,
+    upload_kind_takes,
 )
 
 APPS_DIR = pathlib.Path(__file__).parent.parent / "agentspecs" / "apps"
@@ -874,6 +876,53 @@ def test_an_application_declares_mode_switches_whose_option_goes_with_every_run(
     ):
         with pytest.raises(AppError, match="interface"):
             app(interface={"modes": wrong})
+
+
+def test_an_application_says_what_a_person_may_send_without_being_asked() -> None:
+    """LOOP P-21: the kinds of file the composer takes, each with its largest size, and how many at once."""
+    plain = app()
+    assert plain.interface.uploads is None
+    uploads = {
+        "kinds": [{"type": "image/*", "max_mb": 5}, {"type": "application/pdf"}, {"type": ".csv", "max_mb": 1.5}],
+        "max_files": 2,
+    }
+    said = app(interface={"uploads": uploads})
+    assert dump_app(said)["interface"] == {
+        "uploads": {
+            "kinds": [{"type": "image/*", "max_mb": 5}, {"type": "application/pdf"}, {"type": ".csv", "max_mb": 1.5}],
+            "max_files": 2,
+        }
+    }
+    assert parse_app(dump_app(said)) == said
+    taken = said.interface.uploads
+    assert taken is not None
+    assert taken.kind_of("photo.PNG", "image/png").type == "image/*"
+    assert taken.kind_of("orders.CSV", "application/octet-stream").type == ".csv"
+    assert taken.kind_of("a.pdf", "application/pdf; charset=binary").type == "application/pdf"
+    assert taken.refusal("Desk", "photo.png", "image/png", 5 * 1024 * 1024) is None
+    assert taken.refusal("Desk", "photo.png", "image/png", 6 * 1024 * 1024) == (
+        "photo.png is 6.0 MB: Desk takes image/* of at most 5 MB."
+    )
+    assert taken.refusal("Desk", "a.zip", "application/zip", 10) == (
+        "a.zip is not a kind of file Desk takes: it takes image/*, application/pdf, .csv."
+    )
+    assert taken.too_many("Desk", 2) is None
+    assert taken.too_many("Desk", 3) == "3 files were sent at once: Desk takes at most 2."
+    assert upload_kind_takes("audio/*", "talk.webm", "audio/webm")
+    assert not upload_kind_takes("audio/*", "talk.webm", "video/webm")
+    for wrong in (
+        {"kinds": []},
+        {"kinds": [{"type": "Image/*"}]},
+        {"kinds": [{"type": "*/*"}]},
+        {"kinds": [{"type": "csv"}]},
+        {"kinds": [{"type": "image/*", "max_mb": 0}]},
+        {"kinds": [{"type": "image/*", "max_mb": MAX_UPLOAD_MB + 1}]},
+        {"kinds": [{"type": "image/*"}, {"type": "image/*"}]},
+        {"kinds": [{"type": "image/*"}], "max_files": 0},
+        {"kinds": [{"type": "image/*", "accept": "x"}]},
+    ):
+        with pytest.raises(AppError, match="interface"):
+            app(interface={"uploads": wrong})
 
 
 def test_a_mode_runs_on_a_model_of_the_catalogue() -> None:

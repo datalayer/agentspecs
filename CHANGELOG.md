@@ -8,6 +8,17 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.55
+
+What a person sends (LOOP P-21): the kinds of file an application takes in its composer without asking, each with its largest size, and how many at once.
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (What a person sends), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `interface.uploads`: `kinds` — each a `type`, a media type (`application/pdf`), a family (`image/*`, `audio/*`) or an extension (`.csv`), and its `max_mb` (10 unless said, 25 at most, `MAX_UPLOAD_MB`) — and `max_files` (5 unless said). None when unsaid: the composer offers no attachment, and a file sent with a message is refused.
+- `AppUploads.kind_of`, `refusal` and `too_many` say which kind takes a file and why one is refused, in a sentence; `upload_kind_takes(kind, name, media_type)`.
+- Refused: no kind, a kind said twice, a type that is none of the three, a size of 0 or over 25 MB, `max_files` under 1 or over 20.
+- JSON Schema and reference regenerated. Tests: `test_apps.py`.
+
 ## 0.0.54
 
 What an application's code declares (LOOP P-06): its own tools, its code's checks, and tests its code decides — in the spec, so that the Canvas shows them and validation runs them.

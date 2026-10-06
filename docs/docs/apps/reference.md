@@ -532,6 +532,7 @@ What the user sees.
 | `commands` | list of [AppCommand](#appcommand) | Slash commands the user picks in the composer: typing `/` lists them (LOOP P-19) | — |
 | `modes` | list of [AppMode](#appmode) | Mode switches in the composer: the option picked goes with every run, its instructions told to the agent and its model run on (LOOP P-19) | — |
 | `settings` | mapping | What the user may set: the JSON Schema of a form, an object of named fields, each with its `title` and its `default` (LOOP C-16). Drawn with `@datalayer/primer-rjsf` beside the conversation and on a deployment's Ship card, its values go with every run and are checked by the runtime against the same schema. None when unsaid | empty |
+| `uploads` | [AppUploads](#appuploads) | What a person may send in the composer without being asked — images, files, audio — by kind, each with its largest size, and how many at once (LOOP P-21). None when unsaid: the composer offers no attachment, and a file sent with a message is refused | empty |
 | `components` | list of text | The components of the catalog the surface may use; the kind's own when empty | — |
 | `surface` | [AppSurface](#appsurface) | The component tree, when there is one | empty |
 | `assistant` | text | The character its floating assistant shows, by the id a plugin contributes it under (lowercase letters and digits, words joined by a hyphen): Datalayer's are `paperclip`, `wizard`, `cat` and `eyes`. The paper clip when unsaid; an id no enabled plugin contributes is refused where the plugins are known, the runtime and the page. Said here, it wins over a person's own choice in their settings | empty |
@@ -682,6 +683,24 @@ What starts a worker's work.
 | `at` | text | For once: when, as an ISO date | empty |
 | `description` | text | What it is, in words: `Every morning at 8` | empty |
 | `prompt` | text | What the worker is told when it fires | empty |
+
+### AppUploadKind
+
+A kind of file a person may send, and how large (LOOP P-21).
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `type` (required) | text | A media type (`application/pdf`), a family of them (`image/*`, `audio/*`) or an extension (`.csv`), lowercase | — |
+| `max_mb` | number | The largest file of this kind, in megabytes; 25 at most | `10` |
+
+### AppUploads
+
+What a person may send in the composer without being asked (LOOP P-21): images, files, audio. A file of a kind it does not name, larger than its kind takes, or one too many is refused, in a sentence — by the page before it is sent, and by the runtime when it is sent all the same.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `kinds` (required) | list of [AppUploadKind](#appuploadkind) | The kinds of file it takes, each with its largest size | — |
+| `max_files` | integer | The most files sent with one message | `5` |
 
 ### AppVerified
 

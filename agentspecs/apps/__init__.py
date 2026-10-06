@@ -500,6 +500,86 @@ MEDIA_TYPE = re.compile(r"[a-z0-9][a-z0-9.+-]*/[a-z0-9][a-z0-9.+-]*")
 #: The outputs an answer in words comes in; an application's first output is one.
 TEXT_OUTPUTS = ("text/plain", "text/markdown")
 
+#: The largest file a person may send an application, in megabytes: what a runtime takes.
+MAX_UPLOAD_MB = 25
+
+#: A kind of file a person may send: a media type (`application/pdf`), a family of
+#: them (`image/*`), or an extension (`.csv`).
+UPLOAD_KIND = re.compile(r"(?:[a-z0-9][a-z0-9.+-]*/(?:\*|[a-z0-9][a-z0-9.+-]*)|\.[a-z0-9][a-z0-9_+-]*)")
+
+
+def upload_kind_takes(kind: str, name: str, media_type: str) -> bool:
+    """Whether a kind of file takes a file: an extension by its name, a media type or a family by its type."""
+    if kind.startswith("."):
+        return name.lower().endswith(kind)
+    wanted = (media_type or "").split(";", 1)[0].strip().lower()
+    if kind.endswith("/*"):
+        return wanted.startswith(kind[:-1])
+    return wanted == kind
+
+
+class AppUploadKind(_Strict):
+    """A kind of file a person may send, and how large (LOOP P-21)."""
+
+    type: str = Field(
+        ...,
+        pattern=rf"^{UPLOAD_KIND.pattern}$",
+        description=(
+            "A media type (`application/pdf`), a family of them (`image/*`, `audio/*`) or an "
+            "extension (`.csv`), lowercase"
+        ),
+    )
+    max_mb: float = Field(
+        default=10,
+        gt=0,
+        le=MAX_UPLOAD_MB,
+        description=f"The largest file of this kind, in megabytes; {MAX_UPLOAD_MB} at most",
+    )
+
+
+class AppUploads(_Strict):
+    """What a person may send in the composer without being asked (LOOP P-21): images, files, audio.
+
+    A file of a kind it does not name, larger than its kind takes, or one too
+    many is refused, in a sentence — by the page before it is sent, and by the
+    runtime when it is sent all the same.
+    """
+
+    kinds: List[AppUploadKind] = Field(
+        ..., min_length=1, description="The kinds of file it takes, each with its largest size"
+    )
+    max_files: int = Field(default=5, ge=1, le=20, description="The most files sent with one message")
+
+    @model_validator(mode="after")
+    def _kinds_are_distinct(self) -> "AppUploads":
+        types = [kind.type for kind in self.kinds]
+        if len(set(types)) != len(types):
+            raise ValueError("two kinds of upload have the same type")
+        return self
+
+    def kind_of(self, name: str, media_type: str) -> Optional[AppUploadKind]:
+        """The first of its kinds that takes a file, or None."""
+        return next((kind for kind in self.kinds if upload_kind_takes(kind.type, name, media_type)), None)
+
+    def refusal(self, app_name: str, name: str, media_type: str, size: int) -> Optional[str]:
+        """Why a file is refused, in a sentence; None when it is taken."""
+        kind = self.kind_of(name, media_type)
+        if kind is None:
+            taken = ", ".join(kind.type for kind in self.kinds)
+            return f"{name} is not a kind of file {app_name} takes: it takes {taken}."
+        if size > kind.max_mb * 1024 * 1024:
+            return (
+                f"{name} is {size / (1024 * 1024):.1f} MB: {app_name} takes {kind.type} "
+                f"of at most {kind.max_mb:g} MB."
+            )
+        return None
+
+    def too_many(self, app_name: str, count: int) -> Optional[str]:
+        """Why so many files are refused at once, in a sentence; None when they are not."""
+        if count > self.max_files:
+            return f"{count} files were sent at once: {app_name} takes at most {self.max_files}."
+        return None
+
 
 class AppInterface(_Strict):
     """What the user sees."""
@@ -534,6 +614,14 @@ class AppInterface(_Strict):
             "its `title` and its `default` (LOOP C-16). Drawn with `@datalayer/primer-rjsf` beside "
             "the conversation and on a deployment's Ship card, its values go with every run and are "
             "checked by the runtime against the same schema. None when unsaid"
+        ),
+    )
+    uploads: Optional[AppUploads] = Field(
+        default=None,
+        description=(
+            "What a person may send in the composer without being asked — images, files, audio — "
+            "by kind, each with its largest size, and how many at once (LOOP P-21). None when "
+            "unsaid: the composer offers no attachment, and a file sent with a message is refused"
         ),
     )
     components: List[str] = Field(
@@ -1938,10 +2026,12 @@ __all__ = [
     "DEFAULT_READY_AT",
     "KNOWN_SCHEMAS",
     "KeptRecord",
+    "MAX_UPLOAD_MB",
     "MEDIA_TYPE",
     "SCHEMA_PATH",
     "TEXT_OUTPUTS",
     "TRACK_KEEPS",
+    "UPLOAD_KIND",
     "Accent",
     "Access",
     "ActsAs",
@@ -1976,6 +2066,8 @@ __all__ = [
     "CheckStage",
     "CriterionKind",
     "AppTheme",
+    "AppUploadKind",
+    "AppUploads",
     "BalloonDisplay",
     "EmbedMode",
     "EmbeddedDeployment",
@@ -2009,4 +2101,5 @@ __all__ = [
     "strictest",
     "tool_behaviours",
     "tool_escalations",
+    "upload_kind_takes",
 ]
