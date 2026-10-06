@@ -8,6 +8,17 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.50
+
+Commands and modes in the composer (LOOP P-19).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `interface.commands` (`AppCommand`): `name` (what follows the slash: lower-case letters, digits and hyphens, a letter first), `description`, and `prompt`, what picking it sends — `{input}` the words typed after it, the only placeholder; `command_prompt(command, words)` says it, and `AppInterface.command(name)` finds one. A name said twice is refused.
+- `interface.modes` (`AppMode`, `AppModeOption`): a switch, `id`, `label`, `default`, and two options at least, each with `instructions` told to the agent in every run in that mode and optionally a `model` run in place of the application's. Ids said twice, a default not among the options, or two modes choosing the model are refused; a model the catalogue does not have is a problem (`app_problems`). `AppInterface.mode_choice(chosen)` is the option of every mode a run is in (an unknown mode or option refused), `mode_effect(chosen)` its instructions and model.
+- A key a command, a mode or an option does not know is refused. JSON Schema and reference regenerated.
+- Tests: `test_apps.py`.
+
 ## 0.0.49
 
 The theme an application runs in by default (LOOP T-30).

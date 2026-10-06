@@ -265,6 +265,98 @@ class AppStarter(_Strict):
     message: str = Field(..., description="What is sent when it is chosen")
 
 
+#: What follows the slash: lower-case letters, digits and hyphens, a letter first.
+COMMAND_NAME = r"[a-z](?:[a-z0-9-]{0,30}[a-z0-9])?"
+
+#: Where a command's prompt takes the words typed after it.
+COMMAND_INPUT = "{input}"
+
+#: The id of a mode or of one of its options.
+MODE_ID = r"[a-z][a-z0-9_-]{0,39}"
+
+
+class AppCommand(_Strict):
+    """A slash command the user picks in the composer (LOOP P-19).
+
+    Typing `/` lists the application's commands; picking one sends its
+    `prompt`, `{input}` replaced by the words typed after the command.
+    """
+
+    name: str = Field(
+        ...,
+        pattern=rf"^{COMMAND_NAME}$",
+        description="What follows the slash: lower-case letters, digits and hyphens, a letter first (`summarise`)",
+    )
+    description: str = Field(..., min_length=1, description="What the composer's menu says it does")
+    prompt: str = Field(
+        ...,
+        min_length=1,
+        description=(
+            "What is sent when it is picked: `{input}` stands for the words typed after it; "
+            "without `{input}`, those words follow the prompt. An application's code answers "
+            "`/<name> {input}` itself (`@app.command`)"
+        ),
+    )
+
+    @field_validator("prompt")
+    @classmethod
+    def _takes_input_only(cls, prompt: str) -> str:
+        for placeholder in re.findall(r"\{[^{}]*\}", prompt):
+            if placeholder != COMMAND_INPUT:
+                raise ValueError(
+                    f"a command's prompt takes the words typed after it as `{COMMAND_INPUT}`, not {placeholder}"
+                )
+        return prompt
+
+
+def command_prompt(command: AppCommand, words: str = "") -> str:
+    """What a command sends: its prompt, the words typed after it in place of `{input}`."""
+    words = words.strip()
+    if COMMAND_INPUT in command.prompt:
+        return command.prompt.replace(COMMAND_INPUT, words).strip()
+    return f"{command.prompt}\n\n{words}" if words else command.prompt
+
+
+class AppModeOption(_Strict):
+    """One position of a mode switch (LOOP P-19): what the agent is told, the model it runs on."""
+
+    id: str = Field(..., pattern=rf"^{MODE_ID}$", description="Its id, what a run says it is in")
+    label: str = Field(..., min_length=1, description="What the switch says")
+    description: str = Field(default="", description="What it changes, in a sentence")
+    instructions: str = Field(
+        default="", description="What the agent is told besides its instructions, in every run in this mode"
+    )
+    model: Optional[str] = Field(
+        default=None, description="The model a run in this mode runs on, in place of the application's"
+    )
+
+
+class AppMode(_Strict):
+    """A mode switch in the composer (LOOP P-19): the person picks one of its options."""
+
+    id: str = Field(..., pattern=rf"^{MODE_ID}$", description="Its id, the key a run says its option under")
+    label: str = Field(..., min_length=1, description="What the switch is called")
+    options: List[AppModeOption] = Field(..., min_length=2, description="Its positions, two at least")
+    default: Optional[str] = Field(default=None, description="The option it starts on; the first when unsaid")
+
+    @model_validator(mode="after")
+    def _options_are_distinct(self) -> "AppMode":
+        ids = [option.id for option in self.options]
+        if len(set(ids)) != len(ids):
+            raise ValueError(f"two options of the mode {self.id!r} have the same id")
+        if self.default is not None and self.default not in ids:
+            raise ValueError(f"the mode {self.id!r} starts on {self.default!r}, which is not one of its options")
+        return self
+
+    def option(self, option_id: Optional[str] = None) -> AppModeOption:
+        """An option by id, or the one it starts on."""
+        wanted = option_id or self.default or self.options[0].id
+        for option in self.options:
+            if option.id == wanted:
+                return option
+        raise KeyError(f"The mode {self.id!r} has no option {wanted!r}.")
+
+
 class SettingType(str, Enum):
     """What a setting is set with."""
 
@@ -454,6 +546,17 @@ class AppInterface(_Strict):
     )
     welcome: str = Field(default="", description="What the application says first")
     starters: List[AppStarter] = Field(default_factory=list, description="First messages offered to the user")
+    commands: List[AppCommand] = Field(
+        default_factory=list,
+        description="Slash commands the user picks in the composer: typing `/` lists them (LOOP P-19)",
+    )
+    modes: List[AppMode] = Field(
+        default_factory=list,
+        description=(
+            "Mode switches in the composer: the option picked goes with every run, its instructions "
+            "told to the agent and its model run on (LOOP P-19)"
+        ),
+    )
     settings: List[AppSetting] = Field(default_factory=list, description="What the user may set")
     components: List[str] = Field(
         default_factory=list,
@@ -504,7 +607,46 @@ class AppInterface(_Strict):
         identities = [setting.id for setting in self.settings]
         if len(set(identities)) != len(identities):
             raise ValueError("two settings have the same id")
+        names = [command.name for command in self.commands]
+        if len(set(names)) != len(names):
+            raise ValueError("two commands have the same name")
+        modes = [mode.id for mode in self.modes]
+        if len(set(modes)) != len(modes):
+            raise ValueError("two modes have the same id")
+        choosing = [mode.id for mode in self.modes if any(option.model for option in mode.options)]
+        if len(choosing) > 1:
+            raise ValueError(f"only one mode chooses the model a run runs on, not {', '.join(choosing)}")
         return self
+
+    def command(self, name: str) -> Optional[AppCommand]:
+        """A command by its name, without the slash."""
+        return next((command for command in self.commands if command.name == name), None)
+
+    def mode_choice(self, chosen: Optional[Mapping[str, Any]] = None) -> Dict[str, str]:
+        """The option of every mode a run is in: what was chosen, else where each starts.
+
+        Raises
+        ------
+        ValueError
+            When a mode or an option chosen is not the application's.
+        """
+        chosen = dict(chosen or {})
+        known = {mode.id: mode for mode in self.modes}
+        for mode_id, option_id in chosen.items():
+            mode = known.get(mode_id)
+            if mode is None:
+                raise ValueError(f"There is no mode {mode_id!r}.")
+            if not isinstance(option_id, str) or option_id not in {option.id for option in mode.options}:
+                raise ValueError(f"The mode {mode_id!r} has no option {option_id!r}.")
+        return {mode.id: mode.option(chosen.get(mode.id)).id for mode in self.modes}
+
+    def mode_effect(self, chosen: Optional[Mapping[str, Any]] = None) -> Tuple[str, Optional[str]]:
+        """What a run in the modes chosen is told, and the model it runs on (None: the application's)."""
+        choice = self.mode_choice(chosen)
+        options = [mode.option(choice[mode.id]) for mode in self.modes]
+        instructions = "\n\n".join(option.instructions.strip() for option in options if option.instructions.strip())
+        model = next((option.model for option in options if option.model), None)
+        return instructions, model
 
     @field_validator("outputs")
     @classmethod
@@ -1354,6 +1496,11 @@ def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = No
 
     if app.model and get_model(app.model) is None:
         problems.append(f"There is no model named {app.model!r}.")
+    # The model a mode runs on is the catalogue's (LOOP P-19).
+    for mode in app.interface.modes:
+        for option in mode.options:
+            if option.model and get_model(option.model) is None:
+                problems.append(f"The mode {mode.id!r} runs {option.id!r} on {option.model!r}, which is no model.")
     if app.decision is not None and app.decision.decision_model:
         decider = get_model(app.decision.decision_model)
         if decider is None:
@@ -1687,6 +1834,9 @@ __all__ = [
     "AppError",
     "AppInterface",
     "AppKind",
+    "AppCommand",
+    "AppMode",
+    "AppModeOption",
     "AppPermissions",
     "AppRecord",
     "AppRule",
@@ -1720,6 +1870,7 @@ __all__ = [
     "app_problems",
     "app_setup",
     "behaviour_for",
+    "command_prompt",
     "dump_app",
     "form_problems",
     "get_app",

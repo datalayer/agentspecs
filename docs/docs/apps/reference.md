@@ -414,6 +414,16 @@ Optional: checks from the catalogue, for a builder who wants them.
 | `gates` | list of text | Gates, `id` or `id:version` | — |
 | `track` | text | A Track, `id` or `id:version` | empty |
 
+### AppCommand
+
+A slash command the user picks in the composer (LOOP P-19). Typing `/` lists the application's commands; picking one sends its `prompt`, `{input}` replaced by the words typed after the command.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `name` (required) | text | What follows the slash: lower-case letters, digits and hyphens, a letter first (`summarise`) | — |
+| `description` (required) | text | What the composer's menu says it does | — |
+| `prompt` (required) | text | What is sent when it is picked: `{input}` stands for the words typed after it; without `{input}`, those words follow the prompt. An application's code answers `/<name> {input}` itself (`@app.command`) | — |
+
 ### AppComputer
 
 What the application may do on its own computer. Each is off until it is turned on.
@@ -482,6 +492,8 @@ What the user sees.
 | `theme` | [AppTheme](#apptheme) | The theme it runs in by default, at its address, embedded, in the Studio's Preview and as an example: a `variant` and, optionally, a colour `mode`. The person's own when unsaid. Its `accent` colours the `loop` theme only | empty |
 | `welcome` | text | What the application says first | empty |
 | `starters` | list of [AppStarter](#appstarter) | First messages offered to the user | — |
+| `commands` | list of [AppCommand](#appcommand) | Slash commands the user picks in the composer: typing `/` lists them (LOOP P-19) | — |
+| `modes` | list of [AppMode](#appmode) | Mode switches in the composer: the option picked goes with every run, its instructions told to the agent and its model run on (LOOP P-19) | — |
 | `settings` | list of [AppSetting](#appsetting) | What the user may set | — |
 | `components` | list of text | The components of the catalog the surface may use; the kind's own when empty | — |
 | `surface` | [AppSurface](#appsurface) | The component tree, when there is one | empty |
@@ -489,6 +501,29 @@ What the user sees.
 | `balloon` | [BalloonDisplay](#balloondisplay) | How its floating assistant's balloon shows the conversation: `history` (every message, scrolled, the composer last) or `current` (only what it says or does now, the answer being written or the tool it calls, in one balloon). The page's own when unsaid: `history` for the floating chat | empty |
 | `voice` | [AppVoice](#appvoice) | Its voice: whether it listens and speaks, with which voice, in which language (off unless said) | — |
 | `outputs` | list of text | The formats its answers come in, by media type, words first: `text/markdown`, then `application/x-ipynb+json` for a Jupyter notebook. Over A2A, its agent card's output modes; a caller asks for some of them (`acceptedOutputModes`). Plain text alone when unsaid | — |
+
+### AppMode
+
+A mode switch in the composer (LOOP P-19): the person picks one of its options.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `id` (required) | text | Its id, the key a run says its option under | — |
+| `label` (required) | text | What the switch is called | — |
+| `options` (required) | list of [AppModeOption](#appmodeoption) | Its positions, two at least | — |
+| `default` | text | The option it starts on; the first when unsaid | empty |
+
+### AppModeOption
+
+One position of a mode switch (LOOP P-19): what the agent is told, the model it runs on.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `id` (required) | text | Its id, what a run says it is in | — |
+| `label` (required) | text | What the switch says | — |
+| `description` | text | What it changes, in a sentence | empty |
+| `instructions` | text | What the agent is told besides its instructions, in every run in this mode | empty |
+| `model` | text | The model a run in this mode runs on, in place of the application's | empty |
 
 ### AppPermissions
 

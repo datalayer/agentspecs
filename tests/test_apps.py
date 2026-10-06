@@ -52,6 +52,7 @@ from agentspecs.apps import (
     AppKind,
     AppSpec,
     BalloonDisplay,
+    command_prompt,
     Behaviour,
     ThemeMode,
     ThemeVariant,
@@ -757,6 +758,115 @@ def test_an_application_names_the_theme_it_runs_in_by_default() -> None:
     for wrong in ({"variant": "neon"}, {"variant": "Earth"}, {}, {"variant": "sun", "mode": "night"}, {"variant": "sun", "accent": "sky"}, "earth"):
         with pytest.raises(AppError, match="interface.theme"):
             app(interface={"theme": wrong})
+
+
+def test_an_application_declares_slash_commands_for_its_composer() -> None:
+    """LOOP P-19: a command's name follows the slash; picking it sends its prompt, the words typed in `{input}`."""
+    plain = app()
+    assert plain.interface.commands == []
+    assert "interface" not in dump_app(plain)
+    commands = [
+        {"name": "summarise", "description": "Summarise what was said", "prompt": "Summarise: {input}"},
+        {"name": "draft-reply", "description": "Draft a reply", "prompt": "Draft a short reply."},
+    ]
+    said = app(interface={"commands": commands})
+    assert dump_app(said)["interface"] == {"commands": commands}
+    assert parse_app(dump_app(said)) == said
+    summarise = said.interface.command("summarise")
+    assert summarise is not None and said.interface.command("nothing") is None
+    assert command_prompt(summarise, " the call ") == "Summarise: the call"
+    assert command_prompt(summarise) == "Summarise:"
+    draft = said.interface.command("draft-reply")
+    assert draft is not None
+    assert command_prompt(draft) == "Draft a short reply."
+    assert command_prompt(draft, "to Ana") == "Draft a short reply.\n\nto Ana"
+    one = {"description": "d", "prompt": "p"}
+    for wrong in (
+        [{**one, "name": "Summarise"}],
+        [{**one, "name": "/summarise"}],
+        [{**one, "name": "two words"}],
+        [{**one, "name": "ends-"}],
+        [{**one, "name": "1st"}],
+        [{**one, "name": "x" * 33}],
+        [{**one, "name": "same"}, {**one, "name": "same"}],
+        [{"name": "go", "description": "", "prompt": "p"}],
+        [{"name": "go", "description": "d", "prompt": ""}],
+        [{"name": "go", "description": "d", "prompt": "Ask {question}"}],
+        [{**one, "name": "go", "shortcut": "g"}],
+        [{"name": "go", "description": "d"}],
+    ):
+        with pytest.raises(AppError, match="interface"):
+            app(interface={"commands": wrong})
+
+
+def test_an_application_declares_mode_switches_whose_option_goes_with_every_run() -> None:
+    """LOOP P-19: a mode's options say what the agent is told and, for one mode, the model it runs on."""
+    plain = app()
+    assert plain.interface.modes == []
+    assert plain.interface.mode_choice() == {}
+    assert plain.interface.mode_effect() == ("", None)
+    modes = [
+        {
+            "id": "depth",
+            "label": "Depth",
+            "options": [
+                {"id": "quick", "label": "Quick", "instructions": "Answer in two sentences."},
+                {"id": "thorough", "label": "Thorough", "description": "Longer", "instructions": "Cite sources."},
+            ],
+            "default": "thorough",
+        },
+        {
+            "id": "tone",
+            "label": "Tone",
+            "options": [{"id": "plain", "label": "Plain"}, {"id": "warm", "label": "Warm", "instructions": "Be warm."}],
+        },
+    ]
+    said = app(interface={"modes": modes})
+    assert dump_app(said)["interface"] == {"modes": modes}
+    assert parse_app(dump_app(said)) == said
+    ui = said.interface
+    assert ui.mode_choice() == {"depth": "thorough", "tone": "plain"}
+    assert ui.mode_choice({"tone": "warm"}) == {"depth": "thorough", "tone": "warm"}
+    assert ui.mode_effect() == ("Cite sources.", None)
+    assert ui.mode_effect({"depth": "quick", "tone": "warm"}) == ("Answer in two sentences.\n\nBe warm.", None)
+    for chosen, sentence in (
+        ({"speed": "fast"}, "no mode 'speed'"),
+        ({"depth": "deep"}, "no option 'deep'"),
+        ({"depth": 1}, "no option 1"),
+    ):
+        with pytest.raises(ValueError, match=sentence):
+            ui.mode_choice(chosen)
+    option = {"id": "a", "label": "A"}
+    two = [option, {"id": "b", "label": "B"}]
+    for wrong in (
+        [{"id": "depth", "label": "Depth", "options": [option]}],
+        [{"id": "depth", "label": "Depth", "options": [option, option]}],
+        [{"id": "depth", "label": "Depth", "options": two, "default": "c"}],
+        [{"id": "Depth", "label": "Depth", "options": two}],
+        [{"id": "depth", "label": "", "options": two}],
+        [{"id": "depth", "label": "Depth", "options": two}, {"id": "depth", "label": "Again", "options": two}],
+        [{"id": "depth", "label": "Depth", "options": [{**option, "colour": "red"}, two[1]]}],
+        [
+            {"id": "one", "label": "One", "options": [{**option, "model": "m1"}, two[1]]},
+            {"id": "two", "label": "Two", "options": [{**option, "model": "m2"}, two[1]]},
+        ],
+    ):
+        with pytest.raises(AppError, match="interface"):
+            app(interface={"modes": wrong})
+
+
+def test_a_mode_runs_on_a_model_of_the_catalogue() -> None:
+    """LOOP P-19: a model a mode names that the catalogue does not have is a problem, said in words."""
+    from agentspecs.models import list_models
+
+    known = list_models()[0].id
+    options = [{"id": "fast", "label": "Fast", "model": known}, {"id": "slow", "label": "Slow", "model": "no-such-model"}]
+    said = app(interface={"modes": [{"id": "speed", "label": "Speed", "options": options}]})
+    assert said.interface.mode_effect() == ("", known)
+    assert said.interface.mode_effect({"speed": "slow"}) == ("", "no-such-model")
+    problems = app_problems(said)
+    assert any("'speed'" in problem and "'no-such-model'" in problem for problem in problems)
+    assert not any(known in problem for problem in problems)
 
 
 # --- what the spec refuses ------------------------------------------------------------
