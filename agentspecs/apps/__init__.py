@@ -721,11 +721,95 @@ class HostedDeployment(_Strict):
 _ORIGIN = re.compile(r"^https://[A-Za-z0-9.-]+(?::\d+)?$|^http://(?:localhost|127\.0\.0\.1)(?::\d+)?$")
 
 
+_HOST_NAME = re.compile(r"^[a-z][a-z0-9_]{0,62}$")
+
+#: The tool its agent reads what the host page passes it with (LOOP D-10).
+HOST_CONTEXT_TOOL = "host_context"
+
+
+def host_tool(function: str) -> str:
+    """The tool its agent calls a host function with: ``host_`` and its name."""
+    return f"host_{function}"
+
+
+class HostFunction(_Strict):
+    """A function of the host page the application's agent may call (LOOP D-10)."""
+
+    name: str = Field(..., description="Its name, lower-case words joined by `_`: `open_ticket`")
+    description: str = Field(..., description="What it does, for the agent: when to call it")
+    parameters: Dict[str, Any] = Field(
+        default_factory=lambda: {"type": "object", "properties": {}},
+        description="Its arguments, as a JSON Schema object",
+    )
+
+    @field_validator("name")
+    @classmethod
+    def _is_a_name(cls, name: str) -> str:
+        if not _HOST_NAME.match(name):
+            raise ValueError(f"cannot use {name!r} as a host function: lower-case letters, digits and `_`")
+        return name
+
+    @field_validator("description")
+    @classmethod
+    def _says_what(cls, description: str) -> str:
+        if not description.strip():
+            raise ValueError("a host function says what it does")
+        return description.strip()
+
+    @field_validator("parameters")
+    @classmethod
+    def _is_an_object(cls, parameters: Dict[str, Any]) -> Dict[str, Any]:
+        if parameters.get("type") != "object":
+            raise ValueError("a host function's parameters are a JSON Schema of `type: object`")
+        return parameters
+
+
+class HostBridge(_Strict):
+    """What the host page and the application say to each other (LOOP D-10).
+
+    The values of the host it reads (`context`: `user`, `page`, or a name of
+    the host's own), through the tool `host_context`; the functions of the
+    host it may call, each through `host_<name>`. Every one of these tools is
+    decided by a rule that names it, as any tool is: one no rule names is
+    left to the person.
+    """
+
+    context: List[str] = Field(
+        default_factory=list, description="The host's values it reads: `user`, `page`, or names of the host's own"
+    )
+    functions: List[HostFunction] = Field(default_factory=list, description="The host's functions it may call")
+
+    @field_validator("context")
+    @classmethod
+    def _are_names(cls, context: List[str]) -> List[str]:
+        for name in context:
+            if not _HOST_NAME.match(name):
+                raise ValueError(f"cannot use {name!r} as a value of the host: lower-case letters, digits and `_`")
+        if len(set(context)) != len(context):
+            raise ValueError("the host's values are named once each")
+        return context
+
+    @model_validator(mode="after")
+    def _functions_named_once(self) -> "HostBridge":
+        names = [function.name for function in self.functions]
+        if len(set(names)) != len(names):
+            raise ValueError("the host's functions are named once each")
+        return self
+
+    @property
+    def tools(self) -> List[str]:
+        """The tools its agent is given for the host."""
+        return ([HOST_CONTEXT_TOOL] if self.context else []) + [host_tool(f.name) for f in self.functions]
+
+
 class EmbeddedDeployment(_Strict):
     """The application inside another product's page."""
 
     mode: EmbedMode = Field(default=EmbedMode.INLINE, description="`inline`, `bubble`, `panel` or `assistant`")
     origins: List[str] = Field(default_factory=list, description="The origins allowed to embed it")
+    host: Optional[HostBridge] = Field(
+        default=None, description="What the host page passes it and the functions of the host it may call"
+    )
 
     @field_validator("origins")
     @classmethod
@@ -1278,10 +1362,14 @@ def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = No
                     f"The Gate {ref!r} reads the Guard {guard!r}, which the application does not run: "
                     "add it under `checks.guards`."
                 )
+    host = app.deployment.embedded.host if app.deployment.embedded else None
+    host_tools = host.tools if host else []
     for rule in app.rules:
         for tool in rule.tools:
             server, name = split_ref(tool)
             if server is None:
+                if tool in host_tools:
+                    continue
                 if _id_of(name) not in _catalogue("backend-tools"):
                     problems.append(f"The rule {rule.action!r} names the tool {tool!r}, which the catalogue does not have.")
             elif app.connection(server) is None:
@@ -1292,6 +1380,14 @@ def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = No
                 problems.append(
                     f"The rule {rule.action!r} names {tool!r}, which the connection to {server!r} leaves out (`only`)."
                 )
+    # What the host page offers is decided by a rule that names it (D-10).
+    named = {tool for rule in app.rules for tool in rule.tools}
+    for tool in host_tools:
+        if tool not in named:
+            problems.append(
+                f"No rule names {tool!r}, which the host page offers it: "
+                "it is left to the person until a rule decides it."
+            )
     for connection in app.connections:
         if connection.access is Access.READ:
             continue

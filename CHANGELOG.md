@@ -8,6 +8,16 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.48
+
+The host page and an embedded application talk to each other (LOOP D-10): the values the page passes it and the functions of the page it may call, named in its Appspec, each a tool a rule decides.
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (The host page's values and functions), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `deployment.embedded.host` (`HostBridge`): `context`, the host's values it reads (`user`, `page`, or names of the host's own), through the tool `host_context`; `functions` (`HostFunction`: `name`, `description`, `parameters` as a JSON Schema object), each called through `host_<name>` (`host_tool`, `HOST_CONTEXT_TOOL`). Names are lower-case words joined by `_`, each once.
+- A rule may name `host_context` and `host_<name>`: they are the application's own tools, not the catalogue's. `app_problems` says each tool of the host no rule names: it is left to the person.
+- Tests: `test_apps.py`.
+
 ## 0.0.47
 
 An application's address showing only its character (LOOP T-21), off unless said.

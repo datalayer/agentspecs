@@ -634,6 +634,26 @@ The application inside another product's page.
 | --- | --- | --- | --- |
 | `mode` | [EmbedMode](#embedmode) | `inline`, `bubble`, `panel` or `assistant` | `"inline"` |
 | `origins` | list of text | The origins allowed to embed it | — |
+| `host` | [HostBridge](#hostbridge) | What the host page passes it and the functions of the host it may call | empty |
+
+### HostBridge
+
+What the host page and the application say to each other (LOOP D-10). The values of the host it reads (`context`: `user`, `page`, or a name of the host's own), through the tool `host_context`; the functions of the host it may call, each through `host_<name>`. Every one of these tools is decided by a rule that names it, as any tool is: one no rule names is left to the person.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `context` | list of text | The host's values it reads: `user`, `page`, or names of the host's own | — |
+| `functions` | list of [HostFunction](#hostfunction) | The host's functions it may call | — |
+
+### HostFunction
+
+A function of the host page the application's agent may call (LOOP D-10).
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `name` (required) | text | Its name, lower-case words joined by `_`: `open_ticket` | — |
+| `description` (required) | text | What it does, for the agent: when to call it | — |
+| `parameters` | mapping | Its arguments, as a JSON Schema object | — |
 
 ### HostedDeployment
 

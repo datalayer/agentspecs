@@ -446,6 +446,45 @@ def test_its_address_shows_only_its_character_when_said() -> None:
     assert "character_alone" not in dump_app(app(deployment={"hosted": {"slug": "desk"}}))["deployment"]["hosted"]
 
 
+def test_the_host_page_passes_values_and_offers_functions_each_decided_by_a_rule() -> None:
+    """LOOP D-10: what the host passes is read with host_context, its functions called as host_<name>."""
+    host = {
+        "context": ["user", "page", "plan"],
+        "functions": [
+            {
+                "name": "open_ticket",
+                "description": "Open a ticket in the helpdesk",
+                "parameters": {"type": "object", "properties": {"title": {"type": "string"}}},
+            }
+        ],
+    }
+    ruled = app(
+        deployment={"embedded": {"mode": "assistant", "host": host}},
+        rules=[
+            {"action": "Read what the page says", "applies_to": "host_context", "behaviour": "do_it"},
+            {"action": "Open a ticket", "applies_to": "host_open_ticket", "behaviour": "ask_first"},
+        ],
+    )
+    assert ruled.deployment.embedded.host.tools == ["host_context", "host_open_ticket"]
+    assert not [p for p in app_problems(ruled) if "host" in p]
+    assert parse_app(dump_app(ruled)) == ruled
+    unruled = app(deployment={"embedded": {"host": host}})
+    assert [p for p in app_problems(unruled) if "host" in p] == [
+        "No rule names 'host_context', which the host page offers it: "
+        "it is left to the person until a rule decides it.",
+        "No rule names 'host_open_ticket', which the host page offers it: "
+        "it is left to the person until a rule decides it.",
+    ]
+    for wrong, said in [
+        ({"functions": [{"name": "Open Ticket", "description": "x"}]}, "as a host function"),
+        ({"functions": [{"name": "x", "description": " "}]}, "says what it does"),
+        ({"functions": [{"name": "x", "description": "x", "parameters": {"type": "string"}}]}, "type: object"),
+        ({"context": ["user", "user"]}, "named once each"),
+    ]:
+        with pytest.raises(AppError, match=said):
+            app(deployment={"embedded": {"host": wrong}})
+
+
 def test_a_decision_application_carries_the_whole_decision() -> None:
     decision = APP_CATALOGUE["ship-or-fix"].decision
     assert decision is not None

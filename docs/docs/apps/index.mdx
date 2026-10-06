@@ -87,7 +87,7 @@ record:
 | `tests` | How it is verified: `cases` in plain words (`ask`, `expect`), an `evalset`, `ready_at`, the share that has to pass, and `verified` — what was tried live, what runs on recorded data, and what is not verified yet, each in a sentence (`live`, `recorded`, `unverified`); every example of the catalogue says it, and the Studio's examples show it on their cards and pages. |
 | `record` | What is kept of what it did (`include`), for how long (`keep_for`: `90_days`, `1_years`), and whether its conversations may be used to suggest tests (`suggest_tests`, off unless said: only conversations kept while it is on are sampled). |
 | `checks` | Optional: `guards`, `gates` and a `track` of the catalogue. |
-| `deployment` | Where it goes: `hosted` (a `visibility`, a `slug`) and `embedded` (a `mode`, the `origins` allowed). |
+| `deployment` | Where it goes: `hosted` (a `visibility`, a `slug`, `character_alone`) and `embedded` (a `mode`, the `origins` allowed, and `host`: what the host page passes it and the functions of the host it may call). |
 | `goal`, `triggers`, `memory`, `notifications` | A worker's own: what it works toward, what starts its work, what it remembers, where an approval reaches a person. |
 | `decision` | A decision's own: the `question`, `alternatives`, `criteria`, `scenarios`, the review policy. |
 
@@ -245,6 +245,41 @@ mailbox = {"user_google_email": "eric@datalayer.io", "forward_message_id": "m1"}
 behaviour_for(triage, send, arguments={**mailbox, "to": "ana@datalayer.io"})   # ASK_FIRST: a send
 behaviour_for(triage, send, arguments={**mailbox, "to": "lawyer@firm.com"})    # LEAVE_TO_ME: it publishes
 ```
+
+### The host page's values and functions
+
+Embedded in another product's page, an application can read what the page
+passes it and call functions the page offers (LOOP D-10). Both are named
+under `deployment.embedded.host`, and each is a tool its agent calls — so a
+rule decides it, as any tool:
+
+```yaml
+deployment:
+  embedded:
+    mode: assistant
+    origins: [https://shop.example.com]
+    host:
+      context: [user, page, plan]   # read with the tool host_context
+      functions:
+        - name: open_ticket          # called as the tool host_open_ticket
+          description: Open a ticket in the shop's helpdesk for this customer
+          parameters:
+            type: object
+            properties:
+              title: { type: string }
+            required: [title]
+rules:
+  - action: Read what the page says
+    applies_to: host_context
+    behaviour: do_it
+  - action: Open a ticket
+    applies_to: host_open_ticket
+    behaviour: ask_first
+```
+
+`user` and `page` are what the page says of its visitor and of itself; any
+other name is a value of the host's own. A tool of the host that no rule
+names is left to the person, and `app_problems` says so.
 
 ## Action classes
 
