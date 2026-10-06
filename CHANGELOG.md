@@ -8,6 +8,15 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.47
+
+An application's address showing only its character (LOOP T-21), off unless said.
+
+Pages: [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `deployment.hosted.character_alone` (`HostedDeployment.character_alone`, `false` by default): at its address, only its character, the conversation opening in its balloon — as when it is shipped as `assistant` in another product's page. Written only when true; in the JSON Schema and the reference.
+- Tests: `test_apps.py` (off unless said; written and read again).
+
 ## 0.0.46
 
 Inbox triage's rules, with the plan's defaults: a forward outside the organization is left to the person (LOOP W-04); its agent carries Gmail's tools and nothing else (W-01).

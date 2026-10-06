@@ -702,6 +702,13 @@ class HostedDeployment(_Strict):
 
     visibility: Visibility = Field(default=Visibility.PRIVATE, description="Who can open it")
     slug: str = Field(default="", description="The readable part of its address")
+    character_alone: bool = Field(
+        default=False,
+        description=(
+            "At its address, only its character: the conversation opens in its balloon, "
+            "as when it is shipped as `assistant`"
+        ),
+    )
 
     @field_validator("slug")
     @classmethod

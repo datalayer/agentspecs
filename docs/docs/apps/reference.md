@@ -643,6 +643,7 @@ The application at an address of its own.
 | --- | --- | --- | --- |
 | `visibility` | [Visibility](#visibility) | Who can open it | `"private"` |
 | `slug` | text | The readable part of its address | empty |
+| `character_alone` | true or false | At its address, only its character: the conversation opens in its balloon, as when it is shipped as `assistant` | `false` |
 
 ## Choices
 

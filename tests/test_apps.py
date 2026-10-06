@@ -437,6 +437,15 @@ def test_an_application_survives_being_written_and_read_again() -> None:
         )
 
 
+def test_its_address_shows_only_its_character_when_said() -> None:
+    """LOOP T-21: off unless said; said, it is written and read again."""
+    assert app(deployment={"hosted": {"slug": "desk"}}).deployment.hosted.character_alone is False
+    alone = app(deployment={"hosted": {"slug": "desk", "character_alone": True}})
+    assert alone.deployment.hosted.character_alone is True
+    assert dump_app(alone)["deployment"]["hosted"]["character_alone"] is True
+    assert "character_alone" not in dump_app(app(deployment={"hosted": {"slug": "desk"}}))["deployment"]["hosted"]
+
+
 def test_a_decision_application_carries_the_whole_decision() -> None:
     decision = APP_CATALOGUE["ship-or-fix"].decision
     assert decision is not None
