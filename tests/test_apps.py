@@ -1273,3 +1273,43 @@ def test_an_output_the_catalogue_does_not_give_is_a_problem() -> None:
         "'application/x-unknown' is no format of the outputs catalogue" in p
         for p in app_problems(found)
     )
+
+
+# --- what the record keeps, as its record or its Track says (LOOP R-07) ---------------
+
+
+def test_the_record_keeps_what_it_says_for_as_long_as_it_says() -> None:
+    from agentspecs.apps import kept_record
+
+    kept = kept_record("90_days", ["conversations", "actions", "conversations"])
+    assert (kept.days, kept.include, kept.track) == (90, ("conversations", "actions"), "")
+
+
+def test_a_track_decides_the_retention_and_keeps_its_items_besides() -> None:
+    from agentspecs.apps import TRACK_KEEPS, kept_record
+    from agentspecs.tracks import TrackItem, get_track
+
+    kept = kept_record("30_days", ["conversations"], "financial-reporting:0.0.1")
+    assert kept.track == "financial-reporting"
+    assert kept.days == get_track("financial-reporting").retention_days == 2555
+    assert kept.include[0] == "conversations"
+    assert {"actions", "approvals", "checks", "decisions", "outputs", "sources"} <= set(kept.include)
+    # Every item a Track keeps is one a Track may include, kept as a record item.
+    assert set(TRACK_KEEPS) <= {item.value for item in TrackItem}
+    record_items = {item.value for item in agentspecs.apps.RecordItem}
+    assert all(set(words) <= record_items for words in TRACK_KEEPS.values())
+
+
+def test_the_pipeline_report_keeps_what_its_track_says() -> None:
+    from agentspecs.apps import get_app, kept_record
+
+    app = get_app("pipeline-report")
+    kept = kept_record(app.record.keep_for, app.record.include, app.checks.track)
+    assert kept.track == "financial-reporting" and kept.days == 2555
+
+
+def test_a_track_the_catalogue_does_not_have_is_said() -> None:
+    from agentspecs.apps import AppError, kept_record
+
+    with pytest.raises(AppError, match="There is no Track named 'ghost'"):
+        kept_record("1_years", [], "ghost")

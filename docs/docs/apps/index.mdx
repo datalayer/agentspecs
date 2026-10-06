@@ -273,6 +273,34 @@ example; a Guard checks *what did happen*, every time. An application that
 names Guards, Gates or a Track keeps its rules and tests: the catalogue's
 checks run in addition, never instead.
 
+**A Track decides what the record keeps.** An application that names a Track
+under `checks` keeps its record for as long as the Track says (`retain_for`),
+in place of `record.keep_for`, and keeps what the Track's items ask for
+besides what `record.include` names — never less:
+
+| The Track includes | The record keeps |
+| --- | --- |
+| `input_data` | `conversations` |
+| `actions_taken` | `actions` |
+| `gate_decisions` | `checks`, `decisions` |
+| `guard_results` | `checks` |
+| `human_approvals` | `approvals` |
+| `source_documents` | `sources` |
+| `final_output` | `outputs` |
+
+`kept_record(keep_for, include, track)` says what is applied; a runtime writes
+the record with it. A Track's `readers` and `redact` are not applied to an
+application's record yet: its owner reads it, and credentials are kept out of
+every record whatever the Track says.
+
+```python
+from agentspecs.apps import get_app, kept_record
+
+app = get_app("pipeline-report")
+kept_record(app.record.keep_for, app.record.include, app.checks.track)
+# days=2555 include=('conversations', 'actions', 'decisions', 'approvals', 'checks', 'sources', 'outputs') track='financial-reporting'
+```
+
 ## What is refused
 
 - An application with no `agent` and no `team`, or with both.

@@ -8,6 +8,15 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.44
+
+What an application's record keeps, as its record or its Track says (LOOP R-07).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps).
+
+- `kept_record(keep_for, include, track)`: the days each entry is kept and what is kept — as `record` says, or, when the application names a Track under `checks`, the Track's retention and what its items keep besides (`TRACK_KEEPS`), never less. A Track the catalogue does not have is said.
+- Tests: `test_apps.py` (the record alone, a Track's retention and items, *Weekly pipeline report* kept seven years, an unknown Track).
+
 ## 0.0.43
 
 What the two team examples say was tried, in a Maker's words (LOOP E-01).

@@ -577,6 +577,57 @@ class AppRecord(_Strict):
         return retention_days(self.keep_for)
 
 
+#: What each item a Track includes keeps of an application's record, in the
+#: words of `record.include` (LOOP R-07). A Track's other items — the Op, the
+#: Frames, the model versions, who read it — are not entries of an
+#: application's record: its session already says the application, its
+#: version and who opened it.
+TRACK_KEEPS: Dict[str, Tuple[str, ...]] = {
+    "input_data": ("conversations",),
+    "actions_taken": ("actions",),
+    "gate_decisions": ("checks", "decisions"),
+    "guard_results": ("checks",),
+    "human_approvals": ("approvals",),
+    "source_documents": ("sources",),
+    "final_output": ("outputs",),
+}
+
+
+class KeptRecord(BaseModel):
+    """What an application's record keeps, and for how long, as it is applied."""
+
+    model_config = ConfigDict(frozen=True)
+
+    days: int = Field(..., description="How many days each entry is kept")
+    include: Tuple[str, ...] = Field(
+        ..., description="What is kept, in the words of `record.include`"
+    )
+    track: str = Field(default="", description="The Track that decided it, when one did")
+
+
+def kept_record(keep_for: str, include: Sequence[Any], track: str = "") -> KeptRecord:
+    """What an application's record keeps, and for how long (LOOP R-07).
+
+    As its `record` says — or, when it names a Track under `checks`, as the
+    Track says: the Track's retention in place of `keep_for`, and what its
+    items keep (`TRACK_KEEPS`) besides what `include` names. A Track is an
+    evidence policy: it never keeps less than the application asked for.
+
+    Raises `AppError` for a Track the catalogue does not have.
+    """
+    kept = [str(getattr(item, "value", item)) for item in include]
+    if not track.strip():
+        return KeptRecord(days=retention_days(keep_for), include=tuple(dict.fromkeys(kept)))
+    from ..tracks import get_track
+
+    found = get_track(track.strip())
+    if found is None:
+        raise AppError(f"There is no Track named {track.strip()!r}.")
+    for item in found.include:
+        kept += TRACK_KEEPS.get(item.value, ())
+    return KeptRecord(days=found.retention_days, include=tuple(dict.fromkeys(kept)), track=found.id)
+
+
 class AppChecks(_Strict):
     """Optional: checks from the catalogue, for a builder who wants them."""
 
@@ -1446,9 +1497,11 @@ __all__ = [
     "DEFAULT_LAYOUTS",
     "DEFAULT_READY_AT",
     "KNOWN_SCHEMAS",
+    "KeptRecord",
     "MEDIA_TYPE",
     "SCHEMA_PATH",
     "TEXT_OUTPUTS",
+    "TRACK_KEEPS",
     "Accent",
     "Access",
     "ActsAs",
@@ -1493,6 +1546,7 @@ __all__ = [
     "behaviour_for",
     "dump_app",
     "get_app",
+    "kept_record",
     "json_schema",
     "list_apps",
     "load_app",
