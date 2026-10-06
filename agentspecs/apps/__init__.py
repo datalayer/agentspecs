@@ -263,6 +263,13 @@ class AppStarter(_Strict):
 
     label: str = Field(..., description="What the button says")
     message: str = Field(..., description="What is sent when it is chosen")
+    category: str = Field(
+        default="",
+        description=(
+            "The heading it is offered under: the starters of one category are shown together, "
+            "those without one first (LOOP P-20)"
+        ),
+    )
 
 
 #: What follows the slash: lower-case letters, digits and hyphens, a letter first.
@@ -355,6 +362,225 @@ class AppMode(_Strict):
             if option.id == wanted:
                 return option
         raise KeyError(f"The mode {self.id!r} has no option {wanted!r}.")
+
+
+class AppProfile(_Strict):
+    """One of several assistants in one application (LOOP P-20): a variant of its agent.
+
+    The person picks a profile before the conversation starts, and keeps it to
+    the end: its instructions are told to the agent on top of the
+    application's in every run, its model run in place of the application's
+    (a mode's model wins over it), and its starters offered in place of the
+    application's.
+    """
+
+    id: str = Field(..., pattern=rf"^{MODE_ID}$", description="Its id, what a conversation says it is with")
+    label: str = Field(..., min_length=1, description="What the person picks it by")
+    description: str = Field(default="", description="What it is for, in a sentence, beside its label")
+    instructions: str = Field(
+        default="", description="What the agent is told besides its instructions, in every run with this profile"
+    )
+    model: Optional[str] = Field(
+        default=None, description="The model it runs on, in place of the application's; a mode's model wins over it"
+    )
+    starters: List[AppStarter] = Field(
+        default_factory=list,
+        description="The first messages it offers, in place of the application's; the application's when empty",
+    )
+
+
+#: The inputs a setting is drawn with (LOOP P-20), each a JSON Schema field and
+#: the widget its form's ``ui`` names for it (``ui:widget``; the schema's own
+#: when unsaid): what the page draws with ``@datalayer/primer-rjsf``.
+SETTING_INPUTS: Dict[str, Tuple[str, str]] = {
+    "Select": ("a field with an `enum`", "select (its own)"),
+    "Slider": ("a `number` or an `integer` with a `minimum` and a `maximum`", "range"),
+    "Switch": ("a `boolean`", "switch"),
+    "TextInput": ("a `string`", "text (its own), or textarea"),
+    "Checkbox": ("a `boolean`", "checkbox (its own)"),
+    "DatePicker": ("a `string` of `format: date`", "date (its own)"),
+    "MultiSelect": ("an `array` of `uniqueItems` whose `items` have an `enum`", "select (its own), or checkboxes"),
+    "RadioGroup": ("a field with an `enum`", "radio"),
+    "Tags": ("an `array` of `string` items without an `enum`", "tags"),
+}
+
+#: The widgets a form's ``ui`` may name (``ui:widget``), and the fields each draws.
+FORM_WIDGETS = (
+    "select",
+    "radio",
+    "range",
+    "updown",
+    "switch",
+    "checkbox",
+    "text",
+    "textarea",
+    "date",
+    "checkboxes",
+    "tags",
+)
+
+
+def _widget_refusal(widget: str, field: Mapping[str, Any]) -> Optional[str]:
+    """Why a widget cannot draw a field, in words; None when it can."""
+    kind = field.get("type")
+    items = field.get("items") if isinstance(field.get("items"), Mapping) else {}
+    if widget in ("select", "radio"):
+        if "enum" in field or (widget == "radio" and kind == "boolean"):
+            return None
+        if widget == "select" and kind == "array" and "enum" in items:
+            return None
+        return "draws a choice: the field has an `enum`"
+    if widget == "range":
+        if kind in ("number", "integer") and "minimum" in field and "maximum" in field:
+            return None
+        return "is a slider: a `number` or an `integer` with a `minimum` and a `maximum`"
+    if widget == "updown":
+        return None if kind in ("number", "integer") else "draws a `number` or an `integer`"
+    if widget in ("switch", "checkbox"):
+        return None if kind == "boolean" else "draws a `boolean`"
+    if widget in ("text", "textarea"):
+        return None if kind == "string" else "draws a `string`"
+    if widget == "date":
+        return None if kind == "string" else "draws a `string` of `format: date`"
+    if widget == "checkboxes":
+        return None if kind == "array" and "enum" in items else "draws an `array` whose `items` have an `enum`"
+    if widget == "tags":
+        if kind == "array" and items.get("type") == "string" and "enum" not in items:
+            return None
+        return "draws an `array` of `string` items without an `enum`"
+    return f"is no widget: {', '.join(FORM_WIDGETS)}"
+
+
+def form_ui_problems(said: str, schema: Mapping[str, Any], ui: Any) -> List[str]:
+    """What is wrong with how a form's fields are drawn (LOOP P-20), in sentences.
+
+    ``ui`` is the form's uiSchema as ``@datalayer/primer-rjsf`` reads it: by
+    field name, the ``ui:`` options of each — ``ui:widget`` one of
+    :data:`FORM_WIDGETS` that draws the field — and ``ui:order`` at its top.
+    """
+    if not isinstance(ui, Mapping):
+        return [f"{said} is drawn by field name: its `ui` is a mapping."]
+    fields = schema.get("properties") if isinstance(schema.get("properties"), Mapping) else {}
+    problems: List[str] = []
+    for name, options in ui.items():
+        if name == "ui:order":
+            unknown = [item for item in options or [] if item != "*" and item not in fields]
+            if not isinstance(options, list) or unknown:
+                problems.append(f"{said} orders fields it does not ask: {', '.join(map(repr, unknown)) or options!r}.")
+            continue
+        if str(name).startswith("ui:"):
+            continue
+        if name not in fields:
+            problems.append(f"{said} says how to draw {name!r}, which it does not ask.")
+            continue
+        if not isinstance(options, Mapping):
+            problems.append(f"{said}'s field {name!r} is drawn with `ui:` options, a mapping.")
+            continue
+        wrong = [key for key in options if not str(key).startswith("ui:") and key != "items"]
+        if wrong:
+            problems.append(f"{said}'s field {name!r} is drawn with `ui:` options, not {', '.join(map(repr, wrong))}.")
+        widget = options.get("ui:widget")
+        if widget is None:
+            continue
+        refusal = _widget_refusal(str(widget), fields[name]) if isinstance(fields[name], Mapping) else None
+        if refusal:
+            problems.append(f"{said}'s field {name!r} is drawn with {widget!r}, which {refusal}.")
+    return problems
+
+
+#: A language, as BCP 47 tags it (LOOP P-26): a language of two or three
+#: letters, then optionally its script, its region and its variants — ``fr``,
+#: ``pt-BR``, ``zh-Hant-TW``.
+LANGUAGE_TAG = re.compile(
+    r"^[A-Za-z]{2,3}(?:-[A-Za-z]{4})?(?:-(?:[A-Za-z]{2}|[0-9]{3}))?(?:-(?:[A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*$"
+)
+
+
+def pick_language(available: Sequence[str], preferred: Sequence[str]) -> Optional[str]:
+    """The first language a person prefers that is available (LOOP P-26), or None.
+
+    Tags are compared without case; a preferred tag also matches an available
+    one of its language alone or of the same language (``fr-CA`` takes ``fr``,
+    then ``fr-FR``), the exact one first.
+    """
+    by_tag = {tag.lower(): tag for tag in available}
+    for wanted in preferred:
+        tag = str(wanted).strip().lower()
+        if not tag:
+            continue
+        if tag in by_tag:
+            return by_tag[tag]
+        language = tag.split("-")[0]
+        if language in by_tag:
+            return by_tag[language]
+        for candidate, original in by_tag.items():
+            if candidate.split("-")[0] == language:
+                return original
+    return None
+
+
+class AppStarterTranslation(_Strict):
+    """A starter in another language."""
+
+    label: str = Field(default="", description="What the button says")
+    message: str = Field(default="", description="What is sent when it is chosen")
+
+
+class AppFieldTranslation(_Strict):
+    """A field of the settings in another language."""
+
+    title: str = Field(default="", description="Its title")
+    description: str = Field(default="", description="What it is for")
+    options: Dict[str, str] = Field(
+        default_factory=dict,
+        description="What each value of its `enum` (or of its items') reads as, by the value; the value is sent",
+    )
+
+
+class AppOptionTranslation(_Strict):
+    """An option of a mode in another language."""
+
+    label: str = Field(default="", description="What the switch says")
+    description: str = Field(default="", description="What it changes")
+
+
+class AppModeTranslation(_Strict):
+    """A mode in another language."""
+
+    label: str = Field(default="", description="What the switch is called")
+    options: Dict[str, AppOptionTranslation] = Field(default_factory=dict, description="Its options, by id")
+
+
+class AppProfileTranslation(_Strict):
+    """A profile in another language."""
+
+    label: str = Field(default="", description="What the person picks it by")
+    description: str = Field(default="", description="What it is for")
+
+
+class AppTranslation(_Strict):
+    """What a person reads of an application, in another language (LOOP P-26).
+
+    Each part is keyed by what names it in the spec: a starter by its label,
+    a category by its words, a setting by its field, a command by its name,
+    a mode and a profile by their ids. What is not translated is shown in
+    the spec's own words; what is translated is shown, never sent, but a
+    starter's message — the agent is written to in the person's language.
+    """
+
+    name: str = Field(default="", description="Its display name")
+    description: str = Field(default="", description="What it does")
+    welcome: str = Field(default="", description="What it says first")
+    starters: Dict[str, AppStarterTranslation] = Field(
+        default_factory=dict, description="Its starters and its profiles', by their label"
+    )
+    categories: Dict[str, str] = Field(default_factory=dict, description="The starters' categories, by their words")
+    settings: Dict[str, AppFieldTranslation] = Field(
+        default_factory=dict, description="The fields of its settings, by name"
+    )
+    commands: Dict[str, str] = Field(default_factory=dict, description="Its commands' descriptions, by name")
+    modes: Dict[str, AppModeTranslation] = Field(default_factory=dict, description="Its modes, by id")
+    profiles: Dict[str, AppProfileTranslation] = Field(default_factory=dict, description="Its profiles, by id")
 
 
 class AppSurface(_Strict):
@@ -607,6 +833,14 @@ class AppInterface(_Strict):
             "told to the agent and its model run on (LOOP P-19)"
         ),
     )
+    profiles: List[AppProfile] = Field(
+        default_factory=list,
+        description=(
+            "Several assistants in one application, two at least: the person picks one before the "
+            "conversation starts — the first unless they do — and keeps it to the end; its "
+            "instructions, model and starters go with every run (LOOP P-20). None when unsaid"
+        ),
+    )
     settings: Optional[Dict[str, Any]] = Field(
         default=None,
         description=(
@@ -614,6 +848,27 @@ class AppInterface(_Strict):
             "its `title` and its `default` (LOOP C-16). Drawn with `@datalayer/primer-rjsf` beside "
             "the conversation and on a deployment's Ship card, its values go with every run and are "
             "checked by the runtime against the same schema. None when unsaid"
+        ),
+    )
+    settings_ui: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description=(
+            "How the settings' fields are drawn, as `@datalayer/primer-rjsf` reads a uiSchema: by "
+            "field name, its `ui:` options — `ui:widget` one of `select`, `radio`, `range`, "
+            "`updown`, `switch`, `checkbox`, `text`, `textarea`, `date`, `checkboxes`, `tags` — and "
+            "`ui:order` (LOOP P-20). Each field's own widget when unsaid"
+        ),
+    )
+    language: str = Field(
+        default="en",
+        description="The language its own words are in, as BCP 47 tags it (`en`, `fr`, `pt-BR`) (LOOP P-26)",
+    )
+    translations: Dict[str, AppTranslation] = Field(
+        default_factory=dict,
+        description=(
+            "What a person reads of it in other languages, by BCP 47 tag: its name, welcome, "
+            "starters and their categories, settings, commands, modes and profiles. The page shows "
+            "the person's language when it has it, else its own words (LOOP P-26)"
         ),
     )
     uploads: Optional[AppUploads] = Field(
@@ -694,7 +949,141 @@ class AppInterface(_Strict):
         choosing = [mode.id for mode in self.modes if any(option.model for option in mode.options)]
         if len(choosing) > 1:
             raise ValueError(f"only one mode chooses the model a run runs on, not {', '.join(choosing)}")
+        if self.settings_ui is not None:
+            if self.settings is None:
+                raise ValueError("`settings_ui` draws the settings' fields: say `settings` first")
+            problems = form_ui_problems("The form 'settings'", self.settings, self.settings_ui)
+            if problems:
+                raise ValueError(" ".join(problems))
+        profiles = [profile.id for profile in self.profiles]
+        if len(set(profiles)) != len(profiles):
+            raise ValueError("two profiles have the same id")
+        if len(profiles) == 1:
+            raise ValueError(
+                "one profile is the application itself: say two at least, or put its "
+                "instructions, model and starters on the application"
+            )
+        self._translations_hold()
         return self
+
+    def _translations_hold(self) -> None:
+        """Every translation is of a language, and of something the application says."""
+        if not LANGUAGE_TAG.match(self.language):
+            raise ValueError(f"{self.language!r} is no language as BCP 47 tags it: `en`, `fr`, `pt-BR`")
+        seen: Dict[str, str] = {}
+        starters = {starter.label for starter in self.starters}
+        starters |= {starter.label for profile in self.profiles for starter in profile.starters}
+        categories = {starter.category for starter in self.starters if starter.category}
+        categories |= {starter.category for profile in self.profiles for starter in profile.starters if starter.category}
+        fields = dict((self.settings or {}).get("properties") or {})
+        modes = {mode.id: mode for mode in self.modes}
+        for tag, translation in self.translations.items():
+            if not LANGUAGE_TAG.match(tag):
+                raise ValueError(f"the translation {tag!r} is of no language as BCP 47 tags it: `fr`, `pt-BR`")
+            if tag.lower() == self.language.lower():
+                raise ValueError(f"its own words are in {self.language!r}: no translation into it")
+            if tag.lower() in seen:
+                raise ValueError(f"{seen[tag.lower()]!r} and {tag!r} are the same language")
+            seen[tag.lower()] = tag
+            said = f"The translation {tag!r}"
+            unknown = [
+                *(f"the starter {label!r}" for label in translation.starters if label not in starters),
+                *(f"the category {name!r}" for name in translation.categories if name not in categories),
+                *(f"the setting {name!r}" for name in translation.settings if name not in fields),
+                *(f"the command {name!r}" for name in translation.commands if self.command(name) is None),
+                *(f"the mode {name!r}" for name in translation.modes if name not in modes),
+                *(f"the profile {name!r}" for name in translation.profiles if self.profile(name) is None),
+            ]
+            for mode_id, mode in translation.modes.items():
+                if mode_id in modes:
+                    ids = {option.id for option in modes[mode_id].options}
+                    unknown += [f"the option {option!r} of {mode_id!r}" for option in mode.options if option not in ids]
+            for name, field in translation.settings.items():
+                values = _enum_values(fields.get(name))
+                unknown += [f"the value {value!r} of {name!r}" for value in field.options if value not in values]
+            if unknown:
+                raise ValueError(f"{said} translates what the application does not say: {', '.join(unknown)}")
+
+    def profile(self, profile_id: str) -> Optional[AppProfile]:
+        """A profile by id (LOOP P-20), or None."""
+        return next((profile for profile in self.profiles if profile.id == profile_id), None)
+
+    def profile_choice(self, chosen: Optional[str] = None) -> Optional[AppProfile]:
+        """The profile a conversation is with: the one chosen, else the first; None without profiles.
+
+        Raises
+        ------
+        ValueError
+            When the profile chosen is not the application's, or one is chosen and it has none.
+        """
+        if chosen:
+            profile = self.profile(chosen)
+            if profile is None:
+                raise ValueError(f"There is no profile {chosen!r}.")
+            return profile
+        return self.profiles[0] if self.profiles else None
+
+    def starters_for(self, profile_id: Optional[str] = None) -> List[AppStarter]:
+        """The starters offered: the profile's, else the application's (LOOP P-20)."""
+        profile = self.profile_choice(profile_id)
+        return list(profile.starters) if profile is not None and profile.starters else list(self.starters)
+
+    def translated(self, preferred: Sequence[str]) -> "AppInterface":
+        """What a person who prefers these languages reads (LOOP P-26): its words in
+        the first of them it has a translation into, else its own.
+        """
+        tag = pick_language([self.language, *self.translations], preferred)
+        if tag is None or tag not in self.translations:
+            return self
+        words = self.translations[tag]
+
+        def starter(item: AppStarter) -> AppStarter:
+            said = words.starters.get(item.label)
+            return item.model_copy(
+                update={
+                    "label": (said and said.label) or item.label,
+                    "message": (said and said.message) or item.message,
+                    "category": words.categories.get(item.category, item.category),
+                }
+            )
+
+        settings = None
+        if self.settings is not None:
+            settings = json.loads(json.dumps(self.settings))
+            for name, field in words.settings.items():
+                target = settings["properties"][name]
+                if field.title:
+                    target["title"] = field.title
+                if field.description:
+                    target["description"] = field.description
+        modes = [_mode_in(mode, words.modes.get(mode.id)) for mode in self.modes]
+        return self.model_copy(
+            update={
+                "welcome": words.welcome or self.welcome,
+                "starters": [starter(item) for item in self.starters],
+                "commands": [
+                    command.model_copy(update={"description": words.commands.get(command.name) or command.description})
+                    for command in self.commands
+                ],
+                "modes": modes,
+                "profiles": [
+                    profile.model_copy(
+                        update={
+                            "label": (words.profiles.get(profile.id) and words.profiles[profile.id].label)
+                            or profile.label,
+                            "description": (words.profiles.get(profile.id) and words.profiles[profile.id].description)
+                            or profile.description,
+                            "starters": [starter(item) for item in profile.starters],
+                        }
+                    )
+                    for profile in self.profiles
+                ],
+                "settings": settings,
+                "settings_ui": _with_option_names(self.settings_ui, words, settings),
+                "language": tag,
+                "translations": {},
+            }
+        )
 
     def command(self, name: str) -> Optional[AppCommand]:
         """A command by its name, without the slash."""
@@ -742,6 +1131,46 @@ class AppInterface(_Strict):
                 "the first output is `text/plain` or `text/markdown`"
             )
         return outputs
+
+
+def _enum_values(field: Any) -> List[str]:
+    """The values a field takes, or its items take, as words: what a translation names them by."""
+    if not isinstance(field, Mapping):
+        return []
+    items = field.get("items") if isinstance(field.get("items"), Mapping) else {}
+    return [str(value) for value in (field.get("enum") or items.get("enum") or [])]
+
+
+def _mode_in(mode: AppMode, words: Optional[AppModeTranslation]) -> AppMode:
+    """A mode in another language: what is translated of it, else its own words."""
+    if words is None:
+        return mode
+    options = []
+    for option in mode.options:
+        said = words.options.get(option.id)
+        options.append(
+            option.model_copy(
+                update={
+                    "label": (said and said.label) or option.label,
+                    "description": (said and said.description) or option.description,
+                }
+            )
+        )
+    return mode.model_copy(update={"label": words.label or mode.label, "options": options})
+
+
+def _with_option_names(
+    ui: Optional[Dict[str, Any]], words: AppTranslation, settings: Optional[Dict[str, Any]]
+) -> Optional[Dict[str, Any]]:
+    """The settings' uiSchema, a translated field's values named in the language (``ui:enumNames``)."""
+    named = {name: field for name, field in words.settings.items() if field.options}
+    if not named or settings is None:
+        return ui
+    drawn = json.loads(json.dumps(ui or {}))
+    for name, field in named.items():
+        values = _enum_values(settings["properties"].get(name))
+        drawn.setdefault(name, {})["ui:enumNames"] = [field.options.get(value, value) for value in values]
+    return drawn
 
 
 # --- how it is verified, and what is kept -------------------------------------------
@@ -1466,6 +1895,23 @@ class AppSpec(_Strict):
         """How it is laid out: what it says, or its kind's own."""
         return self.interface.layout or DEFAULT_LAYOUTS[self.kind]
 
+    def translated(self, preferred: Sequence[str]) -> "AppSpec":
+        """The application as a person who prefers these languages reads it (LOOP P-26):
+        its name, description and interface in the first of them it is translated
+        into, else in its own words. What it does — its agent, rules, ids — is the same.
+        """
+        interface = self.interface.translated(preferred)
+        if interface is self.interface:
+            return self
+        words = self.interface.translations[interface.language]
+        return self.model_copy(
+            update={
+                "name": words.name or self.name,
+                "description": words.description or self.description,
+                "interface": interface,
+            }
+        )
+
     def tool(self, name: str) -> Optional[AppTool]:
         """Its own tool of that name (LOOP P-06), or None."""
         for tool in self.tools:
@@ -1670,6 +2116,8 @@ def form_problems(node: Mapping[str, Any]) -> List[str]:
     missing = [name for name in schema.get("required") or [] if name not in schema["properties"]]
     if missing:
         problems.append(f"{said} requires {', '.join(repr(name) for name in missing)}, which it does not ask.")
+    if node.get("ui") is not None:
+        problems += form_ui_problems(said, schema, node["ui"])
     return problems
 
 
@@ -1709,6 +2157,9 @@ def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = No
         for option in mode.options:
             if option.model and get_model(option.model) is None:
                 problems.append(f"The mode {mode.id!r} runs {option.id!r} on {option.model!r}, which is no model.")
+    for profile in app.interface.profiles:
+        if profile.model and get_model(profile.model) is None:
+            problems.append(f"The profile {profile.id!r} runs on {profile.model!r}, which is no model.")
     if app.decision is not None and app.decision.decision_model:
         decider = get_model(app.decision.decision_model)
         if decider is None:
@@ -2048,17 +2499,24 @@ __all__ = [
     "AppCommand",
     "AppMode",
     "AppModeOption",
+    "AppFieldTranslation",
+    "AppModeTranslation",
+    "AppOptionTranslation",
     "AppPermissions",
+    "AppProfile",
+    "AppProfileTranslation",
     "AppRecord",
     "AppRule",
     "AppScenario",
     "AppSpaceGrant",
     "AppSpec",
     "AppStarter",
+    "AppStarterTranslation",
     "AppSurface",
     "AppTestCase",
     "AppTests",
     "AppTool",
+    "AppTranslation",
     "AppTrigger",
     "AppVoice",
     "Behaviour",
@@ -2070,6 +2528,9 @@ __all__ = [
     "AppUploads",
     "BalloonDisplay",
     "EmbedMode",
+    "FORM_WIDGETS",
+    "LANGUAGE_TAG",
+    "SETTING_INPUTS",
     "EmbeddedDeployment",
     "HostedDeployment",
     "Layout",
@@ -2087,6 +2548,7 @@ __all__ = [
     "command_prompt",
     "dump_app",
     "form_problems",
+    "form_ui_problems",
     "get_app",
     "kept_record",
     "json_schema",
@@ -2096,6 +2558,7 @@ __all__ = [
     "load_raw_apps",
     "output_media_types",
     "parse_app",
+    "pick_language",
     "retention_days",
     "schema_text",
     "strictest",

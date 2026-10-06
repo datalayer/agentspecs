@@ -518,6 +518,16 @@ Where the application goes.
 | `hosted` | [HostedDeployment](#hosteddeployment) | At an address of its own | empty |
 | `embedded` | [EmbeddedDeployment](#embeddeddeployment) | Inside another product | empty |
 
+### AppFieldTranslation
+
+A field of the settings in another language.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `title` | text | Its title | empty |
+| `description` | text | What it is for | empty |
+| `options` | mapping of text | What each value of its `enum` (or of its items') reads as, by the value; the value is sent | — |
+
 ### AppInterface
 
 What the user sees.
@@ -531,7 +541,11 @@ What the user sees.
 | `starters` | list of [AppStarter](#appstarter) | First messages offered to the user | — |
 | `commands` | list of [AppCommand](#appcommand) | Slash commands the user picks in the composer: typing `/` lists them (LOOP P-19) | — |
 | `modes` | list of [AppMode](#appmode) | Mode switches in the composer: the option picked goes with every run, its instructions told to the agent and its model run on (LOOP P-19) | — |
+| `profiles` | list of [AppProfile](#appprofile) | Several assistants in one application, two at least: the person picks one before the conversation starts — the first unless they do — and keeps it to the end; its instructions, model and starters go with every run (LOOP P-20). None when unsaid | — |
 | `settings` | mapping | What the user may set: the JSON Schema of a form, an object of named fields, each with its `title` and its `default` (LOOP C-16). Drawn with `@datalayer/primer-rjsf` beside the conversation and on a deployment's Ship card, its values go with every run and are checked by the runtime against the same schema. None when unsaid | empty |
+| `settings_ui` | mapping | How the settings' fields are drawn, as `@datalayer/primer-rjsf` reads a uiSchema: by field name, its `ui:` options — `ui:widget` one of `select`, `radio`, `range`, `updown`, `switch`, `checkbox`, `text`, `textarea`, `date`, `checkboxes`, `tags` — and `ui:order` (LOOP P-20). Each field's own widget when unsaid | empty |
+| `language` | text | The language its own words are in, as BCP 47 tags it (`en`, `fr`, `pt-BR`) (LOOP P-26) | `"en"` |
+| `translations` | mapping of [AppTranslation](#apptranslation) | What a person reads of it in other languages, by BCP 47 tag: its name, welcome, starters and their categories, settings, commands, modes and profiles. The page shows the person's language when it has it, else its own words (LOOP P-26) | — |
 | `uploads` | [AppUploads](#appuploads) | What a person may send in the composer without being asked — images, files, audio — by kind, each with its largest size, and how many at once (LOOP P-21). None when unsaid: the composer offers no attachment, and a file sent with a message is refused | empty |
 | `components` | list of text | The components of the catalog the surface may use; the kind's own when empty | — |
 | `surface` | [AppSurface](#appsurface) | The component tree, when there is one | empty |
@@ -563,6 +577,24 @@ One position of a mode switch (LOOP P-19): what the agent is told, the model it 
 | `instructions` | text | What the agent is told besides its instructions, in every run in this mode | empty |
 | `model` | text | The model a run in this mode runs on, in place of the application's | empty |
 
+### AppModeTranslation
+
+A mode in another language.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `label` | text | What the switch is called | empty |
+| `options` | mapping of [AppOptionTranslation](#appoptiontranslation) | Its options, by id | — |
+
+### AppOptionTranslation
+
+An option of a mode in another language.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `label` | text | What the switch says | empty |
+| `description` | text | What it changes | empty |
+
 ### AppPermissions
 
 What the application may reach beside its connections. Nothing, unless said.
@@ -571,6 +603,28 @@ What the application may reach beside its connections. Nothing, unless said.
 | --- | --- | --- | --- |
 | `spaces` | list of [AppSpaceGrant](#appspacegrant) | The Spaces it reads or writes | — |
 | `computer` | [AppComputer](#appcomputer) | Its computer: browse, files, shell | — |
+
+### AppProfile
+
+One of several assistants in one application (LOOP P-20): a variant of its agent. The person picks a profile before the conversation starts, and keeps it to the end: its instructions are told to the agent on top of the application's in every run, its model run in place of the application's (a mode's model wins over it), and its starters offered in place of the application's.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `id` (required) | text | Its id, what a conversation says it is with | — |
+| `label` (required) | text | What the person picks it by | — |
+| `description` | text | What it is for, in a sentence, beside its label | empty |
+| `instructions` | text | What the agent is told besides its instructions, in every run with this profile | empty |
+| `model` | text | The model it runs on, in place of the application's; a mode's model wins over it | empty |
+| `starters` | list of [AppStarter](#appstarter) | The first messages it offers, in place of the application's; the application's when empty | — |
+
+### AppProfileTranslation
+
+A profile in another language.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `label` | text | What the person picks it by | empty |
+| `description` | text | What it is for | empty |
 
 ### AppRecord
 
@@ -618,6 +672,16 @@ A first message offered to the user.
 | --- | --- | --- | --- |
 | `label` (required) | text | What the button says | — |
 | `message` (required) | text | What is sent when it is chosen | — |
+| `category` | text | The heading it is offered under: the starters of one category are shown together, those without one first (LOOP P-20) | empty |
+
+### AppStarterTranslation
+
+A starter in another language.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `label` | text | What the button says | empty |
+| `message` | text | What is sent when it is chosen | empty |
 
 ### AppSurface
 
@@ -670,6 +734,22 @@ A tool of the application's own, written in its code (LOOP P-06): `@app.tool`. I
 | `description` (required) | text | What it does, for the agent: when to call it | — |
 | `parameters` | mapping | The JSON Schema of its arguments, an object; none when unsaid | — |
 | `does` (required) | list of [ActionClass](#actionclass) | What it does, by class of action (`read`, `write`, `send`…): what the rules decide | — |
+
+### AppTranslation
+
+What a person reads of an application, in another language (LOOP P-26). Each part is keyed by what names it in the spec: a starter by its label, a category by its words, a setting by its field, a command by its name, a mode and a profile by their ids. What is not translated is shown in the spec's own words; what is translated is shown, never sent, but a starter's message — the agent is written to in the person's language.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `name` | text | Its display name | empty |
+| `description` | text | What it does | empty |
+| `welcome` | text | What it says first | empty |
+| `starters` | mapping of [AppStarterTranslation](#appstartertranslation) | Its starters and its profiles', by their label | — |
+| `categories` | mapping of text | The starters' categories, by their words | — |
+| `settings` | mapping of [AppFieldTranslation](#appfieldtranslation) | The fields of its settings, by name | — |
+| `commands` | mapping of text | Its commands' descriptions, by name | — |
+| `modes` | mapping of [AppModeTranslation](#appmodetranslation) | Its modes, by id | — |
+| `profiles` | mapping of [AppProfileTranslation](#appprofiletranslation) | Its profiles, by id | — |
 
 ### AppTrigger
 

@@ -44,14 +44,38 @@ interface:
   starters:
     - label: Reset my password
       message: How do I reset my password?
+      category: Account
     - label: Returns
       message: Can I return a product I bought six weeks ago?
+      category: Orders
     - label: Plans
       message: What is the difference between the Team and the Business plan?
+      category: Account
   settings:
     type: object
     properties:
       product: {type: string, title: Product, enum: [Cloud, Desktop], default: Cloud}
+  settings_ui:
+    product: {"ui:widget": radio}
+  translations:
+    fr:
+      name: Service client
+      welcome: >-
+        Posez-moi vos questions sur le produit. Je réponds à partir de sa
+        documentation et vous montre où ; quand elle ne le dit pas, je vous le dis.
+      starters:
+        Reset my password:
+          label: Réinitialiser mon mot de passe
+          message: Comment réinitialiser mon mot de passe ?
+        Returns:
+          label: Retours
+          message: Puis-je retourner un produit acheté il y a six semaines ?
+        Plans:
+          label: Offres
+          message: Quelle est la différence entre l'offre Team et l'offre Business ?
+      categories: {Account: Compte, Orders: Commandes}
+      settings:
+        product: {title: Produit}
   components: [Card, Column, Row, Text, ChoicePicker, Button, Divider]
   surface:
     protocol: a2ui/v0.9

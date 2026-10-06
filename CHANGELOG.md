@@ -8,6 +8,19 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.56
+
+Profiles and settings in full (LOOP P-20), and translation (P-26): several assistants in one application, starters per profile and by category, the nine setting inputs, and what a person reads of an application in their own language.
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (The nine inputs, Profiles and starters, Translations), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference), [Components](https://agentspecs.datalayer.tech/agents/ui-plugins/components) (Form 1.1.0).
+
+- `interface.starters[].category`: the heading a starter is offered under.
+- `interface.profiles`: two at least, each an `id`, a `label`, a `description`, `instructions` told to the agent in every run, a `model` (a mode's wins over it) and `starters` in place of the application's. `AppInterface.profile`, `profile_choice`, `starters_for`; a profile's model is one of the catalogue's (`app_problems`).
+- `interface.settings_ui`: how the settings' fields are drawn, a uiSchema by field name — `ui:widget` one of `FORM_WIDGETS`, each held to the fields it draws (`form_ui_problems`); `SETTING_INPUTS` names the nine inputs and the field and widget of each. A Form block takes the same `ui` (Form 1.1.0).
+- `interface.language` (`en` unless said) and `interface.translations` by BCP 47 tag (`LANGUAGE_TAG`): name, description, welcome, starters by label, categories, settings' fields (title, description, enum values' names), commands' descriptions, modes and profiles. `pick_language(available, preferred)`, `AppInterface.translated(preferred)` and `AppSpec.translated(preferred)`. Refused: a tag that is not one, a translation into its own language or the same language twice, and a translation of what the application does not say.
+- Support Desk: its starters by category, its product as radio buttons, and in French.
+- JSON Schema, reference and components page regenerated. Tests: `test_apps.py`.
+
 ## 0.0.55
 
 What a person sends (LOOP P-21): the kinds of file an application takes in its composer without asking, each with its largest size, and how many at once.

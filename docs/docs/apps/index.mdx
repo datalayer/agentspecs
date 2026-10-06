@@ -84,7 +84,7 @@ record:
 | `connections` | What it reaches. See below. |
 | `rules` | When it acts alone, and when it asks. See below. |
 | `permissions` | What else it may reach: `spaces` (a Space, `read` or `write`) and its `computer` (`browse`, `files`, `shell`, each off). Nothing, unless said. |
-| `interface` | What the user sees: `layout` (`chat`, `page`, `split`), `accent`, `theme` — the theme it runs in by default, a `variant` of Appearance's (`datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop`) and optionally a `mode` (`light`, `dark`, `auto`), the person's own when unsaid; its `accent` colours the `loop` theme only — `welcome`, `starters`, `commands` and `modes` (see below), `uploads` — what a person may send without being asked (see below) — `settings`, a `surface` — a component tree over the approved catalog — and `assistant`, the character of its floating assistant by the id a plugin contributes it under (`paperclip`, `wizard`, `cat`, `eyes` are Datalayer's; an id no enabled plugin gives is refused by the runtime and the page). Said here, it wins over the person's own choice. `balloon` says how that assistant's balloon shows the conversation: `history`, every message, scrolled, with the composer last, or `current`, only what it says or does now — the answer being written, or the tool it calls ("Using list_invoices…") — in one balloon that replaces its words as the turn goes on; the page's own when unsaid, `history` for the floating chat. And `outputs`, the formats its answers come in — see below. |
+| `interface` | What the user sees: `layout` (`chat`, `page`, `split`), `accent`, `theme` — the theme it runs in by default, a `variant` of Appearance's (`datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop`) and optionally a `mode` (`light`, `dark`, `auto`), the person's own when unsaid; its `accent` colours the `loop` theme only — `welcome`, `starters` (each with an optional `category`), `profiles`, `commands` and `modes` (see below), `uploads` — what a person may send without being asked (see below) — `settings` and `settings_ui`, how its fields are drawn (see below), `language` and `translations` (see below), a `surface` — a component tree over the approved catalog — and `assistant`, the character of its floating assistant by the id a plugin contributes it under (`paperclip`, `wizard`, `cat`, `eyes` are Datalayer's; an id no enabled plugin gives is refused by the runtime and the page). Said here, it wins over the person's own choice. `balloon` says how that assistant's balloon shows the conversation: `history`, every message, scrolled, with the composer last, or `current`, only what it says or does now — the answer being written, or the tool it calls ("Using list_invoices…") — in one balloon that replaces its words as the turn goes on; the page's own when unsaid, `history` for the floating chat. And `outputs`, the formats its answers come in — see below. |
 | `tests` | How it is verified: `cases` in plain words (`ask`, `expect`, and `code` when a function of its code decides one), an `evalset`, `ready_at`, the share that has to pass, and `verified` — what was tried live, what runs on recorded data, and what is not verified yet, each in a sentence (`live`, `recorded`, `unverified`); every example of the catalogue says it, and the Studio's examples show it on their cards and pages. |
 | `record` | What is kept of what it did (`include`), for how long (`keep_for`: `90_days`, `1_years`), and whether its conversations may be used to suggest tests (`suggest_tests`, off unless said: only conversations kept while it is on are sampled). |
 | `checks` | Optional: `guards`, `gates` and a `track` of the catalogue, and `code`, the checks written in its code. |
@@ -198,6 +198,120 @@ schema, and refuses a field the form does not have. The schema is checked as a
 Form's is (`form_problems`, as the form `'settings'`). The list of settings of
 earlier versions (`id`, `type`, `label`, `options`) is refused: say each one as
 a property.
+
+#### The nine inputs
+
+A setting is drawn with one of nine inputs (LOOP P-20), each a JSON Schema
+field and, where the field's own widget is not the one wanted, the widget
+`settings_ui` names for it — a uiSchema as `@datalayer/primer-rjsf` reads it,
+by field name, its `ui:` options.
+
+| Input | The field | `ui:widget` |
+| --- | --- | --- |
+| Select | a field with an `enum` | its own (`select`) |
+| Slider | a `number` or an `integer` with a `minimum` and a `maximum` | `range` |
+| Switch | a `boolean` | `switch` |
+| TextInput | a `string` | its own (`text`), or `textarea` |
+| Checkbox | a `boolean` | its own (`checkbox`) |
+| DatePicker | a `string` of `format: date` | its own (`date`) |
+| MultiSelect | an `array` of `uniqueItems` whose `items` have an `enum` | its own (`select`), or `checkboxes` |
+| RadioGroup | a field with an `enum` | `radio` |
+| Tags | an `array` of `string` items without an `enum` | `tags` |
+
+```yaml
+interface:
+  settings:
+    type: object
+    properties:
+      seats: {type: integer, title: Seats, minimum: 1, maximum: 100, default: 10}
+      live: {type: boolean, title: Live data}
+      tone: {type: string, title: Tone, enum: [warm, dry], default: warm}
+      topics: {type: array, title: Topics, items: {type: string}}
+  settings_ui:
+    seats: {"ui:widget": range}
+    live: {"ui:widget": switch}
+    tone: {"ui:widget": radio}
+    topics: {"ui:widget": tags}
+```
+
+A widget that cannot draw its field is refused in a sentence — a slider for a
+field without a `minimum` and a `maximum`, a switch for a string — and so is a
+field `settings_ui` names that the form does not ask (`form_ui_problems`). A
+Form block takes the same `ui`. When the settings change, the next run is
+given them, and an application's code is told (`@app.settings`).
+
+## Profiles and starters
+
+**Starters** are first messages offered to the person; one with a `category`
+is offered under that heading, the starters of a category together, those
+without one first.
+
+**Profiles** are several assistants in one application (LOOP P-20): the person
+picks one before the conversation starts — the first, unless they pick
+another — and keeps it to the end. A profile's `instructions` are told to the
+agent on top of the application's in every run, its `model` is run in place
+of the application's (a mode's model wins over it), and its `starters` are
+offered in place of the application's.
+
+```yaml
+interface:
+  starters:
+    - {label: Refund, message: I want a refund., category: Billing}
+  profiles:
+    - id: support
+      label: Support
+      instructions: Answer from the documentation, briefly.
+    - id: sales
+      label: Sales
+      description: Plans and prices
+      model: anthropic:claude-sonnet-4-5-20250514
+      starters:
+        - {label: Pricing, message: What does the Business plan cost?, category: Plans}
+```
+
+Two profiles at least, or none: one profile is the application itself. Ids
+are said once, in the same alphabet as a mode's. A run that names a profile the
+application does not have is refused, and so is a conversation asked to change
+its profile. `interface.profile_choice(id)` is the profile a conversation is
+with, and `interface.starters_for(id)` what it offers.
+
+## Translations
+
+What a person reads of an application may be said in other languages (LOOP
+P-26). `language` is the language its own words are in (`en` unless said),
+and `translations` its words in others, by BCP 47 tag (`fr`, `pt-BR`,
+`zh-Hant`): its `name`, `description` and `welcome`, its starters by their
+label, their categories, its settings' fields by name (`title`, `description`,
+and what each value of an `enum` reads as, under `options`), its commands'
+descriptions by name, its modes and its profiles by id.
+
+```yaml
+interface:
+  translations:
+    fr:
+      name: Service client
+      welcome: Posez-moi vos questions sur le produit.
+      starters:
+        Refund: {label: Remboursement, message: Je veux être remboursé.}
+      categories: {Billing: Facturation}
+      settings:
+        tone: {title: Ton, options: {warm: Chaleureux, dry: Sec}}
+      commands: {summarise: Résumer la conversation}
+      modes:
+        depth: {label: Profondeur, options: {quick: {label: Rapide}}}
+      profiles:
+        sales: {label: Ventes, description: Offres et tarifs}
+```
+
+The page shows the person's language when the application is translated into
+it — the browser's, unless the page is told another — and its own words
+otherwise; `fr-CA` reads `fr`. What is not translated is shown in its own
+words. Only what is shown is translated: ids, values and prompts are the same
+in every language, and a starter's message is sent in the person's. A tag that
+is not BCP 47, a translation into its own language, the same language twice,
+or a translation of something the application does not say is refused.
+`pick_language(available, preferred)` is the language a person reads, and
+`app.translated(preferred)` the application as they read it.
 
 ## Commands and modes
 

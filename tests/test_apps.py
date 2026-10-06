@@ -939,6 +939,212 @@ def test_a_mode_runs_on_a_model_of_the_catalogue() -> None:
     assert not any(known in problem for problem in problems)
 
 
+def test_an_application_offers_several_profiles_each_with_its_own_starters() -> None:
+    """LOOP P-20: profiles — a variant of the agent, its model, instructions and starters — and starters by category."""
+    plain = app()
+    assert plain.interface.profiles == []
+    assert plain.interface.profile_choice() is None
+    starters = [
+        {"label": "Refund", "message": "I want a refund.", "category": "Billing"},
+        {"label": "Hello", "message": "Hello!"},
+    ]
+    profiles = [
+        {"id": "support", "label": "Support", "instructions": "Be brief."},
+        {
+            "id": "sales",
+            "label": "Sales",
+            "description": "Plans and prices",
+            "model": "no-such-model",
+            "starters": [{"label": "Pricing", "message": "What does it cost?", "category": "Plans"}],
+        },
+    ]
+    said = app(interface={"starters": starters, "profiles": profiles})
+    assert dump_app(said)["interface"] == {"starters": starters, "profiles": profiles}
+    assert parse_app(dump_app(said)) == said
+    ui = said.interface
+    assert ui.profile_choice().id == "support"
+    assert ui.profile_choice("sales").model == "no-such-model"
+    assert [starter.label for starter in ui.starters_for()] == ["Refund", "Hello"]
+    assert [starter.label for starter in ui.starters_for("sales")] == ["Pricing"]
+    with pytest.raises(ValueError, match="no profile 'buyer'"):
+        ui.profile_choice("buyer")
+    assert any("'sales'" in problem and "'no-such-model'" in problem for problem in app_problems(said))
+    one = {"id": "a", "label": "A"}
+    for wrong in (
+        [one],
+        [one, one],
+        [one, {"id": "B", "label": "B"}],
+        [one, {"id": "b", "label": ""}],
+        [one, {"id": "b", "label": "B", "emoji": "x"}],
+    ):
+        with pytest.raises(AppError, match="interface"):
+            app(interface={"profiles": wrong})
+
+
+def test_settings_are_drawn_with_the_nine_inputs() -> None:
+    """LOOP P-20: the nine inputs are JSON Schema fields and the widget a uiSchema names for each."""
+    from agentspecs.apps import FORM_WIDGETS, SETTING_INPUTS
+
+    assert list(SETTING_INPUTS) == [
+        "Select",
+        "Slider",
+        "Switch",
+        "TextInput",
+        "Checkbox",
+        "DatePicker",
+        "MultiSelect",
+        "RadioGroup",
+        "Tags",
+    ]
+    settings = {
+        "type": "object",
+        "properties": {
+            "plan": {"type": "string", "enum": ["team", "business"], "title": "Plan"},
+            "seats": {"type": "integer", "minimum": 1, "maximum": 100, "title": "Seats"},
+            "live": {"type": "boolean", "title": "Live"},
+            "note": {"type": "string", "title": "Note"},
+            "cc": {"type": "boolean", "title": "Copy me"},
+            "start": {"type": "string", "format": "date", "title": "Start"},
+            "regions": {"type": "array", "uniqueItems": True, "items": {"type": "string", "enum": ["eu", "us"]}},
+            "tone": {"type": "string", "enum": ["warm", "dry"]},
+            "tags": {"type": "array", "items": {"type": "string"}},
+        },
+    }
+    ui = {
+        "ui:order": ["plan", "*"],
+        "seats": {"ui:widget": "range"},
+        "live": {"ui:widget": "switch"},
+        "note": {"ui:widget": "textarea", "ui:placeholder": "Anything"},
+        "regions": {"ui:widget": "checkboxes"},
+        "tone": {"ui:widget": "radio"},
+        "tags": {"ui:widget": "tags"},
+    }
+    said = app(interface={"settings": settings, "settings_ui": ui})
+    assert dump_app(said)["interface"]["settings_ui"] == ui
+    assert parse_app(dump_app(said)) == said
+    assert set(FORM_WIDGETS) >= {"range", "switch", "radio", "tags", "checkboxes", "textarea"}
+    for wrong, sentence in (
+        ({"seats": {"ui:widget": "switch"}}, "'seats' is drawn with 'switch', which draws a `boolean`"),
+        ({"note": {"ui:widget": "range"}}, "is a slider"),
+        ({"plan": {"ui:widget": "tags"}}, "draws an `array` of `string` items"),
+        ({"tone": {"ui:widget": "dial"}}, "is no widget"),
+        ({"colour": {"ui:widget": "text"}}, "how to draw 'colour', which it does not ask"),
+        ({"note": {"widget": "text"}}, "`ui:` options, not 'widget'"),
+        ({"ui:order": ["colour"]}, "orders fields it does not ask"),
+    ):
+        with pytest.raises(AppError, match=re.escape(sentence)):
+            app(interface={"settings": settings, "settings_ui": wrong})
+    with pytest.raises(AppError, match="say `settings` first"):
+        app(interface={"settings_ui": {}})
+    # A Form block is drawn the same way.
+    from agentspecs.apps import form_problems
+
+    assert form_problems({"id": "f", "schema": settings, "ui": ui}) == []
+    assert form_problems({"id": "f", "schema": settings, "ui": {"live": {"ui:widget": "range"}}}) == [
+        "The form 'f''s field 'live' is drawn with 'range', which is a slider: "
+        "a `number` or an `integer` with a `minimum` and a `maximum`."
+    ]
+
+
+def test_an_application_is_translated_in_its_spec() -> None:
+    """LOOP P-26: its words in other languages, by BCP 47 tag; a person reads theirs, else its own."""
+    from agentspecs.apps import pick_language
+
+    assert pick_language(["en", "fr", "pt-BR"], ["fr-CA", "en"]) == "fr"
+    assert pick_language(["en", "pt-BR"], ["pt"]) == "pt-BR"
+    assert pick_language(["en", "PT-br"], ["pt-br"]) == "PT-br"
+    assert pick_language(["en"], ["de"]) is None
+    interface = {
+        "welcome": "Hello",
+        "starters": [{"label": "Refund", "message": "I want a refund.", "category": "Billing"}],
+        "commands": [{"name": "sum", "description": "Summarise", "prompt": "Summarise. {input}"}],
+        "modes": [
+            {
+                "id": "depth",
+                "label": "Depth",
+                "options": [{"id": "quick", "label": "Quick"}, {"id": "deep", "label": "Deep"}],
+            }
+        ],
+        "profiles": [
+            {"id": "a", "label": "Support"},
+            {"id": "b", "label": "Sales", "starters": [{"label": "Pricing", "message": "Prices?"}]},
+        ],
+        "settings": {
+            "type": "object",
+            "properties": {"tone": {"type": "string", "enum": ["warm", "dry"], "title": "Tone"}},
+        },
+        "translations": {
+            "fr": {
+                "welcome": "Bonjour",
+                "starters": {
+                    "Refund": {"label": "Remboursement", "message": "Je veux être remboursé."},
+                    "Pricing": {"label": "Tarifs"},
+                },
+                "categories": {"Billing": "Facturation"},
+                "settings": {"tone": {"title": "Ton", "options": {"warm": "Chaleureux"}}},
+                "commands": {"sum": "Résumer"},
+                "modes": {"depth": {"label": "Profondeur", "options": {"quick": {"label": "Rapide"}}}},
+                "profiles": {"b": {"label": "Ventes"}},
+            },
+            "pt-BR": {"welcome": "Olá"},
+        },
+    }
+    said = app(interface=interface)
+    assert parse_app(dump_app(said)) == said
+    ui = said.interface
+    assert ui.language == "en"
+    assert ui.translated(["de", "en"]) is ui
+    french = ui.translated(["fr-BE"])
+    assert french.language == "fr"
+    assert french.welcome == "Bonjour"
+    assert (french.starters[0].label, french.starters[0].message, french.starters[0].category) == (
+        "Remboursement",
+        "Je veux être remboursé.",
+        "Facturation",
+    )
+    assert french.commands[0].description == "Résumer"
+    assert french.commands[0].prompt == "Summarise. {input}"
+    assert (french.modes[0].label, french.modes[0].options[0].label, french.modes[0].options[1].label) == (
+        "Profondeur",
+        "Rapide",
+        "Deep",
+    )
+    assert [profile.label for profile in french.profiles] == ["Support", "Ventes"]
+    assert french.profiles[1].starters[0].label == "Tarifs"
+    assert french.settings["properties"]["tone"]["title"] == "Ton"
+    assert french.settings["properties"]["tone"]["enum"] == ["warm", "dry"]
+    assert french.settings_ui == {"tone": {"ui:enumNames": ["Chaleureux", "dry"]}}
+    assert ui.settings["properties"]["tone"]["title"] == "Tone"
+    assert ui.translated(["pt"]).welcome == "Olá"
+    for translations, sentence in (
+        ({"french": {}}, "of no language"),
+        ({"en": {}}, "no translation into it"),
+        ({"fr": {}, "FR": {}}, "are the same language"),
+        ({"fr": {"starters": {"Nope": {"label": "Non"}}}}, "the starter 'Nope'"),
+        ({"fr": {"categories": {"Nope": "Non"}}}, "the category 'Nope'"),
+        ({"fr": {"settings": {"size": {"title": "Taille"}}}}, "the setting 'size'"),
+        ({"fr": {"settings": {"tone": {"options": {"cold": "Froid"}}}}}, "the value 'cold' of 'tone'"),
+        ({"fr": {"commands": {"nope": "Non"}}}, "the command 'nope'"),
+        ({"fr": {"modes": {"speed": {}}}}, "the mode 'speed'"),
+        ({"fr": {"modes": {"depth": {"options": {"slow": {"label": "Lent"}}}}}}, "the option 'slow' of 'depth'"),
+        ({"fr": {"profiles": {"c": {"label": "C"}}}}, "the profile 'c'"),
+        ({"fr": {"greeting": "Salut"}}, "greeting"),
+    ):
+        with pytest.raises(AppError, match=re.escape(sentence)):
+            app(interface={**interface, "translations": translations})
+    with pytest.raises(AppError, match="no language as BCP 47"):
+        app(interface={"language": "english"})
+    support = get_app("support-desk")
+    assert support is not None
+    assert support.translated(["fr-FR"]).name == "Service client"
+    assert support.translated(["fr-FR"]).interface.starters[1].category == "Commandes"
+    assert support.translated(["fr-FR"]).id == "support-desk"
+    assert support.translated(["ja"]) is support
+    written_in_french = app(interface={"language": "fr", "welcome": "Bonjour", "translations": {"en": {"welcome": "Hello"}}})
+    assert written_in_french.interface.translated(["en-GB"]).welcome == "Hello"
+    assert written_in_french.interface.translated(["fr"]).welcome == "Bonjour"
+
+
 # --- what the spec refuses ------------------------------------------------------------
 
 

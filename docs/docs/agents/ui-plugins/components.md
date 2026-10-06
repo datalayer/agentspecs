@@ -46,7 +46,7 @@ Catalog `a2ui/v0.9`: 18 standard components, named and drawn as the protocol say
 | [`FileUpload`](#fileupload) | 📎 File upload | input | 1.0.0 | no | A file the person gives the application: a document to read, a sheet to check. |
 | [`Chat`](#chat) | 💬 Chat | conversation | 1.0.0 | no | The conversation with the application: its welcome, its starters, the composer. |
 | [`Evidence`](#evidence) | 🔎 Evidence | data | 1.0.0 | no | What an answer rests on: the sources opened, the passages cited, each with its link. |
-| [`Form`](#form) | 🧾 Form | input | 1.0.0 | no | Several fields asked at once, from a JSON Schema, checked as they are filled and again when they arrive (drawn with @datalayer/primer-rjsf). |
+| [`Form`](#form) | 🧾 Form | input | 1.1.0 | no | Several fields asked at once, from a JSON Schema, checked as they are filled and again when they arrive (drawn with @datalayer/primer-rjsf). |
 
 ## A2UI: standard components
 
@@ -1230,12 +1230,13 @@ title: What this rests on
 
 ### `Form`
 
-🧾 **Form** · input · version 1.0.0 — Several fields asked at once, from a JSON Schema, checked as they are filled and again when they arrive (drawn with @datalayer/primer-rjsf).
+🧾 **Form** · input · version 1.1.0 — Several fields asked at once, from a JSON Schema, checked as they are filled and again when they arrive (drawn with @datalayer/primer-rjsf).
 
 | Property | Type | Meaning | Default |
 | --- | --- | --- | --- |
 | `title` | text | **Title**. What the form is for, above it. | — |
 | `schema` (required) | mapping | **Fields**. The JSON Schema of what is asked: its fields, their types, what is required. | — |
+| `ui` | mapping | **How its fields are drawn**. By field name, the ui: options @datalayer/primer-rjsf reads (a uiSchema): ui:widget one of select, radio, range, updown, switch, checkbox, text, textarea, date, checkboxes, tags; each field's own widget when unsaid. | — |
 | `submit_label` | text | **Send button**. The words on its button. | `"Send"` |
 
 - **Shows**: `values`.
@@ -1260,6 +1261,11 @@ Its properties, as a JSON Schema:
       "type": "object",
       "title": "Fields",
       "description": "The JSON Schema of what is asked: its fields, their types, what is required."
+    },
+    "ui": {
+      "type": "object",
+      "title": "How its fields are drawn",
+      "description": "By field name, the ui: options @datalayer/primer-rjsf reads (a uiSchema): ui:widget one of select, radio, range, updown, switch, checkbox, text, textarea, date, checkboxes, tags; each field's own widget when unsaid."
     },
     "submit_label": {
       "type": "string",
