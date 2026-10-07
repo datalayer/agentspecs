@@ -8,6 +8,10 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## Unreleased
+
+- `interface.accent` is optional, with no default: an application that names none wears the theme's own colours, and one that names an accent wears it over whichever theme it runs in, not over `loop` alone (decided 2026-10-07). An accent not among the six is refused. The schema says `null` by default. STUDIO T-05, T-30 — [reference](https://agentspecs.datalayer.tech/apps/reference).
+
 ## 0.0.65
 
 - A file to download is a component of the catalog (STUDIO P-04): `Download` (*File to download*), its `name` and its `url` — an http(s) link, or the file itself as a `data:` URL — with its `media_type`, `size` and `description` said beside it; pressing it saves the file and sends its `download` event. An application's answer shows it (`session.ui.download(...)`), as the Canvas places it ([components](https://agentspecs.datalayer.tech/agents/ui-plugins/components#download)).

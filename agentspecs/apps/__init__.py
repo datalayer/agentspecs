@@ -1111,13 +1111,18 @@ class AppInterface(_Strict):
     """What the user sees."""
 
     layout: Optional[Layout] = Field(default=None, description="`chat`, `page` or `split`; the kind's own when unsaid")
-    accent: Accent = Field(default=Accent.GREEN, description="The application's one colour")
+    accent: Optional[Accent] = Field(
+        default=None,
+        description=(
+            "The application's one colour, over whichever theme it runs in; unsaid, it wears the theme's own colours"
+        ),
+    )
     theme: Optional[AppTheme] = Field(
         default=None,
         description=(
             "The theme it runs in by default, at its address, embedded, in the Studio's Preview and as an "
             "example: a `variant` and, optionally, a colour `mode`. The person's own when unsaid. Its "
-            "`accent` colours the `loop` theme only"
+            "`accent`, when it names one, colours it, whichever theme it is"
         ),
     )
     welcome: str = Field(default="", description="What the application says first")

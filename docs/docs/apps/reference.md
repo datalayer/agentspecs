@@ -552,8 +552,8 @@ What the user sees.
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
 | `layout` | [Layout](#layout) | `chat`, `page` or `split`; the kind's own when unsaid | empty |
-| `accent` | [Accent](#accent) | The application's one colour | `"green"` |
-| `theme` | [AppTheme](#apptheme) | The theme it runs in by default, at its address, embedded, in the Studio's Preview and as an example: a `variant` and, optionally, a colour `mode`. The person's own when unsaid. Its `accent` colours the `loop` theme only | empty |
+| `accent` | [Accent](#accent) | The application's one colour, over whichever theme it runs in; unsaid, it wears the theme's own colours | empty |
+| `theme` | [AppTheme](#apptheme) | The theme it runs in by default, at its address, embedded, in the Studio's Preview and as an example: a `variant` and, optionally, a colour `mode`. The person's own when unsaid. Its `accent`, when it names one, colours it, whichever theme it is | empty |
 | `welcome` | text | What the application says first | empty |
 | `starters` | list of [AppStarter](#appstarter) | First messages offered to the user | — |
 | `commands` | list of [AppCommand](#appcommand) | Slash commands the user picks in the composer: typing `/` lists them (LOOP P-19) | — |
