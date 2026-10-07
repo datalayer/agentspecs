@@ -64,6 +64,7 @@ interface:
   outputs:
     - text/markdown
     - application/x-ipynb+json
+    - application/json+a2ui
   starters:
     - label: Vigour this season
       message: How has crop vigour evolved over the last three months around 45.5N, 10.2E?
@@ -71,6 +72,8 @@ interface:
       message: Which fields around 41.9N, 12.5E show a drop in vegetation this month compared with last?
     - label: Imagery available
       message: Which datasets and granules cover the Po valley for June 2026?
+    - label: Save the granules
+      message: Save the June 2026 granules of the Po valley to my Space.
 
 tests:
   ready_at: 0.8

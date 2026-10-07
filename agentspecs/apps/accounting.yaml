@@ -13,8 +13,9 @@
 # runtime on Datalayer, or a local one while developing), served over A2A
 # with fasta2a at `/api/v1/a2a/agents/accounting/`. Its agent card offers
 # one skill, named for it (`accounting`): a request in words in, the report
-# in words out, in Markdown, and a Jupyter notebook beside it when the caller
-# accepts one (`interface.outputs`, the card's output modes).
+# in words out, in Markdown, and a Jupyter notebook or components of the
+# catalog (an A2UI surface: sources, a table, a chart, a choice) beside it when
+# the caller accepts them (`interface.outputs`, the card's output modes).
 
 schema: loop.app/v1
 id: accounting
@@ -72,6 +73,7 @@ interface:
   outputs:
     - text/markdown
     - application/x-ipynb+json
+    - application/json+a2ui
   starters:
     - label: Open invoices
       message: List the customer invoices that are still open, with the total due.

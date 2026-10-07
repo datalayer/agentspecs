@@ -38,7 +38,13 @@ instructions: >-
   figure, and never fill a gap from what you know. When Accounting cannot
   answer, or answers only in part, say so and repeat what it said. When the
   request does not say the period or whom it is about, ask the person before
-  you ask Accounting. You change nothing anywhere: you ask, and you report.
+  you ask Accounting. Say in your request how the person wants it shown — a
+  chart, the invoices one by one — since Accounting can show it under the
+  conversation; when it does, say so in a sentence rather than copy it. A
+  request to do something rather than to read — send, remind, post — goes
+  to Accounting the same way, and you repeat what it answered: never say a
+  thing was done unless Accounting says it was. You change nothing anywhere:
+  you ask, and you report.
 
 interface:
   layout: chat
@@ -54,9 +60,11 @@ interface:
     - label: Open invoices
       message: Which customer invoices are still open, and how much is due in total?
     - label: Aged receivables
-      message: Give me the aged receivables as of today, by customer.
-    - label: Trial balance
-      message: What does the trial balance say for last month?
+      message: Chart the aged receivables as of today, by customer.
+    - label: Largest balance
+      message: Which invoices make up the largest balance due? Show me each one.
+    - label: Payment reminders
+      message: Send a payment reminder to every customer more than 60 days late.
 
 tests:
   ready_at: 0.8

@@ -8,6 +8,14 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.64
+
+Components in the answers of the home page's scenes (STUDIO H-02, H-03).
+
+- The outputs catalogue gives `components` (`application/json+a2ui`, A2UI's media type): an answer's components of the catalog, one A2UI surface per artifact. Accounting, Month-end close, Crop monitoring, Disaster assessment and Change detection name it in `interface.outputs`, after Markdown and the notebook.
+- A scene's kinds of answer (`AnswerKind`) gain `sources` (cards that open), `choice` (buttons that answer the application) and `approval` (a choice whose option does more than read); a rehearsal line names them with or without an article (*Accounting: sources*, *an approval*).
+- The four scenes have four beats each, each answered with a different kind — the sources, a table, a chart, an approval — the approval asked of a member that only reads (*Send a payment reminder…*, *Post the accruals…*, *Save the June 2026 granules…*, *Send the Valencia flood assessment…*); the entries' starters and the teams' suggestions are the new cues. Sales and Event response say how the person wants it shown in their request, and never that a thing was done unless the member says so.
+
 ## 0.0.63
 
 - The environment variable specs live in `agentspecs/env-vars/` (was `envvars/`), hyphenated like `mcp-servers/`, `backend-tools/` and the other directories; the `envvars` field of an agent's or server's spec is unchanged.

@@ -658,7 +658,7 @@ def test_sales_reports_what_accounting_answers_and_reaches_nothing() -> None:
     assert "ask_accounting" in found.instructions
     assert "Never invent" in found.instructions
     assert found.interface.assistant == "paperclip"
-    assert len(found.interface.starters) == 3
+    assert len(found.interface.starters) == 4
     assert 3 <= len(found.tests.cases) <= 5
     assert app_problems(found) == []
 
@@ -1767,16 +1767,27 @@ def test_outputs_are_plain_text_alone_unless_said() -> None:
     assert app().interface.outputs == []
 
 
-def test_accounting_answers_in_markdown_and_a_notebook() -> None:
+def test_accounting_answers_in_markdown_a_notebook_and_components() -> None:
     accounting = get_app("accounting")
     assert accounting is not None
-    assert accounting.interface.outputs == ["text/markdown", "application/x-ipynb+json"]
+    assert accounting.interface.outputs == ["text/markdown", "application/x-ipynb+json", "application/json+a2ui"]
     assert app_problems(accounting) == []
     # Written back as it was read.
     assert dump_app(accounting)["interface"]["outputs"] == [
         "text/markdown",
         "application/x-ipynb+json",
+        "application/json+a2ui",
     ]
+
+
+def test_the_scenes_members_answer_with_components_of_the_catalog() -> None:
+    """STUDIO H-02: every member on a runtime offers the catalog's surface, A2UI's media type."""
+    from agentspecs.apps import output_media_types
+
+    assert "application/json+a2ui" in output_media_types()
+    for member in ("accounting", "month-end-close", "crop-monitoring", "disaster-assessment", "change-detection"):
+        outputs = APP_CATALOGUE[member].interface.outputs
+        assert outputs[0] == "text/markdown" and "application/json+a2ui" in outputs, member
 
 
 @pytest.mark.parametrize(

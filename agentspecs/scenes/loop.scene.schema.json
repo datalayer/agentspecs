@@ -22,7 +22,10 @@
         "notebook",
         "map",
         "file",
-        "image"
+        "image",
+        "sources",
+        "choice",
+        "approval"
       ],
       "title": "AnswerKind",
       "type": "string"

@@ -64,6 +64,7 @@ interface:
   outputs:
     - text/markdown
     - application/x-ipynb+json
+    - application/json+a2ui
   starters:
     - label: Change between two dates
       message: What changed around 39.5N, 0.4W between 1 October and 15 November 2024?

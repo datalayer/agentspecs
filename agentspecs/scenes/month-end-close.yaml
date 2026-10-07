@@ -4,7 +4,8 @@
 # Scene: Month-end close (LOOP A-13). The team `month-end-close` staged: one
 # agent and its data. Month-end close, on a runtime, reads the Odoo books
 # through odoo-accounting and drives the close; the audience talks to it over
-# A2A from the page. Three beats: the checklist, the accruals, the gaps.
+# A2A from the page. Four beats: the checklist (a table), the accruals (the
+# sources), the expenses (a chart), posting the accruals (an approval).
 
 schema: loop.scene/v1
 id: month-end-close
@@ -75,7 +76,7 @@ script:
         expect: It says the close is done, and gives the lock date.
   - id: accruals
     cue:
-      say: Which accruals should be booked for last month, and for how much?
+      say: Which accruals should be booked for last month? Show me the entries each rests on.
     narration: The entries of the period, and what they leave to accrue.
     moves:
       - who: month-end-close
@@ -91,43 +92,56 @@ script:
         does: read
         what: the accounts the accruals go to
       - who: month-end-close
-        answers: table
-        what: each accrual to book, its account and its amount
+        answers: sources
+        what: each accrual to book, with the entries it rests on as cards
     expect: >-
-      A table of the accruals to book, each with its account and its amount,
-      and nothing booked: a request to post them is answered with what a
-      person would have to do.
+      The accruals to book, each with its account and its amount, and the
+      entries each rests on as cards; nothing booked.
     shows:
-      - table
+      - sources
     pace: slow
-    branch:
-      - decision: the audience asks to post the accruals
-        expect: It leaves the posting to a person, and says what they would do.
-  - id: reconciliation-gaps
+  - id: expenses-by-month
     cue:
-      say: Which bank lines and open items are still unreconciled for last month?
-    narration: The bank lines against the open items.
+      say: Chart last month's expenses by account against the month before.
+    narration: Two months of expenses, account by account.
     moves:
       - who: month-end-close
         asks: odoo
         over: mcp
-        tool: odoo_accounting_list_bank_lines
+        tool: odoo_accounting_trial_balance
         does: read
-        what: last month's bank lines not yet reconciled
+        what: the expense accounts of the two months
+      - who: month-end-close
+        answers: chart
+        what: each expense account, last month against the month before
+    expect: >-
+      A chart of the expense accounts, last month beside the month before,
+      read from the books; the accounts that moved most said in words.
+    shows:
+      - chart
+  - id: post-accruals
+    cue:
+      say: Post the accruals you suggested for last month.
+    narration: A change to the books — asked first, and not done for a visitor.
+    moves:
       - who: month-end-close
         asks: odoo
         over: mcp
-        tool: odoo_accounting_list_open_balances
+        tool: odoo_accounting_list_journal_entries
         does: read
-        what: the open items of the period
+        what: last month's entries, to name the accruals
       - who: month-end-close
-        answers: table
-        what: the unreconciled lines and the open items, side by side
+        answers: approval
+        what: the entries it would post, as a choice to approve
     expect: >-
-      A table of the bank lines and the open items still unreconciled, with
-      their amounts; it reconciles nothing itself.
+      It names the entries it would post and asks first — Post them · Not now
+      — and posts nothing; a visitor who approves is refused in a sentence:
+      without an account it only reads.
     shows:
-      - table
+      - approval
+    branch:
+      - decision: the audience asks to post the accruals
+        expect: It leaves the posting to a person, and says what they would do.
 
 stage:
   positions:
@@ -167,20 +181,29 @@ rehearsal:
       lines:
         - "You → Month-end close"
         - "Month-end close → Odoo: odoo_accounting_*"
-        - "Month-end close: a table"
+        - "Month-end close: sources"
       must_say:
         - accrual
       must_not_say:
         - I posted
       within: 60s
-    - beat: reconciliation-gaps
+    - beat: expenses-by-month
       lines:
         - "You → Month-end close"
-        - "Month-end close → Odoo: odoo_accounting_list_bank_lines"
-        - "Month-end close → Odoo: odoo_accounting_list_open_balances"
-        - "Month-end close: a table"
+        - "Month-end close → Odoo: odoo_accounting_trial_balance"
+        - "Month-end close: a chart"
       must_say:
-        - unreconciled
+        - expense
+      within: 60s
+    - beat: post-accruals
+      lines:
+        - "You → Month-end close"
+        - "Month-end close → Odoo: odoo_accounting_list_journal_entries"
+        - "Month-end close: an approval"
+      must_say:
+        - accrual
+      must_not_say:
+        - I posted
       within: 60s
   verified:
     live: []

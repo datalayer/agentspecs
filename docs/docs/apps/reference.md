@@ -155,6 +155,7 @@ interface:
   outputs:
   - text/markdown
   - application/x-ipynb+json
+  - application/json+a2ui
   starters:
   - label: Open invoices
     message: List the customer invoices that are still open, with the total due.

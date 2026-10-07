@@ -41,10 +41,12 @@ routing_instructions: >-
 suggestions:
   - text: Where does the month-end close stand for last month? Give me the checklist.
     emoji: "☑️"
-  - text: Which accruals should be booked for last month, and for how much?
+  - text: Which accruals should be booked for last month? Show me the entries each rests on.
     emoji: "🧾"
-  - text: Which bank lines and open items are still unreconciled for last month?
-    emoji: "🏦"
+  - text: Chart last month's expenses by account against the month before.
+    emoji: "📊"
+  - text: Post the accruals you suggested for last month.
+    emoji: "✍️"
 
 context:
   sharing: shared

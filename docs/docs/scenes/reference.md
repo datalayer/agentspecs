@@ -195,15 +195,32 @@ script:
     does: read
     what: the granules of June 2026
   - who: crop-monitoring
-    answers: table
-    what: the datasets and the granules, with their dates
-  expect: A table of the datasets and the granules that cover the Po valley in June
-    2026, with their dates; a download is left to the person.
+    answers: sources
+    what: the datasets and the granules as cards that open their pages
+  expect: The datasets and the granules that cover the Po valley in June 2026 as cards,
+    each with its date and a link that opens it at NASA Earthdata; a download is left
+    to the person.
   shows:
-  - table
-  branch:
-  - decision: the audience asks to download the granules
-    expect: It leaves the download to a person, and says how.
+  - sources
+- id: save-granules
+  cue:
+    say: Save the June 2026 granules of the Po valley to my Space.
+  narration: A download and a save — asked first, and not done for a visitor.
+  moves:
+  - who: crop-monitoring
+    asks: earthdata
+    over: mcp
+    tool: search_earth_datagranules
+    does: read
+    what: the granules of June 2026
+  - who: crop-monitoring
+    answers: approval
+    what: the granules it would save, as a choice to approve
+  expect: 'It names the granules it would save and asks first — Save them · Not now
+    — and saves nothing; a visitor who approves is refused in a sentence: without
+    an account it only reads.'
+  shows:
+  - approval
 ```
 
 ### `stage`
@@ -263,11 +280,22 @@ rehearsal:
     lines:
     - You → Crop monitoring
     - 'Crop monitoring → Earthdata: search_earth_*'
-    - 'Crop monitoring: a table'
+    - 'Crop monitoring: sources'
     must_say:
     - granule
     must_not_say:
     - downloaded
+    within: 60s
+  - beat: save-granules
+    lines:
+    - You → Crop monitoring
+    - 'Crop monitoring → Earthdata: search_earth_datagranules'
+    - 'Crop monitoring: an approval'
+    must_say:
+    - granule
+    must_not_say:
+    - downloaded
+    - saved them
     within: 60s
   verified:
     live: []
@@ -503,7 +531,7 @@ One member asking another, directly, over a protocol. Distinct from `depends_on`
 | Name | Values |
 | --- | --- |
 | <a id="actionclass"></a>ActionClass | `read`, `write`, `send`, `buy`, `delete`, `publish` |
-| <a id="answerkind"></a>AnswerKind | `words`, `table`, `chart`, `notebook`, `map`, `file`, `image` |
+| <a id="answerkind"></a>AnswerKind | `words`, `table`, `chart`, `notebook`, `map`, `file`, `image`, `sources`, `choice`, `approval` |
 | <a id="inspector"></a>Inspector | `agent`, `tools`, `a2a`, `notebook`, `cost` |
 | <a id="pace"></a>Pace | `quick`, `steady`, `slow` |
 | <a id="teamplace"></a>TeamPlace | `browser`, `runtime` |

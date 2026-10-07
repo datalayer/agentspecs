@@ -65,6 +65,7 @@ interface:
   outputs:
     - text/markdown
     - application/x-ipynb+json
+    - application/json+a2ui
   starters:
     - label: Flood extent
       message: Assess the flooding around Valencia, Spain, after 29 October 2024.

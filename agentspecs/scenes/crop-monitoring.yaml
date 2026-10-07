@@ -4,8 +4,9 @@
 # Scene: Crop monitoring (LOOP A-13). The team `crop-monitoring` staged: one
 # agent and its data. Crop monitoring, on a runtime, searches the satellite
 # imagery NASA Earthdata holds through the earthdata server; the audience
-# talks to it over A2A from the page. Three beats: the season, the fields to
-# watch, the imagery available.
+# talks to it over A2A from the page. Four beats: the season (a chart), the
+# fields to watch (a table), the imagery available (the sources), saving the
+# granules (an approval).
 
 schema: loop.scene/v1
 id: crop-monitoring
@@ -116,16 +117,34 @@ script:
         does: read
         what: the granules of June 2026
       - who: crop-monitoring
-        answers: table
-        what: the datasets and the granules, with their dates
+        answers: sources
+        what: the datasets and the granules as cards that open their pages
     expect: >-
-      A table of the datasets and the granules that cover the Po valley in
-      June 2026, with their dates; a download is left to the person.
+      The datasets and the granules that cover the Po valley in June 2026 as
+      cards, each with its date and a link that opens it at NASA Earthdata;
+      a download is left to the person.
     shows:
-      - table
-    branch:
-      - decision: the audience asks to download the granules
-        expect: It leaves the download to a person, and says how.
+      - sources
+  - id: save-granules
+    cue:
+      say: Save the June 2026 granules of the Po valley to my Space.
+    narration: A download and a save — asked first, and not done for a visitor.
+    moves:
+      - who: crop-monitoring
+        asks: earthdata
+        over: mcp
+        tool: search_earth_datagranules
+        does: read
+        what: the granules of June 2026
+      - who: crop-monitoring
+        answers: approval
+        what: the granules it would save, as a choice to approve
+    expect: >-
+      It names the granules it would save and asks first — Save them · Not
+      now — and saves nothing; a visitor who approves is refused in a
+      sentence: without an account it only reads.
+    shows:
+      - approval
 
 stage:
   positions:
@@ -171,11 +190,22 @@ rehearsal:
       lines:
         - "You → Crop monitoring"
         - "Crop monitoring → Earthdata: search_earth_*"
-        - "Crop monitoring: a table"
+        - "Crop monitoring: sources"
       must_say:
         - granule
       must_not_say:
         - downloaded
+      within: 60s
+    - beat: save-granules
+      lines:
+        - "You → Crop monitoring"
+        - "Crop monitoring → Earthdata: search_earth_datagranules"
+        - "Crop monitoring: an approval"
+      must_say:
+        - granule
+      must_not_say:
+        - downloaded
+        - saved them
       within: 60s
   verified:
     live: []

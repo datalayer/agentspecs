@@ -4,7 +4,8 @@
 # Scene: Sales & Accounting (LOOP A-13). The team `sales-and-accounting`
 # staged: Sales, in the visitor's browser, takes the request and asks
 # Accounting, on a runtime, which reads Datalayer's own Odoo books and
-# answers. Three beats, each a cue the audience may say.
+# answers. Four beats, each a cue the audience may say, each answered
+# with a different kind: a table, a chart, the sources, an approval.
 
 schema: loop.scene/v1
 id: sales-and-accounting
@@ -83,13 +84,13 @@ script:
         expect: Sales says so in a sentence, and invents no figure.
   - id: aged-receivables
     cue:
-      say: Give me the aged receivables as of today, by customer.
-    narration: Accounting ages what is due, bucket by bucket.
+      say: Chart the aged receivables as of today, by customer.
+    narration: Accounting ages what is due, bucket by bucket, and draws it.
     moves:
       - who: sales
         asks: accounting
         over: a2a
-        what: the aged receivables as of today, by customer
+        what: the aged receivables as of today, by customer, as a chart
       - who: accounting
         asks: odoo
         over: mcp
@@ -97,46 +98,71 @@ script:
         does: read
         what: the receivables, aged
       - who: accounting
-        answers: table
-        what: each customer's balance by age, with the totals
+        answers: chart
+        what: each customer's balance by age, drawn
       - who: sales
         answers: words
-        what: the table, and which customers are furthest behind
+        what: which customers are furthest behind
     expect: >-
-      A table of the receivables by customer and by age, its totals the
+      A chart of the receivables by customer and by age, its figures the
       books' own; Sales points at the customers furthest behind.
     shows:
-      - table
-  - id: trial-balance
+      - chart
+  - id: largest-balance
     cue:
-      say: What does the trial balance say for last month?
-    narration: The whole of last month, account by account.
+      say: Which invoices make up the largest balance due? Show me each one.
+    narration: The customer who owes the most, invoice by invoice.
     moves:
       - who: sales
         asks: accounting
         over: a2a
-        what: the trial balance for last month
+        what: the invoices behind the largest balance due
       - who: accounting
         asks: odoo
         over: mcp
-        tool: odoo_accounting_trial_balance
+        tool: odoo_accounting_list_invoices
         does: read
-        what: last month's trial balance
+        what: the open invoices of that customer
       - who: accounting
-        answers: table
-        what: the accounts with their debit and credit, balanced
+        answers: sources
+        what: each invoice as a card, its number, its date and what is due
       - who: sales
         answers: words
-        what: the table, and whether it balances
+        what: whose balance it is, and its total
     expect: >-
-      A trial balance for last month whose debits equal its credits; Sales
-      says that it balances, or that it does not.
+      The invoices behind the largest balance as cards, each with its number,
+      its date and the amount due, read from the books; their total is the
+      balance.
     shows:
-      - table
+      - sources
+  - id: payment-reminders
+    cue:
+      say: Send a payment reminder to every customer more than 60 days late.
+    narration: An action, not a report — asked first, and not done for a visitor.
+    moves:
+      - who: sales
+        asks: accounting
+        over: a2a
+        what: payment reminders to the customers more than 60 days late
+      - who: accounting
+        asks: odoo
+        over: mcp
+        tool: odoo_accounting_aged_balance
+        does: read
+        what: the customers more than 60 days late
+      - who: accounting
+        answers: approval
+        what: the reminders it would send, as a choice to approve
+      - who: sales
+        answers: words
+        what: that the reminders wait for an approval
+    expect: >-
+      Accounting lists the customers it would remind and asks first — Send the
+      reminders · Not now — and sends nothing; a visitor who approves is
+      refused in a sentence: without an account it only reads.
+    shows:
+      - approval
     pace: slow
-    branch:
-      - decision: last month is not closed in the books
-        expect: Accounting says the balance is provisional, and gives it as it stands.
 
 stage:
   positions:
@@ -181,21 +207,33 @@ rehearsal:
         - "You → Sales"
         - "Sales → Accounting"
         - "Accounting → Odoo: odoo_accounting_aged_balance"
-        - "Accounting: a table"
+        - "Accounting: a chart"
         - "Sales: words"
       must_say:
         - days
       within: 60s
-    - beat: trial-balance
+    - beat: largest-balance
       lines:
         - "You → Sales"
         - "Sales → Accounting"
-        - "Accounting → Odoo: odoo_accounting_trial_balance"
-        - "Accounting: a table"
+        - "Accounting → Odoo: odoo_accounting_list_invoices"
+        - "Accounting: sources"
         - "Sales: words"
       must_say:
-        - debit
-        - credit
+        - invoice
+      within: 60s
+    - beat: payment-reminders
+      lines:
+        - "You → Sales"
+        - "Sales → Accounting"
+        - "Accounting → Odoo: odoo_accounting_aged_balance"
+        - "Accounting: an approval"
+        - "Sales: words"
+      must_say:
+        - reminder
+      must_not_say:
+        - I sent
+        - reminders sent
       within: 60s
   verified:
     live:

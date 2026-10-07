@@ -44,6 +44,8 @@ suggestions:
     emoji: "🌾"
   - text: Which datasets and granules cover the Po valley for June 2026?
     emoji: "🛰️"
+  - text: Save the June 2026 granules of the Po valley to my Space.
+    emoji: "💾"
 
 context:
   sharing: shared

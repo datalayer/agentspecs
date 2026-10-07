@@ -19,6 +19,7 @@ import pytest
 import yaml
 
 import agentspecs.scenes
+from agentspecs.actions import ActionClass
 from agentspecs.apps import APP_CATALOGUE
 from agentspecs.scenes import (
     SCENE_CATALOGUE,
@@ -117,7 +118,7 @@ def test_every_scene_has_a_face_of_its_own() -> None:
 
 
 def test_the_four_scenes_stage_their_teams() -> None:
-    """LOOP A-13: each with its setting, three beats, stage directions, a visitor audience and a rehearsal."""
+    """LOOP A-13: each with its setting, four beats, stage directions, a visitor audience and a rehearsal."""
     for scene_id, (entry, on_runtime, system) in HOME_SCENES.items():
         scene = SCENE_CATALOGUE[scene_id]
         team = scene.team_of()
@@ -130,8 +131,8 @@ def test_the_four_scenes_stage_their_teams() -> None:
         assert [item.id for item in scene.setting.systems] == [system], scene_id
         assert scene.setting.systems[0].shown_as and scene.setting.systems[0].holds, scene_id
         assert scene.setting.assumes.strip(), scene_id
-        # Three beats, their cues the entry's starters, each with moves, what it shows and a narration.
-        assert len(scene.script) == 3, scene_id
+        # Four beats, their cues the entry's starters, each with moves, what it shows and a narration.
+        assert len(scene.script) == 4, scene_id
         front = APP_CATALOGUE[entry]
         assert scene.cues() == [starter.message for starter in front.interface.starters], scene_id
         for beat in scene.script:
@@ -173,6 +174,19 @@ def test_a_scene_says_what_each_beat_shows() -> None:
     beat = crop.script[0].model_copy(update={"shows": []})
     assert beat.shown == [AnswerKind.CHART, AnswerKind.WORDS]
     assert sales.script[0].branch[0].decision == "the books hold no open invoice"
+
+
+def test_each_scene_of_the_home_page_answers_four_kinds() -> None:
+    """STUDIO H-02, H-03: the starters lead to the sources, a table, a chart and an approval."""
+    wanted = {AnswerKind.SOURCES, AnswerKind.TABLE, AnswerKind.CHART, AnswerKind.APPROVAL}
+    for scene_id in HOME_SCENES:
+        shown = {kind for beat in SCENE_CATALOGUE[scene_id].script for kind in beat.shown}
+        assert wanted <= shown, scene_id
+        # The approval is answered by a member that only reads: it is asked, not done.
+        [approval] = [beat for beat in SCENE_CATALOGUE[scene_id].script if AnswerKind.APPROVAL in beat.shown]
+        assert all(move.does in (None, ActionClass.READ) for move in approval.moves), scene_id
+    assert parse_line("Accounting: an approval").kind is AnswerKind.APPROVAL
+    assert parse_line("Crop monitoring: sources").kind is AnswerKind.SOURCES
 
 
 def test_what_each_scene_needs_is_said_as_setup() -> None:
@@ -323,10 +337,12 @@ def test_the_setting_names_systems_the_cast_reaches() -> None:
         "There is no MCP server named 'no-such-server'.",
         "Beat 'open-invoices': 'accounting' asks 'odoo' over mcp, which is not a system of the scene.",
         "Beat 'aged-receivables': 'accounting' asks 'odoo' over mcp, which is not a system of the scene.",
-        "Beat 'trial-balance': 'accounting' asks 'odoo' over mcp, which is not a system of the scene.",
+        "Beat 'largest-balance': 'accounting' asks 'odoo' over mcp, which is not a system of the scene.",
+        "Beat 'payment-reminders': 'accounting' asks 'odoo' over mcp, which is not a system of the scene.",
         "The rehearsal of 'open-invoices' names 'Odoo', which is not on stage.",
         "The rehearsal of 'aged-receivables' names 'Odoo', which is not on stage.",
-        "The rehearsal of 'trial-balance' names 'Odoo', which is not on stage.",
+        "The rehearsal of 'largest-balance' names 'Odoo', which is not on stage.",
+        "The rehearsal of 'payment-reminders' names 'Odoo', which is not on stage.",
     ]
     document = raw("sales-and-accounting")
     document["setting"]["systems"].append({"server": "earthdata:0.0.1"})
@@ -389,9 +405,9 @@ def test_a_tool_a_connection_does_not_offer_is_refused() -> None:
         APP_CATALOGUE["accounting"] = accounting
     assert found == [
         "Beat 'aged-receivables': 'accounting' asks 'odoo' for 'odoo_accounting_aged_balance', a tool no connection of Accounting offers.",
-        "Beat 'trial-balance': 'accounting' asks 'odoo' for 'odoo_accounting_trial_balance', a tool no connection of Accounting offers.",
+        "Beat 'payment-reminders': 'accounting' asks 'odoo' for 'odoo_accounting_aged_balance', a tool no connection of Accounting offers.",
         "The rehearsal of 'aged-receivables' expects 'odoo_accounting_aged_balance', a tool no connection of Accounting offers.",
-        "The rehearsal of 'trial-balance' expects 'odoo_accounting_trial_balance', a tool no connection of Accounting offers.",
+        "The rehearsal of 'payment-reminders' expects 'odoo_accounting_aged_balance', a tool no connection of Accounting offers.",
     ]
 
 
@@ -399,7 +415,7 @@ def test_a_branch_goes_on_to_a_beat_of_the_script() -> None:
     document = raw("sales-and-accounting")
     document["script"][0]["branch"][0]["then"] = "curtain"
     assert scene_problems(parse_scene(document)) == ["Beat 'open-invoices': its branch goes on to 'curtain', which is no beat."]
-    document["script"][0]["branch"][0]["then"] = "trial-balance"
+    document["script"][0]["branch"][0]["then"] = "largest-balance"
     assert scene_problems(parse_scene(document)) == []
 
 

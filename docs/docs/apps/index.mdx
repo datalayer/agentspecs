@@ -127,6 +127,7 @@ interface:
   outputs:
     - text/markdown
     - application/x-ipynb+json   # a Jupyter notebook
+    - application/json+a2ui      # components of the catalog, as an A2UI surface
 ```
 
 Served over A2A, they are its agent card's output modes (`defaultOutputModes`,
@@ -134,6 +135,13 @@ and its skill's `outputModes`). A caller says which of them it accepts with
 each request (`acceptedOutputModes`), and what is not words comes back as an
 artifact of that media type beside the text: the runtime gives its agent a way
 to write it only when the caller accepts it. Plain text alone when unsaid.
+
+`application/json+a2ui` (A2UI's media type) is components of the catalog drawn
+under the answer: the sources as cards that open (`Evidence`), a comparison as
+a table (`Table`), a series as a chart (`Chart`), a choice as buttons that
+answer the application. A choice whose option does more than read is an
+approval: pressed, it goes back to the application, whose rules decide — a
+visitor without an account is refused in a sentence, since it only reads.
 
 Each output is a media type the [outputs catalogue](https://github.com/datalayer/agentspecs/tree/main/agentspecs/outputs)
 gives (`output_media_types()`), named once, and the first is `text/plain` or

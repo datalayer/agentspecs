@@ -236,6 +236,12 @@ class AnswerKind(str, Enum):
     MAP = "map"
     FILE = "file"
     IMAGE = "image"
+    #: The sources it read, as cards that open (the catalog's Evidence).
+    SOURCES = "sources"
+    #: A choice as buttons that answer the application.
+    CHOICE = "choice"
+    #: A choice whose action does more than read: asked of a person, refused to a visitor.
+    APPROVAL = "approval"
 
 
 class Pace(str, Enum):
@@ -384,7 +390,9 @@ class SceneAudience(_Strict):
 
 _ASK = re.compile(r"^(?P<who>[^→:]+?)\s*→\s*(?P<whom>[^:]+?)(?::\s*(?P<detail>.+))?$")
 _ANSWER = re.compile(r"^(?P<who>[^→:]+?):\s*(?P<detail>.+)$")
-_KIND = re.compile(r"^an?\s+(?P<kind>words|table|chart|notebook|map|file|image)$")
+_KIND = re.compile(
+    r"^(?:an?\s+)?(?P<kind>words|table|chart|notebook|map|file|image|sources|choice|approval)$"
+)
 
 
 @dataclass(frozen=True)

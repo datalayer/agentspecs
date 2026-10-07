@@ -69,13 +69,16 @@ interface:
   outputs:
     - text/markdown
     - application/x-ipynb+json
+    - application/json+a2ui
   starters:
     - label: Close checklist
       message: Where does the month-end close stand for last month? Give me the checklist.
     - label: Accruals
-      message: Which accruals should be booked for last month, and for how much?
-    - label: Reconciliation gaps
-      message: Which bank lines and open items are still unreconciled for last month?
+      message: Which accruals should be booked for last month? Show me the entries each rests on.
+    - label: Expenses by month
+      message: Chart last month's expenses by account against the month before.
+    - label: Post the accruals
+      message: Post the accruals you suggested for last month.
 
 tests:
   ready_at: 0.8

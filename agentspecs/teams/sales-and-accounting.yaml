@@ -42,10 +42,12 @@ routing_instructions: >-
 suggestions:
   - text: Which customer invoices are still open, and how much is due in total?
     emoji: "🧾"
-  - text: Give me the aged receivables as of today, by customer.
+  - text: Chart the aged receivables as of today, by customer.
     emoji: "⏳"
-  - text: What does the trial balance say for last month?
-    emoji: "⚖️"
+  - text: Which invoices make up the largest balance due? Show me each one.
+    emoji: "🔎"
+  - text: Send a payment reminder to every customer more than 60 days late.
+    emoji: "✉️"
 
 delegation:
   max_depth: 1
