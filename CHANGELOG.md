@@ -8,6 +8,10 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.62
+
+- The `earthdata` MCP server reaches NASA's catalogue through the Datalayer MCP server's `earthdata` toolset (`mcp-remote`, `only=earthdata`, the person's `DATALAYER_API_KEY`), as `odoo-accounting` reaches the books: `earthdata-mcp-server` is a Python package, so `npx` never started it on a runtime (every Earthdata scene member failed with "Connection closed"). Searching is anonymous; a download on the sandbox still reads `EARTHDATA_USERNAME` and `EARTHDATA_PASSWORD` there.
+
 ## 0.0.61
 
 A scene has a spec of its own (LOOP A-11, A-13, decided 2026-10-07): `scenes/`, `schema: loop.scene/v1`. The team says who is on stage; the scene says what happens there. The four scenes of the home page written as scene specs.

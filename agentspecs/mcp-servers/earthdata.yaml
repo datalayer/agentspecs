@@ -6,20 +6,25 @@ version: 0.0.1
 name: Earthdata MCP
 description: Access NASA Earthdata search and metadata capabilities
 
+# The Datalayer MCP server (the gateway behind `datalayer`) with its
+# `earthdata` toolset, as `odoo-accounting` reaches the books: `only=` asks
+# for exactly that toolset. `earthdata-mcp-server` is a Python package, so
+# `npx` never started it on a runtime (2026-10-07: every Earthdata scene
+# member failed with "Connection closed"). Searching NASA's catalogue is
+# anonymous — the toolset asks for no Earthdata login; a download, run on the
+# sandbox, reads EARTHDATA_USERNAME and EARTHDATA_PASSWORD there.
 command: npx
 args:
   - "-y"
-  - "earthdata-mcp-server"
-
+  - "mcp-remote"
+  - "https://mcp.datalayer.run/mcp?only=earthdata"
+  - "--header"
+  - "Authorization: Bearer ${DATALAYER_API_KEY}"
 transport: stdio
 enabled: true
-env:
-  EARTHDATA_USERNAME: ${EARTHDATA_USERNAME}
-  EARTHDATA_PASSWORD: ${EARTHDATA_PASSWORD}
-
+env: {}
 envvars:
-  - EARTHDATA_USERNAME:0.0.1
-  - EARTHDATA_PASSWORD:0.0.1
+  - DATALAYER_API_KEY:0.0.1
 
 tags:
   - geospatial
