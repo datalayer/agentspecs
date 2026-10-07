@@ -496,6 +496,22 @@ What an alternative is weighed on.
 | `direction` | text | Whether more counts for, or against | `"higher"` |
 | `measure` | text | For a metric: what a benchmark run fills it from | empty |
 
+### AppCustomComponent
+
+A component the developer writes (LOOP P-17), an A2UI component of this application only: the catalog grows for it, it does not open. Reviewed like any component of the catalog — its properties a JSON Schema, what it shows and sends bindings into the page's data — and drawn in a sandboxed frame of no origin, its module loaded from `source` and nothing else: what it is given is its properties and data, and what it gives back is what it sends.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `name` (required) | text | Its name on a surface, as a catalog component's (`Gauge`); none of the catalog's own | — |
+| `description` (required) | text | What it is for, in a sentence: what the palette says | — |
+| `props` | mapping | Its properties, as the JSON Schema of an object: each typed `string`, `integer`, `number`, `boolean`, `array` or `object`, or an `enum` of words, with its `title`, `description` and `default`; `required` among them | — |
+| `shows` | list of text | What it shows from the page's data: each a binding, given a path or a value in place | — |
+| `sends` | list of text | What it sends back: each a binding it writes, then its `action` dispatched | — |
+| `source` (required) | text | The address of its module, a built ES module whose default export draws it (`export default function (root, {props, send})`): over `https://`, or `http://localhost` while it is written. A module of the application's folder waits for its packaging (LOOP P-29) | — |
+| `integrity` | text | The module as it was reviewed: its Subresource Integrity hash (`sha384-…`); a module that differs is not drawn. Any module at the address when unsaid | empty |
+| `height` | integer | Its height on the page, in pixels | `240` |
+| `example` | mapping | A configuration of it its schema accepts: what the palette previews | empty |
+
 ### AppDecision
 
 What a decision application decides.
@@ -548,6 +564,7 @@ What the user sees.
 | `translations` | mapping of [AppTranslation](#apptranslation) | What a person reads of it in other languages, by BCP 47 tag: its name, welcome, starters and their categories, settings, commands, modes and profiles. The page shows the person's language when it has it, else its own words (LOOP P-26) | — |
 | `uploads` | [AppUploads](#appuploads) | What a person may send in the composer without being asked — images, files, audio — by kind, each with its largest size, and how many at once (LOOP P-21). None when unsaid: the composer offers no attachment, and a file sent with a message is refused | empty |
 | `components` | list of text | The components of the catalog the surface may use; the kind's own when empty | — |
+| `custom_components` | list of [AppCustomComponent](#appcustomcomponent) | Components its developer wrote (LOOP P-17), of this application only: each named, its props a JSON Schema, its module's address; placed, shown and drawn as the catalog's own | — |
 | `surface` | [AppSurface](#appsurface) | The component tree, when there is one | empty |
 | `page` | [AppPage](#apppage) | A widget's page written in its code (`@app.page`, LOOP P-05): its inputs as a form, its outputs as values; run again as an input changes, its outputs shown in place. None when unsaid | empty |
 | `assistant` | text | The character its floating assistant shows, by the id a plugin contributes it under (lowercase letters and digits, words joined by a hyphen): Datalayer's are `paperclip`, `wizard`, `cat` and `eyes`. The paper clip when unsaid; an id no enabled plugin contributes is refused where the plugins are known, the runtime and the page. Said here, it wins over a person's own choice in their settings | empty |
@@ -616,7 +633,7 @@ One thing a page shows for its inputs (LOOP P-05): a value, drawn with a compone
 | --- | --- | --- | --- |
 | `name` (required) | text | Its name: what its code returns it under, and where the page shows it (`/outputs/<name>`) | — |
 | `title` | text | What a person reads above it; none when unsaid | empty |
-| `component` | text | What draws it: `Text` (words, unless said), `Image` (an address), `Table` (rows) or `Chart` (points) | `"Text"` |
+| `component` | text | What draws it: `Text` (words, unless said), `Image` (an address), `Table` (rows) or `Chart` (points), or a component of the application's own (`interface.custom_components`, LOOP P-17), its value what it shows first | `"Text"` |
 | `props` | mapping | The component's other properties: a Table's `columns`, a Chart's `kind`, `x` and `y` | — |
 
 ### AppPermissions

@@ -2033,3 +2033,103 @@ def test_a_page_is_refused_in_sentences() -> None:
     settings = {"type": "object", "properties": {"plan": {"type": "string"}}}
     with pytest.raises(AppError, match="'plan' is both a setting and an input of its page"):
         app(kind="widget", interface={"page": PAGE, "settings": settings})
+
+
+# --- components its developer wrote (LOOP P-17) -----------------------------------------
+
+GAUGE = {
+    "name": "Gauge",
+    "description": "A dial, from nothing to its most.",
+    "props": {
+        "type": "object",
+        "properties": {
+            "label": {"type": "string", "title": "Label"},
+            "most": {"type": "number", "default": 100},
+            "tone": {"enum": ["calm", "loud"]},
+        },
+        "required": ["label"],
+    },
+    "shows": ["value"],
+    "sends": ["chosen"],
+    "source": "https://elements.example.com/gauge.js",
+    "integrity": "sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC",
+    "example": {"label": "Load", "value": 42},
+}
+
+
+def test_a_component_its_developer_wrote_is_its_own_and_reviewed_as_the_catalogs() -> None:
+    said = app(
+        interface={
+            "custom_components": [GAUGE],
+            "components": ["Gauge", "Text"],
+            "layout": "split",
+            "surface": {
+                "components": [
+                    {"id": "root", "component": "Column", "children": ["load"]},
+                    {"id": "load", "component": "Gauge", "label": "Load", "value": {"path": "/load"}},
+                ]
+            },
+        }
+    )
+    gauge = said.interface.custom_component("Gauge")
+    assert gauge is not None and gauge.height == 240 and gauge.sends == ["chosen"]
+    assert app_problems(said) == []
+    assert parse_app(dump_app(said)) == said
+    entry = gauge.catalog_entry("0.0.1")
+    assert entry["id"] == "Gauge" and entry["category"] == "custom" and entry["standard"] is False
+    assert entry["bindings"] == {"shows": ["value"], "sends": ["chosen"]} and entry["events"] == ["send"]
+    # Another application does not have it: the catalog is not opened.
+    assert app_problems(app(interface={"components": ["Gauge"]})) == [
+        "There is no component named 'Gauge' in the catalog."
+    ]
+    wrong = {"id": "load", "component": "Gauge", "most": "a lot", "colour": "red", "weight": 1}
+    surface = {"components": [{"id": "root", "component": "Column", "children": ["load"]}, wrong]}
+    assert app_problems(
+        app(interface={"custom_components": [GAUGE], "layout": "split", "surface": surface})
+    ) == ["The surface's 'load' is a Gauge its schema refuses: it has no property 'colour'; 'most' is number; it needs 'label'."]
+
+
+def test_a_component_its_developer_wrote_is_refused_in_sentences() -> None:
+    def props(**fields: dict) -> dict:
+        return {"type": "object", "properties": fields}
+
+    for wrong, sentence in (
+        ({"name": "Table"}, "the component Table is a component of the catalog"),
+        ({"name": "gauge"}, "should match pattern"),
+        ({"source": "./gauge.js"}, "is a file of the application's folder: it is drawn once the application is packaged"),
+        ({"source": "http://elements.example.com/gauge.js"}, "is loaded over `https://`"),
+        ({"source": "javascript:alert(1)"}, "is loaded over `https://`"),
+        ({"integrity": "md5-abc"}, "is no Subresource Integrity hash"),
+        ({"props": {"type": "array"}}, "props are the JSON Schema of an object"),
+        ({"props": props(when={"type": "date"})}, "'when' is typed 'date'"),
+        ({"props": props(id={"type": "string"})}, "cannot have a property named 'id'"),
+        ({"props": props(tone={"enum": []})}, "an `enum` of words"),
+        ({"props": props(most={"type": "number", "default": "x"})}, "default for 'most' is number"),
+        ({"props": {**props(), "required": ["label"]}}, "requires 'label', which its props do not have"),
+        ({"shows": ["label"]}, "both has the property 'label' and binds through it"),
+        ({"sends": ["action"]}, "cannot bind through 'action'"),
+        ({"shows": ["value", "value"]}, "shows the same binding twice"),
+        ({"example": {"value": 1}}, "example is refused: it needs 'label'"),
+        ({"example": {"label": "x", "colour": "red"}}, "it has no property 'colour'"),
+        ({"height": 10}, "greater than or equal to 40"),
+    ):
+        with pytest.raises(AppError, match=re.escape(sentence)):
+            app(interface={"custom_components": [{**GAUGE, **wrong}]})
+    with pytest.raises(AppError, match="two of its own components have the same name"):
+        app(interface={"custom_components": [GAUGE, GAUGE]})
+
+
+def test_a_widgets_page_shows_an_output_with_a_component_of_its_own() -> None:
+    gauge = {"name": "load", "component": "Gauge", "props": {"label": "Load"}}
+    said = app(kind="widget", interface={"custom_components": [GAUGE], "page": {**PAGE, "outputs": [gauge]}})
+    assert said.interface.page.outputs[0].component == "Gauge"
+    for output, sentence in (
+        ({"name": "load", "component": "Dial"}, "is drawn with 'Dial': an output is one of Text, Image, Table, Chart or"),
+        ({"name": "load", "component": "Gauge"}, "is a Gauge its schema refuses: it needs 'label'"),
+        ({"name": "load", "component": "Gauge", "props": {"label": 3}}, "'label' is string"),
+    ):
+        with pytest.raises(AppError, match=re.escape(sentence)):
+            app(kind="widget", interface={"custom_components": [GAUGE], "page": {**PAGE, "outputs": [output]}})
+    blind = {**GAUGE, "shows": [], "example": {"label": "Load"}}
+    with pytest.raises(AppError, match="which shows nothing"):
+        app(kind="widget", interface={"custom_components": [blind], "page": {**PAGE, "outputs": [gauge]}})

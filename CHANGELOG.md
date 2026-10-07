@@ -8,6 +8,16 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.59
+
+Components a developer writes (LOOP P-17): a component of one application only, declared in its spec and reviewed as the catalog's own.
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (Components of its own), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `interface.custom_components` (`AppCustomComponent`): `name` (none of the catalog's), `description`, `props` (the JSON Schema of an object, its properties typed `string`, `integer`, `number`, `boolean`, `array`, `object` or an `enum` of words), `shows` and `sends` (bindings), `source` (a built ES module over `https://`, or `http://localhost`), `integrity` (a Subresource Integrity hash), `height`, `example`; `catalog_entry(version)` lists it as the catalog lists a component. Refused in sentences: a catalog component's name or one given twice, a module of the application's folder (P-29) or not over `https://`, a property of another type or one every component has, a binding that is also a property, a default or an example its schema refuses.
+- `app_problems` reads an application's own components with the catalog's: in `interface.components`, on its surface (their properties checked: `custom_props_refused`) and as a widget's page's output (its value what it shows first).
+- JSON Schema and reference regenerated. Tests: `test_apps.py`.
+
 ## 0.0.58
 
 Widget applications (LOOP P-05): a widget's page written in its code — its inputs a form, its outputs values — run again as an input changes, its outputs shown in place.

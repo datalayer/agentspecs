@@ -663,6 +663,57 @@ output whose `props` say its id or the property its value fills, or lack one
 its component needs, and an input with the name of a setting (both are on the
 page at `/inputs/<name>`).
 
+### Components of its own
+
+A developer can write a component the catalog does not have — a gauge, a
+map, a diagram — and declare it in the application (LOOP P-17). It is a
+component of that application only: its Canvas places it, its page draws it,
+its code shows it and a widget's page draws an output with it, and no other
+application sees it. The catalog grows for it; it does not open.
+
+```yaml
+interface:
+  custom_components:
+    - name: Gauge                      # as the catalog's are named; none of theirs
+      description: A dial, from nothing to its most.
+      props:                           # what a builder sets, as a JSON Schema
+        type: object
+        properties:
+          label: {type: string, title: Label}
+          most: {type: number, default: 100}
+        required: [label]
+      shows: [value]                   # bound to what the application publishes
+      sends: [chosen]                  # written, then its action dispatched
+      source: https://elements.example.com/gauge.js
+      integrity: sha384-…              # the module as it was reviewed
+      height: 240
+      example: {label: Load, value: 42}
+```
+
+| Field | What it is |
+| --- | --- |
+| `name` | Its name on a surface: a word starting with a capital letter, none of the catalog's. |
+| `description` | What it is for, in a sentence: what the palette says. |
+| `props` | Its properties, the JSON Schema of an object: each typed `string`, `integer`, `number`, `boolean`, `array` or `object`, or an `enum` of words, with its `default`; `required` among them. |
+| `shows`, `sends` | What it shows from the page's data, and what it sends back: bindings, as a Table's `rows` and `selected`. |
+| `source` | The address of a built ES module whose default export draws it: `export default function (root, {props, send})`, returning `{update(props)}` to be told of new properties. Over `https://`, or `http://localhost` while it is written. |
+| `integrity` | Its Subresource Integrity hash: a module that differs is not drawn. Any module at the address when unsaid. |
+| `height` | Its height on the page, in pixels (240 unless said). |
+| `example` | A configuration its schema accepts, which the palette previews. |
+
+It is drawn in a sandboxed frame of no origin (`sandbox="allow-scripts"`,
+nothing else): no cookie, no storage, no access to the page around it, and no
+request leaves it. The page fetches the module without credentials, checks it
+against `integrity`, and hands it to the frame; what the frame sends back is
+taken only under a name of `sends`.
+
+Refused: a name of the catalog's or given twice, a module that is a file of
+the application's folder (drawn once the application is packaged with it,
+P-29) or not over `https://`, a property of another type or one every
+component already has (`id`, `action`, `weight`, `visible_when`…), a binding
+that is also a property, an example its schema refuses — and, where it is
+used, properties its schema refuses, as for any component of the catalog.
+
 ## A rule or a Gate, a test or a Guard
 
 The plain fields and the catalogue's accountability specs answer the same

@@ -617,6 +617,204 @@ class AppSurface(_Strict):
 CODE_NAME = r"[A-Za-z_][A-Za-z0-9_]*"
 
 
+#: The name of a component a developer writes (LOOP P-17): a word starting
+#: with a capital letter, as the catalog's components are named.
+CUSTOM_COMPONENT_NAME = r"[A-Z][A-Za-z0-9]{0,63}"
+
+#: What a custom component's property may be typed: what the page's renderer
+#: tells apart and checks, as for the catalog's own components.
+CUSTOM_PROPERTY_TYPES = ("string", "integer", "number", "boolean", "array", "object")
+
+#: The names every component of a surface already has, which a custom
+#: component cannot declare again.
+CUSTOM_RESERVED_NAMES = ("id", "component", "action", "weight", "visible_when", "children", "child")
+
+#: Where a custom component's module is loaded from (LOOP P-17): an address
+#: served over HTTPS, or this machine (`localhost`, `127.0.0.1`) while it is
+#: being written.
+CUSTOM_SOURCE = re.compile(r"(?:https://[A-Za-z0-9.-]+(?::\d+)?|http://(?:localhost|127\.0\.0\.1)(?::\d+)?)/\S*")
+
+#: A Subresource Integrity hash: the module as it was reviewed, and no other.
+INTEGRITY = re.compile(r"sha(?:256|384|512)-[A-Za-z0-9+/]+={0,2}")
+
+_JSON_TYPES: Dict[str, Tuple[type, ...]] = {
+    "string": (str,),
+    "integer": (int,),
+    "number": (int, float),
+    "boolean": (bool,),
+    "array": (list,),
+    "object": (dict,),
+}
+
+
+def _value_refused(name: str, field: Mapping[str, Any], value: Any) -> Optional[str]:
+    """Why a value is not one a property of a custom component takes, or None."""
+    if "enum" in field:
+        return None if value in field["enum"] else f"{name!r} is one of {', '.join(map(repr, field['enum']))}"
+    kind = field.get("type")
+    takes = _JSON_TYPES.get(str(kind), ())
+    if isinstance(value, bool) and kind != "boolean":
+        return f"{name!r} is {kind}, not true or false"
+    if not isinstance(value, takes):
+        return f"{name!r} is {kind}"
+    return None
+
+
+def custom_props_refused(component: "AppCustomComponent", props: Mapping[str, Any], bound: Sequence[str] = ()) -> List[str]:
+    """What a custom component's schema refuses of the properties given, in sentences.
+
+    ``bound`` are the properties given elsewhere — bound to what the
+    application publishes — and not required here.
+    """
+    fields = component.props.get("properties") or {}
+    problems = [f"it has no property {name!r}" for name in props if name not in fields]
+    for name, value in props.items():
+        if name in fields and not (isinstance(value, Mapping) and "path" in value):
+            refused = _value_refused(name, fields[name], value)
+            if refused:
+                problems.append(refused)
+    missing = [name for name in component.props.get("required") or [] if name not in props and name not in bound]
+    problems += [f"it needs {name!r}" for name in missing]
+    return problems
+
+
+class AppCustomComponent(_Strict):
+    """A component the developer writes (LOOP P-17), an A2UI component of this
+    application only: the catalog grows for it, it does not open.
+
+    Reviewed like any component of the catalog — its properties a JSON
+    Schema, what it shows and sends bindings into the page's data — and drawn
+    in a sandboxed frame of no origin, its module loaded from `source` and
+    nothing else: what it is given is its properties and data, and what it
+    gives back is what it sends.
+    """
+
+    name: str = Field(
+        ...,
+        pattern=rf"^{CUSTOM_COMPONENT_NAME}$",
+        description="Its name on a surface, as a catalog component's (`Gauge`); none of the catalog's own",
+    )
+    description: str = Field(..., min_length=1, description="What it is for, in a sentence: what the palette says")
+    props: Dict[str, Any] = Field(
+        default_factory=lambda: {"type": "object", "properties": {}},
+        description=(
+            "Its properties, as the JSON Schema of an object: each typed `string`, `integer`, `number`, "
+            "`boolean`, `array` or `object`, or an `enum` of words, with its `title`, `description` and "
+            "`default`; `required` among them"
+        ),
+    )
+    shows: List[str] = Field(
+        default_factory=list,
+        description="What it shows from the page's data: each a binding, given a path or a value in place",
+    )
+    sends: List[str] = Field(
+        default_factory=list,
+        description="What it sends back: each a binding it writes, then its `action` dispatched",
+    )
+    source: str = Field(
+        ...,
+        description=(
+            "The address of its module, a built ES module whose default export draws it "
+            "(`export default function (root, {props, send})`): over `https://`, or "
+            "`http://localhost` while it is written. A module of the application's folder waits for "
+            "its packaging (LOOP P-29)"
+        ),
+    )
+    integrity: str = Field(
+        default="",
+        description=(
+            "The module as it was reviewed: its Subresource Integrity hash (`sha384-…`); "
+            "a module that differs is not drawn. Any module at the address when unsaid"
+        ),
+    )
+    height: int = Field(default=240, ge=40, le=2000, description="Its height on the page, in pixels")
+    example: Optional[Dict[str, Any]] = Field(
+        default=None, description="A configuration of it its schema accepts: what the palette previews"
+    )
+
+    @field_validator("source")
+    @classmethod
+    def _source_is_a_module_address(cls, source: str) -> str:
+        if not re.match(r"^[a-z][a-z0-9+.-]*:", source):
+            raise ValueError(
+                f"the module {source!r} is a file of the application's folder: it is drawn once the "
+                "application is packaged with it (LOOP P-29); give the address of a built ES module"
+            )
+        if not CUSTOM_SOURCE.fullmatch(source):
+            raise ValueError(
+                f"the module {source!r} is loaded over `https://`, or from `http://localhost` while it is written"
+            )
+        return source
+
+    @field_validator("integrity")
+    @classmethod
+    def _integrity_is_a_hash(cls, integrity: str) -> str:
+        if integrity and not INTEGRITY.fullmatch(integrity):
+            raise ValueError(f"{integrity!r} is no Subresource Integrity hash: `sha384-` and the hash in base64")
+        return integrity
+
+    @model_validator(mode="after")
+    def _is_reviewable(self) -> "AppCustomComponent":
+        said = f"the component {self.name}"
+        if component_named(self.name) is not None:
+            raise ValueError(f"{said} is a component of the catalog: name yours otherwise")
+        schema = self.props
+        if schema.get("type") != "object" or not isinstance(schema.get("properties"), Mapping):
+            raise ValueError(f"{said}'s props are the JSON Schema of an object, with its `properties`")
+        fields: Mapping[str, Any] = schema["properties"]
+        for name, field in fields.items():
+            if not re.fullmatch(CODE_NAME, name) or name in CUSTOM_RESERVED_NAMES:
+                raise ValueError(f"{said} cannot have a property named {name!r}")
+            if not isinstance(field, Mapping):
+                raise ValueError(f"{said}'s property {name!r} is not a schema")
+            if "enum" in field:
+                values = field["enum"]
+                if not isinstance(values, list) or not values or not all(isinstance(v, str) for v in values):
+                    raise ValueError(f"{said}'s property {name!r} is an `enum` of words, one at least")
+            elif field.get("type") not in CUSTOM_PROPERTY_TYPES:
+                raise ValueError(
+                    f"{said}'s property {name!r} is typed {field.get('type')!r}: "
+                    f"one of {', '.join(CUSTOM_PROPERTY_TYPES)}, or an `enum`"
+                )
+            if "default" in field:
+                refused = _value_refused(name, field, field["default"])
+                if refused:
+                    raise ValueError(f"{said}'s default for {refused}")
+        missing = [name for name in schema.get("required") or [] if name not in fields]
+        if missing:
+            raise ValueError(f"{said} requires {', '.join(map(repr, missing))}, which its props do not have")
+        for name in [*self.shows, *self.sends]:
+            if not re.fullmatch(CODE_NAME, name) or name in CUSTOM_RESERVED_NAMES:
+                raise ValueError(f"{said} cannot bind through {name!r}")
+            if name in fields:
+                raise ValueError(f"{said} both has the property {name!r} and binds through it")
+        for bindings, what in ((self.shows, "shows"), (self.sends, "sends")):
+            if len(set(bindings)) != len(bindings):
+                raise ValueError(f"{said} {what} the same binding twice")
+        if self.example is not None:
+            given = {key: value for key, value in self.example.items() if key not in {*self.shows, *self.sends}}
+            problems = custom_props_refused(self, given)
+            if problems:
+                raise ValueError(f"{said}'s example is refused: {'; '.join(problems)}")
+        return self
+
+    def catalog_entry(self, version: str) -> Dict[str, Any]:
+        """It as the catalog lists a component (LOOP C-13): what the palette and the checks read."""
+        return {
+            "id": self.name,
+            "name": self.name,
+            "description": self.description,
+            "category": "custom",
+            "emoji": "🧩",
+            "version": version,
+            "standard": False,
+            "properties": self.props,
+            "bindings": {"shows": list(self.shows), "sends": list(self.sends)},
+            "events": ["send"] if self.sends else [],
+            **({"example": self.example} if self.example is not None else {}),
+        }
+
+
 #: What a page's output may be drawn with (LOOP P-05), and the property of each
 #: that shows its value: a Text its words, an Image its address, a Table its
 #: rows, a Chart its points.
@@ -634,7 +832,11 @@ class AppPageOutput(_Strict):
     title: str = Field(default="", description="What a person reads above it; none when unsaid")
     component: str = Field(
         default="Text",
-        description="What draws it: `Text` (words, unless said), `Image` (an address), `Table` (rows) or `Chart` (points)",
+        description=(
+            "What draws it: `Text` (words, unless said), `Image` (an address), `Table` (rows) or `Chart` "
+            "(points), or a component of the application's own (`interface.custom_components`, LOOP P-17), "
+            "its value what it shows first"
+        ),
     )
     props: Dict[str, Any] = Field(
         default_factory=dict,
@@ -644,6 +846,9 @@ class AppPageOutput(_Strict):
     @model_validator(mode="after")
     def _drawn(self) -> "AppPageOutput":
         shows = PAGE_OUTPUT_COMPONENTS.get(self.component)
+        if shows is None and re.fullmatch(CUSTOM_COMPONENT_NAME, self.component) and not component_named(self.component):
+            # A component of the application's own: checked by its interface, which declares it (P-17).
+            return self
         if shows is None:
             raise ValueError(
                 f"the output {self.name!r} is drawn with {self.component!r}: "
@@ -978,6 +1183,13 @@ class AppInterface(_Strict):
         default_factory=list,
         description="The components of the catalog the surface may use; the kind's own when empty",
     )
+    custom_components: List[AppCustomComponent] = Field(
+        default_factory=list,
+        description=(
+            "Components its developer wrote (LOOP P-17), of this application only: each named, its props "
+            "a JSON Schema, its module's address; placed, shown and drawn as the catalog's own"
+        ),
+    )
     surface: Optional[AppSurface] = Field(default=None, description="The component tree, when there is one")
     page: Optional[AppPage] = Field(
         default=None,
@@ -1066,7 +1278,35 @@ class AppInterface(_Strict):
                 "instructions, model and starters on the application"
             )
         self._translations_hold()
+        self._custom_components_hold()
         return self
+
+    def custom_component(self, name: str) -> Optional[AppCustomComponent]:
+        """A component its developer wrote, by name (LOOP P-17), or None."""
+        return next((component for component in self.custom_components if component.name == name), None)
+
+    def _custom_components_hold(self) -> None:
+        """Its own components are named once, and its page's outputs drawn by one are given what it needs."""
+        names = [component.name for component in self.custom_components]
+        if len(set(names)) != len(names):
+            raise ValueError("two of its own components have the same name")
+        for output in self.page.outputs if self.page is not None else []:
+            if output.component in PAGE_OUTPUT_COMPONENTS:
+                continue
+            component = self.custom_component(output.component)
+            if component is None:
+                raise ValueError(
+                    f"the output {output.name!r} is drawn with {output.component!r}: an output is one of "
+                    f"{', '.join(PAGE_OUTPUT_COMPONENTS)} or a component of its own (`custom_components`)"
+                )
+            if not component.shows:
+                raise ValueError(
+                    f"the output {output.name!r} is drawn with {output.component!r}, which shows nothing: "
+                    "its value is what it shows first, under `shows`"
+                )
+            problems = custom_props_refused(component, output.props)
+            if problems:
+                raise ValueError(f"the output {output.name!r} is a {output.component} its schema refuses: {'; '.join(problems)}")
 
     def _translations_hold(self) -> None:
         """Every translation is of a language, and of something the application says."""
@@ -2331,12 +2571,24 @@ def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = No
                 f"{', '.join(sorted(known))}."
             )
     # The components it may use, and the ones its surface uses, are the catalog's (C-13).
+    # Its own components are of the catalog for it alone (P-17).
+    own = app.interface.custom_component
     for name in app.interface.components:
-        if component_named(name) is None:
+        if component_named(name) is None and own(name) is None:
             problems.append(f"There is no component named {name!r} in the catalog.")
     if app.interface.surface is not None:
         for node in app.interface.surface.components:
-            if component_named(str(node["component"])) is None:
+            custom = own(str(node["component"]))
+            if custom is not None:
+                skip = {*CUSTOM_RESERVED_NAMES, *custom.shows, *custom.sends}
+                given = {key: value for key, value in node.items() if key not in skip}
+                bound = [key for key, value in given.items() if isinstance(value, Mapping) and "path" in value]
+                refused = custom_props_refused(custom, given, bound)
+                if refused:
+                    problems.append(
+                        f"The surface's {node['id']!r} is a {custom.name} its schema refuses: {'; '.join(refused)}."
+                    )
+            elif component_named(str(node["component"])) is None:
                 problems.append(
                     f"The surface's {node['id']!r} is a {node['component']!r}, which the catalog does not have."
                 )
@@ -2630,6 +2882,9 @@ __all__ = [
     "MAX_UPLOAD_MB",
     "MEDIA_TYPE",
     "PAGE_OUTPUT_COMPONENTS",
+    "CUSTOM_COMPONENT_NAME",
+    "AppCustomComponent",
+    "custom_props_refused",
     "SCHEMA_PATH",
     "TEXT_OUTPUTS",
     "TRACK_KEEPS",
