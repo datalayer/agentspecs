@@ -1,0 +1,190 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Scene: Crop monitoring (LOOP A-13). The team `crop-monitoring` staged: one
+# agent and its data. Crop monitoring, on a runtime, searches the satellite
+# imagery NASA Earthdata holds through the earthdata server; the audience
+# talks to it over A2A from the page. Three beats: the season, the fields to
+# watch, the imagery available.
+
+schema: loop.scene/v1
+id: crop-monitoring
+version: 0.0.1
+name: Crop monitoring
+description: >-
+  One agent follows crop vigour and growth over a season from the satellite
+  imagery NASA Earthdata holds, and flags the fields that need attention.
+tags:
+  - example
+  - scene
+  - earthdata
+  - agriculture
+  - a2a
+icon: globe
+emoji: "🛰️"
+
+team: crop-monitoring:0.0.1
+cast:
+  - member: crop-monitoring
+    persona:
+      name: Crop monitoring
+      line: I search the imagery and tell you how the fields are doing.
+    brief: >-
+      Take the field and the period, search the datasets and the granules
+      that cover them, and report the vigour, the growth and the fields to
+      watch; leave any download to the person.
+
+setting:
+  systems:
+    - server: earthdata:0.0.1
+      as: Earthdata
+      holds: NASA's catalogue of satellite imagery, searched, not downloaded.
+  period: the last three months
+  language: en
+  assumes: >-
+    One agent, its data: Crop monitoring on Datalayer, searching the
+    satellite imagery NASA Earthdata holds.
+
+script:
+  - id: vigour-this-season
+    cue:
+      say: How has crop vigour evolved over the last three months around 45.5N, 10.2E?
+    narration: The datasets that cover the place, then the granules of the season.
+    moves:
+      - who: crop-monitoring
+        asks: earthdata
+        over: mcp
+        tool: search_earth_datasets
+        does: read
+        what: the vegetation datasets covering the place
+      - who: crop-monitoring
+        asks: earthdata
+        over: mcp
+        tool: search_earth_datagranules
+        does: read
+        what: the granules of the last three months
+      - who: crop-monitoring
+        answers: chart
+        what: the vigour month by month
+      - who: crop-monitoring
+        answers: words
+        what: how the season went, in a paragraph
+    expect: >-
+      A chart of the vigour month by month from the granules found, and a
+      paragraph saying how the season went; nothing downloaded.
+    shows:
+      - chart
+      - words
+    branch:
+      - decision: no granule covers the period
+        expect: It says so, and names the nearest dates that are covered.
+  - id: fields-to-watch
+    cue:
+      say: Which fields around 41.9N, 12.5E show a drop in vegetation this month compared with last?
+    narration: This month against the last, field by field.
+    moves:
+      - who: crop-monitoring
+        asks: earthdata
+        over: mcp
+        tool: search_earth_datagranules
+        does: read
+        what: the granules of this month and the last
+      - who: crop-monitoring
+        answers: table
+        what: the fields whose vegetation dropped, with the drop
+    expect: >-
+      A table of the fields whose vegetation dropped from last month to this,
+      each with the size of the drop, from the imagery found.
+    shows:
+      - table
+    pace: slow
+  - id: imagery-available
+    cue:
+      say: Which datasets and granules cover the Po valley for June 2026?
+    narration: What there is to look at, before anything is looked at.
+    moves:
+      - who: crop-monitoring
+        asks: earthdata
+        over: mcp
+        tool: search_earth_datasets
+        does: read
+        what: the datasets covering the Po valley
+      - who: crop-monitoring
+        asks: earthdata
+        over: mcp
+        tool: search_earth_datagranules
+        does: read
+        what: the granules of June 2026
+      - who: crop-monitoring
+        answers: table
+        what: the datasets and the granules, with their dates
+    expect: >-
+      A table of the datasets and the granules that cover the Po valley in
+      June 2026, with their dates; a download is left to the person.
+    shows:
+      - table
+    branch:
+      - decision: the audience asks to download the granules
+        expect: It leaves the download to a person, and says how.
+
+stage:
+  positions:
+    crop-monitoring: { x: 0.5, y: 0.5 }
+  opens_first: crop-monitoring
+  transcript:
+    tools: true
+    narration: true
+  inspectors:
+    - agent
+    - tools
+  rests_after: 10m
+  pace: steady
+
+audience:
+  who: visitors
+  ceiling_per_ask: 0.05
+  asks_a_day: 5
+
+rehearsal:
+  within: 240s
+  beats:
+    - beat: vigour-this-season
+      lines:
+        - "You → Crop monitoring"
+        - "Crop monitoring → Earthdata: search_earth_datasets"
+        - "Crop monitoring → Earthdata: search_earth_datagranules"
+        - "Crop monitoring: a chart"
+      must_say:
+        - vigour
+      must_not_say:
+        - downloaded
+      within: 90s
+    - beat: fields-to-watch
+      lines:
+        - "You → Crop monitoring"
+        - "Crop monitoring → Earthdata: search_earth_datagranules"
+        - "Crop monitoring: a table"
+      must_say:
+        - drop
+      within: 90s
+    - beat: imagery-available
+      lines:
+        - "You → Crop monitoring"
+        - "Crop monitoring → Earthdata: search_earth_*"
+        - "Crop monitoring: a table"
+      must_say:
+        - granule
+      must_not_say:
+        - downloaded
+      within: 60s
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Its runtime is not deployed under the demo account yet, and the rehearsal has not been played (A-14)."
+
+deployment:
+  account: demo
+  page: /
+  addresses:
+    crop-monitoring: DATALAYER_DEMO_SCENE_CROP_MONITORING_CROP_MONITORING_A2A_URL

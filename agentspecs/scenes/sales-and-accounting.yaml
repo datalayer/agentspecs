@@ -1,0 +1,211 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Scene: Sales & Accounting (LOOP A-13). The team `sales-and-accounting`
+# staged: Sales, in the visitor's browser, takes the request and asks
+# Accounting, on a runtime, which reads Datalayer's own Odoo books and
+# answers. Three beats, each a cue the audience may say.
+
+schema: loop.scene/v1
+id: sales-and-accounting
+version: 0.0.1
+name: Sales & Accounting
+description: >-
+  A sales desk asks Accounting for the figures and hands them over;
+  Accounting reads the Odoo books and answers, and changes nothing.
+tags:
+  - example
+  - scene
+  - odoo
+  - finance
+  - a2a
+icon: people
+emoji: "🤝"
+
+team: sales-and-accounting:0.0.1
+cast:
+  - member: sales
+    persona:
+      name: Sales
+      line: I take your request and bring the figures back.
+    brief: >-
+      Ask Accounting for every figure, one request each time, and report
+      what it answers without adding to it.
+  - member: accounting
+    persona:
+      name: Accounting
+      line: I read the books and answer; I change nothing.
+    brief: >-
+      Answer from the Odoo books, read only, in a table where a table
+      fits; say so when the books do not hold the answer.
+
+setting:
+  systems:
+    - server: odoo-accounting:0.0.1
+      as: Odoo
+      holds: Datalayer's own books, read only.
+  period: this month and the last
+  language: en
+  assumes: >-
+    Two agents over A2A — Sales in your browser, Accounting on Datalayer —
+    on Datalayer's own books in Odoo, read only.
+
+script:
+  - id: open-invoices
+    cue:
+      say: Which customer invoices are still open, and how much is due in total?
+    narration: Sales takes the request and asks Accounting, which reads the books.
+    moves:
+      - who: sales
+        asks: accounting
+        over: a2a
+        what: the open customer invoices and the total due
+      - who: accounting
+        asks: odoo
+        over: mcp
+        tool: odoo_accounting_list_invoices
+        does: read
+        what: the customer invoices still open
+      - who: accounting
+        answers: table
+        what: the open invoices by customer, with the total due
+      - who: sales
+        answers: words
+        what: what Accounting answered, as it answered it
+    expect: >-
+      A table of the open customer invoices, by customer, with one total that
+      matches the books; Sales adds nothing to it.
+    shows:
+      - table
+    pace: steady
+    branch:
+      - decision: the books hold no open invoice
+        expect: Sales says so in a sentence, and invents no figure.
+  - id: aged-receivables
+    cue:
+      say: Give me the aged receivables as of today, by customer.
+    narration: Accounting ages what is due, bucket by bucket.
+    moves:
+      - who: sales
+        asks: accounting
+        over: a2a
+        what: the aged receivables as of today, by customer
+      - who: accounting
+        asks: odoo
+        over: mcp
+        tool: odoo_accounting_aged_balance
+        does: read
+        what: the receivables, aged
+      - who: accounting
+        answers: table
+        what: each customer's balance by age, with the totals
+      - who: sales
+        answers: words
+        what: the table, and which customers are furthest behind
+    expect: >-
+      A table of the receivables by customer and by age, its totals the
+      books' own; Sales points at the customers furthest behind.
+    shows:
+      - table
+  - id: trial-balance
+    cue:
+      say: What does the trial balance say for last month?
+    narration: The whole of last month, account by account.
+    moves:
+      - who: sales
+        asks: accounting
+        over: a2a
+        what: the trial balance for last month
+      - who: accounting
+        asks: odoo
+        over: mcp
+        tool: odoo_accounting_trial_balance
+        does: read
+        what: last month's trial balance
+      - who: accounting
+        answers: table
+        what: the accounts with their debit and credit, balanced
+      - who: sales
+        answers: words
+        what: the table, and whether it balances
+    expect: >-
+      A trial balance for last month whose debits equal its credits; Sales
+      says that it balances, or that it does not.
+    shows:
+      - table
+    pace: slow
+    branch:
+      - decision: last month is not closed in the books
+        expect: Accounting says the balance is provisional, and gives it as it stands.
+
+stage:
+  positions:
+    sales: { x: 0.25, y: 0.5 }
+    accounting: { x: 0.75, y: 0.5 }
+  opens_first: sales
+  transcript:
+    tools: true
+    narration: true
+    withhold:
+      - ids
+  inspectors:
+    - agent
+    - a2a
+    - tools
+  rests_after: 10m
+  pace: steady
+
+audience:
+  who: visitors
+  ceiling_per_ask: 0.05
+  asks_a_day: 5
+
+rehearsal:
+  within: 180s
+  beats:
+    - beat: open-invoices
+      lines:
+        - "You → Sales"
+        - "Sales → Accounting"
+        - "Accounting → Odoo: odoo_accounting_list_invoices"
+        - "Accounting: a table"
+        - "Sales: words"
+      must_say:
+        - invoice
+      must_not_say:
+        - I cannot
+        - error
+      within: 60s
+    - beat: aged-receivables
+      lines:
+        - "You → Sales"
+        - "Sales → Accounting"
+        - "Accounting → Odoo: odoo_accounting_aged_balance"
+        - "Accounting: a table"
+        - "Sales: words"
+      must_say:
+        - days
+      within: 60s
+    - beat: trial-balance
+      lines:
+        - "You → Sales"
+        - "Sales → Accounting"
+        - "Accounting → Odoo: odoo_accounting_trial_balance"
+        - "Accounting: a table"
+        - "Sales: words"
+      must_say:
+        - debit
+        - credit
+      within: 60s
+  verified:
+    live:
+      - "Sales asked Accounting live over A2A on a developer's machine (2026-10-06) for the open customer invoices: Accounting read the aged receivables and said the list of invoices had failed; one column total was wrong."
+    recorded: []
+    unverified:
+      - "The rehearsal has not been played as a set (A-14): the scene is not Live yet."
+
+deployment:
+  account: demo
+  page: /
+  addresses:
+    accounting: DATALAYER_DEMO_TEAM_ACCOUNTING_A2A_URL
