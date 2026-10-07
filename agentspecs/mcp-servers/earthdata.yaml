@@ -12,7 +12,8 @@ description: Access NASA Earthdata search and metadata capabilities
 # `npx` never started it on a runtime (2026-10-07: every Earthdata scene
 # member failed with "Connection closed"). Searching NASA's catalogue is
 # anonymous — the toolset asks for no Earthdata login; a download, run on the
-# sandbox, reads EARTHDATA_USERNAME and EARTHDATA_PASSWORD there.
+# sandbox, reads EARTHDATA_USERNAME and EARTHDATA_PASSWORD there
+# (`sandbox_envvars`).
 command: npx
 args:
   - "-y"
@@ -25,6 +26,13 @@ enabled: true
 env: {}
 envvars:
   - DATALAYER_API_KEY:0.0.1
+# What the code its tools write reads in the code sandbox, not the server:
+# download_earth_data_granules' `script` mode answers a Python script that
+# logs in to NASA Earthdata there. Given to the sandbox when the account has
+# them, never to the server, never required: searching is anonymous.
+sandbox_envvars:
+  - EARTHDATA_USERNAME:0.0.1
+  - EARTHDATA_PASSWORD:0.0.1
 
 tags:
   - geospatial

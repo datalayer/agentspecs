@@ -8,6 +8,10 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.65
+
+- The `earthdata` MCP server declares what its download's script reads in the code sandbox (STUDIO R-19): `sandbox_envvars`, `EARTHDATA_USERNAME` and `EARTHDATA_PASSWORD` (new env-var specs). A runtime is given only the secrets its specs declare, so these reach the sandbox again when the account has them — never the server, and never required: searching is anonymous.
+
 ## 0.0.64
 
 Components in the answers of the home page's scenes (STUDIO H-02, H-03).
