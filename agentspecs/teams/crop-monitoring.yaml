@@ -1,0 +1,64 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Team Specification: Crop monitoring
+# A scene of one agent and its data (LOOP A-04, A-08). Crop monitoring, on a
+# runtime, searches and reads the satellite imagery NASA Earthdata holds
+# through the earthdata server; a person talks to it over A2A. Nobody else
+# is in the scene.
+
+id: crop-monitoring
+version: 0.0.1
+name: Crop monitoring
+description: >-
+  One agent, its data: Crop monitoring follows crop vigour and growth over a
+  season from the satellite imagery NASA Earthdata holds, and flags the
+  fields that need attention.
+tags:
+  - example
+  - scene
+  - earth-observation
+  - agriculture
+  - earthdata
+  - a2a
+enabled: true
+icon: telescope
+emoji: "🛰️"
+color: "#1a7f37"
+
+orchestration_protocol: a2a
+execution_mode: supervisor
+supervisor:
+  name: Crop monitoring
+  app: crop-monitoring:0.0.1
+  can_terminate: true
+entry: crop-monitoring
+routing_instructions: >-
+  Crop monitoring answers every request from the imagery itself, one search
+  at a time, and reports what the granules show without adding to it.
+
+suggestions:
+  - text: How has crop vigour evolved over the last three months around 45.5N, 10.2E?
+    emoji: "🌱"
+  - text: Which fields around 41.9N, 12.5E show a drop in vegetation this month compared with last?
+    emoji: "🌾"
+  - text: Which datasets and granules cover the Po valley for June 2026?
+    emoji: "🛰️"
+
+context:
+  sharing: shared
+
+delegation:
+  max_depth: 0
+
+validation:
+  timeout: 300s
+
+agents:
+  - id: crop-monitoring
+    app: crop-monitoring:0.0.1
+    role: initiator
+    runs_in: runtime
+    goal: >-
+      Take the person's field and period, search the imagery that covers
+      them, and report the vigour, the growth and the fields to watch.

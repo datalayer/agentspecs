@@ -1,0 +1,65 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Team Specification: Month-end close
+# A scene of one agent and its data (LOOP A-04, A-08). Month-end close, on a
+# runtime, reads the Odoo books through odoo-accounting and drives the close;
+# a person talks to it over A2A. Nobody else is in the scene.
+
+id: month-end-close
+version: 0.0.1
+name: Month-end close
+description: >-
+  One agent, its data: Month-end close drives the close from the Odoo books,
+  which it only reads — the checklist, the accruals to book, the
+  reconciliation gaps that remain.
+tags:
+  - example
+  - scene
+  - accounting
+  - finance
+  - odoo
+  - a2a
+enabled: true
+icon: sync
+emoji: "🧾"
+color: "#bf8700"
+
+orchestration_protocol: a2a
+execution_mode: supervisor
+# The one member decides what it reads and what the person is told: it is
+# the scene's supervisor and its front door.
+supervisor:
+  name: Month-end close
+  app: month-end-close:0.0.1
+  can_terminate: true
+entry: month-end-close
+routing_instructions: >-
+  Month-end close answers every request from the books itself, one read at a
+  time, and reports what the books hold without adding to it.
+
+suggestions:
+  - text: Where does the month-end close stand for last month? Give me the checklist.
+    emoji: "☑️"
+  - text: Which accruals should be booked for last month, and for how much?
+    emoji: "🧾"
+  - text: Which bank lines and open items are still unreconciled for last month?
+    emoji: "🏦"
+
+context:
+  sharing: shared
+
+delegation:
+  max_depth: 0
+
+validation:
+  timeout: 300s
+
+agents:
+  - id: month-end-close
+    app: month-end-close:0.0.1
+    role: initiator
+    runs_in: runtime
+    goal: >-
+      Take the person's request, read the period's books, and report where
+      the close stands: what is done, what is to book, what is still open.

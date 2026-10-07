@@ -8,6 +8,21 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.60
+
+A scene is a team (LOOP A-04, decided 2026-10-07): one member allowed, none refused; each member its role, the team its shared context, each interaction its protocol. The three scenes the home page needs beside Sales and Accounting (A-08).
+
+Pages: [Teams of applications](https://agentspecs.datalayer.tech/agent-teams/applications) (Scenes), [Members](https://agentspecs.datalayer.tech/agent-teams/members), [Execution](https://agentspecs.datalayer.tech/agent-teams/execution) (`context`).
+
+- `TeamSpec.agents` holds one member at least: a team with none is refused (`has no member`). A single member is a scene of one agent and its data.
+- `TeamSpec.context` (`TeamContext`): `sharing` (`TeamSharing`: `shared` unless said, `isolated`, `own-turns` — what `jupyter.yaml` wrote and the generators read) and `frames`, the Frames every member works under, in order, as a Cog names its own; a Frame named twice refused. `referenced_frames()`.
+- `TeamMember.server`: a member that is an MCP server of the catalogue, a system of the scene the others reach over MCP, in place of `ref` and `app` (`is_server`, `display_name`); it has no `talks_to` and no `subagents`, and the team does not enter at it. `referenced_servers()`.
+- `TeamProtocol.MCP`: `talks_to … over: mcp`, to a server member only; `a2a` to an agent or an application only. Refused in sentences: a link to one not in the team (both names said), to itself, over the protocol that does not fit who is asked, a server that asks, a scene entering at a server. `links()`: every interaction, (who asks, who is asked, over what).
+- Scenes: `teams/month-end-close.yaml` (Month-end close alone, on a runtime, reading Odoo through `odoo-accounting`), `teams/crop-monitoring.yaml` (Crop monitoring alone, on a runtime, on `earthdata`), `teams/disaster-assessment.yaml` (Event response, in the browser, asks Disaster assessment and Change detection, each on a runtime over A2A, each on `earthdata`), each with its page words — a name, one line, the entry's starters as its suggestions.
+- Applications: `apps/month-end-close.yaml` (`worker-month-end-close`, `odoo-accounting` at read), `apps/crop-monitoring.yaml` (`worker-crop-monitoring`), `apps/disaster-assessment.yaml` (`worker-disaster-assessment`), `apps/change-detection.yaml` (`worker-change-detection`), each on `earthdata` at read, and `apps/event-response.yaml` (`worker-event-response`, no connection: it asks and reports). What each needs is said as setup: the five workers are not enabled, `odoo-accounting` is not, `earthdata` is.
+- `mcp-servers/earthdata.yaml` classes its three tools, read off its code: the two searches read, `download_earth_data_granules` writes (its `download` mode); at *Can read* the searches are done and the download is left to the person.
+- Tests: `test_teams.py` (`TestScenes`), `test_apps.py`.
+
 ## 0.0.59
 
 Components a developer writes (LOOP P-17): a component of one application only, declared in its spec and reviewed as the catalog's own.

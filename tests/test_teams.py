@@ -294,8 +294,10 @@ class TestTeamsOfApplications:
             assert app_problems(APP_CATALOGUE[ref.split(":")[0]]) == [], ref
 
     def test_a_member_is_an_agent_or_an_application_not_both(self):
-        with pytest.raises(ValueError, match="not both"):
+        with pytest.raises(ValueError, match="not two of them"):
             TeamSpec(**_minimal(agents=[{"id": "a", "ref": "x:0.0.1", "app": "sales"}]))
+        with pytest.raises(ValueError, match="not two of them"):
+            TeamSpec(**_minimal(agents=[{"id": "a", "app": "sales", "server": "odoo-accounting"}]))
         with pytest.raises(ValueError, match="not both"):
             TeamSpec(**_minimal(supervisor={"name": "S", "ref": "x", "app": "sales"}))
 
@@ -315,3 +317,190 @@ class TestTeamsOfApplications:
             )
         with pytest.raises(ValueError):
             TeamSpec(**_minimal(agents=[{**apps[0], "runs_in": "moon"}, apps[1]]))
+
+
+MCP_SERVERS_DIR = pathlib.Path(__file__).parent.parent / "agentspecs" / "mcp-servers"
+
+#: The four scenes of the home page (LOOP A-08), each a team: its entry, its
+#: other members, and the MCP servers under each member.
+SCENES = {
+    "sales-and-accounting": ("sales", ["accounting"], {"accounting": ["odoo-accounting"]}),
+    "month-end-close": ("month-end-close", [], {"month-end-close": ["odoo-accounting"]}),
+    "crop-monitoring": ("crop-monitoring", [], {"crop-monitoring": ["earthdata"]}),
+    "disaster-assessment": (
+        "event-response",
+        ["disaster-assessment", "change-detection"],
+        {"disaster-assessment": ["earthdata"], "change-detection": ["earthdata"]},
+    ),
+}
+
+
+class TestScenes:
+    """A scene is a team (LOOP A-04, decided 2026-10-07).
+
+    One member allowed, none refused; each member its role; the team its
+    shared context; each link its protocol, fitting who is asked.
+    """
+
+    def test_a_team_may_hold_one_member_and_never_none(self):
+        alone = TeamSpec(**_minimal(agents=[{"id": "a", "ref": "x:0.0.1"}]))
+        assert [member.id for member in alone.agents] == ["a"]
+        assert alone.execution_order() == [["a"]]
+        with pytest.raises(ValueError, match="has no member"):
+            TeamSpec(**_minimal(agents=[]))
+
+    def test_a_member_talking_to_one_not_in_the_scene_is_refused(self):
+        with pytest.raises(ValueError, match="talks to 'nobody', which is not a member"):
+            TeamSpec(
+                **_minimal(agents=[{"id": "a", "app": "sales", "talks_to": [{"member": "nobody"}]}])
+            )
+
+    def test_a_server_is_asked_over_mcp_and_an_agent_over_a2a(self):
+        from agentspecs.teams import TeamProtocol
+
+        members = [
+            {"id": "a", "app": "accounting", "talks_to": [{"member": "odoo", "over": "mcp"}]},
+            {"id": "odoo", "server": "odoo-accounting:0.0.1"},
+        ]
+        team = TeamSpec(**_minimal(agents=members))
+        assert team.member("odoo").is_server
+        assert team.member("odoo").display_name == "odoo-accounting"
+        assert team.referenced_servers() == ["odoo-accounting:0.0.1"]
+        assert team.links() == [("a", "odoo", TeamProtocol.MCP)]
+        # The protocol fits who is asked.
+        with pytest.raises(ValueError, match="over a2a, which is a server"):
+            TeamSpec(
+                **_minimal(
+                    agents=[
+                        {**members[0], "talks_to": [{"member": "odoo", "over": "a2a"}]},
+                        members[1],
+                    ]
+                )
+            )
+        with pytest.raises(ValueError, match="over mcp, which is not a server"):
+            TeamSpec(
+                **_minimal(
+                    agents=[
+                        {"id": "a", "app": "sales", "talks_to": [{"member": "b", "over": "mcp"}]},
+                        {"id": "b", "app": "accounting"},
+                    ]
+                )
+            )
+        # A server answers and asks nobody; a person talks to no server.
+        with pytest.raises(ValueError, match="is a server: it answers over MCP and asks nobody"):
+            TeamSpec(**_minimal(agents=[{**members[1], "talks_to": [{"member": "a"}]}, members[0]]))
+        with pytest.raises(ValueError, match="a server: a person talks to an agent"):
+            TeamSpec(**_minimal(agents=members, entry="odoo"))
+
+    def test_the_shared_context_names_the_conversation_and_the_frames(self):
+        from agentspecs.frames import compose_frames
+        from agentspecs.teams import TeamSharing
+
+        plain = TeamSpec(**_minimal())
+        assert plain.context.sharing is TeamSharing.SHARED
+        assert plain.referenced_frames() == []
+        team = TeamSpec(
+            **_minimal(
+                context={"sharing": "own-turns", "frames": ["datalayer:0.0.1", "sales-pipeline"]}
+            )
+        )
+        assert team.context.sharing is TeamSharing.OWN_TURNS
+        assert team.referenced_frames() == ["datalayer:0.0.1", "sales-pipeline"]
+        # The Frames compose as a Cog's do.
+        assert compose_frames(team.referenced_frames()).frames == ["datalayer", "sales-pipeline"]
+        with pytest.raises(ValueError, match="named twice"):
+            TeamSpec(**_minimal(context={"frames": ["datalayer", "datalayer:0.0.1"]}))
+        with pytest.raises(ValueError):
+            TeamSpec(**_minimal(context={"sharing": "telepathy"}))
+        # What jupyter.yaml wrote before the context had Frames still reads.
+        assert get_team("jupyter").context.sharing is TeamSharing.SHARED
+
+    def test_every_frame_and_server_a_team_names_exists(self):
+        from agentspecs.frames import get_frame
+
+        known_servers = {
+            yaml.safe_load(path.read_text())["id"] for path in MCP_SERVERS_DIR.glob("*.yaml")
+        }
+        for team in TEAM_CATALOGUE:
+            for ref in team.referenced_frames():
+                assert get_frame(ref.split(":")[0]) is not None, (team.id, ref)
+            for ref in team.referenced_servers():
+                assert ref.split(":")[0] in known_servers, (team.id, ref)
+
+    def test_the_four_scenes_of_the_home_page(self):
+        """LOOP A-08: Sales & Accounting, Month-end close, Crop monitoring, Disaster assessment."""
+        from agentspecs.apps import APP_CATALOGUE, app_problems
+        from agentspecs.teams import TeamPlace, TeamProtocol, TeamRole
+
+        for scene, (entry, others, servers) in SCENES.items():
+            team = get_team(scene)
+            assert team is not None, scene
+            assert "scene" in team.tags or scene == "sales-and-accounting", scene
+            assert team.entry == entry and team.supervisor.app.startswith(f"{entry}:"), scene
+            assert [member.id for member in team.agents] == [entry, *others], scene
+            assert team.member(entry).role is TeamRole.INITIATOR, scene
+            # Its page words: a name, one line, and the entry's starters as its openers.
+            assert team.name and team.description.strip(), scene
+            front = APP_CATALOGUE[entry]
+            assert [item.text for item in team.suggestions] == [
+                starter.message for starter in front.interface.starters
+            ], scene
+            # The entry asks each other member over A2A; the others ask nobody.
+            assert [(asked, over) for _, asked, over in team.links()] == [
+                (other, TeamProtocol.A2A) for other in others
+            ], scene
+            for other in others:
+                assert team.member(other).talks_to == [], scene
+                assert team.member(other).runs_in is TeamPlace.RUNTIME, scene
+            # The MCP servers under each member are its application's connections.
+            for member in team.agents:
+                app = APP_CATALOGUE[member.app.split(":")[0]]
+                assert app_problems(app) == [], (scene, member.id)
+                assert [
+                    connection.server.split(":")[0] for connection in app.connections
+                ] == servers.get(member.id, []), (scene, member.id)
+            # A member with a connection runs where its credential is.
+            for member in team.agents:
+                if servers.get(member.id):
+                    assert member.runs_in is TeamPlace.RUNTIME, (scene, member.id)
+
+    def test_a_single_agent_scene_says_so(self):
+        for scene in ("month-end-close", "crop-monitoring"):
+            team = get_team(scene)
+            assert len(team.agents) == 1, scene
+            assert team.description.startswith("One agent, its data:"), scene
+            assert team.links() == [], scene
+            assert team.delegation.max_depth == 0, scene
+
+    def test_what_each_scene_needs_is_said_as_setup(self):
+        """What is not enabled is setup, said in words (LOOP E-01): the agents are off,
+        earthdata is on, odoo-accounting is off."""
+        from agentspecs.apps import APP_CATALOGUE, app_setup
+
+        assert app_setup(APP_CATALOGUE["month-end-close"]) == [
+            "The agent 'worker-month-end-close:0.0.1' is not enabled.",
+            "The MCP server 'odoo-accounting:0.0.1' is not enabled.",
+        ]
+        assert app_setup(APP_CATALOGUE["crop-monitoring"]) == [
+            "The agent 'worker-crop-monitoring:0.0.1' is not enabled.",
+        ]
+        assert app_setup(APP_CATALOGUE["event-response"]) == [
+            "The agent 'worker-event-response:0.0.1' is not enabled.",
+        ]
+        for identity in ("disaster-assessment", "change-detection"):
+            assert app_setup(APP_CATALOGUE[identity]) == [
+                f"The agent 'worker-{identity}:0.0.1' is not enabled.",
+            ]
+
+    def test_earthdata_reads_its_searches_at_can_read(self):
+        """Earthdata's tools are classed (read off its code): at *Can read* the two
+        searches are done, and the download — which writes files — is left to the person."""
+        from agentspecs.apps import APP_CATALOGUE, Behaviour, tool_behaviours
+
+        for identity in ("crop-monitoring", "disaster-assessment", "change-detection"):
+            behaviours = tool_behaviours(APP_CATALOGUE[identity])
+            assert behaviours["earthdata.search_earth_datasets"] is Behaviour.DO_IT, identity
+            assert behaviours["earthdata.search_earth_datagranules"] is Behaviour.DO_IT, identity
+            assert behaviours["earthdata.download_earth_data_granules"] is Behaviour.LEAVE_TO_ME, (
+                identity
+            )

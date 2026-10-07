@@ -615,6 +615,12 @@ EXAMPLES = {
     "decide": AppKind.CHAT,
     "sales": AppKind.CHAT,
     "accounting": AppKind.CHAT,
+    # The scenes of LOOP A-08: one agent and its data, and a desk that asks two.
+    "month-end-close": AppKind.CHAT,
+    "crop-monitoring": AppKind.CHAT,
+    "event-response": AppKind.CHAT,
+    "disaster-assessment": AppKind.CHAT,
+    "change-detection": AppKind.CHAT,
     "customer-interview": AppKind.CHAT,
     "quote-calculator": AppKind.WIDGET,
     "report-from-a-file": AppKind.WIDGET,

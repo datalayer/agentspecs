@@ -52,6 +52,26 @@ supervisor:
 supervisor that also does work will end the run at the natural moment for
 *its own* job, which may be well before the team's is done.
 
+## `context` (object)
+What the members share: how much of the conversation each is told, and the
+Frames they all work under.
+
+| Field | Default | Meaning |
+| --- | --- | --- |
+| `sharing` | `shared` | `shared`: one thread, every member is sent all of it — what a supervisor team wants. `isolated`: a thread per member, the child runs blind and returns a result. `own-turns`: one thread on screen, each member sent only the turns it took part in. |
+| `frames` | `[]` | The [Frames](../frames) every member works under, in order, `id` or `id:version`, as a Cog names its own. A member's own Frames (its application's `context`) come on top. A Frame named twice is refused. |
+
+```yaml
+context:
+  sharing: shared
+  frames:
+    - datalayer:0.0.1
+    - sales-pipeline
+```
+
+`compose_frames(team.referenced_frames())` gives the one context the team's
+Frames make, the way a Cog is given its own.
+
 ## `delegation` (object)
 How far members may hand work to each other, and to subagents.
 

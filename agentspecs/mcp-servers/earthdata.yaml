@@ -32,8 +32,14 @@ emoji: 🌍
 # What each tool does to the world (agentspecs.actions). A tool not named here is
 # unknown, and unknown is the most restricted.
 actions:
-  checked: null
+  checked: "2026-10-07"
   note: >-
-    Not read off the running server yet: its tools are unknown, and unknown is the most
-    restricted. Run the server, list its tools, and class each one here.
-  tools: {}
+    Read off the server's own code (earthdata-mcp-server's extension, its tool
+    annotations): the two searches read NASA's catalogue and change nothing;
+    download_earth_data_granules writes files where the server runs in its
+    `download` mode (its `manifest` and `script` modes only read), so it is
+    classed by the most it does.
+  tools:
+    search_earth_datasets: read
+    search_earth_datagranules: read
+    download_earth_data_granules: write

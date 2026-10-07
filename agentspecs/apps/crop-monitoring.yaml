@@ -1,0 +1,114 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Crop monitoring
+# One agent and its data: the scene `crop-monitoring` (LOOP A-04, A-08) has
+# this single member. It follows crop vigour and growth over a season from
+# the satellite imagery NASA Earthdata holds, found through the `earthdata`
+# MCP server at *Can read*: it searches the datasets and the granules that
+# cover a field and a period, and downloads nothing — the one tool that
+# writes files is held back by the level, and its instructions say it works
+# from what a search describes and the scripts it writes for a person to run.
+#
+# It runs on a runtime, where its connection is, and answers over A2A at
+# `/api/v1/a2a/agents/crop-monitoring/`: the person's page talks to it there.
+
+schema: loop.app/v1
+id: crop-monitoring
+version: 0.0.1
+name: Crop monitoring
+kind: chat
+description: >-
+  Tracks crop vigour and growth over time from the satellite imagery NASA
+  Earthdata holds, which it searches and reads, and flags the fields that
+  need attention, with the datasets and granules behind each finding.
+owner: Datalayer <info@datalayer.io>
+
+agent: worker-crop-monitoring:0.0.1
+instructions: >-
+  You monitor crops from satellite imagery. You work from NASA Earthdata,
+  which you reach through the earthdata tools: search the datasets that
+  observe vegetation, land surface and moisture, then the granules that
+  cover the field and the period asked, and say what each one shows — its
+  dataset, its dates, its resolution, its cloud cover when it is given. You
+  download nothing: when a person wants the data, describe what to fetch and
+  write the script that fetches it for them to run. Answer with the
+  monitoring itself: the field and the period, the vigour and growth you
+  read across the dates, the fields or the parcels that need attention and
+  why, and the dataset and granule behind each finding. When a request does
+  not say the field or the period, ask before you search. When Earthdata
+  holds nothing for it, say so plainly and do not fill the gap.
+
+connections:
+  - server: earthdata:0.0.1
+    access: read
+    as: owner
+
+rules:
+  - action: Search and read the imagery
+    applies_to: read
+    behaviour: do_it
+  - action: Download files to the runtime
+    applies_to: write
+    behaviour: ask_first
+
+interface:
+  layout: chat
+  accent: lime
+  # The eyes, who watch the fields from above.
+  assistant: eyes
+  welcome: >-
+    Give me a field and a period, and I'll follow its crops across the
+    satellite imagery NASA Earthdata holds: vigour, growth and what needs
+    attention. I search and read; I download nothing.
+  outputs:
+    - text/markdown
+    - application/x-ipynb+json
+  starters:
+    - label: Vigour this season
+      message: How has crop vigour evolved over the last three months around 45.5N, 10.2E?
+    - label: Fields to watch
+      message: Which fields around 41.9N, 12.5E show a drop in vegetation this month compared with last?
+    - label: Imagery available
+      message: Which datasets and granules cover the Po valley for June 2026?
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: How has crop vigour evolved over the last three months around 45.5N, 10.2E?
+      expect: >-
+        It searches the vegetation datasets and their granules over the
+        period with the earthdata tools and answers with what the imagery
+        shows across the dates, naming each dataset and granule.
+    - ask: Which datasets and granules cover the Po valley for June 2026?
+      expect: It lists the datasets and granules it found, with their dates, and downloads nothing.
+    - ask: Download the granules for me.
+      expect: >-
+        It does not download them. It writes the script a person would run,
+        and says what it would fetch.
+    - ask: Which fields are at risk on Mars?
+      expect: It says Earthdata holds no such imagery, and invents nothing.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "It has not run live yet: its agent is set up, not enabled, on this machine; the earthdata server is enabled."
+      - "Its tests have not been run as a set: no validation run is attached to it."
+
+record:
+  keep_for: 30_days
+  include: [conversations]
+
+deployment:
+  hosted:
+    visibility: private
+
+tags:
+  - example
+  - earth-observation
+  - agriculture
+  - earthdata
+  - a2a
+  - scene
+icon: telescope
+emoji: "🌾"

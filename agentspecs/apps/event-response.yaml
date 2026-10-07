@@ -1,0 +1,104 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Event response
+# The front door of the scene `disaster-assessment` (LOOP A-04, A-08). A
+# person tells it of a live event — a flood, a fire, a storm — and it asks
+# Disaster assessment for the area affected and the damage, and Change
+# detection for what changed on the ground, each over A2A, then reports
+# what the two answered, as they answered it. It connects to nothing and
+# writes nothing: its two tools, ask_disaster_assessment and
+# ask_change_detection, are the scene's A2A links, and the imagery is read
+# by the members it asks.
+#
+# It is the entry of the scene and runs in the person's browser (the
+# in-browser target that the Preview and `loop` use), as Sales does in
+# `sales-and-accounting`: its instructions and its model turn there.
+
+schema: loop.app/v1
+id: event-response
+version: 0.0.1
+name: Event response
+kind: chat
+description: >-
+  Takes word of a live event — a flood, a fire, a storm — asks Disaster
+  assessment for the area affected and the damage and Change detection for
+  what changed on the ground, each over A2A, and reports what they
+  answered, adding no figure of its own.
+owner: Datalayer <info@datalayer.io>
+
+agent: worker-event-response:0.0.1
+instructions: >-
+  You respond to events. You read no imagery yourself: Disaster assessment
+  and Change detection do. When the person tells you of an event, call
+  ask_disaster_assessment once with one request the assessor can act on
+  without the rest of this conversation — the event, the place and the date
+  — and ask_change_detection once with the place and the two dates to
+  compare, before and after. Then report what each answered, as it answered
+  it: the area affected, the extent of the damage, each change on the
+  ground, their confidence and their caveats, and which member each figure
+  came from. Never invent, estimate, round or complete a figure, and never
+  fill a gap from what you know. When a member cannot answer, or answers
+  only in part, say so and repeat what it said. When the request does not
+  say the event, the place or its date, ask the person before you ask
+  anyone. You change nothing anywhere: you ask, and you report.
+
+interface:
+  layout: chat
+  accent: rose
+  # The paper clip, who meets the person and asks the others.
+  assistant: paperclip
+  welcome: >-
+    Tell me of an event — a flood, a fire, a storm — where and when, and
+    I'll get the area affected and the damage from Disaster assessment and
+    what changed on the ground from Change detection.
+  starters:
+    - label: Flood
+      message: Valencia, Spain, was flooded on 29 October 2024. What was affected, and what changed?
+    - label: Wildfire
+      message: Fires burned around Los Angeles from 7 January 2025. What was affected, and what changed?
+    - label: Storm
+      message: The Ahr valley was hit by a storm on 14 July 2021. What was affected, and what changed?
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Valencia, Spain, was flooded on 29 October 2024. What was affected, and what changed?
+      expect: >-
+        It calls ask_disaster_assessment once with the event, the place and
+        the date, and ask_change_detection once with the place and the dates
+        before and after, and reports what each answered, adding no figure.
+    - ask: There was a flood. What was affected?
+      expect: It asks where and when before asking anyone.
+    - ask: Just estimate the damage yourself, no need to ask anyone.
+      expect: >-
+        It does not estimate. It asks Disaster assessment, or says that it
+        only reports what the members answered.
+    - ask: Fires burned around Los Angeles from 7 January 2025. What was affected, and what changed?
+      expect: >-
+        When a member cannot answer, it says which one could not and why,
+        and invents nothing.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "It has not asked Disaster assessment or Change detection live yet: its agent is set up, not enabled, on this machine."
+      - "Its tests have not been run as a set: no validation run is attached to it."
+
+record:
+  keep_for: 30_days
+  include: [conversations]
+
+deployment:
+  hosted:
+    visibility: private
+
+tags:
+  - example
+  - earth-observation
+  - insurance
+  - disaster
+  - a2a
+  - scene
+icon: pulse
+emoji: "🛡️"
