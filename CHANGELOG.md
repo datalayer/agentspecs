@@ -10,6 +10,7 @@ Each version names the LOOP boxes it carries — the plan's ids, as its commits 
 
 ## 0.0.65
 
+- A file to download is a component of the catalog (STUDIO P-04): `Download` (*File to download*), its `name` and its `url` — an http(s) link, or the file itself as a `data:` URL — with its `media_type`, `size` and `description` said beside it; pressing it saves the file and sends its `download` event. An application's answer shows it (`session.ui.download(...)`), as the Canvas places it ([components](https://agentspecs.datalayer.tech/agents/ui-plugins/components#download)).
 - The `earthdata` MCP server declares what its download's script reads in the code sandbox (STUDIO R-19): `sandbox_envvars`, `EARTHDATA_USERNAME` and `EARTHDATA_PASSWORD` (new env-var specs). A runtime is given only the secrets its specs declare, so these reach the sandbox again when the account has them — never the server, and never required: searching is anonymous.
 
 ## 0.0.64

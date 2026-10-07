@@ -11,7 +11,7 @@ Every visual component a UI plugin renders, by the name a surface gives it. A co
 
 | Plugin | Catalog | Enabled | Components |
 | --- | --- | --- | --- |
-| `a2ui` (A2UI) | a2ui/v0.9 | yes | 24 |
+| `a2ui` (A2UI) | a2ui/v0.9 | yes | 25 |
 | `mcp-apps` (MCP Apps) | — | no | none of its own yet |
 | `mcp-ui` (MCP UI) | — | no | none of its own yet |
 
@@ -19,7 +19,7 @@ Every visual component a UI plugin renders, by the name a surface gives it. A co
 
 An agent describes an interface — a form, a table, a card — as a tree of components from a catalogue the host allows, and the host renders it; what the user does in it comes back to the agent as an action.
 
-Catalog `a2ui/v0.9`: 18 standard components, named and drawn as the protocol says ([A2UI](https://a2ui.org/)), and 6 of Datalayer's own. Every one has a version and its properties as a JSON Schema of the catalog's: what a builder sets, the Canvas draws a properties form from, and Python calls typed.
+Catalog `a2ui/v0.9`: 18 standard components, named and drawn as the protocol says ([A2UI](https://a2ui.org/)), and 7 of Datalayer's own. Every one has a version and its properties as a JSON Schema of the catalog's: what a builder sets, the Canvas draws a properties form from, and Python calls typed.
 
 | Id | Name | Category | Version | Standard | What it is for |
 | --- | --- | --- | --- | --- | --- |
@@ -47,6 +47,7 @@ Catalog `a2ui/v0.9`: 18 standard components, named and drawn as the protocol say
 | [`Chat`](#chat) | 💬 Chat | conversation | 1.0.0 | no | The conversation with the application: its welcome, its starters, the composer. |
 | [`Evidence`](#evidence) | 🔎 Evidence | data | 1.0.0 | no | What an answer rests on: the sources opened, the passages cited, each with its link. |
 | [`Form`](#form) | 🧾 Form | input | 1.1.0 | no | Several fields asked at once, from a JSON Schema, checked as they are filled and again when they arrive (drawn with @datalayer/primer-rjsf). |
+| [`Download`](#download) | 📄 File to download | data | 1.0.0 | no | A file the application gives, to save: a report, a sheet, an export — by its link, or the file itself as a data: URL. |
 
 ## A2UI: standard components
 
@@ -1290,4 +1291,72 @@ schema:
       type: integer
       minimum: 1
       title: Seats
+```
+
+### `Download`
+
+📄 **File to download** · data · version 1.0.0 — A file the application gives, to save: a report, a sheet, an export — by its link, or the file itself as a data: URL.
+
+| Property | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `name` (required) | text | **File name**. What the file is saved as, with its extension. | — |
+| `url` (required) | text | **Link**. Where the file is: an http(s) link, or the file itself as a data: URL. | — |
+| `media_type` | text | **Kind**. Its media type (text/csv, application/pdf…), said beside its name. | — |
+| `size` | integer (minimum 0) | **Size (bytes)**. How large it is, said beside its name. | — |
+| `description` | text | **Description**. A line under its name. | — |
+
+- **Shows**: nothing.
+- **Sends**: nothing.
+- **Events**: `download`.
+
+Its properties, as a JSON Schema:
+
+```json
+{
+  "type": "object",
+  "required": [
+    "name",
+    "url"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "File name",
+      "description": "What the file is saved as, with its extension.",
+      "minLength": 1
+    },
+    "url": {
+      "type": "string",
+      "title": "Link",
+      "description": "Where the file is: an http(s) link, or the file itself as a data: URL.",
+      "pattern": "^(https?://|data:)"
+    },
+    "media_type": {
+      "type": "string",
+      "title": "Kind",
+      "description": "Its media type (text/csv, application/pdf…), said beside its name."
+    },
+    "size": {
+      "type": "integer",
+      "title": "Size (bytes)",
+      "description": "How large it is, said beside its name.",
+      "minimum": 0
+    },
+    "description": {
+      "type": "string",
+      "title": "Description",
+      "description": "A line under its name."
+    }
+  }
+}
+```
+
+An example, valid against it:
+
+```yaml
+name: totals.csv
+url: data:text/csv;base64,bW9udGgsdG90YWwKSmFuLDEyMDAK
+media_type: text/csv
+size: 21
+description: The month's totals.
 ```

@@ -57,7 +57,7 @@ def _components() -> dict[str, dict]:
 def test_a2ui_hosts_its_basic_catalog_and_datalayers_own():
     components = _components()
     assert {name for name, c in components.items() if c["standard"]} == A2UI_BASIC
-    assert {"Table", "Chart", "Chat", "Evidence", "Form", "FileUpload"} <= set(components)
+    assert {"Table", "Chart", "Chat", "Evidence", "Form", "FileUpload", "Download"} <= set(components)
 
 
 def test_a_component_says_what_it_is():
