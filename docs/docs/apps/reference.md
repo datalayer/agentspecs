@@ -817,12 +817,13 @@ The application inside another product's page.
 
 ### HostBridge
 
-What the host page and the application say to each other (LOOP D-10). The values of the host it reads (`context`: `user`, `page`, or a name of the host's own), through the tool `host_context`; the functions of the host it may call, each through `host_<name>`. Every one of these tools is decided by a rule that names it, as any tool is: one no rule names is left to the person.
+What the host page and the application say to each other (LOOP D-10). The values of the host it reads (`context`: `user`, `page`, or a name of the host's own), through the tool `host_context`; the functions of the host it may call, each through `host_<name>`. Every one of these tools is decided by a rule that names it, as any tool is: one no rule names is left to the person. Who its user is (`user`, LOOP D-21): what the page says (`claimed`), or only what the host's server signed (`signed`) — a short token, HS256 with the deployment's secret, naming `sub`, `name` and `exp` at most an hour away. An application that acts in each user's name, or shows data that is theirs, says `signed`.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
 | `context` | list of text | The host's values it reads: `user`, `page`, or names of the host's own | — |
 | `functions` | list of [HostFunction](#hostfunction) | The host's functions it may call | — |
+| `user` | [HostUser](#hostuser) | Who its user is: `claimed`, what the page says; `signed`, only a token the host's server signed with the deployment's secret, the unsigned one refused | `"claimed"` |
 
 ### HostFunction
 
@@ -858,6 +859,7 @@ The application at an address of its own.
 | <a id="checkstage"></a>CheckStage | `answer`, `tool_call` |
 | <a id="criterionkind"></a>CriterionKind | `metric`, `noul`, `choice`, `score` |
 | <a id="embedmode"></a>EmbedMode | `inline`, `bubble`, `panel`, `assistant` |
+| <a id="hostuser"></a>HostUser | `claimed`, `signed` |
 | <a id="layout"></a>Layout | `chat`, `page`, `split` |
 | <a id="recorditem"></a>RecordItem | `conversations`, `actions`, `decisions`, `approvals`, `checks`, `sources`, `outputs`, `feedback`, `audio` |
 | <a id="thememode"></a>ThemeMode | `light`, `dark`, `auto` |

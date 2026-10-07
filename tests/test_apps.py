@@ -511,6 +511,32 @@ def test_the_host_page_passes_values_and_offers_functions_each_decided_by_a_rule
             app(deployment={"embedded": {"host": wrong}})
 
 
+def test_an_application_acting_in_each_users_name_takes_only_a_signed_user() -> None:
+    """LOOP D-21: `user: signed` refuses what the page claims; `claimed` unless said."""
+    from agentspecs.apps import HOST_USER_TOKEN_ALGORITHM, HOST_USER_TOKEN_MAX_SECONDS, HostUser
+
+    claimed = app(deployment={"embedded": {"host": {"context": ["user"]}}})
+    assert claimed.deployment.embedded.host.user is HostUser.CLAIMED
+    assert claimed.deployment.embedded.host.signed_user is False
+    assert "user" not in dump_app(claimed)["deployment"]["embedded"]["host"]
+    signed = app(
+        deployment={"embedded": {"host": {"context": ["user"], "user": "signed"}}},
+        rules=[{"action": "Read what the page says", "applies_to": "host_context", "behaviour": "do_it"}],
+    )
+    assert signed.deployment.embedded.host.signed_user is True
+    assert dump_app(signed)["deployment"]["embedded"]["host"]["user"] == "signed"
+    assert parse_app(dump_app(signed)) == signed
+    assert not [p for p in app_problems(signed) if "host" in p]
+    # Signed without reading it: the session's user still is the one signed.
+    alone = app(deployment={"embedded": {"host": {"user": "signed"}}})
+    assert alone.deployment.embedded.host.tools == []
+    assert (HOST_USER_TOKEN_ALGORITHM, HOST_USER_TOKEN_MAX_SECONDS) == ("HS256", 3600)
+    with pytest.raises(AppError, match="user"):
+        app(deployment={"embedded": {"host": {"user": "verified"}}})
+    schema = json_schema()
+    assert schema["$defs"]["HostUser"]["enum"] == ["claimed", "signed"]
+
+
 def test_a_decision_application_carries_the_whole_decision() -> None:
     decision = APP_CATALOGUE["ship-or-fix"].decision
     assert decision is not None

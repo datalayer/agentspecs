@@ -8,6 +8,15 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.57
+
+Who the user is, when it matters (LOOP D-21): an embedded application that acts in each user's name takes only a user the host's server signed.
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (Who the user is, when it matters), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `deployment.embedded.host.user` (`HostUser`): `claimed` (unless said), what the page says; `signed`, only a token the host's server signed with the deployment's secret — HS256 (`HOST_USER_TOKEN_ALGORITHM`), `sub`, `name` and `exp` at most an hour away (`HOST_USER_TOKEN_MAX_SECONDS`) — the unsigned one refused. `HostBridge.signed_user`.
+- JSON Schema and reference regenerated. Tests: `test_apps.py`.
+
 ## 0.0.56
 
 Profiles and settings in full (LOOP P-20), and translation (P-26): several assistants in one application, starters per profile and by category, the nine setting inputs, and what a person reads of an application in their own language.

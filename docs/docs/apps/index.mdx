@@ -88,7 +88,7 @@ record:
 | `tests` | How it is verified: `cases` in plain words (`ask`, `expect`, and `code` when a function of its code decides one), an `evalset`, `ready_at`, the share that has to pass, and `verified` — what was tried live, what runs on recorded data, and what is not verified yet, each in a sentence (`live`, `recorded`, `unverified`); every example of the catalogue says it, and the Studio's examples show it on their cards and pages. |
 | `record` | What is kept of what it did (`include`), for how long (`keep_for`: `90_days`, `1_years`), and whether its conversations may be used to suggest tests (`suggest_tests`, off unless said: only conversations kept while it is on are sampled). |
 | `checks` | Optional: `guards`, `gates` and a `track` of the catalogue, and `code`, the checks written in its code. |
-| `deployment` | Where it goes: `hosted` (a `visibility`, a `slug`, `character_alone`) and `embedded` (a `mode`, the `origins` allowed, and `host`: what the host page passes it and the functions of the host it may call). |
+| `deployment` | Where it goes: `hosted` (a `visibility`, a `slug`, `character_alone`) and `embedded` (a `mode`, the `origins` allowed, and `host`: what the host page passes it, the functions of the host it may call, and whether its `user` is `signed`). |
 | `goal`, `triggers`, `memory`, `notifications` | A worker's own: what it works toward, what starts its work, what it remembers, where an approval reaches a person. |
 | `decision` | A decision's own: the `question`, `alternatives`, `criteria`, `scenarios`, the review policy. |
 | `enabled`, `unavailable_because` | Whether it is offered today, `true` unless said; and, when it is not, why, in a sentence its page shows. One that is not offered says why; one that is says nothing. |
@@ -488,6 +488,30 @@ rules:
 `user` and `page` are what the page says of its visitor and of itself; any
 other name is a value of the host's own. A tool of the host that no rule
 names is left to the person, and `app_problems` says so.
+
+### Who the user is, when it matters
+
+What the page passes as `user` is a claim: anybody's page can say anything.
+An application that acts in each user's name, or shows data that is theirs,
+takes only a user the host's **server** signed (LOOP D-21):
+
+```yaml
+deployment:
+  embedded:
+    host:
+      context: [user]
+      user: signed      # claimed unless said
+```
+
+The host's server signs a short token naming its user with the secret of the
+deployment — HS256 only, with `sub` (the host's own id for the user), `name`
+and `exp`, at most an hour away (`HOST_USER_TOKEN_ALGORITHM`,
+`HOST_USER_TOKEN_MAX_SECONDS`) — and the page hands it to the embed. The
+runtime verifies it where the session is opened, and refuses a session with
+an unsigned or bad one in a sentence. The user it names is the session's:
+what `host_context` answers as `user`, and who a page the application saves
+was written for. The secret is made for each embedded deployment by its
+owner, under Ship, shown once, and never reaches the page.
 
 ## Action classes
 

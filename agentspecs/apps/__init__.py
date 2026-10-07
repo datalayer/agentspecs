@@ -1540,6 +1540,24 @@ class HostFunction(_Strict):
         return parameters
 
 
+class HostUser(str, Enum):
+    """What the host page's word on its visitor is worth (LOOP D-21)."""
+
+    CLAIMED = "claimed"
+    """What the page says, taken as it says it: anybody's page can say anything."""
+
+    SIGNED = "signed"
+    """Only a token the host's server signed with the deployment's secret: an
+    unsigned or bad one is refused, and no session is opened."""
+
+
+#: The longest a host's signed token naming its user may live, in seconds (LOOP D-21).
+HOST_USER_TOKEN_MAX_SECONDS = 3600
+
+#: The one algorithm a host signs its user's token with (LOOP D-21).
+HOST_USER_TOKEN_ALGORITHM = "HS256"
+
+
 class HostBridge(_Strict):
     """What the host page and the application say to each other (LOOP D-10).
 
@@ -1548,12 +1566,25 @@ class HostBridge(_Strict):
     host it may call, each through `host_<name>`. Every one of these tools is
     decided by a rule that names it, as any tool is: one no rule names is
     left to the person.
+
+    Who its user is (`user`, LOOP D-21): what the page says (`claimed`), or
+    only what the host's server signed (`signed`) — a short token, HS256
+    with the deployment's secret, naming `sub`, `name` and `exp` at most an
+    hour away. An application that acts in each user's name, or shows data
+    that is theirs, says `signed`.
     """
 
     context: List[str] = Field(
         default_factory=list, description="The host's values it reads: `user`, `page`, or names of the host's own"
     )
     functions: List[HostFunction] = Field(default_factory=list, description="The host's functions it may call")
+    user: HostUser = Field(
+        default=HostUser.CLAIMED,
+        description=(
+            "Who its user is: `claimed`, what the page says; `signed`, only a token the host's server "
+            "signed with the deployment's secret, the unsigned one refused"
+        ),
+    )
 
     @field_validator("context")
     @classmethod
@@ -1571,6 +1602,11 @@ class HostBridge(_Strict):
         if len(set(names)) != len(names):
             raise ValueError("the host's functions are named once each")
         return self
+
+    @property
+    def signed_user(self) -> bool:
+        """Whether a session is opened only for a user the host's server signed (D-21)."""
+        return self.user is HostUser.SIGNED
 
     @property
     def tools(self) -> List[str]:
@@ -2532,6 +2568,9 @@ __all__ = [
     "LANGUAGE_TAG",
     "SETTING_INPUTS",
     "EmbeddedDeployment",
+    "HOST_USER_TOKEN_ALGORITHM",
+    "HOST_USER_TOKEN_MAX_SECONDS",
+    "HostUser",
     "HostedDeployment",
     "Layout",
     "RecordItem",
