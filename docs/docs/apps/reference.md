@@ -549,6 +549,7 @@ What the user sees.
 | `uploads` | [AppUploads](#appuploads) | What a person may send in the composer without being asked — images, files, audio — by kind, each with its largest size, and how many at once (LOOP P-21). None when unsaid: the composer offers no attachment, and a file sent with a message is refused | empty |
 | `components` | list of text | The components of the catalog the surface may use; the kind's own when empty | — |
 | `surface` | [AppSurface](#appsurface) | The component tree, when there is one | empty |
+| `page` | [AppPage](#apppage) | A widget's page written in its code (`@app.page`, LOOP P-05): its inputs as a form, its outputs as values; run again as an input changes, its outputs shown in place. None when unsaid | empty |
 | `assistant` | text | The character its floating assistant shows, by the id a plugin contributes it under (lowercase letters and digits, words joined by a hyphen): Datalayer's are `paperclip`, `wizard`, `cat` and `eyes`. The paper clip when unsaid; an id no enabled plugin contributes is refused where the plugins are known, the runtime and the page. Said here, it wins over a person's own choice in their settings | empty |
 | `balloon` | [BalloonDisplay](#balloondisplay) | How its floating assistant's balloon shows the conversation: `history` (every message, scrolled, the composer last) or `current` (only what it says or does now, the answer being written or the tool it calls, in one balloon). The page's own when unsaid: `history` for the floating chat | empty |
 | `voice` | [AppVoice](#appvoice) | Its voice: whether it listens and speaks, with which voice, in which language (off unless said) | — |
@@ -594,6 +595,29 @@ An option of a mode in another language.
 | --- | --- | --- | --- |
 | `label` | text | What the switch says | empty |
 | `description` | text | What it changes | empty |
+
+### AppPage
+
+A widget's page written in its code (LOOP P-05): `@app.page`. Its inputs are a form, drawn on the page; as one changes, the function of its code runs again on them and the page shows what it returned, in place. Without its file nothing runs it, and validation says so.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `function` (required) | text | The function of its code that runs the page | — |
+| `inputs` (required) | mapping | Its inputs: the JSON Schema of a form, an object of named fields, each with its `title` and its `default`; on the page at `/inputs/<name>`, checked by the runtime against the same schema | — |
+| `inputs_ui` | mapping | How its inputs are drawn, as `interface.settings_ui` draws the settings: a uiSchema by field name | empty |
+| `outputs` (required) | list of [AppPageOutput](#apppageoutput) | What it shows for its inputs, in order, each at `/outputs/<name>` | — |
+| `live` | true or false | Whether it runs again as an input changes; `false`: when the person presses Run | `true` |
+
+### AppPageOutput
+
+One thing a page shows for its inputs (LOOP P-05): a value, drawn with a component.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `name` (required) | text | Its name: what its code returns it under, and where the page shows it (`/outputs/<name>`) | — |
+| `title` | text | What a person reads above it; none when unsaid | empty |
+| `component` | text | What draws it: `Text` (words, unless said), `Image` (an address), `Table` (rows) or `Chart` (points) | `"Text"` |
+| `props` | mapping | The component's other properties: a Table's `columns`, a Chart's `kind`, `x` and `y` | — |
 
 ### AppPermissions
 

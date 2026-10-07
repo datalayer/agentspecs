@@ -1973,3 +1973,63 @@ def test_an_application_declares_checks_and_tests_written_in_its_code() -> None:
     schema = json_schema()["$defs"]
     assert schema["CheckStage"]["enum"] == ["answer", "tool_call"]
     assert set(schema["AppTool"]["required"]) == {"name", "description", "does"}
+
+
+# --- a widget's page written in its code (LOOP P-05) ------------------------------------
+
+PAGE = {
+    "function": "quote",
+    "inputs": {
+        "type": "object",
+        "properties": {
+            "seats": {"type": "integer", "title": "Seats", "minimum": 1, "maximum": 1000, "default": 10},
+            "plan": {"type": "string", "title": "Plan", "enum": ["Team", "Business"], "default": "Team"},
+        },
+        "required": ["seats"],
+    },
+    "inputs_ui": {"seats": {"ui:widget": "range"}},
+    "outputs": [
+        {"name": "total", "title": "Total"},
+        {"name": "lines", "component": "Table", "props": {"columns": ["item", "amount"]}},
+        {"name": "by_month", "component": "Chart", "props": {"kind": "bar", "x": "month", "y": "amount"}},
+    ],
+}
+
+
+def test_a_widget_has_a_page_of_inputs_and_outputs() -> None:
+    from agentspecs.apps import PAGE_OUTPUT_COMPONENTS, AppPage
+
+    said = app(kind="widget", interface={"page": PAGE})
+    page = said.interface.page
+    assert isinstance(page, AppPage)
+    assert page.function == "quote" and page.live is True
+    assert [output.component for output in page.outputs] == ["Text", "Table", "Chart"]
+    assert dump_app(said)["interface"]["page"]["outputs"][0] == {"name": "total", "title": "Total"}
+    assert parse_app(dump_app(said)) == said
+    assert PAGE_OUTPUT_COMPONENTS == {"Text": "text", "Image": "url", "Table": "rows", "Chart": "points"}
+    assert app(kind="widget", interface={"page": {**PAGE, "live": False}}).interface.page.live is False
+
+
+def test_a_page_is_refused_in_sentences() -> None:
+    def outputs(*items: dict) -> dict:
+        return {**PAGE, "outputs": list(items)}
+
+    for wrong, sentence in (
+        (outputs(), "at least 1 item"),
+        (outputs({"name": "a"}, {"name": "a"}), "two outputs of its page have the same name"),
+        (outputs({"name": "a", "component": "Video"}), "an output is one of Text, Image, Table, Chart"),
+        (outputs({"name": "a", "component": "Table"}), "is a Table without 'columns'"),
+        (outputs({"name": "a", "component": "Chart", "props": {"kind": "bar"}}), "without 'x', 'y'"),
+        (outputs({"name": "a", "props": {"text": "x"}}), "what it shows is its value"),
+        (outputs({"name": "a b"}), "should match pattern"),
+        ({**PAGE, "inputs": {"type": "object", "properties": {}}}, "asks for no named field"),
+        ({**PAGE, "inputs_ui": {"plan": {"ui:widget": "range"}}}, "is a slider"),
+        ({**PAGE, "function": "not a name"}, "should match pattern"),
+    ):
+        with pytest.raises(AppError, match=re.escape(sentence)):
+            app(kind="widget", interface={"page": wrong})
+    with pytest.raises(AppError, match="a page of inputs and outputs is a widget's: a chat application has none"):
+        app(interface={"page": PAGE})
+    settings = {"type": "object", "properties": {"plan": {"type": "string"}}}
+    with pytest.raises(AppError, match="'plan' is both a setting and an input of its page"):
+        app(kind="widget", interface={"page": PAGE, "settings": settings})

@@ -619,6 +619,50 @@ cases with the same name, a tool named as a backend tool the application
 names, a tool that does not say what it `does` or says it twice, `parameters`
 that are not an object.
 
+### A widget's page
+
+A widget written in Python can have a page of its code (LOOP P-05): its
+inputs a form, its outputs values, and the function of its code that turns
+the one into the other. On the page each input is drawn at `/inputs/<name>`
+and each output at `/outputs/<name>`; as an input changes, the function runs
+again on them all and the outputs change in place — no message, no
+conversation.
+
+```yaml
+kind: widget
+interface:
+  page:
+    function: quote
+    live: true                 # false: it runs when the person presses Run
+    inputs:
+      type: object
+      properties:
+        seats: {type: integer, title: Seats, minimum: 1, maximum: 1000, default: 10}
+        plan: {type: string, title: Plan, enum: [Team, Business], default: Team}
+    inputs_ui:
+      seats: {"ui:widget": range}
+    outputs:
+      - name: total
+        title: Total            # a Text, unless said
+      - name: lines
+        component: Table
+        props: {columns: [item, amount]}
+```
+
+| Field | What it is |
+| --- | --- |
+| `function` | The function of its code that runs the page. Without its file nothing runs it: validation says so. |
+| `inputs` | A form, as `interface.settings` is: an object of named fields, each with its `title` and its `default`. The runtime checks what the page sends against it. |
+| `inputs_ui` | How the inputs are drawn, as `settings_ui` draws the settings. |
+| `outputs` | What it shows, one at least, in order: a `name`, a `title`, and the `component` that draws it — `Text` (words), `Image` (an address), `Table` (rows) or `Chart` (points) — with the component's other properties in `props` (a Table's `columns`, a Chart's `kind`, `x` and `y`). |
+| `live` | Whether it runs again as an input changes (`true` unless said), or when the person presses Run. |
+
+Refused: a page on an application that is not a widget, inputs that are not
+a form, two outputs of one name, an output drawn with another component, an
+output whose `props` say its id or the property its value fills, or lack one
+its component needs, and an input with the name of a setting (both are on the
+page at `/inputs/<name>`).
+
 ## A rule or a Gate, a test or a Guard
 
 The plain fields and the catalogue's accountability specs answer the same

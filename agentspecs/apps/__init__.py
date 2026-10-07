@@ -612,6 +612,101 @@ class AppSurface(_Strict):
         return components
 
 
+#: The name of a function of an application's code: what `code` and a code
+#: check name, and what an application's own tool is called (LOOP P-06).
+CODE_NAME = r"[A-Za-z_][A-Za-z0-9_]*"
+
+
+#: What a page's output may be drawn with (LOOP P-05), and the property of each
+#: that shows its value: a Text its words, an Image its address, a Table its
+#: rows, a Chart its points.
+PAGE_OUTPUT_COMPONENTS: Dict[str, str] = {"Text": "text", "Image": "url", "Table": "rows", "Chart": "points"}
+
+
+class AppPageOutput(_Strict):
+    """One thing a page shows for its inputs (LOOP P-05): a value, drawn with a component."""
+
+    name: str = Field(
+        ...,
+        pattern=rf"^{CODE_NAME}$",
+        description="Its name: what its code returns it under, and where the page shows it (`/outputs/<name>`)",
+    )
+    title: str = Field(default="", description="What a person reads above it; none when unsaid")
+    component: str = Field(
+        default="Text",
+        description="What draws it: `Text` (words, unless said), `Image` (an address), `Table` (rows) or `Chart` (points)",
+    )
+    props: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="The component's other properties: a Table's `columns`, a Chart's `kind`, `x` and `y`",
+    )
+
+    @model_validator(mode="after")
+    def _drawn(self) -> "AppPageOutput":
+        shows = PAGE_OUTPUT_COMPONENTS.get(self.component)
+        if shows is None:
+            raise ValueError(
+                f"the output {self.name!r} is drawn with {self.component!r}: "
+                f"an output is one of {', '.join(PAGE_OUTPUT_COMPONENTS)}"
+            )
+        given = sorted({shows, "id", "component"} & set(self.props))
+        if given:
+            raise ValueError(
+                f"the output {self.name!r} says {', '.join(repr(key) for key in given)} in its `props`: "
+                "its id is its name, and what it shows is its value"
+            )
+        component = component_named(self.component) or {}
+        required = (component.get("properties") or {}).get("required") or []
+        missing = [key for key in required if key != shows and key not in self.props]
+        if missing:
+            raise ValueError(
+                f"the output {self.name!r} is a {self.component} without "
+                f"{', '.join(repr(key) for key in missing)}: say it in its `props`"
+            )
+        return self
+
+
+class AppPage(_Strict):
+    """A widget's page written in its code (LOOP P-05): `@app.page`.
+
+    Its inputs are a form, drawn on the page; as one changes, the function
+    of its code runs again on them and the page shows what it returned, in
+    place. Without its file nothing runs it, and validation says so.
+    """
+
+    function: str = Field(..., pattern=rf"^{CODE_NAME}$", description="The function of its code that runs the page")
+    inputs: Dict[str, Any] = Field(
+        ...,
+        description=(
+            "Its inputs: the JSON Schema of a form, an object of named fields, each with its `title` and "
+            "its `default`; on the page at `/inputs/<name>`, checked by the runtime against the same schema"
+        ),
+    )
+    inputs_ui: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="How its inputs are drawn, as `interface.settings_ui` draws the settings: a uiSchema by field name",
+    )
+    outputs: List[AppPageOutput] = Field(
+        ..., min_length=1, description="What it shows for its inputs, in order, each at `/outputs/<name>`"
+    )
+    live: bool = Field(
+        default=True,
+        description="Whether it runs again as an input changes; `false`: when the person presses Run",
+    )
+
+    @model_validator(mode="after")
+    def _holds(self) -> "AppPage":
+        problems = form_problems({"id": "page inputs", "schema": self.inputs})
+        if self.inputs_ui is not None:
+            problems += form_ui_problems("The form 'page inputs'", self.inputs, self.inputs_ui)
+        if problems:
+            raise ValueError(" ".join(problems))
+        names = [output.name for output in self.outputs]
+        if len(set(names)) != len(names):
+            raise ValueError("two outputs of its page have the same name")
+        return self
+
+
 class ThemeVariant(str, Enum):
     """A theme of Datalayer's, as Appearance names it (LOOP T-30)."""
 
@@ -884,6 +979,13 @@ class AppInterface(_Strict):
         description="The components of the catalog the surface may use; the kind's own when empty",
     )
     surface: Optional[AppSurface] = Field(default=None, description="The component tree, when there is one")
+    page: Optional[AppPage] = Field(
+        default=None,
+        description=(
+            "A widget's page written in its code (`@app.page`, LOOP P-05): its inputs as a form, its "
+            "outputs as values; run again as an input changes, its outputs shown in place. None when unsaid"
+        ),
+    )
     assistant: Optional[str] = Field(
         default=None,
         max_length=64,
@@ -1176,9 +1278,6 @@ def _with_option_names(
 # --- how it is verified, and what is kept -------------------------------------------
 
 
-#: The name of a function of an application's code: what `code` and a code
-#: check name, and what an application's own tool is called (LOOP P-06).
-CODE_NAME = r"[A-Za-z_][A-Za-z0-9_]*"
 
 
 class AppTestCase(_Strict):
@@ -1879,6 +1978,21 @@ class AppSpec(_Strict):
             raise ValueError("a decision application says what it decides, under `decision`")
         if self.kind is not AppKind.DECISION and self.decision is not None:
             raise ValueError(f"a {self.kind.value} application decides nothing: remove `decision`, or make it a decision")
+        page = self.interface.page
+        if page is not None:
+            if self.kind is not AppKind.WIDGET:
+                raise ValueError(
+                    f"a page of inputs and outputs is a widget's: a {self.kind.value} application has none, "
+                    "remove `interface.page` or make it a widget"
+                )
+            # Its inputs and its settings are both on the page at /inputs/<name>.
+            settings = set(((self.interface.settings or {}).get("properties") or {}).keys())
+            shared = sorted(settings & set(page.inputs["properties"]))
+            if shared:
+                raise ValueError(
+                    f"{', '.join(repr(name) for name in shared)} is both a setting and an input of its page: "
+                    "name one otherwise"
+                )
         if self.kind is AppKind.WORKER:
             if not self.goal.strip():
                 raise ValueError("a worker says its `goal`")
@@ -2515,6 +2629,7 @@ __all__ = [
     "KeptRecord",
     "MAX_UPLOAD_MB",
     "MEDIA_TYPE",
+    "PAGE_OUTPUT_COMPONENTS",
     "SCHEMA_PATH",
     "TEXT_OUTPUTS",
     "TRACK_KEEPS",
@@ -2538,6 +2653,8 @@ __all__ = [
     "AppFieldTranslation",
     "AppModeTranslation",
     "AppOptionTranslation",
+    "AppPage",
+    "AppPageOutput",
     "AppPermissions",
     "AppProfile",
     "AppProfileTranslation",

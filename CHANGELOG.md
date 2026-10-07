@@ -8,6 +8,15 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.58
+
+Widget applications (LOOP P-05): a widget's page written in its code — its inputs a form, its outputs values — run again as an input changes, its outputs shown in place.
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (A widget's page), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `interface.page` (`AppPage`): `function`, the function of its code that runs it; `inputs`, the JSON Schema of a form (checked as the form `'page inputs'`), and `inputs_ui`; `outputs` (`AppPageOutput`), one at least, each a `name`, a `title`, a `component` among `PAGE_OUTPUT_COMPONENTS` — `Text` (unless said), `Image`, `Table`, `Chart` — and its other properties in `props`; `live` (`true` unless said). Refused in sentences: a page that is not a widget's, inputs that are not a form, two outputs of one name, an output's `props` saying its id or its value's property or lacking one its component needs, an input named as a setting.
+- JSON Schema and reference regenerated. Tests: `test_apps.py`.
+
 ## 0.0.57
 
 Who the user is, when it matters (LOOP D-21): an embedded application that acts in each user's name takes only a user the host's server signed.
