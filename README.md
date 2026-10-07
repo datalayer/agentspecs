@@ -36,7 +36,7 @@ agentspecs/
 ├── skills/           # Skill specs
 ├── tools/            # Runtime tool specs
 ├── frontend-tools/   # Frontend tool specs
-├── envvars/          # Environment variable specs
+├── env-vars/          # Environment variable specs
 ├── models/           # Model specs
 ├── model-providers/  # Model provider specs
 ├── memory/           # Memory backend specs
@@ -321,7 +321,7 @@ package names it — `@datalayer/icons-react:odoo`, `@primer/octicons-react:mark
 A page draws the icon, the emoji where there is no icon, and nothing where there is
 neither.
 
-### Env Vars (`agentspecs/envvars`)
+### Env Vars (`agentspecs/env-vars`)
 
 Defines environment variable metadata.
 
