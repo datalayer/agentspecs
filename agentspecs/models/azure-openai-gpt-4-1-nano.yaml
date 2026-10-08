@@ -13,6 +13,15 @@ default: false
 available: false
 tokens_limit: 32768
 
+# Azure OpenAI's Global Standard deployment, priced at OpenAI's list price
+# (https://developers.openai.com/api/docs/pricing, read 2026-10-08), as
+# pydantic/genai-prices does: its azure provider falls back to OpenAI's
+# prices for these models (main bd966a9, read 2026-10-08). Data Zone and
+# Regional deployments cost more and are not what this catalogue prices.
+pricing:
+  input_usd_per_million: 0.1
+  output_usd_per_million: 0.4
+
 required_env_vars:
   - AZURE_OPENAI_API_KEY
   - AZURE_OPENAI_ENDPOINT

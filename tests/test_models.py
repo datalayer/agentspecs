@@ -208,11 +208,11 @@ def test_a_provider_file_is_named_for_its_id(tmp_path):
         _load_provider_specs(tmp_path)
 
 
-def test_every_bedrock_openai_anthropic_and_workers_ai_model_has_a_price():
+def test_every_bedrock_openai_azure_anthropic_and_workers_ai_model_has_a_price():
     """ai-inference meters a call by its model's price: a model it routes with
     no price would be recorded as not priced, and the account not charged."""
     from agentspecs.models import AI_MODEL_CATALOGUE
 
-    routed = ("bedrock:", "anthropic:", "openai:", "cloudflare:wrk/")
+    routed = ("bedrock:", "anthropic:", "openai:", "azure-openai:", "cloudflare:wrk/")
     unpriced = [m.id for m in AI_MODEL_CATALOGUE if m.id.startswith(routed) and m.pricing is None]
     assert unpriced == []
