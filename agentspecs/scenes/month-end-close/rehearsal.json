@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-08T17:12:52+00:00",
+  "where": "on Datalayer",
+  "passed": false,
+  "says": "Rehearsal: 0 of 4 beats passed. 4 not run. The scene is not Live.",
+  "beats": [
+    {
+      "beat": "close-checklist",
+      "state": "not_run",
+      "says": "Month-end close is not set up: the MCP server odoo-accounting needs DATALAYER_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
+      "seconds": 0.0
+    },
+    {
+      "beat": "accruals",
+      "state": "not_run",
+      "says": "Month-end close is not set up: the MCP server odoo-accounting needs DATALAYER_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
+      "seconds": 0.0
+    },
+    {
+      "beat": "expenses-by-month",
+      "state": "not_run",
+      "says": "Month-end close is not set up: the MCP server odoo-accounting needs DATALAYER_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
+      "seconds": 0.0
+    },
+    {
+      "beat": "post-accruals",
+      "state": "not_run",
+      "says": "Month-end close is not set up: the MCP server odoo-accounting needs DATALAYER_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
+      "seconds": 0.0
+    }
+  ],
+  "runtime": "1.3.93"
+}
