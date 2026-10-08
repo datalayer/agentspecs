@@ -85,6 +85,14 @@ answered; where the route keeps a log of the request (`none`, `gateway`); the pr
 list price, `{input_usd_per_million, output_usd_per_million}` — both required, never
 negative — for a service that meters by it.
 
+Each price is the provider's published one, and its spec says where it was read and when:
+for Bedrock, the on-demand price of the US cross-region inference profile its `us.` id names
+([AWS](https://aws.amazon.com/bedrock/pricing/)); for Anthropic, OpenAI and Cloudflare,
+their own price pages. A model whose price is not published for the way it is reached —
+Azure OpenAI, whose price depends on the deployment type; Alibaba Model Studio, whose price
+depends on the region and the prompt's length; a local Ollama model — carries no `pricing`,
+and a service that meters by it records the call as not priced, never as free.
+
 ### `aliases` (list of strings)
 Older ids the spec answers to, kept when an id has to move so `get_model` and the
 `AIModels` enum still serve what a consumer named.

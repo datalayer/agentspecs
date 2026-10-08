@@ -8,8 +8,9 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
-## Unreleased
+## 0.0.66
 
+- Model prices (STUDIO R-09): 24 models of the catalogue carry `pricing`, each read from its provider's published page on 2026-10-08 and cited in its spec — every Bedrock Claude model at the US cross-region (geo) price its `us.` id is billed at (Sonnet 4.6 and 4.5 $3.30/$16.50, Sonnet 4 $3/$15, Opus 5, 4.8 and 4.6 $5.50/$27.50, Opus 4 $15/$75, Fable 5 $11/$55 per million input/output tokens), the Anthropic API models, the OpenAI models at the Standard tier, and the Workers AI models at Cloudflare's per-token price. Until now only Jev had one, so ai-inference recorded Bedrock calls, the default, at no cost. Azure OpenAI (priced by deployment type), Alibaba Model Studio (by region and prompt length) and Ollama carry none — [models](https://agentspecs.datalayer.tech/agents/models).
 - `interface.accent` is optional, with no default: an application that names none wears the theme's own colours, and one that names an accent wears it over whichever theme it runs in, not over `loop` alone (decided 2026-10-07). An accent not among the six is refused. The schema says `null` by default. STUDIO T-05, T-30 — [reference](https://agentspecs.datalayer.tech/apps/reference).
 
 ## 0.0.65

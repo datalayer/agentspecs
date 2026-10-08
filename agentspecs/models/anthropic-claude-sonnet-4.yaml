@@ -13,5 +13,13 @@ default: false
 available: false
 tokens_limit: 64000
 
+# Anthropic's list price for the Claude API, from
+# https://platform.claude.com/docs/en/about-claude/pricing (read 2026-10-08).
+# Cache writes and reads are priced apart there (5m write $3.75, 1h write $6,
+# hits $0.30); the catalogue has no field for them.
+pricing:
+  input_usd_per_million: 3.0
+  output_usd_per_million: 15.0
+
 required_env_vars:
   - ANTHROPIC_API_KEY
