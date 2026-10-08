@@ -1,5 +1,5 @@
 {
-  "at": "2026-10-08T17:13:10+00:00",
+  "at": "2026-10-08T17:44:37+00:00",
   "where": "on Datalayer",
   "passed": false,
   "says": "Rehearsal: 0 of 4 beats passed. 4 not run. The scene is not Live.",
@@ -7,25 +7,25 @@
     {
       "beat": "vigour-this-season",
       "state": "not_run",
-      "says": "Crop monitoring is not set up: the MCP server earthdata needs DATALAYER_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
+      "says": "Crop monitoring is not set up: the MCP server tavily needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. Crop monitoring is not set up: the skill crawl needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
       "seconds": 0.0
     },
     {
       "beat": "fields-to-watch",
       "state": "not_run",
-      "says": "Crop monitoring is not set up: the MCP server earthdata needs DATALAYER_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
+      "says": "Crop monitoring is not set up: the MCP server tavily needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. Crop monitoring is not set up: the skill crawl needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
       "seconds": 0.0
     },
     {
       "beat": "imagery-available",
       "state": "not_run",
-      "says": "Crop monitoring is not set up: the MCP server earthdata needs DATALAYER_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
+      "says": "Crop monitoring is not set up: the MCP server tavily needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. Crop monitoring is not set up: the skill crawl needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
       "seconds": 0.0
     },
     {
       "beat": "save-granules",
       "state": "not_run",
-      "says": "Crop monitoring is not set up: the MCP server earthdata needs DATALAYER_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
+      "says": "Crop monitoring is not set up: the MCP server tavily needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. Crop monitoring is not set up: the skill crawl needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
       "seconds": 0.0
     }
   ],

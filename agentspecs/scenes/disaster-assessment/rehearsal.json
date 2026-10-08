@@ -1,5 +1,5 @@
 {
-  "at": "2026-10-08T17:14:07+00:00",
+  "at": "2026-10-08T17:43:28+00:00",
   "where": "on Datalayer",
   "passed": false,
   "says": "Rehearsal: 0 of 4 beats passed. 4 not run. The scene is not Live.",
@@ -7,25 +7,25 @@
     {
       "beat": "flood",
       "state": "not_run",
-      "says": "Disaster assessment is not set up: the MCP server earthdata needs DATALAYER_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped. Change detection is not set up: the MCP server earthdata needs DATALAYER_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
+      "says": "Disaster assessment is not set up: the MCP server tavily needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. Disaster assessment is not set up: the skill crawl needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped. Change detection is not set up: the MCP server tavily needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. Change detection is not set up: the skill crawl needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
       "seconds": 0.0
     },
     {
       "beat": "wildfire",
       "state": "not_run",
-      "says": "Change detection is not set up: the MCP server earthdata needs DATALAYER_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
+      "says": "Change detection is not set up: the MCP server tavily needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. Change detection is not set up: the skill crawl needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
       "seconds": 0.0
     },
     {
       "beat": "storm",
       "state": "not_run",
-      "says": "Disaster assessment is not set up: the MCP server earthdata needs DATALAYER_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
+      "says": "Disaster assessment is not set up: the MCP server tavily needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. Disaster assessment is not set up: the skill crawl needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
       "seconds": 0.0
     },
     {
       "beat": "alert",
       "state": "not_run",
-      "says": "Disaster assessment is not set up: the MCP server earthdata needs DATALAYER_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
+      "says": "Disaster assessment is not set up: the MCP server tavily needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. Disaster assessment is not set up: the skill crawl needs TAVILY_API_KEY, which this runtime was not given: add it to the account's secrets (or set it before a local run), then configure it again. The runtime was stopped.",
       "seconds": 0.0
     }
   ],
