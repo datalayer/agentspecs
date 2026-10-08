@@ -473,6 +473,33 @@ class SceneRehearsal(_Strict):
     )
 
 
+class ScenePlayedBeat(_Strict):
+    """One beat of a rehearsal that was played: its verdict, in the Validate tab's words."""
+
+    beat: str = Field(..., description="The beat, by id")
+    state: str = Field(..., pattern=r"^(?:passed|failed|not_run)$", description="`passed`, `failed` or `not_run`")
+    says: str = Field(default="", description="What differed, or why it was not run")
+    seconds: float = Field(default=0.0, ge=0.0, description="How long it took")
+
+
+class ScenePlayed(_Strict):
+    """What came of the last rehearsal `loop scenes rehearse --cloud` played (LOOP A-14).
+
+    Written by the command to the scene's file beside the specs
+    (:func:`played_path`: ``<id>/rehearsal.json``), never by hand; read by
+    :func:`scene_played`. A scene is *Live* when it ``passed``; one that did
+    not says so with its ``says``. The hand-written ``verified`` sentences stay
+    what a person says of the scene beside it.
+    """
+
+    at: str = Field(..., description="When it was played, ISO 8601")
+    where: str = Field(default="on Datalayer", description="Where it was played: *on Datalayer*")
+    passed: bool = Field(..., description="Whether every beat passed")
+    says: str = Field(..., description="The verdict in one sentence: *Rehearsal: 4 of 4 beats passed. The scene is Live.*")
+    beats: List[ScenePlayedBeat] = Field(default_factory=list, description="Each beat's verdict")
+    runtime: str = Field(default="", description="The agent-runtimes that played it, by version")
+
+
 # --- the deployment --------------------------------------------------------------------
 
 
@@ -924,6 +951,37 @@ def dump_scene(scene: SceneSpec) -> Dict[str, Any]:
     return {"schema": scene.schema_, **{key: value for key, value in data.items() if key != "schema"}}
 
 
+# --- the rehearsal that was played -----------------------------------------------------
+
+
+def played_path(scene_id: str, directory: Optional[Path] = None) -> Path:
+    """Where a scene's last rehearsal is kept: ``<id>/rehearsal.json`` beside the specs."""
+    return (directory or Path(__file__).parent) / _id_of(scene_id) / "rehearsal.json"
+
+
+def scene_played(scene_id: str, directory: Optional[Path] = None) -> Optional[ScenePlayed]:
+    """What the last rehearsal of a scene found, or None when none was played.
+
+    A file that is not a rehearsal's result is refused in a sentence
+    (`SceneError`), never read as a pass.
+    """
+    path = played_path(scene_id, directory)
+    if not path.is_file():
+        return None
+    try:
+        return ScenePlayed.model_validate(json.loads(path.read_text()))
+    except (ValueError, ValidationError) as error:
+        raise SceneError(f"{path.name} of '{_id_of(scene_id)}' is not a rehearsal's result: {error}") from None
+
+
+def write_played(scene_id: str, played: ScenePlayed, directory: Optional[Path] = None) -> Path:
+    """Keep what a rehearsal found as the scene's last, and say where."""
+    path = played_path(scene_id, directory)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(played.model_dump(mode="json"), indent=2, ensure_ascii=False) + "\n")
+    return path
+
+
 def json_schema() -> Dict[str, Any]:
     """The JSON Schema of the scene spec, for editors and for validation outside Python."""
     schema = SceneSpec.model_json_schema(by_alias=True)
@@ -990,6 +1048,8 @@ __all__ = [
     "SceneError",
     "SceneMove",
     "ScenePersona",
+    "ScenePlayed",
+    "ScenePlayedBeat",
     "SceneRecording",
     "SceneRehearsal",
     "SceneSetting",
@@ -1010,8 +1070,11 @@ __all__ = [
     "load_scenes",
     "parse_line",
     "parse_scene",
+    "played_path",
+    "scene_played",
     "scene_problems",
     "scene_setup",
     "scenes_staging",
     "schema_text",
+    "write_played",
 ]

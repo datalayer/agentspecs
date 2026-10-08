@@ -470,6 +470,40 @@ def _folder_with(problems_in: Dict[str, Any]) -> pathlib.Path:
     return folder
 
 
+def test_the_rehearsal_that_was_played_is_kept_beside_the_specs(tmp_path: pathlib.Path) -> None:
+    from agentspecs.scenes import ScenePlayed, played_path, scene_played, write_played
+
+    # None was played: nothing, not a pass.
+    assert scene_played("sales-and-accounting", tmp_path) is None
+    assert played_path("sales-and-accounting:0.0.1", tmp_path) == tmp_path / "sales-and-accounting" / "rehearsal.json"
+    played = ScenePlayed(
+        at="2026-10-08T18:39:08+00:00",
+        passed=False,
+        says="Rehearsal: 0 of 4 beats passed. 4 not run. The scene is not Live.",
+        beats=[{"beat": "open-invoices", "state": "not_run", "says": "Accounting is not set up."}],
+        runtime="1.3.93",
+    )
+    path = write_played("sales-and-accounting", played, tmp_path)
+    assert path == played_path("sales-and-accounting", tmp_path) and path.is_file()
+    again = scene_played("sales-and-accounting", tmp_path)
+    assert again == played and again.where == "on Datalayer" and again.beats[0].seconds == 0.0
+    # The file is read back as it was written, in order, for a diff a person reads.
+    assert json.loads(path.read_text())["beats"][0]["state"] == "not_run"
+    # A beat's state is one of three; anything else is not a rehearsal's result.
+    with pytest.raises(Exception, match="state"):
+        ScenePlayed(at="now", passed=True, says="", beats=[{"beat": "b", "state": "done"}])
+    path.write_text('{"passed": true}')
+    with pytest.raises(SceneError, match="rehearsal.json of 'sales-and-accounting' is not a rehearsal's result"):
+        scene_played("sales-and-accounting", tmp_path)
+    path.write_text("not json")
+    with pytest.raises(SceneError, match="is not a rehearsal's result"):
+        scene_played("sales-and-accounting", tmp_path)
+    # The catalogue's own scenes: a file beside the specs is read, none is a pass by default.
+    for scene_id in SCENE_CATALOGUE:
+        found = scene_played(scene_id)
+        assert found is None or isinstance(found, ScenePlayed)
+
+
 def test_a_scene_spec_is_a_pydantic_model_a_host_can_build() -> None:
     scene = SceneSpec(id="solo", name="Solo", emoji="\U0001f3ad", team="month-end-close:0.0.1")
     assert scene.team_of().id == "month-end-close" and scene.cues() == []

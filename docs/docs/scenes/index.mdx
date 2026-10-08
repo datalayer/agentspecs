@@ -123,6 +123,21 @@ Accounting` (an ask over A2A), `Accounting → Odoo: odoo_accounting_*` (a tool
 of a system, by name or pattern) and `Accounting: a table` (an answer, and
 what kind). Every name is one on stage; every tool one a connection offers.
 
+## The rehearsal that was played
+
+What the last rehearsal found is kept beside the specs, in the scene's own
+file `<id>/rehearsal.json` (`played_path`), written by
+`loop scenes rehearse --cloud` and never by hand: when it was played, where,
+whether every beat `passed`, the verdict in one sentence, each beat's verdict
+(`passed`, `failed` with what differed, `not_run` with why) and the
+agent-runtimes that played it. `scene_played(id)` reads it as a `ScenePlayed`,
+`write_played` keeps one, and a file that is not a rehearsal's result is
+refused in a sentence rather than read as a pass. A scene whose last
+rehearsal passed is *Live* — in `loop scenes ls`, in the catalogue
+agent-runtimes generates and on the home page; one that did not says so with
+the verdict's sentence. The hand-written `verified` sentences stay what a
+person says of the scene beside it.
+
 ## What is refused
 
 `scene_problems` says what stops a scene from being played, in sentences:

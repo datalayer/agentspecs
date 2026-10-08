@@ -8,6 +8,10 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.67 (unreleased)
+
+- The rehearsal that was played (STUDIO A-14): a scene's last rehearsal is kept beside the specs in `<id>/rehearsal.json` — `ScenePlayed`: when, where, whether every beat `passed`, the verdict's sentence, each beat's verdict and the agent-runtimes that played it — written by `loop scenes rehearse --cloud`, read by `scene_played`, kept by `write_played`, refused in a sentence when it is not a rehearsal's result. A scene whose last rehearsal passed is *Live*; one that did not says so. The hand-written `verified` stays a person's word beside it — [scenes](https://agentspecs.datalayer.tech/scenes#the-rehearsal-that-was-played).
+
 ## 0.0.66
 
 - Model prices (STUDIO R-09): 29 models of the catalogue carry `pricing`, each read from its provider's published page on 2026-10-08 and cited in its spec — every Bedrock Claude model at the US cross-region (geo) price its `us.` id is billed at (Sonnet 4.6 and 4.5 $3.30/$16.50, Sonnet 4 $3/$15, Opus 5, 4.8 and 4.6 $5.50/$27.50, Opus 4 $15/$75, Fable 5 $11/$55 per million input/output tokens), the Anthropic API models, the OpenAI models at the Standard tier, the five Azure OpenAI models at their Global Standard deployment's price — OpenAI's list price, as pydantic/genai-prices prices Azure (decided 2026-10-08) — and the Workers AI models at Cloudflare's per-token price. Until now only Jev had one, so ai-inference recorded Bedrock calls, the default, at no cost. Alibaba Model Studio (priced by region and prompt length) and Ollama carry none — [models](https://agentspecs.datalayer.tech/agents/models).
