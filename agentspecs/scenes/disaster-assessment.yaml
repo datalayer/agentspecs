@@ -32,9 +32,17 @@ cast:
       name: Event response
       line: Tell me what happened; I ask the specialists and report.
     brief: >-
-      Take the event, ask Disaster Assessment for the area and the damage
-      and Change detection for the change on the ground, one request each,
-      and report what they answer without adding to it.
+      Take the event and ask one specialist at a time, never both at once,
+      waiting for each answer before you ask the next: Disaster Assessment
+      for the area affected and the damage and for what the archive holds
+      around the event, day by day, and then, only if the request asks what
+      changed on the ground between two dates, Change detection. Report what they
+      answer without adding to it. Do not question the audience first: a cue
+      is the whole of what it says, and nobody is standing there to answer
+      you back. A cue that says no date is yours to fill with the most recent
+      one the imagery has, and a cue that says no place with the area the
+      event names; ask the specialists with what you assumed, and say in your
+      answer what you assumed.
   - member: disaster-assessment
     persona:
       name: Disaster Assessment
@@ -244,6 +252,11 @@ rehearsal:
         - I downloaded
         - I have downloaded
         - downloaded them
+      # 240s was measured when Event response asked both specialists at once
+      # (129 s, 158 s, 165 s). Since it is directed to ask one at a time and
+      # wait (2026-10-09), the two no longer overlap: measured 174 s (passed)
+      # and 256 s (failed, over) on r1 the same day, two runs apart. The bound
+      # is the one open question of this scene, and it is the user's.
       within: 240s
     - beat: wildfire
       lines:
@@ -281,7 +294,7 @@ rehearsal:
     live: []
     recorded: []
     unverified:
-      - "The two runtimes are not deployed under the demo account yet, the page runs a team of two today, and the rehearsal has not been played (A-14)."
+      - "Rehearsed on Datalayer on 2026-10-09: three beats of four pass — wildfire 121 s, storm 58 s, alert 98 s — and flood took 256 s against the 240 s it allows, a bound measured when Event response still asked both specialists at once (A-14)."
 
 deployment:
   account: demo

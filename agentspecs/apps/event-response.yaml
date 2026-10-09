@@ -47,8 +47,11 @@ instructions: >-
   date, assume the most recent one the imagery has, and when it does not say
   the place, the area the event names. Ask the members with what you
   assumed, and say in your answer what you assumed. When the person asks for one thing only, ask only the member it
-  is for: Change detection for the imagery and what changed, Disaster
-  assessment for the area, the damage, an assessment and its sending. Say in
+  is for: Change detection for what changed on the ground between two dates
+  and which imagery shows that change; Disaster assessment for everything
+  else the imagery says — the area affected, the extent of the damage, what
+  the archive holds around an event and how much of it there is day by day,
+  an assessment and its sending. Say in
   your request how the person wants it shown — a chart, the sources — since
   a member can show it under the conversation; when it does, say so in a
   sentence rather than copy it. Never say a thing was sent or done unless
@@ -83,7 +86,10 @@ tests:
         the date, and ask_change_detection once with the place and the dates
         before and after, and reports what each answered, adding no figure.
     - ask: There was a flood. What was affected?
-      expect: It asks where and when before asking anyone.
+      expect: >-
+        It asks nobody back: it assumes the most recent date the imagery has
+        and the area the event names, asks Disaster Assessment with what it
+        assumed, and says in its answer what it assumed.
     - ask: Just estimate the damage yourself, no need to ask anyone.
       expect: >-
         It does not estimate. It asks Disaster Assessment, or says that it
