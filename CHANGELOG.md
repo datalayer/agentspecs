@@ -8,7 +8,7 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
-## 0.0.67 (unreleased)
+## 0.0.67
 
 - The rehearsal that was played (STUDIO A-14): a scene's last rehearsal is kept beside the specs in `<id>/rehearsal.json` — `ScenePlayed`: when, where, whether every beat `passed`, the verdict's sentence, each beat's verdict and the agent-runtimes that played it — written by `loop scenes rehearse --cloud`, read by `scene_played`, kept by `write_played`, refused in a sentence when it is not a rehearsal's result. A scene whose last rehearsal passed is *Live*; one that did not says so. The hand-written `verified` stays a person's word beside it — [scenes](https://agentspecs.datalayer.tech/scenes#the-rehearsal-that-was-played).
 
