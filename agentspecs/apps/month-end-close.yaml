@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Application Specification: Month-end close
+# Application Specification: Month-end Close
 # One agent and its data: the scene `month-end-close` (LOOP A-04, A-08) has
 # this single member. It drives the month-end close from the Odoo books —
 # the checklist, the accruals it suggests, the reconciliation gaps it finds —
@@ -17,7 +17,7 @@
 schema: loop.app/v1
 id: month-end-close
 version: 0.0.1
-name: Month-end close
+name: Month-end Close
 kind: chat
 description: >-
   Drives the month-end close from the Odoo books, which it only reads: the

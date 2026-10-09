@@ -1,9 +1,9 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Scene: Disaster assessment (LOOP A-13). The team `disaster-assessment`
+# Scene: Disaster Assessment (LOOP A-13). The team `disaster-assessment`
 # staged: Event response, in the visitor's browser, is told of a live event
-# and asks Disaster assessment for the area affected and the damage, and
+# and asks Disaster Assessment for the area affected and the damage, and
 # Change detection for what changed on the ground — each on a runtime, each
 # searching the imagery NASA Earthdata holds — then reports. Four beats: a flood (a
 # table), a fire (the sources), a storm (a chart), an alert (an approval).
@@ -11,7 +11,7 @@
 schema: loop.scene/v1
 id: disaster-assessment
 version: 0.0.1
-name: Disaster assessment
+name: Disaster Assessment
 description: >-
   An event desk asks two specialists what a disaster affected and what
   changed on the ground, each reading NASA Earthdata, and reports.
@@ -32,12 +32,12 @@ cast:
       name: Event response
       line: Tell me what happened; I ask the specialists and report.
     brief: >-
-      Take the event, ask Disaster assessment for the area and the damage
+      Take the event, ask Disaster Assessment for the area and the damage
       and Change detection for the change on the ground, one request each,
       and report what they answer without adding to it.
   - member: disaster-assessment
     persona:
-      name: Disaster assessment
+      name: Disaster Assessment
       line: I estimate the area affected and the damage from the imagery.
     brief: >-
       From the imagery before and after the event, estimate the area
@@ -99,7 +99,7 @@ script:
         answers: words
         what: what the two answered, as they answered it
     expect: >-
-      The area affected and the damage from Disaster assessment, the changes
+      The area affected and the damage from Disaster Assessment, the changes
       on the ground from Change detection with their granules, reported by
       Event response without a figure of its own.
     shows:
@@ -157,7 +157,7 @@ script:
         what: the granules found each day, drawn
       - who: event-response
         answers: words
-        what: what Disaster assessment answered
+        what: what Disaster Assessment answered
     expect: >-
       A chart of the granules found each day from 10 to 20 July 2021, read
       from the search, and what the archive does not cover said in words.
@@ -186,7 +186,7 @@ script:
         answers: words
         what: that the sending waits for an approval
     expect: >-
-      Disaster assessment says what it would send and asks first — Send it ·
+      Disaster Assessment says what it would send and asks first — Send it ·
       Not now — and sends nothing; a visitor who approves is refused in a
       sentence: without an account it only reads.
     shows:
@@ -219,9 +219,9 @@ rehearsal:
     - beat: flood
       lines:
         - "You → Event response"
-        - "Event response → Disaster assessment"
-        - "Disaster assessment → Earthdata: search_earth_datagranules"
-        - "Disaster assessment: words"
+        - "Event response → Disaster Assessment"
+        - "Disaster Assessment → Earthdata: search_earth_datagranules"
+        - "Disaster Assessment: words"
         - "Event response → Change detection"
         - "Change detection → Earthdata: search_earth_datagranules"
         - "Change detection: a table"
@@ -244,9 +244,9 @@ rehearsal:
     - beat: storm
       lines:
         - "You → Event response"
-        - "Event response → Disaster assessment"
-        - "Disaster assessment → Earthdata: search_earth_datagranules"
-        - "Disaster assessment: a chart"
+        - "Event response → Disaster Assessment"
+        - "Disaster Assessment → Earthdata: search_earth_datagranules"
+        - "Disaster Assessment: a chart"
         - "Event response: words"
       must_say:
         - Ahr
@@ -254,9 +254,9 @@ rehearsal:
     - beat: alert
       lines:
         - "You → Event response"
-        - "Event response → Disaster assessment"
-        - "Disaster assessment → Earthdata: search_earth_datagranules"
-        - "Disaster assessment: an approval"
+        - "Event response → Disaster Assessment"
+        - "Disaster Assessment → Earthdata: search_earth_datagranules"
+        - "Disaster Assessment: an approval"
         - "Event response: words"
       must_say:
         - Valencia

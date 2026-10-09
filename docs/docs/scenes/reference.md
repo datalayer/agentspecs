@@ -56,7 +56,7 @@ version: 0.0.1
 ### `name`
 
 ```yaml
-name: Crop monitoring
+name: Crop Monitoring
 ```
 
 ### `description`
@@ -101,7 +101,7 @@ team: crop-monitoring:0.0.1
 cast:
 - member: crop-monitoring
   persona:
-    name: Crop monitoring
+    name: Crop Monitoring
     line: I search the imagery and tell you how the fields are doing.
   brief: Take the field and the period, search the datasets and the granules that
     cover them, and report the vigour, the growth and the fields to watch; leave any
@@ -118,7 +118,7 @@ setting:
     holds: NASA's catalogue of satellite imagery, searched, not downloaded.
   period: the last three months
   language: en
-  assumes: 'One agent, its data: Crop monitoring on Datalayer, searching the satellite
+  assumes: 'One agent, its data: Crop Monitoring on Datalayer, searching the satellite
     imagery NASA Earthdata holds.'
 ```
 
@@ -259,10 +259,10 @@ rehearsal:
   beats:
   - beat: vigour-this-season
     lines:
-    - You → Crop monitoring
-    - 'Crop monitoring → Earthdata: search_earth_datasets'
-    - 'Crop monitoring → Earthdata: search_earth_datagranules'
-    - 'Crop monitoring: a chart'
+    - You → Crop Monitoring
+    - 'Crop Monitoring → Earthdata: search_earth_datasets'
+    - 'Crop Monitoring → Earthdata: search_earth_datagranules'
+    - 'Crop Monitoring: a chart'
     must_say:
     - vigour
     must_not_say:
@@ -270,17 +270,17 @@ rehearsal:
     within: 90s
   - beat: fields-to-watch
     lines:
-    - You → Crop monitoring
-    - 'Crop monitoring → Earthdata: search_earth_datagranules'
-    - 'Crop monitoring: a table'
+    - You → Crop Monitoring
+    - 'Crop Monitoring → Earthdata: search_earth_datagranules'
+    - 'Crop Monitoring: a table'
     must_say:
     - drop
     within: 90s
   - beat: imagery-available
     lines:
-    - You → Crop monitoring
-    - 'Crop monitoring → Earthdata: search_earth_*'
-    - 'Crop monitoring: sources'
+    - You → Crop Monitoring
+    - 'Crop Monitoring → Earthdata: search_earth_*'
+    - 'Crop Monitoring: sources'
     must_say:
     - granule
     must_not_say:
@@ -288,9 +288,9 @@ rehearsal:
     within: 60s
   - beat: save-granules
     lines:
-    - You → Crop monitoring
-    - 'Crop monitoring → Earthdata: search_earth_datagranules'
-    - 'Crop monitoring: an approval'
+    - You → Crop Monitoring
+    - 'Crop Monitoring → Earthdata: search_earth_datagranules'
+    - 'Crop Monitoring: an approval'
     must_say:
     - granule
     must_not_say:

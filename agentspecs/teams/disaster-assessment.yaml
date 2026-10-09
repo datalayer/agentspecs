@@ -1,20 +1,20 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Team Specification: Disaster assessment
+# Team Specification: Disaster Assessment
 # A scene of three applications over A2A (LOOP A-04, A-08). A person tells
 # Event response, in their browser, of a live event. Event response asks
-# Disaster assessment for the area affected and the damage, and Change
+# Disaster Assessment for the area affected and the damage, and Change
 # detection for what changed on the ground — each on a runtime, each reading
 # the satellite imagery NASA Earthdata holds through the earthdata server —
 # and reports what the two answered.
 
 id: disaster-assessment
 version: 0.0.1
-name: Disaster assessment
+name: Disaster Assessment
 description: >-
   An event desk in the browser that gets the area a disaster affected and
-  the damage from Disaster assessment, and what changed on the ground from
+  the damage from Disaster Assessment, and what changed on the ground from
   Change detection, each on a runtime over A2A, each reading NASA Earthdata.
   Event response takes the event and reports; the two others read the
   imagery and answer.
@@ -41,7 +41,7 @@ supervisor:
   can_terminate: true
 entry: event-response
 routing_instructions: >-
-  Event response asks Disaster assessment for the area and the damage, and
+  Event response asks Disaster Assessment for the area and the damage, and
   Change detection for the change on the ground, one request each, and
   reports what they answer without adding to it.
 
@@ -71,7 +71,7 @@ agents:
     role: initiator
     runs_in: browser
     goal: >-
-      Take the person's event, ask Disaster assessment and Change detection
+      Take the person's event, ask Disaster Assessment and Change detection
       for it, and report what they answered.
     talks_to:
       - member: disaster-assessment

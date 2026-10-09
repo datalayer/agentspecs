@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Application Specification: Disaster assessment
+# Application Specification: Disaster Assessment
 # Asked over A2A by Event response, in the scene `disaster-assessment`
 # (LOOP A-04, A-08). It estimates the area a disaster affected and the
 # extent of the damage by comparing the satellite imagery NASA Earthdata
@@ -16,7 +16,7 @@
 schema: loop.app/v1
 id: disaster-assessment
 version: 0.0.1
-name: Disaster assessment
+name: Disaster Assessment
 kind: chat
 description: >-
   Estimates the area a natural disaster affected and the extent of the

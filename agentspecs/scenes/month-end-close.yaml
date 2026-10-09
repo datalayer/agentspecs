@@ -1,8 +1,8 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Scene: Month-end close (LOOP A-13). The team `month-end-close` staged: one
-# agent and its data. Month-end close, on a runtime, reads the Odoo books
+# Scene: Month-end Close (LOOP A-13). The team `month-end-close` staged: one
+# agent and its data. Month-end Close, on a runtime, reads the Odoo books
 # through odoo-accounting and drives the close; the audience talks to it over
 # A2A from the page. Four beats: the checklist (a table), the accruals (the
 # sources), the expenses (a chart), posting the accruals (an approval).
@@ -10,7 +10,7 @@
 schema: loop.scene/v1
 id: month-end-close
 version: 0.0.1
-name: Month-end close
+name: Month-end Close
 description: >-
   One agent drives the close from the Odoo books it only reads: where the
   close stands, what is to book, what is still open.
@@ -27,7 +27,7 @@ team: month-end-close:0.0.1
 cast:
   - member: month-end-close
     persona:
-      name: Month-end close
+      name: Month-end Close
       line: I read the books and tell you where the close stands.
     brief: >-
       Read the period's books, one call at a time, and report what is done,
@@ -42,7 +42,7 @@ setting:
   period: last month
   language: en
   assumes: >-
-    One agent, its data: Month-end close on Datalayer, on Datalayer's own
+    One agent, its data: Month-end Close on Datalayer, on Datalayer's own
     books in Odoo, read only.
 
 script:
@@ -168,10 +168,10 @@ rehearsal:
   beats:
     - beat: close-checklist
       lines:
-        - "You → Month-end close"
-        - "Month-end close → Odoo: odoo_accounting_get_lock_dates"
-        - "Month-end close → Odoo: odoo_accounting_bank_status"
-        - "Month-end close: a table"
+        - "You → Month-end Close"
+        - "Month-end Close → Odoo: odoo_accounting_get_lock_dates"
+        - "Month-end Close → Odoo: odoo_accounting_bank_status"
+        - "Month-end Close: a table"
       must_say:
         - close
       must_not_say:
@@ -179,9 +179,9 @@ rehearsal:
       within: 60s
     - beat: accruals
       lines:
-        - "You → Month-end close"
-        - "Month-end close → Odoo: odoo_accounting_*"
-        - "Month-end close: sources"
+        - "You → Month-end Close"
+        - "Month-end Close → Odoo: odoo_accounting_*"
+        - "Month-end Close: sources"
       must_say:
         - accrual
       must_not_say:
@@ -189,17 +189,17 @@ rehearsal:
       within: 60s
     - beat: expenses-by-month
       lines:
-        - "You → Month-end close"
-        - "Month-end close → Odoo: odoo_accounting_trial_balance"
-        - "Month-end close: a chart"
+        - "You → Month-end Close"
+        - "Month-end Close → Odoo: odoo_accounting_trial_balance"
+        - "Month-end Close: a chart"
       must_say:
         - expense
       within: 60s
     - beat: post-accruals
       lines:
-        - "You → Month-end close"
-        - "Month-end close → Odoo: odoo_accounting_list_journal_entries"
-        - "Month-end close: an approval"
+        - "You → Month-end Close"
+        - "Month-end Close → Odoo: odoo_accounting_list_journal_entries"
+        - "Month-end Close: an approval"
       must_say:
         - accrual
       must_not_say:

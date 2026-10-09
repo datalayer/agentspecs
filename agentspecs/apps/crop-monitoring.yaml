@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Application Specification: Crop monitoring
+# Application Specification: Crop Monitoring
 # One agent and its data: the scene `crop-monitoring` (LOOP A-04, A-08) has
 # this single member. It follows crop vigour and growth over a season from
 # the satellite imagery NASA Earthdata holds, found through the `earthdata`
@@ -16,7 +16,7 @@
 schema: loop.app/v1
 id: crop-monitoring
 version: 0.0.1
-name: Crop monitoring
+name: Crop Monitoring
 kind: chat
 description: >-
   Tracks crop vigour and growth over time from the satellite imagery NASA

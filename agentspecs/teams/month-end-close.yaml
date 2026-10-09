@@ -1,16 +1,16 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Team Specification: Month-end close
-# A scene of one agent and its data (LOOP A-04, A-08). Month-end close, on a
+# Team Specification: Month-end Close
+# A scene of one agent and its data (LOOP A-04, A-08). Month-end Close, on a
 # runtime, reads the Odoo books through odoo-accounting and drives the close;
 # a person talks to it over A2A. Nobody else is in the scene.
 
 id: month-end-close
 version: 0.0.1
-name: Month-end close
+name: Month-end Close
 description: >-
-  One agent, its data: Month-end close drives the close from the Odoo books,
+  One agent, its data: Month-end Close drives the close from the Odoo books,
   which it only reads — the checklist, the accruals to book, the
   reconciliation gaps that remain.
 tags:
@@ -30,12 +30,12 @@ execution_mode: supervisor
 # The one member decides what it reads and what the person is told: it is
 # the scene's supervisor and its front door.
 supervisor:
-  name: Month-end close
+  name: Month-end Close
   app: month-end-close:0.0.1
   can_terminate: true
 entry: month-end-close
 routing_instructions: >-
-  Month-end close answers every request from the books itself, one read at a
+  Month-end Close answers every request from the books itself, one read at a
   time, and reports what the books hold without adding to it.
 
 suggestions:

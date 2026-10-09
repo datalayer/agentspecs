@@ -428,7 +428,7 @@ class TestScenes:
                 assert ref.split(":")[0] in known_servers, (team.id, ref)
 
     def test_the_four_scenes_of_the_home_page(self):
-        """LOOP A-08: Sales & Accounting, Month-end close, Crop monitoring, Disaster assessment."""
+        """LOOP A-08: Sales & Accounting, Month-end Close, Crop Monitoring, Disaster Assessment."""
         from agentspecs.apps import APP_CATALOGUE, app_problems
         from agentspecs.teams import TeamPlace, TeamProtocol, TeamRole
 

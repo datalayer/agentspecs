@@ -186,7 +186,7 @@ def test_each_scene_of_the_home_page_answers_four_kinds() -> None:
         [approval] = [beat for beat in SCENE_CATALOGUE[scene_id].script if AnswerKind.APPROVAL in beat.shown]
         assert all(move.does in (None, ActionClass.READ) for move in approval.moves), scene_id
     assert parse_line("Accounting: an approval").kind is AnswerKind.APPROVAL
-    assert parse_line("Crop monitoring: sources").kind is AnswerKind.SOURCES
+    assert parse_line("Crop Monitoring: sources").kind is AnswerKind.SOURCES
 
 
 def test_what_each_scene_needs_is_said_as_setup() -> None:

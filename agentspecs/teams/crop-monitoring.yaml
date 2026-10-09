@@ -1,17 +1,17 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Team Specification: Crop monitoring
-# A scene of one agent and its data (LOOP A-04, A-08). Crop monitoring, on a
+# Team Specification: Crop Monitoring
+# A scene of one agent and its data (LOOP A-04, A-08). Crop Monitoring, on a
 # runtime, searches and reads the satellite imagery NASA Earthdata holds
 # through the earthdata server; a person talks to it over A2A. Nobody else
 # is in the scene.
 
 id: crop-monitoring
 version: 0.0.1
-name: Crop monitoring
+name: Crop Monitoring
 description: >-
-  One agent, its data: Crop monitoring follows crop vigour and growth over a
+  One agent, its data: Crop Monitoring follows crop vigour and growth over a
   season from the satellite imagery NASA Earthdata holds, and flags the
   fields that need attention.
 tags:
@@ -29,12 +29,12 @@ color: "#1a7f37"
 orchestration_protocol: a2a
 execution_mode: supervisor
 supervisor:
-  name: Crop monitoring
+  name: Crop Monitoring
   app: crop-monitoring:0.0.1
   can_terminate: true
 entry: crop-monitoring
 routing_instructions: >-
-  Crop monitoring answers every request from the imagery itself, one search
+  Crop Monitoring answers every request from the imagery itself, one search
   at a time, and reports what the granules show without adding to it.
 
 suggestions:

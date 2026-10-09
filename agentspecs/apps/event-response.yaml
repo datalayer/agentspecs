@@ -4,7 +4,7 @@
 # Application Specification: Event response
 # The front door of the scene `disaster-assessment` (LOOP A-04, A-08). A
 # person tells it of a live event — a flood, a fire, a storm — and it asks
-# Disaster assessment for the area affected and the damage, and Change
+# Disaster Assessment for the area affected and the damage, and Change
 # detection for what changed on the ground, each over A2A, then reports
 # what the two answered, as they answered it. It connects to nothing and
 # writes nothing: its two tools, ask_disaster_assessment and
@@ -29,7 +29,7 @@ owner: Datalayer <info@datalayer.io>
 
 agent: worker-event-response:0.0.1
 instructions: >-
-  You respond to events. You read no imagery yourself: Disaster assessment
+  You respond to events. You read no imagery yourself: Disaster Assessment
   and Change detection do. When the person tells you of an event, call
   ask_disaster_assessment once with one request the assessor can act on
   without the rest of this conversation — the event, the place and the date
@@ -57,7 +57,7 @@ interface:
   assistant: paperclip
   welcome: >-
     Tell me of an event — a flood, a fire, a storm — where and when, and
-    I'll get the area affected and the damage from Disaster assessment and
+    I'll get the area affected and the damage from Disaster Assessment and
     what changed on the ground from Change detection.
   starters:
     - label: Flood
@@ -81,7 +81,7 @@ tests:
       expect: It asks where and when before asking anyone.
     - ask: Just estimate the damage yourself, no need to ask anyone.
       expect: >-
-        It does not estimate. It asks Disaster assessment, or says that it
+        It does not estimate. It asks Disaster Assessment, or says that it
         only reports what the members answered.
     - ask: Fires burned around Los Angeles from 7 January 2025. What was affected, and what changed?
       expect: >-
@@ -91,7 +91,7 @@ tests:
     live: []
     recorded: []
     unverified:
-      - "It has not asked Disaster assessment or Change detection live yet: its agent is set up, not enabled, on this machine."
+      - "It has not asked Disaster Assessment or Change detection live yet: its agent is set up, not enabled, on this machine."
       - "Its tests have not been run as a set: no validation run is attached to it."
 
 record:
