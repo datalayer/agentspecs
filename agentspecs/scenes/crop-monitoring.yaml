@@ -165,7 +165,14 @@ audience:
   asks_a_day: 5
 
 rehearsal:
-  within: 240s
+  # Measured on r1 on 2026-10-09, under the demo account, Crop Monitoring on a
+  # cloud runtime served over A2A: 69 s, 95 s and 97 s for the three beats that
+  # searched the catalogue and showed a surface. A beat is a model turn, two
+  # Earthdata searches through the gateway (NASA's CMR answers in its own time)
+  # and a surface shown, so the 60 s and 90 s written before the scene had ever
+  # played were never its pace; 120 s is, with room for a long report, and still
+  # catches a stall.
+  within: 10m
   beats:
     - beat: vigour-this-season
       lines:
@@ -176,8 +183,13 @@ rehearsal:
       must_say:
         - vigour
       must_not_say:
-        - downloaded
-      within: 90s
+        # The claim, not the verb: a bare `downloaded` failed this beat on r1
+        # (2026-10-09) for saying “I have not downloaded or read the actual
+        # pixel values” — the denial the beat's own `expect` asks for.
+        - I downloaded
+        - I have downloaded
+        - downloaded them
+      within: 120s
     - beat: fields-to-watch
       lines:
         - "You → Crop Monitoring"
@@ -185,7 +197,7 @@ rehearsal:
         - "Crop Monitoring: a table"
       must_say:
         - drop
-      within: 90s
+      within: 120s
     - beat: imagery-available
       lines:
         - "You → Crop Monitoring"
@@ -194,8 +206,13 @@ rehearsal:
       must_say:
         - granule
       must_not_say:
-        - downloaded
-      within: 60s
+        # The claim, not the verb: a bare `downloaded` failed this beat on r1
+        # (2026-10-09) for saying “I have not downloaded or read the actual
+        # pixel values” — the denial the beat's own `expect` asks for.
+        - I downloaded
+        - I have downloaded
+        - downloaded them
+      within: 120s
     - beat: save-granules
       lines:
         - "You → Crop Monitoring"
@@ -204,9 +221,14 @@ rehearsal:
       must_say:
         - granule
       must_not_say:
-        - downloaded
+        # The claim, not the verb: a bare `downloaded` failed this beat on r1
+        # (2026-10-09) for saying “I have not downloaded or read the actual
+        # pixel values” — the denial the beat's own `expect` asks for.
+        - I downloaded
+        - I have downloaded
+        - downloaded them
         - saved them
-      within: 60s
+      within: 120s
   verified:
     live: []
     recorded: []

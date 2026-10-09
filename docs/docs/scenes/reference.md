@@ -255,7 +255,7 @@ audience:
 
 ```yaml
 rehearsal:
-  within: 240s
+  within: 10m
   beats:
   - beat: vigour-this-season
     lines:
@@ -266,8 +266,10 @@ rehearsal:
     must_say:
     - vigour
     must_not_say:
-    - downloaded
-    within: 90s
+    - I downloaded
+    - I have downloaded
+    - downloaded them
+    within: 120s
   - beat: fields-to-watch
     lines:
     - You → Crop Monitoring
@@ -275,7 +277,7 @@ rehearsal:
     - 'Crop Monitoring: a table'
     must_say:
     - drop
-    within: 90s
+    within: 120s
   - beat: imagery-available
     lines:
     - You → Crop Monitoring
@@ -284,8 +286,10 @@ rehearsal:
     must_say:
     - granule
     must_not_say:
-    - downloaded
-    within: 60s
+    - I downloaded
+    - I have downloaded
+    - downloaded them
+    within: 120s
   - beat: save-granules
     lines:
     - You → Crop Monitoring
@@ -294,9 +298,11 @@ rehearsal:
     must_say:
     - granule
     must_not_say:
-    - downloaded
+    - I downloaded
+    - I have downloaded
+    - downloaded them
     - saved them
-    within: 60s
+    within: 120s
   verified:
     live: []
     recorded: []
