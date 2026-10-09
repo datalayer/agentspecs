@@ -1,32 +1,32 @@
 {
-  "at": "2026-10-08T17:37:33+00:00",
+  "at": "2026-10-09T15:33:25+00:00",
   "where": "on Datalayer",
   "passed": false,
-  "says": "Rehearsal: 0 of 4 beats passed. 4 not run. The scene is not Live.",
+  "says": "Rehearsal: 2 of 4 beats passed. 2 failed. The scene is not Live.",
   "beats": [
     {
       "beat": "close-checklist",
-      "state": "not_run",
-      "says": "Month-end close refused the request (403): {\"detail\": \"This key was granted to another route than month-end-close's on this runtime.\"}",
-      "seconds": 0.0
+      "state": "passed",
+      "says": "",
+      "seconds": 100.39224812800012
     },
     {
       "beat": "accruals",
-      "state": "not_run",
-      "says": "Month-end close refused the request (403): {\"detail\": \"This key was granted to another route than month-end-close's on this runtime.\"}",
-      "seconds": 0.0
+      "state": "passed",
+      "says": "",
+      "seconds": 134.23890428100003
     },
     {
       "beat": "expenses-by-month",
-      "state": "not_run",
-      "says": "Month-end close refused the request (403): {\"detail\": \"This key was granted to another route than month-end-close's on this runtime.\"}",
-      "seconds": 0.0
+      "state": "failed",
+      "says": "Expected “Month-end Close: a chart” after “Month-end Close → Odoo: odoo_accounting_trial_balance”; the transcript went on: “Month-end Close → its runtime: show_components”; “Month-end Close: I'll pull the trial balance for both months. Today I'll treat **last month as April 2025** and **the month before as March 2025**.Both trial balance calls returned no data — the books hold no posted entries for either April 2025 or March 2025 in the default company, so there are no expense figures to chart.The trial balance returned **no posted entries** for either April 2025 (last month) or March 2025 (the month before), so there is nothing to chart. A few possible reasons:\n\n- The company may not have posted any journal entries in those months yet.\n- The default company in this Odoo instance may be a demo or test environment with no activity in that period.\n- Entries may still be in **draft** state (I only read posted entries by default).\n\n**What you can do:**\n1. **Post any draft entries** for those months in Odoo, then ask again.\n2. **Specify a different period** — tell me which months to look at and I'll re-run the comparison.\n3. If entries exist as drafts, let me know and I can re-run with `include_draft: true`.”.",
+      "seconds": 21.827084645000014
     },
     {
       "beat": "post-accruals",
-      "state": "not_run",
-      "says": "Month-end close refused the request (403): {\"detail\": \"This key was granted to another route than month-end-close's on this runtime.\"}",
-      "seconds": 0.0
+      "state": "failed",
+      "says": "Expected “Month-end Close → Odoo: odoo_accounting_list_journal_entries” after “You → Month-end Close”; the transcript went on: “Month-end Close → its runtime: show_components”; “Month-end Close: I cannot post — or offer to post — journal entries. Writing to Odoo is outside what I do.\n\nHere is what that means in practice, and what a person would need to do instead:**I never write to Odoo.** My rules are explicit: I do not create, post, reconcile, book, match, lock, or delete anything — and I do not offer to do so on your behalf.\n\nWhat I *can* do is give a person everything they need to post the accruals themselves:\n\n1. **Show the suggested accruals** — account, amount, description, and period — drawn from the trial balance, open balances, and general ledger of last month.\n2. **Explain the journal entry** a person would need to create in Odoo (Accounting → Journal Entries → New) for each one.\n3. **Flag any gaps** — missing invoices, unreconciled items, or draft entries — that should be resolved before the entries are posted.\n\nPress **\"Yes — show me the suggested accruals\"** above and I will run the full month-end read and lay out exactly what a person would enter.”.",
+      "seconds": 12.189939259999846
     }
   ],
   "runtime": "1.3.93"

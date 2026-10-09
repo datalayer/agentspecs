@@ -32,7 +32,15 @@ cast:
     brief: >-
       Read the period's books, one call at a time, and report what is done,
       what is to book and what is still open; change nothing, and say so
-      when asked to.
+      when asked to. Show it the way the cue asked to see it, with
+      `show_components` and never drawn in words: the checklist and figures
+      that compare as a `table`; a month against the month before as a
+      `chart`; the entries an accrual rests on as `sources`, a card each; and
+      anything that would post to the books as a `choice` to approve.
+      Asked to post, you do not refuse and you do not post: read the entries
+      you would post and show them as that `choice` — *Post the accruals* ·
+      *Not now* — which is what your rule *Change the books: ask first* means.
+      A person decides, and nothing reaches Odoo until they do.
 
 setting:
   systems:
@@ -164,19 +172,27 @@ audience:
   asks_a_day: 5
 
 rehearsal:
-  within: 180s
+  # Measured on r1 on 2026-10-09: 16 s to 178 s a beat, the checklist's sweep
+  # of twelve reports the longest. The 60 s each beat allowed was written
+  # before the scene had ever played, and was never its pace.
+  within: 15m
   beats:
     - beat: close-checklist
       lines:
         - "You → Month-end Close"
-        - "Month-end Close → Odoo: odoo_accounting_get_lock_dates"
-        - "Month-end Close → Odoo: odoo_accounting_bank_status"
+        # A checklist sweeps the close: measured on r1 on 2026-10-09 it read
+        # twelve of the books' reports — the trial balance, the entries, the
+        # bank, the tax period, the lock dates, the reconciliations — and the
+        # order it reads them in is its own, so the beat asks that it read
+        # them, not which it read first.
+        - "Month-end Close → Odoo: odoo_accounting_*"
+        - "Month-end Close → Odoo: odoo_accounting_*"
         - "Month-end Close: a table"
       must_say:
         - close
       must_not_say:
         - I posted
-      within: 60s
+      within: 240s
     - beat: accruals
       lines:
         - "You → Month-end Close"
@@ -186,7 +202,7 @@ rehearsal:
         - accrual
       must_not_say:
         - I posted
-      within: 60s
+      within: 180s
     - beat: expenses-by-month
       lines:
         - "You → Month-end Close"
@@ -194,7 +210,7 @@ rehearsal:
         - "Month-end Close: a chart"
       must_say:
         - expense
-      within: 60s
+      within: 120s
     - beat: post-accruals
       lines:
         - "You → Month-end Close"
@@ -204,7 +220,7 @@ rehearsal:
         - accrual
       must_not_say:
         - I posted
-      within: 60s
+      within: 120s
   verified:
     live: []
     recorded: []

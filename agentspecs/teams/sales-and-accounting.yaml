@@ -46,7 +46,7 @@ suggestions:
     emoji: "⏳"
   - text: Which invoices make up the largest balance due? Show me each one.
     emoji: "🔎"
-  - text: Send a payment reminder to every customer more than 60 days late.
+  - text: Send a payment reminder to every customer whose invoice is overdue.
     emoji: "✉️"
 
 delegation:
