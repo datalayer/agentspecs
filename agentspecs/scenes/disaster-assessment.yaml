@@ -214,7 +214,15 @@ audience:
   asks_a_day: 3
 
 rehearsal:
-  within: 300s
+  # Measured on r1 on 2026-10-09, under the demo account, Event response played
+  # as the browser plays it and both specialists on cloud runtimes of their own
+  # over A2A: 129 s, 158 s and 165 s for the three beats that did the work. A
+  # beat here is two members working at once, each a model turn, two Earthdata
+  # searches through the gateway — NASA's CMR answers in its own time — and a
+  # surface shown, then Event response reporting both; so the 120 s written
+  # before the scene had ever played was never its pace. 240 s is, with room
+  # for two long reports, and still catches a stall.
+  within: 10m
   beats:
     - beat: flood
       lines:
@@ -229,8 +237,14 @@ rehearsal:
       must_say:
         - Valencia
       must_not_say:
-        - downloaded
-      within: 120s
+        # The claim, not the verb: a bare `downloaded` failed this beat on r1
+        # (2026-10-09) for saying “No pixel-level band values were downloaded”
+        # — the denial the beat's own `expect` asks for. The alert beat already
+        # has it right with “I sent”.
+        - I downloaded
+        - I have downloaded
+        - downloaded them
+      within: 240s
     - beat: wildfire
       lines:
         - "You → Event response"
@@ -240,7 +254,7 @@ rehearsal:
         - "Event response: words"
       must_say:
         - Los Angeles
-      within: 120s
+      within: 240s
     - beat: storm
       lines:
         - "You → Event response"
@@ -250,7 +264,7 @@ rehearsal:
         - "Event response: words"
       must_say:
         - Ahr
-      within: 120s
+      within: 240s
     - beat: alert
       lines:
         - "You → Event response"
@@ -262,7 +276,7 @@ rehearsal:
         - Valencia
       must_not_say:
         - I sent
-      within: 120s
+      within: 240s
   verified:
     live: []
     recorded: []
