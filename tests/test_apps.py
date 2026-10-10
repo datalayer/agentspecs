@@ -628,7 +628,7 @@ def test_the_four_decision_templates_are_in_the_catalogue() -> None:
         assert found.interface.components == ship.interface.components, identity
         assert (
             found.decision is not None
-            and found.decision.decision_model == "cloudflare:gtw/typesafe/jev"
+            and found.decision.decision_model == "cloudflare:wrk/typesafe/jev"
         )
         assert " For " in found.description, identity
         assert found.contents, identity

@@ -254,7 +254,7 @@ contents:
 ```yaml
 decision:
   question: Which anomalies in this dataset should we fix first?
-  decision_model: cloudflare:gtw/typesafe/jev
+  decision_model: cloudflare:wrk/typesafe/jev
   min_confidence: 0
   criteria:
   - name: Rows affected
