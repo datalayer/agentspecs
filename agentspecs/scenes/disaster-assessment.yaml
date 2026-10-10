@@ -230,7 +230,10 @@ rehearsal:
   # surface shown, then Event response reporting both; so the 120 s written
   # before the scene had ever played was never its pace. 240 s is, with room
   # for two long reports, and still catches a stall.
-  within: 10m
+  # The four beats' own bounds sum to 18 minutes since flood's was raised
+  # (2026-10-10); the scene's is read by nobody today (the driver checks only
+  # a beat's), and it is kept above their sum so that it says no less.
+  within: 20m
   beats:
     - beat: flood
       lines:
@@ -255,9 +258,12 @@ rehearsal:
       # 240s was measured when Event response asked both specialists at once
       # (129 s, 158 s, 165 s). Since it is directed to ask one at a time and
       # wait (2026-10-09), the two no longer overlap: measured 174 s (passed)
-      # and 256 s (failed, over) on r1 the same day, two runs apart. The bound
-      # is the one open question of this scene, and it is the user's.
-      within: 240s
+      # and 256 s (failed, over) on r1 the same day, two runs apart.
+      # Raised to 360s on 2026-10-10 (Eric): the bound now describes the beat
+      # as it plays, one specialist after the other. Not yet measured at 360s
+      # — an Earthdata pass costs ~350 credits, so it waits for one to be
+      # wanted.
+      within: 360s
     - beat: wildfire
       lines:
         - "You → Event response"
