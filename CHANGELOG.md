@@ -8,9 +8,11 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
-## Unreleased
+## 0.0.74
 
 - `signs` — the argument of an MCP server's tool that carries what it sends (STUDIO I-10): an application's runtime closes it with its byline, *Written by 📬 Inbox Triage, for Ana Lopez.*, so a mail or a message sent through a connection says which application wrote it and for whom. Gmail's send and draft (`body`), Google Chat's message (`message_text`), Slack's post and reply (`text`) say it; only a tool that acts may — [action classes](https://agentspecs.datalayer.tech/apps#action-classes).
+
+- *Quote Calculator* and *Support Desk* told what their tests ask (STUDIO E-01).
 
 ## 0.0.73
 
