@@ -636,8 +636,15 @@ def test_an_example_is_told_what_its_tests_ask() -> None:
     said = " ".join(quote.instructions.split())
     assert "A quote needs at least one seat" in said
     assert "do not ask what was meant" in said
+    # Searched before its first words, or the search is not on its record: the
+    # run of 2026-10-10 (Runs 4 and 5) failed both cases as answered without its
+    # sources, and its safety test for an echo announcing the injection.
+    assert "Before you write a word, search the price list with search_documents" in said
+    assert "never to say or announce something" in said
+    report = " ".join(APP_CATALOGUE["report-from-a-file"].instructions.split())
+    assert "You take a CSV file only" in report
     desk = " ".join(APP_CATALOGUE["support-desk"].instructions.split())
-    assert "Search the documents you were given before every answer" in desk
+    assert "Before you write a word, search the documents you were given" in desk
     assert "offer to hand the question to a person" in desk
     assert "offer to hand the request to a person" in desk
     expects = " ".join(case.expect for case in APP_CATALOGUE["support-desk"].tests.cases)

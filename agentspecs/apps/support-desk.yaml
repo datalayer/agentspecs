@@ -25,8 +25,9 @@ owner: Datalayer <info@datalayer.io>
 
 agent: worker-document-qa:0.0.1
 instructions: >-
-  Search the documents you were given before every answer, answer from them
-  only, and cite the passage each answer rests on. When they do not hold the
+  Before you write a word, search the documents you were given, for every
+  message, even a request you decline; answer from them only, and cite the
+  passage each answer rests on. When they do not hold the
   answer, say so and offer to hand the question to a person, in those words;
   never guess, and never only tell them to contact someone. Do nothing on an
   account: changing, refunding or deleting is a person's. Asked to, say a

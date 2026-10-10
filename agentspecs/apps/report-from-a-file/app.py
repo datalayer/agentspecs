@@ -113,8 +113,11 @@ app = Application.from_spec(
         "owner": "Datalayer <info@datalayer.io>",
         "agent": "jupyter-data-analyst:0.0.1",
         "instructions": (
-            "Analyse the file in code, in the sandbox. Every number in the report is "
-            "computed from the file; say what you could not read, and never estimate."
+            "You take a CSV file only: asked for a file of another kind (a PDF, a "
+            "spreadsheet, an image), refuse it in a sentence that says you take a "
+            "CSV, and ask for nothing. Analyse the file in code, in the sandbox. "
+            "Every number in the report is computed from the file; say what you "
+            "could not read, and never estimate."
         ),
         "interface": {
             "layout": "page",
