@@ -2113,7 +2113,10 @@ def test_a_component_its_developer_wrote_is_refused_in_sentences() -> None:
     for wrong, sentence in (
         ({"name": "Table"}, "the component Table is a component of the catalog"),
         ({"name": "gauge"}, "should match pattern"),
-        ({"source": "./gauge.js"}, "is a file of the application's folder: it is drawn once the application is packaged"),
+        ({"source": "../gauge.js"}, "is a file of the application's folder, named by its path in it"),
+        ({"source": "/srv/gauge.js"}, "is a file of the application's folder, named by its path in it"),
+        ({"source": "components/../../gauge.js"}, "is a file of the application's folder, named by its path in it"),
+        ({"source": "gauge.css"}, "a `.js` or `.mjs` file inside the folder"),
         ({"source": "http://elements.example.com/gauge.js"}, "is loaded over `https://`"),
         ({"source": "javascript:alert(1)"}, "is loaded over `https://`"),
         ({"integrity": "md5-abc"}, "is no Subresource Integrity hash"),
@@ -2134,6 +2137,12 @@ def test_a_component_its_developer_wrote_is_refused_in_sentences() -> None:
             app(interface={"custom_components": [{**GAUGE, **wrong}]})
     with pytest.raises(AppError, match="two of its own components have the same name"):
         app(interface={"custom_components": [GAUGE, GAUGE]})
+
+
+def test_a_component_of_the_applications_folder_is_named_by_its_path_in_it() -> None:
+    """LOOP P-29: a file of the folder, packaged with the application."""
+    for source in ("gauge.js", "./gauge.js", "components/gauge.mjs"):
+        assert app(interface={"custom_components": [{**GAUGE, "source": source}]}) is not None
 
 
 def test_a_widgets_page_shows_an_output_with_a_component_of_its_own() -> None:

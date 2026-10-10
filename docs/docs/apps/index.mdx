@@ -704,7 +704,7 @@ interface:
 | `description` | What it is for, in a sentence: what the palette says. |
 | `props` | Its properties, the JSON Schema of an object: each typed `string`, `integer`, `number`, `boolean`, `array` or `object`, or an `enum` of words, with its `default`; `required` among them. |
 | `shows`, `sends` | What it shows from the page's data, and what it sends back: bindings, as a Table's `rows` and `selected`. |
-| `source` | The address of a built ES module whose default export draws it: `export default function (root, {props, send})`, returning `{update(props)}` to be told of new properties. Over `https://`, or `http://localhost` while it is written. |
+| `source` | Its built ES module, whose default export draws it: `export default function (root, {props, send})`, returning `{update(props)}` to be told of new properties. An address over `https://`, or `http://localhost` while it is written; or a file of the application's folder by its path in it (`gauge.js`), packaged with the application and served by the server it is installed beside (P-29). |
 | `integrity` | Its Subresource Integrity hash: a module that differs is not drawn. Any module at the address when unsaid. |
 | `height` | Its height on the page, in pixels (240 unless said). |
 | `example` | A configuration its schema accepts, which the palette previews. |
@@ -715,9 +715,9 @@ request leaves it. The page fetches the module without credentials, checks it
 against `integrity`, and hands it to the frame; what the frame sends back is
 taken only under a name of `sends`.
 
-Refused: a name of the catalog's or given twice, a module that is a file of
-the application's folder (drawn once the application is packaged with it,
-P-29) or not over `https://`, a property of another type or one every
+Refused: a name of the catalog's or given twice, a module not over
+`https://` or a file outside the application's folder (an absolute path, a
+`..`, or one that is not a `.js` or `.mjs` file), a property of another type or one every
 component already has (`id`, `action`, `weight`, `visible_when`…), a binding
 that is also a property, an example its schema refuses — and, where it is
 used, properties its schema refuses, as for any component of the catalog.

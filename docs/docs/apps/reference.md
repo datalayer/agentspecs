@@ -508,7 +508,7 @@ A component the developer writes (LOOP P-17), an A2UI component of this applicat
 | `props` | mapping | Its properties, as the JSON Schema of an object: each typed `string`, `integer`, `number`, `boolean`, `array` or `object`, or an `enum` of words, with its `title`, `description` and `default`; `required` among them | — |
 | `shows` | list of text | What it shows from the page's data: each a binding, given a path or a value in place | — |
 | `sends` | list of text | What it sends back: each a binding it writes, then its `action` dispatched | — |
-| `source` (required) | text | The address of its module, a built ES module whose default export draws it (`export default function (root, {props, send})`): over `https://`, or `http://localhost` while it is written. A module of the application's folder waits for its packaging (LOOP P-29) | — |
+| `source` (required) | text | Its module, a built ES module whose default export draws it (`export default function (root, {props, send})`): an address over `https://`, or `http://localhost` while it is written; or a file of the application's folder, by its path in it (`gauge.js`), packaged with the application and served by the server its package is installed beside (LOOP P-29) | — |
 | `integrity` | text | The module as it was reviewed: its Subresource Integrity hash (`sha384-…`); a module that differs is not drawn. Any module at the address when unsaid | empty |
 | `height` | integer | Its height on the page, in pixels | `240` |
 | `example` | mapping | A configuration of it its schema accepts: what the palette previews | empty |

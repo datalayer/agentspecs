@@ -634,6 +634,12 @@ CUSTOM_RESERVED_NAMES = ("id", "component", "action", "weight", "visible_when", 
 #: being written.
 CUSTOM_SOURCE = re.compile(r"(?:https://[A-Za-z0-9.-]+(?::\d+)?|http://(?:localhost|127\.0\.0\.1)(?::\d+)?)/\S*")
 
+#: A custom component's module as a file of the application's folder (LOOP
+#: P-29): its path in the folder, a `.js` or `.mjs` file inside it — no
+#: absolute path, no `..`. Packaged with the application (`loop apps
+#: package`), it is served by the server its package is installed beside.
+CUSTOM_FILE = re.compile(r"(?:\./)?(?:[A-Za-z0-9_][A-Za-z0-9_.-]*/)*[A-Za-z0-9_][A-Za-z0-9_.-]*\.m?js")
+
 #: A Subresource Integrity hash: the module as it was reviewed, and no other.
 INTEGRITY = re.compile(r"sha(?:256|384|512)-[A-Za-z0-9+/]+={0,2}")
 
@@ -714,10 +720,11 @@ class AppCustomComponent(_Strict):
     source: str = Field(
         ...,
         description=(
-            "The address of its module, a built ES module whose default export draws it "
-            "(`export default function (root, {props, send})`): over `https://`, or "
-            "`http://localhost` while it is written. A module of the application's folder waits for "
-            "its packaging (LOOP P-29)"
+            "Its module, a built ES module whose default export draws it "
+            "(`export default function (root, {props, send})`): an address over `https://`, or "
+            "`http://localhost` while it is written; or a file of the application's folder, by its "
+            "path in it (`gauge.js`), packaged with the application and served by the server its "
+            "package is installed beside (LOOP P-29)"
         ),
     )
     integrity: str = Field(
@@ -736,10 +743,12 @@ class AppCustomComponent(_Strict):
     @classmethod
     def _source_is_a_module_address(cls, source: str) -> str:
         if not re.match(r"^[a-z][a-z0-9+.-]*:", source):
-            raise ValueError(
-                f"the module {source!r} is a file of the application's folder: it is drawn once the "
-                "application is packaged with it (LOOP P-29); give the address of a built ES module"
-            )
+            if not CUSTOM_FILE.fullmatch(source):
+                raise ValueError(
+                    f"the module {source!r} is a file of the application's folder, named by its path in "
+                    "it: a `.js` or `.mjs` file inside the folder (`gauge.js`, `components/gauge.js`)"
+                )
+            return source
         if not CUSTOM_SOURCE.fullmatch(source):
             raise ValueError(
                 f"the module {source!r} is loaded over `https://`, or from `http://localhost` while it is written"
