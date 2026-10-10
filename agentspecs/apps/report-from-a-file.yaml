@@ -1,6 +1,6 @@
 # Built from app.py by `loop apps build`: the file is the source; edit it there.
 # What its code decides; without the file, its agent answers:
-# loop:code message: run (app.py:203)
+# loop:code message: run (app.py:206)
 schema: loop.app/v1
 id: report-from-a-file
 version: 0.0.1
