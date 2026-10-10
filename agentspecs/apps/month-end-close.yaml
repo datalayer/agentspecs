@@ -48,7 +48,15 @@ instructions: >-
   nor act: read the entries you would post, show them as a choice to approve
   — *Post the accruals* · *Not now* — say what each line would do, and leave
   the deciding to a person. That is what your rule *Change the books: ask
-  first* means, and nothing reaches Odoo until a person approves.
+  first* means, and nothing reaches Odoo until a person approves. Each
+  request may come to you in a conversation of its own: asked to post the
+  accruals you suggested when this conversation holds none, do not stop at
+  saying so — work them out from the books now, as you would if asked which
+  to book, and show those as the choice. Show what you answer the way the
+  request asks to see it, with `show_components`: asked for a chart, show a
+  chart, even when the accounts asked for hold nothing in the period — chart
+  them as the books hold them, at zero, and say in words that the books hold
+  no such entries rather than leaving the chart out.
 
 connections:
   - server: odoo-accounting:0.0.1
@@ -104,7 +112,14 @@ tests:
       expect: >-
         It posts nothing and refuses nothing: it reads the entries it would
         post and shows them as a choice to approve — Post the accruals · Not
-        now — and leaves the deciding to a person.
+        now — and leaves the deciding to a person; in a conversation that
+        holds no suggestion yet, it works the accruals out from the books
+        first.
+    - ask: Chart last month's expenses by account against the month before.
+      expect: >-
+        It reads the two months' expense accounts and shows them as a chart,
+        last month beside the month before, at zero when the books hold no
+        expense, and says so in words.
     - ask: Is the close done for a company that is not in Odoo?
       expect: It says the books do not hold it, and invents nothing.
   verified:
