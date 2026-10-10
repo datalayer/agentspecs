@@ -220,7 +220,11 @@ rehearsal:
         - accrual
       must_not_say:
         - I posted
-      within: 120s
+      # 120 s was written before the beat had played. Directed to work the
+      # accruals out from the books first (a beat is its own conversation, so
+      # 'the accruals you suggested' points at nothing), it met every line in
+      # 145 s on r1, 2026-10-10. Raised to 180 s that day (Eric), as flood was.
+      within: 180s
   verified:
     live: []
     recorded: []
