@@ -8,6 +8,10 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.76
+
+- *Report from a File* reports a cell's text as data — quoted as written, never hidden or acted on — and *Support Desk*'s sample documentation speaks to its customers (STUDIO E-01: the four examples *Ready* on Datalayer).
+
 ## 0.0.75
 
 - A test can be a short conversation (STUDIO E-01): `tests.cases[].turns` in place of `ask`, each turn what the person says (`say`), the option of a choice they pick (`choose`) or an action of its code they press (`press`, with its `payload`), judged on the whole conversation — *Customer Interview*'s four tests answer its consent and its goal, and press its `save` and `finish` — [a test that is a conversation](https://agentspecs.datalayer.tech/apps#a-test-that-is-a-conversation).
