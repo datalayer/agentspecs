@@ -8,6 +8,10 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.69
+
+- `example-blank` (STUDIO P-32): a model — Claude Sonnet 4.6 — and nothing else: no prompt of its own, no MCP servers, no skills, no tools. The agent an `app.py` runs in its own process, with the application's instructions as its whole prompt; `loop apps init --python` starts from it — [agents](https://agentspecs.datalayer.tech/agents).
+
 ## 0.0.68
 
 The four scenes of the catalogue rehearsed on Datalayer (STUDIO A-14) — [scenes](https://agentspecs.datalayer.tech/scenes).
