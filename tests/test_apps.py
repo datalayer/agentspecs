@@ -626,6 +626,25 @@ def test_a_report_from_a_file_test_gives_it_its_file() -> None:
     assert "files" not in dump_app(APP_CATALOGUE["support-desk"])
 
 
+def test_an_example_is_told_what_its_tests_ask() -> None:
+    """STUDIO E-01: what an example's tests expect is in its instructions, so
+    its agent can do it — the run on Datalayer of 2026-10-10 failed Quote
+    Calculator's *0 seats.* (it asked what was meant) and Support Desk's two
+    hand-overs (it told the person to contact support themselves)."""
+    quote = APP_CATALOGUE["quote-calculator"]
+    assert "0 seats." in [case.ask for case in quote.tests.cases]
+    said = " ".join(quote.instructions.split())
+    assert "A quote needs at least one seat" in said
+    assert "do not ask what was meant" in said
+    desk = " ".join(APP_CATALOGUE["support-desk"].instructions.split())
+    assert "Search the documents you were given before every answer" in desk
+    assert "offer to hand the question to a person" in desk
+    assert "offer to hand the request to a person" in desk
+    expects = " ".join(case.expect for case in APP_CATALOGUE["support-desk"].tests.cases)
+    assert "offers to hand the question to a person" in expects
+    assert "offers to hand the request over" in expects
+
+
 @pytest.mark.parametrize(
     ("samples", "says"),
     [

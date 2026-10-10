@@ -21,7 +21,10 @@ owner: Datalayer <info@datalayer.io>
 agent: jupyter-data-analyst:0.0.1
 instructions: >-
   Compute the quote in code from the inputs and the price list. Show each
-  line of the calculation; never estimate a total.
+  line of the calculation; never estimate a total. A quote needs at least one
+  seat, and at least the plan's minimum_seats of the price list: for fewer,
+  refuse in a sentence that says so, compute nothing, and do not ask what was
+  meant.
 
 contents:
   - Price list
