@@ -8,6 +8,11 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.71
+
+- `samples` — what an example is tried on before it is anybody's, published with it by Datalayer and read only (STUDIO E-06, E-11): documents of its contents (*Quote Calculator*'s *Price list*, a sample CSV a visitor's browser sandbox is given) and a decision's alternatives with their evidence and metrics (each of the four decisions); validated, in the schema and the reference — [apps reference](https://agentspecs.datalayer.tech/apps/reference).
+- The four decisions decide with `cloudflare:wrk/typesafe/jev`, the route Datalayer's ai-inference offers (E-06).
+
 ## 0.0.70
 
 - A custom component's `source` may be a file of the application's folder, by its path in it — `components/dial.js` (STUDIO P-29): a `.js` or `.mjs` file inside the folder, no absolute path and no `..`; packaged with the application and served by the server it is installed beside — [apps reference](https://agentspecs.datalayer.tech/apps/reference).
