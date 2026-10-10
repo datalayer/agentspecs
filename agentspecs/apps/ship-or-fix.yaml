@@ -75,6 +75,43 @@ decision:
         Failure severity: 1
         Formatting failures block shipping: 0
 
+# What a visitor without an account decides on (STUDIO E-06): three
+# configurations of an agent from a sample benchmark run, read only. A clone
+# decides on its own run.
+samples:
+  alternatives:
+    - name: Current prompt
+      evidence: >-
+        A sample run of 80 tasks of a reporting agent: 70 passed. Six of the
+        ten failures gave a wrong total in a quarterly figure, which a reader
+        would act on; four put the table's columns in another order than the
+        template asks. Nobody who reads the reports has complained about the
+        column order.
+      metrics:
+        Pass rate: 0.875
+        Cost per task: 2.4
+        Latency: 9.5
+    - name: With retrieval
+      evidence: >-
+        The same 80 tasks with the reports of the last two quarters retrieved
+        first: 76 passed. The four failures are all formatting — a missing
+        unit in a table header — and every figure was right. Each task reads
+        about twice as much, which shows in its cost.
+      metrics:
+        Pass rate: 0.95
+        Cost per task: 3.9
+        Latency: 12.8
+    - name: Smaller model
+      evidence: >-
+        The same 80 tasks on a smaller model: 61 passed. Eleven of the
+        nineteen failures gave a wrong figure, two of them a total off by a
+        factor of a thousand; the others were formatting. It is the cheapest
+        and the fastest of the three.
+      metrics:
+        Pass rate: 0.7625
+        Cost per task: 0.7
+        Latency: 4.1
+
 interface:
   layout: page
   accent: green

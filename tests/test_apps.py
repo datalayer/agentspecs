@@ -546,6 +546,76 @@ def test_a_decision_application_carries_the_whole_decision() -> None:
     assert decision.min_confidence == 0.6
 
 
+def test_what_an_example_is_tried_on_is_published_with_it() -> None:
+    """STUDIO E-06, E-11: a visitor without an account decides on sample
+    alternatives with their evidence, and computes a quote from Datalayer's
+    price list — each read only, published with the example."""
+    for identity in ["ship-or-fix", "supplier-comparison", "data-quality", "model-choice"]:
+        found = APP_CATALOGUE[identity]
+        assert found.decision is not None
+        assert len(found.samples.alternatives) >= 2, identity
+        weighted = {c.name for c in found.decision.criteria if c.kind.value == "metric" and c.weight > 0}
+        for alternative in found.samples.alternatives:
+            assert alternative.evidence.strip(), identity
+            assert weighted <= set(alternative.metrics), (identity, alternative.name)
+    quote = APP_CATALOGUE["quote-calculator"]
+    [prices] = quote.samples.documents
+    assert (prices.name, prices.file) == ("Price list", "price-list.csv")
+    assert prices.name in quote.contents
+    assert prices.text.splitlines()[0].startswith("plan,term,price_per_seat")
+    # What nothing is tried on says nothing of it.
+    assert "samples" not in dump_app(APP_CATALOGUE["web-research"])
+
+
+@pytest.mark.parametrize(
+    ("samples", "says"),
+    [
+        ({"alternatives": [{"name": "A", "evidence": "x", "metrics": {"Price": 1}}]}, "two sample alternatives"),
+        (
+            {"alternatives": [{"name": "A", "evidence": "x", "metrics": {"Price": 1}}] * 2},
+            "has a name of its own",
+        ),
+        (
+            {
+                "alternatives": [
+                    {"name": "A", "evidence": "x", "metrics": {"Price": 1}},
+                    {"name": "B", "evidence": "y", "metrics": {}},
+                ]
+            },
+            "says nothing of 'Price'",
+        ),
+        (
+            {
+                "alternatives": [
+                    {"name": "A", "evidence": "x", "metrics": {"Price": 1, "Speed": 2}},
+                    {"name": "B", "evidence": "y", "metrics": {"Price": 2}},
+                ]
+            },
+            "'Speed' is no metric criterion",
+        ),
+        (
+            {
+                "alternatives": [
+                    {"name": "A", "evidence": " ", "metrics": {"Price": 1}},
+                    {"name": "B", "evidence": "y", "metrics": {"Price": 2}},
+                ]
+            },
+            "say what is known",
+        ),
+    ],
+)
+def test_a_decision_is_tried_on_alternatives_it_can_rank(samples: dict, says: str) -> None:
+    decision = {
+        "question": "Which supplier?",
+        "criteria": [
+            {"name": "Price", "kind": "metric", "weight": 1, "direction": "lower"},
+            {"name": "Fit", "kind": "noul", "weight": 1, "instructions": "Does it fit?"},
+        ],
+    }
+    with pytest.raises(ValueError, match=re.escape(says)):
+        app(kind="decision", decision=decision, samples=samples)
+
+
 def test_the_four_decision_templates_are_in_the_catalogue() -> None:
     """LOOP E-01: the landing's four templates, each an Appspec of its own — the
     Jupyter data analyst, the decision's ten components, typed decisions."""
@@ -1193,6 +1263,18 @@ def test_an_application_is_translated_in_its_spec() -> None:
         ({"triggers": [{"type": "schedule", "cron": "0 8 * * *"}]}, "`triggers` are a worker's"),
         ({"kind": "decision"}, "says what it decides"),
         ({"decision": {"question": "Which?"}}, "decides nothing"),
+        (
+            {"samples": {"documents": [{"name": "Price list", "file": "prices.csv", "text": "x"}]}},
+            "is not one of its `contents`",
+        ),
+        (
+            {"contents": ["Prices"], "samples": {"documents": [{"name": "Prices", "file": "a/p.csv", "text": "x"}]}},
+            "without a folder",
+        ),
+        (
+            {"samples": {"alternatives": [{"name": "A", "evidence": "x"}, {"name": "B", "evidence": "y"}]}},
+            "sample alternatives are a decision's",
+        ),
         ({"connections": [{"server": "tavily"}, {"server": "tavily:0.0.1"}]}, "same server twice"),
         ({"connections": [{"server": "tavily", "as": "me"}]}, "connections.0.as"),
         ({"record": {"keep_for": "forever"}}, "cannot read the retention"),

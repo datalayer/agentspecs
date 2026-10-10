@@ -2100,6 +2100,52 @@ class AppDecision(_Strict):
         return self
 
 
+# --- what it is tried on, before it is anybody's -------------------------------------
+
+#: A sample document's file, as a sandbox is given it: a name, no folder.
+SAMPLE_FILE = r"[A-Za-z0-9][A-Za-z0-9._-]{0,99}"
+
+
+class AppSampleDocument(_Strict):
+    """A document it answers from, as Datalayer publishes it with the application."""
+
+    name: str = Field(..., description="The document, as its `contents` names it")
+    file: str = Field(..., description="The file it is given as, in a sandbox: `price-list.csv`")
+    text: str = Field(..., description="What it holds")
+
+    @field_validator("file")
+    @classmethod
+    def _is_a_file(cls, file: str) -> str:
+        if not re.fullmatch(SAMPLE_FILE, file):
+            raise ValueError(f"a sample document's file is a name, without a folder: {file!r} is not one")
+        return file
+
+
+class AppSampleAlternative(_Strict):
+    """An alternative a decision is tried on, and what is known about it."""
+
+    name: str = Field(..., description="Its name")
+    evidence: str = Field(..., description="What is known about it: the text its typed questions are asked on")
+    metrics: Dict[str, float] = Field(
+        default_factory=dict, description="What each metric criterion found for it, by the criterion's name"
+    )
+
+
+class AppSamples(_Strict):
+    """What it is tried on before it is anybody's (STUDIO E-06, E-11).
+
+    Published with it by Datalayer and read only: what a visitor without an
+    account tries it on, in the browser.
+    """
+
+    documents: List[AppSampleDocument] = Field(
+        default_factory=list, description="Documents of its `contents`, as Datalayer publishes them"
+    )
+    alternatives: List[AppSampleAlternative] = Field(
+        default_factory=list, description="For a decision: alternatives with their evidence"
+    )
+
+
 # --- the application ------------------------------------------------------------------
 
 
@@ -2151,6 +2197,10 @@ class AppSpec(_Strict):
     notifications: List[str] = Field(default_factory=list, description="Where an approval reaches a person")
 
     decision: Optional[AppDecision] = Field(default=None, description="For a decision: what it decides")
+    samples: AppSamples = Field(
+        default_factory=AppSamples,
+        description="What it is tried on before it is anybody's: published with it by Datalayer, read only",
+    )
 
     enabled: bool = Field(default=True, description="Whether it is offered today")
     unavailable_because: str = Field(
@@ -2292,7 +2342,47 @@ class AppSpec(_Strict):
                         f"the rules {seen[target]!r} and {rule.action!r} both apply to {target!r}: keep one"
                     )
                 seen[target] = rule.action
+        self._samples_hold_together()
         return self
+
+    def _samples_hold_together(self) -> None:
+        """What it is tried on is its own: its documents, its decision's criteria."""
+        documents = [document.name for document in self.samples.documents]
+        if len(set(documents)) != len(documents):
+            raise ValueError("two sample documents have the same name")
+        files = [document.file for document in self.samples.documents]
+        if len(set(files)) != len(files):
+            raise ValueError("two sample documents are given as the same file")
+        foreign = [name for name in documents if name not in self.contents]
+        if foreign:
+            raise ValueError(f"the sample document {foreign[0]!r} is not one of its `contents`")
+        alternatives = self.samples.alternatives
+        if not alternatives:
+            return
+        if self.decision is None:
+            raise ValueError(f"a {self.kind.value} application decides nothing: sample alternatives are a decision's")
+        if len(alternatives) < 2:
+            raise ValueError("a decision is tried on two sample alternatives at least")
+        names = [alternative.name.strip().lower() for alternative in alternatives]
+        if any(not name for name in names) or len(set(names)) != len(names):
+            raise ValueError("every sample alternative has a name of its own")
+        metrics = {
+            criterion.name for criterion in self.decision.criteria if criterion.kind is CriterionKind.METRIC
+        }
+        weighted = {
+            criterion.name
+            for criterion in self.decision.criteria
+            if criterion.kind is CriterionKind.METRIC and criterion.weight > 0
+        }
+        for alternative in alternatives:
+            if not alternative.evidence.strip():
+                raise ValueError(f"say what is known about the sample alternative {alternative.name!r}")
+            unknown = sorted(set(alternative.metrics) - metrics)
+            if unknown:
+                raise ValueError(f"{unknown[0]!r} is no metric criterion of the decision ({alternative.name!r})")
+            missing = sorted(weighted - set(alternative.metrics))
+            if missing:
+                raise ValueError(f"the sample alternative {alternative.name!r} says nothing of {missing[0]!r}")
 
     @property
     def layout(self) -> Layout:
@@ -2899,6 +2989,7 @@ __all__ = [
     "CUSTOM_COMPONENT_NAME",
     "AppCustomComponent",
     "custom_props_refused",
+    "SAMPLE_FILE",
     "SCHEMA_PATH",
     "TEXT_OUTPUTS",
     "TRACK_KEEPS",
@@ -2929,6 +3020,9 @@ __all__ = [
     "AppProfileTranslation",
     "AppRecord",
     "AppRule",
+    "AppSampleAlternative",
+    "AppSampleDocument",
+    "AppSamples",
     "AppScenario",
     "AppSpaceGrant",
     "AppSpec",

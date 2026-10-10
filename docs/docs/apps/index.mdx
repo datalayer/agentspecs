@@ -91,6 +91,7 @@ record:
 | `deployment` | Where it goes: `hosted` (a `visibility`, a `slug`, `character_alone`) and `embedded` (a `mode`, the `origins` allowed, and `host`: what the host page passes it, the functions of the host it may call, and whether its `user` is `signed`). |
 | `goal`, `triggers`, `memory`, `notifications` | A worker's own: what it works toward, what starts its work, what it remembers, where an approval reaches a person. |
 | `decision` | A decision's own: the `question`, `alternatives`, `criteria`, `scenarios`, the review policy. |
+| `samples` | What it is tried on before it is anybody's, published with it by Datalayer and read only: `documents` of its `contents` (each a `name` its `contents` gives, the `file` a sandbox is given it as, and its `text`), and, for a decision, `alternatives` (each a `name`, its `evidence`, and what each metric criterion found, under `metrics` — every weighted one). A visitor without an account decides on them, or computes from them, in the browser. |
 | `enabled`, `unavailable_because` | Whether it is offered today, `true` unless said; and, when it is not, why, in a sentence its page shows. One that is not offered says why; one that is says nothing. |
 
 A key the spec does not know is refused, by name: a typing mistake does not

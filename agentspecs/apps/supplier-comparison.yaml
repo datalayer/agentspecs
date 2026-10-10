@@ -64,6 +64,43 @@ decision:
         - "Nothing: everything needed is there"
       direction: higher
 
+# What a visitor without an account decides on (STUDIO E-06): three
+# suppliers quoting for a sample order of 5,000 units, read only. A clone
+# decides on its own orders.
+samples:
+  alternatives:
+    - name: Northfield Components
+      evidence: >-
+        Quotes 18,400 for the 5,000 units, delivery included. Its delivery
+        records show 47 of 50 past deliveries on time. It can make 6,000 units
+        a month. It meets the stated requirements: ISO 9001, delivery within
+        three weeks and payment at 60 days.
+      metrics:
+        Price: 18400
+        Delivery reliability: 0.94
+        Capacity: 1.0
+    - name: Harbor Supply
+      evidence: >-
+        Quotes 15,900 for the 5,000 units, plus 900 for delivery. 31 of 40
+        past deliveries arrived on time, the late ones by a week on average.
+        It can make 4,000 units a month, so the order would ship in two parts.
+        It is ISO 9001 certified, and asks for payment at 30 days.
+      metrics:
+        Price: 16800
+        Delivery reliability: 0.775
+        Capacity: 0.8
+    - name: Valley Works
+      evidence: >-
+        Quotes 17,200 for the 5,000 units, delivery included. 12 of its 15
+        past deliveries arrived on time. It states a capacity of 10,000 units
+        a month, but sent no figure for the last quarter. It meets the
+        delivery and payment terms; its ISO 9001 certificate expired last
+        year and is being renewed.
+      metrics:
+        Price: 17200
+        Delivery reliability: 0.8
+        Capacity: 1.0
+
 interface:
   layout: page
   accent: green

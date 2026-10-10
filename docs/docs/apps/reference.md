@@ -42,6 +42,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `memory` | text | A memory of the catalogue, when it remembers | empty |
 | `notifications` | list of text | Where an approval reaches a person | — |
 | `decision` | [AppDecision](#appdecision) | For a decision: what it decides | empty |
+| `samples` | [AppSamples](#appsamples) | What it is tried on before it is anybody's: published with it by Datalayer, read only | — |
 | `enabled` | true or false | Whether it is offered today | `true` |
 | `unavailable_because` | text | Why it is not offered today, in a sentence its page shows: said when `enabled` is false, and only then | empty |
 | `tags` | list of text |  | — |
@@ -284,6 +285,45 @@ decision:
     instructions: Can the proposed correction be applied without a person checking
       each row?
     direction: higher
+```
+
+### `samples`
+
+```yaml
+samples:
+  alternatives:
+  - name: Prices in cents
+    evidence: In the sample orders dataset (12,480 rows), 38 rows from the EU shop
+      carry a unit price one hundred times the catalogue price — 1999 for an item
+      listed at 19.99 — all imported by the same job on 4 March. Divided by one hundred,
+      each matches its catalogue price to the cent. Corrected, total revenue falls
+      by 6.1%.
+    metrics:
+      Rows affected: 38
+      Effect on the result: 6.1
+  - name: Duplicate orders
+    evidence: 96 order ids appear twice with identical lines, timestamps and amounts,
+      all from a retried upload on 19 April. No order id appears three times. Removing
+      the second copies lowers total revenue by 0.9%.
+    metrics:
+      Rows affected: 96
+      Effect on the result: 0.9
+  - name: Missing region
+    evidence: 1,032 rows have an empty region, all imported on 2 March from the partner
+      channel; their shipping addresses are filled in and name a country in every
+      case. Total revenue does not move; revenue by region moves by up to 4.5% once
+      the region is read from the address.
+    metrics:
+      Rows affected: 1032
+      Effect on the result: 4.5
+  - name: Very large orders
+    evidence: 11 orders exceed 40,000 in value, the largest at 182,000. Each is from
+      an account marked as a reseller, and each has an invoice and a delivery record
+      that match its amount. Left out, total revenue would fall by 9.8%, but nothing
+      suggests they are wrong.
+    metrics:
+      Rows affected: 11
+      Effect on the result: 0
 ```
 
 ### `backend_tools`
@@ -687,6 +727,35 @@ When the application acts alone, and when it asks.
 | `action` (required) | text | The action, in the words a person reads: `Send an email` | — |
 | `applies_to` (required) | text or list of text | What the rule applies to: a class of action (`read`, `write`, `send`, `buy`, `delete`, `publish`), or named tools (`server.tool`, or a tool id) | — |
 | `behaviour` (required) | [Behaviour](#behaviour) | `do_it`, `if_asked`, `ask_first` or `leave_to_me` | — |
+
+### AppSampleAlternative
+
+An alternative a decision is tried on, and what is known about it.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `name` (required) | text | Its name | — |
+| `evidence` (required) | text | What is known about it: the text its typed questions are asked on | — |
+| `metrics` | mapping of number | What each metric criterion found for it, by the criterion's name | — |
+
+### AppSampleDocument
+
+A document it answers from, as Datalayer publishes it with the application.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `name` (required) | text | The document, as its `contents` names it | — |
+| `file` (required) | text | The file it is given as, in a sandbox: `price-list.csv` | — |
+| `text` (required) | text | What it holds | — |
+
+### AppSamples
+
+What it is tried on before it is anybody's (STUDIO E-06, E-11). Published with it by Datalayer and read only: what a visitor without an account tries it on, in the browser.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `documents` | list of [AppSampleDocument](#appsampledocument) | Documents of its `contents`, as Datalayer publishes them | — |
+| `alternatives` | list of [AppSampleAlternative](#appsamplealternative) | For a decision: alternatives with their evidence | — |
 
 ### AppScenario
 

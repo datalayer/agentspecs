@@ -26,6 +26,22 @@ instructions: >-
 contents:
   - Price list
 
+# What a visitor without an account computes a quote from (STUDIO E-11):
+# Datalayer's sample price list, read only. A clone answers from the Price
+# list its owner gives it on its Build tab.
+samples:
+  documents:
+    - name: Price list
+      file: price-list.csv
+      text: |
+        plan,term,price_per_seat,billed,minimum_seats
+        Team,Monthly,15,each month,1
+        Team,Annual,144,each year,1
+        Business,Monthly,30,each month,5
+        Business,Annual,288,each year,5
+        Enterprise,Monthly,55,each month,25
+        Enterprise,Annual,528,each year,25
+
 interface:
   layout: page
   accent: sun

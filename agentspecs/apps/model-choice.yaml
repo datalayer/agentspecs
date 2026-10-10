@@ -96,6 +96,43 @@ decision:
         Answer quality: 1
         Follows the format: 1
 
+# What a visitor without an account decides on (STUDIO E-06): three models
+# from a sample benchmark run of fifty support-ticket summaries, read only.
+# A clone decides on its own run.
+samples:
+  alternatives:
+    - name: Large model
+      evidence: >-
+        A sample run of 50 support-ticket summaries: 46 passed. The four
+        failures each left out the customer's account number, which the use
+        case asks for. Every answer kept to the JSON format asked for. Its
+        price per call is published on the Models page, and the run recorded
+        a trajectory for each task.
+      metrics:
+        Pass rate: 0.92
+        Cost per task: 1.8
+        Latency: 6.2
+    - name: Medium model
+      evidence: >-
+        The same 50 summaries: 43 passed. Of the seven failures, four left out
+        the account number and three summarised the wrong ticket of a thread.
+        Two answers broke the JSON format with a trailing comment. Its price
+        per call is published, and every task has its trajectory.
+      metrics:
+        Pass rate: 0.86
+        Cost per task: 0.6
+        Latency: 3.1
+    - name: Small model
+      evidence: >-
+        The same 50 summaries: 34 passed. Most of the 16 failures invented a
+        resolution the thread never reached, and nine answers broke the JSON
+        format. Its billing is not published on the Models page, and the run
+        kept no trajectory for its failures.
+      metrics:
+        Pass rate: 0.68
+        Cost per task: 0.2
+        Latency: 1.4
+
 interface:
   layout: page
   accent: green
