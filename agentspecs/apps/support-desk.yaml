@@ -77,8 +77,8 @@ samples:
         ## Refunds and account changes
 
         Refunds, plan changes and account deletion are handled by a person on
-        the support team, never by the assistant. Ask for one and the assistant
-        hands your request to them.
+        the support team. Ask for one in the chat and your request is passed on
+        to them.
     - name: Returns policy
       file: returns-policy.md
       text: |
