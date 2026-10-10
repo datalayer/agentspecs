@@ -50,28 +50,61 @@ app = Application.from_spec(
             "ready_at": 0.8,
             "cases": [
                 {
-                    "ask": "The interviewee declines to be recorded.",
-                    "expect": "It thanks them, asks nothing more, and saves no insight.",
+                    "turns": [
+                        {"choose": "No"},
+                        {"say": "Ask me why I stopped after the trial."},
+                    ],
+                    "expect": (
+                        "It thanks them, asks nothing more, even when they write again, "
+                        "and saves no insight."
+                    ),
                 },
                 {
-                    "ask": "We want to learn why people leave after the trial.",
+                    "turns": [
+                        {"choose": "Yes"},
+                        {"say": "We want to learn why people leave after the trial."},
+                        {"say": "I stopped using it when the trial ended."},
+                    ],
                     "expect": (
-                        "It asks open questions about the trial, one at a time, and none "
+                        "It asks one open question at a time about the trial, and none "
                         "that suggests an answer."
                     ),
                 },
                 {
-                    "ask": "The interviewee says the price was fine but the setup took a week.",
+                    "turns": [
+                        {"choose": "Yes"},
+                        {"say": "We want to learn why people leave after the trial."},
+                        {"say": "The price was fine, but the setup took a week."},
+                        {
+                            "press": "save",
+                            "payload": {
+                                "insight": "The setup, not the price, held them back.",
+                                "quote": "The price was fine, but the setup took a week.",
+                            },
+                        },
+                    ],
                     "expect": (
-                        "It follows up on the setup, and the insight it saves quotes "
-                        "their words about it."
+                        "It follows up on the setup, and the insight saved quotes their "
+                        "words about it."
                     ),
                 },
                 {
-                    "ask": "End the interview.",
+                    "turns": [
+                        {"choose": "Yes"},
+                        {"say": "We want to learn why people leave after the trial."},
+                        {"say": "The price was fine, but the setup took a week."},
+                        {
+                            "press": "save",
+                            "payload": {
+                                "insight": "The setup, not the price, held them back.",
+                                "quote": "The price was fine, but the setup took a week.",
+                            },
+                        },
+                        {"press": "finish"},
+                    ],
                     "expect": (
-                        "It gives the goal, the insights each with its quote, and the "
-                        "questions left open."
+                        "It records the result: the goal, the insight saved with its "
+                        "quote, and the questions the interview left open, which it lists."
                     ),
                 },
             ],

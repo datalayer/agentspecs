@@ -1560,8 +1560,52 @@ class AppTestFile(_Strict):
         return text
 
 
+class AppTestTurn(_Strict):
+    """One turn of a test's conversation: what the person says, the option of a
+    choice they pick, or an action of its code they press, with its payload.
+
+    Each is sent as its page sends it, after the application answered the turn
+    before: a message, a choice answered in its option's words, an action by
+    its name (``@app.action``).
+    """
+
+    say: str = Field(default="", description="What the person says")
+    choose: str = Field(default="", description="The option they pick, of the choice it asked")
+    press: str = Field(
+        default="",
+        pattern=rf"^(?:{CODE_NAME})?$",
+        description="The action of its code they press, by name (`@app.action`)",
+    )
+    payload: Dict[str, Any] = Field(
+        default_factory=dict, description="What the action is given with its press"
+    )
+
+    @model_validator(mode="after")
+    def _one_thing_at_a_time(self) -> "AppTestTurn":
+        said = [key for key in ("say", "choose", "press") if getattr(self, key).strip()]
+        if len(said) != 1:
+            raise ValueError("a turn of a test either says, chooses or presses one thing")
+        if self.payload and not self.press.strip():
+            raise ValueError("a payload goes with an action pressed")
+        return self
+
+    def in_words(self) -> str:
+        """The turn as a person reads it in a test's conversation."""
+        if self.say.strip():
+            return f"The person says: {self.say.strip()}"
+        if self.choose.strip():
+            return f"The person chooses: {self.choose.strip()}"
+        given = json.dumps(self.payload, ensure_ascii=False) if self.payload else ""
+        return f"The person presses {self.press}" + (f" with {given}" if given else "")
+
+
 class AppTestCase(_Strict):
     """An example of what the application should do, in plain words.
+
+    A case is one message (`ask`) or a short conversation (`turns`): what
+    the person says, chooses and presses, in order, each after the
+    application answered the turn before — and what it should do is judged
+    on the whole conversation.
 
     When plain words are not enough, its code decides it (LOOP P-06): `code`
     names the function of the application's `app.py` that is given the
@@ -1569,7 +1613,14 @@ class AppTestCase(_Strict):
     still says it in words: without its file, the case is judged by them.
     """
 
-    ask: str = Field(..., description="What it is asked")
+    ask: str = Field(default="", description="What it is asked, in one message; none when it has turns")
+    turns: List[AppTestTurn] = Field(
+        default_factory=list,
+        description=(
+            "The conversation it is had in, turn by turn, in place of one message: "
+            "what the person says, chooses and presses"
+        ),
+    )
     expect: str = Field(..., description="What it should do")
     code: str = Field(
         default="",
@@ -1585,11 +1636,21 @@ class AppTestCase(_Strict):
     )
 
     @model_validator(mode="after")
-    def _files_have_their_own_names(self) -> "AppTestCase":
+    def _asked_once(self) -> "AppTestCase":
+        if bool(self.ask.strip()) == bool(self.turns):
+            raise ValueError("a test asks one message (ask) or has a conversation (turns), not both")
+        if self.turns and self.files:
+            raise ValueError("a test's files go with the message it asks: a conversation's turns take none")
         names = [file.name for file in self.files]
         if len(set(names)) != len(names):
             raise ValueError("two files of a test have the same name")
         return self
+
+    def in_words(self) -> str:
+        """What the test asks, as a person reads it: its message, or its conversation's turns."""
+        if not self.turns:
+            return self.ask
+        return "\n".join(turn.in_words() for turn in self.turns)
 
 
 class AppVerified(_Strict):
@@ -3069,6 +3130,7 @@ __all__ = [
     "AppSurface",
     "AppTestCase",
     "AppTestFile",
+    "AppTestTurn",
     "AppTests",
     "AppTool",
     "AppTranslation",

@@ -807,11 +807,12 @@ The component tree the user meets, over the approved catalog (A2UI).
 
 ### AppTestCase
 
-An example of what the application should do, in plain words. When plain words are not enough, its code decides it (LOOP P-06): `code` names the function of the application's `app.py` that is given the conversation and says whether it passed — `@app.test` writes it. `expect` still says it in words: without its file, the case is judged by them.
+An example of what the application should do, in plain words. A case is one message (`ask`) or a short conversation (`turns`): what the person says, chooses and presses, in order, each after the application answered the turn before — and what it should do is judged on the whole conversation. When plain words are not enough, its code decides it (LOOP P-06): `code` names the function of the application's `app.py` that is given the conversation and says whether it passed — `@app.test` writes it. `expect` still says it in words: without its file, the case is judged by them.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
-| `ask` (required) | text | What it is asked | — |
+| `ask` | text | What it is asked, in one message; none when it has turns | empty |
+| `turns` | list of [AppTestTurn](#apptestturn) | The conversation it is had in, turn by turn, in place of one message: what the person says, chooses and presses | — |
 | `expect` (required) | text | What it should do | — |
 | `code` | text | The function of its code that decides the case, by name, when words are not enough; `expect` says it in words | empty |
 | `files` | list of [AppTestFile](#apptestfile) | Text files it is given with what it is asked, each in the message after it | — |
@@ -824,6 +825,17 @@ A text file a test gives with what it asks, as a person gives one on its page.
 | --- | --- | --- | --- |
 | `name` (required) | text | Its name, without a folder: `orders.csv` | — |
 | `text` (required) | text | What it holds | — |
+
+### AppTestTurn
+
+One turn of a test's conversation: what the person says, the option of a choice they pick, or an action of its code they press, with its payload. Each is sent as its page sends it, after the application answered the turn before: a message, a choice answered in its option's words, an action by its name (``@app.action``).
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `say` | text | What the person says | empty |
+| `choose` | text | The option they pick, of the choice it asked | empty |
+| `press` | text | The action of its code they press, by name (`@app.action`) | empty |
+| `payload` | mapping | What the action is given with its press | — |
 
 ### AppTests
 

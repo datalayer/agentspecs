@@ -626,6 +626,71 @@ def test_a_report_from_a_file_test_gives_it_its_file() -> None:
     assert "files" not in dump_app(APP_CATALOGUE["support-desk"])
 
 
+def test_a_test_can_be_a_short_conversation() -> None:
+    """STUDIO E-01: a test is one message or a conversation of turns — what the
+    person says, the option they choose, the action they press with its
+    payload — judged whole; each turn does one thing, and a case does not
+    both ask and converse."""
+    turns = [
+        {"choose": "Yes"},
+        {"say": "Why people leave after the trial."},
+        {"press": "save", "payload": {"quote": "It took a week."}},
+        {"press": "finish"},
+    ]
+    said = app(tests={"cases": [{"turns": turns, "expect": "It keeps the quote."}]})
+    case = said.tests.cases[0]
+    assert case.ask == "" and [turn.press for turn in case.turns] == ["", "", "save", "finish"]
+    assert case.in_words().splitlines() == [
+        "The person chooses: Yes",
+        "The person says: Why people leave after the trial.",
+        'The person presses save with {"quote": "It took a week."}',
+        "The person presses finish",
+    ]
+    written = dump_app(said)["tests"]["cases"][0]
+    assert written == {"turns": turns, "expect": "It keeps the quote."}
+    assert parse_app(dump_app(said)).tests.cases == said.tests.cases
+    asked = app(tests={"cases": [{"ask": "Hello", "expect": "It greets."}]}).tests.cases[0]
+    assert asked.in_words() == "Hello" and asked.turns == []
+
+
+@pytest.mark.parametrize(
+    ("case", "says"),
+    [
+        ({"expect": "x"}, "one message (ask) or has a conversation (turns)"),
+        ({"ask": "Hi", "turns": [{"say": "Hi"}], "expect": "x"}, "not both"),
+        ({"turns": [{"say": "Hi", "press": "save"}], "expect": "x"}, "says, chooses or presses one thing"),
+        ({"turns": [{}], "expect": "x"}, "says, chooses or presses one thing"),
+        ({"turns": [{"say": "Hi", "payload": {"a": 1}}], "expect": "x"}, "a payload goes with an action pressed"),
+        ({"turns": [{"press": "save it"}], "expect": "x"}, "press"),
+        (
+            {"turns": [{"say": "Hi"}], "expect": "x", "files": [{"name": "a.csv", "text": "a"}]},
+            "a conversation's turns take none",
+        ),
+    ],
+)
+def test_a_test_s_conversation_is_refused_when_it_does_not_hold(case: dict, says: str) -> None:
+    with pytest.raises(ValueError, match=re.escape(says)):
+        app(tests={"cases": [case]})
+
+
+def test_customer_interview_s_tests_are_conversations_its_code_can_pass() -> None:
+    """STUDIO E-01: Customer Interview asks for consent (a choice), then the goal,
+    and keeps an insight and its result by its actions — one message could test
+    only that it asks for consent first. Its tests answer its questions and press
+    the actions its app.py defines."""
+    cases = APP_CATALOGUE["customer-interview"].tests.cases
+    assert [case.ask for case in cases] == ["", "", "", ""]
+    assert [case.turns[0].choose for case in cases] == ["No", "Yes", "Yes", "Yes"]
+    header = (APPS_DIR / "customer-interview.yaml").read_text()
+    actions = set(re.findall(r"^# loop:code action (\w+):", header, re.M))
+    assert actions == {"save", "finish"}
+    pressed = [turn.press for case in cases for turn in case.turns if turn.press]
+    assert set(pressed) == actions
+    saved = next(turn for turn in cases[2].turns if turn.press == "save")
+    assert saved.payload["quote"] == "The price was fine, but the setup took a week."
+    assert cases[3].turns[-1].press == "finish"
+
+
 def test_an_example_is_told_what_its_tests_ask() -> None:
     """STUDIO E-01: what an example's tests expect is in its instructions, so
     its agent can do it — the run on Datalayer of 2026-10-10 failed Quote

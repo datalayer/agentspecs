@@ -85,7 +85,7 @@ record:
 | `rules` | When it acts alone, and when it asks. See below. |
 | `permissions` | What else it may reach: `spaces` (a Space, `read` or `write`) and its `computer` (`browse`, `files`, `shell`, each off). Nothing, unless said. |
 | `interface` | What the user sees: `layout` (`chat`, `page`, `split`), `accent`, `theme` — the theme it runs in by default, a `variant` of Appearance's (`datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop`) and optionally a `mode` (`light`, `dark`, `auto`), the person's own when unsaid; its `accent` colours the `loop` theme only — `welcome`, `starters` (each with an optional `category`), `profiles`, `commands` and `modes` (see below), `uploads` — what a person may send without being asked (see below) — `settings` and `settings_ui`, how its fields are drawn (see below), `language` and `translations` (see below), a `surface` — a component tree over the approved catalog — and `assistant`, the character of its floating assistant by the id a plugin contributes it under (`paperclip`, `wizard`, `cat`, `eyes` are Datalayer's; an id no enabled plugin gives is refused by the runtime and the page). Said here, it wins over the person's own choice. `balloon` says how that assistant's balloon shows the conversation: `history`, every message, scrolled, with the composer last, or `current`, only what it says or does now — the answer being written, or the tool it calls ("Using list_invoices…") — in one balloon that replaces its words as the turn goes on; the page's own when unsaid, `history` for the floating chat. And `outputs`, the formats its answers come in — see below. |
-| `tests` | How it is verified: `cases` in plain words (`ask`, `expect`, and `code` when a function of its code decides one), an `evalset`, `ready_at`, the share that has to pass, and `verified` — what was tried live, what runs on recorded data, and what is not verified yet, each in a sentence (`live`, `recorded`, `unverified`); every example of the catalogue says it, and the Studio's examples show it on their cards and pages. |
+| `tests` | How it is verified: `cases` in plain words (`ask`, `expect`, and `code` when a function of its code decides one; `turns` in place of `ask` for a short conversation, see [A test that is a conversation](#a-test-that-is-a-conversation)), an `evalset`, `ready_at`, the share that has to pass, and `verified` — what was tried live, what runs on recorded data, and what is not verified yet, each in a sentence (`live`, `recorded`, `unverified`); every example of the catalogue says it, and the Studio's examples show it on their cards and pages. |
 | `record` | What is kept of what it did (`include`), for how long (`keep_for`: `90_days`, `1_years`), and whether its conversations may be used to suggest tests (`suggest_tests`, off unless said: only conversations kept while it is on are sampled). |
 | `checks` | Optional: `guards`, `gates` and a `track` of the catalogue, and `code`, the checks written in its code. |
 | `deployment` | Where it goes: `hosted` (a `visibility`, a `slug`, `character_alone`) and `embedded` (a `mode`, the `origins` allowed, and `host`: what the host page passes it, the functions of the host it may call, and whether its `user` is `signed`). |
@@ -740,6 +740,46 @@ Refused: a name of the catalog's or given twice, a module not over
 component already has (`id`, `action`, `weight`, `visible_when`…), a binding
 that is also a property, an example its schema refuses — and, where it is
 used, properties its schema refuses, as for any component of the catalog.
+
+## A test that is a conversation
+
+A test asks one message (`ask`) — or, when one message cannot exercise what
+the application does, it is a short conversation (`turns`). Each turn is one
+of three things the person does, in order, each sent after the application
+answered the turn before, as its page sends it:
+
+| Turn | What the person does | Sent as |
+| --- | --- | --- |
+| `say` | Writes a message: a new message, or the answer to what it asked in words. | A message. |
+| `choose` | Picks an option of a choice it asked (`ChoiceQuestion`). | The option, in its words, as the chat answers a choice. |
+| `press` | Presses an action of its code (`@app.action`), by its name, with `payload` when it takes one. | The action, by name, with its payload. |
+
+What it should do (`expect`) is then judged on the whole conversation and on
+its record: what it said at each turn, the tools it called, and what its code
+kept (an insight, a result). A case has `ask` or `turns`, never both; a
+conversation's turns take no `files`.
+
+```yaml
+tests:
+  cases:
+    - turns:
+        - choose: "No"
+        - say: Ask me why I stopped after the trial.
+      expect: It thanks them, asks nothing more, and saves no insight.
+    - turns:
+        - choose: "Yes"
+        - say: We want to learn why people leave after the trial.
+        - say: The price was fine, but the setup took a week.
+        - press: save
+          payload:
+            insight: The setup, not the price, held them back.
+            quote: The price was fine, but the setup took a week.
+        - press: finish
+      expect: It records the goal, the insight with its quote, and the questions left open.
+```
+
+Refused: a turn that does none or several of `say`, `choose`, `press`; a
+`payload` without a `press`; a `press` that is not a Python name.
 
 ## A rule or a Gate, a test or a Guard
 
