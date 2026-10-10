@@ -25,7 +25,7 @@ contents:
 
 decision:
   question: Which chat model should this use case run on?
-  decision_model: "cloudflare:gtw/typesafe/jev"
+  decision_model: "cloudflare:wrk/typesafe/jev"
   min_confidence: 0.6
   criteria:
     - name: Pass rate

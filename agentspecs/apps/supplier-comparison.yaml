@@ -25,7 +25,7 @@ contents:
 
 decision:
   question: Which supplier should we choose for these orders?
-  decision_model: "cloudflare:gtw/typesafe/jev"
+  decision_model: "cloudflare:wrk/typesafe/jev"
   min_confidence: 0
   criteria:
     - name: Price
