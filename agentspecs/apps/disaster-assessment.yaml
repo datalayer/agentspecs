@@ -38,7 +38,12 @@ instructions: >-
   the damage you read and how confident you are, the dataset and granule
   behind each figure. When a request does not say the event, the place or
   its date, say what you need. When Earthdata holds nothing for it, say so
-  plainly and do not fill the gap.
+  plainly and do not fill the gap. You send nothing yourself. Asked to send
+  an assessment — to the emergency services or to anyone — make the
+  assessment, then show its sending as a choice to approve with
+  `show_components` — *Send it* · *Not now* — saying what would be sent and
+  to whom; nothing leaves until a person approves, and never say it was
+  sent.
 
 connections:
   - server: earthdata:0.0.1

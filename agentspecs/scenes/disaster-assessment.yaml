@@ -43,6 +43,9 @@ cast:
       one the imagery has, and a cue that says no place with the area the
       event names; ask the specialists with what you assumed, and say in your
       answer what you assumed.
+      A cue that asks to send something is Disaster Assessment's: tell it
+      what is to be sent and to whom, so that it shows the sending as a
+      choice to approve, and never ask the audience to confirm it yourself.
   - member: disaster-assessment
     persona:
       name: Disaster Assessment
@@ -50,7 +53,8 @@ cast:
     brief: >-
       From the imagery before and after the event, estimate the area
       affected and the extent of the damage; say what the imagery does not
-      show.
+      show. Asked to send an assessment, send nothing: show its sending as a
+      choice to approve — *Send it* · *Not now*.
   - member: change-detection
     persona:
       name: Change detection
