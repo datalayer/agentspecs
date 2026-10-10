@@ -8,6 +8,11 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.73
+
+- A test can give its application text files with what it asks (STUDIO E-01): `tests.cases[].files`, each a name and its text (at most 120,000 characters) — *Report from a File*'s cases carry their CSVs.
+- *Support Desk* ships its *Product documentation* and *Returns policy* as `samples`, given to the application made from it (E-01).
+
 ## 0.0.72
 
 0.0.71 was tagged but not published: its tests failed in CI on the decision model and the generated reference.
