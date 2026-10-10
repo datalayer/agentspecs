@@ -8,6 +8,13 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.68
+
+The four scenes of the catalogue rehearsed on Datalayer (STUDIO A-14) — [scenes](https://agentspecs.datalayer.tech/scenes).
+
+- Event response asks one specialist at a time, never asks the audience back, and says in its request what is to be sent and to whom; Disaster Assessment never sends: it shows a sending as a choice to approve (*Send it*, *Not now*). Its flood beat is allowed 360 s, and the storm is routed by what it asks for.
+- Month-end Close works the accruals out when the conversation holds none, charts at zero, and its post-accruals beat is allowed 180 s; its rehearsal on r1 passed four beats of four (`month-end-close/rehearsal.json`), Disaster Assessment's full run three of four (`disaster-assessment/rehearsal.json`).
+
 ## 0.0.67
 
 - The rehearsal that was played (STUDIO A-14): a scene's last rehearsal is kept beside the specs in `<id>/rehearsal.json` — `ScenePlayed`: when, where, whether every beat `passed`, the verdict's sentence, each beat's verdict and the agent-runtimes that played it — written by `loop scenes rehearse --cloud`, read by `scene_played`, kept by `write_played`, refused in a sentence when it is not a rehearsal's result. A scene whose last rehearsal passed is *Live*; one that did not says so. The hand-written `verified` stays a person's word beside it — [scenes](https://agentspecs.datalayer.tech/scenes#the-rehearsal-that-was-played).
