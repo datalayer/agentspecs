@@ -36,6 +36,7 @@ from agentspecs.actions import (
     server_specs,
     server_tool_classes,
     server_tool_conditions,
+    server_tool_signs,
     split_ref,
     tool_classes,
     tool_specs,
@@ -209,6 +210,34 @@ def test_a_condition_is_read_or_refused() -> None:
         },
     ):
         assert server_actions_problems({"id": "s", "actions": {"tools": {"manage": wrong}}}) != []
+
+
+def test_a_tool_that_sends_says_which_argument_carries_its_words() -> None:
+    """STUDIO I-10: what it sends is signed, in the argument its spec names."""
+    servers = server_specs()
+    assert server_tool_signs(servers["google-workspace"], "send_gmail_message") == "body"
+    assert server_tool_signs(servers["google-workspace"], "draft_gmail_message") == "body"
+    assert server_tool_signs(servers["google-workspace"], "send_message") == "message_text"
+    assert server_tool_signs(servers["slack"], "slack_post_message") == "text"
+    assert server_tool_signs(servers["slack"], "slack_reply_to_thread") == "text"
+    # What reads, and what says nothing, signs nothing.
+    assert server_tool_signs(servers["google-workspace"], "search_gmail_messages") == ""
+    assert server_tool_signs(servers["slack"], "slack_add_reaction") == ""
+    assert server_tool_signs(servers["slack"], "no_such_tool") == ""
+    # Signing does not change what it does.
+    assert classes_of("google-workspace.send_gmail_message", {}) == (ActionClass.SEND,)
+    server = {"id": "s", "actions": {"tools": {"post_*": {"class": "send", "signs": "text"}}}}
+    assert server_tool_signs(server, "post_note") == "text"
+    assert server_tool_classes(server, "post_note", {}) == (ActionClass.SEND,)
+    assert server_actions_problems(server) == []
+    for wrong in (
+        {"class": "read", "signs": "text"},
+        {"class": "send", "signs": ""},
+        {"class": "send", "signs": ["text"]},
+        {"class": "send", "signs": "a.b"},
+        {"class": "send", "sign": "text"},
+    ):
+        assert server_actions_problems({"id": "s", "actions": {"tools": {"post": wrong}}}) != []
 
 
 def test_an_unknown_tool_has_no_class_and_is_never_a_reader() -> None:

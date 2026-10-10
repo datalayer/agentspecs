@@ -39,11 +39,17 @@ emoji: 💬
 actions:
   checked: "2026-10-02"
   note: >-
-    Posting, replying and reacting put something in front of other people.
+    Posting, replying and reacting put something in front of other people. A post and
+    a reply say the argument holding their words (`signs`): an application's runtime
+    closes it with its byline (LOOP I-10).
   tools:
     slack_list_channels: read
-    slack_post_message: send
-    slack_reply_to_thread: send
+    slack_post_message:
+      class: send
+      signs: text
+    slack_reply_to_thread:
+      class: send
+      signs: text
     slack_add_reaction: send
     slack_get_channel_history: read
     slack_get_thread_replies: read

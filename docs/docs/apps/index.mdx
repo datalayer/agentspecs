@@ -577,6 +577,24 @@ manage_gmail_label:
 With the arguments of a call, the tool's classes are those of that call.
 Without them — nobody said what it is asked — they are everything it can do.
 
+**What it sends says who wrote it.** A mail or a message sent through a
+connection is written by the account the connection acts as, so its words
+alone do not say an application wrote them, nor for whom. A tool that puts
+words in front of other people says which of its arguments carries them, and
+the runtime closes that argument with the application's byline before the
+call is made — or shown to the person who approves it:
+
+```yaml
+send_gmail_message:
+  class: send
+  signs: body        # the mail ends: Written by 📬 Inbox Triage, for Ana Lopez.
+```
+
+The person is named when they signed in (or the host's server signed them);
+a session nobody opened says *on its own* instead. Only a tool that acts
+says `signs`. Gmail's send and draft, Google Chat's message, and Slack's post
+and reply say it today.
+
 A server nobody has checked yet says `checked: null` and classes nothing: its
 tools are unknown, and an application cannot write through it.
 

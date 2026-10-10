@@ -43,6 +43,22 @@ domain of the mailbox it sends from (``user_google_email``) — or the mailbox
 is not said — the call also ``publish``-es: it makes the message reachable by
 people who could not reach it. A reply is not a forward.
 
+**What it sends says who wrote it** (LOOP I-10). A tool that puts words in
+front of other people outside Datalayer — a mail, a message — writes them as
+the account its connection acts as, so the words alone do not say that an
+application wrote them, nor for whom. Such a tool says which of its arguments
+carries those words (``signs``), and an application's runtime closes that
+argument with its byline — *Written by 📬 Inbox Triage, for Ana Lopez.* —
+before the call is made, or asked of the person:
+
+.. code-block:: yaml
+
+    send_gmail_message:
+      class: send
+      signs: body
+
+Only a tool that acts says ``signs``: what only reads sends nothing.
+
 Where the class is written:
 
 - a backend tool of ``agentspecs/backend-tools`` says ``action: send``;
@@ -221,13 +237,23 @@ def _same(value: Any, wanted: Any) -> bool:
     return is_comparable(value) and is_comparable(wanted) and bool(value == wanted)
 
 
+#: What an argument a tool signs is called: a name, as a tool's arguments are named.
+_ARGUMENT = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+
+
 def _entry(value: Any, *, where: str) -> Tuple[Classes, Tuple[Condition, ...]]:
     """One tool's entry as (its classes, the conditions that add to them)."""
     if not isinstance(value, Mapping):
         return classes_from(value, where=where), ()
-    unknown = sorted(set(value) - {"class", "when"})
+    unknown = sorted(set(value) - {"class", "when", "signs"})
     if unknown:
-        raise ActionError(f"{where}: an entry says `class` and `when`, not {', '.join(unknown)}")
+        raise ActionError(f"{where}: an entry says `class`, `when` and `signs`, not {', '.join(unknown)}")
+    if "signs" in value:
+        signs = value["signs"]
+        if not isinstance(signs, str) or not _ARGUMENT.match(signs):
+            raise ActionError(f"{where}: `signs` names one argument of the tool, the one carrying what it sends")
+        if not any(item is not ActionClass.READ for item in classes_from(value.get("class"), where=where)):
+            raise ActionError(f"{where}: only a tool that acts signs what it sends; this one only reads")
     conditions: List[Condition] = []
     for condition in value.get("when") or []:
         extra = sorted(set(condition) - {"argument", "equals", "includes", "class"})
@@ -263,17 +289,35 @@ def _listed(value: Any) -> List[Any]:
     return list(value) if isinstance(value, (list, tuple)) else [value]
 
 
-def _server_entry(server: Mapping[str, Any], tool_name: str) -> Tuple[Classes, Tuple[Condition, ...]]:
-    """The entry that answers for a tool of a server: its name, a pattern, or the default."""
-    actions = server.get("actions") or {}
-    tools = actions.get("tools") or {}
-    where = f"MCP server {server.get('id', '?')!r}, tool {tool_name!r}"
+def _server_value(server: Mapping[str, Any], tool_name: str) -> Any:
+    """What a server's spec writes for a tool: under its name, a pattern, or ``None``."""
+    tools = (server.get("actions") or {}).get("tools") or {}
     if tool_name in tools:
-        return _entry(tools[tool_name], where=where)
+        return tools[tool_name]
     for pattern, value in tools.items():
         if is_pattern(pattern) and matches(tool_name, pattern):
-            return _entry(value, where=where)
-    return classes_from(actions.get("default"), where=where), ()
+            return value
+    return None
+
+
+def _server_entry(server: Mapping[str, Any], tool_name: str) -> Tuple[Classes, Tuple[Condition, ...]]:
+    """The entry that answers for a tool of a server: its name, a pattern, or the default."""
+    where = f"MCP server {server.get('id', '?')!r}, tool {tool_name!r}"
+    value = _server_value(server, tool_name)
+    if value is not None:
+        return _entry(value, where=where)
+    return classes_from((server.get("actions") or {}).get("default"), where=where), ()
+
+
+def server_tool_signs(server: Mapping[str, Any], tool_name: str) -> str:
+    """The argument of a server's tool that carries what it sends, which is
+    signed with the application's byline (LOOP I-10); ``""`` when it says none.
+    """
+    value = _server_value(server, tool_name)
+    if not isinstance(value, Mapping) or "signs" not in value:
+        return ""
+    _entry(value, where=f"MCP server {server.get('id', '?')!r}, tool {tool_name!r}")
+    return str(value["signs"])
 
 
 def server_tool_classes(
@@ -480,6 +524,7 @@ __all__ = [
     "server_specs",
     "server_tool_classes",
     "server_tool_conditions",
+    "server_tool_signs",
     "split_ref",
     "tool_classes",
     "tool_specs",

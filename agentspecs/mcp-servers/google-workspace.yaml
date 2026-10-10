@@ -63,15 +63,21 @@ actions:
     deletes when its action is `delete`; the label tools archive a message, and trash it
     when the label is TRASH or SPAM. A send that forwards a message (`forward_message_id`)
     to somebody outside the domain of the mailbox it sends from also publishes: that is
-    told from the call (agentspecs.actions.FORWARDING), not written here.
+    told from the call (agentspecs.actions.FORWARDING), not written here. A mail, a
+    draft and a Chat message say the argument holding their words (`signs`): an
+    application's runtime closes it with its byline (LOOP I-10).
   tools:
     start_google_auth: write
     search_gmail_messages: read
     get_gmail_message_content: read
     get_gmail_messages_content_batch: read
     get_gmail_attachment_content: [read, write]
-    send_gmail_message: send
-    draft_gmail_message: write
+    send_gmail_message:
+      class: send
+      signs: body
+    draft_gmail_message:
+      class: write
+      signs: body
     get_gmail_thread_content: read
     get_gmail_threads_content_batch: read
     list_gmail_labels: read
@@ -201,7 +207,9 @@ actions:
     manage_spreadsheet_comment: [write, send]
     list_spaces: read
     get_messages: read
-    send_message: [send, write]
+    send_message:
+      class: [send, write]
+      signs: message_text
     search_messages: read
     create_reaction: send
     download_chat_attachment: [read, write]
