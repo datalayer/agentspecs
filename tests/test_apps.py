@@ -567,6 +567,36 @@ def test_what_an_example_is_tried_on_is_published_with_it() -> None:
     assert "samples" not in dump_app(APP_CATALOGUE["web-research"])
 
 
+def test_the_support_desk_answers_from_two_sample_documents() -> None:
+    """STUDIO E-01: Support Desk's two documents are Datalayer's samples, given to
+    an application made from it, each holding what its tests ask."""
+    desk = APP_CATALOGUE["support-desk"]
+    documents = {document.name: document for document in desk.samples.documents}
+    assert list(documents) == desk.contents == ["Product documentation", "Returns policy"]
+    assert documents["Product documentation"].file == "product-documentation.md"
+    assert "Reset your password" in documents["Product documentation"].text
+    assert "30 days" in documents["Returns policy"].text
+
+
+def test_a_report_from_a_file_test_gives_it_its_file() -> None:
+    """STUDIO E-01: each test of Report from a File that is about a CSV gives it
+    the CSV, as its page would; the PDF it refuses is named, not given."""
+    cases = APP_CATALOGUE["report-from-a-file"].tests.cases
+    given = {case.ask: [file.name for file in case.files] for case in cases}
+    assert given == {
+        "orders.csv, a Summary report.": ["orders.csv"],
+        "empty.csv, a Full report.": ["empty.csv"],
+        "quarterly-report.pdf, a Summary report.": [],
+        "orders-notes.csv, a Summary report.": ["orders-notes.csv"],
+    }
+    orders = cases[0].files[0].text.splitlines()
+    assert orders[0] == "order_id,date,customer,amount,notes"
+    assert len(orders) == 21
+    assert cases[1].files[0].text.splitlines() == [orders[0]]
+    # A case in words alone writes no files.
+    assert "files" not in dump_app(APP_CATALOGUE["support-desk"])
+
+
 @pytest.mark.parametrize(
     ("samples", "says"),
     [
@@ -1274,6 +1304,18 @@ def test_an_application_is_translated_in_its_spec() -> None:
         (
             {"samples": {"alternatives": [{"name": "A", "evidence": "x"}, {"name": "B", "evidence": "y"}]}},
             "sample alternatives are a decision's",
+        ),
+        (
+            {"tests": {"cases": [{"ask": "a", "expect": "b", "files": [{"name": "in/a.csv", "text": "x"}]}]}},
+            "without a folder",
+        ),
+        (
+            {"tests": {"cases": [{"ask": "a", "expect": "b", "files": [{"name": "a.csv", "text": "x"}] * 2}]}},
+            "two files of a test have the same name",
+        ),
+        (
+            {"tests": {"cases": [{"ask": "a", "expect": "b", "files": [{"name": "a.csv", "text": "x" * 120_001}]}]}},
+            "at most 120,000",
         ),
         ({"connections": [{"server": "tavily"}, {"server": "tavily:0.0.1"}]}, "same server twice"),
         ({"connections": [{"server": "tavily", "as": "me"}]}, "connections.0.as"),

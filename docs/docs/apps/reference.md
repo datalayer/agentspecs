@@ -814,6 +814,16 @@ An example of what the application should do, in plain words. When plain words a
 | `ask` (required) | text | What it is asked | — |
 | `expect` (required) | text | What it should do | — |
 | `code` | text | The function of its code that decides the case, by name, when words are not enough; `expect` says it in words | empty |
+| `files` | list of [AppTestFile](#apptestfile) | Text files it is given with what it is asked, each in the message after it | — |
+
+### AppTestFile
+
+A text file a test gives with what it asks, as a person gives one on its page.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `name` (required) | text | Its name, without a folder: `orders.csv` | — |
+| `text` (required) | text | What it holds | — |
 
 ### AppTests
 

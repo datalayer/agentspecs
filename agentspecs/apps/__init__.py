@@ -1531,7 +1531,33 @@ def _with_option_names(
 
 # --- how it is verified, and what is kept -------------------------------------------
 
+#: How long a test's file can be: it is sent in the message, as a text file given
+#: on a page is to an application with no computer (agent-runtimes'
+#: ``sessions.MAX_TEXT_CHARACTERS``).
+TEST_FILE_CHARACTERS = 120_000
 
+
+class AppTestFile(_Strict):
+    """A text file a test gives with what it asks, as a person gives one on its page."""
+
+    name: str = Field(..., description="Its name, without a folder: `orders.csv`")
+    text: str = Field(..., description="What it holds")
+
+    @field_validator("name")
+    @classmethod
+    def _is_a_name(cls, name: str) -> str:
+        if not re.fullmatch(SAMPLE_FILE, name):
+            raise ValueError(f"a test's file is a name, without a folder: {name!r} is not one")
+        return name
+
+    @field_validator("text")
+    @classmethod
+    def _fits_a_message(cls, text: str) -> str:
+        if len(text) > TEST_FILE_CHARACTERS:
+            raise ValueError(
+                f"a test's file is sent in the message: {len(text):,} characters, at most {TEST_FILE_CHARACTERS:,}"
+            )
+        return text
 
 
 class AppTestCase(_Strict):
@@ -1553,6 +1579,17 @@ class AppTestCase(_Strict):
             "`expect` says it in words"
         ),
     )
+    files: List[AppTestFile] = Field(
+        default_factory=list,
+        description="Text files it is given with what it is asked, each in the message after it",
+    )
+
+    @model_validator(mode="after")
+    def _files_have_their_own_names(self) -> "AppTestCase":
+        names = [file.name for file in self.files]
+        if len(set(names)) != len(names):
+            raise ValueError("two files of a test have the same name")
+        return self
 
 
 class AppVerified(_Strict):
@@ -2990,6 +3027,7 @@ __all__ = [
     "AppCustomComponent",
     "custom_props_refused",
     "SAMPLE_FILE",
+    "TEST_FILE_CHARACTERS",
     "SCHEMA_PATH",
     "TEXT_OUTPUTS",
     "TRACK_KEEPS",
@@ -3030,6 +3068,7 @@ __all__ = [
     "AppStarterTranslation",
     "AppSurface",
     "AppTestCase",
+    "AppTestFile",
     "AppTests",
     "AppTool",
     "AppTranslation",

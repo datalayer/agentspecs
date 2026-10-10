@@ -34,6 +34,71 @@ contents:
   - Product documentation
   - Returns policy
 
+# What it answers from until its builder gives their own (STUDIO E-01, E-11):
+# Datalayer's two sample documents, for a made-up product, read only. Each is
+# given to an application made from the example; a builder replaces them with
+# their own on What it knows.
+samples:
+  documents:
+    - name: Product documentation
+      file: product-documentation.md
+      text: |
+        # Product documentation (sample)
+
+        This is a sample document for the Support Desk example. It describes a
+        made-up product, offered as Cloud (in the browser) and Desktop (an
+        application installed on a computer).
+
+        ## Reset your password
+
+        1. On the sign-in page, choose *Forgot your password?*.
+        2. Enter the email address of your account and choose *Send the link*.
+        3. Open the email we send you and follow its link within 60 minutes.
+        4. Choose a new password of at least 12 characters, then sign in.
+
+        On Desktop, choose *Forgot your password?* in the sign-in window: the
+        steps are the same, and the link opens in your browser. A link that is
+        more than 60 minutes old no longer works: ask for a new one.
+
+        ## Plans
+
+        - **Team**: up to 50 people, 100 GB of storage, support by email within
+          two business days.
+        - **Business**: unlimited people, 1 TB of storage, single sign-on, and
+          support by email and chat within one business day.
+
+        Prices are on the pricing page. This documentation does not say how
+        they will change.
+
+        ## Refunds and account changes
+
+        Refunds, plan changes and account deletion are handled by a person on
+        the support team, never by the assistant. Ask for one and the assistant
+        hands your request to them.
+    - name: Returns policy
+      file: returns-policy.md
+      text: |
+        # Returns policy (sample)
+
+        This is a sample document for the Support Desk example, for a made-up
+        product.
+
+        ## Time limit
+
+        A product bought from our store can be returned within 30 days of its
+        delivery, for a full refund. After 30 days, it can no longer be
+        returned.
+
+        ## Condition
+
+        A returned product must be in its original packaging, with every part
+        it came with.
+
+        ## How to return
+
+        Ask the support team for a return: a person sends you a return label
+        and refunds you within 10 business days of receiving the product.
+
 interface:
   layout: page
   accent: violet
@@ -153,7 +218,7 @@ tests:
     recorded: []
     unverified:
       - "No conversation has run: its agent was switched on in the catalogue on 2026-10-06 and has not answered yet."
-      - "Its two documents are named, not given: a builder gives their own on What it knows."
+      - "Its two documents are Datalayer's samples, for a made-up product: a builder gives their own on What it knows."
       - "Its tests have not been run."
 
 record:
