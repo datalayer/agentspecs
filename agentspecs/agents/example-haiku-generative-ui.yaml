@@ -32,7 +32,7 @@ mcp_servers: []
 skills: []
 
 # Runtime tools
-tools:
+backend_tools:
   - example-generate-haiku:0.0.1
 frontend_tools: []
 

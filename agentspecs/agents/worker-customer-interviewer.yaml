@@ -29,8 +29,12 @@ delegable:
   - id: research.gather
   - id: support.respond
 
-enabled: false
+enabled: true
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
+# Other models it may be switched to, beside its own: those
+# datalayer-ai-inference serves from the catalogue.
+model_additionals:
+  - "alibaba:qwen-max"
 harness: pydantic-ai
 
 sandbox_variant: jupyter-server
@@ -46,7 +50,7 @@ skills:
   - events:0.0.1
 
 # Runtime tools available to this agent
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 frontend_tools:
   - jupyter-notebook:0.0.1

@@ -1,0 +1,242 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Support Desk
+# A chat: it answers product questions from the documents it was given, cites
+# the passage it answers from, and says when they do not hold the answer. It
+# reaches no server and acts on nothing: it only reads what it was given.
+#
+# Its page, composed on the Canvas, binds what a chat publishes and takes: the
+# product setting at /inputs/product, the last question at /question, its
+# answer at /answer and where it stands at /status; its buttons send a
+# question and start over.
+#
+# What was verified, and how, is said under tests.verified.
+
+schema: loop.app/v1
+id: support-desk
+version: 0.0.1
+name: Support Desk
+kind: chat
+description: >-
+  Answers product questions from the documentation it was given, cites the
+  passage, and says when the documentation does not hold the answer.
+owner: Datalayer <info@datalayer.io>
+
+agent: worker-document-qa:0.0.1
+instructions: >-
+  Search the documents you were given before every answer, answer from them
+  only, and cite the passage each answer rests on. When they do not hold the
+  answer, say so and offer to hand the question to a person, in those words;
+  never guess, and never only tell them to contact someone. Do nothing on an
+  account: changing, refunding or deleting is a person's. Asked to, say a
+  person does it, cite the passage that says so, and offer to hand the request
+  to a person.
+
+contents:
+  - Product documentation
+  - Returns policy
+
+# What it answers from until its builder gives their own (STUDIO E-01, E-11):
+# Datalayer's two sample documents, for a made-up product, read only. Each is
+# given to an application made from the example; a builder replaces them with
+# their own on What it knows.
+samples:
+  documents:
+    - name: Product documentation
+      file: product-documentation.md
+      text: |
+        # Product documentation (sample)
+
+        This is a sample document for the Support Desk example. It describes a
+        made-up product, offered as Cloud (in the browser) and Desktop (an
+        application installed on a computer).
+
+        ## Reset your password
+
+        1. On the sign-in page, choose *Forgot your password?*.
+        2. Enter the email address of your account and choose *Send the link*.
+        3. Open the email we send you and follow its link within 60 minutes.
+        4. Choose a new password of at least 12 characters, then sign in.
+
+        On Desktop, choose *Forgot your password?* in the sign-in window: the
+        steps are the same, and the link opens in your browser. A link that is
+        more than 60 minutes old no longer works: ask for a new one.
+
+        ## Plans
+
+        - **Team**: up to 50 people, 100 GB of storage, support by email within
+          two business days.
+        - **Business**: unlimited people, 1 TB of storage, single sign-on, and
+          support by email and chat within one business day.
+
+        Prices are on the pricing page. This documentation does not say how
+        they will change.
+
+        ## Refunds and account changes
+
+        Refunds, plan changes and account deletion are handled by a person on
+        the support team, never by the assistant. Ask for one and the assistant
+        hands your request to them.
+    - name: Returns policy
+      file: returns-policy.md
+      text: |
+        # Returns policy (sample)
+
+        This is a sample document for the Support Desk example, for a made-up
+        product.
+
+        ## Time limit
+
+        A product bought from our store can be returned within 30 days of its
+        delivery, for a full refund. After 30 days, it can no longer be
+        returned.
+
+        ## Condition
+
+        A returned product must be in its original packaging, with every part
+        it came with.
+
+        ## How to return
+
+        Ask the support team for a return: a person sends you a return label
+        and refunds you within 10 business days of receiving the product.
+
+interface:
+  layout: page
+  accent: violet
+  assistant: paperclip
+  welcome: >-
+    Ask me about the product. I answer from its documentation and show you
+    where; when it does not say, I tell you.
+  starters:
+    - label: Reset my password
+      message: How do I reset my password?
+      category: Account
+    - label: Returns
+      message: Can I return a product I bought six weeks ago?
+      category: Orders
+    - label: Plans
+      message: What is the difference between the Team and the Business plan?
+      category: Account
+  settings:
+    type: object
+    properties:
+      product: {type: string, title: Product, enum: [Cloud, Desktop], default: Cloud}
+  settings_ui:
+    product: {"ui:widget": radio}
+  translations:
+    fr:
+      name: Service client
+      welcome: >-
+        Posez-moi vos questions sur le produit. Je réponds à partir de sa
+        documentation et vous montre où ; quand elle ne le dit pas, je vous le dis.
+      starters:
+        Reset my password:
+          label: Réinitialiser mon mot de passe
+          message: Comment réinitialiser mon mot de passe ?
+        Returns:
+          label: Retours
+          message: Puis-je retourner un produit acheté il y a six semaines ?
+        Plans:
+          label: Offres
+          message: Quelle est la différence entre l'offre Team et l'offre Business ?
+      categories: {Account: Compte, Orders: Commandes}
+      settings:
+        product: {title: Produit}
+  components: [Card, Column, Row, Text, ChoicePicker, Button, Divider]
+  surface:
+    protocol: a2ui/v0.9
+    composed_by: canvas
+    components:
+      - id: root
+        component: Column
+        children: [title, product, exchange, actions]
+      - id: title
+        component: Text
+        text: Support
+        variant: h2
+      - id: product
+        component: ChoicePicker
+        label: Product
+        value: { path: /inputs/product }
+        options:
+          - { label: Cloud, value: Cloud }
+          - { label: Desktop, value: Desktop }
+      - id: exchange
+        component: Card
+        child: exchange-body
+      - id: exchange-body
+        component: Column
+        children: [question, divider, answer, status]
+      - id: question
+        component: Text
+        text: { path: /question }
+        variant: h4
+      - id: divider
+        component: Divider
+      - id: answer
+        component: Text
+        text: { path: /answer }
+      - id: status
+        component: Text
+        text: { path: /status }
+        variant: caption
+      - id: actions
+        component: Row
+        children: [ask-returns, start-over]
+      - id: ask-returns
+        component: Button
+        child: ask-returns-label
+        action:
+          event:
+            name: send
+            context:
+              message: What is the returns policy?
+      - id: ask-returns-label
+        component: Text
+        text: Ask about returns
+      - id: start-over
+        component: Button
+        child: start-over-label
+        variant: borderless
+        action: { event: { name: new } }
+      - id: start-over-label
+        component: Text
+        text: Start over
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: How do I reset my password?
+      expect: It gives the steps from the documentation and cites the passage they come from.
+    - ask: Can I return a product I bought six weeks ago?
+      expect: It answers from the returns policy, with the time limit it states, and cites it.
+    - ask: Will the price go down next year?
+      expect: It says the documentation does not say, offers to hand the question to a person, and invents nothing.
+    - ask: Refund my last invoice now.
+      expect: It does not do it, says a person handles refunds, and offers to hand the request over.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "No conversation has run: its agent was switched on in the catalogue on 2026-10-06 and has not answered yet."
+      - "Its two documents are Datalayer's samples, for a made-up product: a builder gives their own on What it knows."
+      - "Its tests have not been run."
+
+record:
+  keep_for: 1_years
+  include: [conversations, sources, feedback]
+
+deployment:
+  hosted:
+    visibility: private
+  embedded:
+    mode: bubble
+    origins: []
+
+tags:
+  - example
+  - support
+icon: question
+emoji: "🛟"

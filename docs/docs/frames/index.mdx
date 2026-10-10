@@ -63,7 +63,7 @@ guards:
 | `process` | The business process the work follows, step by step. |
 | `architecture` | The software and system context that orients the work. |
 | `prompts` | Reusable prompt fragments (`id`, `text`) loaded into a Cog's context. |
-| `skills`, `tools`, `mcp_servers` | Capability the work depends on: references into those catalogues. A Cog under the Frame is given them. |
+| `skills`, `backend_tools`, `mcp_servers` | Capability the work depends on: references into those catalogues. A Cog under the Frame is given them. |
 | `guards` | The checks the output of work done under the Frame has to pass. |
 
 ## Guards
@@ -106,7 +106,7 @@ a resolved Frame carries its `lineage`.
 | Field kind | Rule |
 | --- | --- |
 | Scalars (`name`, `description`, `scope`, `owner`, `architecture`) | the child wins; a Frame keeps its own identity and its own owner |
-| Lists (`rules`, `goals`, `style`, `norms`, `process`, `skills`, `tools`, `mcp_servers`, `tags`) | **append**, deduplicated; `!remove` and `!replace` as on an agent |
+| Lists (`rules`, `goals`, `style`, `norms`, `process`, `skills`, `backend_tools`, `mcp_servers`, `tags`) | **append**, deduplicated; `!remove` and `!replace` as on an agent |
 | `terminology` | merged term by term; the child's definition wins |
 | `guards`, `prompts` | merged entry by entry, on `id`; the child's wins |
 
@@ -136,6 +136,38 @@ definition stands if the second says nothing about it.
 | `sales-pipeline` | department | `datalayer` | The stages, the definitions of conversion and weighted pipeline, the checks a figure passes. |
 | `board-reporting` | relationship | `datalayer` | The voice, the structure and the standard of evidence of a document for the board. |
 | `customer-research` | team | `datalayer` | Consent, neutral questions, and insights that cite what was said. |
+
+## An organization's Frames
+
+An organization changes a Frame of the catalogue for itself — its rules, its
+terminology and its style — and writes Frames of its own beside the
+catalogue's (LOOP U-21, U-32). Both are kept by Datalayer IAM, on the
+organization; nothing here stores them.
+
+- **Its version of a catalogue Frame** replaces that Frame's three as the
+  Frame is resolved, what it inherits included; everything else stays the
+  catalogue's. It then stands alone, and a Frame that builds on it keeps the
+  catalogue's version of what it inherits.
+- **A Frame of its own** has an id starting with `org-` — never a catalogue
+  id, which is refused when the catalogue loads — a name, a description, and
+  its rules, terminology and style. It is for the whole organization, and
+  managed by it.
+
+`frames_with_organization(versions, owner=...)` gives the catalogue as the
+organization reads it, which `compose_frames` takes in place of the
+catalogue's:
+
+```python
+from agentspecs.frames import compose_frames, frames_with_organization, render_frames
+
+versions = {  # what IAM keeps for the organization, by id
+    "board-reporting": {"rules": ["..."], "terminology": {"ARR": "..."}, "style": ["..."]},
+    "org-house-style": {"name": "House style", "description": "...",
+                        "rules": ["..."], "terminology": {}, "style": ["..."]},
+}
+frames = frames_with_organization(versions, owner="Acme")
+print(render_frames(compose_frames(["board-reporting", "org-house-style"], frames)))
+```
 
 ## In Python
 

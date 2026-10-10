@@ -70,13 +70,13 @@ Lists append because the common case is "the parent's tools plus mine". Two
 markers cover the cases where that is wrong:
 
 ```yaml
-tools:
+backend_tools:
   - "!remove delete-cells:0.0.1"   # drop one thing the parent granted
   - my-own-tool:0.0.1
 ```
 
 ```yaml
-tools:
+backend_tools:
   - "!replace"                     # start from nothing
   - only-this:0.0.1
 ```

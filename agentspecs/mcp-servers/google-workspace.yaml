@@ -4,24 +4,43 @@
 id: google-workspace
 version: 0.0.1
 name: Google Workspace
-description: Google Drive, Gmail, Calendar, and Docs integration
+description: Gmail of the person an application acts for, read or read and send, with a token Datalayer mints per call
 
+# Gmail only, through Datalayer (STUDIO W-02). The person connects Gmail in
+# Google's own consent screen, at one of two levels — *can read*
+# (gmail.readonly) or *can read and send* (gmail.modify + gmail.send) — and
+# Datalayer's IAM keeps the refresh token as their secret. The server runs in
+# its external OAuth provider mode: it holds no Google credential and opens
+# the mailbox of whichever Google access token each request carries, which it
+# checks at Google's userinfo. The runtime gives it, per call, an access token
+# of an hour that IAM mints for the person the application acts for
+# (`POST /api/iam/v1/oauth2/google-workspace/token`), narrowed to the
+# connection's level (`access: read` is *can read*, `write` *can read and
+# send*). Neither token is ever in the model's context or the runtime's
+# environment (R-19); the refresh token never leaves IAM.
+#
+# `GOOGLE_OAUTH_CLIENT_ID` is a name, not Datalayer's client: in this mode the
+# server only validates tokens, which Google issued to IAM's client.
 command: uvx
 args:
   - "workspace-mcp"
+  - "--transport"
+  - "streamable-http"
+  - "--permissions"
+  - "gmail:send"
 
-transport: stdio
-
-envvars:
-  - GOOGLE_OAUTH_CLIENT_ID:0.0.1
-  - GOOGLE_OAUTH_CLIENT_SECRET:0.0.1
+transport: streamable-http
+url: "http://127.0.0.1:9711/mcp"
 
 env:
-  GOOGLE_OAUTH_CLIENT_ID: "${GOOGLE_OAUTH_CLIENT_ID}"
-  GOOGLE_OAUTH_CLIENT_SECRET: "${GOOGLE_OAUTH_CLIENT_SECRET}"
-  WORKSPACE_MCP_PORT: "9000"
+  MCP_ENABLE_OAUTH21: "true"
+  EXTERNAL_OAUTH21_PROVIDER: "true"
+  GOOGLE_OAUTH_CLIENT_ID: "datalayer-iam"
+  WORKSPACE_MCP_HOST: "127.0.0.1"
+  WORKSPACE_MCP_PORT: "9711"
 
-# Not offered on the platform yet: the integrations page lists it as not available.
+# Not offered on the platform yet: switched on once Gmail is connected through
+# IAM on the platform (W-02's deploy and consent drill).
 enabled: false
 
 tags:
@@ -29,7 +48,7 @@ tags:
   - productivity
   - workspace
 
-icon: mail
+icon: "@datalayer/icons-react:google"
 emoji: 📧
 
 # What each tool does to the world (agentspecs.actions). A tool not named here is
@@ -42,15 +61,23 @@ actions:
     comment is read by everybody the document is shared with, a filter can forward mail.
     A tool whose effect depends on what it is asked says `when`: a `manage_*` tool
     deletes when its action is `delete`; the label tools archive a message, and trash it
-    when the label is TRASH or SPAM.
+    when the label is TRASH or SPAM. A send that forwards a message (`forward_message_id`)
+    to somebody outside the domain of the mailbox it sends from also publishes: that is
+    told from the call (agentspecs.actions.FORWARDING), not written here. A mail, a
+    draft and a Chat message say the argument holding their words (`signs`): an
+    application's runtime closes it with its byline (LOOP I-10).
   tools:
     start_google_auth: write
     search_gmail_messages: read
     get_gmail_message_content: read
     get_gmail_messages_content_batch: read
     get_gmail_attachment_content: [read, write]
-    send_gmail_message: send
-    draft_gmail_message: write
+    send_gmail_message:
+      class: send
+      signs: body
+    draft_gmail_message:
+      class: write
+      signs: body
     get_gmail_thread_content: read
     get_gmail_threads_content_batch: read
     list_gmail_labels: read
@@ -180,7 +207,9 @@ actions:
     manage_spreadsheet_comment: [write, send]
     list_spaces: read
     get_messages: read
-    send_message: [send, write]
+    send_message:
+      class: [send, write]
+      signs: message_text
     search_messages: read
     create_reaction: send
     download_chat_attachment: [read, write]

@@ -5,8 +5,8 @@
 # A widget: a page of inputs and outputs, no conversation. Fill in the seats
 # and the term, run, read the quote.
 #
-# Not offered today: its surface is a first draft, waiting for the page a
-# widget is rendered on, and its agent is disabled.
+# Its surface binds what a widget's page publishes and takes: each setting at
+# /inputs/<id>, what it gave at /output, where it stands at /status.
 
 schema: loop.app/v1
 id: quote-calculator
@@ -21,14 +21,39 @@ owner: Datalayer <info@datalayer.io>
 agent: jupyter-data-analyst:0.0.1
 instructions: >-
   Compute the quote in code from the inputs and the price list. Show each
-  line of the calculation; never estimate a total.
+  line of the calculation; never estimate a total. A quote needs at least one
+  seat, and at least the plan's minimum_seats of the price list: for fewer,
+  refuse in a sentence that says so, compute nothing, and do not ask what was
+  meant.
 
 contents:
   - Price list
 
+# What a visitor without an account computes a quote from (STUDIO E-11):
+# Datalayer's sample price list, read only. A clone answers from the Price
+# list its owner gives it on its Build tab.
+samples:
+  documents:
+    - name: Price list
+      file: price-list.csv
+      text: |
+        plan,term,price_per_seat,billed,minimum_seats
+        Team,Monthly,15,each month,1
+        Team,Annual,144,each year,1
+        Business,Monthly,30,each month,5
+        Business,Annual,288,each year,5
+        Enterprise,Monthly,55,each month,25
+        Enterprise,Annual,528,each year,25
+
 interface:
   layout: page
   accent: sun
+  settings:
+    type: object
+    properties:
+      seats: {type: integer, title: Seats, minimum: 1, maximum: 1000, default: 10}
+      plan: {type: string, title: Plan, enum: [Team, Business, Enterprise], default: Team}
+      term: {type: string, title: Term, enum: [Monthly, Annual], default: Annual}
   components: [Card, Column, Row, Text, TextField, ChoicePicker, Slider, Button, Divider]
   surface:
     protocol: a2ui/v0.9
@@ -57,12 +82,17 @@ interface:
         component: ChoicePicker
         label: Plan
         value: { path: /inputs/plan }
-        options: [Team, Business, Enterprise]
+        options:
+          - { label: Team, value: Team }
+          - { label: Business, value: Business }
+          - { label: Enterprise, value: Enterprise }
       - id: term
         component: ChoicePicker
         label: Term
         value: { path: /inputs/term }
-        options: [Monthly, Annual]
+        options:
+          - { label: Monthly, value: Monthly }
+          - { label: Annual, value: Annual }
       - id: run
         component: Button
         child: run-label
@@ -76,14 +106,14 @@ interface:
         child: result-body
       - id: result-body
         component: Column
-        children: [total, lines]
-      - id: total
+        children: [status, output]
+      - id: status
         component: Text
-        text: { path: /outputs/total }
-        variant: h3
-      - id: lines
+        text: { path: /status }
+        variant: caption
+      - id: output
         component: Text
-        text: { path: /outputs/lines }
+        text: { path: /output }
 
 tests:
   ready_at: 1.0
@@ -92,6 +122,13 @@ tests:
       expect: The total is the seats times the annual Team price of the price list, and each line is shown.
     - ask: 0 seats.
       expect: It refuses, and says a quote needs at least one seat.
+  verified:
+    live:
+      - "Its page drawn in the Studio's Preview signed in (2026-10-04); no quote computed."
+    recorded: []
+    unverified:
+      - "No quote has been computed live: its agent was switched on in the catalogue on 2026-10-06 and has not run it yet."
+      - "Its tests have not been run."
 
 record:
   keep_for: 90_days
@@ -103,8 +140,6 @@ deployment:
   embedded:
     mode: inline
     origins: []
-
-enabled: false
 
 tags:
   - example

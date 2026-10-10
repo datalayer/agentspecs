@@ -1,0 +1,127 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Data Quality Investigation
+# A decision: which anomalies of a dataset to fix first, before it is used for
+# a decision. Two criteria are measured in the sandbox, one is asked of a decision model, and
+# one says what kind of anomaly it is.
+
+schema: loop.app/v1
+id: data-quality
+version: 0.0.1
+name: Data Quality Investigation
+kind: decision
+description: >-
+  Which anomalies in this dataset should we fix first? For a data team, before
+  a dataset is used for a decision.
+owner: Datalayer <info@datalayer.io>
+
+agent: jupyter-data-analyst:0.0.1
+
+contents:
+  - The dataset under investigation
+
+decision:
+  question: Which anomalies in this dataset should we fix first?
+  decision_model: "cloudflare:wrk/typesafe/jev"
+  min_confidence: 0
+  criteria:
+    - name: Rows affected
+      kind: metric
+      weight: 2
+      instructions: How many rows the anomaly touches, from a validation run in the sandbox.
+      direction: higher
+    - name: Effect on the result
+      kind: metric
+      weight: 3
+      instructions: How far the headline figures move when the anomaly is corrected.
+      direction: higher
+    - name: Kind of anomaly
+      kind: choice
+      weight: 0
+      instructions: What is this anomaly?
+      options:
+        - "Genuine: a real extreme, to keep"
+        - "Outlier: a value far from the rest, to check"
+        - "Unit: a unit mismatch"
+        - "Missing: a missing value"
+        - "Duplicate: the same row twice"
+      direction: higher
+    - name: Safe to correct automatically
+      kind: noul
+      weight: 1
+      instructions: >-
+        Can the proposed correction be applied without a person checking each
+        row?
+      direction: higher
+
+# What a visitor without an account decides on (STUDIO E-06): four anomalies
+# Datalayer found in a sample orders dataset, read only. A clone decides on
+# its own dataset.
+samples:
+  alternatives:
+    - name: Prices in cents
+      evidence: >-
+        In the sample orders dataset (12,480 rows), 38 rows from the EU shop
+        carry a unit price one hundred times the catalogue price — 1999 for an
+        item listed at 19.99 — all imported by the same job on 4 March.
+        Divided by one hundred, each matches its catalogue price to the cent.
+        Corrected, total revenue falls by 6.1%.
+      metrics:
+        Rows affected: 38
+        Effect on the result: 6.1
+    - name: Duplicate orders
+      evidence: >-
+        96 order ids appear twice with identical lines, timestamps and
+        amounts, all from a retried upload on 19 April. No order id appears
+        three times. Removing the second copies lowers total revenue by 0.9%.
+      metrics:
+        Rows affected: 96
+        Effect on the result: 0.9
+    - name: Missing region
+      evidence: >-
+        1,032 rows have an empty region, all imported on 2 March from the
+        partner channel; their shipping addresses are filled in and name a
+        country in every case. Total revenue does not move; revenue by region
+        moves by up to 4.5% once the region is read from the address.
+      metrics:
+        Rows affected: 1032
+        Effect on the result: 4.5
+    - name: Very large orders
+      evidence: >-
+        11 orders exceed 40,000 in value, the largest at 182,000. Each is from
+        an account marked as a reseller, and each has an invoice and a
+        delivery record that match its amount. Left out, total revenue would
+        fall by 9.8%, but nothing suggests they are wrong.
+      metrics:
+        Rows affected: 11
+        Effect on the result: 0
+
+interface:
+  layout: page
+  accent: green
+  components: [Card, Column, Row, List, Tabs, Text, Slider, ChoicePicker, TextField, Button]
+
+tests:
+  ready_at: 0.8
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "It has not decided live: no dataset has been measured for it."
+      - "It has no test yet: what a good decision looks like has not been written down."
+
+record:
+  keep_for: 1_years
+  include: [decisions, sources, checks]
+
+deployment:
+  hosted:
+    visibility: private
+
+tags:
+  - example
+  - decision
+  - data-quality
+icon: filter
+emoji: "🧹"

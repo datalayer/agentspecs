@@ -1,0 +1,52 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Speech model: Moonshine Tiny, English, for the browser (VOICE.md, decision 3)
+
+id: moonshine-tiny-en
+version: 0.0.1
+name: Moonshine Tiny (English)
+description: >-
+  Speech to text in the browser, in English: Useful Sensors' Moonshine Tiny
+  (27M parameters), its ONNX export quantized to 8 bits, run by transformers.js.
+  One of the English models whose weights are MIT; the legacy non-English
+  Moonshine models are under a non-commercial licence and are not listed.
+task: stt
+engine: transformers.js
+dtype: q8
+languages: [en]
+where: [device]
+streaming: false
+licence:
+  weights: MIT
+  code: MIT
+attribution: ""
+source:
+  upstream: https://huggingface.co/UsefulSensors/moonshine-tiny
+  repository: https://huggingface.co/onnx-community/moonshine-tiny-ONNX
+  revision: a6da1241cd305dcd64eab1edbd615f2bb9aabb95
+files:
+  - path: config.json
+    sha256: 558e1e02069137c796ace1e50c48d8fe451f04a295929138e6bea885517f0edb
+    size: 921
+  - path: generation_config.json
+    sha256: f9b3f711b57be7def2e50a8942f64f36ee0a55fad5b84ff93a687b6c5bcc1d44
+    size: 147
+  - path: preprocessor_config.json
+    sha256: fa43a7017ef85cd1d0fba0d9aae77c8adb16990ae6f11115631f41ec5d8aa679
+    size: 128
+  - path: special_tokens_map.json
+    sha256: ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356
+    size: 3
+  - path: tokenizer.json
+    sha256: 7b913404bdd039af4756783218af4440bc07fb7d6d8258d677e34f95b3ec416f
+    size: 3761754
+  - path: tokenizer_config.json
+    sha256: edaee394565d428ea98a663ae7209cdcfeefc5585c42d7a570ff7c986df2cd15
+    size: 135735
+  - path: onnx/encoder_model_quantized.onnx
+    sha256: c6fc4b7bc5af75c0591fd157a1f3829b533d18e9769a888fd95a62e470dd4f4a
+    size: 7937661
+  - path: onnx/decoder_model_merged_quantized.onnx
+    sha256: eed87831c3a6103534aae7d47a5d485025c659a1323901513961c39fe8a1a367
+    size: 20243286

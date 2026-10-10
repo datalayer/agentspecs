@@ -22,6 +22,32 @@ Agent catalogue reference, `id` or `id:version`. Prefer this over restating an
 agent inline: a member that names a catalogue agent stays correct when that
 agent changes.
 
+## `app` (string)
+An application of the [application catalogue](../apps), `id` or `id:version`,
+in place of `ref`: the member is that application, with its agent,
+connections, rules and interface. A member is an agent or an application, not
+both. See [Teams of applications](./applications).
+
+## `server` (string)
+An MCP server of the [server catalogue](../agents/mcp-servers), `id` or
+`id:version`, in place of `ref` and `app`: the member is that server, a
+system of the scene the other members reach over MCP. It answers tool by
+tool and asks nobody: a server member has no `talks_to` and no `subagents`,
+and a person never talks to it (`entry` is not a server). A member is an
+agent, an application or a server, one of them.
+
+## `runs_in` (enum)
+Where the member's loop turns: `browser` (the person's page) or `runtime` (a
+cloud or a local runtime). Unsaid, wherever the team runs.
+
+## `talks_to` (list)
+The members it asks directly while it works, each `{member, over}`. `over`
+names the protocol, and it fits who is asked: `a2a` to an agent or an
+application, `mcp` to a member that is a `server`. Every `member` must be a
+member of the same team, and not itself; a link to a member the team does
+not have is refused when the catalogue loads, with the two names in the
+sentence.
+
 ## `role` (enum)
 What the member is *for*, structurally — about its position in the work rather
 than its subject matter, because a runtime scheduling a team cares which member

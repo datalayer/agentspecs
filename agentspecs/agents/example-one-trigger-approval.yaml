@@ -33,7 +33,7 @@ memory: ephemeral
 skills: []
 
 # Runtime tools
-tools:
+backend_tools:
   - runtime-sensitive-echo:0.0.1
 frontend_tools:
   - jupyter-notebook:0.0.1

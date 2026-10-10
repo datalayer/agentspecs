@@ -1,0 +1,37 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Speech model: Kokoro-82M, text to speech on ai-agents (VOICE.md, decision 5)
+
+id: kokoro-82m
+version: 0.0.1
+name: Kokoro 82M
+description: >-
+  Text to speech on Datalayer's servers (datalayer-speech, on r1), on CPU: hexgrad's
+  Kokoro-82M v1.0 exported to ONNX, in full precision, with the voices
+  file that holds its 54 voices, run by kokoro-onnx. Its phonemes come from
+  eSpeak NG (GPL-3.0), which runs on the server and is never sent to a browser
+  (decision 1). Full precision, not the 8-bit export: on a 16-core CPU the
+  8-bit one speaks slower than real time (6 s for 3.9 s of speech), this one
+  about four times faster than real time (1 s).
+task: tts
+engine: kokoro-onnx
+dtype: fp32
+languages: [en, fr, es, it, pt, hi, ja, zh]
+where: [server]
+streaming: false
+licence:
+  weights: Apache-2.0
+  code: MIT
+attribution: ""
+source:
+  upstream: https://huggingface.co/hexgrad/Kokoro-82M
+  repository: https://github.com/thewh1teagle/kokoro-onnx/releases/tag/model-files-v1.0
+  revision: model-files-v1.0
+files:
+  - path: kokoro-v1.0.onnx
+    sha256: 7d5df8ecf7d4b1878015a32686053fd0eebe2bc377234608764cc0ef3636a6c5
+    size: 325532387
+  - path: voices-v1.0.bin
+    sha256: bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d
+    size: 28214398

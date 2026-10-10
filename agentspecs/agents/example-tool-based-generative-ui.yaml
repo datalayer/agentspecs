@@ -32,7 +32,7 @@ mcp_servers: []
 skills: []
 
 # No backend tools — render tools are provided by the frontend
-tools: []
+backend_tools: []
 frontend_tools: []
 
 # Runtime environment

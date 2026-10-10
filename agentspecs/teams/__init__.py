@@ -6,7 +6,7 @@
 
 A *team* is several agents working on one job. This module defines the
 ``TeamSpec`` Pydantic class and the helpers for loading team definitions from
-YAML, the same way ``loops``, ``memory`` and ``models`` do for theirs — teams
+YAML, the same way ``strategies``, ``memory`` and ``models`` do for theirs — teams
 were the one catalogue with no schema at all, which meant nothing checked them
 and nothing could load them.
 
@@ -26,14 +26,32 @@ must finish first, so a runtime can compute the order, run independent members
 at once, and refuse a team whose graph has a cycle. It replaces sentences like
 "On completion of the Triage Agent", which read well and cannot be executed.
 
+**A team may compose applications too.** A member names one with ``app``,
+pointing into the application catalogue, and is then that application — its
+agent, its connections, its rules, its interface. Such a team says where each
+member's loop turns (``runs_in``: the person's browser or a runtime), who asks
+whom while the work runs (``talks_to``, over A2A) and which member a person
+talks to (``entry``).
+
 Subagents work here as they do on an agent: a member may delegate to
 specialists, and ``delegation`` bounds how far that can go for the team as a
 whole.
+
+**A scene is a team** (LOOP A-04, decided 2026-10-07). Agents arranged with
+their roles, their shared context and their interactions are a team and
+nothing else: a team may hold one member — an agent working alone with its
+data is a scene — and never none; each member names its ``role``; the team
+names its shared ``context`` — how much of the conversation each member is
+told, and the Frames they all work under (``agentspecs.frames``); and each
+link names its protocol: ``a2a`` to an agent or an application, ``mcp`` to a
+member that is an MCP server (``server``), a system of the scene the others
+reach tool by tool. A member that talks to one not in the team, and a team
+with no member, are refused when the catalogue loads.
 """
 
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import yaml
 from pydantic import BaseModel, Field, field_validator, model_validator
@@ -85,6 +103,104 @@ class TeamExecutionMode(str, Enum):
 
     SUPERVISOR = "supervisor"
     """The supervisor decides who runs next, each turn."""
+
+
+class TeamPlace(str, Enum):
+    """Where a member's loop turns.
+
+    A team of applications can be split between the person's page and a
+    runtime: what reads the person's screen and talks to them turns in their
+    browser, what reaches a company's systems turns on a runtime, where its
+    connections and its credentials are.
+    """
+
+    BROWSER = "browser"
+    """In the person's browser: the in-browser target the Preview and `loop` use."""
+
+    RUNTIME = "runtime"
+    """On a runtime: a cloud runtime on Datalayer, or a local one."""
+
+
+class TeamProtocol(str, Enum):
+    """How one member talks to another."""
+
+    A2A = "a2a"
+    """The Agent2Agent protocol: the member talked to is served over A2A, and
+    its agent card says what it may be asked and how it answers."""
+
+    MCP = "mcp"
+    """The Model Context Protocol: the member talked to is an MCP server
+    (`server`), asked tool by tool; its tools say what it does."""
+
+
+class TeamSharing(str, Enum):
+    """How much of the conversation each member is told."""
+
+    SHARED = "shared"
+    """One thread, and every member is sent all of it: what a supervisor
+    team wants, since routing only makes sense when the member receiving the
+    work can see what was already said."""
+
+    ISOLATED = "isolated"
+    """A thread per member: the child runs blind and returns a result, as a
+    delegation model wants."""
+
+    OWN_TURNS = "own-turns"
+    """One thread on screen, but each member is sent only the turns it took
+    part in."""
+
+
+class TeamContext(BaseModel):
+    """What the members share: the conversation, and the context they work in.
+
+    A scene's shared context (LOOP A-04): how much of the conversation each
+    member is told (`sharing`), and the Frames — the rules, the vocabulary,
+    the goals, the style and the norms of the organization, the department,
+    the project (`agentspecs.frames`) — every member works under (`frames`),
+    in order, as a Cog names its own. A member's own Frames (its application's
+    `context`) come on top of the team's.
+    """
+
+    sharing: TeamSharing = Field(
+        default=TeamSharing.SHARED,
+        description=(
+            "How much of the conversation each member is given: `shared` (all of it), "
+            "`isolated` (its own thread) or `own-turns` (one thread, only its own turns)"
+        ),
+    )
+    frames: List[str] = Field(
+        default_factory=list,
+        description="The Frames every member works under, in order, `id` or `id:version`",
+    )
+
+    @field_validator("frames")
+    @classmethod
+    def _named_once(cls, frames: List[str]) -> List[str]:
+        seen = set()
+        for ref in frames:
+            identity = ref.split(":")[0]
+            if not identity:
+                raise ValueError("a Frame of the team's context is named by its id")
+            if identity in seen:
+                raise ValueError(f"the Frame {identity!r} is named twice in the team's context")
+            seen.add(identity)
+        return frames
+
+
+class TeamLink(BaseModel):
+    """One member asking another, directly, over a protocol.
+
+    Distinct from `depends_on`, which orders work: a link says who may ask
+    whom while the work runs, in either order and as often as it needs.
+    """
+
+    member: str = Field(..., description="The member asked, by its id in this team")
+    over: TeamProtocol = Field(
+        default=TeamProtocol.A2A,
+        description=(
+            "The protocol it is asked over: `a2a` to an agent or an application, `mcp` to a server"
+        ),
+    )
 
 
 class TeamSubagent(BaseModel):
@@ -154,9 +270,36 @@ class TeamMember(BaseModel):
         default="",
         description="Agent catalogue reference, `id` or `id:version`",
     )
+    app: str = Field(
+        default="",
+        description=(
+            "Application catalogue reference, `id` or `id:version`, in place of "
+            "`ref`: the member is that application, with its agent, its "
+            "connections, its rules and its interface."
+        ),
+    )
+    server: str = Field(
+        default="",
+        description=(
+            "MCP server catalogue reference, `id` or `id:version`, in place of "
+            "`ref` and `app`: the member is that server, a system of the scene "
+            "the other members reach over MCP (`talks_to` … `over: mcp`). It "
+            "answers tool by tool and asks nobody."
+        ),
+    )
+    runs_in: Optional[TeamPlace] = Field(
+        default=None,
+        description="Where its loop turns: `browser` or `runtime`. Unsaid, wherever the team runs.",
+    )
+    talks_to: List[TeamLink] = Field(
+        default_factory=list,
+        description="The members it asks directly while it works, and over what",
+    )
     name: str = Field(
         default="",
-        description="Display name. Falls back to the referenced agent, then to `id`.",
+        description=(
+            "Display name. Falls back to the referenced agent or application, then to `id`."
+        ),
     )
     role: TeamRole = Field(
         default=TeamRole.CONTRIBUTOR,
@@ -201,25 +344,42 @@ class TeamMember(BaseModel):
         description="MCP server, overriding the agent's",
         alias="mcpServer",
     )
-    tools: List[str] = Field(
-        default_factory=list, description="Tools, overriding the agent's"
-    )
+    tools: List[str] = Field(default_factory=list, description="Tools, overriding the agent's")
 
     model_config = {"populate_by_name": True}
 
     @model_validator(mode="after")
     def _needs_a_definition(self) -> "TeamMember":
-        if not self.ref and not self.name and not self.goal:
+        if sum(1 for given in (self.ref, self.app, self.server) if given) > 1:
             raise ValueError(
-                f"member {self.id!r} needs a `ref` into the agent catalogue, or "
-                f"enough of its own definition (`name`, `goal`) to stand alone"
+                f"member {self.id!r} is an agent (`ref`), an application (`app`) "
+                f"or a server (`server`), not two of them"
             )
+        if not self.ref and not self.app and not self.server and not self.name and not self.goal:
+            raise ValueError(
+                f"member {self.id!r} needs a `ref` into the agent catalogue, an "
+                f"`app` from the application catalogue, a `server` from the MCP "
+                f"server catalogue, or enough of its own definition (`name`, "
+                f"`goal`) to stand alone"
+            )
+        if self.server:
+            if self.talks_to:
+                raise ValueError(
+                    f"member {self.id!r} is a server: it answers over MCP and asks nobody"
+                )
+            if self.subagents:
+                raise ValueError(f"member {self.id!r} is a server: it has no subagent")
         return self
 
     @property
+    def is_server(self) -> bool:
+        """Whether the member is an MCP server of the scene, asked over MCP."""
+        return bool(self.server)
+
+    @property
     def display_name(self) -> str:
-        """What to show a person: the name, the referenced agent, or the id."""
-        return self.name or self.ref.split(":")[0] or self.id
+        """What to show a person: the name, what it references, or the id."""
+        return self.name or (self.ref or self.app or self.server).split(":")[0] or self.id
 
 
 class TeamSupervisor(BaseModel):
@@ -241,6 +401,14 @@ class TeamSupervisor(BaseModel):
             "an agent like any other; naming one from the catalogue means its "
             "prompt, tools and subagents are defined in one place rather than "
             "restated here."
+        ),
+    )
+    app: str = Field(
+        default="",
+        description=(
+            "Application catalogue reference, `id` or `id:version`: in a team "
+            "of applications, the one that decides who is asked next, usually "
+            "the team's `entry`."
         ),
     )
     model: str = Field(
@@ -273,10 +441,15 @@ class TeamSupervisor(BaseModel):
 
     @model_validator(mode="after")
     def _has_a_definition(self) -> "TeamSupervisor":
-        if not self.ref and not self.instructions and not self.model:
+        if self.ref and self.app:
+            raise ValueError(
+                f"supervisor {self.name!r} is an agent (`ref`) or an application (`app`), not both"
+            )
+        if not self.ref and not self.app and not self.instructions and not self.model:
             raise ValueError(
                 f"supervisor {self.name!r} needs a `ref` into the agent "
-                f"catalogue, or a `model` and `instructions` of its own"
+                f"catalogue, an `app` from the application catalogue, or a "
+                f"`model` and `instructions` of its own"
             )
         return self
 
@@ -341,12 +514,8 @@ class TeamSuggestion(BaseModel):
     """
 
     text: str = Field(..., description="What is sent when the suggestion is taken")
-    icon: Optional[str] = Field(
-        default=None, description="Octicon name to show beside it"
-    )
-    emoji: Optional[str] = Field(
-        default=None, description="Unicode emoji to show beside it"
-    )
+    icon: Optional[str] = Field(default=None, description="Octicon name to show beside it")
+    emoji: Optional[str] = Field(default=None, description="Unicode emoji to show beside it")
 
 
 class TeamSpec(BaseModel):
@@ -374,6 +543,13 @@ class TeamSpec(BaseModel):
         description="Who decides what happens next. Every team has one.",
     )
     routing_instructions: str = Field(default="")
+    entry: str = Field(
+        default="",
+        description=(
+            "The member a person talks to, by its id: the team's front door. "
+            "Unsaid, the supervisor answers first."
+        ),
+    )
     suggestions: List[TeamSuggestion] = Field(
         default_factory=list,
         description=(
@@ -384,11 +560,19 @@ class TeamSpec(BaseModel):
             "property of the whole team rather than of any one member."
         ),
     )
+    context: TeamContext = Field(
+        default_factory=TeamContext,
+        description=(
+            "What the members share: how much of the conversation each is told, "
+            "and the Frames they all work under"
+        ),
+    )
     delegation: TeamDelegation = Field(default_factory=TeamDelegation)
     validation: Optional[TeamValidation] = Field(default=None)
 
     agents: List[TeamMember] = Field(
-        default_factory=list, description="The members, in declaration order"
+        default_factory=list,
+        description="The members, in declaration order: one at least",
     )
 
     reaction_rules: List[TeamReactionRule] = Field(default_factory=list)
@@ -399,6 +583,9 @@ class TeamSpec(BaseModel):
     @field_validator("agents")
     @classmethod
     def _members_are_uniquely_named(cls, members: List[TeamMember]):
+        if not members:
+            # A scene can hold a single agent; it cannot hold none.
+            raise ValueError("a team has no member: it holds one at least")
         seen = set()
         for member in members:
             if member.id in seen:
@@ -413,10 +600,22 @@ class TeamSpec(BaseModel):
         Checked here rather than left to a runtime because a team whose graph
         does not resolve has no correct execution at all — and a cycle
         discovered at run time is discovered with a model already loaded and a
-        person waiting.
+        person waiting. Every link, too: who it asks is a member of the team,
+        and the protocol fits who is asked — a server over MCP, an agent or an
+        application over A2A.
         """
         ids = {member.id for member in self.agents}
+        servers = {member.id for member in self.agents if member.is_server}
+        if self.entry and self.entry not in ids:
+            raise ValueError(f"team {self.id!r} enters at {self.entry!r}, which is not a member")
+        if self.entry in servers:
+            raise ValueError(
+                f"team {self.id!r} enters at {self.entry!r}, a server: "
+                "a person talks to an agent or an application"
+            )
         for member in self.agents:
+            for link in member.talks_to:
+                self._link_fits(member, link, ids, servers)
             for needed in member.depends_on:
                 if needed not in ids:
                     raise ValueError(
@@ -428,6 +627,26 @@ class TeamSpec(BaseModel):
         # Resolving the order is the cycle check: it raises when one is left.
         self.execution_order()
         return self
+
+    def _link_fits(self, member: TeamMember, link: TeamLink, ids: set, servers: set) -> None:
+        """A link names another member of the team, over the protocol that fits it."""
+        if link.member not in ids:
+            raise ValueError(
+                f"member {member.id!r} talks to {link.member!r}, which is "
+                f"not a member of team {self.id!r}"
+            )
+        if link.member == member.id:
+            raise ValueError(f"member {member.id!r} talks to itself")
+        if link.over is TeamProtocol.MCP and link.member not in servers:
+            raise ValueError(
+                f"member {member.id!r} talks to {link.member!r} over mcp, "
+                f"which is not a server: an agent or an application is asked over a2a"
+            )
+        if link.over is not TeamProtocol.MCP and link.member in servers:
+            raise ValueError(
+                f"member {member.id!r} talks to {link.member!r} over {link.over.value}, "
+                f"which is a server: a server is asked over mcp"
+            )
 
     def execution_order(self) -> List[List[str]]:
         """The members in the order they may run, grouped by what can run at once.
@@ -447,9 +666,7 @@ class TeamSpec(BaseModel):
             ready = [name for name in order if name in remaining and not remaining[name]]
             if not ready:
                 stuck = ", ".join(sorted(remaining))
-                raise ValueError(
-                    f"team {self.id!r} has a dependency cycle among: {stuck}"
-                )
+                raise ValueError(f"team {self.id!r} has a dependency cycle among: {stuck}")
             groups.append(ready)
             for name in ready:
                 del remaining[name]
@@ -482,6 +699,34 @@ class TeamSpec(BaseModel):
         # Order preserved, duplicates dropped.
         return list(dict.fromkeys(refs))
 
+    def referenced_apps(self) -> List[str]:
+        """Every application this team names — its members and its supervisor.
+
+        A team of applications composes them as a team of agents composes
+        agents: by reference, so that each application stays the one of the
+        catalogue, with its rules and its connections.
+        """
+        refs = [member.app for member in self.agents if member.app]
+        if self.supervisor and self.supervisor.app:
+            refs.append(self.supervisor.app)
+        return list(dict.fromkeys(refs))
+
+    def referenced_servers(self) -> List[str]:
+        """Every MCP server this team names as a member: the systems of the scene."""
+        return list(dict.fromkeys(member.server for member in self.agents if member.server))
+
+    def referenced_frames(self) -> List[str]:
+        """Every Frame of the team's shared context, in order."""
+        return list(self.context.frames)
+
+    def links(self) -> List[Tuple[str, str, TeamProtocol]]:
+        """Every interaction of the scene, in order: (who asks, who is asked, over what)."""
+        return [
+            (member.id, link.member, link.over)
+            for member in self.agents
+            for link in member.talks_to
+        ]
+
 
 def _load_team_specs() -> List[TeamSpec]:
     """Load every team YAML in this directory."""
@@ -492,7 +737,7 @@ def _load_team_specs() -> List[TeamSpec]:
             data = yaml.safe_load(f)
         try:
             specs.append(TeamSpec(**data))
-        except Exception as error:  # noqa: BLE001
+        except Exception as error:
             # Name the file. A validation error on a bare field path is a
             # puzzle when the catalogue is a directory of them.
             raise ValueError(f"{yaml_file.name}: {error}") from error
@@ -558,4 +803,3 @@ def teams_using(agent_ref: str) -> List[TeamSpec]:
         for team in TEAM_CATALOGUE
         if any(ref.split(":")[0] == wanted for ref in team.referenced_agents())
     ]
-

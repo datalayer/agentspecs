@@ -23,5 +23,5 @@ tags:
   - crawl
   - scraping
 
-icon: globe
+icon: "@primer/octicons-react:globe"
 emoji: 🌐

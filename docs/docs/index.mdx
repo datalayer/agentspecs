@@ -55,6 +55,10 @@ interface, rules, tests and a place to run. One spec, the Appspec, for a chat,
 a widget, a decision and an always-on worker; rules written in a person's
 words and enforced on what each tool does.
 
+**[Scenes](./scenes)** — a team, staged: the setting, the script (beats: a cue,
+the moves, what to expect), the stage directions, the audience, the rehearsal
+and where it plays. The team says who; the scene says what happens.
+
 **[Modularity](./modularity)** — how a spec is built out of other specs, rather
 than copied from them. Extension (`extends`) for "the same agent, adjusted",
 composition (`includes`) for "this bundle, wherever needed". It sits beside the
@@ -87,6 +91,7 @@ Generated catalogs are keyed by unversioned id only (e.g. `tavily`). The `get_*`
 agentspecs/
 ├── agents/
 ├── teams/
+├── scenes/
 ├── frames/
 ├── cogs/
 ├── ops/
@@ -96,7 +101,7 @@ agentspecs/
 ├── mcp-servers/
 ├── skills/
 ├── tools/
-├── envvars/
+├── env-vars/
 ├── models/
 ├── memory/
 ├── guardrails/

@@ -34,7 +34,7 @@ sandbox_variant: jupyter-server
 memory: ephemeral
 mcp_servers: []
 skills: []
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 # Only what this specialist needs. `!remove` drops the full bundle the fragment
 # grants and replaces it with the narrow one — least privilege said in the spec

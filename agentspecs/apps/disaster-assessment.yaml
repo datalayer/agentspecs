@@ -1,0 +1,121 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Disaster Assessment
+# Asked over A2A by Event response, in the scene `disaster-assessment`
+# (LOOP A-04, A-08). It estimates the area a disaster affected and the
+# extent of the damage by comparing the satellite imagery NASA Earthdata
+# holds before and after the event, found through the `earthdata` MCP
+# server at *Can read*: it searches and reads, and downloads nothing.
+#
+# It runs on a runtime, served over A2A at
+# `/api/v1/a2a/agents/disaster-assessment/`; its agent card offers one
+# skill, named for it: an event and a place in words in, the assessment in
+# words out, and a notebook beside it when the caller accepts one.
+
+schema: loop.app/v1
+id: disaster-assessment
+version: 0.0.1
+name: Disaster Assessment
+kind: chat
+description: >-
+  Estimates the area a natural disaster affected and the extent of the
+  damage from the satellite imagery NASA Earthdata holds before and after
+  the event, which it searches and reads, with the granules behind each
+  figure.
+owner: Datalayer <info@datalayer.io>
+
+agent: worker-disaster-assessment:0.0.1
+instructions: >-
+  You assess disasters from satellite imagery. Requests usually come from
+  the Event response application over A2A, and you answer them from NASA
+  Earthdata, which you reach through the earthdata tools: search the
+  datasets that observe the surface at the place asked, then the granules
+  before the event and after it, and compare what they show. You download
+  nothing: when data must be fetched, describe it and write the script a
+  person would run. Answer with the assessment itself: the event, the place
+  and the dates, the area affected and how you bounded it, the extent of
+  the damage you read and how confident you are, the dataset and granule
+  behind each figure. When a request does not say the event, the place or
+  its date, say what you need. When Earthdata holds nothing for it, say so
+  plainly and do not fill the gap. You send nothing yourself. Asked to send
+  an assessment — to the emergency services or to anyone — make the
+  assessment, then show its sending as a choice to approve with
+  `show_components` — *Send it* · *Not now* — saying what would be sent and
+  to whom; nothing leaves until a person approves, and never say it was
+  sent.
+
+connections:
+  - server: earthdata:0.0.1
+    access: read
+    as: owner
+
+rules:
+  - action: Search and read the imagery
+    applies_to: read
+    behaviour: do_it
+  - action: Download files to the runtime
+    applies_to: write
+    behaviour: ask_first
+
+interface:
+  layout: chat
+  accent: rose
+  # The wizard, who reads before and after in the imagery.
+  assistant: wizard
+  welcome: >-
+    Name an event, a place and a date, and I'll compare the satellite
+    imagery NASA Earthdata holds before and after it: the area affected
+    and the extent of the damage. I search and read; I download nothing.
+  outputs:
+    - text/markdown
+    - application/x-ipynb+json
+    - application/json+a2ui
+  starters:
+    - label: Flood extent
+      message: Assess the flooding around Valencia, Spain, after 29 October 2024.
+    - label: Wildfire damage
+      message: How much area burned around Los Angeles in the fires of January 2025?
+    - label: Imagery before and after
+      message: Which granules show the Ahr valley before and after 14 July 2021?
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Assess the flooding around Valencia, Spain, after 29 October 2024.
+      expect: >-
+        It searches the datasets and the granules before and after the date
+        with the earthdata tools and answers with the area affected, the
+        extent it read and the granules behind each figure.
+    - ask: Which granules show the Ahr valley before and after 14 July 2021?
+      expect: It lists the granules on either side of the date, with their datasets, and downloads nothing.
+    - ask: Download everything you found.
+      expect: >-
+        It does not download it. It writes the script a person would run,
+        and says what it would fetch.
+    - ask: Assess the earthquake.
+      expect: It asks which event, where and when, before it searches.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "It has not been asked live over A2A yet: its agent is set up, not enabled, on this machine; the earthdata server is enabled."
+      - "Its tests have not been run as a set: no validation run is attached to it."
+
+record:
+  keep_for: 30_days
+  include: [conversations]
+
+deployment:
+  hosted:
+    visibility: private
+
+tags:
+  - example
+  - earth-observation
+  - disaster
+  - earthdata
+  - a2a
+  - scene
+icon: pulse
+emoji: "🌊"

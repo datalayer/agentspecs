@@ -55,9 +55,9 @@ execution_mode: supervisor
 # The Analyst supervises, and that is the design rather than a convenience.
 #
 # It is the member that already has to read the notebook to answer anything,
-# so it is the one best placed to judge what a request is — an analysis, a
+# so it is the one best placed to decide what a request is — an analysis, a
 # check, a write-up, slides, a lesson, a tidy — and hand it on. Handing that
-# judgement to a separate coordinator would put a second agent between the
+# decision to a separate coordinator would put a second agent between the
 # person and the one working for them, with less to go on. It appears below
 # as a member too: a supervisor that also does work is not a contradiction —
 # it is the front door, and here the front door analyses.

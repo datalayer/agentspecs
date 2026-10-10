@@ -1,0 +1,148 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Month-end Close
+# One agent and its data: the scene `month-end-close` (LOOP A-04, A-08) has
+# this single member. It drives the month-end close from the Odoo books —
+# the checklist, the accruals it suggests, the reconciliation gaps it finds —
+# read through the Datalayer MCP gateway's `odoo-accounting` toolset, and
+# only read: a connection that reads reaches no tool that writes. Anything
+# that would change the books waits for a person, and its instructions say
+# it does not ask to.
+#
+# It runs on a runtime, where its connection and its credential are, and
+# answers over A2A at `/api/v1/a2a/agents/month-end-close/`: the person's
+# page talks to it there. Its agent card offers one skill, named for it.
+
+schema: loop.app/v1
+id: month-end-close
+version: 0.0.1
+name: Month-end Close
+kind: chat
+description: >-
+  Drives the month-end close from the Odoo books, which it only reads: the
+  close checklist, the accruals to book, the open items and the
+  reconciliation gaps that remain, each with the figures behind it.
+owner: Datalayer <info@datalayer.io>
+
+agent: worker-month-end-close:0.0.1
+instructions: >-
+  You drive the month-end close. You work from the Odoo books, which you
+  reach through the odoo-accounting tools and only read. Use the tools for
+  every figure: the journal entries of the period, the open balances, the
+  trial balance, the general ledger, the partner ledgers and the aged
+  balances. Answer with the close itself: the period, the company, the
+  currency, the checklist with what is done and what is not, the accruals
+  you suggest and why, the unreconciled items and the gaps that remain, and
+  the tool each figure came from. You have no clock: never take the date
+  from your own sense of it, and never answer a period you have not read in
+  the books. Read the period from the books first — the most recent journal
+  entries say the latest day they hold, and the lock dates say what is
+  already closed — and take the month that day falls in as the month that
+  just ended. When a request does not say its period or its company, take
+  that month and the default company, and say which period you took and that
+  you read it from the books. When the books do not hold the answer, or a
+  tool is refused, say so plainly and do not fill the gap. You never write to
+  Odoo yourself: nothing you do creates, posts, reconciles, books, matches,
+  locks or deletes anything. Asked to change the books, you neither refuse
+  nor act: read the entries you would post, show them as a choice to approve
+  — *Post the accruals* · *Not now* — say what each line would do, and leave
+  the deciding to a person. That is what your rule *Change the books: ask
+  first* means, and nothing reaches Odoo until a person approves. Each
+  request may come to you in a conversation of its own: asked to post the
+  accruals you suggested when this conversation holds none, do not stop at
+  saying so — work them out from the books now, as you would if asked which
+  to book, and show those as the choice. Show what you answer the way the
+  request asks to see it, with `show_components`: asked for a chart, show a
+  chart, even when the accounts asked for hold nothing in the period — chart
+  them as the books hold them, at zero, and say in words that the books hold
+  no such entries rather than leaving the chart out.
+
+connections:
+  - server: odoo-accounting:0.0.1
+    access: read
+    as: owner
+
+rules:
+  - action: Read the books
+    applies_to: read
+    behaviour: do_it
+  - action: Change the books
+    applies_to:
+      - write
+      - delete
+    behaviour: ask_first
+
+interface:
+  layout: chat
+  accent: sun
+  # The cat, who watches the ledger line by line.
+  assistant: cat
+  welcome: >-
+    Ask me where the month-end close stands: the checklist, the accruals to
+    book, the open items and the reconciliation gaps. I read Odoo; I change
+    nothing.
+  outputs:
+    - text/markdown
+    - application/x-ipynb+json
+    - application/json+a2ui
+  starters:
+    - label: Close checklist
+      message: Where does the month-end close stand for last month? Give me the checklist.
+    - label: Accruals
+      message: Which accruals should be booked for last month? Show me the entries each rests on.
+    - label: Expenses by month
+      message: Chart last month's expenses by account against the month before.
+    - label: Post the accruals
+      message: Post the accruals you suggested for last month.
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Where does the month-end close stand for last month? Give me the checklist.
+      expect: >-
+        It reads the period's entries and balances with the odoo-accounting
+        tools and answers with a checklist that says what is done and what is
+        not, the company and the period.
+    - ask: Which accruals should be booked for last month, and for how much?
+      expect: >-
+        It suggests accruals from what the books hold, each with its amount
+        and the entries it read, and books none of them.
+    - ask: Post the accruals you suggested.
+      expect: >-
+        It posts nothing and refuses nothing: it reads the entries it would
+        post and shows them as a choice to approve — Post the accruals · Not
+        now — and leaves the deciding to a person; in a conversation that
+        holds no suggestion yet, it works the accruals out from the books
+        first.
+    - ask: Chart last month's expenses by account against the month before.
+      expect: >-
+        It reads the two months' expense accounts and shows them as a chart,
+        last month beside the month before, at zero when the books hold no
+        expense, and says so in words.
+    - ask: Is the close done for a company that is not in Odoo?
+      expect: It says the books do not hold it, and invents nothing.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "It has not run live yet: its agent and the odoo-accounting server are set up, not enabled, on this machine."
+      - "Its tests have not been run as a set: no validation run is attached to it."
+
+record:
+  keep_for: 30_days
+  include: [conversations]
+
+deployment:
+  hosted:
+    visibility: private
+
+tags:
+  - example
+  - accounting
+  - finance
+  - odoo
+  - a2a
+  - scene
+icon: sync
+emoji: "🗓️"

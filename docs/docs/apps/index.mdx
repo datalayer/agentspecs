@@ -77,19 +77,22 @@ record:
 | `emoji` | Its face: one emoji, shown wherever the application appears — an approval, an activity line, a card. 👀 until one is chosen. |
 | `kind` | `chat`, `widget`, `decision` or `worker`. |
 | `agent` or `team` | Who does the work: an agent or a [Cog](../cogs) of the catalogue, or a team. One, and not both. |
-| `instructions`, `model`, `skills`, `tools` | What this application says differently from its agent, and adds to it. |
-| `context` | The [Frames](../frames) it works under. |
+| `instructions`, `model`, `skills`, `backend_tools` | What this application says differently from its agent, and adds to it. |
+| `tools` | Tools of its own, written in its code (`@app.tool` in an `app.py`): each a `name`, a `description` for the agent, its `parameters` as the JSON Schema of an object, and what it `does` by class of action. See *Written in its code* below. |
+| `context` | The [Frames](../frames) it works under: the catalogue's, or its organization's own (`org-…`). |
 | `contents` | The documents and datasets it answers from. |
 | `connections` | What it reaches. See below. |
 | `rules` | When it acts alone, and when it asks. See below. |
 | `permissions` | What else it may reach: `spaces` (a Space, `read` or `write`) and its `computer` (`browse`, `files`, `shell`, each off). Nothing, unless said. |
-| `interface` | What the user sees: `layout` (`chat`, `page`, `split`), `accent`, `welcome`, `starters`, `settings`, and a `surface` — a component tree over the approved catalog. |
-| `tests` | How it is verified: `cases` in plain words (`ask`, `expect`), an `evalset`, and `ready_at`, the share that has to pass. |
-| `record` | What is kept of what it did (`include`), and for how long (`keep_for`: `90_days`, `1_years`). |
-| `checks` | Optional: `guards`, `gates` and a `track` of the catalogue. |
-| `deployment` | Where it goes: `hosted` (a `visibility`, a `slug`) and `embedded` (a `mode`, the `origins` allowed). |
+| `interface` | What the user sees: `layout` (`chat`, `page`, `split`), `accent`, `theme` — the theme it runs in by default, a `variant` of Appearance's (`datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop`) and optionally a `mode` (`light`, `dark`, `auto`), the person's own when unsaid; its `accent` colours the `loop` theme only — `welcome`, `starters` (each with an optional `category`), `profiles`, `commands` and `modes` (see below), `uploads` — what a person may send without being asked (see below) — `settings` and `settings_ui`, how its fields are drawn (see below), `language` and `translations` (see below), a `surface` — a component tree over the approved catalog — and `assistant`, the character of its floating assistant by the id a plugin contributes it under (`paperclip`, `wizard`, `cat`, `eyes` are Datalayer's; an id no enabled plugin gives is refused by the runtime and the page). Said here, it wins over the person's own choice. `balloon` says how that assistant's balloon shows the conversation: `history`, every message, scrolled, with the composer last, or `current`, only what it says or does now — the answer being written, or the tool it calls ("Using list_invoices…") — in one balloon that replaces its words as the turn goes on; the page's own when unsaid, `history` for the floating chat. And `outputs`, the formats its answers come in — see below. |
+| `tests` | How it is verified: `cases` in plain words (`ask`, `expect`, and `code` when a function of its code decides one), an `evalset`, `ready_at`, the share that has to pass, and `verified` — what was tried live, what runs on recorded data, and what is not verified yet, each in a sentence (`live`, `recorded`, `unverified`); every example of the catalogue says it, and the Studio's examples show it on their cards and pages. |
+| `record` | What is kept of what it did (`include`), for how long (`keep_for`: `90_days`, `1_years`), and whether its conversations may be used to suggest tests (`suggest_tests`, off unless said: only conversations kept while it is on are sampled). |
+| `checks` | Optional: `guards`, `gates` and a `track` of the catalogue, and `code`, the checks written in its code. |
+| `deployment` | Where it goes: `hosted` (a `visibility`, a `slug`, `character_alone`) and `embedded` (a `mode`, the `origins` allowed, and `host`: what the host page passes it, the functions of the host it may call, and whether its `user` is `signed`). |
 | `goal`, `triggers`, `memory`, `notifications` | A worker's own: what it works toward, what starts its work, what it remembers, where an approval reaches a person. |
 | `decision` | A decision's own: the `question`, `alternatives`, `criteria`, `scenarios`, the review policy. |
+| `samples` | What it is tried on before it is anybody's, published with it by Datalayer and read only: `documents` of its `contents` (each a `name` its `contents` gives, the `file` a sandbox is given it as, and its `text`), and, for a decision, `alternatives` (each a `name`, its `evidence`, and what each metric criterion found, under `metrics` — every weighted one). A visitor without an account decides on them, or computes from them, in the browser. |
+| `enabled`, `unavailable_because` | Whether it is offered today, `true` unless said; and, when it is not, why, in a sentence its page shows. One that is not offered says why; one that is says nothing. |
 
 A key the spec does not know is refused, by name: a typing mistake does not
 become a setting that is silently ignored.
@@ -114,6 +117,279 @@ are not carried over: what the application can touch is the list under
 | `access` | How far: `read`, or `write`. A connection that only reads carries no tool that acts. |
 | `as` | In whose name: `owner` (the builder's account, for everybody) or `user` (each user's own). |
 | `only` | Optionally, the tools it may use, by name or pattern (`*gmail*`): `*` is any run of characters, `?` any one, and nothing else is special. A tool left out is not reached at all. |
+
+## Outputs
+
+An application answers in words. `interface.outputs` says, by media type, the
+formats its answers may also come in — words first:
+
+```yaml
+interface:
+  outputs:
+    - text/markdown
+    - application/x-ipynb+json   # a Jupyter notebook
+    - application/json+a2ui      # components of the catalog, as an A2UI surface
+```
+
+Served over A2A, they are its agent card's output modes (`defaultOutputModes`,
+and its skill's `outputModes`). A caller says which of them it accepts with
+each request (`acceptedOutputModes`), and what is not words comes back as an
+artifact of that media type beside the text: the runtime gives its agent a way
+to write it only when the caller accepts it. Plain text alone when unsaid.
+
+`application/json+a2ui` (A2UI's media type) is components of the catalog drawn
+under the answer: the sources as cards that open (`Evidence`), a comparison as
+a table (`Table`), a series as a chart (`Chart`), a choice as buttons that
+answer the application. A choice whose option does more than read is an
+approval: pressed, it goes back to the application, whose rules decide — a
+visitor without an account is refused in a sentence, since it only reads.
+
+Each output is a media type the [outputs catalogue](https://github.com/datalayer/agentspecs/tree/main/agentspecs/outputs)
+gives (`output_media_types()`), named once, and the first is `text/plain` or
+`text/markdown`.
+
+## Forms
+
+What an application needs from a person — a quote's parameters, an approval's
+reason — is asked with a **Form** block on its surface: the JSON Schema of its
+fields, an object whose fields are named.
+
+```yaml
+interface:
+  layout: page
+  surface:
+    components:
+      - id: root
+        component: Column
+        children: [quote]
+      - id: quote
+        component: Form
+        title: The quote
+        schema:
+          type: object
+          required: [seats]
+          properties:
+            seats: {type: integer, minimum: 1, title: Seats}
+        values: {path: /quote}
+        action:
+          event:
+            name: send
+            context: {values: {path: /quote}}
+```
+
+The page draws it with `@datalayer/primer-rjsf` and sends nothing its schema
+refuses; the runtime checks what it receives against the same schema before
+the application acts on it. A form whose schema is not an object of named
+fields, or that requires a field it does not ask, is refused
+(`form_problems`). Every component of the [catalog](../agents/ui-plugins/components),
+standard or Datalayer's own, has its version and its properties as a JSON
+Schema.
+
+### Settings
+
+What a person may set — a quote's plan, an interview's language — is a form of
+the same kind: `interface.settings` is the JSON Schema of an object of named
+fields, each with its `title` and its `default`.
+
+```yaml
+interface:
+  settings:
+    type: object
+    properties:
+      seats: {type: integer, title: Seats, minimum: 1, maximum: 1000, default: 10}
+      plan: {type: string, title: Plan, enum: [Team, Business, Enterprise], default: Team}
+```
+
+The page draws it with `@datalayer/primer-rjsf` beside the conversation, and
+its values go with every run; a deployment's own values are set with the same
+form on its Ship card. The runtime checks what a run is given against the
+schema, and refuses a field the form does not have. The schema is checked as a
+Form's is (`form_problems`, as the form `'settings'`). The list of settings of
+earlier versions (`id`, `type`, `label`, `options`) is refused: say each one as
+a property.
+
+#### The nine inputs
+
+A setting is drawn with one of nine inputs (LOOP P-20), each a JSON Schema
+field and, where the field's own widget is not the one wanted, the widget
+`settings_ui` names for it — a uiSchema as `@datalayer/primer-rjsf` reads it,
+by field name, its `ui:` options.
+
+| Input | The field | `ui:widget` |
+| --- | --- | --- |
+| Select | a field with an `enum` | its own (`select`) |
+| Slider | a `number` or an `integer` with a `minimum` and a `maximum` | `range` |
+| Switch | a `boolean` | `switch` |
+| TextInput | a `string` | its own (`text`), or `textarea` |
+| Checkbox | a `boolean` | its own (`checkbox`) |
+| DatePicker | a `string` of `format: date` | its own (`date`) |
+| MultiSelect | an `array` of `uniqueItems` whose `items` have an `enum` | its own (`select`), or `checkboxes` |
+| RadioGroup | a field with an `enum` | `radio` |
+| Tags | an `array` of `string` items without an `enum` | `tags` |
+
+```yaml
+interface:
+  settings:
+    type: object
+    properties:
+      seats: {type: integer, title: Seats, minimum: 1, maximum: 100, default: 10}
+      live: {type: boolean, title: Live data}
+      tone: {type: string, title: Tone, enum: [warm, dry], default: warm}
+      topics: {type: array, title: Topics, items: {type: string}}
+  settings_ui:
+    seats: {"ui:widget": range}
+    live: {"ui:widget": switch}
+    tone: {"ui:widget": radio}
+    topics: {"ui:widget": tags}
+```
+
+A widget that cannot draw its field is refused in a sentence — a slider for a
+field without a `minimum` and a `maximum`, a switch for a string — and so is a
+field `settings_ui` names that the form does not ask (`form_ui_problems`). A
+Form block takes the same `ui`. When the settings change, the next run is
+given them, and an application's code is told (`@app.settings`).
+
+## Profiles and starters
+
+**Starters** are first messages offered to the person; one with a `category`
+is offered under that heading, the starters of a category together, those
+without one first.
+
+**Profiles** are several assistants in one application (LOOP P-20): the person
+picks one before the conversation starts — the first, unless they pick
+another — and keeps it to the end. A profile's `instructions` are told to the
+agent on top of the application's in every run, its `model` is run in place
+of the application's (a mode's model wins over it), and its `starters` are
+offered in place of the application's.
+
+```yaml
+interface:
+  starters:
+    - {label: Refund, message: I want a refund., category: Billing}
+  profiles:
+    - id: support
+      label: Support
+      instructions: Answer from the documentation, briefly.
+    - id: sales
+      label: Sales
+      description: Plans and prices
+      model: anthropic:claude-sonnet-4-5-20250514
+      starters:
+        - {label: Pricing, message: What does the Business plan cost?, category: Plans}
+```
+
+Two profiles at least, or none: one profile is the application itself. Ids
+are said once, in the same alphabet as a mode's. A run that names a profile the
+application does not have is refused, and so is a conversation asked to change
+its profile. `interface.profile_choice(id)` is the profile a conversation is
+with, and `interface.starters_for(id)` what it offers.
+
+## Translations
+
+What a person reads of an application may be said in other languages (LOOP
+P-26). `language` is the language its own words are in (`en` unless said),
+and `translations` its words in others, by BCP 47 tag (`fr`, `pt-BR`,
+`zh-Hant`): its `name`, `description` and `welcome`, its starters by their
+label, their categories, its settings' fields by name (`title`, `description`,
+and what each value of an `enum` reads as, under `options`), its commands'
+descriptions by name, its modes and its profiles by id.
+
+```yaml
+interface:
+  translations:
+    fr:
+      name: Service client
+      welcome: Posez-moi vos questions sur le produit.
+      starters:
+        Refund: {label: Remboursement, message: Je veux être remboursé.}
+      categories: {Billing: Facturation}
+      settings:
+        tone: {title: Ton, options: {warm: Chaleureux, dry: Sec}}
+      commands: {summarise: Résumer la conversation}
+      modes:
+        depth: {label: Profondeur, options: {quick: {label: Rapide}}}
+      profiles:
+        sales: {label: Ventes, description: Offres et tarifs}
+```
+
+The page shows the person's language when the application is translated into
+it — the browser's, unless the page is told another — and its own words
+otherwise; `fr-CA` reads `fr`. What is not translated is shown in its own
+words. Only what is shown is translated: ids, values and prompts are the same
+in every language, and a starter's message is sent in the person's. A tag that
+is not BCP 47, a translation into its own language, the same language twice,
+or a translation of something the application does not say is refused.
+`pick_language(available, preferred)` is the language a person reads, and
+`app.translated(preferred)` the application as they read it.
+
+## Commands and modes
+
+What a person picks in the composer (LOOP P-19). **Commands** are slash
+commands: typing `/` lists them, and picking one sends its `prompt`, the words
+typed after it in place of `{input}` — or after the prompt, when it has no
+`{input}`. **Modes** are switches beside the composer: the option picked goes
+with every run, its `instructions` told to the agent on top of its own and its
+`model`, when it names one, run in place of the application's.
+
+```yaml
+interface:
+  commands:
+    - name: summarise
+      description: Summarise what was said
+      prompt: "Summarise the conversation so far in five bullets. {input}"
+  modes:
+    - id: depth
+      label: Depth
+      default: quick
+      options:
+        - id: quick
+          label: Quick
+          instructions: Answer in two sentences at most.
+        - id: thorough
+          label: Thorough
+          instructions: Think it through, and cite what you read.
+```
+
+A command's `name` is what follows the slash — lower-case letters, digits and
+hyphens, a letter first, 32 at most — and is said once; its prompt takes no
+placeholder but `{input}`. A mode has two options at least, each id said once,
+and starts on its `default`, else its first. Only one mode may choose the
+model, and the model it names is one of the catalogue's (`app_problems`). A
+run that names a mode or an option the application does not have is refused.
+`command_prompt(command, words)` is what a command sends, and
+`interface.mode_effect(chosen)` what a run in the modes chosen is told and
+the model it runs on.
+
+## What a person sends
+
+What a person may send in the composer without being asked for it — an
+image, a file, a recording (LOOP P-21). `uploads` names the kinds of file it
+takes, each with the largest it takes in megabytes (`max_mb`, 10 unless said,
+25 at most), and how many go with one message (`max_files`, 5 unless said).
+A kind is a media type (`application/pdf`), a family of them (`image/*`,
+`audio/*`) or an extension (`.csv`), lowercase.
+
+```yaml
+interface:
+  uploads:
+    kinds:
+      - type: image/*
+        max_mb: 5
+      - type: application/pdf
+      - type: .csv
+        max_mb: 2
+    max_files: 3
+```
+
+Without `uploads` the composer offers no attachment, and a file sent with a
+message is refused. A file of a kind it does not name, larger than its kind
+takes, or one file too many is refused in a sentence — by the page before it
+is sent, and by the runtime when it is sent all the same. What a block of its
+page asks for (a File upload, with its own `accept` and `max_mb`) and what its
+code asks for (`session.ask` with a file) are asked, and answered by their own
+limits. `uploads.refusal(app_name, name, media_type, size)` and
+`uploads.too_many(app_name, count)` say the sentences; `upload_kind_takes(kind,
+name, media_type)` whether a kind takes a file.
 
 ## Rules
 
@@ -171,6 +447,81 @@ tool_escalations(triage)    # where what a tool is asked changes the decision
 Pass the `arguments` of the call when there is a call: without them, the
 decision is for the worst the tool can do.
 
+**A forward outside the organization publishes.** Gmail's send tool forwards a
+message when the call names one (`forward_message_id`). When one of its
+recipients — `to`, `cc` or `bcc` — is outside the domain of the mailbox it
+sends from (`user_google_email`), or the mailbox is not said, the call is
+`publish` besides `send`: it makes the message reachable by people who could
+not reach it. A reply is not a forward. This is told from the call
+(`agentspecs.actions.FORWARDING`), not written in the server's spec, so it
+holds only with the call's arguments:
+
+```python
+send = "google-workspace.send_gmail_message"
+mailbox = {"user_google_email": "eric@datalayer.io", "forward_message_id": "m1"}
+behaviour_for(triage, send, arguments={**mailbox, "to": "ana@datalayer.io"})   # ASK_FIRST: a send
+behaviour_for(triage, send, arguments={**mailbox, "to": "lawyer@firm.com"})    # LEAVE_TO_ME: it publishes
+```
+
+### The host page's values and functions
+
+Embedded in another product's page, an application can read what the page
+passes it and call functions the page offers (LOOP D-10). Both are named
+under `deployment.embedded.host`, and each is a tool its agent calls — so a
+rule decides it, as any tool:
+
+```yaml
+deployment:
+  embedded:
+    mode: assistant
+    origins: [https://shop.example.com]
+    host:
+      context: [user, page, plan]   # read with the tool host_context
+      functions:
+        - name: open_ticket          # called as the tool host_open_ticket
+          description: Open a ticket in the shop's helpdesk for this customer
+          parameters:
+            type: object
+            properties:
+              title: { type: string }
+            required: [title]
+rules:
+  - action: Read what the page says
+    applies_to: host_context
+    behaviour: do_it
+  - action: Open a ticket
+    applies_to: host_open_ticket
+    behaviour: ask_first
+```
+
+`user` and `page` are what the page says of its visitor and of itself; any
+other name is a value of the host's own. A tool of the host that no rule
+names is left to the person, and `app_problems` says so.
+
+### Who the user is, when it matters
+
+What the page passes as `user` is a claim: anybody's page can say anything.
+An application that acts in each user's name, or shows data that is theirs,
+takes only a user the host's **server** signed (LOOP D-21):
+
+```yaml
+deployment:
+  embedded:
+    host:
+      context: [user]
+      user: signed      # claimed unless said
+```
+
+The host's server signs a short token naming its user with the secret of the
+deployment — HS256 only, with `sub` (the host's own id for the user), `name`
+and `exp`, at most an hour away (`HOST_USER_TOKEN_ALGORITHM`,
+`HOST_USER_TOKEN_MAX_SECONDS`) — and the page hands it to the embed. The
+runtime verifies it where the session is opened, and refuses a session with
+an unsigned or bad one in a sentence. The user it names is the session's:
+what `host_context` answers as `user`, and who a page the application saves
+was written for. The secret is made for each embedded deployment by its
+owner, under Ship, shown once, and never reaches the page.
+
 ## Action classes
 
 A tool's name does not say what it does, so every tool carries a class
@@ -185,7 +536,7 @@ A tool's name does not say what it does, so every tool carries a class
 | `delete` | Removes something. |
 | `publish` | Makes something reachable by people who could not reach it. |
 
-A tool of `agentspecs/tools` says `action: send`. An MCP server says, under
+A backend tool of `agentspecs/backend-tools` says `action: send`. An MCP server says, under
 `actions`, the class of each tool it serves, and the day those names were read
 off the running server:
 
@@ -226,12 +577,169 @@ manage_gmail_label:
 With the arguments of a call, the tool's classes are those of that call.
 Without them — nobody said what it is asked — they are everything it can do.
 
+**What it sends says who wrote it.** A mail or a message sent through a
+connection is written by the account the connection acts as, so its words
+alone do not say an application wrote them, nor for whom. A tool that puts
+words in front of other people says which of its arguments carries them, and
+the runtime closes that argument with the application's byline before the
+call is made — or shown to the person who approves it:
+
+```yaml
+send_gmail_message:
+  class: send
+  signs: body        # the mail ends: Written by 📬 Inbox Triage, for Ana Lopez.
+```
+
+The person is named when they signed in (or the host's server signed them);
+a session nobody opened says *on its own* instead. Only a tool that acts
+says `signs`. Gmail's send and draft, Google Chat's message, and Slack's post
+and reply say it today.
+
 A server nobody has checked yet says `checked: null` and classes nothing: its
 tools are unknown, and an application cannot write through it.
 
 What a server says of its own tools — the `readOnlyHint` of the protocol — is
 a claim by the server. It is not read: the class is the catalogue's, written
 by somebody who looked.
+
+## Written in its code
+
+An application written in Python (an `app.py`) can go where plain words are
+not enough, and says so in its spec, so that the Canvas shows it and
+validation runs it (LOOP P-06). `loop apps build` writes these fields from
+the decorators; a spec written by hand may hold them too, but only the file
+makes them run.
+
+```yaml
+tools:
+  - name: lookup_order
+    description: Find an order by its number.
+    parameters:
+      type: object
+      properties: {number: {type: string}}
+      required: [number]
+    does: [read]
+rules:
+  - action: Refund an order
+    applies_to: refund        # its own tool, by its name
+    behaviour: ask_first
+checks:
+  code:
+    - name: no_prices
+      on: answer              # or tool_call
+      description: It never quotes a price.
+tests:
+  cases:
+    - ask: Interview me about my onboarding.
+      expect: It never asks a leading question.
+      code: no_leading_question
+```
+
+| Field | What it is | Without its file |
+| --- | --- | --- |
+| `tools` | A tool its agent calls. Each call is decided by the rules as any tool is: by a rule that names it, else by what it `does` — reading needs no rule, anything that acts asks first. | Its agent is not given it. |
+| `checks.code` | A check run at its stage beside the built-in checks: on every `answer` (one it refuses is asked again) or every `tool_call` the rules let through (one it refuses is stopped), refused in its own sentence. | Nothing runs it: validation says so. |
+| `tests.cases[].code` | The function that decides the case from the conversation, in place of a judge reading `expect`. | The case is judged by `expect`, in words. |
+
+Refused: a name that is not a Python name, two tools, two code checks or two
+cases with the same name, a tool named as a backend tool the application
+names, a tool that does not say what it `does` or says it twice, `parameters`
+that are not an object.
+
+### A widget's page
+
+A widget written in Python can have a page of its code (LOOP P-05): its
+inputs a form, its outputs values, and the function of its code that turns
+the one into the other. On the page each input is drawn at `/inputs/<name>`
+and each output at `/outputs/<name>`; as an input changes, the function runs
+again on them all and the outputs change in place — no message, no
+conversation.
+
+```yaml
+kind: widget
+interface:
+  page:
+    function: quote
+    live: true                 # false: it runs when the person presses Run
+    inputs:
+      type: object
+      properties:
+        seats: {type: integer, title: Seats, minimum: 1, maximum: 1000, default: 10}
+        plan: {type: string, title: Plan, enum: [Team, Business], default: Team}
+    inputs_ui:
+      seats: {"ui:widget": range}
+    outputs:
+      - name: total
+        title: Total            # a Text, unless said
+      - name: lines
+        component: Table
+        props: {columns: [item, amount]}
+```
+
+| Field | What it is |
+| --- | --- |
+| `function` | The function of its code that runs the page. Without its file nothing runs it: validation says so. |
+| `inputs` | A form, as `interface.settings` is: an object of named fields, each with its `title` and its `default`. The runtime checks what the page sends against it. |
+| `inputs_ui` | How the inputs are drawn, as `settings_ui` draws the settings. |
+| `outputs` | What it shows, one at least, in order: a `name`, a `title`, and the `component` that draws it — `Text` (words), `Image` (an address), `Table` (rows) or `Chart` (points) — with the component's other properties in `props` (a Table's `columns`, a Chart's `kind`, `x` and `y`). |
+| `live` | Whether it runs again as an input changes (`true` unless said), or when the person presses Run. |
+
+Refused: a page on an application that is not a widget, inputs that are not
+a form, two outputs of one name, an output drawn with another component, an
+output whose `props` say its id or the property its value fills, or lack one
+its component needs, and an input with the name of a setting (both are on the
+page at `/inputs/<name>`).
+
+### Components of its own
+
+A developer can write a component the catalog does not have — a gauge, a
+map, a diagram — and declare it in the application (LOOP P-17). It is a
+component of that application only: its Canvas places it, its page draws it,
+its code shows it and a widget's page draws an output with it, and no other
+application sees it. The catalog grows for it; it does not open.
+
+```yaml
+interface:
+  custom_components:
+    - name: Gauge                      # as the catalog's are named; none of theirs
+      description: A dial, from nothing to its most.
+      props:                           # what a builder sets, as a JSON Schema
+        type: object
+        properties:
+          label: {type: string, title: Label}
+          most: {type: number, default: 100}
+        required: [label]
+      shows: [value]                   # bound to what the application publishes
+      sends: [chosen]                  # written, then its action dispatched
+      source: https://elements.example.com/gauge.js
+      integrity: sha384-…              # the module as it was reviewed
+      height: 240
+      example: {label: Load, value: 42}
+```
+
+| Field | What it is |
+| --- | --- |
+| `name` | Its name on a surface: a word starting with a capital letter, none of the catalog's. |
+| `description` | What it is for, in a sentence: what the palette says. |
+| `props` | Its properties, the JSON Schema of an object: each typed `string`, `integer`, `number`, `boolean`, `array` or `object`, or an `enum` of words, with its `default`; `required` among them. |
+| `shows`, `sends` | What it shows from the page's data, and what it sends back: bindings, as a Table's `rows` and `selected`. |
+| `source` | Its built ES module, whose default export draws it: `export default function (root, {props, send})`, returning `{update(props)}` to be told of new properties. An address over `https://`, or `http://localhost` while it is written; or a file of the application's folder by its path in it (`gauge.js`), packaged with the application and served by the server it is installed beside (P-29). |
+| `integrity` | Its Subresource Integrity hash: a module that differs is not drawn. Any module at the address when unsaid. |
+| `height` | Its height on the page, in pixels (240 unless said). |
+| `example` | A configuration its schema accepts, which the palette previews. |
+
+It is drawn in a sandboxed frame of no origin (`sandbox="allow-scripts"`,
+nothing else): no cookie, no storage, no access to the page around it, and no
+request leaves it. The page fetches the module without credentials, checks it
+against `integrity`, and hands it to the frame; what the frame sends back is
+taken only under a name of `sends`.
+
+Refused: a name of the catalog's or given twice, a module not over
+`https://` or a file outside the application's folder (an absolute path, a
+`..`, or one that is not a `.js` or `.mjs` file), a property of another type or one every
+component already has (`id`, `action`, `weight`, `visible_when`…), a binding
+that is also a property, an example its schema refuses — and, where it is
+used, properties its schema refuses, as for any component of the catalog.
 
 ## A rule or a Gate, a test or a Guard
 
@@ -251,6 +759,34 @@ example; a Guard checks *what did happen*, every time. An application that
 names Guards, Gates or a Track keeps its rules and tests: the catalogue's
 checks run in addition, never instead.
 
+**A Track decides what the record keeps.** An application that names a Track
+under `checks` keeps its record for as long as the Track says (`retain_for`),
+in place of `record.keep_for`, and keeps what the Track's items ask for
+besides what `record.include` names — never less:
+
+| The Track includes | The record keeps |
+| --- | --- |
+| `input_data` | `conversations` |
+| `actions_taken` | `actions` |
+| `gate_decisions` | `checks`, `decisions` |
+| `guard_results` | `checks` |
+| `human_approvals` | `approvals` |
+| `source_documents` | `sources` |
+| `final_output` | `outputs` |
+
+`kept_record(keep_for, include, track)` says what is applied; a runtime writes
+the record with it. A Track's `readers` and `redact` are not applied to an
+application's record yet: its owner reads it, and credentials are kept out of
+every record whatever the Track says.
+
+```python
+from agentspecs.apps import get_app, kept_record
+
+app = get_app("pipeline-report")
+kept_record(app.record.keep_for, app.record.include, app.checks.track)
+# days=2555 include=('conversations', 'actions', 'decisions', 'approvals', 'checks', 'sources', 'outputs') track='financial-reporting'
+```
+
 ## What is refused
 
 - An application with no `agent` and no `team`, or with both.
@@ -262,8 +798,10 @@ checks run in addition, never instead.
 - A rule naming a tool of a server the application is not connected to, or
   that its connection leaves out.
 - A Gate reading a Guard the application does not run.
-- A decision judged by a model that does not answer typed judgments.
+- A decision asked of a model that does not answer typed decisions.
 - Writing through a server whose tools nobody has classed.
+- An output that is not a media type, or that the outputs catalogue does not give; one named twice; outputs that do not start with words (`text/plain` or `text/markdown`).
+- A component the catalog does not have; a Form whose schema is not an object of named fields, or that requires a field it does not ask.
 
 What an application names that is merely **not enabled** — an agent, a server —
 is not a mistake of the spec: `app_setup` lists it as something to set up.
@@ -285,11 +823,27 @@ behind the code.
 
 ## The catalogue
 
-One application of each kind:
+The eleven examples, and *Decide*, each a spec of its own. Two are written in Python: their
+`app.py` sits in a folder named for the example (`apps/customer-interview/app.py`),
+and their spec is the one `loop apps build` writes from it (agent-runtimes'
+application API). An example is offered where its agent works: what it needs
+is enabled today, and nothing it needs is missing (since 0.0.51). Two are not,
+and each says why under `unavailable_because`: *Inbox triage*, whose mailbox
+cannot be connected yet, and *Weekly pipeline report*, ten of whose twelve
+Guards are not run yet, so the Gates before the board cannot pass. What each
+was tried on is said under `tests.verified`.
 
-| Application | Kind | Shows |
-| --- | --- | --- |
-| `web-research` | chat | A [Cog](../cogs) under a Frame; one read-only connection; no rule needed. |
-| `quote-calculator` | widget | Inputs, a run button and a result on a component surface. |
-| `ship-or-fix` | decision | Criteria measured by a run and judged by a model, with scenarios. |
-| `inbox-triage` | worker | Triggers, a scoped connection in each user's name, and the four behaviours. |
+| Application | Kind | Built with | Shows |
+| --- | --- | --- | --- |
+| `ship-or-fix` | decision | Canvas | Criteria measured by a run and asked of a decision model, with scenarios. |
+| `supplier-comparison` | decision | Canvas | Typed decisions and a review policy. |
+| `data-quality` | decision | Spec | An application reviewed as a YAML file. |
+| `model-choice` | decision | Canvas | A decision filled from a benchmark run. |
+| `support-desk` | chat | Canvas | Starters, a setting, answers from the documents it was given; a page bound to a chat's question and answer. |
+| `web-research` | chat | Spec | A [Cog](../cogs) under a Frame; one read-only connection; no rule needed. |
+| `decide` | chat | Spec | Answers by asking Jev typed decisions with the `decide` tool — yes or no, a choice, a score — each with its confidence; deciding is a read, done without asking. |
+| `customer-interview` | chat | Python | Consent asked first, a step per answer, insights saved from a button, a structured result. |
+| `quote-calculator` | widget | Canvas | Inputs, a run button and a result on a component surface. |
+| `report-from-a-file` | widget | Python | A file asked by the code, analysed in the sandbox, the report kept as an output. |
+| `pipeline-report` | worker | Spec | A weekly schedule, the Guards, Gates and Track of `op-sales-pipeline-board-report`, an approval before sending. |
+| `inbox-triage` | worker | Spec | Triggers, a scoped connection in each user's name, and the four behaviours. |

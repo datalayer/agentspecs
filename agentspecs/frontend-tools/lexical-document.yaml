@@ -16,5 +16,5 @@ tags:
   - diagram
 enabled: true
 toolset: all
-icon: file
+icon: "@primer/octicons-react:file"
 emoji: "📄"

@@ -23,5 +23,5 @@ tags:
   - summarization
   - text-processing
 
-icon: note
+icon: "@primer/octicons-react:note"
 emoji: 📝

@@ -40,7 +40,7 @@ skills: []
 # The AI Agents Reactor plugin owns the tool contract and supplies live
 # handlers bound to the current site and authenticated CMS session. Keeping
 # that contract in a second agentspec would duplicate its authority source.
-tools: []
+backend_tools: []
 frontend_tools: []
 
 environment_name: ai-agents-env

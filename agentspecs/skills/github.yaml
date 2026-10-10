@@ -22,5 +22,5 @@ tags:
   - git
   - code
 
-icon: mark-github
+icon: "@datalayer/icons-react:github-mark"
 emoji: 🐙

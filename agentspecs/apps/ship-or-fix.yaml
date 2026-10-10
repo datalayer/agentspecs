@@ -3,7 +3,7 @@
 
 # Application Specification: Ship or Fix
 # A decision: which agent configuration to ship, on the evidence of a
-# benchmark run. Three criteria are measured by the run, two are judgments.
+# benchmark run. Three criteria are measured by the run, two are asked of a decision model.
 
 schema: loop.app/v1
 id: ship-or-fix
@@ -22,7 +22,7 @@ contents:
 
 decision:
   question: Which agent configuration should we ship?
-  judgment_model: "cloudflare:gtw/typesafe/jev"
+  decision_model: "cloudflare:wrk/typesafe/jev"
   min_confidence: 0.6
   criteria:
     - name: Pass rate
@@ -75,6 +75,43 @@ decision:
         Failure severity: 1
         Formatting failures block shipping: 0
 
+# What a visitor without an account decides on (STUDIO E-06): three
+# configurations of an agent from a sample benchmark run, read only. A clone
+# decides on its own run.
+samples:
+  alternatives:
+    - name: Current prompt
+      evidence: >-
+        A sample run of 80 tasks of a reporting agent: 70 passed. Six of the
+        ten failures gave a wrong total in a quarterly figure, which a reader
+        would act on; four put the table's columns in another order than the
+        template asks. Nobody who reads the reports has complained about the
+        column order.
+      metrics:
+        Pass rate: 0.875
+        Cost per task: 2.4
+        Latency: 9.5
+    - name: With retrieval
+      evidence: >-
+        The same 80 tasks with the reports of the last two quarters retrieved
+        first: 76 passed. The four failures are all formatting — a missing
+        unit in a table header — and every figure was right. Each task reads
+        about twice as much, which shows in its cost.
+      metrics:
+        Pass rate: 0.95
+        Cost per task: 3.9
+        Latency: 12.8
+    - name: Smaller model
+      evidence: >-
+        The same 80 tasks on a smaller model: 61 passed. Eleven of the
+        nineteen failures gave a wrong figure, two of them a total off by a
+        factor of a thousand; the others were formatting. It is the cheapest
+        and the fastest of the three.
+      metrics:
+        Pass rate: 0.7625
+        Cost per task: 0.7
+        Latency: 4.1
+
 interface:
   layout: page
   accent: green
@@ -82,6 +119,12 @@ interface:
 
 tests:
   ready_at: 0.8
+  verified:
+    live: []
+    recorded:
+      - "Its three measured criteria — pass rate, cost and latency per task — are read from a run already recorded, not measured as it decides."
+    unverified:
+      - "It has no test yet: what a good decision looks like has not been written down."
 
 record:
   keep_for: 1_years

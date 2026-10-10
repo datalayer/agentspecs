@@ -1,0 +1,94 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Team Specification: Disaster Assessment
+# A scene of three applications over A2A (LOOP A-04, A-08). A person tells
+# Event response, in their browser, of a live event. Event response asks
+# Disaster Assessment for the area affected and the damage, and Change
+# detection for what changed on the ground — each on a runtime, each reading
+# the satellite imagery NASA Earthdata holds through the earthdata server —
+# and reports what the two answered.
+
+id: disaster-assessment
+version: 0.0.1
+name: Disaster Assessment
+description: >-
+  An event desk in the browser that gets the area a disaster affected and
+  the damage from Disaster Assessment, and what changed on the ground from
+  Change detection, each on a runtime over A2A, each reading NASA Earthdata.
+  Event response takes the event and reports; the two others read the
+  imagery and answer.
+tags:
+  - example
+  - scene
+  - earth-observation
+  - disaster
+  - insurance
+  - earthdata
+  - a2a
+enabled: true
+icon: pulse
+emoji: "🛰️"
+color: "#cf222e"
+
+orchestration_protocol: a2a
+execution_mode: supervisor
+# Event response decides when the two others are asked, and what the person
+# is told: it is the scene's supervisor and its front door.
+supervisor:
+  name: Event response
+  app: event-response:0.0.1
+  can_terminate: true
+entry: event-response
+routing_instructions: >-
+  Event response asks Disaster Assessment for the area and the damage, and
+  Change detection for the change on the ground, one request each, and
+  reports what they answer without adding to it.
+
+suggestions:
+  - text: Valencia, Spain, was flooded on 29 October 2024. What was affected, and what changed?
+    emoji: "🌊"
+  - text: Fires burned around Los Angeles from 7 January 2025. Which imagery shows what changed?
+    emoji: "🔥"
+  - text: The Ahr valley was hit by a storm on 14 July 2021. Chart the imagery found each day from 10 to 20 July.
+    emoji: "🌧️"
+  - text: Send the Valencia flood assessment to the emergency services.
+    emoji: "📣"
+
+context:
+  sharing: shared
+
+delegation:
+  max_depth: 1
+  allow_peer_delegation: true
+
+validation:
+  timeout: 600s
+
+agents:
+  - id: event-response
+    app: event-response:0.0.1
+    role: initiator
+    runs_in: browser
+    goal: >-
+      Take the person's event, ask Disaster Assessment and Change detection
+      for it, and report what they answered.
+    talks_to:
+      - member: disaster-assessment
+        over: a2a
+      - member: change-detection
+        over: a2a
+  - id: disaster-assessment
+    app: disaster-assessment:0.0.1
+    role: contributor
+    runs_in: runtime
+    goal: >-
+      Estimate the area the event affected and the extent of the damage from
+      the imagery before and after it, over A2A.
+  - id: change-detection
+    app: change-detection:0.0.1
+    role: contributor
+    runs_in: runtime
+    goal: >-
+      Find what changed on the ground between the two dates from the
+      imagery, over A2A.

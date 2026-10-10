@@ -1,0 +1,19 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Voice: Emma, Kokoro, British English (VOICE.md VO-40)
+
+id: kokoro-bf-emma
+version: 0.0.1
+name: Emma
+description: A clear British English voice.
+engine: kokoro
+model: kokoro-82m
+voice: bf_emma
+languages: [en-GB]
+where: [server]
+licence:
+  weights: Apache-2.0
+attribution: ""
+watermark: false
+sample: Hello. I read the answers aloud, sentence by sentence, as they are written.

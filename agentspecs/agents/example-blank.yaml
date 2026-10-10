@@ -1,0 +1,58 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: A Blank Agent
+# A model and nothing else: no prompt of its own, no MCP servers, no skills,
+# no tools. An application that runs it is what its instructions say, and an
+# app.py runs it in its own process (LOOP P-32).
+
+id: example-blank
+version: 0.0.1
+name: A Blank Agent
+description: >
+  A model and nothing else: no prompt of its own, no MCP servers, no skills,
+  no tools. The application that runs it says who it is in its instructions,
+  and gives it its tools — so an app.py runs it in its own process, as on a
+  runtime.
+
+tags:
+  - workflow
+
+enabled: true
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+# Other models it may be switched to, beside its own: those
+# datalayer-ai-inference serves from the catalogue.
+model_additionals:
+  - "alibaba:qwen-max"
+harness: pydantic-ai
+
+sandbox_variant: jupyter-server
+
+# Memory backend
+memory: ephemeral
+
+# Nothing a process must bring: an application's own tools are its code's.
+mcp_servers: []
+skills: []
+backend_tools: []
+frontend_tools: []
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: agent
+emoji: ⬜
+color: "#6B7280"  # Gray
+
+suggestions: []
+
+# No system_prompt: the application's instructions are the whole prompt.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+
+welcome_document: null
+
+trigger: null

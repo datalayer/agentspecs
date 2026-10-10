@@ -1,0 +1,275 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Scene: Sales & Accounting (LOOP A-13). The team `sales-and-accounting`
+# staged: Sales, in the visitor's browser, takes the request and asks
+# Accounting, on a runtime, which reads Datalayer's own Odoo books and
+# answers. Four beats, each a cue the audience may say, each answered
+# with a different kind: a table, a chart, the sources, an approval.
+
+schema: loop.scene/v1
+id: sales-and-accounting
+version: 0.0.1
+name: Sales & Accounting
+description: >-
+  A sales desk asks Accounting for the figures and hands them over;
+  Accounting reads the Odoo books and answers, and changes nothing.
+tags:
+  - example
+  - scene
+  - odoo
+  - finance
+  - a2a
+icon: people
+emoji: "🤝"
+
+team: sales-and-accounting:0.0.1
+cast:
+  - member: sales
+    persona:
+      name: Sales
+      line: I take your request and bring the figures back.
+    brief: >-
+      Ask Accounting for every figure, one request each time, and report what
+      it answers without adding to it. Do not question the audience first: a
+      cue is the whole of what it says, and nobody is standing there to answer
+      you back. A cue that names the report it wants — the invoices still
+      open, the aged receivables as of today, the invoices behind the largest
+      balance, a reminder to whoever is overdue — goes to
+      Accounting as it stands, with how the audience asked to see it. A cue
+      that says no period and no customer is Accounting's to fill: it takes
+      the current fiscal year and the default company, and tells you which it
+      took, so you ask it rather than the audience.
+  - member: accounting
+    persona:
+      name: Accounting
+      line: I read the books and answer; I change nothing.
+    brief: >-
+      Answer from the Odoo books, read only, and say so when the books do not
+      hold the answer. Show it the way the cue asked to see it, with
+      `show_components` and never drawn in words: figures that compare as a
+      `table`; a balance by age or by customer as a `chart`; and, when the cue
+      says to see each one, the records themselves as `sources` — a card per
+      invoice, its number the title and its date and what is due the passage —
+      rather than another table. Anything that would change the books is a
+      `choice` to approve.
+
+setting:
+  systems:
+    - server: odoo-accounting:0.0.1
+      as: Odoo
+      holds: Datalayer's own books, read only.
+  period: this month and the last
+  language: en
+  assumes: >-
+    Two agents over A2A — Sales in your browser, Accounting on Datalayer —
+    on Datalayer's own books in Odoo, read only.
+
+script:
+  - id: open-invoices
+    cue:
+      say: Which customer invoices are still open, and how much is due in total?
+    narration: Sales takes the request and asks Accounting, which reads the books.
+    moves:
+      - who: sales
+        asks: accounting
+        over: a2a
+        what: the open customer invoices and the total due
+      - who: accounting
+        asks: odoo
+        over: mcp
+        tool: odoo_accounting_list_invoices
+        does: read
+        what: the customer invoices still open
+      - who: accounting
+        answers: table
+        what: the open invoices by customer, with the total due
+      - who: sales
+        answers: words
+        what: what Accounting answered, as it answered it
+    expect: >-
+      A table of the open customer invoices, by customer, with one total that
+      matches the books; Sales adds nothing to it.
+    shows:
+      - table
+    pace: steady
+    branch:
+      - decision: the books hold no open invoice
+        expect: Sales says so in a sentence, and invents no figure.
+  - id: aged-receivables
+    cue:
+      say: Chart the aged receivables as of today, by customer.
+    narration: Accounting ages what is due, bucket by bucket, and draws it.
+    moves:
+      - who: sales
+        asks: accounting
+        over: a2a
+        what: the aged receivables as of today, by customer, as a chart
+      - who: accounting
+        asks: odoo
+        over: mcp
+        tool: odoo_accounting_aged_balance
+        does: read
+        what: the receivables, aged
+      - who: accounting
+        answers: chart
+        what: each customer's balance by age, drawn
+      - who: sales
+        answers: words
+        what: which customers are furthest behind
+    expect: >-
+      A chart of the receivables by customer and by age, its figures the
+      books' own; Sales points at the customers furthest behind.
+    shows:
+      - chart
+  - id: largest-balance
+    cue:
+      say: Which invoices make up the largest balance due? Show me each one.
+    narration: The customer who owes the most, invoice by invoice.
+    moves:
+      - who: sales
+        asks: accounting
+        over: a2a
+        what: the invoices behind the largest balance due
+      - who: accounting
+        asks: odoo
+        over: mcp
+        tool: odoo_accounting_list_open_balances
+        does: read
+        what: >-
+          what each customer owes, invoice by invoice: whose balance is the
+          largest, and the invoices it is made of
+      - who: accounting
+        answers: sources
+        what: each invoice as a card, its number, its date and what is due
+      - who: sales
+        answers: words
+        what: whose balance it is, and its total
+    expect: >-
+      The invoices behind the largest balance as cards, each with its number,
+      its date and the amount due, read from the books; their total is the
+      balance.
+    shows:
+      - sources
+  - id: payment-reminders
+    cue:
+      say: Send a payment reminder to every customer whose invoice is overdue.
+    narration: An action, not a report — asked first, and not done for a visitor.
+    moves:
+      - who: sales
+        asks: accounting
+        over: a2a
+        what: payment reminders to the customers whose invoices are overdue
+      - who: accounting
+        asks: odoo
+        over: mcp
+        tool: odoo_accounting_aged_balance
+        does: read
+        what: >-
+          what each customer owes by age: who is overdue, and by how much
+      - who: accounting
+        answers: approval
+        what: the reminders it would send, as a choice to approve
+      - who: sales
+        answers: words
+        what: that the reminders wait for an approval
+    expect: >-
+      Accounting lists the customers it would remind and asks first — Send the
+      reminders · Not now — and sends nothing; a visitor who approves is
+      refused in a sentence: without an account it only reads.
+    shows:
+      - approval
+    pace: slow
+
+stage:
+  positions:
+    sales: { x: 0.25, y: 0.5 }
+    accounting: { x: 0.75, y: 0.5 }
+  opens_first: sales
+  transcript:
+    tools: true
+    narration: true
+    withhold:
+      - ids
+  inspectors:
+    - agent
+    - a2a
+    - tools
+  rests_after: 10m
+  pace: steady
+
+audience:
+  who: visitors
+  ceiling_per_ask: 0.05
+  asks_a_day: 5
+
+rehearsal:
+  # Measured on r1 on 2026-10-09, four beats against Datalayer's own books:
+  # 36 s to 68 s a beat, and 132 s for the one that also composed a notebook.
+  # A beat is two model turns, an Odoo read through the gateway and a surface
+  # shown, so the 60 s written before the scene had ever played was never its
+  # pace; 120 s is, with room for a long report, and still catches a stall.
+  within: 10m
+  beats:
+    - beat: open-invoices
+      lines:
+        - "You → Sales"
+        - "Sales → Accounting"
+        - "Accounting → Odoo: odoo_accounting_list_invoices"
+        - "Accounting: a table"
+        - "Sales: words"
+      must_say:
+        - invoice
+      must_not_say:
+        - I cannot
+        - error
+      within: 120s
+    - beat: aged-receivables
+      lines:
+        - "You → Sales"
+        - "Sales → Accounting"
+        - "Accounting → Odoo: odoo_accounting_aged_balance"
+        - "Accounting: a chart"
+        - "Sales: words"
+      must_say:
+        - days
+      within: 120s
+    - beat: largest-balance
+      lines:
+        - "You → Sales"
+        - "Sales → Accounting"
+        # The books hold the invoices behind a balance in the balance itself
+        # (`list_open_balances` gives each open invoice, its number and its
+        # residual), and an aged balance finds whose is largest: which read it
+        # takes is the books' matter, that it read them is the beat's.
+        - "Accounting → Odoo: odoo_accounting_*"
+        - "Accounting: sources"
+        - "Sales: words"
+      must_say:
+        - invoice
+      within: 120s
+    - beat: payment-reminders
+      lines:
+        - "You → Sales"
+        - "Sales → Accounting"
+        - "Accounting → Odoo: odoo_accounting_aged_balance"
+        - "Accounting: an approval"
+        - "Sales: words"
+      must_say:
+        - reminder
+      must_not_say:
+        - I sent
+        - reminders sent
+      within: 120s
+  verified:
+    live:
+      - "Sales asked Accounting live over A2A on a developer's machine (2026-10-06) for the open customer invoices: Accounting read the aged receivables and said the list of invoices had failed; one column total was wrong."
+    recorded: []
+    unverified:
+      - "The rehearsal has not been played as a set (A-14): the scene is not Live yet."
+
+deployment:
+  account: demo
+  page: /
+  addresses:
+    accounting: DATALAYER_DEMO_TEAM_ACCOUNTING_A2A_URL

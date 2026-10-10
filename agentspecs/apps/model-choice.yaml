@@ -1,0 +1,165 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Model Choice
+# A decision: which chat model a use case runs on, from what a benchmark run
+# measured and what a decision model reads in the answers. Three criteria are measured
+# by the run, two are asked of a decision model, and one says what is missing.
+
+schema: loop.app/v1
+id: model-choice
+version: 0.0.1
+name: Model Choice
+kind: decision
+description: >-
+  Which chat model should this use case run on? For a team choosing a model
+  for one job — a summarizer, a classifier, an agent — from what a benchmark
+  run measured and what a decision model reads in the answers.
+owner: Datalayer <info@datalayer.io>
+
+agent: jupyter-data-analyst:0.0.1
+
+contents:
+  - "The benchmark run: one configuration per model, its task results, cost and latency"
+  - "The Models page: how each model is billed (standard or credits) and who hosts it"
+
+decision:
+  question: Which chat model should this use case run on?
+  decision_model: "cloudflare:wrk/typesafe/jev"
+  min_confidence: 0.6
+  criteria:
+    - name: Pass rate
+      kind: metric
+      weight: 3
+      instructions: Share of tasks passed, from the run.
+      direction: higher
+      measure: pass_rate
+    - name: Cost per task
+      kind: metric
+      weight: 2
+      instructions: Credits spent per task, from the run; lower is better.
+      direction: lower
+      measure: cost_per_task
+    - name: Latency
+      kind: metric
+      weight: 2
+      instructions: Median seconds per task, from the run; lower is better.
+      direction: lower
+      measure: seconds_per_task
+    - name: Answer quality
+      kind: score
+      weight: 3
+      instructions: >-
+        Reading the failures and what the run recorded, how good are this
+        model’s answers for the use case?
+      options:
+        - "Unusable: wrong or off-task answers"
+        - "Rough: usable with rework"
+        - "Good: usable as they are"
+        - "Excellent: better than the reference"
+      direction: higher
+    - name: Follows the format
+      kind: noul
+      weight: 1
+      instructions: Does this model keep to the output format the use case asks for?
+      direction: higher
+    - name: Missing information
+      kind: choice
+      weight: 0
+      instructions: What is missing to choose this model?
+      options:
+        - "Price: the billing of this model is not known"
+        - "Traces: the failures have no trajectory to read"
+        - "Cases: the run is too small to tell"
+        - "Nothing: everything needed is there"
+      direction: higher
+  scenarios:
+    - name: Quality first
+      weights:
+        Pass rate: 4
+        Cost per task: 0
+        Latency: 1
+        Answer quality: 4
+        Follows the format: 1
+    - name: Cheapest that works
+      weights:
+        Pass rate: 3
+        Cost per task: 4
+        Latency: 1
+        Answer quality: 1
+        Follows the format: 1
+    - name: Fastest that works
+      weights:
+        Pass rate: 3
+        Cost per task: 1
+        Latency: 4
+        Answer quality: 1
+        Follows the format: 1
+
+# What a visitor without an account decides on (STUDIO E-06): three models
+# from a sample benchmark run of fifty support-ticket summaries, read only.
+# A clone decides on its own run.
+samples:
+  alternatives:
+    - name: Large model
+      evidence: >-
+        A sample run of 50 support-ticket summaries: 46 passed. The four
+        failures each left out the customer's account number, which the use
+        case asks for. Every answer kept to the JSON format asked for. Its
+        price per call is published on the Models page, and the run recorded
+        a trajectory for each task.
+      metrics:
+        Pass rate: 0.92
+        Cost per task: 1.8
+        Latency: 6.2
+    - name: Medium model
+      evidence: >-
+        The same 50 summaries: 43 passed. Of the seven failures, four left out
+        the account number and three summarised the wrong ticket of a thread.
+        Two answers broke the JSON format with a trailing comment. Its price
+        per call is published, and every task has its trajectory.
+      metrics:
+        Pass rate: 0.86
+        Cost per task: 0.6
+        Latency: 3.1
+    - name: Small model
+      evidence: >-
+        The same 50 summaries: 34 passed. Most of the 16 failures invented a
+        resolution the thread never reached, and nine answers broke the JSON
+        format. Its billing is not published on the Models page, and the run
+        kept no trajectory for its failures.
+      metrics:
+        Pass rate: 0.68
+        Cost per task: 0.2
+        Latency: 1.4
+
+interface:
+  layout: page
+  accent: green
+  components: [Card, Column, Row, List, Tabs, Text, Slider, ChoicePicker, TextField, Button]
+
+tests:
+  ready_at: 0.8
+  verified:
+    live:
+      - "Its page edited on the Canvas in Chrome signed in (2026-10-04); a decision of it is kept, with its record."
+    recorded:
+      - "Its three measured criteria — pass rate, cost and latency per task — are read from a run already recorded, not measured as it decides."
+    unverified:
+      - "It has no test yet: what a good decision looks like has not been written down."
+
+record:
+  keep_for: 1_years
+  include: [decisions, sources, checks]
+
+deployment:
+  hosted:
+    visibility: private
+
+tags:
+  - example
+  - decision
+  - benchmarks
+  - models
+icon: cpu
+emoji: "🧠"

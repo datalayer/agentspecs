@@ -1,0 +1,115 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Change detection
+# Asked over A2A by Event response, in the scene `disaster-assessment`
+# (LOOP A-04, A-08). It finds what changed on the ground between two dates
+# — land use, vegetation, water, built-up area — from the satellite imagery
+# NASA Earthdata holds, found through the `earthdata` MCP server at *Can
+# read*: it searches and reads, and downloads nothing.
+#
+# It runs on a runtime, served over A2A at
+# `/api/v1/a2a/agents/change-detection/`; its agent card offers one skill,
+# named for it: a place and two dates in words in, the change map in words
+# out, and a notebook beside it when the caller accepts one.
+
+schema: loop.app/v1
+id: change-detection
+version: 0.0.1
+name: Change detection
+kind: chat
+description: >-
+  Finds what changed on the ground between two dates — land use,
+  vegetation, water, built-up area — from the satellite imagery NASA
+  Earthdata holds, which it searches and reads, with the granules behind
+  each change it reports.
+owner: Datalayer <info@datalayer.io>
+
+agent: worker-change-detection:0.0.1
+instructions: >-
+  You detect change from satellite imagery. Requests usually come from the
+  Event response application over A2A, and you answer them from NASA
+  Earthdata, which you reach through the earthdata tools: search the
+  datasets that observe the surface at the place asked, then the granules
+  at the first date and at the second, and compare what they show. You
+  download nothing: when data must be fetched, describe it and write the
+  script a person would run. Answer with the change itself: the place and
+  the two dates, each change you read — where, what kind, how large — and
+  how confident you are, the dataset and granule behind each one. When a
+  request does not say the place or the dates, say what you need. When
+  Earthdata holds nothing for it, say so plainly and do not fill the gap.
+
+connections:
+  - server: earthdata:0.0.1
+    access: read
+    as: owner
+
+rules:
+  - action: Search and read the imagery
+    applies_to: read
+    behaviour: do_it
+  - action: Download files to the runtime
+    applies_to: write
+    behaviour: ask_first
+
+interface:
+  layout: chat
+  accent: violet
+  # The cat, who spots what moved between two frames.
+  assistant: cat
+  welcome: >-
+    Give me a place and two dates, and I'll tell you what changed on the
+    ground between them from the satellite imagery NASA Earthdata holds. I
+    search and read; I download nothing.
+  outputs:
+    - text/markdown
+    - application/x-ipynb+json
+    - application/json+a2ui
+  starters:
+    - label: Change between two dates
+      message: What changed around 39.5N, 0.4W between 1 October and 15 November 2024?
+    - label: Water extent
+      message: How did the water extent change around the Ahr valley between 10 and 20 July 2021?
+    - label: Imagery at two dates
+      message: Which granules cover Los Angeles on 1 January and 15 January 2025?
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: What changed around 39.5N, 0.4W between 1 October and 15 November 2024?
+      expect: >-
+        It searches the datasets and the granules at both dates with the
+        earthdata tools and answers with each change it read, its kind and
+        its size, and the granules behind it.
+    - ask: Which granules cover Los Angeles on 1 January and 15 January 2025?
+      expect: It lists the granules at both dates, with their datasets, and downloads nothing.
+    - ask: Download the granules at both dates.
+      expect: >-
+        It does not download them. It writes the script a person would run,
+        and says what it would fetch.
+    - ask: What changed?
+      expect: It asks where and between which dates, before it searches.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "It has not been asked live over A2A yet: its agent is set up, not enabled, on this machine; the earthdata server is enabled."
+      - "Its tests have not been run as a set: no validation run is attached to it."
+
+record:
+  keep_for: 30_days
+  include: [conversations]
+
+deployment:
+  hosted:
+    visibility: private
+
+tags:
+  - example
+  - earth-observation
+  - change-detection
+  - earthdata
+  - a2a
+  - scene
+icon: telescope
+emoji: "🔍"
