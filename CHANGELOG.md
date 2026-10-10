@@ -8,6 +8,10 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.70
+
+- A custom component's `source` may be a file of the application's folder, by its path in it — `components/dial.js` (STUDIO P-29): a `.js` or `.mjs` file inside the folder, no absolute path and no `..`; packaged with the application and served by the server it is installed beside — [apps reference](https://agentspecs.datalayer.tech/apps/reference).
+
 ## 0.0.69
 
 - `example-blank` (STUDIO P-32): a model — Claude Sonnet 4.6 — and nothing else: no prompt of its own, no MCP servers, no skills, no tools. The agent an `app.py` runs in its own process, with the application's instructions as its whole prompt; `loop apps init --python` starts from it — [agents](https://agentspecs.datalayer.tech/agents).
