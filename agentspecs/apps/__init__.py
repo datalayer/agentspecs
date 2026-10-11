@@ -366,9 +366,10 @@ class AppPap(_Strict):
         ids = [connection.id for connection in self.connections]
         if len(set(ids)) != len(ids):
             raise ValueError("two Personal Agent Protocol connections have the same id")
-        companies = [(connection.company, connection.acts_as) for connection in self.connections]
+        # One grant per company (`datalayer_connection` `pap:<domain>`, ADR-1).
+        companies = [connection.company for connection in self.connections]
         if len(set(companies)) != len(companies):
-            raise ValueError("the application connects to the same company twice, in the same name")
+            raise ValueError("the application connects to the same company twice")
         return self
 
 

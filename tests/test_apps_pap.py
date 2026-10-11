@@ -79,8 +79,9 @@ def test_web_waits_for_an_isolated_browser() -> None:
         app(connections=[{**CONNECTION, "interfaces": ["web"]}])
 
 
-def test_the_same_company_twice_in_the_same_name_is_refused() -> None:
+def test_the_same_company_twice_is_refused() -> None:
     with pytest.raises(ValueError, match="same company twice"):
         app(connections=[CONNECTION, {**CONNECTION, "id": "orders-2"}])
-    # Once for the owner's account and once for each user's is two things.
-    app(connections=[CONNECTION, {**CONNECTION, "id": "orders-owner", "as": "owner"}])
+    # Even in another name: the application's grant names a company once.
+    with pytest.raises(ValueError, match="same company twice"):
+        app(connections=[CONNECTION, {**CONNECTION, "id": "orders-owner", "as": "owner"}])
