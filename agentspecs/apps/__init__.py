@@ -343,7 +343,8 @@ class AppPapOperation(_Strict):
         "`Exchange order {order_id} for size {size}`; never written by the model"
     )
     user_approval_required: bool = Field(
-        default=True, description="Whether only the person may confirm it, never an approval in advance"
+        default=True,
+        description="Whether only the person may confirm it, never an approval in advance",
     )
 
     @field_validator("action")
@@ -382,7 +383,8 @@ class AppPapCompany(_Strict):
     extensions: List[str] = Field(default_factory=list, description="Extensions it offers: `operations`")
     personal_agents: PapAgents = Field(default=PapAgents.ANY, description="`any`, or `registered` only")
     operations: List[AppPapOperation] = Field(
-        default_factory=list, description="What it does for the person once they confirm (the `operations` extension)"
+        default_factory=list,
+        description="What it does for the person once they confirm (the `operations` extension)",
     )
 
     @field_validator("scopes")
