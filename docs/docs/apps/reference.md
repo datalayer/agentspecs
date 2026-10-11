@@ -30,6 +30,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `context` | list of text | The Frames it works under: the catalogue's, or its organization's own (`org-…`) | — |
 | `contents` | list of text | The documents and datasets it answers from | — |
 | `connections` | list of [AppConnection](#appconnection) | What it reaches | — |
+| `pap` | [AppPap](#apppap) | Personal Agent Protocol: companies it works with, or being one | — |
 | `rules` | list of [AppRule](#apprule) | When it acts alone, and when it asks | — |
 | `permissions` | [AppPermissions](#apppermissions) | What else it may reach: Spaces, its computer. Nothing, unless said | — |
 | `interface` | [AppInterface](#appinterface) | What the user sees | — |
@@ -416,6 +417,29 @@ checks:
 team: analyze-support-tickets:0.0.1
 ```
 
+### `pap`
+
+```yaml
+pap:
+  connections:
+  - id: orders
+    company: example.com
+    access: read
+    as: user
+    scopes:
+    - poppy:read
+    interfaces:
+    - agent
+    - openapi
+    sign_in:
+    - direct
+    - device
+    extensions:
+    - operations
+  company:
+    enabled: false
+```
+
 ### `model`
 
 ```yaml
@@ -676,6 +700,43 @@ One thing a page shows for its inputs (LOOP P-05): a value, drawn with a compone
 | `title` | text | What a person reads above it; none when unsaid | empty |
 | `component` | text | What draws it: `Text` (words, unless said), `Image` (an address), `Table` (rows) or `Chart` (points), or a component of the application's own (`interface.custom_components`, LOOP P-17), its value what it shows first | `"Text"` |
 | `props` | mapping | The component's other properties: a Table's `columns`, a Chart's `kind`, `x` and `y` | — |
+
+### AppPap
+
+Personal Agent Protocol: the companies it works with, and whether it is one.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `connections` | list of [AppPapConnection](#apppapconnection) | Companies, as a personal agent | — |
+| `company` | [AppPapCompany](#apppapcompany) | As a company | — |
+
+### AppPapCompany
+
+The application is a company personal agents work with (PAP_DATALAYER S-01, U-04).
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `enabled` | true or false | Whether it publishes itself as a company at Ship | `false` |
+| `signed_out` | true or false | Whether a personal agent may ask before signing in | `true` |
+| `interfaces` | list of [PapInterface](#papinterface) | How personal agents reach it | — |
+| `scopes` | list of text | The scopes it offers | — |
+| `extensions` | list of text | Extensions it offers: `operations` | — |
+| `personal_agents` | [PapAgents](#papagents) | `any`, or `registered` only | `"any"` |
+
+### AppPapConnection
+
+A company the application works with as a Personal Agent (PAP_DATALAYER S-01). The company is named by its domain, the discovery input, and nothing else: its endpoints, issuer and metadata are what discovery verifies and are kept by the deployment, never here, and no credential is ever part of a spec. `access` and `as` mean what they mean for every connection.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `id` (required) | text | Stable within the application: `orders` | — |
+| `company` (required) | text | The company's domain, as discovery takes it: `example.com` | — |
+| `access` | [Access](#access) | How far: `read`, or `write` | `"read"` |
+| `as` | [ActsAs](#actsas) | In whose account: `user` (each person signs in to their own) or `owner` | `"user"` |
+| `scopes` | list of text | The fewest scopes the application needs | — |
+| `interfaces` | list of [PapInterface](#papinterface) | How it reaches the company | — |
+| `sign_in` | list of [PapSignIn](#papsignin) | Sign-in modes the application accepts, preferred first | — |
+| `extensions` | list of text | Extensions it uses: `operations` | — |
 
 ### AppPermissions
 
@@ -994,6 +1055,9 @@ The application at an address of its own.
 | <a id="embedmode"></a>EmbedMode | `inline`, `bubble`, `panel`, `assistant` |
 | <a id="hostuser"></a>HostUser | `claimed`, `signed` |
 | <a id="layout"></a>Layout | `chat`, `page`, `split` |
+| <a id="papagents"></a>PapAgents | `any`, `registered` |
+| <a id="papinterface"></a>PapInterface | `agent`, `openapi`, `mcp`, `web` |
+| <a id="papsignin"></a>PapSignIn | `direct`, `device`, `mediated` |
 | <a id="recorditem"></a>RecordItem | `conversations`, `actions`, `decisions`, `approvals`, `checks`, `sources`, `outputs`, `feedback`, `audio` |
 | <a id="thememode"></a>ThemeMode | `light`, `dark`, `auto` |
 | <a id="themevariant"></a>ThemeVariant | `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop` |

@@ -67,6 +67,21 @@ def _cell(text: str) -> str:
 #: (a test reads each one into an application of the catalogue).
 EXTRA_EXAMPLES: Dict[str, Any] = {
     "team": "analyze-support-tickets:0.0.1",
+    "pap": {
+        "connections": [
+            {
+                "id": "orders",
+                "company": "example.com",
+                "access": "read",
+                "as": "user",
+                "scopes": ["poppy:read"],
+                "interfaces": ["agent", "openapi"],
+                "sign_in": ["direct", "device"],
+                "extensions": ["operations"],
+            }
+        ],
+        "company": {"enabled": False},
+    },
     "model": "bedrock:us.anthropic.claude-sonnet-4-6",
     "skills": ["crawl:0.0.1"],
     "backend_tools": ["current-time:0.0.1"],

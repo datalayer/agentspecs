@@ -208,6 +208,170 @@ class AppConnection(_Strict):
         return not self.only or any(matches(tool_name, pattern) for pattern in self.only)
 
 
+_PAP_DOMAIN = re.compile(r"^(?=.{1,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$")
+_PAP_SCOPE = re.compile(r"^[\x21\x23-\x5b\x5d-\x7e]{1,128}$")
+_PAP_EXTENSION = re.compile(r"^(?:[a-z][a-z0-9_-]{0,63}|[a-z0-9.-]+\.[a-z]{2,63}/[a-z0-9_.-]{1,64})$")
+
+
+class PapInterface(str, Enum):
+    """How a Personal Agent Protocol company is reached (PAP §3.1)."""
+
+    AGENT = "agent"
+    OPENAPI = "openapi"
+    MCP = "mcp"
+    WEB = "web"
+
+
+class PapSignIn(str, Enum):
+    """How a person signs in at a company, in the order the application prefers."""
+
+    DIRECT = "direct"
+    DEVICE = "device"
+    MEDIATED = "mediated"
+
+
+def _pap_scopes(values: List[str]) -> List[str]:
+    if len(set(values)) != len(values):
+        raise ValueError("a scope is named twice")
+    for value in values:
+        if not _PAP_SCOPE.fullmatch(value):
+            raise ValueError(f"{value!r} is not an OAuth scope")
+    return values
+
+
+def _pap_extensions(values: List[str]) -> List[str]:
+    for value in values:
+        if not _PAP_EXTENSION.fullmatch(value):
+            raise ValueError(
+                f"{value!r} is not an extension name: a protocol one (`operations`) "
+                "or one under a domain its publisher controls (`example.com/gift-wrap`)"
+            )
+    return values
+
+
+class AppPapConnection(_Strict):
+    """A company the application works with as a Personal Agent (PAP_DATALAYER S-01).
+
+    The company is named by its domain, the discovery input, and nothing else:
+    its endpoints, issuer and metadata are what discovery verifies and are kept
+    by the deployment, never here, and no credential is ever part of a spec.
+    `access` and `as` mean what they mean for every connection.
+    """
+
+    id: str = Field(..., description="Stable within the application: `orders`")
+    company: str = Field(..., description="The company's domain, as discovery takes it: `example.com`")
+    access: Access = Field(default=Access.READ, description="How far: `read`, or `write`")
+    acts_as: ActsAs = Field(
+        default=ActsAs.USER,
+        alias="as",
+        description="In whose account: `user` (each person signs in to their own) or `owner`",
+    )
+    scopes: List[str] = Field(default_factory=list, description="The fewest scopes the application needs")
+    interfaces: List[PapInterface] = Field(
+        default_factory=lambda: [PapInterface.AGENT], description="How it reaches the company"
+    )
+    sign_in: List[PapSignIn] = Field(
+        default_factory=lambda: [PapSignIn.DIRECT, PapSignIn.DEVICE],
+        description="Sign-in modes the application accepts, preferred first",
+    )
+    extensions: List[str] = Field(default_factory=list, description="Extensions it uses: `operations`")
+
+    @field_validator("id")
+    @classmethod
+    def _an_id(cls, value: str) -> str:
+        if not re.fullmatch(r"[a-z][a-z0-9_-]{0,63}", value):
+            raise ValueError(f"{value!r} is not a connection id: lower case, digits, `-` and `_`")
+        return value
+
+    @field_validator("company")
+    @classmethod
+    def _a_domain(cls, value: str) -> str:
+        if not _PAP_DOMAIN.fullmatch(value):
+            raise ValueError(
+                f"{value!r} is not a company domain: only the domain, as `example.com` — "
+                "no scheme, path, port or address; discovery finds the rest"
+            )
+        return value
+
+    @field_validator("scopes")
+    @classmethod
+    def _scopes(cls, values: List[str]) -> List[str]:
+        return _pap_scopes(values)
+
+    @field_validator("extensions")
+    @classmethod
+    def _extensions(cls, values: List[str]) -> List[str]:
+        return _pap_extensions(values)
+
+    @model_validator(mode="after")
+    def _coherent(self) -> "AppPapConnection":
+        if not self.interfaces or len(set(self.interfaces)) != len(self.interfaces):
+            raise ValueError(f"the connection {self.id!r} reaches the company in at least one way, each once")
+        if not self.sign_in or len(set(self.sign_in)) != len(self.sign_in):
+            raise ValueError(f"the connection {self.id!r} accepts at least one sign-in mode, each once")
+        if PapInterface.WEB in self.interfaces:
+            raise ValueError(
+                f"the connection {self.id!r} cannot browse the company's website yet: "
+                "an isolated browser per person comes first (PAP_DATALAYER P-07)"
+            )
+        return self
+
+
+class PapAgents(str, Enum):
+    """Which personal agents a company application accepts."""
+
+    ANY = "any"
+    REGISTERED = "registered"
+
+
+class AppPapCompany(_Strict):
+    """The application is a company personal agents work with (PAP_DATALAYER S-01, U-04)."""
+
+    enabled: bool = Field(default=False, description="Whether it publishes itself as a company at Ship")
+    signed_out: bool = Field(default=True, description="Whether a personal agent may ask before signing in")
+    interfaces: List[PapInterface] = Field(
+        default_factory=lambda: [PapInterface.AGENT], description="How personal agents reach it"
+    )
+    scopes: List[str] = Field(default_factory=list, description="The scopes it offers")
+    extensions: List[str] = Field(default_factory=list, description="Extensions it offers: `operations`")
+    personal_agents: PapAgents = Field(default=PapAgents.ANY, description="`any`, or `registered` only")
+
+    @field_validator("scopes")
+    @classmethod
+    def _scopes(cls, values: List[str]) -> List[str]:
+        return _pap_scopes(values)
+
+    @field_validator("extensions")
+    @classmethod
+    def _extensions(cls, values: List[str]) -> List[str]:
+        return _pap_extensions(values)
+
+    @model_validator(mode="after")
+    def _coherent(self) -> "AppPapCompany":
+        if self.enabled and not self.scopes and not self.signed_out:
+            raise ValueError("a company that admits nobody signed out offers at least one scope")
+        if PapInterface.WEB in self.interfaces or PapInterface.MCP in self.interfaces:
+            raise ValueError("a company application is reached through its agent or its API for now")
+        return self
+
+
+class AppPap(_Strict):
+    """Personal Agent Protocol: the companies it works with, and whether it is one."""
+
+    connections: List[AppPapConnection] = Field(default_factory=list, description="Companies, as a personal agent")
+    company: AppPapCompany = Field(default_factory=AppPapCompany, description="As a company")
+
+    @model_validator(mode="after")
+    def _distinct(self) -> "AppPap":
+        ids = [connection.id for connection in self.connections]
+        if len(set(ids)) != len(ids):
+            raise ValueError("two Personal Agent Protocol connections have the same id")
+        companies = [(connection.company, connection.acts_as) for connection in self.connections]
+        if len(set(companies)) != len(companies):
+            raise ValueError("the application connects to the same company twice, in the same name")
+        return self
+
+
 class AppRule(_Strict):
     """When the application acts alone, and when it asks."""
 
@@ -2277,6 +2441,9 @@ class AppSpec(_Strict):
     )
     contents: List[str] = Field(default_factory=list, description="The documents and datasets it answers from")
     connections: List[AppConnection] = Field(default_factory=list, description="What it reaches")
+    pap: AppPap = Field(
+        default_factory=AppPap, description="Personal Agent Protocol: companies it works with, or being one"
+    )
     rules: List[AppRule] = Field(default_factory=list, description="When it acts alone, and when it asks")
     permissions: AppPermissions = Field(
         default_factory=AppPermissions,

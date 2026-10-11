@@ -907,6 +907,139 @@
       "title": "AppPageOutput",
       "type": "object"
     },
+    "AppPap": {
+      "additionalProperties": false,
+      "description": "Personal Agent Protocol: the companies it works with, and whether it is one.",
+      "properties": {
+        "company": {
+          "$ref": "#/$defs/AppPapCompany",
+          "description": "As a company"
+        },
+        "connections": {
+          "description": "Companies, as a personal agent",
+          "items": {
+            "$ref": "#/$defs/AppPapConnection"
+          },
+          "title": "Connections",
+          "type": "array"
+        }
+      },
+      "title": "AppPap",
+      "type": "object"
+    },
+    "AppPapCompany": {
+      "additionalProperties": false,
+      "description": "The application is a company personal agents work with (PAP_DATALAYER S-01, U-04).",
+      "properties": {
+        "enabled": {
+          "default": false,
+          "description": "Whether it publishes itself as a company at Ship",
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "extensions": {
+          "description": "Extensions it offers: `operations`",
+          "items": {
+            "type": "string"
+          },
+          "title": "Extensions",
+          "type": "array"
+        },
+        "interfaces": {
+          "description": "How personal agents reach it",
+          "items": {
+            "$ref": "#/$defs/PapInterface"
+          },
+          "title": "Interfaces",
+          "type": "array"
+        },
+        "personal_agents": {
+          "$ref": "#/$defs/PapAgents",
+          "default": "any",
+          "description": "`any`, or `registered` only"
+        },
+        "scopes": {
+          "description": "The scopes it offers",
+          "items": {
+            "type": "string"
+          },
+          "title": "Scopes",
+          "type": "array"
+        },
+        "signed_out": {
+          "default": true,
+          "description": "Whether a personal agent may ask before signing in",
+          "title": "Signed Out",
+          "type": "boolean"
+        }
+      },
+      "title": "AppPapCompany",
+      "type": "object"
+    },
+    "AppPapConnection": {
+      "additionalProperties": false,
+      "description": "A company the application works with as a Personal Agent (PAP_DATALAYER S-01).\n\nThe company is named by its domain, the discovery input, and nothing else:\nits endpoints, issuer and metadata are what discovery verifies and are kept\nby the deployment, never here, and no credential is ever part of a spec.\n`access` and `as` mean what they mean for every connection.",
+      "properties": {
+        "access": {
+          "$ref": "#/$defs/Access",
+          "default": "read",
+          "description": "How far: `read`, or `write`"
+        },
+        "as": {
+          "$ref": "#/$defs/ActsAs",
+          "default": "user",
+          "description": "In whose account: `user` (each person signs in to their own) or `owner`"
+        },
+        "company": {
+          "description": "The company's domain, as discovery takes it: `example.com`",
+          "title": "Company",
+          "type": "string"
+        },
+        "extensions": {
+          "description": "Extensions it uses: `operations`",
+          "items": {
+            "type": "string"
+          },
+          "title": "Extensions",
+          "type": "array"
+        },
+        "id": {
+          "description": "Stable within the application: `orders`",
+          "title": "Id",
+          "type": "string"
+        },
+        "interfaces": {
+          "description": "How it reaches the company",
+          "items": {
+            "$ref": "#/$defs/PapInterface"
+          },
+          "title": "Interfaces",
+          "type": "array"
+        },
+        "scopes": {
+          "description": "The fewest scopes the application needs",
+          "items": {
+            "type": "string"
+          },
+          "title": "Scopes",
+          "type": "array"
+        },
+        "sign_in": {
+          "description": "Sign-in modes the application accepts, preferred first",
+          "items": {
+            "$ref": "#/$defs/PapSignIn"
+          },
+          "title": "Sign In",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "company"
+      ],
+      "title": "AppPapConnection",
+      "type": "object"
+    },
     "AppPermissions": {
       "additionalProperties": false,
       "description": "What the application may reach beside its connections. Nothing, unless said.",
@@ -1911,6 +2044,36 @@
       "title": "Layout",
       "type": "string"
     },
+    "PapAgents": {
+      "description": "Which personal agents a company application accepts.",
+      "enum": [
+        "any",
+        "registered"
+      ],
+      "title": "PapAgents",
+      "type": "string"
+    },
+    "PapInterface": {
+      "description": "How a Personal Agent Protocol company is reached (PAP \u00a73.1).",
+      "enum": [
+        "agent",
+        "openapi",
+        "mcp",
+        "web"
+      ],
+      "title": "PapInterface",
+      "type": "string"
+    },
+    "PapSignIn": {
+      "description": "How a person signs in at a company, in the order the application prefers.",
+      "enum": [
+        "direct",
+        "device",
+        "mediated"
+      ],
+      "title": "PapSignIn",
+      "type": "string"
+    },
     "RecordItem": {
       "description": "What an application may keep of what it did.",
       "enum": [
@@ -2162,6 +2325,10 @@
       "description": "Who answers for it",
       "title": "Owner",
       "type": "string"
+    },
+    "pap": {
+      "$ref": "#/$defs/AppPap",
+      "description": "Personal Agent Protocol: companies it works with, or being one"
     },
     "permissions": {
       "$ref": "#/$defs/AppPermissions",
