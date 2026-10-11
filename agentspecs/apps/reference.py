@@ -80,7 +80,18 @@ EXTRA_EXAMPLES: Dict[str, Any] = {
                 "extensions": ["operations"],
             }
         ],
-        "company": {"enabled": False},
+        "company": {
+            "enabled": False,
+            "extensions": ["operations"],
+            "operations": [
+                {
+                    "action": "orders.exchange",
+                    "tool": "exchange_order",
+                    "summary": "Exchange order {order_id} for size {size}",
+                    "user_approval_required": True,
+                }
+            ],
+        },
     },
     "model": "bedrock:us.anthropic.claude-sonnet-4-6",
     "skills": ["crawl:0.0.1"],

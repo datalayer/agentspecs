@@ -438,6 +438,13 @@ pap:
     - operations
   company:
     enabled: false
+    extensions:
+    - operations
+    operations:
+    - action: orders.exchange
+      tool: exchange_order
+      summary: Exchange order {order_id} for size {size}
+      user_approval_required: true
 ```
 
 ### `model`
@@ -722,6 +729,7 @@ The application is a company personal agents work with (PAP_DATALAYER S-01, U-04
 | `scopes` | list of text | The scopes it offers | — |
 | `extensions` | list of text | Extensions it offers: `operations` | — |
 | `personal_agents` | [PapAgents](#papagents) | `any`, or `registered` only | `"any"` |
+| `operations` | list of [AppPapOperation](#apppapoperation) | What it does for the person once they confirm (the `operations` extension) | — |
 
 ### AppPapConnection
 
@@ -737,6 +745,17 @@ A company the application works with as a Personal Agent (PAP_DATALAYER S-01). T
 | `interfaces` | list of [PapInterface](#papinterface) | How it reaches the company | — |
 | `sign_in` | list of [PapSignIn](#papsignin) | Sign-in modes the application accepts, preferred first | — |
 | `extensions` | list of text | Extensions it uses: `operations` | — |
+
+### AppPapOperation
+
+Something a personal agent may ask the application to do for the person, done only once they confirm its exact terms (PAP_DATALAYER B-04, Operations v1). Asked by a personal agent, the application's agent does not call `tool`: the call is proposed, its arguments the terms, and the person confirms that revision before the tool runs, with those arguments and only once.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `action` (required) | text | The action's name at this company, e.g. `orders.exchange` | — |
+| `tool` (required) | text | The application's tool that does it, called with the terms | — |
+| `summary` (required) | text | What the person is shown, with `{term}` for each term, e.g. `Exchange order {order_id} for size {size}`; never written by the model | — |
+| `user_approval_required` | true or false | Whether only the person may confirm it, never an approval in advance | `true` |
 
 ### AppPermissions
 

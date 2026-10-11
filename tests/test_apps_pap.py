@@ -85,3 +85,45 @@ def test_the_same_company_twice_is_refused() -> None:
     # Even in another name: the application's grant names a company once.
     with pytest.raises(ValueError, match="same company twice"):
         app(connections=[CONNECTION, {**CONNECTION, "id": "orders-owner", "as": "owner"}])
+
+
+OPERATION = {
+    "action": "orders.exchange",
+    "tool": "exchange_order",
+    "summary": "Exchange order {order_id} for size {size}",
+}
+
+
+def test_a_company_declares_what_it_does_once_the_person_confirms() -> None:
+    spec = app(company={"enabled": True, "scopes": ["orders:write"], "extensions": ["operations"],
+                        "operations": [OPERATION]})
+    operation = spec.pap.company.operations[0]
+    assert (operation.action, operation.tool) == ("orders.exchange", "exchange_order")
+    # Only the person confirms it unless the Maker says otherwise.
+    assert operation.user_approval_required is True
+
+
+@pytest.mark.parametrize(
+    ("change", "says"),
+    [
+        ({"action": "Orders Exchange"}, "action name"),
+        ({"summary": "Exchange {order.id}"}, "names no term"),
+        ({"summary": "Exchange {order_id"}, "not a template"),
+        ({"summary": "  "}, "says what it does"),
+    ],
+)
+def test_an_operation_is_checked(change: dict, says: str) -> None:
+    with pytest.raises(ValueError, match=says):
+        app(company={"enabled": True, "scopes": ["orders:write"], "extensions": ["operations"],
+                     "operations": [{**OPERATION, **change}]})
+
+
+def test_operations_need_the_extension_and_each_action_and_tool_once() -> None:
+    with pytest.raises(ValueError, match="`operations` extension"):
+        app(company={"enabled": True, "scopes": ["orders:write"], "operations": [OPERATION]})
+    with pytest.raises(ValueError, match="declared twice"):
+        app(company={"enabled": True, "scopes": ["orders:write"], "extensions": ["operations"],
+                     "operations": [OPERATION, {**OPERATION, "tool": "other"}]})
+    with pytest.raises(ValueError, match="one action"):
+        app(company={"enabled": True, "scopes": ["orders:write"], "extensions": ["operations"],
+                     "operations": [OPERATION, {**OPERATION, "action": "orders.other"}]})

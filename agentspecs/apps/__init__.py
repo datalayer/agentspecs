@@ -324,6 +324,52 @@ class PapAgents(str, Enum):
     REGISTERED = "registered"
 
 
+_PAP_ACTION = re.compile(r"^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)*$")
+
+
+class AppPapOperation(_Strict):
+    """Something a personal agent may ask the application to do for the person,
+    done only once they confirm its exact terms (PAP_DATALAYER B-04, Operations v1).
+
+    Asked by a personal agent, the application's agent does not call `tool`:
+    the call is proposed, its arguments the terms, and the person confirms
+    that revision before the tool runs, with those arguments and only once.
+    """
+
+    action: str = Field(description="The action's name at this company, e.g. `orders.exchange`")
+    tool: str = Field(description="The application's tool that does it, called with the terms")
+    summary: str = Field(
+        description="What the person is shown, with `{term}` for each term, e.g. "
+        "`Exchange order {order_id} for size {size}`; never written by the model"
+    )
+    user_approval_required: bool = Field(
+        default=True, description="Whether only the person may confirm it, never an approval in advance"
+    )
+
+    @field_validator("action")
+    @classmethod
+    def _action(cls, value: str) -> str:
+        if not _PAP_ACTION.fullmatch(value):
+            raise ValueError(f"{value!r} is not an action name: lower-case words joined by dots")
+        return value
+
+    @field_validator("summary")
+    @classmethod
+    def _summary(cls, value: str) -> str:
+        import string  # noqa: PLC0415
+
+        if not value.strip():
+            raise ValueError("an operation says what it does")
+        try:
+            fields = [name for _, name, _, _ in string.Formatter().parse(value) if name is not None]
+        except ValueError as error:
+            raise ValueError(f"the summary is not a template: {error}") from error
+        for name in fields:
+            if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", name):
+                raise ValueError(f"`{{{name}}}` names no term: a term is one plain name")
+        return value
+
+
 class AppPapCompany(_Strict):
     """The application is a company personal agents work with (PAP_DATALAYER S-01, U-04)."""
 
@@ -335,6 +381,9 @@ class AppPapCompany(_Strict):
     scopes: List[str] = Field(default_factory=list, description="The scopes it offers")
     extensions: List[str] = Field(default_factory=list, description="Extensions it offers: `operations`")
     personal_agents: PapAgents = Field(default=PapAgents.ANY, description="`any`, or `registered` only")
+    operations: List[AppPapOperation] = Field(
+        default_factory=list, description="What it does for the person once they confirm (the `operations` extension)"
+    )
 
     @field_validator("scopes")
     @classmethod
@@ -352,6 +401,14 @@ class AppPapCompany(_Strict):
             raise ValueError("a company that admits nobody signed out offers at least one scope")
         if PapInterface.WEB in self.interfaces or PapInterface.MCP in self.interfaces:
             raise ValueError("a company application is reached through its agent or its API for now")
+        if self.operations and "operations" not in self.extensions:
+            raise ValueError("operations are offered with the `operations` extension")
+        actions = [operation.action for operation in self.operations]
+        if len(set(actions)) != len(actions):
+            raise ValueError("an action is declared twice")
+        tools = [operation.tool for operation in self.operations]
+        if len(set(tools)) != len(tools):
+            raise ValueError("a tool does one action")
         return self
 
 

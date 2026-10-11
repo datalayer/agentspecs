@@ -953,6 +953,14 @@
           "title": "Interfaces",
           "type": "array"
         },
+        "operations": {
+          "description": "What it does for the person once they confirm (the `operations` extension)",
+          "items": {
+            "$ref": "#/$defs/AppPapOperation"
+          },
+          "title": "Operations",
+          "type": "array"
+        },
         "personal_agents": {
           "$ref": "#/$defs/PapAgents",
           "default": "any",
@@ -1038,6 +1046,40 @@
         "company"
       ],
       "title": "AppPapConnection",
+      "type": "object"
+    },
+    "AppPapOperation": {
+      "additionalProperties": false,
+      "description": "Something a personal agent may ask the application to do for the person,\ndone only once they confirm its exact terms (PAP_DATALAYER B-04, Operations v1).\n\nAsked by a personal agent, the application's agent does not call `tool`:\nthe call is proposed, its arguments the terms, and the person confirms\nthat revision before the tool runs, with those arguments and only once.",
+      "properties": {
+        "action": {
+          "description": "The action's name at this company, e.g. `orders.exchange`",
+          "title": "Action",
+          "type": "string"
+        },
+        "summary": {
+          "description": "What the person is shown, with `{term}` for each term, e.g. `Exchange order {order_id} for size {size}`; never written by the model",
+          "title": "Summary",
+          "type": "string"
+        },
+        "tool": {
+          "description": "The application's tool that does it, called with the terms",
+          "title": "Tool",
+          "type": "string"
+        },
+        "user_approval_required": {
+          "default": true,
+          "description": "Whether only the person may confirm it, never an approval in advance",
+          "title": "User Approval Required",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "action",
+        "tool",
+        "summary"
+      ],
+      "title": "AppPapOperation",
       "type": "object"
     },
     "AppPermissions": {
