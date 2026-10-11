@@ -127,3 +127,22 @@ def test_operations_need_the_extension_and_each_action_and_tool_once() -> None:
     with pytest.raises(ValueError, match="one action"):
         app(company={"enabled": True, "scopes": ["orders:write"], "extensions": ["operations"],
                      "operations": [OPERATION, {**OPERATION, "action": "orders.other"}]})
+
+
+def test_a_company_reached_over_mcp_and_by_registered_agents_only() -> None:
+    agent = "https://agents.example/agent.json"
+    company = {"enabled": True, "scopes": ["poppy:read"]}
+    registered = {**company, "personal_agents": "registered"}
+    spec = app(company={**registered, "interfaces": ["agent", "mcp"], "registered_agents": [agent]})
+    assert spec.pap.company.registered_agents == [agent]
+    with pytest.raises(ValueError, match="names at least one"):
+        app(company=registered)
+    with pytest.raises(ValueError, match="accepts them alone"):
+        app(company={**company, "registered_agents": [agent]})
+    for wrong in ("http://agents.example/a.json", "agents.example", "https://u@agents.example/a.json"):
+        with pytest.raises(ValueError, match="client_id"):
+            app(company={**registered, "registered_agents": [wrong]})
+    with pytest.raises(ValueError, match="twice"):
+        app(company={**registered, "registered_agents": [agent, agent]})
+    with pytest.raises(ValueError, match="for now"):
+        app(company={**company, "interfaces": ["web"]})

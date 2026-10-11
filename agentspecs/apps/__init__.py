@@ -382,6 +382,10 @@ class AppPapCompany(_Strict):
     scopes: List[str] = Field(default_factory=list, description="The scopes it offers")
     extensions: List[str] = Field(default_factory=list, description="Extensions it offers: `operations`")
     personal_agents: PapAgents = Field(default=PapAgents.ANY, description="`any`, or `registered` only")
+    registered_agents: List[str] = Field(
+        default_factory=list,
+        description="The personal agents it accepts when `registered` only: each one's `client_id` URL",
+    )
     operations: List[AppPapOperation] = Field(
         default_factory=list,
         description="What it does for the person once they confirm (the `operations` extension)",
@@ -397,12 +401,32 @@ class AppPapCompany(_Strict):
     def _extensions(cls, values: List[str]) -> List[str]:
         return _pap_extensions(values)
 
+    @field_validator("registered_agents")
+    @classmethod
+    def _registered_agents(cls, values: List[str]) -> List[str]:
+        from urllib.parse import urlsplit  # noqa: PLC0415
+
+        for value in values:
+            parts = urlsplit(value)
+            # A client_id is the HTTPS URL of its metadata document (spec 4.1).
+            if parts.scheme != "https" or not parts.hostname or parts.fragment or parts.username:
+                raise ValueError(f"`{value}` is not a personal agent's client_id: an HTTPS URL")
+        if len(set(values)) != len(values):
+            raise ValueError("a personal agent is registered twice")
+        return values
+
     @model_validator(mode="after")
     def _coherent(self) -> "AppPapCompany":
         if self.enabled and not self.scopes and not self.signed_out:
             raise ValueError("a company that admits nobody signed out offers at least one scope")
-        if PapInterface.WEB in self.interfaces or PapInterface.MCP in self.interfaces:
-            raise ValueError("a company application is reached through its agent or its API for now")
+        if PapInterface.WEB in self.interfaces:
+            raise ValueError(
+                "a company application is reached through its agent, its API or its MCP server for now"
+            )
+        if self.personal_agents is PapAgents.REGISTERED and not self.registered_agents:
+            raise ValueError("a company for registered personal agents names at least one")
+        if self.registered_agents and self.personal_agents is not PapAgents.REGISTERED:
+            raise ValueError("registered personal agents are named only when it accepts them alone")
         if self.operations and "operations" not in self.extensions:
             raise ValueError("operations are offered with the `operations` extension")
         actions = [operation.action for operation in self.operations]

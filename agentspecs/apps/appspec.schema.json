@@ -966,6 +966,14 @@
           "default": "any",
           "description": "`any`, or `registered` only"
         },
+        "registered_agents": {
+          "description": "The personal agents it accepts when `registered` only: each one's `client_id` URL",
+          "items": {
+            "type": "string"
+          },
+          "title": "Registered Agents",
+          "type": "array"
+        },
         "scopes": {
           "description": "The scopes it offers",
           "items": {

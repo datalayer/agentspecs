@@ -729,6 +729,7 @@ The application is a company personal agents work with (PAP_DATALAYER S-01, U-04
 | `scopes` | list of text | The scopes it offers | — |
 | `extensions` | list of text | Extensions it offers: `operations` | — |
 | `personal_agents` | [PapAgents](#papagents) | `any`, or `registered` only | `"any"` |
+| `registered_agents` | list of text | The personal agents it accepts when `registered` only: each one's `client_id` URL | — |
 | `operations` | list of [AppPapOperation](#apppapoperation) | What it does for the person once they confirm (the `operations` extension) | — |
 
 ### AppPapConnection
