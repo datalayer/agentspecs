@@ -534,6 +534,88 @@ class AppPact(_Strict):
         return self
 
 
+#: Names an A2A extension's params may not take: a card is public, a credential never goes on it.
+_A2A_SECRET_PARAM = re.compile(r"(?i)(secret|token|password|passwd|api[_-]?key|private[_-]?key|credential|bearer)")
+#: Datalayer's own A2A extensions, published by the runtime itself (orchestration, face).
+_A2A_DATALAYER_EXTENSIONS = "https://datalayer.ai/extensions/"
+
+
+def _a2a_params_safe(value: Any, path: str) -> None:
+    if isinstance(value, dict):
+        for key, item in value.items():
+            if not isinstance(key, str):
+                raise ValueError(f"the params of {path} are keyed by names")
+            if _A2A_SECRET_PARAM.search(key):
+                raise ValueError(
+                    f"`{key}` looks like a credential: an Agent Card is public, so no secret goes in an extension's params"
+                )
+            _a2a_params_safe(item, f"{path}.{key}")
+    elif isinstance(value, list):
+        for item in value:
+            _a2a_params_safe(item, path)
+    elif value is not None and not isinstance(value, (str, int, float, bool)):
+        raise ValueError(f"the params of {path} are JSON values")
+
+
+class AppA2AExtension(_Strict):
+    """An A2A extension the application's Agent Card advertises (A2A 1.0
+    *Extensions*, AGENT_PROTOCOLS PR-02), beside the runtime's own.
+
+    Named by its URI, as `capabilities.extensions` writes it; its params are
+    published on the card as they are, so they never hold a credential.
+    Datalayer's own extensions (orchestration, the face) are the runtime's,
+    never declared here.
+    """
+
+    uri: str = Field(..., description="The extension's URI: `https://example.com/ext/gift-wrap/v1`")
+    description: str = Field(default="", description="What it adds, for whoever reads the card")
+    required: bool = Field(
+        default=False,
+        description="Whether a client must support it to talk to the application at all",
+    )
+    params: Dict[str, Any] = Field(
+        default_factory=dict, description="Its parameters on the card, as the extension defines them; public"
+    )
+
+    @field_validator("uri")
+    @classmethod
+    def _a_uri(cls, value: str) -> str:
+        from urllib.parse import urlsplit  # noqa: PLC0415
+
+        parts = urlsplit(value)
+        if not (
+            (parts.scheme == "https" and parts.hostname and not parts.username and not parts.fragment)
+            or (parts.scheme == "urn" and parts.path)
+        ):
+            raise ValueError(f"{value!r} is not an extension URI: an `https://` URL or a `urn:`")
+        if value.startswith(_A2A_DATALAYER_EXTENSIONS):
+            raise ValueError(
+                f"{value!r} is one of Datalayer's own extensions: the runtime publishes it, the application does not"
+            )
+        return value
+
+    @field_validator("params")
+    @classmethod
+    def _public(cls, value: Dict[str, Any]) -> Dict[str, Any]:
+        _a2a_params_safe(value, "the extension")
+        return value
+
+
+class AppA2A(_Strict):
+    """A2A: what the application's Agent Card says beside its name and skill (AGENT_PROTOCOLS PR-02)."""
+
+    extensions: List[AppA2AExtension] = Field(
+        default_factory=list, description="Extensions its card advertises, besides the runtime's own"
+    )
+
+    @model_validator(mode="after")
+    def _distinct(self) -> "AppA2A":
+        uris = [extension.uri for extension in self.extensions]
+        if len(set(uris)) != len(uris):
+            raise ValueError("an A2A extension is declared twice")
+        return self
+
+
 class AppPap(_Strict):
     """Personal Agent Protocol: the companies it works with, and whether it is one."""
 
@@ -2625,6 +2707,9 @@ class AppSpec(_Strict):
         default_factory=AppPap, description="Personal Agent Protocol: companies it works with, or being one"
     )
     pact: AppPact = Field(default_factory=AppPact, description="PACT: businesses it asks for each person")
+    a2a: AppA2A = Field(
+        default_factory=AppA2A, description="A2A: the extensions its Agent Card advertises"
+    )
     rules: List[AppRule] = Field(default_factory=list, description="When it acts alone, and when it asks")
     permissions: AppPermissions = Field(
         default_factory=AppPermissions,
@@ -3468,6 +3553,8 @@ __all__ = [
     "AppChecks",
     "AppCodeCheck",
     "AppComputer",
+    "AppA2A",
+    "AppA2AExtension",
     "AppConnection",
     "AppCriterion",
     "AppDecision",

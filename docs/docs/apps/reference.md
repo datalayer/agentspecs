@@ -32,6 +32,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `connections` | list of [AppConnection](#appconnection) | What it reaches | — |
 | `pap` | [AppPap](#apppap) | Personal Agent Protocol: companies it works with, or being one | — |
 | `pact` | [AppPact](#apppact) | PACT: businesses it asks for each person | — |
+| `a2a` | [AppA2A](#appa2a) | A2A: the extensions its Agent Card advertises | — |
 | `rules` | list of [AppRule](#apprule) | When it acts alone, and when it asks | — |
 | `permissions` | [AppPermissions](#apppermissions) | What else it may reach: Spaces, its computer. Nothing, unless said | — |
 | `interface` | [AppInterface](#appinterface) | What the user sees | — |
@@ -474,6 +475,20 @@ pact:
 team: analyze-support-tickets:0.0.1
 ```
 
+### `a2a`
+
+```yaml
+a2a:
+  extensions:
+  - uri: https://shop.example/extensions/gift-wrap/v1
+    description: Wraps an order as a gift.
+    required: false
+    params:
+      papers:
+      - red
+      - gold
+```
+
 ### `model`
 
 ```yaml
@@ -511,6 +526,25 @@ banner: SvgTutorialsHero
 ```
 
 ## Parts
+
+### AppA2A
+
+A2A: what the application's Agent Card says beside its name and skill (AGENT_PROTOCOLS PR-02).
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `extensions` | list of [AppA2AExtension](#appa2aextension) | Extensions its card advertises, besides the runtime's own | — |
+
+### AppA2AExtension
+
+An A2A extension the application's Agent Card advertises (A2A 1.0 *Extensions*, AGENT_PROTOCOLS PR-02), beside the runtime's own. Named by its URI, as `capabilities.extensions` writes it; its params are published on the card as they are, so they never hold a credential. Datalayer's own extensions (orchestration, the face) are the runtime's, never declared here.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `uri` (required) | text | The extension's URI: `https://example.com/ext/gift-wrap/v1` | — |
+| `description` | text | What it adds, for whoever reads the card | empty |
+| `required` | true or false | Whether a client must support it to talk to the application at all | `false` |
+| `params` | mapping | Its parameters on the card, as the extension defines them; public | — |
 
 ### AppChecks
 

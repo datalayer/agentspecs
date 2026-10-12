@@ -93,6 +93,16 @@ EXTRA_EXAMPLES: Dict[str, Any] = {
             ],
         },
     },
+    "a2a": {
+        "extensions": [
+            {
+                "uri": "https://shop.example/extensions/gift-wrap/v1",
+                "description": "Wraps an order as a gift.",
+                "required": False,
+                "params": {"papers": ["red", "gold"]},
+            }
+        ],
+    },
     "model": "bedrock:us.anthropic.claude-sonnet-4-6",
     "skills": ["crawl:0.0.1"],
     "backend_tools": ["current-time:0.0.1"],
