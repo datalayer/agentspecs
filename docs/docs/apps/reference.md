@@ -562,6 +562,16 @@ An A2A extension the application's Agent Card advertises (A2A 1.0 *Extensions*, 
 | `required` | true or false | Whether a client must support it to talk to the application at all | `false` |
 | `params` | mapping | Its parameters on the card, as the extension defines them; public | — |
 
+### AppAction
+
+An action of its code a person presses (`@app.action`, REACTOR_UI RU-5). What its payload is, typed: the JSON Schema of an object, written from the pydantic model its code declares (`@app.action(name, payload=Model)`); an action declaring none takes nothing. The runtime offers it only where a display showed it, or to the session that runs it, each press with a token; a press of an action not declared here is refused, and its payload is checked against this schema before its code runs.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `name` (required) | text | Its name, as its button presses it | — |
+| `description` | text | What it does, in a sentence | empty |
+| `payload` | mapping | The JSON Schema of what it is pressed with, an object; none when it takes nothing (a press with anything is then refused) | empty |
+
 ### AppChecks
 
 Optional: checks from the catalogue, for a builder who wants them — and its code's own.
@@ -689,6 +699,7 @@ What the user sees.
 | `starters` | list of [AppStarter](#appstarter) | First messages offered to the user | — |
 | `commands` | list of [AppCommand](#appcommand) | Slash commands the user picks in the composer: typing `/` lists them (LOOP P-19) | — |
 | `modes` | list of [AppMode](#appmode) | Mode switches in the composer: the option picked goes with every run, its instructions told to the agent and its model run on (LOOP P-19) | — |
+| `actions` | list of [AppAction](#appaction) | The actions of its code a person presses (`@app.action`, REACTOR_UI RU-5), each with the JSON Schema of its payload: what its buttons offer, with a token, and nothing else | — |
 | `profiles` | list of [AppProfile](#appprofile) | Several assistants in one application, two at least: the person picks one before the conversation starts — the first unless they do — and keeps it to the end; its instructions, model and starters go with every run (LOOP P-20). None when unsaid | — |
 | `settings` | mapping | What the user may set: the JSON Schema of a form, an object of named fields, each with its `title` and its `default` (LOOP C-16). Drawn with `@datalayer/primer-rjsf` beside the conversation and on a deployment's Ship card, its values go with every run and are checked by the runtime against the same schema. None when unsaid | empty |
 | `settings_ui` | mapping | How the settings' fields are drawn, as `@datalayer/primer-rjsf` reads a uiSchema: by field name, its `ui:` options — `ui:widget` one of `select`, `radio`, `range`, `updown`, `switch`, `checkbox`, `text`, `textarea`, `date`, `checkboxes`, `tags` — and `ui:order` (LOOP P-20). Each field's own widget when unsaid | empty |

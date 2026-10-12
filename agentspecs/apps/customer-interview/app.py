@@ -16,7 +16,17 @@ What was verified, and how, is said in its spec (``tests.verified``), on its
 card and on its page.
 """
 
+from pydantic import BaseModel, Field
+
 from agent_runtimes.loop.apps import Application, ChoiceQuestion, Session
+
+
+class Insight(BaseModel):
+    """An insight, in the interviewer's words, and the interviewee's own that it cites."""
+
+    insight: str = Field(..., min_length=1, description="What was learned")
+    quote: str = Field(..., min_length=1, description="The interviewee's words it cites")
+
 
 app = Application.from_spec(
     {
@@ -175,17 +185,19 @@ async def reply(session: Session, text: str) -> None:
     await session.send(answer.text)
 
 
-@app.action("save")
-async def save(session: Session, payload: dict) -> None:
+@app.action("save", payload=Insight)
+async def save(session: Session, saved: Insight) -> None:
+    """Save an insight, with the words it cites."""
     if not session.state.get("consent"):
         return
-    insight = {"insight": payload.get("insight", ""), "quote": payload.get("quote", "")}
+    insight = saved.model_dump()
     session.state.setdefault("insights", []).append(insight)
     await session.record(insight, summary="An insight", kind="feedback")
 
 
 @app.action("finish")
-async def finish(session: Session, payload: dict) -> None:
+async def finish(session: Session) -> None:
+    """End the interview, and record its result."""
     async with session.step("Writing the result", kind="model") as step:
         answer = await session.agent.run(
             "The interview is over. List the questions it left open, one per line.",

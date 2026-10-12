@@ -1347,6 +1347,67 @@ class AppPage(_Strict):
         return self
 
 
+#: The name its page's own run has (`@app.page`): no action of its code is called it.
+PAGE_FUNCTION_ACTION = "page"
+
+
+class AppAction(_Strict):
+    """An action of its code a person presses (`@app.action`, REACTOR_UI RU-5).
+
+    What its payload is, typed: the JSON Schema of an object, written from the
+    pydantic model its code declares (`@app.action(name, payload=Model)`); an
+    action declaring none takes nothing. The runtime offers it only where a
+    display showed it, or to the session that runs it, each press with a
+    token; a press of an action not declared here is refused, and its payload
+    is checked against this schema before its code runs.
+    """
+
+    name: str = Field(..., pattern=rf"^{CODE_NAME}$", description="Its name, as its button presses it")
+    description: str = Field(default="", description="What it does, in a sentence")
+    payload: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description=(
+            "The JSON Schema of what it is pressed with, an object; none when it takes nothing "
+            "(a press with anything is then refused)"
+        ),
+    )
+
+    @field_validator("name")
+    @classmethod
+    def _not_the_page(cls, name: str) -> str:
+        if name == PAGE_FUNCTION_ACTION:
+            raise ValueError(f"{name!r} is what runs its page (`@app.page`): name the action otherwise")
+        return name
+
+    @field_validator("payload")
+    @classmethod
+    def _is_an_object(cls, payload: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+        if payload is None:
+            return None
+        if payload.get("type") != "object" or not isinstance(payload.get("properties", {}), dict):
+            raise ValueError("an action's `payload` is the JSON Schema of an object, its fields its properties")
+        return payload
+
+    def payload_refused(self, payload: Mapping[str, Any]) -> Optional[str]:
+        """Why a payload is not this action's, in a sentence; None when its fields are.
+
+        Its fields only, by name: each required one there, none it does not
+        declare. Their values are checked where its code runs, by its model.
+        """
+        if self.payload is None:
+            if payload:
+                return f"it takes nothing, and was given {', '.join(sorted(payload))}"
+            return None
+        fields = set((self.payload.get("properties") or {}).keys())
+        unknown = sorted(set(payload) - fields)
+        if unknown:
+            return f"it takes {', '.join(sorted(fields)) or 'nothing'}, not {', '.join(unknown)}"
+        missing = [name for name in self.payload.get("required") or [] if name not in payload]
+        if missing:
+            return f"it needs {', '.join(missing)}"
+        return None
+
+
 class ThemeVariant(str, Enum):
     """A theme of Datalayer's, as Appearance names it (LOOP T-30)."""
 
@@ -1573,6 +1634,13 @@ class AppInterface(_Strict):
             "told to the agent and its model run on (LOOP P-19)"
         ),
     )
+    actions: List[AppAction] = Field(
+        default_factory=list,
+        description=(
+            "The actions of its code a person presses (`@app.action`, REACTOR_UI RU-5), each with "
+            "the JSON Schema of its payload: what its buttons offer, with a token, and nothing else"
+        ),
+    )
     profiles: List[AppProfile] = Field(
         default_factory=list,
         description=(
@@ -1697,6 +1765,9 @@ class AppInterface(_Strict):
         names = [command.name for command in self.commands]
         if len(set(names)) != len(names):
             raise ValueError("two commands have the same name")
+        actions = [action.name for action in self.actions]
+        if len(set(actions)) != len(actions):
+            raise ValueError("two actions of its code have the same name")
         modes = [mode.id for mode in self.modes]
         if len(set(modes)) != len(modes):
             raise ValueError("two modes have the same id")
@@ -3473,12 +3544,37 @@ def load_raw_apps(directory: Optional[Path] = None) -> Dict[str, Dict[str, Any]]
     return raw
 
 
+def press_problems(app: AppSpec) -> List[str]:
+    """What its tests press that its code does not declare, in sentences
+    (REACTOR_UI RU-5): each press an action of ``interface.actions``, with
+    the fields its payload takes. Asked of a whole Appspec — one built from
+    its code, or the catalogue's — not of one its code is still declaring.
+    """
+    declared = {action.name: action for action in app.interface.actions}
+    problems: List[str] = []
+    for case in app.tests.cases:
+        for turn in case.turns:
+            if not turn.press.strip():
+                continue
+            action = declared.get(turn.press)
+            if action is None:
+                problems.append(
+                    f"A test presses {turn.press!r}, which its code declares no action for "
+                    "(`interface.actions`, `@app.action`)."
+                )
+                continue
+            refused = action.payload_refused(turn.payload)
+            if refused:
+                problems.append(f"A test presses {turn.press!r} with what it does not take: {refused}.")
+    return problems
+
+
 def load_apps(directory: Optional[Path] = None) -> Dict[str, AppSpec]:
     """Every application of a directory, validated, its references resolved."""
     apps: Dict[str, AppSpec] = {}
     for identity, data in load_raw_apps(directory).items():
         app = parse_app(data)
-        problems = app_problems(app)
+        problems = app_problems(app) + press_problems(app)
         if problems:
             raise AppError(f"{identity}: " + " ".join(problems))
         apps[identity] = app
@@ -3607,6 +3703,7 @@ __all__ = [
     "AppError",
     "AppInterface",
     "AppKind",
+    "AppAction",
     "AppCommand",
     "AppMode",
     "AppModeOption",
@@ -3679,6 +3776,7 @@ __all__ = [
     "load_raw_apps",
     "output_media_types",
     "parse_app",
+    "press_problems",
     "pick_language",
     "retention_days",
     "schema_text",

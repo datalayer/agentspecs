@@ -68,6 +68,7 @@ from agentspecs.apps import (
     list_apps,
     load_apps,
     parse_app,
+    press_problems,
     schema_text,
     strictest,
     tool_behaviours,
@@ -1087,6 +1088,49 @@ def test_an_application_declares_slash_commands_for_its_composer() -> None:
     ):
         with pytest.raises(AppError, match="interface"):
             app(interface={"commands": wrong})
+
+
+def test_an_application_declares_the_actions_of_its_code_typed() -> None:
+    """REACTOR_UI RU-5: each action of its code is declared with the JSON Schema
+    of its payload; a test presses only a declared action, with what it takes."""
+    insight = {
+        "type": "object",
+        "properties": {"insight": {"type": "string"}, "quote": {"type": "string"}},
+        "required": ["insight"],
+    }
+    said = app(interface={"actions": [{"name": "save", "payload": insight}, {"name": "finish"}]})
+    assert dump_app(said)["interface"]["actions"] == [{"name": "save", "payload": insight}, {"name": "finish"}]
+    save, finish = said.interface.actions
+    assert save.payload_refused({"insight": "x", "quote": "y"}) is None
+    assert save.payload_refused({"quote": "y"}) == "it needs insight"
+    assert save.payload_refused({"insight": "x", "secret": "s"}) == "it takes insight, quote, not secret"
+    assert finish.payload_refused({}) is None
+    assert finish.payload_refused({"secret": "s"}) == "it takes nothing, and was given secret"
+    for wrong in (
+        [{"name": "page"}],
+        [{"name": "two words"}],
+        [{"name": "save"}, {"name": "save"}],
+        [{"name": "save", "payload": {"type": "string"}}],
+        [{"name": "save", "label": "Save"}],
+    ):
+        with pytest.raises(AppError, match="interface"):
+            app(interface={"actions": wrong})
+
+    def pressing(*turns: dict) -> list:
+        return press_problems(
+            app(
+                interface={"actions": [{"name": "save", "payload": insight}, {"name": "finish"}]},
+                tests={"cases": [{"turns": [{"say": "Hi"}, *turns], "expect": "It saves."}]},
+            )
+        )
+
+    assert pressing({"press": "save", "payload": {"insight": "x"}}, {"press": "finish"}) == []
+    assert pressing({"press": "delete"}) == [
+        "A test presses 'delete', which its code declares no action for (`interface.actions`, `@app.action`)."
+    ]
+    assert pressing({"press": "finish", "payload": {"why": "done"}}) == [
+        "A test presses 'finish' with what it does not take: it takes nothing, and was given why."
+    ]
 
 
 def test_an_application_declares_mode_switches_whose_option_goes_with_every_run() -> None:

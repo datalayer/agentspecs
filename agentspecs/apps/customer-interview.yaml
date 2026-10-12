@@ -1,9 +1,9 @@
 # Built from app.py by `loop apps build`: the file is the source; edit it there.
 # What its code decides; without the file, its agent answers:
-# loop:code start: opening (app.py:149)
-# loop:code message: reply (app.py:162)
-# loop:code action save: save (app.py:178)
-# loop:code action finish: finish (app.py:187)
+# loop:code start: opening (app.py:159)
+# loop:code message: reply (app.py:172)
+# loop:code action save: save (app.py:188)
+# loop:code action finish: finish (app.py:198)
 schema: loop.app/v1
 id: customer-interview
 version: 0.0.1
@@ -44,6 +44,30 @@ interface:
         minimum: 3
         maximum: 15
         default: 8
+  actions:
+  - name: save
+    description: Save an insight, with the words it cites.
+    payload:
+      description: An insight, in the interviewer's words, and the interviewee's own
+        that it cites.
+      properties:
+        insight:
+          description: What was learned
+          minLength: 1
+          title: Insight
+          type: string
+        quote:
+          description: The interviewee's words it cites
+          minLength: 1
+          title: Quote
+          type: string
+      required:
+      - insight
+      - quote
+      title: Insight
+      type: object
+  - name: finish
+    description: End the interview, and record its result.
 tests:
   ready_at: 0.8
   cases:
