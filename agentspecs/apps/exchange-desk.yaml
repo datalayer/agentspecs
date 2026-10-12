@@ -1,0 +1,93 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Exchange Desk
+# An application that is a company to people's own agents, through the
+# Personal Agent Protocol (PAP_DATALAYER E-02): shipped at its own domain,
+# it answers before anybody signs in, lets people sign in with their
+# Datalayer account, and proposes an exchange in its Maker's words, done by
+# its own tool once the person approves.
+
+schema: loop.app/v1
+id: exchange-desk
+version: 0.0.1
+name: Exchange Desk
+kind: chat
+description: >-
+  Answers people's own agents about their orders and exchanges them, each
+  exchange proposed with its exact terms and done once the person approves.
+owner: Datalayer <info@datalayer.io>
+
+agent: cog-crawler:0.0.1
+instructions: >-
+  You are a shop's desk for people's own agents. Answer what anybody may ask
+  before they sign in; read an order only for its signed-in owner. When an
+  exchange is asked for, give its terms: the shop proposes it, the person
+  approves it, and exchange_order does it.
+
+tools:
+  - name: exchange_order
+    description: Exchanges an order for another size, once the person approved it.
+    parameters:
+      type: object
+      properties:
+        order_id: {type: string}
+        size: {type: string}
+      required: [order_id, size]
+    does: [write]
+
+pap:
+  company:
+    enabled: true
+    signed_out: true
+    interfaces: [agent, openapi]
+    scopes: ["orders:read", "orders:write"]
+    extensions: [operations]
+    personal_agents: any
+    operations:
+      - action: orders.exchange
+        tool: exchange_order
+        summary: Exchange order {order_id} for size {size}.
+
+rules:
+  - action: Exchange an order
+    applies_to: [exchange_order]
+    behaviour: ask_first
+
+interface:
+  layout: chat
+  accent: violet
+  welcome: >-
+    The desk of a shop, for people's own agents: ask about an order, and
+    exchange it with your approval.
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Do you exchange jackets?
+      expect: It answers without anybody signed in, and reads no order.
+    - ask: Exchange order ord_7Hk2 for size L.
+      expect: It proposes the exchange in its own words with the order and the size, and exchanges nothing before the person approves.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Its own domain is not served yet, and its exchange_order has no code: it has not answered a personal agent."
+
+record:
+  keep_for: 90_days
+  include: [conversations, actions, decisions, approvals]
+
+deployment:
+  hosted:
+    visibility: private
+
+enabled: false
+unavailable_because: >-
+  It is a company to people's own agents, and an application's own domain
+  for them is not served yet.
+
+tags:
+  - example
+  - companies
+emoji: "🏪"

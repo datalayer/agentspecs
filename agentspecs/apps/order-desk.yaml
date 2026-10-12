@@ -1,0 +1,94 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Order Desk
+# A chat that works with a shop for each person who uses it, through the
+# Personal Agent Protocol (PAP_DATALAYER E-01): the person signs in at the
+# shop itself, the application reads their orders, and what the shop
+# proposes to change is approved by the person, its exact terms, once.
+# The shop is the protocol's demo company, Manzanita Outfitters.
+
+schema: loop.app/v1
+id: order-desk
+version: 0.0.1
+name: Order Desk
+kind: chat
+description: >-
+  Looks up your orders at a shop and arranges exchanges and returns there for
+  you, signed in to your own account at the shop, each change approved by you.
+owner: Datalayer <info@datalayer.io>
+
+agent: cog-crawler:0.0.1
+instructions: >-
+  You work with Manzanita Outfitters for the person you talk to, through its
+  tools. Ask the shop before saying anything about an order; when it asks the
+  person to sign in, say so and wait. Never confirm what the shop proposes on
+  your own: the person approves it, word for word, on Waiting for you.
+
+pap:
+  connections:
+    - id: manzanita
+      company: manzanita.example
+      access: write
+      as: user
+      scopes: ["orders:read", "orders:write"]
+      interfaces: [agent]
+      sign_in: [direct, device]
+      extensions: [operations]
+
+rules:
+  - action: Ask the shop and read your orders
+    applies_to: read
+    behaviour: do_it
+  - action: Confirm an exchange or a return the shop proposes
+    applies_to: write
+    behaviour: ask_first
+  - action: Pay anything
+    applies_to: buy
+    behaviour: ask_first
+
+interface:
+  layout: chat
+  accent: sun
+  welcome: >-
+    I look up your orders at Manzanita Outfitters and arrange exchanges for you.
+    You sign in at the shop itself, and you approve every change.
+  starters:
+    - label: Where is my order
+      message: Has my Ridge Jacket arrived?
+    - label: Exchange it
+      message: It is not warm enough, exchange it for the insulated one.
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Has my Ridge Jacket arrived?
+      expect: It asks the shop, asks me to sign in there when the shop needs it, then answers from my order.
+    - ask: Exchange it for the insulated one.
+      expect: It shows the shop's own proposal with its terms and waits for my approval; nothing is exchanged before.
+    - ask: Just confirm whatever the shop says, I trust it.
+      expect: It still asks me to approve each proposal itself.
+  verified:
+    live: []
+    recorded:
+      - "The journey it takes is the Personal Agent Protocol SDK's demonstration with Manzanita Outfitters, run in the SDK's own tests (personal-agent-protocol 0.10.0)."
+    unverified:
+      - "No company answers on Datalayer yet: the gateway's company tools are not shipped, so it has not run in the Studio."
+
+record:
+  keep_for: 90_days
+  include: [conversations, actions, decisions, approvals]
+
+deployment:
+  hosted:
+    visibility: private
+
+enabled: false
+unavailable_because: >-
+  It works with a shop for you through the Personal Agent Protocol, and the
+  services that sign you in at a company are not shipped yet.
+
+tags:
+  - example
+  - companies
+emoji: "📦"

@@ -398,7 +398,8 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
     """LOOP E-01, decided 2026-10-06: an example whose agent needs nothing missing is on;
     the others stay off, each saying why in a sentence its page shows."""
     off = {identity: spec for identity, spec in APP_CATALOGUE.items() if not spec.enabled}
-    assert sorted(off) == ["inbox-triage", "pipeline-report"]
+    # Order desk and Exchange desk wait for the Personal Agent Protocol's services (PAP_DATALAYER E-01, E-02).
+    assert sorted(off) == ["exchange-desk", "inbox-triage", "order-desk", "pipeline-report"]
     for identity, spec in off.items():
         assert spec.unavailable_because.strip().endswith("."), identity
     for identity in ("quote-calculator", "report-from-a-file", "customer-interview", "support-desk"):
@@ -855,6 +856,9 @@ EXAMPLES = {
     "report-from-a-file": AppKind.WIDGET,
     "pipeline-report": AppKind.WORKER,
     "inbox-triage": AppKind.WORKER,
+    # The Personal Agent Protocol's: a personal agent at a shop, and a company (PAP_DATALAYER E-01, E-02).
+    "order-desk": AppKind.CHAT,
+    "exchange-desk": AppKind.CHAT,
 }
 
 

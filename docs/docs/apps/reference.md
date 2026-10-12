@@ -334,6 +334,61 @@ backend_tools:
 - decide:0.0.1
 ```
 
+### `tools`
+
+```yaml
+tools:
+- name: exchange_order
+  description: Exchanges an order for another size, once the person approved it.
+  parameters:
+    type: object
+    properties:
+      order_id:
+        type: string
+      size:
+        type: string
+    required:
+    - order_id
+    - size
+  does:
+  - write
+```
+
+### `pap`
+
+```yaml
+pap:
+  company:
+    enabled: true
+    signed_out: true
+    interfaces:
+    - agent
+    - openapi
+    scopes:
+    - orders:read
+    - orders:write
+    extensions:
+    - operations
+    personal_agents: any
+    operations:
+    - action: orders.exchange
+      tool: exchange_order
+      summary: Exchange order {order_id} for size {size}.
+```
+
+### `enabled`
+
+```yaml
+enabled: false
+```
+
+### `unavailable_because`
+
+```yaml
+unavailable_because: It is a company to people's own agents, and an application's
+  own domain for them is not served yet.
+```
+
 ### `goal`
 
 ```yaml
@@ -367,19 +422,6 @@ memory: mem0
 ```yaml
 notifications:
 - email
-```
-
-### `enabled`
-
-```yaml
-enabled: false
-```
-
-### `unavailable_because`
-
-```yaml
-unavailable_because: 'It reads and sorts your mail, and a mailbox cannot be connected
-  yet: the Google Workspace connection is still being built.'
 ```
 
 ### `checks`
@@ -417,36 +459,6 @@ checks:
 team: analyze-support-tickets:0.0.1
 ```
 
-### `pap`
-
-```yaml
-pap:
-  connections:
-  - id: orders
-    company: example.com
-    access: read
-    as: user
-    scopes:
-    - poppy:read
-    interfaces:
-    - agent
-    - openapi
-    sign_in:
-    - direct
-    - device
-    extensions:
-    - operations
-  company:
-    enabled: false
-    extensions:
-    - operations
-    operations:
-    - action: orders.exchange
-      tool: exchange_order
-      summary: Exchange order {order_id} for size {size}
-      user_approval_required: true
-```
-
 ### `model`
 
 ```yaml
@@ -458,23 +470,6 @@ model: bedrock:us.anthropic.claude-sonnet-4-6
 ```yaml
 skills:
 - crawl:0.0.1
-```
-
-### `tools`
-
-```yaml
-tools:
-- name: lookup_order
-  description: Find an order by its number.
-  parameters:
-    type: object
-    properties:
-      number:
-        type: string
-    required:
-    - number
-  does:
-  - read
 ```
 
 ### `permissions`
