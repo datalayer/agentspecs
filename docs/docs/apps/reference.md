@@ -49,7 +49,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `tags` | list of text |  | — |
 | `icon` | text | Icon identifier | `"apps"` |
 | `emoji` | text | Its face: one emoji, shown wherever the application appears | `"👀"` |
-| `avatar` | text | Its avatar, by name: a drawing of the set people choose theirs from on their profile. Its emoji stands for it when unsaid, and where only text goes | empty |
+| `avatar` | text | Its avatar, as people keep theirs on their profile: `emoji:<emoji>`, or `@datalayer/icons-react:<Name>Icon` for a drawing of the set. Its emoji stands for it when unsaid, and where only text goes | empty |
 | `banner` | text | Its banner, by name, from the set people choose theirs from on their profile. The one its id seeds when unsaid | empty |
 
 ## Examples
@@ -491,7 +491,7 @@ permissions:
 ### `avatar`
 
 ```yaml
-avatar: AstronautIcon
+avatar: '@datalayer/icons-react:AstronautIcon'
 ```
 
 ### `banner`

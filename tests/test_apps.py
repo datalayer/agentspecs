@@ -1502,7 +1502,9 @@ def test_an_application_is_translated_in_its_spec() -> None:
         ),
         ({"emoji": "mail"}, "is one emoji"),
         ({"emoji": ""}, "is one emoji"),
-        ({"avatar": "an astronaut"}, "named as its drawing is"),
+        ({"avatar": "AstronautIcon"}, "an avatar is `emoji:"),
+        ({"avatar": "emoji:mail"}, "an avatar is `emoji:"),
+        ({"avatar": "@datalayer/icons-react:astronaut"}, "an avatar is `emoji:"),
         ({"banner": "svg-terms-hero"}, "named as its drawing is"),
         ({"permissions": {"spaces": [{"space": "a"}, {"space": "a"}]}}, "same Space twice"),
         ({"permissions": {"network": True}}, "permissions.network is not a field"),
@@ -1690,17 +1692,21 @@ def test_an_application_chooses_its_avatar_and_banner_as_a_person_does() -> None
     # and nothing is written for either.
     assert (plain.avatar, plain.banner) == ("", "")
     assert "avatar" not in dump_app(plain) and "banner" not in dump_app(plain)
-    chosen = app(avatar=" AstronautIcon ", banner="SvgTutorialsHero")
-    assert (chosen.avatar, chosen.banner) == ("AstronautIcon", "SvgTutorialsHero")
+    chosen = app(avatar=" @datalayer/icons-react:AstronautIcon ", banner="SvgTutorialsHero")
+    assert (chosen.avatar, chosen.banner) == ("@datalayer/icons-react:AstronautIcon", "SvgTutorialsHero")
+    assert app(avatar="emoji:🚀").avatar == "emoji:🚀"
     written = list(dump_app(chosen))
     # Beside its emoji, in the order the spec declares them.
     assert written.index("avatar") == written.index("banner") - 1
     assert parse_app(dump_app(chosen)) == chosen
     # A validator outside Python checks the same shape.
     pattern = re.compile(json_schema()["properties"]["avatar"]["pattern"])
-    assert pattern.match("AstronautIcon") and pattern.match("") and pattern.match(" AstronautIcon ")
-    assert not pattern.match("an astronaut")
-    assert json_schema()["properties"]["banner"]["pattern"] == pattern.pattern
+    for kept in ("@datalayer/icons-react:AstronautIcon", "", " emoji:🚀 ", "emoji:👩‍💻"):
+        assert pattern.match(kept), kept
+    for refused in ("AstronautIcon", "an astronaut", "emoji:mail", "@datalayer/icons-react:Astronaut"):
+        assert not pattern.match(refused), refused
+    banner = re.compile(json_schema()["properties"]["banner"]["pattern"])
+    assert banner.match("SvgTutorialsHero") and not banner.match("svg-terms-hero")
 
 
 # --- what a rule decides ----------------------------------------------------------------

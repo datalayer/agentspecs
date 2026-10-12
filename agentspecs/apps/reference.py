@@ -116,7 +116,7 @@ EXTRA_EXAMPLES: Dict[str, Any] = {
         "guards": ["confidence-guard:0.0.1"],
         "gates": ["low-confidence-review"],
     },
-    "avatar": "AstronautIcon",
+    "avatar": "@datalayer/icons-react:AstronautIcon",
     "banner": "SvgTutorialsHero",
 }
 

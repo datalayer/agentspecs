@@ -72,9 +72,21 @@ KNOWN_SCHEMAS = (APP_SCHEMA,)
 #: How an avatar or a banner is named: as its drawing is, ``AstronautIcon``.
 DRAWING_NAME = r"[A-Z][A-Za-z0-9]{0,63}"
 
-#: What a validator outside Python checks an avatar or a banner against:
+#: What a validator outside Python checks a banner against:
 #: nothing, or a drawing's name, around the spaces Python lets go.
 _DRAWING_SCHEMA = {"pattern": rf"^\s*({DRAWING_NAME})?\s*$"}
+
+#: How an avatar is kept, as core's ``avatarChoice`` keeps a person's: prefixed
+#: by what it is — ``emoji:👀``, or ``@datalayer/icons-react:AstronautIcon``.
+AVATAR_EMOJI_PREFIX = "emoji:"
+AVATAR_ICON_PREFIX = "@datalayer/icons-react:"
+AVATAR_ICON_NAME = r"[A-Z][A-Za-z0-9]{0,62}Icon"
+
+#: What a validator outside Python checks an avatar against: nothing, an
+#: emoji avatar (no letter, digit or space after the prefix), or an icon's.
+_AVATAR_SCHEMA = {
+    "pattern": rf"^\s*(emoji:[^\sA-Za-z0-9]{{1,32}}|@datalayer/icons-react:{AVATAR_ICON_NAME})?\s*$"
+}
 
 #: How the character of a floating assistant is named (LOOP T-24): by the id
 #: a UI plugin contributes it under, ``paperclip`` or ``acme-owl``. Which ids
@@ -2568,10 +2580,11 @@ class AppSpec(_Strict):
     avatar: str = Field(
         default="",
         description=(
-            "Its avatar, by name: a drawing of the set people choose theirs from on their profile. "
+            "Its avatar, as people keep theirs on their profile: `emoji:<emoji>`, or "
+            "`@datalayer/icons-react:<Name>Icon` for a drawing of the set. "
             "Its emoji stands for it when unsaid, and where only text goes"
         ),
-        json_schema_extra=_DRAWING_SCHEMA,
+        json_schema_extra=_AVATAR_SCHEMA,
     )
     banner: str = Field(
         default="",
@@ -2590,7 +2603,27 @@ class AppSpec(_Strict):
             raise ValueError("an application's `emoji` is one emoji, its face")
         return face
 
-    @field_validator("avatar", "banner")
+    @field_validator("avatar")
+    @classmethod
+    def _is_an_avatar(cls, value: str) -> str:
+        # The set is the interface's (core's PRINCIPAL_AVATAR_ICONS): this
+        # says the value is an avatar's shape, the interface whether the
+        # drawing is in the set.
+        value = value.strip()
+        if not value:
+            return value
+        if value.startswith(AVATAR_EMOJI_PREFIX):
+            emoji = value[len(AVATAR_EMOJI_PREFIX) :]
+            if emoji and len(emoji) <= 32 and not any(c.isalnum() or c.isspace() for c in emoji):
+                return value
+        elif value.startswith(AVATAR_ICON_PREFIX):
+            if re.fullmatch(AVATAR_ICON_NAME, value[len(AVATAR_ICON_PREFIX) :]):
+                return value
+        raise ValueError(
+            "an avatar is `emoji:<emoji>` or `@datalayer/icons-react:<Name>Icon`, as `emoji:👀`"
+        )
+
+    @field_validator("banner")
     @classmethod
     def _is_a_drawing(cls, name: str) -> str:
         # The sets are the interface's (core's PRINCIPAL_AVATAR_ICONS and
@@ -2598,7 +2631,7 @@ class AppSpec(_Strict):
         # it is in them — and draws the emoji, or the seeded banner, if not.
         name = name.strip()
         if name and not re.fullmatch(DRAWING_NAME, name):
-            raise ValueError("an avatar or a banner is named as its drawing is, `AstronautIcon`")
+            raise ValueError("a banner is named as its drawing is, `SvgTutorialsHero`")
         return name
 
     @field_validator("schema_")
