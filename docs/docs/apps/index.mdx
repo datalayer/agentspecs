@@ -118,6 +118,56 @@ are not carried over: what the application can touch is the list under
 | `as` | In whose name: `owner` (the builder's account, for everybody) or `user` (each user's own). |
 | `only` | Optionally, the tools it may use, by name or pattern (`*gmail*`): `*` is any run of characters, `?` any one, and nothing else is special. A tool left out is not reached at all. |
 
+### Companies and businesses, over agent protocols
+
+Other companies' agents are reached the same way, each in a block of its
+protocol, and only with that protocol listed under `protocols` (a `pap` or
+`pact` block without it is refused). A counterpart is named by its domain,
+never a URL, and no credential is ever part of the spec: the gateway's `pap`
+and `pact` toolsets reach it, with the application's own keys held by
+Datalayer.
+
+```yaml
+protocols: [pap, pact]
+
+pap:
+  # A company it works with as each person's agent (Personal Agent Protocol).
+  connections:
+    - id: manzanita
+      company: manzanita.example
+      access: write          # read, or write
+      as: user               # each person's own account, or owner
+      scopes: ["orders:read", "orders:write"]
+      extensions: [operations]
+  # The application itself as a company to people's own agents.
+  company:
+    enabled: true
+    scopes: ["orders:read", "orders:write"]
+    extensions: [operations]
+    operations:
+      - action: orders.exchange
+        tool: exchange_order                  # one of its own tools
+        summary: "Exchange order {order_id} for size {size}."
+        user_approval_required: true          # only the person, never an approval in advance
+
+pact:
+  # A business's own agent, asked for each person (PACT 1.0).
+  connections:
+    - id: example-air
+      brand: air.example
+      audience: https://provider.example/a2a  # what its Provider assigned the application
+      access: write                           # read: as itself; write: also for each person
+      scopes: ["bookings:read", "bookings:change"]
+```
+
+An operation is proposed to the person with the summary filled from its
+exact terms — the Maker's words, never the model's — and done by its tool
+once, after they confirm that revision. Every key is in the
+[reference](./reference.md) (`AppPap`, `AppPapConnection`, `AppPapCompany`,
+`AppPapOperation`, `AppPact`, `AppPactConnection`); the catalogue's *Order
+Desk*, *Exchange Desk* and *Travel Desk* are written this way, and how each
+protocol tool is classed is under [Action classes](#action-classes).
+
 ## Outputs
 
 An application answers in words. `interface.outputs` says, by media type, the
