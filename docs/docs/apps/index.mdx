@@ -598,6 +598,30 @@ and reply say it today.
 A server nobody has checked yet says `checked: null` and classes nothing: its
 tools are unknown, and an application cannot write through it.
 
+**An agent protocol's tools are classed the same way**, in
+`agentspecs/protocol-tools`: the MCP gateway's `pap` toolset (a company,
+over the Personal Agent Protocol), its `pact` toolset (a business, over
+PACT), and the operations of the UCP and Agentic Commerce clients. Each says
+the `connection` prefix its connections take — `pap:<domain>`,
+`pact:<brand>`, `ucp:<domain>`, `acp:<domain>` — and
+`connection_tool_classes(server, tool)` answers for a tool reached through
+any connection, a protocol's or a catalogue server's, so a rule decides a
+protocol's tool with no code of that protocol:
+
+```yaml
+# protocol-tools/pap.yaml
+connection: pap
+actions:
+  checked: "2026-10-12"
+  tools:
+    pap_ask: read              # asks the company's agent; changes nothing there
+    pap_confirm: [write, buy]  # does what the operation does
+    pap_disconnect: write
+```
+
+Confirming a company's operation is everything an operation can do until its
+terms are read at the call: `buy` when a term moves money, `write` otherwise.
+
 What a server says of its own tools — the `readOnlyHint` of the protocol — is
 a claim by the server. It is not read: the class is the catalogue's, written
 by somebody who looked.

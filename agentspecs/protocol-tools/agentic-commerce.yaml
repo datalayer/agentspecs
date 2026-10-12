@@ -1,0 +1,23 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agentic Commerce Protocol 2026-04-17 checkout operations, as agent-runtimes'
+# `agentic_commerce` client makes them (AGENT_PROTOCOLS PR-42). A seller
+# connection is `acp:<domain>`.
+id: agentic-commerce
+name: Agentic Commerce Protocol
+description: Checking out at a seller over ACP.
+connection: acp
+
+actions:
+  checked: "2026-10-12"
+  note: >-
+    Proposing a completion only reads the session and records the exact
+    revision the person approves; completing it pays.
+  tools:
+    propose_completion: read
+    get_checkout: read
+    create_checkout: write
+    update_checkout: write
+    cancel_checkout: write
+    complete: buy

@@ -67,6 +67,14 @@ Where the class is written:
   is any run of characters, ``?`` any one, and nothing else is special), and
   the day those names were read off the running server (``checked``).
 
+- an agent protocol's tools — a toolset of Datalayer's MCP gateway reached
+  through a protocol connection (``pap:<domain>``, ``pact:<brand>``), or the
+  operations of a protocol client (``ucp:``, ``acp:``) — are written the same
+  way in ``agentspecs/protocol-tools``, each naming its ``connection`` prefix
+  (AGENT_PROTOCOLS PR-54): :func:`connection_tool_classes` answers for a
+  tool reached through any connection, so a Rule decides a protocol's tool
+  with no code of that protocol.
+
 **A tool with no class is unknown, and unknown is the most restricted**: it
 is never taken for a reader. What a server says of its own tools — the
 ``readOnlyHint`` of the protocol — is a claim by the server, and is not read
@@ -432,6 +440,55 @@ def server_specs() -> Dict[str, Dict[str, Any]]:
     return _SERVERS
 
 
+_PROTOCOLS: Dict[str, Dict[str, Any]] = {}
+
+
+def protocol_tool_specs() -> Dict[str, Dict[str, Any]]:
+    """The agent protocols' tools, as plain data, by protocol id, read once (PR-54)."""
+    if not _PROTOCOLS:
+        _PROTOCOLS.update(_load(_ROOT / "protocol-tools"))
+    return _PROTOCOLS
+
+
+def protocol_of_connection(server: str) -> Optional[Dict[str, Any]]:
+    """The protocol a connection's ``server`` names (``pap:example.com``), or ``None``
+    for a connection to an MCP server of the catalogue."""
+    prefix, colon, rest = str(server).partition(":")
+    if not colon or not rest or "." not in rest:
+        return None
+    for spec in protocol_tool_specs().values():
+        if spec.get("connection") == prefix:
+            return spec
+    return None
+
+
+def protocol_tool_classes(
+    protocol: str, tool_name: str, arguments: Optional[Mapping[str, Any]] = None
+) -> Classes:
+    """The classes of one tool of an agent protocol, by the protocol's id; empty when
+    nothing says (unknown, the most restricted)."""
+    spec = protocol_tool_specs().get(protocol)
+    return server_tool_classes(spec, tool_name, arguments) if spec else ()
+
+
+def protocol_tool_names(protocol: str) -> Tuple[str, ...]:
+    """The tools an agent protocol's spec names (its patterns left out)."""
+    tools = ((protocol_tool_specs().get(protocol) or {}).get("actions") or {}).get("tools") or {}
+    return tuple(name for name in tools if not is_pattern(name))
+
+
+def connection_tool_classes(
+    server: str, tool_name: str, arguments: Optional[Mapping[str, Any]] = None
+) -> Classes:
+    """The classes of a tool reached through a connection to ``server``: an agent
+    protocol's (``pap:example.com``, ``pact:air.example``) or an MCP server's of the
+    catalogue (``tavily``); empty when nothing says."""
+    spec = protocol_of_connection(server)
+    if spec is not None:
+        return server_tool_classes(spec, tool_name, arguments)
+    return classes_of(f"{server}.{tool_name}", arguments) if server else ()
+
+
 #: `server.tool`, the server with or without its version: `tavily.tavily_search`,
 #: `google-workspace:0.0.1.send_gmail_message`.
 _SERVER_TOOL = re.compile(r"^(?P<server>[A-Za-z0-9_-]+)(?::\d+(?:\.\d+)*)?\.(?P<tool>[A-Za-z_][A-Za-z0-9_-]*)$")
@@ -478,6 +535,18 @@ def _id_of(ref: str) -> str:
     return base if base and "." in version else str(ref)
 
 
+def protocol_tools_problems(spec: Mapping[str, Any]) -> List[str]:
+    """What is wrong with an agent protocol's tools spec; empty when nothing is."""
+    identity = spec.get("id", "?")
+    problems = [problem.replace("MCP server", "Protocol", 1) for problem in server_actions_problems(spec)]
+    connection = spec.get("connection")
+    if not isinstance(connection, str) or not re.fullmatch(r"[a-z][a-z0-9-]*", connection):
+        problems.append(f"Protocol {identity!r} names the `connection` prefix its connections take (`pap`)")
+    if not (spec.get("actions") or {}).get("tools"):
+        problems.append(f"Protocol {identity!r} names no tool")
+    return problems
+
+
 def server_actions_problems(server: Mapping[str, Any]) -> List[str]:
     """What is wrong with the ``actions`` of an MCP server spec; empty when nothing is."""
     identity = server.get("id", "?")
@@ -520,6 +589,12 @@ __all__ = [
     "is_pattern",
     "is_read_only",
     "matches",
+    "connection_tool_classes",
+    "protocol_of_connection",
+    "protocol_tool_classes",
+    "protocol_tool_names",
+    "protocol_tool_specs",
+    "protocol_tools_problems",
     "server_actions_problems",
     "server_specs",
     "server_tool_classes",
