@@ -2499,6 +2499,14 @@
       "$ref": "#/$defs/AppPermissions",
       "description": "What else it may reach: Spaces, its computer. Nothing, unless said"
     },
+    "protocols": {
+      "description": "The agent protocols it speaks, ids of the protocols catalogue (AGENT_PROTOCOLS PS-02): its `pap`, `pact` and `a2a` blocks are refused unless their protocol is listed, and a planned protocol only while it is not offered",
+      "items": {
+        "type": "string"
+      },
+      "title": "Protocols",
+      "type": "array"
+    },
     "record": {
       "$ref": "#/$defs/AppRecord",
       "description": "What is kept of what it did"

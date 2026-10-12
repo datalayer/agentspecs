@@ -2007,6 +2007,9 @@ def test_the_reference_says_every_field_and_is_the_one_in_the_docs() -> None:
         document = {**base, key: value}
         if key == "team":
             document.pop("agent")
+        if key in ("pap", "pact", "a2a"):
+            # A block configuring a protocol is read with its protocol listed (PS-02).
+            document["protocols"] = [key]
         parse_app(document)
     if REFERENCE_PATH.exists():
         assert REFERENCE_PATH.read_text() == page, "run `python -m agentspecs.apps`"

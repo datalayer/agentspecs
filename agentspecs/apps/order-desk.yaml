@@ -25,6 +25,9 @@ instructions: >-
   person to sign in, say so and wait. Never confirm what the shop proposes on
   your own: the person approves it, word for word, on Waiting for you.
 
+# The protocols it speaks: its `pap` block is refused unless listed here.
+protocols: [pap]
+
 pap:
   connections:
     - id: manzanita

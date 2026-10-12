@@ -2703,6 +2703,14 @@ class AppSpec(_Strict):
     )
     contents: List[str] = Field(default_factory=list, description="The documents and datasets it answers from")
     connections: List[AppConnection] = Field(default_factory=list, description="What it reaches")
+    protocols: List[str] = Field(
+        default_factory=list,
+        description=(
+            "The agent protocols it speaks, ids of the protocols catalogue (AGENT_PROTOCOLS PS-02): "
+            "its `pap`, `pact` and `a2a` blocks are refused unless their protocol is listed, "
+            "and a planned protocol only while it is not offered"
+        ),
+    )
     pap: AppPap = Field(
         default_factory=AppPap, description="Personal Agent Protocol: companies it works with, or being one"
     )
@@ -2830,6 +2838,7 @@ class AppSpec(_Strict):
             raise ValueError(
                 "an application offered today is available: remove `unavailable_because`, or set `enabled: false`"
             )
+        self._speaks_its_protocols()
         if self.kind is AppKind.DECISION and self.decision is None:
             raise ValueError("a decision application says what it decides, under `decision`")
         if self.kind is not AppKind.DECISION and self.decision is not None:
@@ -2896,6 +2905,27 @@ class AppSpec(_Strict):
                 seen[target] = rule.action
         self._samples_hold_together()
         return self
+
+    def _speaks_its_protocols(self) -> None:
+        """Its protocols are the catalogue's, each once, none planned while it is offered; a block
+        configuring a protocol it does not list is refused: `protocols` is the one place it is said."""
+        from ..protocols import protocol_of_block, protocols_problems
+
+        problems = protocols_problems(self.protocols, to_ship=self.enabled)
+        configured = {
+            "pap": bool(self.pap.connections) or self.pap.company.enabled,
+            "pact": bool(self.pact.connections),
+            "a2a": bool(self.a2a.extensions),
+        }
+        for block, used in configured.items():
+            protocol = protocol_of_block(block)
+            if used and protocol.id not in self.protocols:
+                problems.append(
+                    f"Its `{block}` block configures {protocol.name}, which it does not list: "
+                    f"add {protocol.id!r} to `protocols`."
+                )
+        if problems:
+            raise ValueError(" ".join(problems))
 
     def _samples_hold_together(self) -> None:
         """What it is tried on is its own: its documents, its decision's criteria."""

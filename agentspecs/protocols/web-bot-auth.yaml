@@ -1,0 +1,22 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# An agent protocol Datalayer targets (AGENT_PROTOCOLS §1). `status` says it as
+# it stands: `shipped` when agent-runtimes implements it today, `planned`
+# otherwise — an application cannot ship speaking a planned one.
+id: web-bot-auth
+version: 0.0.1
+name: Web Bot Auth
+description: >-
+  Signed outbound requests (RFC 9421) and the key directory a website checks them against.
+publisher: Cloudflare (IETF draft)
+layer: identity
+spec_url: https://datatracker.ietf.org/doc/draft-ietf-webbotauth-httpsig-protocol/
+spec_version: "draft-ietf-webbotauth-httpsig-protocol-00"
+status: shipped
+connects: Websites, which can tell the application's requests from someone pretending
+packages:
+  python: ["agent-runtimes"]
+  typescript: ["@datalayer/agent-runtimes", "web-bot-auth"]
+# Its tools' action classes, under protocol-tools/ (agentspecs.actions).
+protocol_tools: []

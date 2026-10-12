@@ -9,7 +9,7 @@ from pydantic import ValidationError
 
 from agentspecs.apps import AppSpec
 
-BASE = {"id": "support", "name": "Support", "kind": "chat", "agent": "a"}
+BASE = {"id": "support", "name": "Support", "kind": "chat", "agent": "a", "protocols": ["pact"]}
 AIR = {
     "id": "air",
     "brand": "air.example",

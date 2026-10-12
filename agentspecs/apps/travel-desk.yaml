@@ -25,6 +25,9 @@ instructions: >-
   permission, give them its link and code to sign in at the airline itself,
   and never ask for a password. Change a booking only when the person asked.
 
+# The protocols it speaks: its `pact` block is refused unless listed here.
+protocols: [pact]
+
 pact:
   connections:
     - id: example-air

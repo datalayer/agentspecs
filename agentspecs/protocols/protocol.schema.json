@@ -1,0 +1,155 @@
+{
+  "$defs": {
+    "AppspecBlock": {
+      "description": "The Appspec blocks a protocol configures.",
+      "enum": [
+        "pap",
+        "pact",
+        "a2a"
+      ],
+      "title": "AppspecBlock",
+      "type": "string"
+    },
+    "ProtocolLayer": {
+      "description": "The layer of an agent's visit a protocol answers (AGENT_PROTOCOLS \u00a71, after poppy.md).",
+      "enum": [
+        "transport",
+        "consent",
+        "identity",
+        "commerce",
+        "ui"
+      ],
+      "title": "ProtocolLayer",
+      "type": "string"
+    },
+    "ProtocolPackages": {
+      "additionalProperties": false,
+      "description": "The packages implementing it, by language.",
+      "properties": {
+        "python": {
+          "description": "Python distributions",
+          "items": {
+            "type": "string"
+          },
+          "title": "Python",
+          "type": "array"
+        },
+        "typescript": {
+          "description": "npm packages",
+          "items": {
+            "type": "string"
+          },
+          "title": "Typescript",
+          "type": "array"
+        }
+      },
+      "title": "ProtocolPackages",
+      "type": "object"
+    },
+    "ProtocolStatus": {
+      "description": "Where a protocol stands: implemented by agent-runtimes today, or only planned.",
+      "enum": [
+        "shipped",
+        "planned"
+      ],
+      "title": "ProtocolStatus",
+      "type": "string"
+    }
+  },
+  "$id": "https://agentspecs.datalayer.tech/schemas/protocol.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One agent protocol.",
+  "properties": {
+    "appspec_block": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AppspecBlock"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "The Appspec block that configures it: refused unless `protocols` lists it"
+    },
+    "connects": {
+      "description": "What it connects an agent to",
+      "minLength": 1,
+      "title": "Connects",
+      "type": "string"
+    },
+    "description": {
+      "description": "What it does, in a sentence or two",
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "id": {
+      "description": "Its id, the file's name: what `protocols` lists",
+      "title": "Id",
+      "type": "string"
+    },
+    "layer": {
+      "$ref": "#/$defs/ProtocolLayer",
+      "description": "The layer it answers"
+    },
+    "name": {
+      "description": "Its name",
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "packages": {
+      "$ref": "#/$defs/ProtocolPackages"
+    },
+    "protocol_tools": {
+      "description": "Its tools' action-class tables, under protocol-tools/",
+      "items": {
+        "type": "string"
+      },
+      "title": "Protocol Tools",
+      "type": "array"
+    },
+    "publisher": {
+      "description": "Who publishes the specification",
+      "minLength": 1,
+      "title": "Publisher",
+      "type": "string"
+    },
+    "spec_url": {
+      "description": "The specification, https",
+      "title": "Spec Url",
+      "type": "string"
+    },
+    "spec_version": {
+      "description": "The version of the specification implemented",
+      "minLength": 1,
+      "title": "Spec Version",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/ProtocolStatus",
+      "description": "shipped, or planned"
+    },
+    "version": {
+      "description": "The version of this spec",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "name",
+    "description",
+    "publisher",
+    "layer",
+    "spec_url",
+    "spec_version",
+    "status",
+    "connects"
+  ],
+  "title": "Protocol",
+  "type": "object"
+}

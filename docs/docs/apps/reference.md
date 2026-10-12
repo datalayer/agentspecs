@@ -30,6 +30,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `context` | list of text | The Frames it works under: the catalogue's, or its organization's own (`org-…`) | — |
 | `contents` | list of text | The documents and datasets it answers from | — |
 | `connections` | list of [AppConnection](#appconnection) | What it reaches | — |
+| `protocols` | list of text | The agent protocols it speaks, ids of the protocols catalogue (AGENT_PROTOCOLS PS-02): its `pap`, `pact` and `a2a` blocks are refused unless their protocol is listed, and a planned protocol only while it is not offered | — |
 | `pap` | [AppPap](#apppap) | Personal Agent Protocol: companies it works with, or being one | — |
 | `pact` | [AppPact](#apppact) | PACT: businesses it asks for each person | — |
 | `a2a` | [AppA2A](#appa2a) | A2A: the extensions its Agent Card advertises | — |
@@ -354,6 +355,13 @@ tools:
     - size
   does:
   - write
+```
+
+### `protocols`
+
+```yaml
+protocols:
+- pap
 ```
 
 ### `pap`

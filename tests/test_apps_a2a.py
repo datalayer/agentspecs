@@ -9,7 +9,7 @@ from pydantic import ValidationError
 
 from agentspecs.apps import AppSpec
 
-BASE = {"id": "shop", "name": "Shop", "kind": "chat", "agent": "a"}
+BASE = {"id": "shop", "name": "Shop", "kind": "chat", "agent": "a", "protocols": ["a2a"]}
 GIFT = {
     "uri": "https://shop.example/extensions/gift-wrap/v1",
     "description": "Wraps an order as a gift.",

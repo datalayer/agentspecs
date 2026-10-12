@@ -1,0 +1,22 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# An agent protocol Datalayer targets (AGENT_PROTOCOLS §1). `status` says it as
+# it stands: `shipped` when agent-runtimes implements it today, `planned`
+# otherwise — an application cannot ship speaking a planned one.
+id: ag-ui
+version: 0.0.1
+name: AG-UI
+description: >-
+  How an agent streams its run to a page: messages, tool calls and state as events.
+publisher: CopilotKit
+layer: ui
+spec_url: https://docs.ag-ui.com
+spec_version: "0.0.57 (@ag-ui/core)"
+status: shipped
+connects: The page a person talks to the agent on
+packages:
+  python: ["ag-ui-protocol"]
+  typescript: ["@ag-ui/client", "@ag-ui/core"]
+# Its tools' action classes, under protocol-tools/ (agentspecs.actions).
+protocol_tools: []

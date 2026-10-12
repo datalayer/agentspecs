@@ -36,6 +36,9 @@ tools:
       required: [order_id, size]
     does: [write]
 
+# The protocols it speaks: its `pap` block is refused unless listed here.
+protocols: [pap]
+
 pap:
   company:
     enabled: true

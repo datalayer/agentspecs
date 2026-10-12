@@ -11,7 +11,7 @@ import yaml
 import agentspecs.apps
 from agentspecs.apps import AppPap, parse_app
 
-BASE = yaml.safe_load((Path(agentspecs.apps.__file__).parent / "web-research.yaml").read_text())
+BASE = {**yaml.safe_load((Path(agentspecs.apps.__file__).parent / "web-research.yaml").read_text()), "protocols": ["pap"]}
 
 CONNECTION = {
     "id": "orders",
