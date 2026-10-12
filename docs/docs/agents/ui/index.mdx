@@ -1,12 +1,12 @@
 ---
-title: UI Plugins
+title: UI
 ---
 
-# UI Plugin Specifications
+# UI Specifications
 
-A UI plugin is how an agent's answer becomes an interface rather than text: a protocol
-the host knows how to render. One YAML per plugin under `agentspecs/ui-plugins/`; an
-agent spec's `ui_plugin` names one.
+A UI spec is how an agent's answer becomes an interface rather than text: a protocol
+the host knows how to render. One YAML per plugin under `agentspecs/ui/`; an
+agent spec's `ui` names one.
 
 A plugin hosts **the catalog of visual components** it renders (LOOP C-13): A2UI hosts
 the 18 components of its v0.9 basic catalog and Datalayer's own six. The catalog is one
@@ -19,7 +19,7 @@ its properties, bindings, events and an example, is listed in
 
 | Field | Meaning |
 |-------|---------|
-| `id` | What an agent spec's `ui_plugin` names: `a2ui`, `mcp-apps`, `mcp-ui`. The file is named for it. |
+| `id` | What an agent spec's `ui` names: `a2ui`, `mcp-apps`, `mcp-ui`. The file is named for it. |
 | `version` | The spec's version. |
 | `name` | Display name. |
 | `description` | What the plugin renders, and how the user's action comes back. |
@@ -54,7 +54,7 @@ Each entry of a plugin's `components`:
 | `example` | A configuration of it, valid against its `properties`. |
 
 ```yaml
-# agentspecs/ui-plugins/a2ui.yaml (one of Datalayer's own)
+# agentspecs/ui/a2ui.yaml (one of Datalayer's own)
 - id: Table
   name: Table
   category: data
@@ -75,17 +75,17 @@ Each entry of a plugin's `components`:
     columns: [model, pass rate, cost]
 ```
 
-The tests (`tests/test_ui_plugin_components.py`) hold that A2UI's standard components
+The tests (`tests/test_ui_components.py`) hold that A2UI's standard components
 are exactly its basic catalog, that each component says what it is, that each of
 Datalayer's own has a valid JSON Schema whose every property is titled and described,
 bindings and events, and an example its schema accepts — and that
-[the catalog's page](./components.md) is the one `python -m agentspecs.ui_plugins` writes.
+[the catalog's page](./components.md) is the one `python -m agentspecs.ui` writes.
 
 ## In an agent spec
 
 ```yaml
 protocol: vercel-ai
-ui_plugin: a2ui
+ui: a2ui
 ```
 
 ## In an Appspec: how a surface names a component
@@ -147,6 +147,6 @@ against its component's JSON Schema, and a version per component.
 
 Agent Runtimes generates the plugins into its catalogues with `make specs`:
 `UI_PLUGIN_CATALOGUE`, and `COMPONENT_CATALOGUE` with `get_component` /
-`list_components` in Python (`agent_runtimes.specs.ui_plugins`) and `getComponent` /
+`list_components` in Python (`agent_runtimes.specs.ui`) and `getComponent` /
 `listComponents` in TypeScript (`src/specs/uiPlugins.ts`) — the components of the
 enabled plugins, by the name a surface gives them.

@@ -3158,9 +3158,9 @@ def _agent_of(app: AppSpec) -> Optional[Dict[str, Any]]:
 
 def component_named(name: str) -> Optional[Dict[str, Any]]:
     """The component a layout names (LOOP C-13), from the catalogs of the UI
-    plugins an application may use (`ui-plugins/*.yaml`, `components`), by the
+    specs an application may use (`ui/*.yaml`, `components`), by the
     name a surface gives it. None when no enabled plugin renders it."""
-    for plugin in _catalogue("ui-plugins").values():
+    for plugin in _catalogue("ui").values():
         if not plugin.get("enabled"):
             continue
         for component in plugin.get("components") or []:

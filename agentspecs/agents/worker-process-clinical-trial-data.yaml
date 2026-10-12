@@ -65,9 +65,9 @@ goal: >-
   screen for adverse events and safety signals in real time, and prepare
   submission-ready datasets with full validation and audit trails.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui: a2ui
 
 # Evals
 evals:

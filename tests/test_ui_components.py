@@ -2,9 +2,9 @@
 #
 # BSD 3-Clause License
 
-"""The catalog of visual components a UI plugin renders (LOOP C-13).
+"""The catalog of visual components a UI spec renders (LOOP C-13).
 
-One catalog for the spec, the Canvas and Python, hosted by the UI plugins:
+One catalog for the spec, the Canvas and Python, hosted by the UI specs:
 A2UI's standard components by the names A2UI gives them, and Datalayer's own,
 each with its version and its properties as a JSON Schema a properties form
 is drawn from (`@datalayer/primer-rjsf`, C-14): valid, an object, each
@@ -49,7 +49,7 @@ A2UI_BASIC = {
 
 
 def _components() -> dict[str, dict]:
-    plugin = yaml.safe_load((ROOT / "ui-plugins" / "a2ui.yaml").read_text())
+    plugin = yaml.safe_load((ROOT / "ui" / "a2ui.yaml").read_text())
     assert plugin["catalog"] == "a2ui/v0.9"
     return {component["id"]: component for component in plugin["components"]}
 
@@ -134,7 +134,7 @@ def test_the_catalogue_page_says_every_component_and_is_the_one_in_the_docs():
     """The documentation's page of components is generated from the plugins
     (LOOP G-05): it names every component, and for Datalayer's own every
     property, binding and event; the page in the docs is the generated one."""
-    from agentspecs.ui_plugins import CATALOGUE_PATH, catalogue_markdown
+    from agentspecs.ui import CATALOGUE_PATH, catalogue_markdown
 
     page = catalogue_markdown()
     for name, spec in _components().items():
@@ -150,4 +150,4 @@ def test_the_catalogue_page_says_every_component_and_is_the_one_in_the_docs():
         for value in [*spec["bindings"]["shows"], *spec["bindings"]["sends"], *spec["events"]]:
             assert f"`{value}`" in page, f"{name}: {value}"
     if CATALOGUE_PATH.exists():
-        assert CATALOGUE_PATH.read_text() == page, "run `python -m agentspecs.ui_plugins`"
+        assert CATALOGUE_PATH.read_text() == page, "run `python -m agentspecs.ui`"

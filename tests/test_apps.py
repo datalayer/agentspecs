@@ -1562,8 +1562,8 @@ def test_a_reference_that_does_not_resolve_is_a_problem_said_in_words() -> None:
     assert any("not connected to 'tavily'" in problem for problem in problems)
 
 
-def test_a_component_is_one_a_ui_plugin_renders() -> None:
-    """LOOP C-13: the UI plugins' catalogs — what a layout names resolves, or is refused."""
+def test_a_component_is_one_a_ui_renders() -> None:
+    """LOOP C-13: the UI specs' catalogs — what a layout names resolves, or is refused."""
     from agentspecs.apps import component_named
 
     assert component_named("Table")["standard"] is False  # type: ignore[index]

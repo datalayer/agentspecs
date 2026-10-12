@@ -48,7 +48,7 @@ agentspecs/
 ├── events/           # Event specs
 ├── outputs/          # Output format specs
 ├── notifications/    # Notification channel specs
-└── ui-plugins/       # UI plugin specs
+└── ui/       # UI specs
 ```
 
 Current YAML file counts:
@@ -79,7 +79,7 @@ Current YAML file counts:
 - Events: 6
 - Outputs: 9
 - Notifications: 5
-- UI plugins: 3
+- UI specs: 3
 
 ## Versioning
 

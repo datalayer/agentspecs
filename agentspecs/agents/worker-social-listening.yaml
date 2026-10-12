@@ -65,9 +65,9 @@ color: "#8B5CF6"
 goal: >-
   Monitor conversations at scale and surface actionable, evidence-backed insights.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui: a2ui
 
 # Model configuration
 model_config:

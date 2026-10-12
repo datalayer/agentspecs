@@ -65,9 +65,9 @@ color: "#A855F7"
 goal: >-
   Find relevant roles and prepare tailored application materials for review.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui: a2ui
 
 # Model configuration
 model_config:

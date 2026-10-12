@@ -72,9 +72,9 @@ goal: >-
   timely engagement opportunities and people worth connecting with, and draft
   or publish platform-specific content that fits each channel's audience.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui: a2ui
 
 # Model configuration
 model_config:

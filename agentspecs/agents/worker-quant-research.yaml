@@ -62,9 +62,9 @@ color: "#3B82F6"
 goal: >-
   Construct clean datasets and research factors, respecting point-in-time correctness.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui: a2ui
 
 # Model configuration
 model_config:

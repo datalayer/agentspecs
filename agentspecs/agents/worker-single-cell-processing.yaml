@@ -64,9 +64,9 @@ color: "#06B6D4"
 goal: >-
   Process and cluster single-cell data and deliver annotated, reproducible outputs.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui: a2ui
 
 # Model configuration
 model_config:

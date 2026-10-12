@@ -66,9 +66,9 @@ color: "#8B5CF6"
 goal: >-
   Repurpose existing content into channel-specific formats while keeping brand voice.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui: a2ui
 
 # Model configuration
 model_config:
