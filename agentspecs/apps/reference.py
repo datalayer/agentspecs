@@ -67,6 +67,7 @@ def _cell(text: str) -> str:
 #: (a test reads each one into an application of the catalogue).
 EXTRA_EXAMPLES: Dict[str, Any] = {
     "team": "analyze-support-tickets:0.0.1",
+    "ui": ["a2ui"],
     "pap": {
         "connections": [
             {

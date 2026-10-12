@@ -2570,6 +2570,14 @@
       "title": "Triggers",
       "type": "array"
     },
+    "ui": {
+      "description": "The UI its answers render in, ids of `agentspecs/ui` (AGENT_PROTOCOLS PS-04): each once, and one that is not enabled only while it is not offered",
+      "items": {
+        "type": "string"
+      },
+      "title": "Ui",
+      "type": "array"
+    },
     "unavailable_because": {
       "default": "",
       "description": "Why it is not offered today, in a sentence its page shows: said when `enabled` is false, and only then",

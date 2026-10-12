@@ -2711,6 +2711,13 @@ class AppSpec(_Strict):
             "and a planned protocol only while it is not offered"
         ),
     )
+    ui: List[str] = Field(
+        default_factory=list,
+        description=(
+            "The UI its answers render in, ids of `agentspecs/ui` (AGENT_PROTOCOLS PS-04): "
+            "each once, and one that is not enabled only while it is not offered"
+        ),
+    )
     pap: AppPap = Field(
         default_factory=AppPap, description="Personal Agent Protocol: companies it works with, or being one"
     )
@@ -2924,6 +2931,14 @@ class AppSpec(_Strict):
                     f"Its `{block}` block configures {protocol.name}, which it does not list: "
                     f"add {protocol.id!r} to `protocols`."
                 )
+        for ui_id in dict.fromkeys(self.ui):
+            spec = _catalogue("ui").get(ui_id)
+            if self.ui.count(ui_id) > 1:
+                problems.append(f"It lists the UI {ui_id!r} twice.")
+            if spec is None:
+                problems.append(f"There is no UI named {ui_id!r}: one of {', '.join(sorted(_catalogue('ui')))}.")
+            elif self.enabled and not spec.get("enabled"):
+                problems.append(f"The UI {spec.get('name', ui_id)} ({ui_id!r}) is not enabled: an application cannot render in it yet.")
         if problems:
             raise ValueError(" ".join(problems))
 

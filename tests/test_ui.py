@@ -44,3 +44,19 @@ def test_the_old_names_are_gone():
     for path in sorted([*(ROOT / "agents").rglob("*.yaml"), *(ROOT / "cogs").rglob("*.yaml")]):
         spec = yaml.safe_load(path.read_text()) or {}
         assert "ui_plugin" not in spec, f"{path.name}: `ui_plugin` is now `ui`"
+
+
+def test_an_application_lists_the_ui_its_answers_render_in():
+    """The Appspec's `ui` (AGENT_PROTOCOLS PS-04): ids of agentspecs/ui, each once, a disabled one only while not offered."""
+    import pytest
+    from pydantic import ValidationError
+
+    from agentspecs.apps import AppSpec
+
+    base = {"id": "shop", "name": "Shop", "kind": "chat", "agent": "a"}
+    assert AppSpec.model_validate({**base, "ui": ["a2ui"]}).ui == ["a2ui"]
+    for ui, why in ((["nope"], "no UI named 'nope'"), (["a2ui", "a2ui"], "twice"), (["mcp-ui"], "not enabled")):
+        with pytest.raises(ValidationError, match=why):
+            AppSpec.model_validate({**base, "ui": ui})
+    off = {**base, "ui": ["mcp-ui"], "enabled": False, "unavailable_because": "Later."}
+    assert AppSpec.model_validate(off).ui == ["mcp-ui"]
