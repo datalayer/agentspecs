@@ -450,6 +450,80 @@ class AppPapCompany(_Strict):
         return self
 
 
+#: A PACT scope, as a Brand defines it: `orders:read`, `booking:change`.
+_PACT_SCOPE = re.compile(r"^[a-z][a-z0-9_.-]{0,63}:[a-z][a-z0-9_.-]{0,63}$")
+
+
+class AppPactConnection(_Strict):
+    """A business the application asks for each person, over PACT 1.0 (AGENT_PROTOCOLS PI-01).
+
+    The Brand is named by its domain — its Agent Card is at
+    `https://<brand>/.well-known/agent-card.json` (PACT §2.1) — and its
+    Provider's `audience`, which the Provider assigns at registration and
+    the personal-agent JWT carries (§3.1). Always in each person's own name:
+    PACT acts for a person. No credential is ever part of a spec.
+    """
+
+    id: str = Field(..., description="Stable within the application: `support`")
+    brand: str = Field(..., description="The business's domain: `example.com`")
+    audience: str = Field(..., description="The audience its Provider assigned (PACT §3.1)")
+    access: Access = Field(
+        default=Access.READ,
+        description="How far: `read` (asks as the application alone), or `write` (also for the person, delegated)",
+    )
+    scopes: List[str] = Field(
+        default_factory=list, description="The Brand's scopes it may ask the person for: `orders:read`"
+    )
+
+    @field_validator("id")
+    @classmethod
+    def _an_id(cls, value: str) -> str:
+        if not re.fullmatch(r"[a-z][a-z0-9_-]{0,63}", value):
+            raise ValueError(f"{value!r} is not a connection id: lower case, digits, `-` and `_`")
+        return value
+
+    @field_validator("brand")
+    @classmethod
+    def _a_domain(cls, value: str) -> str:
+        if not _PAP_DOMAIN.fullmatch(value):
+            raise ValueError(f"{value!r} is not a business's domain: only the domain, as `example.com`")
+        return value
+
+    @field_validator("audience")
+    @classmethod
+    def _an_audience(cls, value: str) -> str:
+        if not value.strip() or len(value) > 512 or any(c.isspace() for c in value):
+            raise ValueError("the audience is the string the Brand's Provider assigned, without spaces")
+        return value
+
+    @field_validator("scopes")
+    @classmethod
+    def _scopes(cls, values: List[str]) -> List[str]:
+        if len(set(values)) != len(values):
+            raise ValueError("a scope is named twice")
+        for value in values:
+            if not _PACT_SCOPE.fullmatch(value):
+                raise ValueError(f"{value!r} is not a PACT scope: `resource:verb`")
+        return values
+
+
+class AppPact(_Strict):
+    """PACT: the businesses it asks for each person (AGENT_PROTOCOLS PI-01)."""
+
+    connections: List[AppPactConnection] = Field(default_factory=list, description="Businesses, over PACT")
+
+    @model_validator(mode="after")
+    def _distinct(self) -> "AppPact":
+        ids = [connection.id for connection in self.connections]
+        if len(set(ids)) != len(ids):
+            raise ValueError("two PACT connections have the same id")
+        # One grant per Brand (`datalayer_connection` `pact:<domain>`, PI-02).
+        brands = [connection.brand for connection in self.connections]
+        if len(set(brands)) != len(brands):
+            raise ValueError("the application connects to the same business twice")
+        return self
+
+
 class AppPap(_Strict):
     """Personal Agent Protocol: the companies it works with, and whether it is one."""
 
@@ -2540,6 +2614,7 @@ class AppSpec(_Strict):
     pap: AppPap = Field(
         default_factory=AppPap, description="Personal Agent Protocol: companies it works with, or being one"
     )
+    pact: AppPact = Field(default_factory=AppPact, description="PACT: businesses it asks for each person")
     rules: List[AppRule] = Field(default_factory=list, description="When it acts alone, and when it asks")
     permissions: AppPermissions = Field(
         default_factory=AppPermissions,

@@ -31,6 +31,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `contents` | list of text | The documents and datasets it answers from | — |
 | `connections` | list of [AppConnection](#appconnection) | What it reaches | — |
 | `pap` | [AppPap](#apppap) | Personal Agent Protocol: companies it works with, or being one | — |
+| `pact` | [AppPact](#apppact) | PACT: businesses it asks for each person | — |
 | `rules` | list of [AppRule](#apprule) | When it acts alone, and when it asks | — |
 | `permissions` | [AppPermissions](#apppermissions) | What else it may reach: Spaces, its computer. Nothing, unless said | — |
 | `interface` | [AppInterface](#appinterface) | What the user sees | — |
@@ -453,6 +454,20 @@ checks:
   track: financial-reporting:0.0.1
 ```
 
+### `pact`
+
+```yaml
+pact:
+  connections:
+  - id: example-air
+    brand: air.example
+    audience: https://provider.example/a2a
+    access: write
+    scopes:
+    - bookings:read
+    - bookings:change
+```
+
 ### `team`
 
 ```yaml
@@ -679,6 +694,26 @@ An option of a mode in another language.
 | --- | --- | --- | --- |
 | `label` | text | What the switch says | empty |
 | `description` | text | What it changes | empty |
+
+### AppPact
+
+PACT: the businesses it asks for each person (AGENT_PROTOCOLS PI-01).
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `connections` | list of [AppPactConnection](#apppactconnection) | Businesses, over PACT | — |
+
+### AppPactConnection
+
+A business the application asks for each person, over PACT 1.0 (AGENT_PROTOCOLS PI-01). The Brand is named by its domain — its Agent Card is at `https://<brand>/.well-known/agent-card.json` (PACT §2.1) — and its Provider's `audience`, which the Provider assigns at registration and the personal-agent JWT carries (§3.1). Always in each person's own name: PACT acts for a person. No credential is ever part of a spec.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `id` (required) | text | Stable within the application: `support` | — |
+| `brand` (required) | text | The business's domain: `example.com` | — |
+| `audience` (required) | text | The audience its Provider assigned (PACT §3.1) | — |
+| `access` | [Access](#access) | How far: `read` (asks as the application alone), or `write` (also for the person, delegated) | `"read"` |
+| `scopes` | list of text | The Brand's scopes it may ask the person for: `orders:read` | — |
 
 ### AppPage
 

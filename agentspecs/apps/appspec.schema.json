@@ -818,6 +818,63 @@
       "title": "AppOptionTranslation",
       "type": "object"
     },
+    "AppPact": {
+      "additionalProperties": false,
+      "description": "PACT: the businesses it asks for each person (AGENT_PROTOCOLS PI-01).",
+      "properties": {
+        "connections": {
+          "description": "Businesses, over PACT",
+          "items": {
+            "$ref": "#/$defs/AppPactConnection"
+          },
+          "title": "Connections",
+          "type": "array"
+        }
+      },
+      "title": "AppPact",
+      "type": "object"
+    },
+    "AppPactConnection": {
+      "additionalProperties": false,
+      "description": "A business the application asks for each person, over PACT 1.0 (AGENT_PROTOCOLS PI-01).\n\nThe Brand is named by its domain \u2014 its Agent Card is at\n`https://<brand>/.well-known/agent-card.json` (PACT \u00a72.1) \u2014 and its\nProvider's `audience`, which the Provider assigns at registration and\nthe personal-agent JWT carries (\u00a73.1). Always in each person's own name:\nPACT acts for a person. No credential is ever part of a spec.",
+      "properties": {
+        "access": {
+          "$ref": "#/$defs/Access",
+          "default": "read",
+          "description": "How far: `read` (asks as the application alone), or `write` (also for the person, delegated)"
+        },
+        "audience": {
+          "description": "The audience its Provider assigned (PACT \u00a73.1)",
+          "title": "Audience",
+          "type": "string"
+        },
+        "brand": {
+          "description": "The business's domain: `example.com`",
+          "title": "Brand",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable within the application: `support`",
+          "title": "Id",
+          "type": "string"
+        },
+        "scopes": {
+          "description": "The Brand's scopes it may ask the person for: `orders:read`",
+          "items": {
+            "type": "string"
+          },
+          "title": "Scopes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "brand",
+        "audience"
+      ],
+      "title": "AppPactConnection",
+      "type": "object"
+    },
     "AppPage": {
       "additionalProperties": false,
       "description": "A widget's page written in its code (LOOP P-05): `@app.page`.\n\nIts inputs are a form, drawn on the page; as one changes, the function\nof its code runs again on them and the page shows what it returned, in\nplace. Without its file nothing runs it, and validation says so.",
@@ -2375,6 +2432,10 @@
       "description": "Who answers for it",
       "title": "Owner",
       "type": "string"
+    },
+    "pact": {
+      "$ref": "#/$defs/AppPact",
+      "description": "PACT: businesses it asks for each person"
     },
     "pap": {
       "$ref": "#/$defs/AppPap",

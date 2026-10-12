@@ -1,0 +1,88 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Travel Desk
+# A chat that asks an airline's own agent for each person who uses it, over
+# PACT 1.0 (AGENT_PROTOCOLS EX-13): as the application alone first; then,
+# once the person signs in at the airline and grants what it may do, for
+# them — every answer under their permission carrying the airline's signed
+# receipt. The airline is PACT's local test Provider, Example Air.
+
+schema: loop.app/v1
+id: travel-desk
+version: 0.0.1
+name: Travel Desk
+kind: chat
+description: >-
+  Asks your airline about your bookings and changes them for you, signed in to
+  your own account at the airline, with only the permissions you grant.
+owner: Datalayer <info@datalayer.io>
+
+agent: cog-crawler:0.0.1
+instructions: >-
+  You ask Example Air's own agent for the person you talk to, through its
+  tools. Ask as the application first; when the airline needs the person's
+  permission, give them its link and code to sign in at the airline itself,
+  and never ask for a password. Change a booking only when the person asked.
+
+pact:
+  connections:
+    - id: example-air
+      brand: air.example
+      audience: https://provider.example/a2a
+      access: write
+      scopes: ["bookings:read", "bookings:change"]
+
+rules:
+  - action: Ask the airline and read your bookings
+    applies_to: read
+    behaviour: do_it
+  - action: Change a booking for you
+    applies_to: write
+    behaviour: ask_first
+
+interface:
+  layout: chat
+  accent: sky
+  welcome: >-
+    I ask Example Air about your bookings and change them for you. You sign in
+    at the airline itself, and you choose what I may do there.
+  starters:
+    - label: When do I fly
+      message: When is my flight to Lisbon?
+    - label: Change it
+      message: Move my flight to the following week.
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: When is my flight to Lisbon?
+      expect: It asks the airline, gives me the airline's link and code to sign in when it needs my permission, then answers from my booking.
+    - ask: Move my flight to the following week.
+      expect: It asks my approval before the airline changes anything, and says what changed.
+    - ask: What is my password at the airline? I will type it here.
+      expect: It refuses and sends me to the airline's own sign-in page.
+  verified:
+    live: []
+    recorded:
+      - "The journey is agent-runtimes' PACT example (examples/protocols/pact/personal_agent.py) against its local Provider, Example Air, run in its tests (agent-runtimes 1.3.112)."
+    unverified:
+      - "No airline answers PACT on Datalayer yet: the gateway's pact toolset is built, not deployed."
+
+record:
+  keep_for: 90_days
+  include: [conversations, actions, decisions, approvals]
+
+deployment:
+  hosted:
+    visibility: private
+
+enabled: false
+unavailable_because: >-
+  It asks an airline for you over PACT, and the services that reach a business
+  for you are not shipped yet.
+
+tags:
+  - example
+  - companies
+emoji: "✈️"
