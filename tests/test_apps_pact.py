@@ -10,7 +10,12 @@ from pydantic import ValidationError
 from agentspecs.apps import AppSpec
 
 BASE = {"id": "support", "name": "Support", "kind": "chat", "agent": "a"}
-AIR = {"id": "air", "brand": "air.example", "audience": "https://provider.example/a2a", "scopes": ["bookings:read"]}
+AIR = {
+    "id": "air",
+    "brand": "air.example",
+    "audience": "https://provider.example/a2a",
+    "scopes": ["bookings:read"],
+}
 
 
 def test_a_business_is_its_domain_and_its_providers_audience():

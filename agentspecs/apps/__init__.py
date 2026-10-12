@@ -469,10 +469,14 @@ class AppPactConnection(_Strict):
     audience: str = Field(..., description="The audience its Provider assigned (PACT §3.1)")
     access: Access = Field(
         default=Access.READ,
-        description="How far: `read` (asks as the application alone), or `write` (also for the person, delegated)",
+        description=(
+            "How far: `read` (asks as the application alone), "
+            "or `write` (also for the person, delegated)"
+        ),
     )
     scopes: List[str] = Field(
-        default_factory=list, description="The Brand's scopes it may ask the person for: `orders:read`"
+        default_factory=list,
+        description="The Brand's scopes it may ask the person for: `orders:read`",
     )
 
     @field_validator("id")
@@ -486,14 +490,18 @@ class AppPactConnection(_Strict):
     @classmethod
     def _a_domain(cls, value: str) -> str:
         if not _PAP_DOMAIN.fullmatch(value):
-            raise ValueError(f"{value!r} is not a business's domain: only the domain, as `example.com`")
+            raise ValueError(
+                f"{value!r} is not a business's domain: only the domain, as `example.com`"
+            )
         return value
 
     @field_validator("audience")
     @classmethod
     def _an_audience(cls, value: str) -> str:
         if not value.strip() or len(value) > 512 or any(c.isspace() for c in value):
-            raise ValueError("the audience is the string the Brand's Provider assigned, without spaces")
+            raise ValueError(
+                "the audience is the string the Brand's Provider assigned, without spaces"
+            )
         return value
 
     @field_validator("scopes")
@@ -510,7 +518,9 @@ class AppPactConnection(_Strict):
 class AppPact(_Strict):
     """PACT: the businesses it asks for each person (AGENT_PROTOCOLS PI-01)."""
 
-    connections: List[AppPactConnection] = Field(default_factory=list, description="Businesses, over PACT")
+    connections: List[AppPactConnection] = Field(
+        default_factory=list, description="Businesses, over PACT"
+    )
 
     @model_validator(mode="after")
     def _distinct(self) -> "AppPact":
