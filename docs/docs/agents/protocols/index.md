@@ -13,7 +13,7 @@ are refused unless their protocol is listed.
 | [Model Context Protocol](https://modelcontextprotocol.io/specification) | `mcp` | transport | Anthropic | 2026-07-28 (Python), 2025-11-25 (TypeScript) | shipped | Tools, resources and prompts served by MCP servers |  |
 | [Personal Agent Consent & Trust](https://openpactprotocol.org) | `pact` | consent | Decagon, Instinct | 1.0 | shipped | Businesses' agents, asked for a person with their delegation | `pact` |
 | [Personal Agent Protocol](https://poppy.md) | `pap` | consent | Sierra, Meta | draft 0.1 | shipped | Companies, as a person's agent there, or being one | `pap` |
-| [Trusted Agent Protocol](https://developer.visa.com) | `tap` | identity | Visa | none yet | planned | Merchants that recognise an agent by its signature |  |
+| [Trusted Agent Protocol](https://developer.visa.com/capabilities/trusted-agent-protocol/trusted-agent-protocol-specifications) | `tap` | identity | Visa | draft (Merchant Specifications, read 2026-10-13) | planned | Merchants that recognise an agent by its signature |  |
 | [Web Bot Auth](https://datatracker.ietf.org/doc/draft-ietf-webbotauth-httpsig-protocol/) | `web-bot-auth` | identity | Cloudflare (IETF draft) | draft-ietf-webbotauth-httpsig-protocol-00 | shipped | Websites, which can tell the application's requests from someone pretending |  |
 | [Agentic Commerce Protocol](https://github.com/agentic-commerce-protocol/agentic-commerce-protocol) | `acp` | commerce | OpenAI, Stripe | 2026-04-17 | shipped | Sellers, to check out with a delegated payment |  |
 | [Universal Commerce Protocol](https://github.com/Universal-Commerce-Protocol/ucp) | `ucp` | commerce | Google, with Shopify and retailers | 2026-08-25 | shipped | Merchants, to search, check out and follow orders |  |
@@ -76,8 +76,10 @@ A person's agent working with a company for them — signed out, then signed in 
 
 ### Trusted Agent Protocol (`tap`)
 
-An agent-recognition profile over Web Bot Auth for merchants. Planned: nothing is built until its profile is confirmed.
+An agent-recognition profile over Web Bot Auth for merchants: a signature tagged agent-browser-auth to browse or agent-payer-auth to pay. Built as a draft from Visa's public Merchant Specifications (2026-10-13) in agent-runtimes; planned for applications until Visa confirms it.
 
+- Python: `agent-runtimes`
+- TypeScript: `@datalayer/agent-runtimes`, `http-message-sig`
 
 ### Universal Commerce Protocol (`ucp`)
 
