@@ -403,10 +403,10 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
     # Order desk and Exchange desk wait for the Personal Agent Protocol's services (PAP_DATALAYER E-01, E-02).
     # The Personal Agent Protocol's recorded journeys, written as applications (AGENT_PROTOCOLS PR-05).
     # Travel Desk and Shopping Desk are on since drilled live at the hosted counterparts (PI-42).
-    # Signed Reader waits for the gateway's signed fetch (AGENT_PROTOCOLS EX-11).
+    # Signed Reader is on since drilled live at the hosted Example Verifier (AGENT_PROTOCOLS EX-11).
     # Guest Desk and Errand Runner wait for their pair to be run live (AGENT_PROTOCOLS PR-13).
     assert sorted(off) == sorted(
-        ["errand-runner", "exchange-desk", "guest-desk", "inbox-triage", "order-desk", "pipeline-report", "signed-reader"]
+        ["errand-runner", "exchange-desk", "guest-desk", "inbox-triage", "order-desk", "pipeline-report"]
         + list(PAP_JOURNEYS)
     )
     for identity, spec in off.items():

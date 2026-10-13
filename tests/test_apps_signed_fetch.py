@@ -59,6 +59,6 @@ def test_the_signed_reader_reads_the_hosted_verifier_only():
     assert [(site.id, site.site) for site in app.signed_fetch.sites] == [
         ("example-verifier", "verify.examples.datalayer.run")
     ]
-    # Reading is a read under its Rules; off until the gateway's signed fetch is deployed and drilled.
+    # Reading is a read under its Rules; on since drilled live at the hosted verifier (13 October 2026).
     assert [rule.behaviour.value for rule in app.rules] == ["do_it"]
-    assert not app.enabled and "signed fetch" in app.unavailable_because
+    assert app.enabled and app.tests.verified.live
