@@ -152,6 +152,21 @@ pap:
         tool: exchange_order                  # one of its own tools
         summary: "Exchange order {order_id} for size {size}."
         user_approval_required: true          # only the person, never an approval in advance
+      # A standing permission given through an operation (the Ledgerly pattern): once
+      # the person confirms it, the application may confirm, at one of its own companies
+      # and in their account there, what stays within these bounds — recorded as the
+      # approval in advance they would give in Datalayer, read back and withdrawn there.
+      - action: payments.allow
+        summary: "Let it pay {payee} without asking, up to {currency} {maximum} each, at most {uses} payments, for {days} days."
+        allows:
+          connection: manzanita               # one of its own connections: as user, write
+          action: buy                         # what confirming there does: write, or buy
+          limits:                             # each bound is a term of this operation
+            - {path: payee, allowed: payee}
+            - {path: amount.amount, maximum: maximum}
+            - {path: amount.currency, allowed: currency}
+          uses: uses
+          days: days                          # at most 90
 
 pact:
   # A business's own agent, asked for each person (PACT 1.0).

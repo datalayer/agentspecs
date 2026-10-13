@@ -908,14 +908,37 @@ A company the application works with as a Personal Agent (PAP_DATALAYER S-01). T
 
 ### AppPapOperation
 
-Something a personal agent may ask the application to do for the person, done only once they confirm its exact terms (PAP_DATALAYER B-04, Operations v1). Asked by a personal agent, the application's agent does not call `tool`: the call is proposed, its arguments the terms, and the person confirms that revision before the tool runs, with those arguments and only once.
+Something a personal agent may ask the application to do for the person, done only once they confirm its exact terms (PAP_DATALAYER B-04, Operations v1). Asked by a personal agent, the application's agent does not call `tool`: the call is proposed, its arguments the terms, and the person confirms that revision before the tool runs, with those arguments and only once. An operation that `allows` instead gives a standing permission once the person confirms it (R-07): it calls no tool, and is asked for through the application's API or its server for agents.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
 | `action` (required) | text | The action's name at this company, e.g. `orders.exchange` | — |
-| `tool` (required) | text | The application's tool that does it, called with the terms | — |
+| `tool` | text | The application's tool that does it, called with the terms | empty |
+| `allows` | [AppPapStanding](#apppapstanding) | Instead of a tool: the standing permission confirming it gives (R-07) | empty |
 | `summary` (required) | text | What the person is shown, with `{term}` for each term, e.g. `Exchange order {order_id} for size {size}`; never written by the model | — |
 | `user_approval_required` | true or false | Whether only the person may confirm it, never an approval in advance | `true` |
+
+### AppPapStanding
+
+An operation whose effect is a standing permission (PAP_DATALAYER R-07, the Ledgerly pattern). Confirmed by the person, it is recorded as the approval in advance they would give in Datalayer: this application may confirm, at the company of one of its own connections and in the person's account there, operations of that class whose terms stay within these limits, so many times, for so many days — and the person reads it back and withdraws it there.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `connection` (required) | text | The id of its own company connection the permission is used at | — |
+| `action` (required) | [PapStandingAction](#papstandingaction) | What confirming there does: `write`, or `buy` | — |
+| `limits` (required) | list of [AppPapStandingLimit](#apppapstandinglimit) | Every term bounded, 1 to 20 | — |
+| `uses` (required) | text | The term of this operation giving how many times, at most | — |
+| `days` (required) | text | The term of this operation giving for how many days, at most 90 | — |
+
+### AppPapStandingLimit
+
+One bound of a standing permission: a term of the other company's operations, bounded by a term of this one — its maximum, or the one value allowed.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `path` (required) | text | The other company's term, by its dotted path: `amount.amount`, `payee` | — |
+| `maximum` | text | The term of this operation giving its maximum | empty |
+| `allowed` | text | The term of this operation giving the value allowed | empty |
 
 ### AppPermissions
 
@@ -1247,6 +1270,7 @@ The application at an address of its own.
 | <a id="papagents"></a>PapAgents | `any`, `registered` |
 | <a id="papinterface"></a>PapInterface | `agent`, `openapi`, `mcp`, `web` |
 | <a id="papsignin"></a>PapSignIn | `direct`, `device`, `mediated` |
+| <a id="papstandingaction"></a>PapStandingAction | `write`, `buy` |
 | <a id="recorditem"></a>RecordItem | `conversations`, `actions`, `decisions`, `approvals`, `checks`, `sources`, `outputs`, `feedback`, `audio` |
 | <a id="thememode"></a>ThemeMode | `light`, `dark`, `auto` |
 | <a id="themevariant"></a>ThemeVariant | `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop` |
