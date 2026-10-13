@@ -5,7 +5,8 @@
       "enum": [
         "pap",
         "pact",
-        "a2a"
+        "a2a",
+        "signed_fetch"
       ],
       "title": "AppspecBlock",
       "type": "string"

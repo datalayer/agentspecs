@@ -4,8 +4,8 @@
 
 The agent protocols Datalayer targets, one spec each under `agentspecs/protocols/`.
 An agent spec or an application lists the ones it speaks in `protocols`; an
-application may not list a planned one, and its `pap`, `pact` and `a2a` blocks
-are refused unless their protocol is listed.
+application may not list a planned one, and its `pap`, `pact`, `signed_fetch` and
+`a2a` blocks are refused unless their protocol is listed.
 
 | Protocol | Id | Layer | Publisher | Version implemented | Status | Connects to | Appspec block |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -14,7 +14,7 @@ are refused unless their protocol is listed.
 | [Personal Agent Consent & Trust](https://openpactprotocol.org) | `pact` | consent | Decagon, Instinct | 1.0 | shipped | Businesses' agents, asked for a person with their delegation | `pact` |
 | [Personal Agent Protocol](https://poppy.md) | `pap` | consent | Sierra, Meta | draft 0.1 | shipped | Companies, as a person's agent there, or being one | `pap` |
 | [Trusted Agent Protocol](https://developer.visa.com/capabilities/trusted-agent-protocol/trusted-agent-protocol-specifications) | `tap` | identity | Visa | draft (Merchant Specifications, read 2026-10-13) | planned | Merchants that recognise an agent by its signature |  |
-| [Web Bot Auth](https://datatracker.ietf.org/doc/draft-ietf-webbotauth-httpsig-protocol/) | `web-bot-auth` | identity | Cloudflare (IETF draft) | draft-ietf-webbotauth-httpsig-protocol-00 | shipped | Websites, which can tell the application's requests from someone pretending |  |
+| [Web Bot Auth](https://datatracker.ietf.org/doc/draft-ietf-webbotauth-httpsig-protocol/) | `web-bot-auth` | identity | Cloudflare (IETF draft) | draft-ietf-webbotauth-httpsig-protocol-00 | shipped | Websites, which can tell the application's requests from someone pretending | `signed_fetch` |
 | [Agentic Commerce Protocol](https://github.com/agentic-commerce-protocol/agentic-commerce-protocol) | `acp` | commerce | OpenAI, Stripe | 2026-04-17 | shipped | Sellers, to check out with a delegated payment |  |
 | [Universal Commerce Protocol](https://github.com/Universal-Commerce-Protocol/ucp) | `ucp` | commerce | Google, with Shopify and retailers | 2026-08-25 | shipped | Merchants, to search, check out and follow orders |  |
 | [A2UI](https://a2ui.org) | `a2ui` | ui | Google | 0.9 | shipped | The person, through components an answer draws |  |
@@ -91,7 +91,8 @@ Shopping at a merchant: catalogue, checkout and orders, every purchase an exact 
 
 ### Web Bot Auth (`web-bot-auth`)
 
-Signed outbound requests (RFC 9421) and the key directory a website checks them against.
+Signed outbound requests (RFC 9421) and the key directory a website checks them against. In applications, every request to a company, business or merchant is signed, and a signed fetch reads pages at the sites an application names, GET only (decided 2026-10-13).
 
 - Python: `agent-runtimes`
 - TypeScript: `@datalayer/agent-runtimes`, `web-bot-auth`
+- Its tools' action classes: `protocol-tools/signed-fetch.yaml`

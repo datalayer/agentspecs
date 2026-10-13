@@ -21,10 +21,10 @@ READ, WRITE, BUY, SEND = ActionClass.READ, ActionClass.WRITE, ActionClass.BUY, A
 
 def test_every_protocol_spec_is_sound_and_its_prefix_its_own():
     specs = protocol_tool_specs()
-    assert sorted(specs) == ["agentic-commerce", "pact", "pap", "ucp"]
+    assert sorted(specs) == ["agentic-commerce", "pact", "pap", "signed-fetch", "ucp"]
     assert [problem for spec in specs.values() for problem in protocol_tools_problems(spec)] == []
     prefixes = [spec["connection"] for spec in specs.values()]
-    assert sorted(prefixes) == ["acp", "pact", "pap", "ucp"]
+    assert sorted(prefixes) == ["acp", "pact", "pap", "signed-fetch", "ucp"]
 
 
 @pytest.mark.parametrize(
@@ -45,6 +45,8 @@ def test_every_protocol_spec_is_sound_and_its_prefix_its_own():
         ("ucp:store.example", "ucp_complete", (BUY,)),
         ("acp:outfitters.example", "acp_update_checkout", (WRITE,)),
         ("acp:outfitters.example", "acp_complete", (BUY,)),
+        # A page read at a site it names, signed (AGENT_PROTOCOLS EX-11): GET only.
+        ("signed-fetch:verify.examples.datalayer.run", "signed_fetch", (READ,)),
         # An MCP server of the catalogue, as before.
         ("tavily", "tavily_search", (READ,)),
     ],

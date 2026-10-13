@@ -66,6 +66,7 @@ class AppspecBlock(str, Enum):
     PAP = "pap"
     PACT = "pact"
     A2A = "a2a"
+    SIGNED_FETCH = "signed_fetch"
 
 
 class ProtocolPackages(BaseModel):
@@ -204,8 +205,8 @@ def reference_text() -> str:
         "",
         "The agent protocols Datalayer targets, one spec each under `agentspecs/protocols/`.",
         "An agent spec or an application lists the ones it speaks in `protocols`; an",
-        "application may not list a planned one, and its `pap`, `pact` and `a2a` blocks",
-        "are refused unless their protocol is listed.",
+        "application may not list a planned one, and its `pap`, `pact`, `signed_fetch` and",
+        "`a2a` blocks are refused unless their protocol is listed.",
         "",
         "| Protocol | Id | Layer | Publisher | Version implemented | Status | Connects to | Appspec block |",
         "| --- | --- | --- | --- | --- | --- | --- | --- |",

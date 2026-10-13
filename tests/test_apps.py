@@ -403,8 +403,9 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
     # Order desk and Exchange desk wait for the Personal Agent Protocol's services (PAP_DATALAYER E-01, E-02).
     # The Personal Agent Protocol's recorded journeys, written as applications (AGENT_PROTOCOLS PR-05).
     # Travel Desk and Shopping Desk are on since drilled live at the hosted counterparts (PI-42).
+    # Signed Reader waits for the gateway's signed fetch (AGENT_PROTOCOLS EX-11).
     assert sorted(off) == sorted(
-        ["exchange-desk", "inbox-triage", "order-desk", "pipeline-report"]
+        ["exchange-desk", "inbox-triage", "order-desk", "pipeline-report", "signed-reader"]
         + list(PAP_JOURNEYS)
     )
     for identity, spec in off.items():
@@ -870,6 +871,8 @@ EXAMPLES = {
     "travel-desk": AppKind.CHAT,
     # Shopping at a test merchant over UCP, each purchase asked first (AGENT_PROTOCOLS EX-12).
     "shopping-desk": AppKind.CHAT,
+    # Reading a page at a site that checks its signature (AGENT_PROTOCOLS EX-11).
+    "signed-reader": AppKind.CHAT,
     # The Personal Agent Protocol's recorded journeys, written as applications (AGENT_PROTOCOLS PR-05).
     "order-tracker": AppKind.CHAT,
     "shop-concierge": AppKind.CHAT,
@@ -922,6 +925,7 @@ HOSTED_COUNTERPARTS = {
     "air.examples.datalayer.run",
     "store.examples.datalayer.run",
     "outfitters.examples.datalayer.run",
+    "verify.examples.datalayer.run",
 }
 
 
@@ -934,12 +938,13 @@ def test_the_protocol_examples_reach_the_hosted_counterparts() -> None:
             *(connection.company for connection in found.pap.connections),
             *(connection.brand for connection in found.pact.connections),
             *(merchant.merchant for merchant in found.commerce.merchants),
+            *(site.site for site in found.signed_fetch.sites),
         ]
         if names:
             reached[identity] = names
     assert reached.pop("bookkeeping-desk") == ["northwind.example"]
     assert not APP_CATALOGUE["bookkeeping-desk"].enabled
-    assert {"order-desk", "travel-desk", "shopping-desk"} <= set(reached)
+    assert {"order-desk", "travel-desk", "shopping-desk", "signed-reader"} <= set(reached)
     for identity, names in reached.items():
         assert set(names) <= HOSTED_COUNTERPARTS, identity
     # Example Air's audience is the one it assigns at its hosted address (PACT 1.0 §3.1).

@@ -30,11 +30,12 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `context` | list of text | The Frames it works under: the catalogue's, or its organization's own (`org-…`) | — |
 | `contents` | list of text | The documents and datasets it answers from | — |
 | `connections` | list of [AppConnection](#appconnection) | What it reaches | — |
-| `protocols` | list of text | The agent protocols it speaks, ids of the protocols catalogue (AGENT_PROTOCOLS PS-02): its `pap`, `pact` and `a2a` blocks, and each merchant of `commerce`, are refused unless their protocol is listed, and a planned protocol only while it is not offered | — |
+| `protocols` | list of text | The agent protocols it speaks, ids of the protocols catalogue (AGENT_PROTOCOLS PS-02): its `pap`, `pact`, `signed_fetch` and `a2a` blocks, and each merchant of `commerce`, are refused unless their protocol is listed, and a planned protocol only while it is not offered | — |
 | `ui` | list of text | The UI its answers render in, ids of `agentspecs/ui` (AGENT_PROTOCOLS PS-04): each once, and one that is not enabled only while it is not offered | — |
 | `pap` | [AppPap](#apppap) | Personal Agent Protocol: companies it works with, or being one | — |
 | `pact` | [AppPact](#apppact) | PACT: businesses it asks for each person | — |
 | `commerce` | [AppCommerce](#appcommerce) | UCP and ACP: merchants it shops at for each person | — |
+| `signed_fetch` | [AppSignedFetch](#appsignedfetch) | Web Bot Auth: the sites it reads pages of, GET only, each request signed with its key | — |
 | `a2a` | [AppA2A](#appa2a) | A2A: the extensions its Agent Card advertises | — |
 | `rules` | list of [AppRule](#apprule) | When it acts alone, and when it asks | — |
 | `permissions` | [AppPermissions](#apppermissions) | What else it may reach: Spaces, its computer. Nothing, unless said | — |
@@ -488,6 +489,15 @@ commerce:
     limit:
       amount: '150'
       currency: USD
+```
+
+### `signed_fetch`
+
+```yaml
+signed_fetch:
+  sites:
+  - id: example-verifier
+    site: verify.examples.datalayer.run
 ```
 
 ### `pact`
@@ -1028,6 +1038,23 @@ A named set of weights: one way of looking at the same findings.
 | --- | --- | --- | --- |
 | `name` (required) | text | Its name | — |
 | `weights` | mapping of number | By criterion name | — |
+
+### AppSignedFetch
+
+Signed fetch: the sites it reads pages of, signed with its Web Bot Auth key (AGENT_PROTOCOLS EX-11).
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `sites` | list of [AppSignedFetchSite](#appsignedfetchsite) | Sites, each by its exact domain: read with GET only, every request signed | — |
+
+### AppSignedFetchSite
+
+A website the application reads pages of, each request signed (AGENT_PROTOCOLS EX-11). Decided 2026-10-13: a *signed fetch* names exact sites, an allow-list. Datalayer's gateway reads a page there with `GET` only, on its safe egress path (public addresses only), each request signed with the application's own Web Bot Auth key and recorded; reading is under the application's Rules like any read. Named by its domain: no other host is reached, and no credential is ever part of a spec.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `id` (required) | text | Stable within the application: `example-verifier` | — |
+| `site` (required) | text | The site's domain, exactly: `verify.examples.datalayer.run` | — |
 
 ### AppSpaceGrant
 

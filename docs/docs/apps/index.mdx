@@ -215,14 +215,31 @@ commerce:
         currency: USD
 ```
 
+A website is read in the `signed_fetch` block, with `web-bot-auth` listed: it
+names **exact sites**, by their domain, and the gateway's `signed-fetch`
+toolset reads a page there with `GET` only, on its safe egress path (public
+addresses only), every request signed with the application's own Web Bot Auth
+key and recorded. Reading a page is a `read` under its Rules, as any other;
+no other host is reached, and nothing is sent but the request.
+
+```yaml
+protocols: [web-bot-auth]
+
+signed_fetch:
+  sites:
+    - id: example-verifier
+      site: verify.examples.datalayer.run   # only the domain
+```
+
 An operation is proposed to the person with the summary filled from its
 exact terms — the Maker's words, never the model's — and done by its tool
 once, after they confirm that revision. Every key is in the
 [reference](./reference.md) (`AppPap`, `AppPapConnection`, `AppPapCompany`,
 `AppPapOperation`, `AppPact`, `AppPactConnection`, `AppPactBusiness`,
 `AppPactRegisteredAgent`, `AppCommerce`,
-`AppCommerceMerchant`, `AppSpendLimit`); the catalogue's *Order Desk*,
-*Exchange Desk*, *Travel Desk* and *Shopping Desk* are written this way,
+`AppCommerceMerchant`, `AppSpendLimit`, `AppSignedFetch`,
+`AppSignedFetchSite`); the catalogue's *Order Desk*, *Exchange Desk*,
+*Travel Desk*, *Shopping Desk* and *Signed Reader* are written this way,
 and how each protocol tool is classed is under [Action classes](#action-classes).
 
 ## Outputs

@@ -834,6 +834,54 @@ class AppCommerce(_Strict):
         return self
 
 
+class AppSignedFetchSite(_Strict):
+    """A website the application reads pages of, each request signed (AGENT_PROTOCOLS EX-11).
+
+    Decided 2026-10-13: a *signed fetch* names exact sites, an allow-list.
+    Datalayer's gateway reads a page there with `GET` only, on its safe
+    egress path (public addresses only), each request signed with the
+    application's own Web Bot Auth key and recorded; reading is under the
+    application's Rules like any read. Named by its domain: no other host is
+    reached, and no credential is ever part of a spec.
+    """
+
+    id: str = Field(..., description="Stable within the application: `example-verifier`")
+    site: str = Field(..., description="The site's domain, exactly: `verify.examples.datalayer.run`")
+
+    @field_validator("id")
+    @classmethod
+    def _an_id(cls, value: str) -> str:
+        if not re.fullmatch(r"[a-z][a-z0-9_-]{0,63}", value):
+            raise ValueError(f"{value!r} is not a site id: lower case, digits, `-` and `_`")
+        return value
+
+    @field_validator("site")
+    @classmethod
+    def _a_domain(cls, value: str) -> str:
+        if not _PAP_DOMAIN.fullmatch(value):
+            raise ValueError(f"{value!r} is not a site's domain: only the domain, as `example.com`")
+        return value
+
+
+class AppSignedFetch(_Strict):
+    """Signed fetch: the sites it reads pages of, signed with its Web Bot Auth key (AGENT_PROTOCOLS EX-11)."""
+
+    sites: List[AppSignedFetchSite] = Field(
+        default_factory=list, description="Sites, each by its exact domain: read with GET only, every request signed"
+    )
+
+    @model_validator(mode="after")
+    def _distinct(self) -> "AppSignedFetch":
+        ids = [site.id for site in self.sites]
+        if len(set(ids)) != len(ids):
+            raise ValueError("two sites have the same id")
+        # One grant per site (`datalayer_connection` `signed-fetch:<domain>`).
+        domains = [site.site for site in self.sites]
+        if len(set(domains)) != len(domains):
+            raise ValueError("the application names the same site twice")
+        return self
+
+
 #: Names an A2A extension's params may not take: a card is public, a credential never goes on it.
 _A2A_SECRET_PARAM = re.compile(r"(?i)(secret|token|password|passwd|api[_-]?key|private[_-]?key|credential|bearer)")
 #: Datalayer's own A2A extensions, published by the runtime itself (orchestration, face).
@@ -3113,7 +3161,7 @@ class AppSpec(_Strict):
         default_factory=list,
         description=(
             "The agent protocols it speaks, ids of the protocols catalogue (AGENT_PROTOCOLS PS-02): "
-            "its `pap`, `pact` and `a2a` blocks, and each merchant of `commerce`, are refused unless "
+            "its `pap`, `pact`, `signed_fetch` and `a2a` blocks, and each merchant of `commerce`, are refused unless "
             "their protocol is listed, "
             "and a planned protocol only while it is not offered"
         ),
@@ -3131,6 +3179,10 @@ class AppSpec(_Strict):
     pact: AppPact = Field(default_factory=AppPact, description="PACT: businesses it asks for each person")
     commerce: AppCommerce = Field(
         default_factory=AppCommerce, description="UCP and ACP: merchants it shops at for each person"
+    )
+    signed_fetch: AppSignedFetch = Field(
+        default_factory=AppSignedFetch,
+        description="Web Bot Auth: the sites it reads pages of, GET only, each request signed with its key",
     )
     a2a: AppA2A = Field(
         default_factory=AppA2A, description="A2A: the extensions its Agent Card advertises"
@@ -3333,6 +3385,7 @@ class AppSpec(_Strict):
             "pap": bool(self.pap.connections) or self.pap.company.enabled,
             "pact": bool(self.pact.connections) or self.pact.business.enabled,
             "a2a": bool(self.a2a.extensions),
+            "signed_fetch": bool(self.signed_fetch.sites),
         }
         for block, used in configured.items():
             protocol = protocol_of_block(block)

@@ -8,7 +8,7 @@ id: web-bot-auth
 version: 0.0.1
 name: Web Bot Auth
 description: >-
-  Signed outbound requests (RFC 9421) and the key directory a website checks them against.
+  Signed outbound requests (RFC 9421) and the key directory a website checks them against. In applications, every request to a company, business or merchant is signed, and a signed fetch reads pages at the sites an application names, GET only (decided 2026-10-13).
 publisher: Cloudflare (IETF draft)
 layer: identity
 spec_url: https://datatracker.ietf.org/doc/draft-ietf-webbotauth-httpsig-protocol/
@@ -19,4 +19,7 @@ packages:
   python: ["agent-runtimes"]
   typescript: ["@datalayer/agent-runtimes", "web-bot-auth"]
 # Its tools' action classes, under protocol-tools/ (agentspecs.actions).
-protocol_tools: []
+protocol_tools: ["signed-fetch"]
+# The Appspec block it is configured by: refused unless `protocols` lists it.
+# A signed fetch reads a page at a site it names (AGENT_PROTOCOLS EX-11).
+appspec_block: signed_fetch

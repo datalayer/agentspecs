@@ -29,6 +29,7 @@ def test_the_catalogue_holds_the_protocols_the_plan_targets_as_they_stand():
         "pap": "pap",
         "pact": "pact",
         "a2a": "a2a",
+        "web-bot-auth": "signed_fetch",
     }
     assert {p.layer.value for p in catalogue.values()} == {"transport", "consent", "identity", "commerce", "ui"}
 
