@@ -5,7 +5,7 @@
 # purchase at a test shop over UCP: the application fills a checkout, shows
 # the exact purchase, the person approves it, it is bought once and the
 # record shows it — as written from agent-runtimes' UCP test merchant, Example
-# Store (its products, prices and tax word for word), with nothing live
+# Store (its product, price and tax word for word), with nothing live
 # behind it. Test merchants only, with no real payment (decided 2026-10-13).
 # The audience takes the person's part where the person decides.
 
@@ -36,18 +36,18 @@ actors:
 lines:
 - from: ada
   to: agent
-  says: “Buy one Sencha green tea for me.”
+  says: “Buy me a stoneware mug.”
 - from: agent
   to: store
-  says: Searches the shop for green tea.
+  says: Searches the shop for a mug.
   how: The application reads the page every shop publishes for agents, then its catalogue; reading changes
     nothing, so its rule lets it do it.
 - from: store
   to: agent
-  says: '“Sencha green tea, 100 g: USD 12.50.”'
+  says: '“Stoneware mug: USD 24.00.”'
 - from: agent
   to: store
-  says: Fills a checkout with one Sencha green tea, for Ada.
+  says: Fills a checkout with one stoneware mug, for Ada.
   how: A checkout the shop can cancel; nothing is bought yet.
 - from: store
   to: agent
@@ -62,15 +62,15 @@ lines:
     - - Shop
       - Example Store
     - - What
-      - Sencha green tea, 100 g × 1
+      - Stoneware mug × 1
     - - Tax
-      - USD 1.00
+      - USD 1.92
     - - Total
-      - USD 13.50
+      - USD 25.92
     - - The most one purchase may cost
       - USD 50.00
     lines:
-    - Buy 1 Sencha green tea, 100 g at Example Store for USD 13.50.
+    - Buy 1 Stoneware mug at Example Store for USD 25.92.
   how: The purchase is the shop’s own checkout, read again before it is shown; approving this one never
     approves a changed basket.
   turn:
@@ -92,7 +92,7 @@ lines:
     kind: done
     title: Bought, once
     lines:
-    - 1 Sencha green tea, 100 g, USD 13.50, at Example Store.
+    - 1 Stoneware mug, USD 25.92, at Example Store.
 - from: agent
   says: Keeps a record of the purchase, for Ada and for whoever built it.
   card:
@@ -102,7 +102,7 @@ lines:
     - - Bought at
       - Example Store, for Ada
     - - Amount
-      - USD 13.50
+      - USD 25.92
     - - Approved by
       - Ada, once
   how: The purchase shows in the application’s Activity with its amount.

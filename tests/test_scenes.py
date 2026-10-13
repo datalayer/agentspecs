@@ -602,7 +602,7 @@ def test_the_protocol_stages_are_scripted_from_the_test_counterparts() -> None:
     assert kinds == ["approval", "done", "record"]
     [approval] = [line for line in purchase.lines if line.turn]
     assert approval.turn.no and "nothing is bought" in approval.turn.declined
-    assert ["Total", "USD 13.50"] in approval.card.rows
+    assert ["Total", "USD 25.92"] in approval.card.rows
     # The business: one permission of the two it asks for, and its receipt in the record.
     [sign_in] = [line for line in business.lines if line.turn]
     assert sign_in.card.kind.value == "sign-in" and not sign_in.turn.no
