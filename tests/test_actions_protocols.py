@@ -16,7 +16,7 @@ from agentspecs.actions import (
     protocol_tools_problems,
 )
 
-READ, WRITE, BUY = ActionClass.READ, ActionClass.WRITE, ActionClass.BUY
+READ, WRITE, BUY, SEND = ActionClass.READ, ActionClass.WRITE, ActionClass.BUY, ActionClass.SEND
 
 
 def test_every_protocol_spec_is_sound_and_its_prefix_its_own():
@@ -30,9 +30,10 @@ def test_every_protocol_spec_is_sound_and_its_prefix_its_own():
 @pytest.mark.parametrize(
     "server,tool,classes",
     [
-        ("pap:manzanita.example", "pap_ask", (READ,)),
-        # Asking for one of the company's people is the conversation's own control.
-        ("pap:manzanita.example", "pap_handoff", (READ,)),
+        # A message to the company goes out in the person's name: a Rule decides it (R-02).
+        ("pap:manzanita.example", "pap_ask", (SEND,)),
+        # Asking for one of the company's people is the conversation's own control, classed with it.
+        ("pap:manzanita.example", "pap_handoff", (SEND,)),
         ("pap:manzanita.example", "pap_read", (READ,)),
         ("pap:manzanita.example", "pap_mcp_call", (WRITE,)),
         # Confirming does what an operation can do: the most restricted wins.

@@ -40,9 +40,13 @@ pap:
       extensions: [operations]
 
 rules:
-  - action: Ask the shop and read your orders
+  - action: Read your orders at the shop
     applies_to: read
     behaviour: do_it
+  # A message to the shop goes out in your name (PAP_DATALAYER R-02).
+  - action: Send the shop a message for you
+    applies_to: send
+    behaviour: ask_first
   - action: Confirm an exchange or a return the shop proposes
     applies_to: write
     behaviour: ask_first
