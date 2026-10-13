@@ -15,8 +15,8 @@ are refused unless their protocol is listed.
 | [Personal Agent Protocol](https://poppy.md) | `pap` | consent | Sierra, Meta | draft 0.1 | shipped | Companies, as a person's agent there, or being one | `pap` |
 | [Trusted Agent Protocol](https://developer.visa.com) | `tap` | identity | Visa | none yet | planned | Merchants that recognise an agent by its signature |  |
 | [Web Bot Auth](https://datatracker.ietf.org/doc/draft-ietf-webbotauth-httpsig-protocol/) | `web-bot-auth` | identity | Cloudflare (IETF draft) | draft-ietf-webbotauth-httpsig-protocol-00 | shipped | Websites, which can tell the application's requests from someone pretending |  |
-| [Agentic Commerce Protocol](https://github.com/agentic-commerce-protocol/agentic-commerce-protocol) | `acp` | commerce | OpenAI, Stripe | 2026-04-17 | planned | Sellers, to check out with a delegated payment |  |
-| [Universal Commerce Protocol](https://github.com/Universal-Commerce-Protocol/ucp) | `ucp` | commerce | Google, with Shopify and retailers | 2026-08-25 | planned | Merchants, to search, check out and follow orders |  |
+| [Agentic Commerce Protocol](https://github.com/agentic-commerce-protocol/agentic-commerce-protocol) | `acp` | commerce | OpenAI, Stripe | 2026-04-17 | shipped | Sellers, to check out with a delegated payment |  |
+| [Universal Commerce Protocol](https://github.com/Universal-Commerce-Protocol/ucp) | `ucp` | commerce | Google, with Shopify and retailers | 2026-08-25 | shipped | Merchants, to search, check out and follow orders |  |
 | [A2UI](https://a2ui.org) | `a2ui` | ui | Google | 0.9 | shipped | The person, through components an answer draws |  |
 | [AG-UI](https://docs.ag-ui.com) | `ag-ui` | ui | CopilotKit | 0.0.57 (@ag-ui/core) | shipped | The page a person talks to the agent on |  |
 
@@ -38,7 +38,7 @@ How an agent's answer becomes an interface: components the host renders from a d
 
 ### Agentic Commerce Protocol (`acp`)
 
-Checkout sessions at a seller, completed with a delegated payment token the model never sees. Planned in applications: the client exists, purchases wait on a source of payment tokens.
+Checkout sessions at a seller, completed with a payment the model never sees. In applications at test merchants only, with no real payment token (decided 2026-10-13): each purchase asked of the person first, made at most once.
 
 - Python: `agent-runtimes`
 - TypeScript: `@datalayer/agent-runtimes`
@@ -81,7 +81,7 @@ An agent-recognition profile over Web Bot Auth for merchants. Planned: nothing i
 
 ### Universal Commerce Protocol (`ucp`)
 
-Shopping at a merchant: catalogue, checkout and orders, every purchase an exact proposal the person approves. Planned in applications: the client exists, purchases wait on a source of payment tokens.
+Shopping at a merchant: catalogue, checkout and orders, every purchase an exact proposal the person approves. In applications at test merchants only, with no real payment (decided 2026-10-13): each purchase asked of the person first, made at most once.
 
 - Python: `ucp-sdk`, `agent-runtimes`
 - TypeScript: `@ucp-js/sdk`, `@datalayer/agent-runtimes`

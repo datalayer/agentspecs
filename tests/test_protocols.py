@@ -20,8 +20,9 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent / "agentspecs"
 
 def test_the_catalogue_holds_the_protocols_the_plan_targets_as_they_stand():
     catalogue = protocols.PROTOCOL_CATALOGUE
-    shipped = {"mcp", "a2a", "a2ui", "ag-ui", "pap", "pact", "web-bot-auth"}
-    planned = {"ucp", "acp", "tap"}
+    # UCP and ACP in applications at test merchants only (decided 2026-10-13).
+    shipped = {"mcp", "a2a", "a2ui", "ag-ui", "pap", "pact", "web-bot-auth", "ucp", "acp"}
+    planned = {"tap"}
     assert set(catalogue) == shipped | planned
     assert {p for p, spec in catalogue.items() if spec.status.value == "shipped"} == shipped
     assert {p.id: p.appspec_block.value for p in catalogue.values() if p.appspec_block} == {
@@ -79,7 +80,7 @@ def test_an_application_lists_what_it_speaks():
         ({"a2a": {"extensions": [{"uri": "https://ext.example/v1"}]}}, "add 'a2a' to `protocols`"),
         ({"protocols": ["smtp"]}, "no protocol named 'smtp'"),
         ({"protocols": ["mcp", "mcp"]}, "twice"),
-        ({"protocols": ["ucp"]}, "planned, not shipped"),
+        ({"protocols": ["tap"]}, "planned, not shipped"),
     ],
 )
 def test_an_application_is_refused(spec, why):
@@ -88,5 +89,5 @@ def test_an_application_is_refused(spec, why):
 
 
 def test_a_planned_protocol_is_listed_only_while_the_application_is_not_offered():
-    off = {**BASE, "protocols": ["ucp"], "enabled": False, "unavailable_because": "Purchases wait on payment tokens."}
-    assert AppSpec.model_validate(off).protocols == ["ucp"]
+    off = {**BASE, "protocols": ["tap"], "enabled": False, "unavailable_because": "Card networks wait on TAP."}
+    assert AppSpec.model_validate(off).protocols == ["tap"]

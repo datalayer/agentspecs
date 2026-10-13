@@ -1,23 +1,24 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UCP 2026-08-25 shopping operations, as agent-runtimes' `UcpClient` makes them
-# (AGENT_PROTOCOLS PR-31). A merchant connection is `ucp:<domain>`.
+# UCP 2026-08-25 shopping, as Datalayer's gateway serves it (its `ucp` toolset,
+# AGENT_PROTOCOLS PI-10) over agent-runtimes' `UcpClient` (PR-31), which names
+# its operations without the prefix. A merchant connection is `ucp:<domain>`.
 id: ucp
 name: Universal Commerce Protocol
 description: Shopping at a merchant over UCP.
 connection: ucp
 
 actions:
-  checked: "2026-10-12"
+  checked: "2026-10-13"
   note: >-
-    Proposing a completion only reads the checkout and records the exact
-    revision the person approves; completing it pays.
+    Completing a checkout pays: the exact purchase is always asked of the
+    person first, and made at most once (decided 2026-10-13: test merchants
+    only, no real payment).
   tools:
-    search: read
-    propose_completion: read
-    get_checkout: read
-    create_checkout: write
-    update_checkout: write
-    cancel_checkout: write
-    complete: buy
+    ucp_search: read
+    ucp_get_checkout: read
+    ucp_create_checkout: write
+    ucp_update_checkout: write
+    ucp_cancel_checkout: write
+    ucp_complete: buy

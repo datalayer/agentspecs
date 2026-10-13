@@ -121,8 +121,8 @@ are not carried over: what the application can touch is the list under
 ### Companies and businesses, over agent protocols
 
 Other companies' agents are reached the same way, each in a block of its
-protocol, and only with that protocol listed under `protocols` (a `pap` or
-`pact` block without it is refused). A counterpart is named by its domain,
+protocol, and only with that protocol listed under `protocols` (a `pap`,
+`pact` or `commerce` block without it is refused). A counterpart is named by its domain,
 never a URL, and no credential is ever part of the spec: the gateway's `pap`
 and `pact` toolsets reach it, with the application's own keys held by
 Datalayer.
@@ -160,13 +160,34 @@ pact:
       scopes: ["bookings:read", "bookings:change"]
 ```
 
+A merchant is reached over UCP or ACP, in the `commerce` block, with `ucp`
+or `acp` listed. For now Datalayer buys at **test merchants only**, with no
+real payment: the gateway's `ucp` and `acp` toolsets refuse any other, and
+every purchase is asked of the person first — the exact checkout, made at
+most once — whatever the rule on buying says.
+
+```yaml
+protocols: [ucp]
+
+commerce:
+  merchants:
+    - id: example-store
+      protocol: ucp          # ucp, or acp
+      merchant: store.example
+      access: write          # read: searches and reads; write: also fills a checkout and buys
+      limit:                 # required to buy: the most one purchase may cost
+        amount: "50"
+        currency: USD
+```
+
 An operation is proposed to the person with the summary filled from its
 exact terms — the Maker's words, never the model's — and done by its tool
 once, after they confirm that revision. Every key is in the
 [reference](./reference.md) (`AppPap`, `AppPapConnection`, `AppPapCompany`,
-`AppPapOperation`, `AppPact`, `AppPactConnection`); the catalogue's *Order
-Desk*, *Exchange Desk* and *Travel Desk* are written this way, and how each
-protocol tool is classed is under [Action classes](#action-classes).
+`AppPapOperation`, `AppPact`, `AppPactConnection`, `AppCommerce`,
+`AppCommerceMerchant`, `AppSpendLimit`); the catalogue's *Order Desk*,
+*Exchange Desk*, *Travel Desk* and *Shopping Assistant* are written this way,
+and how each protocol tool is classed is under [Action classes](#action-classes).
 
 ## Outputs
 

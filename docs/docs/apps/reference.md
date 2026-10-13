@@ -30,10 +30,11 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `context` | list of text | The Frames it works under: the catalogue's, or its organization's own (`org-…`) | — |
 | `contents` | list of text | The documents and datasets it answers from | — |
 | `connections` | list of [AppConnection](#appconnection) | What it reaches | — |
-| `protocols` | list of text | The agent protocols it speaks, ids of the protocols catalogue (AGENT_PROTOCOLS PS-02): its `pap`, `pact` and `a2a` blocks are refused unless their protocol is listed, and a planned protocol only while it is not offered | — |
+| `protocols` | list of text | The agent protocols it speaks, ids of the protocols catalogue (AGENT_PROTOCOLS PS-02): its `pap`, `pact` and `a2a` blocks, and each merchant of `commerce`, are refused unless their protocol is listed, and a planned protocol only while it is not offered | — |
 | `ui` | list of text | The UI its answers render in, ids of `agentspecs/ui` (AGENT_PROTOCOLS PS-04): each once, and one that is not enabled only while it is not offered | — |
 | `pap` | [AppPap](#apppap) | Personal Agent Protocol: companies it works with, or being one | — |
 | `pact` | [AppPact](#apppact) | PACT: businesses it asks for each person | — |
+| `commerce` | [AppCommerce](#appcommerce) | UCP and ACP: merchants it shops at for each person | — |
 | `a2a` | [AppA2A](#appa2a) | A2A: the extensions its Agent Card advertises | — |
 | `rules` | list of [AppRule](#apprule) | When it acts alone, and when it asks | — |
 | `permissions` | [AppPermissions](#apppermissions) | What else it may reach: Spaces, its computer. Nothing, unless said | — |
@@ -464,6 +465,20 @@ checks:
   track: financial-reporting:0.0.1
 ```
 
+### `commerce`
+
+```yaml
+commerce:
+  merchants:
+  - id: example-store
+    protocol: ucp
+    merchant: store.example
+    access: write
+    limit:
+      amount: '50'
+      currency: USD
+```
+
 ### `pact`
 
 ```yaml
@@ -602,6 +617,26 @@ A slash command the user picks in the composer (LOOP P-19). Typing `/` lists the
 | `name` (required) | text | What follows the slash: lower-case letters, digits and hyphens, a letter first (`summarise`) | — |
 | `description` (required) | text | What the composer's menu says it does | — |
 | `prompt` (required) | text | What is sent when it is picked: `{input}` stands for the words typed after it; without `{input}`, those words follow the prompt. An application's code answers `/<name> {input}` itself (`@app.command`) | — |
+
+### AppCommerce
+
+Commerce: the merchants it shops at for each person (AGENT_PROTOCOLS PI-01).
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `merchants` | list of [AppCommerceMerchant](#appcommercemerchant) | Merchants, over UCP or ACP: test merchants only for now | — |
+
+### AppCommerceMerchant
+
+A merchant the application shops at for each person, over UCP or ACP (AGENT_PROTOCOLS PI-01). Decided 2026-10-13: test merchants only, with no real payment — a purchase is always asked of the person first (*Ask me first*, PI-21), as the exact checkout, and made at most once; Datalayer's gateway pays with a test instrument and refuses any merchant it does not know as a test one. Named by its domain (its profile at `/.well-known/ucp`, or `/.well-known/acp.json`), always in each person's own name. No credential is ever part of a spec.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `id` (required) | text | Stable within the application: `example-store` | — |
+| `protocol` (required) | [CommerceProtocol](#commerceprotocol) | `ucp` or `acp` | — |
+| `merchant` (required) | text | The merchant's domain: `store.example` | — |
+| `access` | [Access](#access) | How far: `read` (searches and reads its checkouts), or `write` (also fills a checkout and buys, each purchase asked of the person) | `"read"` |
+| `limit` | [AppSpendLimit](#appspendlimit) | The most one purchase may cost there: required for `write` | empty |
 
 ### AppComputer
 
@@ -947,6 +982,15 @@ A Space the application may reach.
 | `space` (required) | text | The Space, by its handle or its id | — |
 | `access` | [Access](#access) | `read`, or `write` | `"read"` |
 
+### AppSpendLimit
+
+The most one purchase may cost at a merchant (AGENT_PROTOCOLS PI-22).
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `amount` (required) | text | At most this much, as written: `50`, `12.50` | — |
+| `currency` (required) | text | Its currency, ISO 4217: `USD` | — |
+
 ### AppStarter
 
 A first message offered to the user.
@@ -1162,6 +1206,7 @@ The application at an address of its own.
 | <a id="balloondisplay"></a>BalloonDisplay | `history`, `current` |
 | <a id="behaviour"></a>Behaviour | `do_it`, `if_asked`, `ask_first`, `leave_to_me` |
 | <a id="checkstage"></a>CheckStage | `answer`, `tool_call` |
+| <a id="commerceprotocol"></a>CommerceProtocol | `ucp`, `acp` |
 | <a id="criterionkind"></a>CriterionKind | `metric`, `noul`, `choice`, `score` |
 | <a id="embedmode"></a>EmbedMode | `inline`, `bubble`, `panel`, `assistant` |
 | <a id="hostuser"></a>HostUser | `claimed`, `signed` |

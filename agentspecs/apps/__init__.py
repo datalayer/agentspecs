@@ -534,6 +534,115 @@ class AppPact(_Strict):
         return self
 
 
+class CommerceProtocol(str, Enum):
+    """The commerce protocol a merchant is reached over (AGENT_PROTOCOLS PI-01)."""
+
+    UCP = "ucp"
+    ACP = "acp"
+
+
+#: An amount as written: digits, at most two decimals (`50`, `12.50`).
+_AMOUNT = re.compile(r"^(0|[1-9][0-9]{0,8})(\.[0-9]{1,2})?$")
+
+
+class AppSpendLimit(_Strict):
+    """The most one purchase may cost at a merchant (AGENT_PROTOCOLS PI-22)."""
+
+    amount: str = Field(..., description="At most this much, as written: `50`, `12.50`")
+    currency: str = Field(..., description="Its currency, ISO 4217: `USD`")
+
+    @field_validator("amount")
+    @classmethod
+    def _an_amount(cls, value: str) -> str:
+        if not _AMOUNT.fullmatch(value) or float(value) <= 0:
+            raise ValueError(f"{value!r} is not an amount: more than zero, at most two decimals, as `50` or `12.50`")
+        return value
+
+    @field_validator("currency")
+    @classmethod
+    def _a_currency(cls, value: str) -> str:
+        if not re.fullmatch(r"[A-Z]{3}", value):
+            raise ValueError(f"{value!r} is not a currency: three capital letters, as `USD`")
+        return value
+
+    @property
+    def minor_units(self) -> int:
+        """The amount in the currency's minor units, as a checkout counts it: `12.50` is 1250."""
+        whole, _, cents = self.amount.partition(".")
+        return int(whole) * 100 + int((cents + "00")[:2])
+
+
+class AppCommerceMerchant(_Strict):
+    """A merchant the application shops at for each person, over UCP or ACP (AGENT_PROTOCOLS PI-01).
+
+    Decided 2026-10-13: test merchants only, with no real payment — a
+    purchase is always asked of the person first (*Ask me first*, PI-21),
+    as the exact checkout, and made at most once; Datalayer's gateway pays
+    with a test instrument and refuses any merchant it does not know as a
+    test one. Named by its domain (its profile at `/.well-known/ucp`, or
+    `/.well-known/acp.json`), always in each person's own name. No
+    credential is ever part of a spec.
+    """
+
+    id: str = Field(..., description="Stable within the application: `example-store`")
+    protocol: CommerceProtocol = Field(..., description="`ucp` or `acp`")
+    merchant: str = Field(..., description="The merchant's domain: `store.example`")
+    access: Access = Field(
+        default=Access.READ,
+        description=(
+            "How far: `read` (searches and reads its checkouts), "
+            "or `write` (also fills a checkout and buys, each purchase asked of the person)"
+        ),
+    )
+    limit: Optional[AppSpendLimit] = Field(
+        default=None,
+        description="The most one purchase may cost there: required for `write`",
+    )
+
+    @field_validator("id")
+    @classmethod
+    def _an_id(cls, value: str) -> str:
+        if not re.fullmatch(r"[a-z][a-z0-9_-]{0,63}", value):
+            raise ValueError(f"{value!r} is not a merchant id: lower case, digits, `-` and `_`")
+        return value
+
+    @field_validator("merchant")
+    @classmethod
+    def _a_domain(cls, value: str) -> str:
+        if not _PAP_DOMAIN.fullmatch(value):
+            raise ValueError(f"{value!r} is not a merchant's domain: only the domain, as `example.com`")
+        return value
+
+    @model_validator(mode="after")
+    def _a_limit_to_buy(self) -> "AppCommerceMerchant":
+        if self.access is Access.WRITE and self.limit is None:
+            raise ValueError(
+                f"the application may buy at {self.merchant}: say the most one purchase may cost there (`limit`)"
+            )
+        if self.access is Access.READ and self.limit is not None:
+            raise ValueError(f"the application only reads at {self.merchant}: a spending limit says nothing there")
+        return self
+
+
+class AppCommerce(_Strict):
+    """Commerce: the merchants it shops at for each person (AGENT_PROTOCOLS PI-01)."""
+
+    merchants: List[AppCommerceMerchant] = Field(
+        default_factory=list, description="Merchants, over UCP or ACP: test merchants only for now"
+    )
+
+    @model_validator(mode="after")
+    def _distinct(self) -> "AppCommerce":
+        ids = [merchant.id for merchant in self.merchants]
+        if len(set(ids)) != len(ids):
+            raise ValueError("two merchants have the same id")
+        # One grant per merchant (`datalayer_connection` `ucp:<domain>` or `acp:<domain>`, PI-02).
+        domains = [merchant.merchant for merchant in self.merchants]
+        if len(set(domains)) != len(domains):
+            raise ValueError("the application connects to the same merchant twice")
+        return self
+
+
 #: Names an A2A extension's params may not take: a card is public, a credential never goes on it.
 _A2A_SECRET_PARAM = re.compile(r"(?i)(secret|token|password|passwd|api[_-]?key|private[_-]?key|credential|bearer)")
 #: Datalayer's own A2A extensions, published by the runtime itself (orchestration, face).
@@ -2778,7 +2887,8 @@ class AppSpec(_Strict):
         default_factory=list,
         description=(
             "The agent protocols it speaks, ids of the protocols catalogue (AGENT_PROTOCOLS PS-02): "
-            "its `pap`, `pact` and `a2a` blocks are refused unless their protocol is listed, "
+            "its `pap`, `pact` and `a2a` blocks, and each merchant of `commerce`, are refused unless "
+            "their protocol is listed, "
             "and a planned protocol only while it is not offered"
         ),
     )
@@ -2793,6 +2903,9 @@ class AppSpec(_Strict):
         default_factory=AppPap, description="Personal Agent Protocol: companies it works with, or being one"
     )
     pact: AppPact = Field(default_factory=AppPact, description="PACT: businesses it asks for each person")
+    commerce: AppCommerce = Field(
+        default_factory=AppCommerce, description="UCP and ACP: merchants it shops at for each person"
+    )
     a2a: AppA2A = Field(
         default_factory=AppA2A, description="A2A: the extensions its Agent Card advertises"
     )
@@ -3001,6 +3114,13 @@ class AppSpec(_Strict):
                 problems.append(
                     f"Its `{block}` block configures {protocol.name}, which it does not list: "
                     f"add {protocol.id!r} to `protocols`."
+                )
+        # The `commerce` block configures UCP and ACP, by each merchant's protocol.
+        for protocol_id in dict.fromkeys(merchant.protocol.value for merchant in self.commerce.merchants):
+            if protocol_id not in self.protocols:
+                problems.append(
+                    f"Its `commerce` block shops over {protocol_id.upper()}, which it does not list: "
+                    f"add {protocol_id!r} to `protocols`."
                 )
         for ui_id in dict.fromkeys(self.ui):
             spec = _catalogue("ui").get(ui_id)

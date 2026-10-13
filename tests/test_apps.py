@@ -400,7 +400,9 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
     the others stay off, each saying why in a sentence its page shows."""
     off = {identity: spec for identity, spec in APP_CATALOGUE.items() if not spec.enabled}
     # Order desk and Exchange desk wait for the Personal Agent Protocol's services (PAP_DATALAYER E-01, E-02).
-    assert sorted(off) == ["exchange-desk", "inbox-triage", "order-desk", "pipeline-report", "travel-desk"]
+    assert sorted(off) == [
+        "exchange-desk", "inbox-triage", "order-desk", "pipeline-report", "shopping-assistant", "travel-desk",
+    ]
     for identity, spec in off.items():
         assert spec.unavailable_because.strip().endswith("."), identity
     for identity in ("quote-calculator", "report-from-a-file", "customer-interview", "support-desk"):
@@ -862,6 +864,8 @@ EXAMPLES = {
     "exchange-desk": AppKind.CHAT,
     # A personal agent at an airline, over PACT (AGENT_PROTOCOLS EX-13).
     "travel-desk": AppKind.CHAT,
+    # Shopping at a test merchant over UCP, each purchase asked first (AGENT_PROTOCOLS EX-12).
+    "shopping-assistant": AppKind.CHAT,
 }
 
 
