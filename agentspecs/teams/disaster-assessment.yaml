@@ -37,7 +37,7 @@ execution_mode: supervisor
 # is told: it is the scene's supervisor and its front door.
 supervisor:
   name: Event response
-  app: event-response:0.0.1
+  app: event-response:0.0.2
   can_terminate: true
 entry: event-response
 routing_instructions: >-
@@ -67,7 +67,7 @@ validation:
 
 agents:
   - id: event-response
-    app: event-response:0.0.1
+    app: event-response:0.0.2
     role: initiator
     runs_in: browser
     goal: >-

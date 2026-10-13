@@ -273,8 +273,8 @@ class TestTeamsOfApplications:
         team = get_team("sales-and-accounting")
         assert team is not None
         assert team.entry == "sales"
-        assert team.supervisor.app == "sales:0.0.1"
-        assert team.referenced_apps() == ["sales:0.0.1", "accounting:0.0.1"]
+        assert team.supervisor.app == "sales:0.0.2"
+        assert team.referenced_apps() == ["sales:0.0.2", "accounting:0.0.1"]
         assert team.referenced_agents() == []
         sales, accounting = team.member("sales"), team.member("accounting")
         assert sales.runs_in is TeamPlace.BROWSER

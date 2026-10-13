@@ -32,7 +32,7 @@ execution_mode: supervisor
 # the team's supervisor and its front door.
 supervisor:
   name: Sales
-  app: sales:0.0.1
+  app: sales:0.0.2
   can_terminate: true
 entry: sales
 routing_instructions: >-
@@ -58,7 +58,7 @@ validation:
 
 agents:
   - id: sales
-    app: sales:0.0.1
+    app: sales:0.0.2
     role: initiator
     runs_in: browser
     goal: >-
