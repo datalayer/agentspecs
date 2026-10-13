@@ -1,0 +1,100 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Scene: A Person and a Company (PAP_DATALAYER X-02), scripted. It plays
+# a person's agent working with a company, signed out then signed in (§1.10 slice 1),
+# as written from the Personal Agent Protocol SDK's demo companies — their
+# answers, proposals and results word for word — with nothing live behind it.
+# The audience takes the person's part where the person decides.
+
+schema: loop.scene/v1
+id: pap-a-person-and-a-company
+version: 0.0.1
+kind: scripted
+name: A Person and a Company
+description: Ada’s agent asks a shop about her order, and she signs in at the shop itself.
+tags:
+- stage
+- pap
+- slice-1
+emoji: 🧥
+actors:
+- id: ada
+  name: Ada
+  face: 🧑
+  is: the person
+- id: agent
+  name: Her agent
+  face: 🤖
+  is: an application on Datalayer, working for Ada
+- id: manzanita
+  name: Manzanita Outfitters
+  face: 🧥
+  is: a company, at manzanita.example
+lines:
+- from: ada
+  to: agent
+  says: “Has my Ridge Jacket from Manzanita arrived?”
+- from: agent
+  says: Finds Manzanita Outfitters by its domain and checks it is who it says.
+  card:
+    kind: found
+    title: Manzanita Outfitters
+    rows:
+    - - Its domain
+      - manzanita.example
+    - - Signs its sign-ins as
+      - manzanita.example
+    - - How a person signs in
+      - With a code, or in a protected form
+    - - It offers
+      - See your orders · Exchange and return items
+  how: The agent reads the page every company publishes for personal agents and checks that the domain
+    and who signs its sign-ins belong together.
+- from: agent
+  to: manzanita
+  says: 'Asks, before anybody signed in: “Where is Ada’s Ridge Jacket order?”'
+  how: A conversation starts with the company’s own agent; nobody is signed in yet, so it answers only
+    what anybody may ask.
+- from: manzanita
+  to: agent
+  says: “I can look that up once you sign in to your Manzanita account.”
+  how: 'The company asks for a sign-in and names what it needs: See your orders.'
+- from: agent
+  to: ada
+  says: Asks Ada to sign in at Manzanita, on Manzanita’s own page.
+  card:
+    kind: sign-in
+    title: Sign in at Manzanita Outfitters
+    lines:
+    - Your agent asks to see your orders.
+    - 'You sign in on manzanita.example: your agent never sees your password.'
+    - You can keep fewer permissions than it asks for.
+  turn:
+    'yes': Sign in at Manzanita
+- from: ada
+  to: manzanita
+  says: Signs in on Manzanita’s page and allows “See your orders”.
+  how: The company gives the agent a sign-in of its own, for Ada and for this agent only; Datalayer keeps
+    it, out of the agent’s reach.
+- from: manzanita
+  to: agent
+  says: '“Your order ord_7Hk2: Ridge Jacket, size M, delivered.”'
+- from: agent
+  to: ada
+  says: '“Yes: your Ridge Jacket, size M, was delivered.”'
+- from: agent
+  says: Keeps a record of what it did, for Ada and for whoever built it.
+  card:
+    kind: record
+    title: Activity
+    rows:
+    - - Signed in at
+      - Manzanita Outfitters, for Ada
+    - - Allowed
+      - See your orders
+    - - Read
+      - Order ord_7Hk2
+  how: Ada sees it under In your name, and ends it there with Disconnect.
+live: Connecting an application to a company is built in the Studio (its Connections card); signing in
+  at a company through Datalayer waits for the services to be shipped.

@@ -13,6 +13,7 @@ from __future__ import annotations
 import copy
 import json
 import pathlib
+import re
 from typing import Any, Dict
 
 import pytest
@@ -27,6 +28,7 @@ from agentspecs.scenes import (
     SCHEMA_PATH,
     AnswerKind,
     SceneError,
+    SceneKind,
     SceneSpec,
     Watchers,
     dump_scene,
@@ -89,8 +91,12 @@ def _minimal_cast(**overrides: Any) -> Dict[str, Any]:
 # --- the catalogue ----------------------------------------------------------------------
 
 
+#: The Personal Agent Protocol's Stages, scripted (PAP_DATALAYER X-02).
+PAP_STAGES = ("pap-a-person-and-a-company", "pap-approve-once", "pap-your-application-a-company", "pap-two-companies")
+
+
 def test_the_catalogue_holds_the_four_scenes_of_the_home_page() -> None:
-    assert set(SCENE_CATALOGUE) == set(HOME_SCENES)
+    assert set(SCENE_CATALOGUE) == set(HOME_SCENES) | set(PAP_STAGES)
     assert get_scene("sales-and-accounting:0.0.1") is SCENE_CATALOGUE["sales-and-accounting"]
     assert get_scene("no-such-scene") is None
     assert [scene.id for scene in list_scenes("earthdata")] == ["crop-monitoring", "disaster-assessment"]
@@ -111,6 +117,9 @@ def test_every_scene_has_a_face_of_its_own() -> None:
     assert len(set(faces)) == len(faces) and "\U0001f440" not in faces
     for scene in SCENE_CATALOGUE.values():
         assert scene.name and scene.description.strip() and scene.icon, scene.id
+        if scene.kind is SceneKind.SCRIPTED:
+            # Its actors are the company it is about, not a cast of applications: none is checked here.
+            continue
         members = [member.persona.face for member in scene.cast_of()]
         assert all(members), scene.id
         assert scene.emoji not in members, scene.id
@@ -460,7 +469,7 @@ def test_a_scene_of_the_catalogue_that_cannot_be_played_is_refused_when_loading(
     from agentspecs.scenes import load_scenes
 
     folder = SCENES_DIR
-    assert set(load_scenes(folder)) == set(HOME_SCENES)
+    assert set(load_scenes(folder)) == set(HOME_SCENES) | set(PAP_STAGES)
     with pytest.raises(SceneError, match="Visitors may watch"):
         load_scenes(_folder_with(problems_in={"deployment": {}}))
 
@@ -511,3 +520,69 @@ def test_a_scene_spec_is_a_pydantic_model_a_host_can_build() -> None:
     scene = SceneSpec(id="solo", name="Solo", emoji="\U0001f3ad", team="month-end-close:0.0.1")
     assert scene.team_of().id == "month-end-close" and scene.cues() == []
     assert dump_scene(scene) == {"schema": SCENE_SCHEMA, "id": "solo", "name": "Solo", "emoji": "\U0001f3ad", "team": "month-end-close:0.0.1"}
+
+
+# --- a scripted scene (PAP_DATALAYER X-02) ------------------------------------------------
+
+
+def _scripted(**overrides: Any) -> Dict[str, Any]:
+    document: Dict[str, Any] = {
+        "schema": "loop.scene/v1",
+        "id": "a-shop",
+        "kind": "scripted",
+        "name": "A Shop",
+        "description": "Ada asks a shop about her order.",
+        "emoji": "\U0001f6cd\ufe0f",
+        "actors": [
+            {"id": "ada", "name": "Ada", "face": "\U0001f9d1", "is": "the person"},
+            {"id": "shop", "name": "The Shop", "face": "\U0001f9e5", "is": "a company"},
+        ],
+        "lines": [
+            {"from": "ada", "to": "shop", "says": "\u201cHas it arrived?\u201d"},
+            {
+                "from": "shop",
+                "to": "ada",
+                "says": "Asks Ada to sign in at the shop itself.",
+                "card": {"kind": "sign-in", "title": "Sign in at The Shop", "rows": [["Where", "shop.example"]]},
+                "how": "The shop asks; nothing is typed here.",
+                "turn": {"yes": "Sign in"},
+            },
+        ],
+        "live": "Nothing of it runs on Datalayer yet.",
+    }
+    document.update(overrides)
+    return document
+
+
+def test_a_scripted_scene_names_its_actors_and_writes_its_lines_and_stages_no_team() -> None:
+    scene = parse_scene(_scripted())
+    assert scene.kind is SceneKind.SCRIPTED and [line.from_ for line in scene.lines] == ["ada", "shop"]
+    assert scene_problems(scene) == [] and scene_setup(scene) == []
+    with pytest.raises(SceneError, match="is scripted: it stages no team"):
+        scene.team_of()
+    # Read back as written.
+    assert parse_scene(dump_scene(scene)) == scene
+    for overrides, says in (
+        ({"team": "month-end-close"}, "stages no team: it has no `team`"),
+        ({"cast": [{"member": "front", "app": "order-desk"}]}, "it has no `cast`"),
+        ({"lines": []}, "names its `actors` and writes its `lines`"),
+        ({"live": " "}, "runs on Datalayer today"),
+        ({"lines": [{"from": "bob", "says": "Hello."}]}, "names 'bob', who is not among the actors"),
+        ({"lines": [{"from": "ada", "says": "No.", "turn": {"yes": "Yes", "no": "No"}}]}, "says what follows a no"),
+        ({"lines": [{"from": "ada", "says": "A card.", "card": {"kind": "done", "title": "Done", "rows": [["only"]]}}]}, "a label and a value"),
+    ):
+        with pytest.raises(SceneError, match=re.escape(says)):
+            parse_scene(_scripted(**overrides))
+    # What is a scripted scene's is refused on one that stages a team.
+    with pytest.raises(SceneError, match="are a scripted scene's"):
+        parse_scene({**_minimal_cast(), "live": "Live."})
+
+
+def test_the_pap_stages_are_scripted_from_the_sdks_demo_companies() -> None:
+    for scene_id in PAP_STAGES:
+        scene = SCENE_CATALOGUE[scene_id]
+        assert scene.kind is SceneKind.SCRIPTED and "pap" in scene.tags, scene_id
+        assert scene.lines and scene.live, scene_id
+        # The person decides somewhere on each: a turn waits for them.
+        assert any(line.turn for line in scene.lines), scene_id
+    assert [scene.id for scene in list_scenes("pap")] == sorted(PAP_STAGES)

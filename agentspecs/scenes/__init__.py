@@ -37,6 +37,15 @@ membership twice. What a scene spec holds:
   and where each member on a runtime is served, by the name of the variable
   its address is read from at build.
 
+A **scripted** scene (``kind: scripted``) stages no team: it names its
+``actors`` (a person, an application, a company — each a name, a face and what
+it is) and writes its ``lines`` — who acts, to whom, what they say or do, a
+``card`` the audience reads, ``how`` it happened underneath and the audience's
+``turn`` where they decide — and says what of it is ``live`` on Datalayer
+today. It is played as written, with nothing live behind it: the Personal
+Agent Protocol's Stages are scripted from the SDK's demo companies
+(PAP_DATALAYER X-02).
+
 What is wrong is said in sentences (:func:`scene_problems`): a cast member
 not in the team, a beat's mover not in the cast, a move over ``mcp`` to one
 that is not a system, a cue nobody answers, a tool no connection offers, a
@@ -525,8 +534,91 @@ class SceneDeployment(_Strict):
 # --- the scene -------------------------------------------------------------------------
 
 
+# --- a scripted scene ----------------------------------------------------------------
+
+
+class SceneKind(str, Enum):
+    """What a scene plays: a team, live (`team`), or lines written out (`scripted`)."""
+
+    TEAM = "team"
+    SCRIPTED = "scripted"
+
+
+class SceneActor(_Strict):
+    """Somebody on a scripted scene: a person, an application, a company — never a team member."""
+
+    id: str = Field(..., description="Its id, as the lines name it")
+    name: str = Field(..., description="The name the audience sees")
+    face: str = Field(..., description="One emoji, drawn before the name")
+    is_: str = Field(..., alias="is", description="What it is, in a few words")
+
+    @field_validator("id")
+    @classmethod
+    def _an_id(cls, value: str) -> str:
+        if not re.fullmatch(r"[a-z][a-z0-9-]{0,63}", value):
+            raise ValueError(f"{value!r} is not an actor's id: lower case, digits and `-`")
+        return value
+
+    @field_validator("face")
+    @classmethod
+    def _one_emoji(cls, face: str) -> str:
+        return _is_a_face(face, "an actor's `face`")
+
+
+class SceneCardKind(str, Enum):
+    """What a card of a scripted line is."""
+
+    FOUND = "found"
+    SIGN_IN = "sign-in"
+    APPROVAL = "approval"
+    DONE = "done"
+    RECORD = "record"
+
+
+class SceneCard(_Strict):
+    """What the audience reads on a line: rows and sentences, never a credential."""
+
+    kind: SceneCardKind
+    title: str
+    rows: List[List[str]] = Field(default_factory=list, description="Its rows: each a label and a value")
+    lines: List[str] = Field(default_factory=list, description="Its sentences")
+
+    @field_validator("rows")
+    @classmethod
+    def _pairs(cls, rows: List[List[str]]) -> List[List[str]]:
+        for row in rows:
+            if len(row) != 2:
+                raise ValueError("each row of a card is a label and a value")
+        return rows
+
+
+class SceneTurn(_Strict):
+    """The audience's turn on a scripted line: the scene waits for them."""
+
+    yes: str = Field(..., description="What saying yes is called")
+    no: str = Field(default="", description="What saying no is called; none when there is nothing to refuse")
+    declined: str = Field(default="", description="What happens once they said no: the scene ends there")
+
+    @model_validator(mode="after")
+    def _no_says_what_follows(self) -> "SceneTurn":
+        if bool(self.no) != bool(self.declined):
+            raise ValueError("a turn that can be refused says what follows a no (`no` and `declined`, both or neither)")
+        return self
+
+
+class SceneLine(_Strict):
+    """One line of a scripted scene: who acts, to whom, what they say or do."""
+
+    from_: str = Field(..., alias="from", description="Who acts: an actor's id")
+    to: str = Field(default="", description="To whom, when somebody is addressed")
+    says: str = Field(..., description="What they say or do, in a sentence; in quotes when it is said")
+    card: Optional[SceneCard] = Field(default=None, description="What the audience reads")
+    how: str = Field(default="", description="What happened underneath, in a visitor's words")
+    turn: Optional[SceneTurn] = Field(default=None, description="The audience's turn: the scene waits")
+
+
 class SceneSpec(_Strict):
-    """Specification for a scene: a team, staged."""
+    """Specification for a scene: a team, staged — or, `kind: scripted`, lines written out."""
 
     schema_: str = Field(default=SCENE_SCHEMA, alias="schema", description="The version of the spec itself")
     id: str = Field(..., description="Unique scene identifier")
@@ -537,6 +629,10 @@ class SceneSpec(_Strict):
     icon: str = Field(default="people", description="Icon identifier")
     emoji: str = Field(default="\U0001f440", description="Its face: one emoji, drawn before its name")
 
+    kind: SceneKind = Field(
+        default=SceneKind.TEAM,
+        description="`team`: a team staged, live; `scripted`: lines written out, played as written, with no team or cast",
+    )
     team: str = Field(default="", description="The team it stages, `id` or `id:version`")
     entry: str = Field(default="", description="The member the audience talks to; the team's entry when unsaid")
     cast: List[SceneCastMember] = Field(default_factory=list, description="The cast: personas and briefs, or the members")
@@ -546,6 +642,9 @@ class SceneSpec(_Strict):
     audience: SceneAudience = Field(default_factory=SceneAudience, description="Who may watch and ask")
     rehearsal: SceneRehearsal = Field(default_factory=SceneRehearsal, description="Its tests")
     deployment: SceneDeployment = Field(default_factory=SceneDeployment, description="Where it plays")
+    actors: List[SceneActor] = Field(default_factory=list, description="A scripted scene's actors")
+    lines: List[SceneLine] = Field(default_factory=list, description="A scripted scene's lines, in order")
+    live: str = Field(default="", description="A scripted scene: what of it runs on Datalayer today, said honestly")
 
     @field_validator("schema_")
     @classmethod
@@ -561,6 +660,10 @@ class SceneSpec(_Strict):
 
     @model_validator(mode="after")
     def _stages_somebody(self) -> "SceneSpec":
+        if self.kind is SceneKind.SCRIPTED:
+            return self._is_written_out()
+        if self.actors or self.lines or self.live:
+            raise ValueError("`actors`, `lines` and `live` are a scripted scene's: this one stages a team (`kind: scripted` for lines)")
         if not self.team and not self.cast:
             raise ValueError("the scene stages nobody: it names a `team`, or writes its `cast`")
         seen = set()
@@ -575,14 +678,37 @@ class SceneSpec(_Strict):
             beats.add(beat.id)
         return self
 
+    def _is_written_out(self) -> "SceneSpec":
+        """A scripted scene: actors and lines, and nothing of a team."""
+        staged = [name for name in ("team", "entry", "cast", "script") if getattr(self, name)]
+        if staged:
+            raise ValueError(f"a scripted scene stages no team: it has no {', '.join(f'`{name}`' for name in staged)}")
+        if not self.actors or not self.lines:
+            raise ValueError("a scripted scene names its `actors` and writes its `lines`")
+        if not self.live.strip():
+            raise ValueError("a scripted scene says what of it runs on Datalayer today (`live`)")
+        ids = set()
+        for actor in self.actors:
+            if actor.id in ids:
+                raise ValueError(f"the actors name '{actor.id}' twice")
+            ids.add(actor.id)
+        for index, line in enumerate(self.lines, start=1):
+            for who in (line.from_, line.to):
+                if who and who not in ids:
+                    raise ValueError(f"line {index} names '{who}', who is not among the actors")
+        return self
+
     # -- what it stages ----------------------------------------------------------------
 
     def team_of(self) -> TeamSpec:
         """The team on stage: the one it names, or the one its cast makes.
 
         Raises:
-            SceneError: when the team is not in the catalogue, or the cast makes none.
+            SceneError: when the team is not in the catalogue, or the cast makes none,
+                or the scene is scripted.
         """
+        if self.kind is SceneKind.SCRIPTED:
+            raise SceneError(f"{self.name} is scripted: it stages no team.")
         if self.team:
             team = get_team(self.team.split(":")[0])
             if team is None:
@@ -739,6 +865,9 @@ def scene_problems(scene: SceneSpec) -> List[str]:
     from ..frames import get_frame
 
     problems: List[str] = []
+    if scene.kind is SceneKind.SCRIPTED:
+        # Written out and played as written: what its model checks is all there is.
+        return problems
     try:
         team = scene.team_of()
     except SceneError as error:
@@ -879,6 +1008,8 @@ def _move_problems(
 def scene_setup(scene: SceneSpec) -> List[str]:
     """What a scene names that is not offered today, in sentences: its members' applications' setup."""
     setup: List[str] = []
+    if scene.kind is SceneKind.SCRIPTED:
+        return setup
     for member in scene.team_of().agents:
         app = _app_of(member)
         for sentence in app_setup(app) if app is not None else []:
@@ -1039,13 +1170,18 @@ __all__ = [
     "SCENE_CATALOGUE",
     "SCENE_SCHEMA",
     "SCHEMA_PATH",
+    "SceneActor",
     "SceneAudience",
     "SceneBeat",
     "SceneBranch",
+    "SceneCard",
+    "SceneCardKind",
     "SceneCastMember",
     "SceneCue",
     "SceneDeployment",
     "SceneError",
+    "SceneKind",
+    "SceneLine",
     "SceneMove",
     "ScenePersona",
     "ScenePlayed",
@@ -1057,6 +1193,7 @@ __all__ = [
     "SceneStage",
     "SceneSystem",
     "SceneTranscript",
+    "SceneTurn",
     "StagePosition",
     "TranscriptLine",
     "Watchers",

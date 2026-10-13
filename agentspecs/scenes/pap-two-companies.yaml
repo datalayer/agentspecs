@@ -1,0 +1,124 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Scene: Two Companies Together (PAP_DATALAYER X-02), scripted. It plays
+# two companies working together (§1.10 slice 4),
+# as written from the Personal Agent Protocol SDK's demo companies — their
+# answers, proposals and results word for word — with nothing live behind it.
+# The audience takes the person's part where the person decides.
+
+schema: loop.scene/v1
+id: pap-two-companies
+version: 0.0.1
+kind: scripted
+name: Two Companies Together
+description: An accounting firm pays a bill at Ada’s bank, and every payment is Ada’s approval.
+tags:
+- stage
+- pap
+- slice-4
+emoji: 🏦
+actors:
+- id: ada
+  name: Ada
+  face: 🧑
+  is: the person
+- id: atlas
+  name: Atlas
+  face: 🤖
+  is: Ada’s agent
+- id: ledgerly
+  name: Ledgerly
+  face: 📒
+  is: 'an accounting firm: a company to Ada, an agent at her bank'
+- id: northwind
+  name: Northwind Bank
+  face: 🏦
+  is: Ada’s bank
+lines:
+- from: ada
+  to: atlas
+  says: “Ask Ledgerly to pay invoice INV-0042.”
+- from: atlas
+  to: ledgerly
+  says: Asks Ledgerly, signed in as Ada.
+  how: To Atlas, Ledgerly is a company like any other.
+- from: ledgerly
+  to: ada
+  says: 'Needs Ada’s Northwind account first: Ada approves Ledgerly on Northwind’s own page.'
+  card:
+    kind: sign-in
+    title: Let Ledgerly connect to your Northwind account
+    lines:
+    - 'On northwind.example, with a code Ledgerly shows you: Ledgerly never sees your bank password.'
+  how: To Northwind, Ledgerly is a personal agent acting for Ada, with an identity of its own.
+  turn:
+    'yes': Approve at Northwind
+- from: northwind
+  to: ledgerly
+  says: “Ready to pay INV-0042.”
+  how: The bank proposes the payment; it does not make it yet.
+- from: ledgerly
+  to: ada
+  says: Passes the bank’s proposal on, quoting it as written.
+  card:
+    kind: approval
+    title: Ledgerly asks you to confirm
+    rows:
+    - - Amount
+      - EUR 1250.00
+    - - To
+      - Acme GmbH
+    - - Invoice
+      - INV-0042
+    lines:
+    - 'At Northwind Bank: Pay EUR 1250.00 to Acme GmbH for INV-0042 from the current account DE89 3704
+      0044 0532 0130 00, today. Payments cannot be recalled once sent.'
+  turn:
+    'yes': Approve
+    'no': Decline
+    declined: 'Ada declined: Ledgerly tells the bank no, and nothing is paid.'
+- from: ledgerly
+  to: northwind
+  says: Confirms at the bank the exact version Ada approved, as approved by Ada.
+- from: northwind
+  to: ledgerly
+  says: “Sent EUR 1250.00 to Acme GmbH for INV-0042 from DE89 3704 0044 0532 0130 00. Bank reference NW-0001.”
+- from: ada
+  to: atlas
+  says: “Allow Ledgerly to pay Acme without asking, within limits.”
+- from: ledgerly
+  to: ada
+  says: Even a permission given in advance is something Ada approves.
+  card:
+    kind: approval
+    title: Ledgerly asks you to confirm
+    rows:
+    - - Up to
+      - EUR 2000.00 each
+    - - At most
+      - 5 payments
+    - - For
+      - 30 days
+    lines:
+    - Let Ledgerly pay Acme GmbH from your Northwind account without asking, up to EUR 2000.00 each, at
+      most 5 payments, for 30 days.
+  turn:
+    'yes': Approve
+    'no': Decline
+    declined: 'Ada declined: Ledgerly asks her again for every payment.'
+- from: ledgerly
+  to: ada
+  says: 'INV-0043, EUR 980.00, is within the limits: Ledgerly pays it and tells Ada what was done.'
+  how: 'Approved in advance: the bank is told it was, never that Ada approved this one.'
+- from: ledgerly
+  to: ada
+  says: 'INV-0044, EUR 3400.00, is beyond them: Ledgerly asks Ada again.'
+  card:
+    kind: done
+    title: Within limits, done; beyond them, asked
+    lines:
+    - INV-0043 paid under your permission (1 of 5 used).
+    - INV-0044 waits for your approval.
+live: Two companies working together is the open-source SDK’s demonstration; on Datalayer it waits for
+  both roles to be shipped.

@@ -1,0 +1,86 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Scene: A Change, Approved Once (PAP_DATALAYER X-02), scripted. It plays
+# a consequential action confirmed once, at its exact version (§1.10 slice 2),
+# as written from the Personal Agent Protocol SDK's demo companies — their
+# answers, proposals and results word for word — with nothing live behind it.
+# The audience takes the person's part where the person decides.
+
+schema: loop.scene/v1
+id: pap-approve-once
+version: 0.0.1
+kind: scripted
+name: A Change, Approved Once
+description: The shop proposes an exchange; Ada approves its exact terms, and it is done once.
+tags:
+- stage
+- pap
+- slice-2
+emoji: 🔁
+actors:
+- id: ada
+  name: Ada
+  face: 🧑
+  is: the person
+- id: agent
+  name: Her agent
+  face: 🤖
+  is: an application on Datalayer, working for Ada
+- id: manzanita
+  name: Manzanita Outfitters
+  face: 🧥
+  is: a company, at manzanita.example
+lines:
+- from: ada
+  to: agent
+  says: '“It is not warm enough: exchange it for the insulated one.”'
+- from: agent
+  to: manzanita
+  says: Asks for the exchange, signed in as Ada.
+- from: manzanita
+  to: agent
+  says: “The insulated Ridge Jacket is in stock. Here is the exchange.”
+  how: 'The company does not do it yet: it proposes it, with its exact terms and a version.'
+- from: agent
+  to: ada
+  says: 'Its rule says Ask me first: it waits for Ada.'
+  card:
+    kind: approval
+    title: Manzanita Outfitters asks you to confirm
+    rows:
+    - - Order
+      - ord_7Hk2
+    - - Price difference
+      - USD 70.00
+    - - Version
+      - '1'
+    lines:
+    - Exchange the Ridge Jacket (M) from order ord_7Hk2 for the insulated Ridge Jacket (M), USD 70.00
+      more.
+  how: The summary is the company’s own sentence, never the model’s; approving version 1 never approves
+    a version 2.
+  turn:
+    'yes': Approve
+    'no': Decline
+    declined: 'Ada declined: her agent tells Manzanita no, and nothing is exchanged.'
+- from: agent
+  to: manzanita
+  says: Confirms version 1, exactly as Ada approved it.
+  how: 'Datalayer writes down that it confirms before it does: asked again, it reads the outcome back
+    instead of sending it twice.'
+- from: manzanita
+  to: agent
+  says: “Exchanged the Ridge Jacket (M) for the insulated Ridge Jacket (M). USD 70.00 charged to the card
+    ending 4242; a return label was emailed.”
+- from: agent
+  to: ada
+  says: Tells Ada what the company says it did, in its words.
+  card:
+    kind: done
+    title: Done, once
+    lines:
+    - Exchanged the Ridge Jacket (M) for the insulated Ridge Jacket (M). USD 70.00 charged to the card
+      ending 4242; a return label was emailed.
+live: The approval card on Waiting for you is built in the Studio; a company’s exchange approved through
+  Datalayer waits for the services to be shipped.

@@ -21,6 +21,7 @@ Every field of a scene spec (`schema: loop.scene/v1`), what it means, its defaul
 | `tags` | list of text |  | — |
 | `icon` | text | Icon identifier | `"people"` |
 | `emoji` | text | Its face: one emoji, drawn before its name | `"👀"` |
+| `kind` | [SceneKind](#scenekind) | `team`: a team staged, live; `scripted`: lines written out, played as written, with no team or cast | `"team"` |
 | `team` | text | The team it stages, `id` or `id:version` | empty |
 | `entry` | text | The member the audience talks to; the team's entry when unsaid | empty |
 | `cast` | list of [SceneCastMember](#scenecastmember) | The cast: personas and briefs, or the members | — |
@@ -30,6 +31,9 @@ Every field of a scene spec (`schema: loop.scene/v1`), what it means, its defaul
 | `audience` | [SceneAudience](#sceneaudience) | Who may watch and ask | — |
 | `rehearsal` | [SceneRehearsal](#scenerehearsal) | Its tests | — |
 | `deployment` | [SceneDeployment](#scenedeployment) | Where it plays | — |
+| `actors` | list of [SceneActor](#sceneactor) | A scripted scene's actors | — |
+| `lines` | list of [SceneLine](#sceneline) | A scripted scene's lines, in order | — |
+| `live` | text | A scripted scene: what of it runs on Datalayer today, said honestly | empty |
 
 ## Examples
 
@@ -321,6 +325,107 @@ deployment:
     crop-monitoring: DATALAYER_DEMO_SCENE_CROP_MONITORING_CROP_MONITORING_A2A_URL
 ```
 
+### `kind`
+
+```yaml
+kind: scripted
+```
+
+### `actors`
+
+```yaml
+actors:
+- id: ada
+  name: Ada
+  face: 🧑
+  is: the person
+- id: agent
+  name: Her agent
+  face: 🤖
+  is: an application on Datalayer, working for Ada
+- id: manzanita
+  name: Manzanita Outfitters
+  face: 🧥
+  is: a company, at manzanita.example
+```
+
+### `lines`
+
+```yaml
+lines:
+- from: ada
+  to: agent
+  says: “Has my Ridge Jacket from Manzanita arrived?”
+- from: agent
+  says: Finds Manzanita Outfitters by its domain and checks it is who it says.
+  card:
+    kind: found
+    title: Manzanita Outfitters
+    rows:
+    - - Its domain
+      - manzanita.example
+    - - Signs its sign-ins as
+      - manzanita.example
+    - - How a person signs in
+      - With a code, or in a protected form
+    - - It offers
+      - See your orders · Exchange and return items
+  how: The agent reads the page every company publishes for personal agents and checks
+    that the domain and who signs its sign-ins belong together.
+- from: agent
+  to: manzanita
+  says: 'Asks, before anybody signed in: “Where is Ada’s Ridge Jacket order?”'
+  how: A conversation starts with the company’s own agent; nobody is signed in yet,
+    so it answers only what anybody may ask.
+- from: manzanita
+  to: agent
+  says: “I can look that up once you sign in to your Manzanita account.”
+  how: 'The company asks for a sign-in and names what it needs: See your orders.'
+- from: agent
+  to: ada
+  says: Asks Ada to sign in at Manzanita, on Manzanita’s own page.
+  card:
+    kind: sign-in
+    title: Sign in at Manzanita Outfitters
+    lines:
+    - Your agent asks to see your orders.
+    - 'You sign in on manzanita.example: your agent never sees your password.'
+    - You can keep fewer permissions than it asks for.
+  turn:
+    'yes': Sign in at Manzanita
+- from: ada
+  to: manzanita
+  says: Signs in on Manzanita’s page and allows “See your orders”.
+  how: The company gives the agent a sign-in of its own, for Ada and for this agent
+    only; Datalayer keeps it, out of the agent’s reach.
+- from: manzanita
+  to: agent
+  says: '“Your order ord_7Hk2: Ridge Jacket, size M, delivered.”'
+- from: agent
+  to: ada
+  says: '“Yes: your Ridge Jacket, size M, was delivered.”'
+- from: agent
+  says: Keeps a record of what it did, for Ada and for whoever built it.
+  card:
+    kind: record
+    title: Activity
+    rows:
+    - - Signed in at
+      - Manzanita Outfitters, for Ada
+    - - Allowed
+      - See your orders
+    - - Read
+      - Order ord_7Hk2
+  how: Ada sees it under In your name, and ends it there with Disconnect.
+```
+
+### `live`
+
+```yaml
+live: Connecting an application to a company is built in the Studio (its Connections
+  card); signing in at a company through Datalayer waits for the services to be shipped.
+```
+
 ### `entry`
 
 ```yaml
@@ -350,6 +455,17 @@ What a beat's transcript must look like.
 | `must_say` | list of text | Words that must appear | — |
 | `must_not_say` | list of text | Words that must not | — |
 | `within` | text | The time the beat may take | empty |
+
+### SceneActor
+
+Somebody on a scripted scene: a person, an application, a company — never a team member.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `id` (required) | text | Its id, as the lines name it | — |
+| `name` (required) | text | The name the audience sees | — |
+| `face` (required) | text | One emoji, drawn before the name | — |
+| `is` (required) | text | What it is, in a few words | — |
 
 ### SceneAudience
 
@@ -387,6 +503,17 @@ What a beat does instead when a decision holds.
 | `moves` | list of [SceneMove](#scenemove) | The moves then, when they differ | — |
 | `then` | text | The beat that follows, by id, when the script goes on elsewhere | empty |
 
+### SceneCard
+
+What the audience reads on a line: rows and sentences, never a credential.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `kind` (required) | [SceneCardKind](#scenecardkind) |  | — |
+| `title` (required) | text |  | — |
+| `rows` | list of list of text | Its rows: each a label and a value | — |
+| `lines` | list of text | Its sentences | — |
+
 ### SceneCastMember
 
 A member of the cast. On a staged team, it names a member of the team (`member`) and says only how it appears here (`persona`) and what it is for in this scene (`brief`). Written inline — a scene with no `team` — it is the member: what it is (`app`, `ref` or `server`), its `role`, where it `runs_in` and whom it `talks_to`, as a team member says them.
@@ -422,6 +549,19 @@ Where the scene plays.
 | `account` | text | Under which account the scene plays: `demo` | empty |
 | `page` | text | The page it plays on: the entry's address | empty |
 | `addresses` | mapping of text | For each member on a runtime, the variable its address is read from at build | — |
+
+### SceneLine
+
+One line of a scripted scene: who acts, to whom, what they say or do.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `from` (required) | text | Who acts: an actor's id | — |
+| `to` | text | To whom, when somebody is addressed | empty |
+| `says` (required) | text | What they say or do, in a sentence; in quotes when it is said | — |
+| `card` | [SceneCard](#scenecard) | What the audience reads | empty |
+| `how` | text | What happened underneath, in a visitor's words | empty |
+| `turn` | [SceneTurn](#sceneturn) | The audience's turn: the scene waits | empty |
 
 ### SceneMove
 
@@ -514,6 +654,16 @@ What the transcript shows.
 | `narration` | true or false | Whether the beats' narration is read in it | `true` |
 | `withhold` | list of [Withheld](#withheld) | Words withheld: credentials, ids, … | — |
 
+### SceneTurn
+
+The audience's turn on a scripted line: the scene waits for them.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `yes` (required) | text | What saying yes is called | — |
+| `no` | text | What saying no is called; none when there is nothing to refuse | empty |
+| `declined` | text | What happens once they said no: the scene ends there | empty |
+
 ### StagePosition
 
 Where a member stands: fractions of the box, left to right and top to bottom.
@@ -540,6 +690,8 @@ One member asking another, directly, over a protocol. Distinct from `depends_on`
 | <a id="answerkind"></a>AnswerKind | `words`, `table`, `chart`, `notebook`, `map`, `file`, `image`, `sources`, `choice`, `approval` |
 | <a id="inspector"></a>Inspector | `agent`, `tools`, `a2a`, `notebook`, `cost` |
 | <a id="pace"></a>Pace | `quick`, `steady`, `slow` |
+| <a id="scenecardkind"></a>SceneCardKind | `found`, `sign-in`, `approval`, `done`, `record` |
+| <a id="scenekind"></a>SceneKind | `team`, `scripted` |
 | <a id="teamplace"></a>TeamPlace | `browser`, `runtime` |
 | <a id="teamprotocol"></a>TeamProtocol | `a2a`, `mcp` |
 | <a id="teamrole"></a>TeamRole | `coordinator`, `initiator`, `contributor`, `reviewer`, `finalizer` |

@@ -131,6 +131,40 @@
       "title": "RehearsalBeat",
       "type": "object"
     },
+    "SceneActor": {
+      "additionalProperties": false,
+      "description": "Somebody on a scripted scene: a person, an application, a company \u2014 never a team member.",
+      "properties": {
+        "face": {
+          "description": "One emoji, drawn before the name",
+          "title": "Face",
+          "type": "string"
+        },
+        "id": {
+          "description": "Its id, as the lines name it",
+          "title": "Id",
+          "type": "string"
+        },
+        "is": {
+          "description": "What it is, in a few words",
+          "title": "Is",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name the audience sees",
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "face",
+        "is"
+      ],
+      "title": "SceneActor",
+      "type": "object"
+    },
     "SceneAudience": {
       "additionalProperties": false,
       "description": "Who may watch and ask, and what an ask may cost.",
@@ -263,6 +297,56 @@
       "title": "SceneBranch",
       "type": "object"
     },
+    "SceneCard": {
+      "additionalProperties": false,
+      "description": "What the audience reads on a line: rows and sentences, never a credential.",
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/SceneCardKind"
+        },
+        "lines": {
+          "description": "Its sentences",
+          "items": {
+            "type": "string"
+          },
+          "title": "Lines",
+          "type": "array"
+        },
+        "rows": {
+          "description": "Its rows: each a label and a value",
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Rows",
+          "type": "array"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "title"
+      ],
+      "title": "SceneCard",
+      "type": "object"
+    },
+    "SceneCardKind": {
+      "description": "What a card of a scripted line is.",
+      "enum": [
+        "found",
+        "sign-in",
+        "approval",
+        "done",
+        "record"
+      ],
+      "title": "SceneCardKind",
+      "type": "string"
+    },
     "SceneCastMember": {
       "additionalProperties": false,
       "description": "A member of the cast.\n\nOn a staged team, it names a member of the team (`member`) and says only\nhow it appears here (`persona`) and what it is for in this scene\n(`brief`). Written inline \u2014 a scene with no `team` \u2014 it is the member:\nwhat it is (`app`, `ref` or `server`), its `role`, where it `runs_in`\nand whom it `talks_to`, as a team member says them.",
@@ -391,6 +475,73 @@
         }
       },
       "title": "SceneDeployment",
+      "type": "object"
+    },
+    "SceneKind": {
+      "description": "What a scene plays: a team, live (`team`), or lines written out (`scripted`).",
+      "enum": [
+        "team",
+        "scripted"
+      ],
+      "title": "SceneKind",
+      "type": "string"
+    },
+    "SceneLine": {
+      "additionalProperties": false,
+      "description": "One line of a scripted scene: who acts, to whom, what they say or do.",
+      "properties": {
+        "card": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SceneCard"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "What the audience reads"
+        },
+        "from": {
+          "description": "Who acts: an actor's id",
+          "title": "From",
+          "type": "string"
+        },
+        "how": {
+          "default": "",
+          "description": "What happened underneath, in a visitor's words",
+          "title": "How",
+          "type": "string"
+        },
+        "says": {
+          "description": "What they say or do, in a sentence; in quotes when it is said",
+          "title": "Says",
+          "type": "string"
+        },
+        "to": {
+          "default": "",
+          "description": "To whom, when somebody is addressed",
+          "title": "To",
+          "type": "string"
+        },
+        "turn": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SceneTurn"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The audience's turn: the scene waits"
+        }
+      },
+      "required": [
+        "from",
+        "says"
+      ],
+      "title": "SceneLine",
       "type": "object"
     },
     "SceneMove": {
@@ -709,6 +860,34 @@
       "title": "SceneTranscript",
       "type": "object"
     },
+    "SceneTurn": {
+      "additionalProperties": false,
+      "description": "The audience's turn on a scripted line: the scene waits for them.",
+      "properties": {
+        "declined": {
+          "default": "",
+          "description": "What happens once they said no: the scene ends there",
+          "title": "Declined",
+          "type": "string"
+        },
+        "no": {
+          "default": "",
+          "description": "What saying no is called; none when there is nothing to refuse",
+          "title": "No",
+          "type": "string"
+        },
+        "yes": {
+          "description": "What saying yes is called",
+          "title": "Yes",
+          "type": "string"
+        }
+      },
+      "required": [
+        "yes"
+      ],
+      "title": "SceneTurn",
+      "type": "object"
+    },
     "StagePosition": {
       "additionalProperties": false,
       "description": "Where a member stands: fractions of the box, left to right and top to bottom.",
@@ -808,8 +987,16 @@
   "$id": "https://agentspecs.datalayer.tech/schemas/loop.scene/v1.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "Specification for a scene: a team, staged.",
+  "description": "Specification for a scene: a team, staged \u2014 or, `kind: scripted`, lines written out.",
   "properties": {
+    "actors": {
+      "description": "A scripted scene's actors",
+      "items": {
+        "$ref": "#/$defs/SceneActor"
+      },
+      "title": "Actors",
+      "type": "array"
+    },
     "audience": {
       "$ref": "#/$defs/SceneAudience",
       "description": "Who may watch and ask"
@@ -853,6 +1040,25 @@
     "id": {
       "description": "Unique scene identifier",
       "title": "Id",
+      "type": "string"
+    },
+    "kind": {
+      "$ref": "#/$defs/SceneKind",
+      "default": "team",
+      "description": "`team`: a team staged, live; `scripted`: lines written out, played as written, with no team or cast"
+    },
+    "lines": {
+      "description": "A scripted scene's lines, in order",
+      "items": {
+        "$ref": "#/$defs/SceneLine"
+      },
+      "title": "Lines",
+      "type": "array"
+    },
+    "live": {
+      "default": "",
+      "description": "A scripted scene: what of it runs on Datalayer today, said honestly",
+      "title": "Live",
       "type": "string"
     },
     "name": {
