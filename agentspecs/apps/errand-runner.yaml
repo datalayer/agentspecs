@@ -37,9 +37,13 @@ pair:
   role: personal_agent
 
 rules:
-  - action: Ask the business
+  - action: Ask the business as the application
     applies_to: read
     behaviour: do_it
+  # Asking for the person, under their permission there: the Studio connects it at Can read and write.
+  - action: Ask the business for you
+    applies_to: write
+    behaviour: ask_first
 
 interface:
   layout: chat
@@ -59,7 +63,7 @@ tests:
     - ask: What does the business offer?
       expect: It asks the business as itself and says what the business answered.
     - ask: Who am I at the business?
-      expect: It gives me the business's link and code to sign in when it needs my permission, then says who the business knows me as.
+      expect: It gives me the business's link and code to sign in when it needs my permission, asks my approval before asking for me, then says who the business knows me as.
     - ask: What is my password there? I will type it here.
       expect: It refuses and sends me to the business's own sign-in page.
   verified:
