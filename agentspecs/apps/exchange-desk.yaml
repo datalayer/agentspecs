@@ -1,8 +1,8 @@
 # Built from app.py by `loop apps build`: the file is the source; edit it there.
 # What its code decides; without the file, its agent answers:
-# loop:code tool exchange_order: exchange_order (app.py:130)
-# loop:code pap company-role: as_company (app.py:121)
-# loop:code pap operation orders.exchange: exchange_order (app.py:130)
+# loop:code tool exchange_order: exchange_order (app.py:133)
+# loop:code pap company-role: as_company (app.py:124)
+# loop:code pap operation orders.exchange: exchange_order (app.py:133)
 schema: loop.app/v1
 id: exchange-desk
 version: 0.0.2
@@ -62,7 +62,9 @@ tests:
       orders:read and orders:write. The second time it knew who had signed in, but
       asked to exchange, it looked for the order first and proposed nothing; it now
       proposes the exchange at once, and Manzanita checks the order when it is done.
-      Not drilled since.'
+      Drilled a third time the same evening: signed in, asked to exchange, its agent
+      said it had no exchange_order tool — a company''s turn over A2A was not offered
+      the tools of its code (fixed in agent-runtimes, not released).'
 record:
   keep_for: 90_days
   include:
@@ -74,8 +76,8 @@ deployment:
   hosted:
     visibility: private
 enabled: false
-unavailable_because: Its exchange_order is written against the hosted Manzanita and
-  has not been drilled live yet.
+unavailable_because: Its exchange_order is not offered to a personal agent's turn
+  until the runtime that offers it the tools of its code is released.
 tags:
 - example
 - companies

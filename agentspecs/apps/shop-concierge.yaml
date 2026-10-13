@@ -71,11 +71,12 @@ tests:
     - ask: That is all, thank you.
       expect: It ends the conversation with the shop.
   verified:
-    live: []
+    live:
+      - "Drilled on r1 on 13 October 2026 against the hosted Manzanita (counterparts 0.0.6), as its Preview reaches the gateway's pap toolset: asked signed out, signed in by Device Sign-In with orders:read, the person's latest order answered; asked for one of the shop's people, the conversation went to Marta, of Manzanita's staff (responder human), who answered in it."
     recorded:
       - "The journey is the Personal Agent Protocol SDK's recorded journey conversation-control (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
     unverified:
-      - "Drilled on r1 on 13 October 2026 against the hosted Manzanita: signed in by Device Sign-In and the person's order answered, but asking for one of the shop's people came back to its agent: nobody works at the test company to take the conversation."
+      - "A model's turns in the Studio's Preview were not watched in that drill; Marta is a scripted member of the test shop's staff."
 
 record:
   keep_for: 90_days
@@ -85,11 +86,7 @@ deployment:
   hosted:
     visibility: private
 
-enabled: false
-unavailable_because: >-
-  The test company Manzanita's staff, who take a conversation handed to them,
-  are not on duty at the hosted shop yet, so asking for one of its people
-  cannot be shown live yet.
+enabled: true
 
 tags:
   - example

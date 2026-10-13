@@ -79,11 +79,12 @@ tests:
     - ask: The zip of my jacket broke, can it be repaired?
       expect: It asks the shop, shows the repair it proposes, and does nothing before I approve.
   verified:
-    live: []
+    live:
+      - "Drilled on r1 on 13 October 2026 against the hosted Manzanita, as its Preview reaches the gateway's pap toolset (gateway 0.0.81): signed in by Device Sign-In with orders:read and orders:write; a return asked through the shop's API with pap_propose came back as the shop's operation (Return the Ridge Jacket (M) from order ord_7Hk2 for a refund of USD 180.00), approved by the person on Waiting for you, done once — the test shop's return fails as written, its label emailed and no money moved, which it said — and already confirmed the second time; a repair proposed the same way (a zip repair, free)."
     recorded:
       - "The journey is the Personal Agent Protocol SDK's recorded journey operations (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
     unverified:
-      - "Drilled on r1 on 13 October 2026 against the hosted Manzanita: signed in with orders:read and orders:write, an exchange the shop proposed in the conversation was approved on Waiting for you, done once and refused the second time; but the test company proposes returns and repairs only through its API, which this application does not use, so neither was shown."
+      - "A model's turns in the Studio's Preview were not watched in that drill."
 
 record:
   keep_for: 90_days
@@ -93,11 +94,7 @@ deployment:
   hosted:
     visibility: private
 
-enabled: false
-unavailable_because: >-
-  It asks the test company Manzanita for returns and repairs through its API,
-  which Datalayer's gateway does not reach yet, so neither can be shown live
-  yet.
+enabled: true
 
 tags:
   - example

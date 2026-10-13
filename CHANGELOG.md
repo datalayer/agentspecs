@@ -10,6 +10,7 @@ Each version names the LOOP boxes it carries — the plan's ids, as its commits 
 
 ## Unreleased
 
+- *Returns Desk* and *Shop Concierge* are on (AGENT_PROTOCOLS PI-42): drilled live on r1 on 13 October 2026 at the hosted Manzanita — a return and a repair asked through its API with `pap_propose`, the return approved by the person and done once; a conversation handed to Marta, of the shop's staff, who answered in it. *Exchange Desk* stays off until the runtime offers a company's turn the tools of its code.
 - *Order Desk* is on (AGENT_PROTOCOLS PI-42): drilled live on r1 on 13 October 2026 at the hosted Manzanita, the person signed in both by Direct Sign-In and by Device Sign-In, and their order answered for them.
 - *Signed Reader* is on (AGENT_PROTOCOLS EX-11): drilled live on r1 on 13 October 2026 at the hosted Example Verifier, which said the signature holds and named the application; a site its signed fetch does not name refused.
 - A pair of examples (AGENT_PROTOCOLS PR-13, E-02; decided 2026-10-13): `pair` (`AppPair`: an `id` and a `role`, `business` or `personal_agent`) links a PACT business to the personal agent that asks it; one of a pair speaks PACT, a business says its scopes, a personal agent answers as no business. *Guest Desk* (a business: `profile:read`, off and registering nobody) and *Errand Runner* (its personal agent, naming no business) are the catalogue's pair, both off until run live: when a person has copied both, the Studio registers the personal agent's copy with the business's copy and points it there.

@@ -400,9 +400,10 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
     """LOOP E-01, decided 2026-10-06: an example whose agent needs nothing missing is on;
     the others stay off, each saying why in a sentence its page shows."""
     off = {identity: spec for identity, spec in APP_CATALOGUE.items() if not spec.enabled}
-    # Exchange Desk waits for its exchange_order to be drilled live (PI-42); Order Desk is on (PI-42).
+    # Exchange Desk waits for a runtime offering a company's turn its code's tools (PI-42); Order Desk is on.
     # The Personal Agent Protocol's recorded journeys, written as applications (AGENT_PROTOCOLS PR-05):
-    # Order Tracker and Sign-in Desk are on since drilled live at the hosted Manzanita (PI-42).
+    # Order Tracker and Sign-in Desk are on since drilled live at the hosted Manzanita (PI-42),
+    # Returns Desk (pap_propose) and Shop Concierge (Marta's handoff) since 13 October 2026, evening.
     # Travel Desk and Shopping Desk are on since drilled live at the hosted counterparts (PI-42).
     # Signed Reader is on since drilled live at the hosted Example Verifier (AGENT_PROTOCOLS EX-11).
     # Guest Desk and Errand Runner are on since drilled live as a pair (AGENT_PROTOCOLS PR-13).
@@ -900,7 +901,7 @@ PAP_JOURNEYS = {
 #: The journeys drilled live at the hosted Manzanita on 13 October 2026, and switched on (AGENT_PROTOCOLS PI-42):
 #: Shop Concierge (nobody at the test company), Live Shop Chat (replies read whole), Returns Desk (returns and
 #: repairs only through the company's API) and Bookkeeping Desk (no hosted counterpart) say why not.
-PAP_JOURNEYS_LIVE = {"order-desk", "order-tracker", "sign-in-desk"}
+PAP_JOURNEYS_LIVE = {"order-desk", "order-tracker", "returns-desk", "shop-concierge", "sign-in-desk"}
 
 
 def test_the_seven_pap_journeys_are_examples_saying_they_are_recorded() -> None:
