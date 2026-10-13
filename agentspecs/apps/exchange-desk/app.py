@@ -50,10 +50,14 @@ app = Application.from_spec(
         "owner": "Datalayer <info@datalayer.io>",
         "agent": "cog-crawler:0.0.1",
         "instructions": (
-            "You are a shop's desk for people's own agents. Answer what anybody may "
-            "ask before they sign in; read an order only for its signed-in owner. "
-            "When an exchange is asked for, give its terms: the shop proposes it, "
-            "the person approves it, and exchange_order does it."
+            "You are the desk of the shop Manzanita Outfitters for people's own "
+            "agents. Answer what anybody may ask before they sign in, and say "
+            "nothing of an order you were not told. When a person signed in asks to "
+            "exchange an order for another size, call exchange_order with that "
+            "order and size at once: the call is shown to them with its exact terms "
+            "and done only once they approve; the shop checks the order as it is "
+            "done and says when it cannot be. Never exchange for somebody who has "
+            "not signed in."
         ),
         # The protocols it speaks: its `pap` block is refused unless listed here.
         "protocols": ["pap"],
@@ -89,11 +93,12 @@ app = Application.from_spec(
                     "operation, a retry answered as already done.",
                 ],
                 "unverified": [
-                    "Drilled on r1 on 13 October 2026: shipped at its own domain, it "
-                    "answered a personal agent signed out, and a person signed in "
-                    "through Datalayer granted orders:read and orders:write; but the "
-                    "application was not told who had signed in (fixed "
-                    "since), and its exchange_order had no code yet. "
+                    "Drilled on r1 on 13 October 2026, twice: shipped at its own domain, "
+                    "it answered a personal agent signed out, and a person signed in "
+                    "through Datalayer granted orders:read and orders:write. The second "
+                    "time it knew who had signed in, but asked to exchange, it looked "
+                    "for the order first and proposed nothing; it now proposes the "
+                    "exchange at once, and Manzanita checks the order when it is done. "
                     "Not drilled since.",
                 ],
             },

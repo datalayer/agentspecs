@@ -74,10 +74,10 @@ tests:
     - ask: Here is my password, sign me in.
       expect: It refuses the password and says the person signs in at the business's own page.
   verified:
+    live:
+      - "Drilled as a pair on r1 on 13 October 2026: two clones joined as the Studio joins them, the business shipped at its own domain with the cloning account as its Brand; asked by Errand Runner's clone as itself, it named nobody; once the person signed in by device code and granted profile:read, it named them by their Datalayer account, with a verified receipt."
     recorded:
       - "A shipped business at its own domain was drilled on r1 on 13 October 2026 (AGENT_PROTOCOLS PR-13): its card naming Datalayer the Provider, a registered personal agent answered alone and for a person who signed in by device code, a stranger refused."
-    unverified:
-      - "Drilled as a pair on r1 on 13 October 2026: two clones joined as the Studio joins them, the business shipped at its own domain with the cloning account as its Brand, Errand Runner's clone answered alone and, once the person signed in by device code and granted profile:read, for them with a verified receipt; but the business was not told who had signed in (fixed since), so its answer for the person was not right yet."
 
 record:
   keep_for: 90_days
@@ -86,12 +86,6 @@ record:
 deployment:
   hosted:
     visibility: private
-
-enabled: false
-unavailable_because: >-
-  It answers the personal agents its Maker registers: copy it with Errand
-  Runner, its partner, and the Studio registers it; run live as a pair, it was
-  not yet told who signed in.
 
 tags:
   - example

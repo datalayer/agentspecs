@@ -400,14 +400,14 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
     """LOOP E-01, decided 2026-10-06: an example whose agent needs nothing missing is on;
     the others stay off, each saying why in a sentence its page shows."""
     off = {identity: spec for identity, spec in APP_CATALOGUE.items() if not spec.enabled}
-    # Exchange desk's exchange_order has no code (PAP_DATALAYER E-02); Order Desk is on (PI-42).
+    # Exchange Desk waits for its exchange_order to be drilled live (PI-42); Order Desk is on (PI-42).
     # The Personal Agent Protocol's recorded journeys, written as applications (AGENT_PROTOCOLS PR-05):
     # Order Tracker and Sign-in Desk are on since drilled live at the hosted Manzanita (PI-42).
     # Travel Desk and Shopping Desk are on since drilled live at the hosted counterparts (PI-42).
     # Signed Reader is on since drilled live at the hosted Example Verifier (AGENT_PROTOCOLS EX-11).
-    # Guest Desk and Errand Runner wait for their pair to be run live (AGENT_PROTOCOLS PR-13).
+    # Guest Desk and Errand Runner are on since drilled live as a pair (AGENT_PROTOCOLS PR-13).
     assert sorted(off) == sorted(
-        ["errand-runner", "exchange-desk", "guest-desk", "inbox-triage", "pipeline-report"]
+        ["exchange-desk", "inbox-triage", "pipeline-report"]
         + [identity for identity in PAP_JOURNEYS if identity not in PAP_JOURNEYS_LIVE]
     )
     for identity, spec in off.items():
