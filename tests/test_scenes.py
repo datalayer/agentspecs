@@ -93,10 +93,12 @@ def _minimal_cast(**overrides: Any) -> Dict[str, Any]:
 
 #: The Personal Agent Protocol's Stages, scripted (PAP_DATALAYER X-02).
 PAP_STAGES = ("pap-a-person-and-a-company", "pap-approve-once", "pap-your-application-a-company", "pap-two-companies")
+#: The other protocols' Stages, scripted (AGENT_PROTOCOLS EX-14, EX-15).
+PROTOCOL_STAGES = ("ucp-a-purchase-approved", "pact-a-personal-agent-at-a-business")
 
 
 def test_the_catalogue_holds_the_four_scenes_of_the_home_page() -> None:
-    assert set(SCENE_CATALOGUE) == set(HOME_SCENES) | set(PAP_STAGES)
+    assert set(SCENE_CATALOGUE) == set(HOME_SCENES) | set(PAP_STAGES) | set(PROTOCOL_STAGES)
     assert get_scene("sales-and-accounting:0.0.1") is SCENE_CATALOGUE["sales-and-accounting"]
     assert get_scene("no-such-scene") is None
     assert [scene.id for scene in list_scenes("earthdata")] == ["crop-monitoring", "disaster-assessment"]
@@ -469,7 +471,7 @@ def test_a_scene_of_the_catalogue_that_cannot_be_played_is_refused_when_loading(
     from agentspecs.scenes import load_scenes
 
     folder = SCENES_DIR
-    assert set(load_scenes(folder)) == set(HOME_SCENES) | set(PAP_STAGES)
+    assert set(load_scenes(folder)) == set(HOME_SCENES) | set(PAP_STAGES) | set(PROTOCOL_STAGES)
     with pytest.raises(SceneError, match="Visitors may watch"):
         load_scenes(_folder_with(problems_in={"deployment": {}}))
 
@@ -586,3 +588,25 @@ def test_the_pap_stages_are_scripted_from_the_sdks_demo_companies() -> None:
         # The person decides somewhere on each: a turn waits for them.
         assert any(line.turn for line in scene.lines), scene_id
     assert [scene.id for scene in list_scenes("pap")] == sorted(PAP_STAGES)
+
+
+def test_the_protocol_stages_are_scripted_from_the_test_counterparts() -> None:
+    """EX-14 (a purchase at a UCP test shop) and EX-15 (a business over PACT): the person decides on each."""
+    purchase = SCENE_CATALOGUE["ucp-a-purchase-approved"]
+    business = SCENE_CATALOGUE["pact-a-personal-agent-at-a-business"]
+    for scene in (purchase, business):
+        assert scene.kind is SceneKind.SCRIPTED and "stage" in scene.tags, scene.id
+        assert scene.live and any(line.turn for line in scene.lines), scene.id
+    # The purchase: the exact checkout approved, or declined and nothing bought; then done once, and recorded.
+    kinds = [line.card.kind.value for line in purchase.lines if line.card]
+    assert kinds == ["approval", "done", "record"]
+    [approval] = [line for line in purchase.lines if line.turn]
+    assert approval.turn.no and "nothing is bought" in approval.turn.declined
+    assert ["Total", "USD 13.50"] in approval.card.rows
+    # The business: one permission of the two it asks for, and its receipt in the record.
+    [sign_in] = [line for line in business.lines if line.turn]
+    assert sign_in.card.kind.value == "sign-in" and not sign_in.turn.no
+    assert "See your bookings and their status" in sign_in.card.lines[0] and "Change the date of a booking" in sign_in.card.lines[0]
+    assert business.lines[-1].card.kind.value == "record"
+    assert [scene.id for scene in list_scenes("ucp")] == ["ucp-a-purchase-approved"]
+    assert [scene.id for scene in list_scenes("pact")] == ["pact-a-personal-agent-at-a-business"]

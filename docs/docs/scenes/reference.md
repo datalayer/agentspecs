@@ -340,13 +340,13 @@ actors:
   face: 🧑
   is: the person
 - id: agent
-  name: Her agent
+  name: Travel Desk
   face: 🤖
   is: an application on Datalayer, working for Ada
-- id: manzanita
-  name: Manzanita Outfitters
-  face: 🧥
-  is: a company, at manzanita.example
+- id: air
+  name: Example Air Support
+  face: 🛫
+  is: a business, at air.examples.datalayer.run
 ```
 
 ### `lines`
@@ -355,75 +355,79 @@ actors:
 lines:
 - from: ada
   to: agent
-  says: “Has my Ridge Jacket from Manzanita arrived?”
+  says: “When is my flight?”
 - from: agent
-  says: Finds Manzanita Outfitters by its domain and checks it is who it says.
+  says: Finds Example Air Support by its domain and checks who answers for it.
   card:
     kind: found
-    title: Manzanita Outfitters
+    title: Example Air Support
     rows:
     - - Its domain
-      - manzanita.example
-    - - Signs its sign-ins as
-      - manzanita.example
+      - air.examples.datalayer.run
+    - - Answered for it by
+      - Example Provider
     - - How a person signs in
-      - With a code, or in a protected form
-    - - It offers
-      - See your orders · Exchange and return items
-  how: The agent reads the page every company publishes for personal agents and checks
-    that the domain and who signs its sign-ins belong together.
+      - With a code, on the airline’s page
+    - - It may ask
+      - See your bookings and their status · Change the date of a booking
+  how: The application reads the card the business publishes for agents, at its own
+    domain.
 - from: agent
-  to: manzanita
-  says: 'Asks, before anybody signed in: “Where is Ada’s Ridge Jacket order?”'
-  how: A conversation starts with the company’s own agent; nobody is signed in yet,
-    so it answers only what anybody may ask.
-- from: manzanita
+  to: air
+  says: Asks the airline’s agent about Ada’s bookings, as Travel Desk.
+  how: Each request says which application asks, signed by Datalayer; nobody is signed
+    in yet.
+- from: air
   to: agent
-  says: “I can look that up once you sign in to your Manzanita account.”
-  how: 'The company asks for a sign-in and names what it needs: See your orders.'
+  says: “Happy to help. Please sign in so I can see your bookings.”
+  how: The business asks for a sign-in and names what it may ask for.
 - from: agent
   to: ada
-  says: Asks Ada to sign in at Manzanita, on Manzanita’s own page.
+  says: Asks Ada to sign in at Example Air, on the airline’s own page.
   card:
     kind: sign-in
-    title: Sign in at Manzanita Outfitters
+    title: Sign in at Example Air
     lines:
-    - Your agent asks to see your orders.
-    - 'You sign in on manzanita.example: your agent never sees your password.'
-    - You can keep fewer permissions than it asks for.
+    - 'Travel Desk asks for: See your bookings and their status; Change the date of
+      a booking.'
+    - You sign in on the airline’s page, and choose what it may do there.
+    - You can allow fewer permissions than it asks for.
   turn:
-    'yes': Sign in at Manzanita
+    'yes': Sign in, and allow only “See your bookings”
 - from: ada
-  to: manzanita
-  says: Signs in on Manzanita’s page and allows “See your orders”.
-  how: The company gives the agent a sign-in of its own, for Ada and for this agent
-    only; Datalayer keeps it, out of the agent’s reach.
-- from: manzanita
+  to: air
+  says: Signs in on the airline’s page and allows “See your bookings and their status”
+    only.
+  how: The airline gives Travel Desk a permission of its own, for Ada and for this
+    application only; Datalayer keeps it, out of the agent’s reach.
+- from: air
   to: agent
-  says: '“Your order ord_7Hk2: Ridge Jacket, size M, delivered.”'
+  says: “Your booking AB123 flies on 2026-11-02.”
+  how: The airline signs a receipt of what it did with the permission.
 - from: agent
   to: ada
-  says: '“Yes: your Ridge Jacket, size M, was delivered.”'
+  says: “Your flight, booking AB123, is on 2 November 2026.”
 - from: agent
-  says: Keeps a record of what it did, for Ada and for whoever built it.
+  says: Keeps the airline’s receipt with its record, for Ada and for whoever built
+    it.
   card:
     kind: record
     title: Activity
     rows:
     - - Signed in at
-      - Manzanita Outfitters, for Ada
+      - Example Air, for Ada
     - - Allowed
-      - See your orders
-    - - Read
-      - Order ord_7Hk2
-  how: Ada sees it under In your name, and ends it there with Disconnect.
+      - See your bookings and their status
+    - - Receipt
+      - Looked up booking AB123, signed by the airline
+  how: Ada sees the permission under In your name, and ends it there with Disconnect.
 ```
 
 ### `live`
 
 ```yaml
-live: Connecting an application to a company is built in the Studio (its Connections
-  card); signing in at a company through Datalayer waits for the services to be shipped.
+live: Working with a business over PACT is built in the Studio and its services; asking
+  a business through Datalayer waits for them to be shipped.
 ```
 
 ### `entry`
