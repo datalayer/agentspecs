@@ -725,6 +725,34 @@ class AppPact(_Strict):
         return self
 
 
+class PairRole(str, Enum):
+    """Which side of a pair of examples an application is (AGENT_PROTOCOLS PR-13)."""
+
+    BUSINESS = "business"
+    PERSONAL_AGENT = "personal_agent"
+
+
+class AppPair(_Strict):
+    """One of a pair of examples, a PACT business and the personal agent that asks it
+    (AGENT_PROTOCOLS PR-13, E-02; decided 2026-10-13).
+
+    A personal agent's issuer is its own application's, known only once a copy
+    exists: when a person has copied both of a pair, the Studio registers the
+    personal agent's copy with the business's copy (`pact.business.registered_agents`)
+    and points the personal agent at the business's own domain.
+    """
+
+    id: str = Field(..., description="The pair's id, the same on both of its applications")
+    role: PairRole = Field(..., description="`business`, or `personal_agent`: the one that asks it")
+
+    @field_validator("id")
+    @classmethod
+    def _an_id(cls, value: str) -> str:
+        if not re.fullmatch(r"[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", value):
+            raise ValueError(f"cannot use {value!r} as a pair's id: lower-case letters, digits and hyphens")
+        return value
+
+
 class CommerceProtocol(str, Enum):
     """The commerce protocol a merchant is reached over (AGENT_PROTOCOLS PI-01)."""
 
@@ -3184,6 +3212,10 @@ class AppSpec(_Strict):
         default_factory=AppSignedFetch,
         description="Web Bot Auth: the sites it reads pages of, GET only, each request signed with its key",
     )
+    pair: Optional[AppPair] = Field(
+        default=None,
+        description="One of a pair of examples: a PACT business, or the personal agent that asks it",
+    )
     a2a: AppA2A = Field(
         default_factory=AppA2A, description="A2A: the extensions its Agent Card advertises"
     )
@@ -3308,6 +3340,7 @@ class AppSpec(_Strict):
                 "an application offered today is available: remove `unavailable_because`, or set `enabled: false`"
             )
         self._speaks_its_protocols()
+        self._pairs_as_it_says()
         if self.kind is AppKind.DECISION and self.decision is None:
             raise ValueError("a decision application says what it decides, under `decision`")
         if self.kind is not AppKind.DECISION and self.decision is not None:
@@ -3411,6 +3444,20 @@ class AppSpec(_Strict):
                 problems.append(f"The UI {spec.get('name', ui_id)} ({ui_id!r}) is not enabled: an application cannot render in it yet.")
         if problems:
             raise ValueError(" ".join(problems))
+
+    def _pairs_as_it_says(self) -> None:
+        """One of a pair speaks PACT, as the business it answers as or the personal agent that asks it."""
+        if self.pair is None:
+            return
+        if "pact" not in self.protocols:
+            raise ValueError(f"one of the pair {self.pair.id!r} speaks PACT: add 'pact' to `protocols`")
+        if self.pair.role is PairRole.BUSINESS and not self.pact.business.scopes:
+            raise ValueError(
+                f"the business of the pair {self.pair.id!r} says what a person may let its partner do: "
+                "`pact.business.scopes`"
+            )
+        if self.pair.role is PairRole.PERSONAL_AGENT and self.pact.business.enabled:
+            raise ValueError(f"the personal agent of the pair {self.pair.id!r} does not answer as a business")
 
     def _samples_hold_together(self) -> None:
         """What it is tried on is its own: its documents, its decision's criteria."""

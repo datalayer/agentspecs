@@ -404,8 +404,9 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
     # The Personal Agent Protocol's recorded journeys, written as applications (AGENT_PROTOCOLS PR-05).
     # Travel Desk and Shopping Desk are on since drilled live at the hosted counterparts (PI-42).
     # Signed Reader waits for the gateway's signed fetch (AGENT_PROTOCOLS EX-11).
+    # Guest Desk and Errand Runner wait for their pair to be run live (AGENT_PROTOCOLS PR-13).
     assert sorted(off) == sorted(
-        ["exchange-desk", "inbox-triage", "order-desk", "pipeline-report", "signed-reader"]
+        ["errand-runner", "exchange-desk", "guest-desk", "inbox-triage", "order-desk", "pipeline-report", "signed-reader"]
         + list(PAP_JOURNEYS)
     )
     for identity, spec in off.items():
@@ -873,6 +874,9 @@ EXAMPLES = {
     "shopping-desk": AppKind.CHAT,
     # Reading a page at a site that checks its signature (AGENT_PROTOCOLS EX-11).
     "signed-reader": AppKind.CHAT,
+    # A PACT business and the personal agent that asks it, a pair (AGENT_PROTOCOLS PR-13).
+    "guest-desk": AppKind.CHAT,
+    "errand-runner": AppKind.CHAT,
     # The Personal Agent Protocol's recorded journeys, written as applications (AGENT_PROTOCOLS PR-05).
     "order-tracker": AppKind.CHAT,
     "shop-concierge": AppKind.CHAT,

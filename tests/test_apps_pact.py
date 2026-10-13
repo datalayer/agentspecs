@@ -7,7 +7,7 @@
 import pytest
 from pydantic import ValidationError
 
-from agentspecs.apps import AppSpec
+from agentspecs.apps import APP_CATALOGUE, AppSpec, PairRole
 
 BASE = {"id": "support", "name": "Support", "kind": "chat", "agent": "a", "protocols": ["pact"]}
 AIR = {
@@ -93,3 +93,47 @@ def test_what_a_business_refuses(change, why):
 def test_a_business_switched_off_may_keep_its_list_empty():
     spec = AppSpec.model_validate({**BASE, "pact": {"business": {"scopes": {"bookings:read": "See"}}}})
     assert not spec.pact.business.enabled and spec.pact.business.registered_agents == []
+
+
+# --- a pair of examples (AGENT_PROTOCOLS PR-13, E-02; decided 2026-10-13) ------------------
+
+
+def test_one_of_a_pair_speaks_pact_as_the_side_it_says():
+    business = {**BASE, "pact": {"business": {"scopes": {"profile:read": "See who you are"}}}}
+    spec = AppSpec.model_validate({**business, "pair": {"id": "desk", "role": "business"}})
+    assert spec.pair is not None and spec.pair.role is PairRole.BUSINESS
+    assert AppSpec.model_validate({**BASE, "pair": {"id": "desk", "role": "personal_agent"}}).pair.id == "desk"
+    assert AppSpec.model_validate(BASE).pair is None
+
+
+@pytest.mark.parametrize(
+    "spec,why",
+    [
+        ({**BASE, "protocols": [], "pair": {"id": "desk", "role": "personal_agent"}}, "speaks PACT"),
+        ({**BASE, "pair": {"id": "desk", "role": "business"}}, "pact.business.scopes"),
+        (
+            {**BASE, "pact": {"business": BUSINESS}, "pair": {"id": "desk", "role": "personal_agent"}},
+            "does not answer as a business",
+        ),
+        ({**BASE, "pair": {"id": "Desk Pair", "role": "personal_agent"}}, "pair's id"),
+        ({**BASE, "pair": {"id": "desk", "role": "company"}}, "role"),
+    ],
+)
+def test_what_a_pair_refuses(spec, why):
+    with pytest.raises(ValidationError, match=why):
+        AppSpec.model_validate(spec)
+
+
+def test_each_pair_of_the_catalogue_is_a_business_and_the_personal_agent_that_asks_it():
+    """Decided 2026-10-13: the Studio registers the personal agent's copy with the business's
+    copy, so the business starts off and lists nobody, and the personal agent names no business."""
+    pairs: dict[str, dict[PairRole, str]] = {}
+    for identity, found in APP_CATALOGUE.items():
+        if found.pair is not None:
+            side = pairs.setdefault(found.pair.id, {})
+            assert found.pair.role not in side, identity
+            side[found.pair.role] = identity
+    assert pairs == {"guest-desk": {PairRole.BUSINESS: "guest-desk", PairRole.PERSONAL_AGENT: "errand-runner"}}
+    business = APP_CATALOGUE["guest-desk"].pact.business
+    assert not business.enabled and business.registered_agents == [] and business.scopes
+    assert APP_CATALOGUE["errand-runner"].pact.connections == []

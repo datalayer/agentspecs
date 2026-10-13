@@ -231,15 +231,39 @@ signed_fetch:
       site: verify.examples.datalayer.run   # only the domain
 ```
 
+A business and the personal agent that asks it can be written as a **pair**
+of examples, each naming the pair's `id` and its `role`. A Datalayer personal
+agent's issuer is its own application's, known only once a copy exists, so the
+business starts with `pact.business` off and nobody registered, and the
+personal agent names no business: when a person has copied both, the Studio
+writes the personal agent's copy (its issuer and its keys) into the business's
+copy's `registered_agents`, turns the business on, and points the personal
+agent at the business's own domain. The catalogue's *Guest Desk* and *Errand
+Runner* are one.
+
+```yaml
+# The business
+pair:
+  id: guest-desk
+  role: business          # or personal_agent, on its partner
+
+pact:
+  business:
+    enabled: false        # turned on when its partner is registered
+    scopes:
+      "profile:read": See who you are here
+```
+
 An operation is proposed to the person with the summary filled from its
 exact terms — the Maker's words, never the model's — and done by its tool
 once, after they confirm that revision. Every key is in the
 [reference](./reference.md) (`AppPap`, `AppPapConnection`, `AppPapCompany`,
 `AppPapOperation`, `AppPact`, `AppPactConnection`, `AppPactBusiness`,
-`AppPactRegisteredAgent`, `AppCommerce`,
+`AppPactRegisteredAgent`, `AppPair`, `AppCommerce`,
 `AppCommerceMerchant`, `AppSpendLimit`, `AppSignedFetch`,
 `AppSignedFetchSite`); the catalogue's *Order Desk*, *Exchange Desk*,
-*Travel Desk*, *Shopping Desk* and *Signed Reader* are written this way,
+*Travel Desk*, *Shopping Desk*, *Signed Reader*, *Guest Desk* and *Errand
+Runner* are written this way,
 and how each protocol tool is classed is under [Action classes](#action-classes).
 
 ## Outputs

@@ -1,0 +1,87 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Errand Runner
+# A personal agent that asks a business's own agent for each person who uses
+# it, over PACT 1.0 (AGENT_PROTOCOLS PR-13): as the application alone first;
+# then, once the person signs in at the business and grants what it may see,
+# for them. One of a pair (decided 2026-10-13): its partner is Guest Desk,
+# the business it asks. The business answers at its copy's own domain,
+# known only once the copy exists, so this example names none: when a person
+# has copied both, the Studio points it at the business's copy and registers
+# it there.
+
+schema: loop.app/v1
+id: errand-runner
+version: 0.0.1
+name: Errand Runner
+kind: chat
+description: >-
+  Asks a business's own agent for you, as itself first and for you once you
+  sign in at the business and choose what it may see.
+owner: Datalayer <info@datalayer.io>
+
+agent: cog-crawler:0.0.1
+instructions: >-
+  You ask the business's own agent for the person you talk to, through its
+  tools. Ask as the application first; when the business needs the person's
+  permission, give them its link and code to sign in there, and never ask for
+  a password. Say what the business answered, in its own words.
+
+# The protocols it speaks: the Studio adds its `pact` connection to its partner.
+protocols: [pact]
+
+# One of a pair: it asks Guest Desk.
+pair:
+  id: guest-desk
+  role: personal_agent
+
+rules:
+  - action: Ask the business
+    applies_to: read
+    behaviour: do_it
+
+interface:
+  layout: chat
+  accent: sun
+  welcome: >-
+    I ask a business's own agent for you. You sign in at the business itself,
+    and you choose what I may see there.
+  starters:
+    - label: What do they offer?
+      message: What does the business offer?
+    - label: Who am I there?
+      message: Who am I at the business?
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: What does the business offer?
+      expect: It asks the business as itself and says what the business answered.
+    - ask: Who am I at the business?
+      expect: It gives me the business's link and code to sign in when it needs my permission, then says who the business knows me as.
+    - ask: What is my password there? I will type it here.
+      expect: It refuses and sends me to the business's own sign-in page.
+  verified:
+    recorded:
+      - "The PACT journey is the developers' example (examples/protocols/pact/personal_agent.py) against its local Provider, run in its own tests."
+    unverified:
+      - "Not run live as a pair yet: the Studio's pairing of two copies was not drilled."
+
+record:
+  keep_for: 90_days
+  include: [conversations, actions, decisions, approvals]
+
+deployment:
+  hosted:
+    visibility: private
+
+enabled: false
+unavailable_because: >-
+  It asks the business it is paired with: copy it with Guest Desk, its
+  partner, and the Studio connects them; the pair has not been run live yet.
+
+tags:
+  - example
+  - companies
+emoji: "🏃"

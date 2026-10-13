@@ -36,6 +36,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `pact` | [AppPact](#apppact) | PACT: businesses it asks for each person | — |
 | `commerce` | [AppCommerce](#appcommerce) | UCP and ACP: merchants it shops at for each person | — |
 | `signed_fetch` | [AppSignedFetch](#appsignedfetch) | Web Bot Auth: the sites it reads pages of, GET only, each request signed with its key | — |
+| `pair` | [AppPair](#apppair) | One of a pair of examples: a PACT business, or the personal agent that asks it | empty |
 | `a2a` | [AppA2A](#appa2a) | A2A: the extensions its Agent Card advertises | — |
 | `rules` | list of [AppRule](#apprule) | When it acts alone, and when it asks | — |
 | `permissions` | [AppPermissions](#apppermissions) | What else it may reach: Spaces, its computer. Nothing, unless said | — |
@@ -406,6 +407,24 @@ backend_tools:
 - decide:0.0.1
 ```
 
+### `pair`
+
+```yaml
+pair:
+  id: guest-desk
+  role: personal_agent
+```
+
+### `pact`
+
+```yaml
+pact:
+  business:
+    enabled: false
+    scopes:
+      profile:read: See who you are here
+```
+
 ### `goal`
 
 ```yaml
@@ -498,20 +517,6 @@ signed_fetch:
   sites:
   - id: example-verifier
     site: verify.examples.datalayer.run
-```
-
-### `pact`
-
-```yaml
-pact:
-  connections:
-  - id: example-air
-    brand: air.examples.datalayer.run
-    audience: https://air.examples.datalayer.run/a2a
-    access: write
-    scopes:
-    - bookings:read
-    - bookings:change
 ```
 
 ### `team`
@@ -875,6 +880,15 @@ One thing a page shows for its inputs (LOOP P-05): a value, drawn with a compone
 | `title` | text | What a person reads above it; none when unsaid | empty |
 | `component` | text | What draws it: `Text` (words, unless said), `Image` (an address), `Table` (rows) or `Chart` (points), or a component of the application's own (`interface.custom_components`, LOOP P-17), its value what it shows first | `"Text"` |
 | `props` | mapping | The component's other properties: a Table's `columns`, a Chart's `kind`, `x` and `y` | — |
+
+### AppPair
+
+One of a pair of examples, a PACT business and the personal agent that asks it (AGENT_PROTOCOLS PR-13, E-02; decided 2026-10-13). A personal agent's issuer is its own application's, known only once a copy exists: when a person has copied both of a pair, the Studio registers the personal agent's copy with the business's copy (`pact.business.registered_agents`) and points the personal agent at the business's own domain.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `id` (required) | text | The pair's id, the same on both of its applications | — |
+| `role` (required) | [PairRole](#pairrole) | `business`, or `personal_agent`: the one that asks it | — |
 
 ### AppPap
 
@@ -1294,6 +1308,7 @@ The application at an address of its own.
 | <a id="embedmode"></a>EmbedMode | `inline`, `bubble`, `panel`, `assistant` |
 | <a id="hostuser"></a>HostUser | `claimed`, `signed` |
 | <a id="layout"></a>Layout | `chat`, `page`, `split` |
+| <a id="pairrole"></a>PairRole | `business`, `personal_agent` |
 | <a id="papagents"></a>PapAgents | `any`, `registered` |
 | <a id="papinterface"></a>PapInterface | `agent`, `openapi`, `mcp`, `web` |
 | <a id="papsignin"></a>PapSignIn | `direct`, `device`, `mediated` |
