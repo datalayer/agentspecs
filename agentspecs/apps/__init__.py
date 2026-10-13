@@ -531,12 +531,100 @@ class AppPactConnection(_Strict):
         return values
 
 
+def _https_url(value: str, what: str) -> str:
+    from urllib.parse import urlsplit  # noqa: PLC0415
+
+    parts = urlsplit(value)
+    if parts.scheme != "https" or not parts.hostname or parts.fragment or parts.username or parts.query:
+        raise ValueError(f"`{value}` is not {what}: an HTTPS URL")
+    return value
+
+
+class AppPactRegisteredAgent(_Strict):
+    """A personal agent the business accepts (PACT 1.0 §3.1): its issuer, and where its keys are.
+
+    Registered by the Maker, as `pap.company.registered_agents` (AGENT_PROTOCOLS PR-13,
+    decided 2026-10-13): a personal-agent JWT is verified against the keys of a registered
+    issuer only, and any other is refused.
+    """
+
+    issuer: str = Field(..., description="The personal agent's `iss`, an HTTPS URL")
+    jwks_uri: str = Field(..., description="Where its public keys are (a JWKS), an HTTPS URL")
+
+    @field_validator("issuer")
+    @classmethod
+    def _an_issuer(cls, value: str) -> str:
+        return _https_url(value, "a personal agent's issuer")
+
+    @field_validator("jwks_uri")
+    @classmethod
+    def _a_jwks_uri(cls, value: str) -> str:
+        return _https_url(value, "where a personal agent's keys are")
+
+
+class AppPactBusiness(_Strict):
+    """The application answers as a PACT business (AGENT_PROTOCOLS PR-13, PI-32; decided 2026-10-13).
+
+    Published at its deployment's own address: its A2A Agent Card names
+    Datalayer as the Provider and the application's owner as the Brand; its
+    A2A interface verifies each personal-agent JWT against a registered
+    issuer's keys (§3.1); with `scopes`, a person delegates to a personal agent
+    through the Provider's device-code sign-in — their Datalayer sign-in — and
+    every answer under their delegation carries a signed receipt (§5).
+    """
+
+    enabled: bool = Field(default=False, description="Whether it is published as a business at Ship")
+    brand: str = Field(
+        default="",
+        description="The Brand's name on its card: the application's `owner` when unsaid",
+    )
+    scopes: Dict[str, str] = Field(
+        default_factory=dict,
+        description=(
+            "What a person may let a personal agent do, `{scope: what the person is shown}`: "
+            "`bookings:read: See your bookings`; none, it answers personal agents alone"
+        ),
+    )
+    registered_agents: List[AppPactRegisteredAgent] = Field(
+        default_factory=list,
+        description="The personal agents it accepts, each its issuer and its keys",
+    )
+
+    @field_validator("brand")
+    @classmethod
+    def _a_brand(cls, value: str) -> str:
+        if len(value) > 120 or any(ch in value for ch in "<>\n"):
+            raise ValueError("a Brand's name is one line of at most 120 characters")
+        return value.strip()
+
+    @field_validator("scopes")
+    @classmethod
+    def _scopes(cls, values: Dict[str, str]) -> Dict[str, str]:
+        for scope, said in values.items():
+            if not _PACT_SCOPE.fullmatch(scope):
+                raise ValueError(f"{scope!r} is not a PACT scope: `resource:verb`")
+            if not str(said or "").strip():
+                raise ValueError(f"the scope {scope!r} says what the person lets it do")
+        return values
+
+    @model_validator(mode="after")
+    def _coherent(self) -> "AppPactBusiness":
+        if self.enabled and not self.registered_agents:
+            raise ValueError("a business accepts the personal agents its Maker registered: name at least one")
+        issuers = [agent.issuer for agent in self.registered_agents]
+        if len(set(issuers)) != len(issuers):
+            raise ValueError("a personal agent is registered twice")
+        return self
+
+
 class AppPact(_Strict):
-    """PACT: the businesses it asks for each person (AGENT_PROTOCOLS PI-01)."""
+    """PACT: the businesses it asks for each person (AGENT_PROTOCOLS PI-01), and
+    whether it answers as one (PR-13)."""
 
     connections: List[AppPactConnection] = Field(
         default_factory=list, description="Businesses, over PACT"
     )
+    business: AppPactBusiness = Field(default_factory=AppPactBusiness, description="As a business")
 
     @model_validator(mode="after")
     def _distinct(self) -> "AppPact":
@@ -3139,7 +3227,7 @@ class AppSpec(_Strict):
         problems = protocols_problems(self.protocols, to_ship=self.enabled)
         configured = {
             "pap": bool(self.pap.connections) or self.pap.company.enabled,
-            "pact": bool(self.pact.connections),
+            "pact": bool(self.pact.connections) or self.pact.business.enabled,
             "a2a": bool(self.a2a.extensions),
         }
         for block, used in configured.items():

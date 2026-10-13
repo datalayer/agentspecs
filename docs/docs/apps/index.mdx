@@ -161,7 +161,24 @@ pact:
       audience: https://provider.example/a2a  # what its Provider assigned the application
       access: write                           # read: as itself; write: also for each person
       scopes: ["bookings:read", "bookings:change"]
+  # The application itself as a business to people's own agents (PACT 1.0).
+  business:
+    enabled: true
+    brand: Example Air          # the Brand on its card; the application's owner when unsaid
+    scopes:                     # what a person may let a personal agent do, as they read it
+      bookings:read: See your bookings
+      bookings:change: Change a booking
+    registered_agents:          # the personal agents it accepts, and nobody else
+      - issuer: https://agent.example/pact
+        jwks_uri: https://agent.example/pact/jwks.json
 ```
+
+As a business, the application is published at its deployment's own address
+when it ships: its Agent Card names Datalayer as the Provider and the Brand on
+it; each personal agent proves itself with a JWT signed by a key of a
+registered issuer — any other is refused; and with `scopes`, a person signs in
+with their Datalayer account to let a personal agent act for them, every
+answer under that permission carrying a receipt signed by Datalayer.
 
 A merchant is reached over UCP or ACP, in the `commerce` block, with `ucp`
 or `acp` listed. For now Datalayer buys at **test merchants only**, with no
@@ -187,7 +204,8 @@ An operation is proposed to the person with the summary filled from its
 exact terms — the Maker's words, never the model's — and done by its tool
 once, after they confirm that revision. Every key is in the
 [reference](./reference.md) (`AppPap`, `AppPapConnection`, `AppPapCompany`,
-`AppPapOperation`, `AppPact`, `AppPactConnection`, `AppCommerce`,
+`AppPapOperation`, `AppPact`, `AppPactConnection`, `AppPactBusiness`,
+`AppPactRegisteredAgent`, `AppCommerce`,
 `AppCommerceMerchant`, `AppSpendLimit`); the catalogue's *Order Desk*,
 *Exchange Desk*, *Travel Desk* and *Shopping Desk* are written this way,
 and how each protocol tool is classed is under [Action classes](#action-classes).

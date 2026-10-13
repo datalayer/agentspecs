@@ -7,8 +7,8 @@
 # checkout, and buys only once the person approved the exact purchase — every
 # purchase asked of them first, at most once, under a spending limit. Test
 # merchants only, with no real payment (decided 2026-10-13): the merchant is
-# UCP's local test store, Example Store, and ACP's test seller, Example
-# Outfitters.
+# UCP's test store, Example Store, and ACP's test seller, Example
+# Outfitters, as Datalayer hosts them for examples (AGENT_PROTOCOLS PI-42).
 
 schema: loop.app/v1
 id: shopping-desk
@@ -35,14 +35,14 @@ commerce:
   merchants:
     - id: example-store
       protocol: ucp
-      merchant: store.example
+      merchant: store.examples.datalayer.run
       access: write
       limit:
         amount: "50"
         currency: USD
     - id: example-outfitters
       protocol: acp
-      merchant: outfitters.example
+      merchant: outfitters.examples.datalayer.run
       access: write
       limit:
         amount: "150"
@@ -88,7 +88,7 @@ tests:
       - "The purchase is the developers' UCP example (examples/protocols/ucp/shopping.py) against its local test store, Example Store, run in its own tests."
       - "The checkout at Example Outfitters is the developers' ACP example (examples/protocols/agentic_commerce/checkout.py), run in its own tests."
     unverified:
-      - "No shop answers UCP or ACP on Datalayer yet: the gateway's ucp and acp toolsets are built, not deployed."
+      - "It has not run in the Studio against the hosted Example Store and Example Outfitters (store.examples.datalayer.run, outfitters.examples.datalayer.run) from this example yet."
 
 record:
   keep_for: 90_days

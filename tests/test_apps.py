@@ -915,6 +915,37 @@ def test_the_seven_pap_journeys_are_examples_saying_they_are_recorded() -> None:
     assert [connection.company for connection in bookkeeping.connections] == ["northwind.example"]
 
 
+#: Datalayer's hosted test counterparts (AGENT_PROTOCOLS PI-42): Manzanita, Example Air, the test merchants.
+HOSTED_COUNTERPARTS = {
+    "manzanita.examples.datalayer.run",
+    "air.examples.datalayer.run",
+    "store.examples.datalayer.run",
+    "outfitters.examples.datalayer.run",
+}
+
+
+def test_the_protocol_examples_reach_the_hosted_counterparts() -> None:
+    """AGENT_PROTOCOLS PI-42 (decided 2026-10-13): every protocol example names a counterpart Datalayer
+    hosts; Bookkeeping Desk's Northwind has none, so it stays off."""
+    reached: dict[str, list[str]] = {}
+    for identity, found in APP_CATALOGUE.items():
+        names = [
+            *(connection.company for connection in found.pap.connections),
+            *(connection.brand for connection in found.pact.connections),
+            *(merchant.merchant for merchant in found.commerce.merchants),
+        ]
+        if names:
+            reached[identity] = names
+    assert reached.pop("bookkeeping-desk") == ["northwind.example"]
+    assert not APP_CATALOGUE["bookkeeping-desk"].enabled
+    assert {"order-desk", "travel-desk", "shopping-desk"} <= set(reached)
+    for identity, names in reached.items():
+        assert set(names) <= HOSTED_COUNTERPARTS, identity
+    # Example Air's audience is the one it assigns at its hosted address (PACT 1.0 §3.1).
+    [air] = APP_CATALOGUE["travel-desk"].pact.connections
+    assert air.audience == "https://air.examples.datalayer.run/a2a"
+
+
 def test_the_examples_are_in_the_catalogue() -> None:
     """LOOP E-01: every example of §9, and Decide, of its kind, with its face its own."""
     assert {identity: found.kind for identity, found in APP_CATALOGUE.items()} == EXAMPLES

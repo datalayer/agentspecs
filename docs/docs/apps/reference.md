@@ -476,14 +476,14 @@ commerce:
   merchants:
   - id: example-store
     protocol: ucp
-    merchant: store.example
+    merchant: store.examples.datalayer.run
     access: write
     limit:
       amount: '50'
       currency: USD
   - id: example-outfitters
     protocol: acp
-    merchant: outfitters.example
+    merchant: outfitters.examples.datalayer.run
     access: write
     limit:
       amount: '150'
@@ -496,8 +496,8 @@ commerce:
 pact:
   connections:
   - id: example-air
-    brand: air.example
-    audience: https://provider.example/a2a
+    brand: air.examples.datalayer.run
+    audience: https://air.examples.datalayer.run/a2a
     access: write
     scopes:
     - bookings:read
@@ -804,11 +804,23 @@ An option of a mode in another language.
 
 ### AppPact
 
-PACT: the businesses it asks for each person (AGENT_PROTOCOLS PI-01).
+PACT: the businesses it asks for each person (AGENT_PROTOCOLS PI-01), and whether it answers as one (PR-13).
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
 | `connections` | list of [AppPactConnection](#apppactconnection) | Businesses, over PACT | — |
+| `business` | [AppPactBusiness](#apppactbusiness) | As a business | — |
+
+### AppPactBusiness
+
+The application answers as a PACT business (AGENT_PROTOCOLS PR-13, PI-32; decided 2026-10-13). Published at its deployment's own address: its A2A Agent Card names Datalayer as the Provider and the application's owner as the Brand; its A2A interface verifies each personal-agent JWT against a registered issuer's keys (§3.1); with `scopes`, a person delegates to a personal agent through the Provider's device-code sign-in — their Datalayer sign-in — and every answer under their delegation carries a signed receipt (§5).
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `enabled` | true or false | Whether it is published as a business at Ship | `false` |
+| `brand` | text | The Brand's name on its card: the application's `owner` when unsaid | empty |
+| `scopes` | mapping of text | What a person may let a personal agent do, `{scope: what the person is shown}`: `bookings:read: See your bookings`; none, it answers personal agents alone | — |
+| `registered_agents` | list of [AppPactRegisteredAgent](#apppactregisteredagent) | The personal agents it accepts, each its issuer and its keys | — |
 
 ### AppPactConnection
 
@@ -821,6 +833,15 @@ A business the application asks for each person, over PACT 1.0 (AGENT_PROTOCOLS 
 | `audience` (required) | text | The audience its Provider assigned (PACT §3.1) | — |
 | `access` | [Access](#access) | How far: `read` (asks as the application alone), or `write` (also for the person, delegated) | `"read"` |
 | `scopes` | list of text | The Brand's scopes it may ask the person for: `orders:read` | — |
+
+### AppPactRegisteredAgent
+
+A personal agent the business accepts (PACT 1.0 §3.1): its issuer, and where its keys are. Registered by the Maker, as `pap.company.registered_agents` (AGENT_PROTOCOLS PR-13, decided 2026-10-13): a personal-agent JWT is verified against the keys of a registered issuer only, and any other is refused.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `issuer` (required) | text | The personal agent's `iss`, an HTTPS URL | — |
+| `jwks_uri` (required) | text | Where its public keys are (a JWKS), an HTTPS URL | — |
 
 ### AppPage
 

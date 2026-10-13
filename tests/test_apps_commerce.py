@@ -62,6 +62,6 @@ def test_the_shopping_desk_buys_at_a_test_store_asking_first():
     app = APP_CATALOGUE["shopping-desk"]
     assert app.protocols == ["ucp", "acp"] and not app.enabled
     store, outfitters = app.commerce.merchants
-    assert (store.merchant, store.limit.amount, store.limit.currency) == ("store.example", "50", "USD")
-    assert (outfitters.protocol.value, outfitters.merchant) == ("acp", "outfitters.example")
+    assert (store.merchant, store.limit.amount, store.limit.currency) == ("store.examples.datalayer.run", "50", "USD")
+    assert (outfitters.protocol.value, outfitters.merchant) == ("acp", "outfitters.examples.datalayer.run")
     assert {rule.behaviour.value for rule in app.rules if "buy" in [str(getattr(t, "value", t)) for t in rule.targets]} <= {"ask_first"}

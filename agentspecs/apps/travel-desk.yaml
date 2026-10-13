@@ -6,7 +6,9 @@
 # PACT 1.0 (AGENT_PROTOCOLS EX-13): as the application alone first; then,
 # once the person signs in at the airline and grants what it may do, for
 # them — every answer under their permission carrying the airline's signed
-# receipt. The airline is PACT's local test Provider, Example Air.
+# receipt. The airline is PACT's test Provider, Example Air, as Datalayer
+# hosts it for examples (AGENT_PROTOCOLS PI-42); it accepts a personal agent
+# once its issuer is registered there (PACT 1.0 §3.1).
 
 schema: loop.app/v1
 id: travel-desk
@@ -31,8 +33,8 @@ protocols: [pact]
 pact:
   connections:
     - id: example-air
-      brand: air.example
-      audience: https://provider.example/a2a
+      brand: air.examples.datalayer.run
+      audience: https://air.examples.datalayer.run/a2a
       access: write
       scopes: ["bookings:read", "bookings:change"]
 
@@ -70,7 +72,7 @@ tests:
     recorded:
       - "The journey is the developers' PACT example (examples/protocols/pact/personal_agent.py) against its local Provider, Example Air, run in its own tests (version 1.3.112)."
     unverified:
-      - "No airline answers PACT on Datalayer yet: the gateway's pact toolset is built, not deployed."
+      - "It has not run in the Studio against the hosted Example Air (air.examples.datalayer.run) from this example yet; the hosted Example Air keeps registrations in memory, so an application is registered there again after each restart."
 
 record:
   keep_for: 90_days

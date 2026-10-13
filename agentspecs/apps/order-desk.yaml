@@ -6,7 +6,8 @@
 # Personal Agent Protocol (PAP_DATALAYER E-01): the person signs in at the
 # shop itself, the application reads their orders, and what the shop
 # proposes to change is approved by the person, its exact terms, once.
-# The shop is the protocol's demo company, Manzanita Outfitters.
+# The shop is the protocol's demo company, Manzanita Outfitters, as Datalayer
+# hosts it for examples (AGENT_PROTOCOLS PI-42).
 
 schema: loop.app/v1
 id: order-desk
@@ -32,7 +33,7 @@ pap:
   profile: draft-01
   connections:
     - id: manzanita
-      company: manzanita.example
+      company: manzanita.examples.datalayer.run
       access: write
       as: user
       scopes: ["orders:read", "orders:write"]
@@ -82,7 +83,7 @@ tests:
       - "The journey it takes is the Personal Agent Protocol SDK's demonstration with Manzanita Outfitters, run in the SDK's own tests (personal-agent-protocol 0.10.0)."
       - "The journey is the Personal Agent Protocol SDK's recorded journey user-with-a-company (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
     unverified:
-      - "No company answers on Datalayer yet: no test company is served on r1, so it has not run in the Studio against one."
+      - "It has not run in the Studio against the hosted Manzanita (manzanita.examples.datalayer.run) from this example yet."
 
 record:
   keep_for: 90_days
