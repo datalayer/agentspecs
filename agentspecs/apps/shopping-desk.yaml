@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Application Specification: Shopping Assistant
+# Application Specification: Shopping Desk
 # A chat that shops at a merchant for each person who uses it, over UCP
 # 2026-08-25 (AGENT_PROTOCOLS EX-12): it searches the catalogue and fills a
 # checkout, and buys only once the person approved the exact purchase — every
@@ -10,9 +10,9 @@
 # UCP's local test store, Example Store.
 
 schema: loop.app/v1
-id: shopping-assistant
+id: shopping-desk
 version: 0.0.1
-name: Shopping Assistant
+name: Shopping Desk
 kind: chat
 description: >-
   Finds what you want at the shop, fills your basket and buys it only once you

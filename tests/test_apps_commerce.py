@@ -58,8 +58,8 @@ def test_an_application_shopping_is_refused(commerce, protocols, why):
         AppSpec.model_validate({**BASE, "protocols": protocols, "commerce": commerce})
 
 
-def test_the_shopping_assistant_buys_at_a_test_store_asking_first():
-    app = APP_CATALOGUE["shopping-assistant"]
+def test_the_shopping_desk_buys_at_a_test_store_asking_first():
+    app = APP_CATALOGUE["shopping-desk"]
     assert app.protocols == ["ucp"] and not app.enabled
     [merchant] = app.commerce.merchants
     assert (merchant.merchant, merchant.limit.amount, merchant.limit.currency) == ("store.example", "50", "USD")
