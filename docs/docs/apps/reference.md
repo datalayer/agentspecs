@@ -241,6 +241,71 @@ icon: book
 emoji: 🧾
 ```
 
+### `tools`
+
+```yaml
+tools:
+- name: read_books
+  description: Reads a signed-in client's books.
+  parameters:
+    type: object
+    properties:
+      period:
+        type: string
+    required:
+    - period
+  does:
+  - read
+```
+
+### `protocols`
+
+```yaml
+protocols:
+- pap
+```
+
+### `pap`
+
+```yaml
+pap:
+  company:
+    enabled: true
+    signed_out: false
+    interfaces:
+    - agent
+    scopes:
+    - books:read
+    personal_agents: any
+  connections:
+  - id: northwind
+    company: northwind.example
+    access: write
+    as: user
+    scopes:
+    - accounts:read
+    - payments:write
+    interfaces:
+    - agent
+    sign_in:
+    - device
+    extensions:
+    - operations
+```
+
+### `enabled`
+
+```yaml
+enabled: false
+```
+
+### `unavailable_because`
+
+```yaml
+unavailable_because: It is one of the Personal Agent Protocol's recorded journeys
+  written as an application, and it has not run in the Studio against a company yet.
+```
+
 ### `context`
 
 ```yaml
@@ -337,68 +402,6 @@ samples:
 ```yaml
 backend_tools:
 - decide:0.0.1
-```
-
-### `tools`
-
-```yaml
-tools:
-- name: exchange_order
-  description: Exchanges an order for another size, once the person approved it.
-  parameters:
-    type: object
-    properties:
-      order_id:
-        type: string
-      size:
-        type: string
-    required:
-    - order_id
-    - size
-  does:
-  - write
-```
-
-### `protocols`
-
-```yaml
-protocols:
-- pap
-```
-
-### `pap`
-
-```yaml
-pap:
-  company:
-    enabled: true
-    signed_out: true
-    interfaces:
-    - agent
-    - openapi
-    scopes:
-    - orders:read
-    - orders:write
-    extensions:
-    - operations
-    personal_agents: any
-    operations:
-    - action: orders.exchange
-      tool: exchange_order
-      summary: Exchange order {order_id} for size {size}.
-```
-
-### `enabled`
-
-```yaml
-enabled: false
-```
-
-### `unavailable_because`
-
-```yaml
-unavailable_because: It is a company to people's own agents, and an application's
-  own domain for them is not served yet.
 ```
 
 ### `goal`

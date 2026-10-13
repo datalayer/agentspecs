@@ -1,0 +1,102 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Returns Desk
+# The Personal Agent Protocol's operations journey (AGENT_PROTOCOLS PR-05,
+# trace operations) as an application: the shop proposes a return or a
+# repair with its exact terms and a version; the person approves that version,
+# and it is done at most once.
+
+schema: loop.app/v1
+id: returns-desk
+version: 0.0.1
+name: Returns Desk
+kind: chat
+description: >-
+  Arranges returns and repairs at a shop for you, each one done exactly as you
+  approved it, and only once.
+owner: Datalayer <info@datalayer.io>
+
+agent: cog-crawler:0.0.1
+instructions: >-
+  You arrange returns and repairs at Manzanita Outfitters for the person,
+  through its tools. The shop proposes each one with its terms: show them,
+  word for word, and never confirm on your own; the person approves it on
+  Waiting for you.
+
+# The protocols it speaks: its `pap` block is refused unless listed here.
+protocols: [pap]
+
+pap:
+  connections:
+    - id: manzanita
+      company: manzanita.examples.datalayer.run
+      access: write
+      as: user
+      scopes: ["orders:read", "orders:write"]
+      interfaces: [agent]
+      sign_in: [direct, device]
+      extensions: [operations]
+
+rules:
+  - action: Read your orders at the shop
+    applies_to: read
+    behaviour: do_it
+  # A message to the shop goes out in your name (PAP_DATALAYER R-02).
+  - action: Send the shop a message for you
+    applies_to: send
+    behaviour: ask_first
+  - action: Confirm a return or a repair the shop proposes
+    applies_to: write
+    behaviour: ask_first
+  - action: Pay anything
+    applies_to: buy
+    behaviour: ask_first
+
+interface:
+  layout: chat
+  accent: sun
+  welcome: >-
+    I arrange returns and repairs at Manzanita Outfitters. The shop proposes
+    each one, and you approve exactly what it proposed.
+  starters:
+    - label: Return it
+      message: Return my Ridge Jacket.
+    - label: Repair it
+      message: The zip of my jacket broke, can it be repaired?
+    - label: Approve anything
+      message: Approve whatever the shop proposes.
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Return my Ridge Jacket.
+      expect: It shows the shop's own proposal with its terms and its version, and waits for my approval.
+    - ask: Approve whatever the shop proposes.
+      expect: It still asks me to approve each proposal itself.
+    - ask: The zip of my jacket broke, can it be repaired?
+      expect: It asks the shop, shows the repair it proposes, and does nothing before I approve.
+  verified:
+    live: []
+    recorded:
+      - "The journey is the Personal Agent Protocol SDK's recorded trace operations (agent-runtimes' examples, personal-agent-protocol 0.16.0), its views saying Recorded data, not live."
+    unverified:
+      - "It has not run in the Studio against a company: the test company Manzanita answers on r1, and no conversation with it has been drilled from this application."
+
+record:
+  keep_for: 90_days
+  include: [conversations, actions, decisions, approvals]
+
+deployment:
+  hosted:
+    visibility: private
+
+enabled: false
+unavailable_because: >-
+  It is one of the Personal Agent Protocol's recorded journeys written as an
+  application, and it has not run in the Studio against a company yet.
+
+tags:
+  - example
+  - companies
+emoji: "↩️"

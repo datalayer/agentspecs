@@ -53,6 +53,7 @@ from agentspecs.apps import (
     AppError,
     AppKind,
     AppSpec,
+    PapSignIn,
     BalloonDisplay,
     command_prompt,
     Behaviour,
@@ -400,9 +401,11 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
     the others stay off, each saying why in a sentence its page shows."""
     off = {identity: spec for identity, spec in APP_CATALOGUE.items() if not spec.enabled}
     # Order desk and Exchange desk wait for the Personal Agent Protocol's services (PAP_DATALAYER E-01, E-02).
-    assert sorted(off) == [
-        "exchange-desk", "inbox-triage", "order-desk", "pipeline-report", "shopping-desk", "travel-desk",
-    ]
+    # The Personal Agent Protocol's recorded journeys, written as applications (AGENT_PROTOCOLS PR-05).
+    assert sorted(off) == sorted(
+        ["exchange-desk", "inbox-triage", "order-desk", "pipeline-report", "shopping-desk", "travel-desk"]
+        + list(PAP_JOURNEYS)
+    )
     for identity, spec in off.items():
         assert spec.unavailable_because.strip().endswith("."), identity
     for identity in ("quote-calculator", "report-from-a-file", "customer-interview", "support-desk"):
@@ -866,7 +869,48 @@ EXAMPLES = {
     "travel-desk": AppKind.CHAT,
     # Shopping at a test merchant over UCP, each purchase asked first (AGENT_PROTOCOLS EX-12).
     "shopping-desk": AppKind.CHAT,
+    # The Personal Agent Protocol's recorded journeys, written as applications (AGENT_PROTOCOLS PR-05).
+    "order-tracker": AppKind.CHAT,
+    "shop-concierge": AppKind.CHAT,
+    "live-shop-chat": AppKind.CHAT,
+    "sign-in-desk": AppKind.CHAT,
+    "returns-desk": AppKind.CHAT,
+    "bookkeeping-desk": AppKind.CHAT,
 }
+
+#: Each of the SDK's seven recorded PAP journeys (agent-runtimes' trace examples) and the example it became.
+PAP_JOURNEYS = {
+    "order-tracker": "account-tokens",
+    "shop-concierge": "conversation-control",
+    "live-shop-chat": "conversation-streaming",
+    "sign-in-desk": "mediated-sign-in",
+    "returns-desk": "operations",
+    "bookkeeping-desk": "two-companies",
+}
+
+
+def test_the_seven_pap_journeys_are_examples_saying_they_are_recorded() -> None:
+    """AGENT_PROTOCOLS PR-05 (decided 2026-10-13): each recorded PAP trace is a Studio example, off until run live."""
+    journeys = {**PAP_JOURNEYS, "order-desk": "user-with-a-company"}
+    assert sorted(journeys.values()) == [
+        "account-tokens", "conversation-control", "conversation-streaming", "mediated-sign-in",
+        "operations", "two-companies", "user-with-a-company",
+    ]
+    for identity, trace in journeys.items():
+        found = APP_CATALOGUE[identity]
+        assert found.protocols == ["pap"] and found.pap is not None, identity
+        assert any(f"recorded trace {trace}" in line for line in found.tests.verified.recorded), identity
+        assert not found.tests.verified.live and not found.enabled, identity
+        if identity != "order-desk":
+            assert 3 <= len(found.tests.cases) <= 5 and len(found.interface.starters) == 3, identity
+        assert app_problems(found) == [], identity
+    # What each journey shows is what its application declares.
+    assert APP_CATALOGUE["sign-in-desk"].pap.connections[0].sign_in == [PapSignIn.MEDIATED]
+    assert APP_CATALOGUE["order-tracker"].pap.connections[0].scopes == ["orders:read"]
+    assert APP_CATALOGUE["returns-desk"].pap.connections[0].extensions == ["operations"]
+    bookkeeping = APP_CATALOGUE["bookkeeping-desk"].pap
+    assert bookkeeping.company is not None and bookkeeping.company.enabled
+    assert [connection.company for connection in bookkeeping.connections] == ["northwind.example"]
 
 
 def test_the_examples_are_in_the_catalogue() -> None:
