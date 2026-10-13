@@ -77,7 +77,7 @@ tests:
     recorded:
       - "A shipped business at its own domain was drilled on r1 on 13 October 2026 (AGENT_PROTOCOLS PR-13): its card naming Datalayer the Provider, a registered personal agent answered alone and for a person who signed in by device code, a stranger refused."
     unverified:
-      - "Drilled as a pair on r1 on 13 October 2026: two clones joined as the Studio joins them, the business shipped at its own domain with the cloning account as its Brand, Errand Runner's clone answered alone and, once the person signed in by device code and granted profile:read, for them with a verified receipt; but the business was not told who had signed in (fixed in agent-runtimes, to release), so its answer for the person was not right yet."
+      - "Drilled as a pair on r1 on 13 October 2026: two clones joined as the Studio joins them, the business shipped at its own domain with the cloning account as its Brand, Errand Runner's clone answered alone and, once the person signed in by device code and granted profile:read, for them with a verified receipt; but the business was not told who had signed in (fixed since), so its answer for the person was not right yet."
 
 record:
   keep_for: 90_days

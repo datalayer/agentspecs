@@ -50,15 +50,14 @@ tests:
   verified:
     live: []
     recorded:
-    - 'Its exchange_order runs in process in agent-runtimes'' tests against a stand-in
+    - 'Its exchange_order runs in process in Datalayer''s own tests against a stand-in
       for Manzanita''s back office: one exchange per confirmed operation, a retry
       answered as already done.'
     unverified:
     - 'Drilled on r1 on 13 October 2026: shipped at its own domain, it answered a
       personal agent signed out, and a person signed in through Datalayer granted
       orders:read and orders:write; but the application was not told who had signed
-      in (fixed in agent-runtimes 1.5.11), and its exchange_order had no code yet.
-      Not drilled since.'
+      in (fixed since), and its exchange_order had no code yet. Not drilled since.'
 record:
   keep_for: 90_days
   include:
