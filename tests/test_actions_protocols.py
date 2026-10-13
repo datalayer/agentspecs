@@ -35,6 +35,7 @@ def test_every_protocol_spec_is_sound_and_its_prefix_its_own():
         # Asking for one of the company's people is the conversation's own control, classed with it.
         ("pap:manzanita.example", "pap_handoff", (SEND,)),
         ("pap:manzanita.example", "pap_read", (READ,)),
+        ("pap:manzanita.example", "pap_propose", (SEND,)),
         ("pap:manzanita.example", "pap_mcp_call", (WRITE,)),
         # Confirming does what an operation can do: the most restricted wins.
         ("pap:manzanita.example", "pap_confirm", (WRITE, BUY)),
