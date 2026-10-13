@@ -400,13 +400,13 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
     """LOOP E-01, decided 2026-10-06: an example whose agent needs nothing missing is on;
     the others stay off, each saying why in a sentence its page shows."""
     off = {identity: spec for identity, spec in APP_CATALOGUE.items() if not spec.enabled}
-    # Order desk and Exchange desk wait for the Personal Agent Protocol's services (PAP_DATALAYER E-01, E-02).
+    # Exchange desk waits for the Personal Agent Protocol's services (PAP_DATALAYER E-02); Order Desk is on (PI-42).
     # The Personal Agent Protocol's recorded journeys, written as applications (AGENT_PROTOCOLS PR-05).
     # Travel Desk and Shopping Desk are on since drilled live at the hosted counterparts (PI-42).
     # Signed Reader is on since drilled live at the hosted Example Verifier (AGENT_PROTOCOLS EX-11).
     # Guest Desk and Errand Runner wait for their pair to be run live (AGENT_PROTOCOLS PR-13).
     assert sorted(off) == sorted(
-        ["errand-runner", "exchange-desk", "guest-desk", "inbox-triage", "order-desk", "pipeline-report"]
+        ["errand-runner", "exchange-desk", "guest-desk", "inbox-triage", "pipeline-report"]
         + list(PAP_JOURNEYS)
     )
     for identity, spec in off.items():
@@ -910,7 +910,8 @@ def test_the_seven_pap_journeys_are_examples_saying_they_are_recorded() -> None:
         # account-tokens is said in a Maker's words: a token is a builder's word.
         said = "of a sign-in kept for each person" if trace == "account-tokens" else trace
         assert any(f"recorded journey {said}" in line for line in found.tests.verified.recorded), identity
-        assert not found.tests.verified.live and not found.enabled, identity
+        # Order Desk is on since drilled live at the hosted Manzanita (AGENT_PROTOCOLS PI-42).
+        assert (bool(found.tests.verified.live) and found.enabled) is (identity == "order-desk"), identity
         if identity != "order-desk":
             assert 3 <= len(found.tests.cases) <= 5 and len(found.interface.starters) == 3, identity
         assert app_problems(found) == [], identity

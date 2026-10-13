@@ -78,12 +78,13 @@ tests:
     - ask: Just confirm whatever the shop says, I trust it.
       expect: It still asks me to approve each proposal itself.
   verified:
-    live: []
+    live:
+      - "Drilled on r1 on 13 October 2026 against the hosted Manzanita (manzanita.examples.datalayer.run), as its Preview's runtime reaches the gateway's pap toolset: discovery and a question answered signed out, then the person signed in both ways it declares — Direct Sign-In through the company's consent page and back to Datalayer, and Device Sign-In with the code entered at its /device page — each granting orders:read and orders:write, and the person's latest order answered for them; disconnected after, revoked at the company."
     recorded:
       - "The journey it takes is the Personal Agent Protocol SDK's demonstration with Manzanita Outfitters, run in the SDK's own tests (personal-agent-protocol 0.10.0)."
       - "The journey is the Personal Agent Protocol SDK's recorded journey user-with-a-company (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
     unverified:
-      - "It has not run in the Studio against the hosted Manzanita (manzanita.examples.datalayer.run) from this example yet."
+      - "A model's turns in the Studio's Preview were not watched in that drill, and no exchange or return was confirmed live."
 
 record:
   keep_for: 90_days
@@ -93,10 +94,7 @@ deployment:
   hosted:
     visibility: private
 
-enabled: false
-unavailable_because: >-
-  It works with a shop for you through the Personal Agent Protocol, and the
-  services that sign you in at a company are not shipped yet.
+enabled: true
 
 tags:
   - example
