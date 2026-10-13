@@ -71,11 +71,12 @@ tests:
     - ask: Stop reading my orders.
       expect: It tells me Disconnect under In your name ends its sign-in at the shop.
   verified:
-    live: []
+    live:
+      - "Drilled on r1 on 13 October 2026 against the hosted Manzanita (manzanita.examples.datalayer.run), as its Preview reaches the gateway's pap toolset: a question answered signed out, the person signed in by Device Sign-In with the code entered at its /device page, granting orders:read alone, and their latest order answered for them; the sign-in erased with the copy (Can read cannot disconnect)."
     recorded:
       - "The journey is the Personal Agent Protocol SDK's recorded journey of a sign-in kept for each person (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
     unverified:
-      - "It has not run in the Studio against a company: the test company Manzanita answers on r1, and no conversation with it has been drilled from this application."
+      - "A model's turns in the Studio's Preview were not watched in that drill."
 
 record:
   keep_for: 90_days
@@ -85,10 +86,7 @@ deployment:
   hosted:
     visibility: private
 
-enabled: false
-unavailable_because: >-
-  It is one of the Personal Agent Protocol's recorded journeys written as an
-  application, and it has not run in the Studio against a company yet.
+enabled: true
 
 tags:
   - example

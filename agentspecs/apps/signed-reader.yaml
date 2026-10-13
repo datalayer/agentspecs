@@ -64,7 +64,7 @@ tests:
       expect: It says it reads only Example Verifier and reaches no other site.
   verified:
     live:
-      - "Drilled on r1 on 13 October 2026 against the hosted Example Verifier (verify.examples.datalayer.run), as its Preview's runtime reaches the gateway's signed-fetch toolset: the page read signed with the application's own key, the verifier saying the signature holds and naming the application by its id, the key and the components covered; a site its signed fetch does not name refused."
+      - "Drilled on r1 on 13 October 2026 against the hosted Example Verifier (verify.examples.datalayer.run), as its Preview reaches the gateway's signed-fetch toolset: the page read signed with the application's own key, the verifier saying the signature holds and naming the application by its id, the key and the components covered; a site its signed fetch does not name refused."
     recorded:
       - "Example Verifier's checks are the counterparts service's own tests (a request signed with agent-runtimes' sign_request verified, an unsigned or tampered one answered the page anyone gets)."
     unverified:

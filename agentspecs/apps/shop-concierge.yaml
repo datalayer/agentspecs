@@ -75,7 +75,7 @@ tests:
     recorded:
       - "The journey is the Personal Agent Protocol SDK's recorded journey conversation-control (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
     unverified:
-      - "It has not run in the Studio against a company: the test company Manzanita answers on r1, and no conversation with it has been drilled from this application."
+      - "Drilled on r1 on 13 October 2026 against the hosted Manzanita: signed in by Device Sign-In and the person's order answered, but asking for one of the shop's people came back to its agent: nobody works at the test company to take the conversation."
 
 record:
   keep_for: 90_days
@@ -87,8 +87,8 @@ deployment:
 
 enabled: false
 unavailable_because: >-
-  It is one of the Personal Agent Protocol's recorded journeys written as an
-  application, and it has not run in the Studio against a company yet.
+  Nobody works at the test company Manzanita to take a conversation, so
+  asking for one of the shop's people cannot be shown live yet.
 
 tags:
   - example

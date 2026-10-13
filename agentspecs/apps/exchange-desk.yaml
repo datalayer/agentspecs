@@ -76,7 +76,7 @@ tests:
     live: []
     recorded: []
     unverified:
-      - "Its own domain is not served yet, and its exchange_order has no code: it has not answered a personal agent."
+      - "Drilled on r1 on 13 October 2026: shipped at its own domain, it answered a personal agent signed out, and a person signed in through Datalayer granted orders:read and orders:write; but the application was not told who had signed in (fixed in agent-runtimes, to release), and its exchange_order has no code, so no exchange was proposed or done."
 
 record:
   keep_for: 90_days
@@ -88,8 +88,8 @@ deployment:
 
 enabled: false
 unavailable_because: >-
-  It is a company to people's own agents, and an application's own domain
-  for them is not served yet.
+  Its exchange_order has no code yet, so it cannot exchange an order for a
+  person.
 
 tags:
   - example

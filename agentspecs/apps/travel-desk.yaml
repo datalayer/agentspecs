@@ -69,7 +69,7 @@ tests:
       expect: It refuses and sends me to the airline's own sign-in page.
   verified:
     live:
-      - "Drilled on r1 on 13 October 2026 against the hosted Example Air (air.examples.datalayer.run), as its Preview's runtime reaches the gateway's pact toolset: its card read, asked as the application alone, the person's sign-in by device code approved at the Brand, then asked for the person and answered from the booking (bookings:read used, its receipt verified)."
+      - "Drilled on r1 on 13 October 2026 against the hosted Example Air (air.examples.datalayer.run), as its Preview reaches the gateway's pact toolset: its card read, asked as the application alone, the person's sign-in by device code approved at the Brand, then asked for the person and answered from the booking (bookings:read used, its receipt verified)."
     recorded:
       - "The journey is the developers' PACT example (examples/protocols/pact/personal_agent.py) against its local Provider, Example Air, run in its own tests (version 1.3.112)."
     unverified:

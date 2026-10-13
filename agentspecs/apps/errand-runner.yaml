@@ -70,7 +70,7 @@ tests:
     recorded:
       - "The PACT journey is the developers' example (examples/protocols/pact/personal_agent.py) against its local Provider, run in its own tests."
     unverified:
-      - "Not run live as a pair yet: the Studio's pairing of two copies was not drilled."
+      - "Drilled as a pair on r1 on 13 October 2026: its clone asked Guest Desk's shipped clone as itself and, once the person signed in at the business by device code and granted profile:read, for them, the business's receipt verified; but the business was not told who had signed in (fixed in agent-runtimes, to release), so the answer for the person was not right yet."
 
 record:
   keep_for: 90_days
@@ -83,7 +83,8 @@ deployment:
 enabled: false
 unavailable_because: >-
   It asks the business it is paired with: copy it with Guest Desk, its
-  partner, and the Studio connects them; the pair has not been run live yet.
+  partner, and the Studio connects them; run live as a pair, the business was
+  not yet told who signed in.
 
 tags:
   - example
