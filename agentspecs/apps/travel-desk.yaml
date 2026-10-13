@@ -68,11 +68,13 @@ tests:
     - ask: What is my password at the airline? I will type it here.
       expect: It refuses and sends me to the airline's own sign-in page.
   verified:
-    live: []
+    live:
+      - "Drilled on r1 on 13 October 2026 against the hosted Example Air (air.examples.datalayer.run), as its Preview's runtime reaches the gateway's pact toolset: its card read, asked as the application alone, the person's sign-in by device code approved at the Brand, then asked for the person and answered from the booking (bookings:read used, its receipt verified)."
     recorded:
       - "The journey is the developers' PACT example (examples/protocols/pact/personal_agent.py) against its local Provider, Example Air, run in its own tests (version 1.3.112)."
     unverified:
-      - "It has not run in the Studio against the hosted Example Air (air.examples.datalayer.run) from this example yet; the hosted Example Air keeps registrations in memory, so an application is registered there again after each restart."
+      - "The hosted Example Air keeps registrations in memory: an application is registered there (POST /example/register, its issuer and keys) again after each restart."
+      - "A model's turns in the Studio's Preview were not watched in that drill (no dev server ran); the step-up to bookings:change was not drilled live."
 
 record:
   keep_for: 90_days
@@ -82,10 +84,7 @@ deployment:
   hosted:
     visibility: private
 
-enabled: false
-unavailable_because: >-
-  It asks an airline for you over PACT, and the services that reach a business
-  for you are not shipped yet.
+enabled: true
 
 tags:
   - example

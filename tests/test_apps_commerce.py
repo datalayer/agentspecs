@@ -60,7 +60,8 @@ def test_an_application_shopping_is_refused(commerce, protocols, why):
 
 def test_the_shopping_desk_buys_at_a_test_store_asking_first():
     app = APP_CATALOGUE["shopping-desk"]
-    assert app.protocols == ["ucp", "acp"] and not app.enabled
+    # On since drilled live at the hosted test merchants (AGENT_PROTOCOLS PI-42).
+    assert app.protocols == ["ucp", "acp"] and app.enabled
     store, outfitters = app.commerce.merchants
     assert (store.merchant, store.limit.amount, store.limit.currency) == ("store.examples.datalayer.run", "50", "USD")
     assert (outfitters.protocol.value, outfitters.merchant) == ("acp", "outfitters.examples.datalayer.run")

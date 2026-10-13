@@ -402,8 +402,9 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
     off = {identity: spec for identity, spec in APP_CATALOGUE.items() if not spec.enabled}
     # Order desk and Exchange desk wait for the Personal Agent Protocol's services (PAP_DATALAYER E-01, E-02).
     # The Personal Agent Protocol's recorded journeys, written as applications (AGENT_PROTOCOLS PR-05).
+    # Travel Desk and Shopping Desk are on since drilled live at the hosted counterparts (PI-42).
     assert sorted(off) == sorted(
-        ["exchange-desk", "inbox-triage", "order-desk", "pipeline-report", "shopping-desk", "travel-desk"]
+        ["exchange-desk", "inbox-triage", "order-desk", "pipeline-report"]
         + list(PAP_JOURNEYS)
     )
     for identity, spec in off.items():
