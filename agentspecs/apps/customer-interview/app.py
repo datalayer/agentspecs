@@ -32,7 +32,7 @@ app = Application.from_spec(
     {
         "schema": "loop.app/v1",
         "id": "customer-interview",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "name": "Customer Interview",
         "kind": "chat",
         "description": (

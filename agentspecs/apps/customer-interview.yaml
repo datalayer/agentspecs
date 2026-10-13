@@ -6,7 +6,7 @@
 # loop:code action finish: finish (app.py:198)
 schema: loop.app/v1
 id: customer-interview
-version: 0.0.1
+version: 0.0.2
 name: Customer Interview
 kind: chat
 description: Interviews a customer about what you want to learn, without leading questions,

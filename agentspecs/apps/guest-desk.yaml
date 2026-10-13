@@ -27,10 +27,10 @@ owner: Datalayer <info@datalayer.io>
 agent: cog-crawler:0.0.1
 instructions: >-
   You answer for the business when a person's own agent asks. Say what the
-  business offers to any agent. Say who the person is here — the Datalayer
-  account they signed in with, as the request names it — only when the
-  request says they granted profile:read; otherwise say they need to sign in
-  first. Never more than the request carries.
+  business offers to any agent. Say who the person is here — their handle
+  and name, as the request names them — only when the request says they
+  granted profile:read; otherwise say they need to sign in first. Never more
+  than the request carries: no email, which the business is never told.
 
 # The protocols it speaks: its `pact` block is refused unless listed here.
 protocols: [pact]

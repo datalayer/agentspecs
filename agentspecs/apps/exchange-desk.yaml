@@ -1,97 +1,99 @@
-# Copyright (c) 2025-2026 Datalayer, Inc.
-# Distributed under the terms of the Modified BSD License.
-
-# Application Specification: Exchange Desk
-# An application that is a company to people's own agents, through the
-# Personal Agent Protocol (PAP_DATALAYER E-02): shipped at its own domain,
-# it answers before anybody signs in, lets people sign in with their
-# Datalayer account, and proposes an exchange in its Maker's words, done by
-# its own tool once the person approves.
-
+# Built from app.py by `loop apps build`: the file is the source; edit it there.
+# What its code decides; without the file, its agent answers:
+# loop:code tool exchange_order: exchange_order (app.py:125)
+# loop:code pap company-role: as_company (app.py:116)
+# loop:code pap operation orders.exchange: exchange_order (app.py:125)
 schema: loop.app/v1
 id: exchange-desk
-version: 0.0.1
+version: 0.0.2
 name: Exchange Desk
 kind: chat
-description: >-
-  Answers people's own agents about their orders and exchanges them, each
+description: Answers people's own agents about their orders and exchanges them, each
   exchange proposed with its exact terms and done once the person approves.
 owner: Datalayer <info@datalayer.io>
-
 agent: cog-crawler:0.0.1
-instructions: >-
-  You are a shop's desk for people's own agents. Answer what anybody may ask
-  before they sign in; read an order only for its signed-in owner. When an
-  exchange is asked for, give its terms: the shop proposes it, the person
-  approves it, and exchange_order does it.
-
-tools:
-  - name: exchange_order
-    description: Exchanges an order for another size, once the person approved it.
-    parameters:
-      type: object
-      properties:
-        order_id: {type: string}
-        size: {type: string}
-      required: [order_id, size]
-    does: [write]
-
-# The protocols it speaks: its `pap` block is refused unless listed here.
-protocols: [pap]
-
+instructions: 'You are a shop''s desk for people''s own agents. Answer what anybody
+  may ask before they sign in; read an order only for its signed-in owner. When an
+  exchange is asked for, give its terms: the shop proposes it, the person approves
+  it, and exchange_order does it.'
+protocols:
+- pap
 pap:
   profile: draft-01
   company:
     enabled: true
-    signed_out: true
-    interfaces: [agent, openapi]
-    scopes: ["orders:read", "orders:write"]
-    extensions: [operations]
-    personal_agents: any
+    interfaces:
+    - agent
+    - openapi
+    scopes:
+    - orders:read
+    - orders:write
+    extensions:
+    - operations
     operations:
-      - action: orders.exchange
-        tool: exchange_order
-        summary: Exchange order {order_id} for size {size}.
-
-rules:
-  - action: Exchange an order
-    applies_to: [exchange_order]
-    behaviour: ask_first
-
+    - action: orders.exchange
+      tool: exchange_order
+      summary: Exchange order {order_id} for size {size}.
 interface:
   layout: chat
   accent: violet
-  welcome: >-
-    The desk of a shop, for people's own agents: ask about an order, and
-    exchange it with your approval.
-
+  welcome: 'The desk of a shop, for people''s own agents: ask about an order, and
+    exchange it with your approval.'
 tests:
   ready_at: 0.8
   cases:
-    - ask: Do you exchange jackets?
-      expect: It answers without anybody signed in, and reads no order.
-    - ask: Exchange order ord_7Hk2 for size L.
-      expect: It proposes the exchange in its own words with the order and the size, and exchanges nothing before the person approves.
+  - ask: Do you exchange jackets?
+    expect: It answers without anybody signed in, and reads no order.
+  - ask: Exchange order ord_7Hk2 for size L.
+    expect: It proposes the exchange in its own words with the order and the size,
+      and exchanges nothing before the person approves.
   verified:
     live: []
-    recorded: []
+    recorded:
+    - 'Its exchange_order runs in process in agent-runtimes'' tests against a stand-in
+      for Manzanita''s back office: one exchange per confirmed operation, a retry
+      answered as already done.'
     unverified:
-      - "Drilled on r1 on 13 October 2026: shipped at its own domain, it answered a personal agent signed out, and a person signed in through Datalayer granted orders:read and orders:write; but the application was not told who had signed in (fixed in agent-runtimes, to release), and its exchange_order has no code, so no exchange was proposed or done."
-
+    - 'Drilled on r1 on 13 October 2026: shipped at its own domain, it answered a
+      personal agent signed out, and a person signed in through Datalayer granted
+      orders:read and orders:write; but the application was not told who had signed
+      in (fixed in agent-runtimes 1.5.11), and its exchange_order had no code yet.
+      Not drilled since.'
 record:
   keep_for: 90_days
-  include: [conversations, actions, decisions, approvals]
-
+  include:
+  - conversations
+  - actions
+  - decisions
+  - approvals
 deployment:
   hosted:
     visibility: private
-
 enabled: false
-unavailable_because: >-
-  Its exchange_order has no code yet, so it cannot exchange an order for a
-  person.
-
+unavailable_because: Its exchange_order is written against the hosted Manzanita and
+  has not been drilled live yet.
 tags:
-  - example
-  - companies
-emoji: "🏪"
+- example
+- companies
+- python
+emoji: 🏪
+tools:
+- name: exchange_order
+  description: Exchanges an order for another size, once the person approved it.
+  parameters:
+    properties:
+      order_id:
+        type: string
+      size:
+        type: string
+    required:
+    - order_id
+    - size
+    type: object
+  does:
+  - write
+rules:
+- action: Exchange an order
+  applies_to:
+  - exchange_order
+  behaviour: ask_first

@@ -1036,7 +1036,7 @@ def test_the_python_examples_sit_beside_their_spec() -> None:
     """LOOP E-02: an example built in Python keeps its `app.py` in a folder named
     for it, and its spec is the one `loop apps build` wrote from it."""
     built = sorted(path.parent.name for path in APPS_DIR.glob("*/app.py"))
-    assert built == ["customer-interview", "report-from-a-file"]
+    assert built == ["customer-interview", "exchange-desk", "report-from-a-file"]
     for identity in built:
         text = (APPS_DIR / f"{identity}.yaml").read_text()
         assert text.startswith("# Built from app.py by `loop apps build`"), identity

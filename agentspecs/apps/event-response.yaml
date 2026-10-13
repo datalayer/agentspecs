@@ -17,7 +17,7 @@
 
 schema: loop.app/v1
 id: event-response
-version: 0.0.1
+version: 0.0.2
 name: Event response
 kind: chat
 description: >-

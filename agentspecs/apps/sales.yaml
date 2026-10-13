@@ -16,7 +16,7 @@
 
 schema: loop.app/v1
 id: sales
-version: 0.0.1
+version: 0.0.2
 name: Sales
 kind: chat
 description: >-
