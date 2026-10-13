@@ -19,10 +19,10 @@ owner: Datalayer <info@datalayer.io>
 
 agent: cog-crawler:0.0.1
 instructions: >-
-  You arrange returns and repairs at Manzanita Outfitters for the person,
-  through its tools. The shop proposes each one with its terms: show them,
-  word for word, and never confirm on your own; the person approves it on
-  Waiting for you.
+  You arrange returns and repairs at Manzanita Outfitters for the person.
+  Ask the shop for a return or a repair through its API, with pap_propose;
+  the shop proposes each one with its terms: show them, word for word, and
+  never confirm on your own; the person approves it on Waiting for you.
 
 # The protocols it speaks: its `pap` block is refused unless listed here.
 protocols: [pap]
@@ -35,7 +35,8 @@ pap:
       access: write
       as: user
       scopes: ["orders:read", "orders:write"]
-      interfaces: [agent]
+      # Manzanita proposes returns and repairs through its API (decided 2026-10-13).
+      interfaces: [agent, openapi]
       sign_in: [direct, device]
       extensions: [operations]
 
@@ -94,9 +95,9 @@ deployment:
 
 enabled: false
 unavailable_because: >-
-  The test company Manzanita proposes returns and repairs only through its
-  API, and this application asks it through its agent, so neither can be
-  shown live yet.
+  It asks the test company Manzanita for returns and repairs through its API,
+  which Datalayer's gateway does not reach yet, so neither can be shown live
+  yet.
 
 tags:
   - example

@@ -87,8 +87,9 @@ deployment:
 
 enabled: false
 unavailable_because: >-
-  Nobody works at the test company Manzanita to take a conversation, so
-  asking for one of the shop's people cannot be shown live yet.
+  The test company Manzanita's staff, who take a conversation handed to them,
+  are not on duty at the hosted shop yet, so asking for one of its people
+  cannot be shown live yet.
 
 tags:
   - example
