@@ -15,12 +15,14 @@ connection: pap
 # AGENT_PROTOCOLS PR-54). A tool not named here is unknown, and unknown is the
 # most restricted.
 actions:
-  checked: "2026-10-12"
+  checked: "2026-10-13"
   note: >-
     Read off the gateway's `extensions/pap/pap.py`. Asking the company's agent
     is `read`: it changes nothing at the company and puts nothing in front of a
     person (an operation it proposes changes nothing until `pap_confirm`), and a
-    connection that only reads must still be able to ask. Signing in records the
+    connection that only reads must still be able to ask. Asking for one of the
+    company's people (`pap_handoff`) is the same conversation's control and is
+    classed with `pap_ask` (PAP_DATALAYER R-02 decides both). Signing in records the
     person's consent and changes nothing at the company. A company MCP tool is
     unknown here, so it is taken as changing something. Confirming an operation
     does what the operation does: the terms decide at the call (`buy` when a term
@@ -28,6 +30,7 @@ actions:
   tools:
     pap_company: read
     pap_ask: read
+    pap_handoff: read
     pap_sign_in: read
     pap_sign_in_status: read
     pap_read: read
