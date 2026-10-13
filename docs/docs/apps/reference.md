@@ -269,6 +269,7 @@ protocols:
 
 ```yaml
 pap:
+  profile: draft-01
   company:
     enabled: true
     signed_out: false
@@ -846,10 +847,11 @@ One thing a page shows for its inputs (LOOP P-05): a value, drawn with a compone
 
 ### AppPap
 
-Personal Agent Protocol: the companies it works with, and whether it is one.
+Personal Agent Protocol: the companies it works with, and whether it is one. A `pap` block names the profile it is written for (PAP_DATALAYER S-03): one Datalayer speaks, or it is refused in a sentence. An application without the block has none.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
+| `profile` | `draft-01` | The Personal Agent Protocol profile it is written for: `draft-01` | empty |
 | `connections` | list of [AppPapConnection](#apppapconnection) | Companies, as a personal agent | — |
 | `company` | [AppPapCompany](#apppapcompany) | As a company | — |
 

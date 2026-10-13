@@ -62,7 +62,7 @@ def test_an_agent_lists_only_protocols_of_the_catalogue():
 
 
 BASE = {"id": "shop", "name": "Shop", "kind": "chat", "agent": "a"}
-PAP = {"connections": [{"id": "orders", "company": "manzanita.example"}]}
+PAP = {"profile": "draft-01", "connections": [{"id": "orders", "company": "manzanita.example"}]}
 
 
 def test_an_application_lists_what_it_speaks():

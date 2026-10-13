@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-"""Personal Agent Protocol in the Appspec (PAP_DATALAYER S-01, S-02)."""
+"""Personal Agent Protocol in the Appspec (PAP_DATALAYER S-01, S-02, S-03)."""
 
 from pathlib import Path
 
@@ -9,7 +9,7 @@ import pytest
 import yaml
 
 import agentspecs.apps
-from agentspecs.apps import AppPap, parse_app
+from agentspecs.apps import PAP_PROFILES, AppPap, parse_app
 
 BASE = {**yaml.safe_load((Path(agentspecs.apps.__file__).parent / "web-research.yaml").read_text()), "protocols": ["pap"]}
 
@@ -26,7 +26,7 @@ CONNECTION = {
 
 
 def app(**pap: object):  # type: ignore[no-untyped-def]
-    return parse_app({**BASE, "pap": pap})
+    return parse_app({**BASE, "pap": {"profile": "draft-01", **pap}})
 
 
 def test_a_company_connection_and_the_company_role_parse() -> None:
@@ -39,6 +39,30 @@ def test_a_company_connection_and_the_company_role_parse() -> None:
 def test_an_application_without_pap_has_none() -> None:
     spec = parse_app(BASE)
     assert spec.pap == AppPap()
+    assert spec.pap.profile is None
+
+
+def test_a_pap_block_names_a_profile_datalayer_speaks() -> None:
+    assert app(connections=[CONNECTION]).pap.profile == "draft-01"
+    assert PAP_PROFILES == ("draft-01",)
+    with pytest.raises(ValueError, match="names no Personal Agent Protocol profile: add `profile: draft-01`"):
+        parse_app({**BASE, "pap": {"connections": [CONNECTION]}})
+    with pytest.raises(ValueError, match="names no Personal Agent Protocol profile"):
+        parse_app({**BASE, "pap": {"company": {"enabled": True}}})
+    with pytest.raises(
+        ValueError,
+        match="This application asks for Personal Agent Protocol profile “draft-02”; Datalayer speaks draft-01.",
+    ):
+        app(profile="draft-02", connections=[CONNECTION])
+
+
+def test_the_profile_is_written_back_with_the_block() -> None:
+    import json
+
+    spec = app(connections=[CONNECTION])
+    dumped = json.loads(spec.model_dump_json(by_alias=True, exclude_defaults=True))
+    assert dumped["pap"]["profile"] == "draft-01"
+    assert "pap" not in json.loads(parse_app(BASE).model_dump_json(by_alias=True, exclude_defaults=True))
 
 
 @pytest.mark.parametrize(

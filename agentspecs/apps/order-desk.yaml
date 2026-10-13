@@ -29,6 +29,7 @@ instructions: >-
 protocols: [pap]
 
 pap:
+  profile: draft-01
   connections:
     - id: manzanita
       company: manzanita.example

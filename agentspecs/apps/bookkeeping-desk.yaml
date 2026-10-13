@@ -39,6 +39,7 @@ tools:
 protocols: [pap]
 
 pap:
+  profile: draft-01
   company:
     enabled: true
     signed_out: false

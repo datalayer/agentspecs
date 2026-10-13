@@ -69,6 +69,7 @@ EXTRA_EXAMPLES: Dict[str, Any] = {
     "team": "analyze-support-tickets:0.0.1",
     "ui": ["a2ui"],
     "pap": {
+        "profile": "draft-01",
         "connections": [
             {
                 "id": "orders",

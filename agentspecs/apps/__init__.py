@@ -45,7 +45,7 @@ import json
 import re
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple, Union
+from typing import Any, Dict, List, Literal, Mapping, Optional, Sequence, Tuple, Union, get_args
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
@@ -223,6 +223,22 @@ class AppConnection(_Strict):
 _PAP_DOMAIN = re.compile(r"^(?=.{1,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$")
 _PAP_SCOPE = re.compile(r"^[\x21\x23-\x5b\x5d-\x7e]{1,128}$")
 _PAP_EXTENSION = re.compile(r"^(?:[a-z][a-z0-9_-]{0,63}|[a-z0-9.-]+\.[a-z]{2,63}/[a-z0-9_.-]{1,64})$")
+
+
+#: The Personal Agent Protocol profiles Datalayer speaks: the drafts the PAP SDK
+#: implements (`draft-01` is its `PROTOCOL_PROFILE` 0.1; PAP_DATALAYER S-03).
+PapProfile = Literal["draft-01"]
+PAP_PROFILES: Tuple[str, ...] = get_args(PapProfile)
+
+
+def pap_profile_problem(value: object) -> Optional[str]:
+    """What is wrong with a `pap` block's profile, in a sentence; None when it is one Datalayer speaks."""
+    spoken = " or ".join(PAP_PROFILES)
+    if value is None or value == "":
+        return f"Its `pap` block names no Personal Agent Protocol profile: add `profile: {PAP_PROFILES[-1]}`."
+    if value not in PAP_PROFILES:
+        return f"This application asks for Personal Agent Protocol profile “{value}”; Datalayer speaks {spoken}."
+    return None
 
 
 class PapInterface(str, Enum):
@@ -726,13 +742,31 @@ class AppA2A(_Strict):
 
 
 class AppPap(_Strict):
-    """Personal Agent Protocol: the companies it works with, and whether it is one."""
+    """Personal Agent Protocol: the companies it works with, and whether it is one.
 
+    A `pap` block names the profile it is written for (PAP_DATALAYER S-03): one
+    Datalayer speaks, or it is refused in a sentence. An application without the
+    block has none.
+    """
+
+    profile: Optional[PapProfile] = Field(
+        default=None, description="The Personal Agent Protocol profile it is written for: `draft-01`"
+    )
     connections: List[AppPapConnection] = Field(default_factory=list, description="Companies, as a personal agent")
     company: AppPapCompany = Field(default_factory=AppPapCompany, description="As a company")
 
+    @field_validator("profile", mode="before")
+    @classmethod
+    def _a_profile_spoken(cls, value: object) -> object:
+        problem = pap_profile_problem(value)
+        if problem:
+            raise ValueError(problem)
+        return value
+
     @model_validator(mode="after")
     def _distinct(self) -> "AppPap":
+        if self.model_fields_set and self.profile is None:
+            raise ValueError(pap_profile_problem(None))
         ids = [connection.id for connection in self.connections]
         if len(set(ids)) != len(ids):
             raise ValueError("two Personal Agent Protocol connections have the same id")

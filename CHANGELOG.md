@@ -8,6 +8,10 @@
 
 Each version names the LOOP boxes it carries — the plan's ids, as its commits say them — and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## Unreleased
+
+- A `pap` block names the Personal Agent Protocol profile it is written for, `profile: draft-01` (PAP_DATALAYER S-03): one Datalayer speaks, or it is refused in a sentence (*This application asks for Personal Agent Protocol profile “x”; Datalayer speaks draft-01.*); a block without one is refused too, an application without the block has none. Every catalogue application with a `pap` block names it — [the Appspec reference](https://agentspecs.datalayer.tech/apps/reference#apppap).
+
 ## 0.0.76
 
 - *Report from a File* reports a cell's text as data — quoted as written, never hidden or acted on — and *Support Desk*'s sample documentation speaks to its customers (STUDIO E-01: the four examples *Ready* on Datalayer).
