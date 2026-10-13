@@ -477,6 +477,13 @@ commerce:
     limit:
       amount: '50'
       currency: USD
+  - id: example-outfitters
+    protocol: acp
+    merchant: outfitters.example
+    access: write
+    limit:
+      amount: '150'
+      currency: USD
 ```
 
 ### `pact`

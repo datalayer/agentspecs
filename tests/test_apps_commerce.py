@@ -60,7 +60,8 @@ def test_an_application_shopping_is_refused(commerce, protocols, why):
 
 def test_the_shopping_desk_buys_at_a_test_store_asking_first():
     app = APP_CATALOGUE["shopping-desk"]
-    assert app.protocols == ["ucp"] and not app.enabled
-    [merchant] = app.commerce.merchants
-    assert (merchant.merchant, merchant.limit.amount, merchant.limit.currency) == ("store.example", "50", "USD")
+    assert app.protocols == ["ucp", "acp"] and not app.enabled
+    store, outfitters = app.commerce.merchants
+    assert (store.merchant, store.limit.amount, store.limit.currency) == ("store.example", "50", "USD")
+    assert (outfitters.protocol.value, outfitters.merchant) == ("acp", "outfitters.example")
     assert {rule.behaviour.value for rule in app.rules if "buy" in [str(getattr(t, "value", t)) for t in rule.targets]} <= {"ask_first"}
