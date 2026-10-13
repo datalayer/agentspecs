@@ -1,8 +1,8 @@
 # Built from app.py by `loop apps build`: the file is the source; edit it there.
 # What its code decides; without the file, its agent answers:
-# loop:code tool exchange_order: exchange_order (app.py:132)
-# loop:code pap company-role: as_company (app.py:123)
-# loop:code pap operation orders.exchange: exchange_order (app.py:132)
+# loop:code tool exchange_order: exchange_order (app.py:135)
+# loop:code pap company-role: as_company (app.py:126)
+# loop:code pap operation orders.exchange: exchange_order (app.py:135)
 schema: loop.app/v1
 id: exchange-desk
 version: 0.0.2
@@ -64,6 +64,8 @@ tests:
       proposes the exchange at once, and Manzanita checks the order when it is done.
       Drilled a third time the same evening: signed in, asked to exchange, it said
       it could not — asked by a person''s own agent, it was not given its exchange_order
+      (fixed). Drilled a fourth time the same night, given it: proposing the exchange
+      ended its answer, and the personal agent was told it could not answer just now
       (fixed, not yet released).'
 record:
   keep_for: 90_days
@@ -76,8 +78,8 @@ deployment:
   hosted:
     visibility: private
 enabled: false
-unavailable_because: Asked by a person's own agent, it is not given its exchange_order
-  until a fix is released.
+unavailable_because: Asked by a person's own agent, proposing an exchange ends its
+  answer until a fix is released.
 tags:
 - example
 - companies
