@@ -100,9 +100,8 @@ app = Application.from_spec(
                     "for the order first and proposed nothing; it now proposes the "
                     "exchange at once, and Manzanita checks the order when it is done. "
                     "Drilled a third time the same evening: signed in, asked to "
-                    "exchange, its agent said it had no exchange_order tool — a "
-                    "company's turn over A2A was not offered the tools of its code "
-                    "(fixed in agent-runtimes, not released).",
+                    "exchange, it said it could not — asked by a person's own agent, "
+                    "it was not given its exchange_order (fixed, not yet released).",
                 ],
             },
         },
@@ -113,8 +112,8 @@ app = Application.from_spec(
         "deployment": {"hosted": {"visibility": "private"}},
         "enabled": False,
         "unavailable_because": (
-            "Its exchange_order is not offered to a personal agent's turn until the "
-            "runtime that offers it the tools of its code is released."
+            "Asked by a person's own agent, it is not given its exchange_order "
+            "until a fix is released."
         ),
         "tags": ["example", "companies", "python"],
         "emoji": "🏪",
