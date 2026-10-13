@@ -79,7 +79,7 @@ tests:
     live: []
     recorded:
       - "The journey it takes is the Personal Agent Protocol SDK's demonstration with Manzanita Outfitters, run in the SDK's own tests (personal-agent-protocol 0.10.0)."
-      - "The journey is the Personal Agent Protocol SDK's recorded trace user-with-a-company (agent-runtimes' examples, personal-agent-protocol 0.16.0), its views saying Recorded data, not live."
+      - "The journey is the Personal Agent Protocol SDK's recorded journey user-with-a-company (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
     unverified:
       - "No company answers on Datalayer yet: no test company is served on r1, so it has not run in the Studio against one."
 

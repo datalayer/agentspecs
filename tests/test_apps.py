@@ -899,7 +899,7 @@ def test_the_seven_pap_journeys_are_examples_saying_they_are_recorded() -> None:
     for identity, trace in journeys.items():
         found = APP_CATALOGUE[identity]
         assert found.protocols == ["pap"] and found.pap is not None, identity
-        assert any(f"recorded trace {trace}" in line for line in found.tests.verified.recorded), identity
+        assert any(f"recorded journey {trace}" in line for line in found.tests.verified.recorded), identity
         assert not found.tests.verified.live and not found.enabled, identity
         if identity != "order-desk":
             assert 3 <= len(found.tests.cases) <= 5 and len(found.interface.starters) == 3, identity
