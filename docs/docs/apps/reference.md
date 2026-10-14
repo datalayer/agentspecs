@@ -31,7 +31,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `contents` | list of text | The documents and datasets it answers from | — |
 | `connections` | list of [AppConnection](#appconnection) | What it reaches | — |
 | `protocols` | list of text | The agent protocols it speaks, ids of the protocols catalogue (AGENT_PROTOCOLS PS-02): its `pap`, `pact`, `signed_fetch` and `a2a` blocks, and each merchant of `commerce`, are refused unless their protocol is listed, and a planned protocol only while it is not offered | — |
-| `ui` | list of text | The UI its answers render in, ids of `agentspecs/ui` (AGENT_PROTOCOLS PS-04): each once, and one that is not enabled only while it is not offered | — |
+| `ui` | list of [UiChoice](#uichoice) | Its UI plugins, each `{plugin, renderer}` (AGENTIC_UI R8): a plugin of `agentspecs/ui`, each once, and the renderer of `agentspecs/ui-renderers` it is exposed through, when it is — one the plugin may be exposed through, and one that is not enabled only while the application is not offered | — |
 | `pap` | [AppPap](#apppap) | Personal Agent Protocol: companies it works with, or being one | — |
 | `pact` | [AppPact](#apppact) | PACT: businesses it asks for each person | — |
 | `commerce` | [AppCommerce](#appcommerce) | UCP and ACP: merchants it shops at for each person | — |
@@ -529,7 +529,8 @@ team: analyze-support-tickets:0.0.1
 
 ```yaml
 ui:
-- a2ui
+- plugin: a2ui-surface
+  renderer: a2ui
 ```
 
 ### `a2a`
@@ -1290,6 +1291,15 @@ The application at an address of its own.
 | `visibility` | [Visibility](#visibility) | Who can open it | `"private"` |
 | `slug` | text | The readable part of its address | empty |
 | `character_alone` | true or false | At its address, only its character: the conversation opens in its balloon, as when it is shipped as `assistant` | `false` |
+
+### UiChoice
+
+A UI plugin an agent or an application names, and the renderer it is exposed through, when it is.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `plugin` (required) | text | A UI plugin of `agentspecs/ui`, by id | — |
+| `renderer` | text | The UI renderer of `agentspecs/ui-renderers` it is exposed through, by id | empty |
 
 ## Choices
 

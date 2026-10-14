@@ -87,7 +87,7 @@ app = Application.from_spec(
             ],
             "verified": {
                 "live": [
-                    "Drilled on r1 on 14 October 2026 (runtime image 0.0.34): shipped at "
+                    "Drilled on r1 on 14 October 2026, once its last fix was out: shipped at "
                     "its own domain, asked by a person's own agent signed in through "
                     "Datalayer with orders:read and orders:write, asked to exchange order "
                     "ord_7Hk2 for size L, it proposed the exchange (Exchange order "
@@ -111,7 +111,7 @@ app = Application.from_spec(
                     "it was not given its exchange_order (fixed). Drilled a fourth "
                     "time the same night, given it: proposing the exchange ended its "
                     "answer, and the personal agent was told it could not answer just "
-                    "now (fixed, released in runtime image 0.0.34).",
+                    "now (fixed, and the fix released on 14 October).",
                 ],
             },
         },

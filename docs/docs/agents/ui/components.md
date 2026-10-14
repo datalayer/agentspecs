@@ -7,17 +7,43 @@ title: Components
 
 # The catalog of visual components
 
-Every visual component a UI spec renders, by the name a surface gives it. A component no enabled plugin renders is not in the catalog: an Appspec that names one is refused (see [UI](./index.mdx)).
+Every UI plugin, and the visual components each renders, by the name a surface gives them. A component no UI plugin renders is not in the catalog: an Appspec that names one is refused (see [UI](./index.mdx)).
 
-| Plugin | Catalog | Enabled | Components |
-| --- | --- | --- | --- |
-| `a2ui` (A2UI) | a2ui/v0.9 | yes | 25 |
-| `mcp-apps` (MCP Apps) | — | no | none of its own yet |
-| `mcp-ui` (MCP UI) | — | no | none of its own yet |
+| UI plugin | Registered as | Renderers | Catalog | Components |
+| --- | --- | --- | --- | --- |
+| `a2ui-surface` (Surfaces in the conversation) | `@datalayer/loop-plugin-a2ui-surface` | `a2ui` | a2ui/v0.9 | 25 |
+| `a2ui-view` (Surface view) | `@datalayer/loop-plugin-a2ui` | `a2ui` | — | none of its own |
+| `agentspecs` (Agent picker) | `@datalayer/loop-plugin-agentspecs` | — | — | none of its own |
+| `app-activity` (Activity) | `@datalayer/loop-plugin-app-activity` (one per application) | — | — | none of its own |
+| `app-components` (Your own components) | `@datalayer/loop-plugin-app-components` (one per application) | `a2ui` | — | none of its own |
+| `app-computer` (Computer) | `@datalayer/loop-plugin-app-computer` (one per application) | — | — | none of its own |
+| `app-elements` (Side panel and pages) | `@datalayer/loop-plugin-app-elements` | `a2ui` | — | none of its own |
+| `app-page` (Application page) | `@datalayer/loop-plugin-app-page` (one per application) | `a2ui`, `mcp-apps` | — | none of its own |
+| `app-rules` (Rules and approvals) | `@datalayer/loop-plugin-app-rules` (one per application) | — | — | none of its own |
+| `canvas-blocks` (Blocks) | `@datalayer/loop-plugin-ui` (one per ui) | — | — | none of its own |
+| `canvas-parts` (Parts) | `@datalayer/loop-plugin-parts` (one per source) | — | — | none of its own |
+| `chat` (Chat) | `@datalayer/loop-plugin-chat` | — | — | none of its own |
+| `chat-extras` (Banner and status) | `@datalayer/loop-plugin-chat-extras` | — | — | none of its own |
+| `chat-header` (Chat title bar) | `@datalayer/loop-plugin-chat-header` | — | — | none of its own |
+| `chat-view` (Chat button) | `@datalayer/loop-plugin-chat-view` | — | — | none of its own |
+| `commands` (Command palette) | `@datalayer/loop-plugin-commands` | — | — | none of its own |
+| `document` (Document) | `@datalayer/loop-plugin-document` | — | — | none of its own |
+| `document-toolbar` (Document toolbar) | `@datalayer/loop-plugin-document-toolbar` | — | — | none of its own |
+| `document-view` (Document button) | `@datalayer/loop-plugin-document-view` | — | — | none of its own |
+| `input-prompt` (Composer) | `@datalayer/loop-plugin-input-prompt` | — | — | none of its own |
+| `models` (Models) | `@datalayer/loop-plugin-models` | — | — | none of its own |
+| `notebook` (Notebook) | `@datalayer/loop-plugin-notebook` | — | — | none of its own |
+| `notebook-toolbar` (Notebook toolbar) | `@datalayer/loop-plugin-notebook-toolbar` | — | — | none of its own |
+| `notebook-view` (Notebook button) | `@datalayer/loop-plugin-notebook-view` | — | — | none of its own |
+| `page-layout` (Page layout) | `@datalayer/loop-plugin-page-layout` | — | — | none of its own |
+| `pap-sign-in` (Sign in at a company) | `@datalayer/loop-plugin-pap-sign-in` | `mcp-ui` | — | none of its own |
+| `prompt` (Floating composer) | `@datalayer/loop-plugin-prompt` | — | — | none of its own |
+| `subagent-activity` (Delegated work) | `@datalayer/loop-plugin-subagent-activity` | — | — | none of its own |
+| `window-frame` (Window) | `@datalayer/loop-plugin-window-frame` | — | — | none of its own |
 
-## A2UI (`a2ui`)
+## Surfaces in the conversation (`a2ui-surface`)
 
-An agent describes an interface — a form, a table, a card — as a tree of components from a catalogue the host allows, and the host renders it; what the user does in it comes back to the agent as an action.
+Forms, tables and cards the agent draws in the conversation; what you fill in goes back to it.
 
 Catalog `a2ui/v0.9`: 18 standard components, named and drawn as the protocol says ([A2UI](https://a2ui.org/)), and 7 of Datalayer's own. Every one has a version and its properties as a JSON Schema of the catalog's: what a builder sets, the Canvas draws a properties form from, and Python calls typed.
 
@@ -49,7 +75,7 @@ Catalog `a2ui/v0.9`: 18 standard components, named and drawn as the protocol say
 | [`Form`](#form) | 🧾 Form | input | 1.1.0 | no | Several fields asked at once, from a JSON Schema, checked as they are filled and again when they arrive (drawn with @datalayer/primer-rjsf). |
 | [`Download`](#download) | 📄 File to download | data | 1.0.0 | no | A file the application gives, to save: a report, a sheet, an export — by its link, or the file itself as a data: URL. |
 
-## A2UI: standard components
+## Surfaces in the conversation: standard components
 
 ### `Text`
 
@@ -916,7 +942,7 @@ Its properties, as a JSON Schema:
 }
 ```
 
-## A2UI: Datalayer's own components
+## Surfaces in the conversation: Datalayer's own components
 
 ### `Table`
 

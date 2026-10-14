@@ -1,16 +1,35 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: A2UI
+# UI Specification: Surfaces in the conversation — the Reactor plugin `@datalayer/loop-plugin-a2ui-surface`.
+#
+# Read from the plugin's registration in agent-runtimes (src/apps/plugins/a2ui-surface):
+# its Slots, Contributions, Commands and Contribution Points are what the
+# reactor registers for it, held to it by agent-runtimes' ui-specs test.
 
-id: "a2ui"
+id: "a2ui-surface"
 version: 0.0.1
-name: A2UI
+name: Surfaces in the conversation
 description: >-
-  An agent describes an interface — a form, a table, a card — as a tree of components from a catalogue the host allows, and the host renders it; what the user does in it comes back to the agent as an action.
-docs_url: "https://a2ui.org/"
-# Whether an agent spec may name it today (`ui: a2ui`).
-enabled: true
+  Forms, tables and cards the agent draws in the conversation; what you fill in goes back to it.
+emoji: "🪟"
+octicon: browser
+plugin: "@datalayer/loop-plugin-a2ui-surface"
+folder: "a2ui-surface"
+# Its Contributions: the Slots it fills, the Contribution Points it
+# contributes to, the Commands it adds (the composer's `/` commands by name).
+contributions:
+  slots:
+  - "loop.chatHeader"
+  points:
+  - "reactor.ui.renderer"
+  - "reactor.ui.toolBinding"
+  commands: []
+# The Contribution Points it offers to other plugins.
+contribution_points: []
+# The UI renderers (agentspecs/ui-renderers) it may be exposed through.
+renderers:
+- "a2ui"
 
 # The catalog of visual components it renders (LOOP C-13): one catalog for the
 # spec, the Canvas and Python. The A2UI v0.9 basic catalog's components, named

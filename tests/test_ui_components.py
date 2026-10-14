@@ -49,7 +49,7 @@ A2UI_BASIC = {
 
 
 def _components() -> dict[str, dict]:
-    plugin = yaml.safe_load((ROOT / "ui" / "a2ui.yaml").read_text())
+    plugin = yaml.safe_load((ROOT / "ui" / "a2ui-surface.yaml").read_text())
     assert plugin["catalog"] == "a2ui/v0.9"
     return {component["id"]: component for component in plugin["components"]}
 

@@ -60,6 +60,7 @@ from ..actions import (
     server_tool_conditions,
     split_ref,
 )
+from ..ui import UiChoice, ui_choices_problems
 
 _ROOT = Path(__file__).parent.parent
 
@@ -3194,11 +3195,12 @@ class AppSpec(_Strict):
             "and a planned protocol only while it is not offered"
         ),
     )
-    ui: List[str] = Field(
+    ui: List[UiChoice] = Field(
         default_factory=list,
         description=(
-            "The UI its answers render in, ids of `agentspecs/ui` (AGENT_PROTOCOLS PS-04): "
-            "each once, and one that is not enabled only while it is not offered"
+            "Its UI plugins, each `{plugin, renderer}` (AGENTIC_UI R8): a plugin of `agentspecs/ui`, each once, "
+            "and the renderer of `agentspecs/ui-renderers` it is exposed through, when it is — one the plugin "
+            "may be exposed through, and one that is not enabled only while the application is not offered"
         ),
     )
     pap: AppPap = Field(
@@ -3434,14 +3436,7 @@ class AppSpec(_Strict):
                     f"Its `commerce` block shops over {protocol_id.upper()}, which it does not list: "
                     f"add {protocol_id!r} to `protocols`."
                 )
-        for ui_id in dict.fromkeys(self.ui):
-            spec = _catalogue("ui").get(ui_id)
-            if self.ui.count(ui_id) > 1:
-                problems.append(f"It lists the UI {ui_id!r} twice.")
-            if spec is None:
-                problems.append(f"There is no UI named {ui_id!r}: one of {', '.join(sorted(_catalogue('ui')))}.")
-            elif self.enabled and not spec.get("enabled"):
-                problems.append(f"The UI {spec.get('name', ui_id)} ({ui_id!r}) is not enabled: an application cannot render in it yet.")
+        problems += ui_choices_problems([choice.model_dump(exclude_none=True) for choice in self.ui], to_ship=self.enabled)
         if problems:
             raise ValueError(" ".join(problems))
 
@@ -3690,11 +3685,9 @@ def _agent_of(app: AppSpec) -> Optional[Dict[str, Any]]:
 
 def component_named(name: str) -> Optional[Dict[str, Any]]:
     """The component a layout names (LOOP C-13), from the catalogs of the UI
-    specs an application may use (`ui/*.yaml`, `components`), by the
-    name a surface gives it. None when no enabled plugin renders it."""
+    plugins (`ui/*.yaml`, `components`), by the name a surface gives it. None
+    when no UI plugin renders it."""
     for plugin in _catalogue("ui").values():
-        if not plugin.get("enabled"):
-            continue
         for component in plugin.get("components") or []:
             if component["id"] == name:
                 return component

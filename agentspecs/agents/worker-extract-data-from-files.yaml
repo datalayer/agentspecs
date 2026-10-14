@@ -70,7 +70,9 @@ goal: >-
 
 # Protocols & UI
 protocol: vercel-ai
-ui: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Trigger configuration
 trigger:

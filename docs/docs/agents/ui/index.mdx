@@ -4,41 +4,76 @@ title: UI
 
 # UI Specifications
 
-A UI spec is how an agent's answer becomes an interface rather than text: a protocol
-the host knows how to render. One YAML per plugin under `agentspecs/ui/`; an
-agent spec's `ui` names one.
+The interface of an application is made of **UI plugins**: Reactor plugins of
+Agent Runtimes — the chat, the composer, the notebook and its toolbar, the document
+and its toolbar, the page an application draws, its rules and approvals, its activity,
+the *Sign in at a company* card, the page layout… — the ones the Loop editor assembles.
+**A UI spec is one of them**: one YAML per plugin under `agentspecs/ui/`.
 
-A plugin hosts **the catalog of visual components** it renders (LOOP C-13): A2UI hosts
-the 18 components of its v0.9 basic catalog and Datalayer's own six. The catalog is one
-for the three editors of an application — the Appspec, the Canvas and Python — and a
-component the catalog does not have is reached by none of them. Every component, with
-its properties, bindings, events and an example, is listed in
-[the catalog of visual components](./components.md), generated from the plugins' files.
+A **UI renderer** is something else: how a plugin's interface reaches a host that is
+not Datalayer's own page — A2UI, MCP Apps, MCP UI. Renderers are their own specs,
+under `agentspecs/ui-renderers/` ([Renderers](./renderers.md)). Each UI plugin says the
+renderers it may be exposed through, and an agent or an application names its UI
+plugins and, per plugin, the renderer. A renderer listed as a UI — the old shape,
+`ui: a2ui` — is refused, with no compatibility reading.
+
+A plugin's Slots, Contributions, Commands and Contribution Points are its registration
+in Agent Runtimes, read from it: a test of Agent Runtimes
+(`src/apps/__tests__/ui-specs.test.ts`) builds each plugin on a reactor and holds the
+spec and the registration to each other, both ways — and holds every plugin folder of
+`src/apps/plugins/` to a UI spec, or to the reason it has none.
+
+The plugin that draws A2UI surfaces (`a2ui-surface`) hosts **the catalog of visual
+components** (LOOP C-13): the 18 components of A2UI's v0.9 basic catalog and Datalayer's
+own. The catalog is one for the three editors of an application — the Appspec, the
+Canvas and Python — and a component the catalog does not have is reached by none of
+them. Every component, with its properties, bindings, events and an example, is listed
+in [the catalog of visual components](./components.md), generated from the plugins' files.
 
 ## Fields
 
 | Field | Meaning |
 |-------|---------|
-| `id` | What an agent spec's `ui` names: `a2ui`, `mcp-apps`, `mcp-ui`. The file is named for it. |
+| `id` | What an agent's or an application's `ui` names: `chat`, `notebook`, `a2ui-surface`. The file is named for it. |
 | `version` | The spec's version. |
-| `name` | Display name. |
-| `description` | What the plugin renders, and how the user's action comes back. |
-| `docs_url` | The protocol's own documentation. |
-| `enabled` | Whether an agent spec may name it today. A plugin that is not enabled is listed, and not offered — and its components are not in the catalog. |
-| `catalog` | The catalog its components are written in: `a2ui/v0.9`. |
-| `components` | The visual components it renders; see below. |
+| `name` | What a Maker reads. |
+| `description` | What it is, in a Maker's words. |
+| `emoji`, `octicon` | Its faces. |
+| `plugin` | The name the Reactor plugin registers under: `@datalayer/loop-plugin-chat`. |
+| `folder` | The plugin's folder in Agent Runtimes, under `src/apps/plugins/`. |
+| `per` | For a plugin registered once per something, `application`, `source` or `ui`: it registers as `<plugin>-<its id>`. |
+| `contributions` | Its Contributions: the `slots` it fills, the Contribution Points it contributes to (`points`), and the `commands` it adds — Reactor Commands by id, the composer's `/` commands by name. |
+| `contribution_points` | The Contribution Points it offers to other plugins. |
+| `settings` | Its settings, as the JSON Schema of an object; each default is the plugin's. |
+| `renderers` | The UI renderers it may be exposed through, ids of `agentspecs/ui-renderers`; any other is refused. |
+| `catalog`, `components` | For a plugin that renders components: the catalog they are written in (`a2ui/v0.9`) and the components; see below. |
 
-## The catalogue
+```yaml
+# agentspecs/ui/app-rules.yaml
+id: app-rules
+version: 0.0.1
+name: Rules and approvals
+description: >-
+  When your application acts alone, when it asks you, and the approvals waiting for your yes.
+emoji: "🛡️"
+octicon: shield-check
+plugin: "@datalayer/loop-plugin-app-rules"
+folder: app-rules
+per: application
+contributions:
+  slots: [loop.sidebar]
+  points: []
+  commands: []
+contribution_points: []
+renderers: []
+```
 
-| Id | Name | Enabled | Components |
-|----|------|---------|------------|
-| `a2ui` | A2UI | yes | 18 standard, 6 of Datalayer's own |
-| `mcp-apps` | MCP Apps | no | none of its own yet |
-| `mcp-ui` | MCP UI | no | none of its own yet |
+The catalogue, with each plugin's registration and renderers, is listed on
+[the components page](./components.md).
 
 ## A component
 
-Each entry of a plugin's `components`:
+Each entry of `a2ui-surface`'s `components`:
 
 | Field | Meaning |
 |-------|---------|
@@ -54,7 +89,7 @@ Each entry of a plugin's `components`:
 | `example` | A configuration of it, valid against its `properties`. |
 
 ```yaml
-# agentspecs/ui/a2ui.yaml (one of Datalayer's own)
+# agentspecs/ui/a2ui-surface.yaml (one of Datalayer's own)
 - id: Table
   name: Table
   category: data
@@ -81,11 +116,24 @@ Datalayer's own has a valid JSON Schema whose every property is titled and descr
 bindings and events, and an example its schema accepts — and that
 [the catalog's page](./components.md) is the one `python -m agentspecs.ui` writes.
 
-## In an agent spec
+## In an agent spec, and in an Appspec
 
 ```yaml
-protocol: vercel-ai
-ui: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
+  - plugin: chat
+```
+
+Each entry names a UI plugin, once, and the renderer it is exposed through when it is
+one: one the plugin's `renderers` lists, and — for an application that is offered — an
+enabled one. `agentspecs.ui.ui_choices_problems` says what is wrong, in sentences:
+
+```python
+from agentspecs.ui import ui_choices_problems
+
+ui_choices_problems(["a2ui"], to_ship=True)
+# ["`ui` lists UI plugins, each as `{plugin, renderer}`: 'a2ui' is not one ('a2ui' is a UI renderer: …)."]
 ```
 
 ## In an Appspec: how a surface names a component
@@ -139,14 +187,15 @@ app_problems(load_app("apps/my-app.yaml"))
 #  "The surface's 'speed' is a 'Gauge', which the catalog does not have."]
 ```
 
-A component is in the catalog when an **enabled** plugin renders it
+A component is in the catalog when a UI plugin renders it
 (`agentspecs.apps.component_named`). What is not checked yet: a node's properties
 against its component's JSON Schema, and a version per component.
 
 ## In Python and TypeScript
 
-Agent Runtimes generates the plugins into its catalogues with `make specs`:
-`UI_PLUGIN_CATALOGUE`, and `COMPONENT_CATALOGUE` with `get_component` /
-`list_components` in Python (`agent_runtimes.specs.ui`) and `getComponent` /
-`listComponents` in TypeScript (`src/specs/uiPlugins.ts`) — the components of the
-enabled plugins, by the name a surface gives them.
+Agent Runtimes generates both kinds into its catalogues with `make specs`:
+`UI_CATALOGUE` (`agent_runtimes.specs.ui`, `src/specs/ui.ts`) and
+`UI_RENDERER_CATALOGUE` (`agent_runtimes.specs.ui_renderers`, `src/specs/uiRenderers.ts`),
+and `COMPONENT_CATALOGUE` with `get_component` / `list_components` in Python and
+`getComponent` / `listComponents` in TypeScript — the components of the UI plugins, by
+the name a surface gives them.
