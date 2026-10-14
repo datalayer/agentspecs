@@ -1905,11 +1905,21 @@ class BalloonDisplay(str, Enum):
 
 
 class VoiceInput(str, Enum):
-    """How a person talks to the application (VOICE.md VO-10, VO-12)."""
+    """How a person talks to the application (VOICE.md VO-10).
+
+    `hands_free` (VO-12) is not one yet: it is refused in a sentence until it
+    is built, never taken for click-to-talk.
+    """
 
     OFF = "off"
     PUSH_TO_TALK = "push_to_talk"
-    HANDS_FREE = "hands_free"
+
+
+#: Why ``input: hands_free`` is refused until VOICE.md VO-12 is built (decided 14 October 2026).
+HANDS_FREE_NOT_BUILT = (
+    "hands_free is not built yet (VOICE.md VO-12): say push_to_talk — click the microphone "
+    "or hold it, speak, and it stops when let go or once the person stops speaking"
+)
 
 
 class VoiceOutput(str, Enum):
@@ -1942,7 +1952,10 @@ class AppVoice(_Strict):
     enabled: bool = Field(default=False, description="Whether it has a voice at all; off unless said")
     input: VoiceInput = Field(
         default=VoiceInput.PUSH_TO_TALK,
-        description="`off`, `push_to_talk` (hold a key or the microphone, speak, let go) or `hands_free`",
+        description=(
+            "`off` or `push_to_talk` (click the microphone or hold it, speak; "
+            "it stops when let go or once the person stops speaking)"
+        ),
     )
     output: VoiceOutput = Field(
         default=VoiceOutput.ON_REQUEST,
@@ -1964,6 +1977,13 @@ class AppVoice(_Strict):
         default=VoiceWhere.AUTO,
         description="Where its speech runs: `auto`, `device` (the person's browser) or `server` (Datalayer's)",
     )
+
+    @field_validator("input", mode="before")
+    @classmethod
+    def _hands_free_is_not_built(cls, value: Any) -> Any:
+        if value == "hands_free":
+            raise ValueError(HANDS_FREE_NOT_BUILT)
+        return value
 
 
 def agent_voice_problems(agent_id: str, block: Any) -> List[str]:
@@ -4179,6 +4199,7 @@ def list_apps(kind: Optional[AppKind] = None) -> List[AppSpec]:
 __all__ = [
     "A2UI_OUTPUT",
     "agent_voice_problems",
+    "HANDS_FREE_NOT_BUILT",
     "APP_CATALOGUE",
     "APP_SCHEMA",
     "ASSISTANT_CHARACTER_ID",

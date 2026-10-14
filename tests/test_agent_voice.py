@@ -40,6 +40,7 @@ def test_a_voice_of_the_catalogue_speaking_its_language_is_taken():
         ({"enabled": True, "voice": "kokoro-lessac"}, "There is no voice named 'kokoro-lessac'"),
         ({"enabled": True, "voice": "kokoro-ff-siwis", "language": "en-US"}, "does not speak en-US"),
         ({"enabled": True, "input": "shout"}, "voice: input:"),
+        ({"enabled": True, "input": "hands_free"}, "hands_free is not built yet (VOICE.md VO-12)"),
         ({"enabled": True, "colour": "blue"}, "colour is not a field of the spec"),
         ({"enabled": True, "language": "english"}, "voice: language:"),
         ("on", "voice is a mapping"),

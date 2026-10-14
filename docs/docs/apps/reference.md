@@ -1247,7 +1247,7 @@ Its voice (VOICE.md VO-41): whether it listens, whether it speaks, with which vo
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
 | `enabled` | true or false | Whether it has a voice at all; off unless said | `false` |
-| `input` | [VoiceInput](#voiceinput) | `off`, `push_to_talk` (hold a key or the microphone, speak, let go) or `hands_free` | `"push_to_talk"` |
+| `input` | [VoiceInput](#voiceinput) | `off` or `push_to_talk` (click the microphone or hold it, speak; it stops when let go or once the person stops speaking) | `"push_to_talk"` |
 | `output` | [VoiceOutput](#voiceoutput) | When its answers are heard: `off`, `on_request` (a Read aloud on each answer) or `always` | `"on_request"` |
 | `voice` | text | The voice it speaks with, an id of the voice catalogue (`kokoro-af-heart`); the language's first when unsaid | empty |
 | `language` | text | The language it listens and speaks in, BCP 47 (`en-US`, `fr-FR`); the person's when unsaid | empty |
@@ -1329,6 +1329,6 @@ A UI plugin an agent or an application names, and the renderer it is exposed thr
 | <a id="themevariant"></a>ThemeVariant | `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop` |
 | <a id="triggertype"></a>TriggerType | `schedule`, `event`, `once` |
 | <a id="visibility"></a>Visibility | `private`, `invited`, `organization`, `link`, `public` |
-| <a id="voiceinput"></a>VoiceInput | `off`, `push_to_talk`, `hands_free` |
+| <a id="voiceinput"></a>VoiceInput | `off`, `push_to_talk` |
 | <a id="voiceoutput"></a>VoiceOutput | `off`, `on_request`, `always` |
 | <a id="voicewhere"></a>VoiceWhere | `auto`, `device`, `server` |

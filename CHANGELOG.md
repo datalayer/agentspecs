@@ -10,6 +10,7 @@ Each version names the LOOP boxes it carries — the plan's ids, as its commits 
 
 ## Unreleased
 
+- Appspec `interface.voice.input`: `hands_free` is refused in a sentence until it is built (VOICE.md VO-12, decided 14 October 2026), no longer taken for click-to-talk; `VoiceInput` is `off` or `push_to_talk`. JSON Schema and reference regenerated.
 - *Exchange Desk* is on (AGENT_PROTOCOLS PI-42): drilled live on r1 on 14 October 2026 on runtime image 0.0.34 — asked by a person's own agent signed in through Datalayer to exchange order `ord_7Hk2` for size L, it proposed the exchange and went on to tell the person it waits for their approval.
 - *Returns Desk* and *Shop Concierge* are on (AGENT_PROTOCOLS PI-42): drilled live on r1 on 13 October 2026 at the hosted Manzanita — a return and a repair asked through its API with `pap_propose`, the return approved by the person and done once; a conversation handed to Marta, of the shop's staff, who answered in it. *Exchange Desk* stays off until the runtime offers a company's turn the tools of its code.
 - *Order Desk* is on (AGENT_PROTOCOLS PI-42): drilled live on r1 on 13 October 2026 at the hosted Manzanita, the person signed in both by Direct Sign-In and by Device Sign-In, and their order answered for them.

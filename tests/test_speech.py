@@ -8,7 +8,15 @@ import pytest
 from pydantic import ValidationError
 
 from agentspecs import speech
-from agentspecs.apps import AppError, RecordItem, app_problems, dump_app, list_apps, parse_app
+from agentspecs.apps import (
+    AppError,
+    RecordItem,
+    app_problems,
+    dump_app,
+    json_schema,
+    list_apps,
+    parse_app,
+)
 
 
 def _app(**changes):
@@ -180,6 +188,14 @@ def test_the_appspec_voice_is_off_unless_said_and_round_trips():
         "where": "server",
     }
     assert app_problems(voiced) == app_problems(parse_app(_app()))
+
+
+def test_hands_free_is_refused_until_it_is_built():
+    """Decided 14 October 2026: refused in a sentence, never taken for click-to-talk (VO-12)."""
+    with pytest.raises(AppError) as refused:
+        parse_app(_app(interface={"voice": {"enabled": True, "input": "hands_free"}}))
+    assert "interface.voice.input: hands_free is not built yet (VOICE.md VO-12)" in str(refused.value)
+    assert json_schema()["$defs"]["VoiceInput"]["enum"] == ["off", "push_to_talk"]
 
 
 def test_a_voice_not_in_the_catalogue_or_not_speaking_the_language_is_a_problem():
