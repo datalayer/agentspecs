@@ -13,7 +13,9 @@ Three kinds of YAML, beside the other catalogues:
 - ``agentspecs/speech-models/*.yaml`` — the models behind them and behind
   speech-to-text and voice activity: each file pinned by its SHA-256 and its
   size, so that a model is never fetched from a third party's hub at run time
-  and a changed file is refused (VO-03, VO-48);
+  and a changed file is refused (VO-03, VO-48); kept in Datalayer's storage
+  (``https://models-speech.datalayer.tech``) under its ``provider``, the
+  organisation its upstream names: ``<provider>/<model id>/<path>``;
 - ``agentspecs/speech-licences.yaml`` — the register (VO-01): every library,
   model, voice and dataset weighed, with its licence and its source, and the
   two lists a licence is checked against: ``allowed`` (anywhere, the browser
@@ -116,6 +118,15 @@ class SpeechModel(_Strict):
     version: str = "0.0.1"
     name: str
     description: str = ""
+    provider: str = Field(
+        ...,
+        pattern=r"^[a-z0-9][a-z0-9-]*$",
+        description=(
+            "Who published it, as its upstream names the organisation (`hexgrad`, `openai`), "
+            "lowercase: the folder Datalayer's storage keeps it under, "
+            "`<provider>/<model id>/<path>`"
+        ),
+    )
     task: Task
     engine: str = Field(
         ..., description="What runs it: `transformers.js`, `kokoro-onnx`, `vad-web`"
@@ -145,6 +156,11 @@ class SpeechModel(_Strict):
     def size(self) -> int:
         """What a first use downloads, in bytes."""
         return sum(item.size for item in self.files)
+
+    @property
+    def folder(self) -> str:
+        """Where its files are kept in Datalayer's storage, and in a pod's or a page's store: `<provider>/<id>`."""
+        return f"{self.provider}/{self.id}"
 
 
 class Voice(_Strict):

@@ -10,6 +10,7 @@ description: >-
   Speech to text in the browser for the languages Moonshine's MIT models do not
   speak, French first: OpenAI's Whisper base (74M parameters, 99 languages), its
   ONNX export quantized to 8 bits, run by transformers.js. A clip at a time.
+provider: openai
 task: stt
 engine: transformers.js
 dtype: q8

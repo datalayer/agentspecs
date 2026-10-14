@@ -10,6 +10,7 @@ description: >-
   Where speech starts and ends in what the microphone heard, in the browser:
   Silero VAD (about 2 MB), the build @ricky0123/vad-web 0.0.31 ships and runs
   on onnxruntime-web. Push-to-talk keeps the speech it finds and drops the rest.
+provider: snakers4
 task: vad
 engine: vad-web
 dtype: fp32

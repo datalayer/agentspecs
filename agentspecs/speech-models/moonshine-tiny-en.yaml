@@ -11,6 +11,7 @@ description: >-
   (27M parameters), its ONNX export quantized to 8 bits, run by transformers.js.
   One of the English models whose weights are MIT; the legacy non-English
   Moonshine models are under a non-commercial licence and are not listed.
+provider: usefulsensors
 task: stt
 engine: transformers.js
 dtype: q8

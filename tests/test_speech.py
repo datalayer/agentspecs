@@ -83,6 +83,23 @@ def test_every_file_is_pinned_by_its_hash_and_size():
         speech.PinnedFile(path="../elsewhere.onnx", sha256="0" * 64, size=1)
 
 
+def test_each_model_is_kept_under_its_provider_the_organisation_its_upstream_names():
+    """Datalayer's storage keeps a model's files at `<provider>/<model id>/<path>` (VO-48)."""
+    for model in speech.list_speech_models():
+        organisation = model.source.upstream.rstrip("/").split("/")[3].lower()
+        assert model.provider == organisation, model.id
+        assert model.folder == f"{model.provider}/{model.id}"
+    assert speech.get_speech_model("kokoro-82m").folder == "hexgrad/kokoro-82m"
+    unsaid = speech.get_speech_model("silero-vad").model_dump()
+    del unsaid["provider"]
+    with pytest.raises(ValidationError):
+        speech.parse_speech_model(unsaid)
+    shouted = speech.get_speech_model("silero-vad").model_dump()
+    shouted["provider"] = "Snakers4/x"
+    with pytest.raises(ValidationError):
+        speech.parse_speech_model(shouted)
+
+
 def test_the_first_languages_are_heard_and_spoken():
     """English and French first (decision 12): a voice and a speech-to-text model on the device for each."""
     for language in ("en-US", "fr-FR"):
