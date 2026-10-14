@@ -8,7 +8,7 @@
 # changes nothing.
 
 id: sales-and-accounting
-version: 0.0.1
+version: 0.0.2
 name: Sales and Accounting
 description: >-
   A sales desk in the browser that gets financial reports from an accounting

@@ -25,7 +25,7 @@ tags:
 icon: alert
 emoji: "🚨"
 
-team: disaster-assessment:0.0.1
+team: disaster-assessment:0.0.2
 cast:
   - member: event-response
     persona:

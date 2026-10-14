@@ -7,7 +7,7 @@
 # a person talks to it over A2A. Nobody else is in the scene.
 
 id: month-end-close
-version: 0.0.1
+version: 0.0.2
 name: Month-end Close
 description: >-
   One agent, its data: Month-end Close drives the close from the Odoo books,

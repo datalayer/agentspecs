@@ -519,9 +519,9 @@ def test_the_rehearsal_that_was_played_is_kept_beside_the_specs(tmp_path: pathli
 
 
 def test_a_scene_spec_is_a_pydantic_model_a_host_can_build() -> None:
-    scene = SceneSpec(id="solo", name="Solo", emoji="\U0001f3ad", team="month-end-close:0.0.1")
+    scene = SceneSpec(id="solo", name="Solo", emoji="\U0001f3ad", team="month-end-close:0.0.2")
     assert scene.team_of().id == "month-end-close" and scene.cues() == []
-    assert dump_scene(scene) == {"schema": SCENE_SCHEMA, "id": "solo", "name": "Solo", "emoji": "\U0001f3ad", "team": "month-end-close:0.0.1"}
+    assert dump_scene(scene) == {"schema": SCENE_SCHEMA, "id": "solo", "name": "Solo", "emoji": "\U0001f3ad", "team": "month-end-close:0.0.2"}
 
 
 # --- a scripted scene (PAP_DATALAYER X-02) ------------------------------------------------

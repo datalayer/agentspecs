@@ -10,7 +10,7 @@
 # and reports what the two answered.
 
 id: disaster-assessment
-version: 0.0.1
+version: 0.0.2
 name: Disaster Assessment
 description: >-
   An event desk in the browser that gets the area a disaster affected and

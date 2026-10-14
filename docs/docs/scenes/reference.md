@@ -96,7 +96,7 @@ emoji: 🛰️
 ### `team`
 
 ```yaml
-team: crop-monitoring:0.0.1
+team: crop-monitoring:0.0.2
 ```
 
 ### `cast`

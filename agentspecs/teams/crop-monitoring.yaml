@@ -8,7 +8,7 @@
 # is in the scene.
 
 id: crop-monitoring
-version: 0.0.1
+version: 0.0.2
 name: Crop Monitoring
 description: >-
   One agent, its data: Crop Monitoring follows crop vigour and growth over a
