@@ -1,8 +1,8 @@
 # Built from app.py by `loop apps build`: the file is the source; edit it there.
 # What its code decides; without the file, its agent answers:
-# loop:code tool exchange_order: exchange_order (app.py:135)
-# loop:code pap company-role: as_company (app.py:126)
-# loop:code pap operation orders.exchange: exchange_order (app.py:135)
+# loop:code tool exchange_order: exchange_order (app.py:138)
+# loop:code pap company-role: as_company (app.py:129)
+# loop:code pap operation orders.exchange: exchange_order (app.py:138)
 schema: loop.app/v1
 id: exchange-desk
 version: 0.0.2
@@ -52,11 +52,11 @@ tests:
       and exchanges nothing before the person approves.
   verified:
     live:
-    - 'Drilled on r1 on 14 October 2026 (runtime image 0.0.34): shipped at its own domain,
-      asked by a person''s own agent signed in through Datalayer with orders:read and
-      orders:write, asked to exchange order ord_7Hk2 for size L, it proposed the exchange
-      (Exchange order ord_7Hk2 for size L., awaiting the person''s approval) and went
-      on to tell them in its own words that nothing was done yet.'
+    - 'Drilled on r1 on 14 October 2026 (runtime image 0.0.34): shipped at its own
+      domain, asked by a person''s own agent signed in through Datalayer with orders:read
+      and orders:write, asked to exchange order ord_7Hk2 for size L, it proposed the
+      exchange (Exchange order ord_7Hk2 for size L., awaiting the person''s approval)
+      and went on to tell them in its own words that nothing was done yet.'
     recorded:
     - 'Its exchange_order runs in process in Datalayer''s own tests against a stand-in
       for Manzanita''s back office: one exchange per confirmed operation, a retry

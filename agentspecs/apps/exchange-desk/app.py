@@ -86,7 +86,14 @@ app = Application.from_spec(
                 },
             ],
             "verified": {
-                "live": [],
+                "live": [
+                    "Drilled on r1 on 14 October 2026 (runtime image 0.0.34): shipped at "
+                    "its own domain, asked by a person's own agent signed in through "
+                    "Datalayer with orders:read and orders:write, asked to exchange order "
+                    "ord_7Hk2 for size L, it proposed the exchange (Exchange order "
+                    "ord_7Hk2 for size L., awaiting the person's approval) and went on "
+                    "to tell them in its own words that nothing was done yet.",
+                ],
                 "recorded": [
                     "Its exchange_order runs in process in Datalayer's own tests against "
                     "a stand-in for Manzanita's back office: one exchange per confirmed "
@@ -104,7 +111,7 @@ app = Application.from_spec(
                     "it was not given its exchange_order (fixed). Drilled a fourth "
                     "time the same night, given it: proposing the exchange ended its "
                     "answer, and the personal agent was told it could not answer just "
-                    "now (fixed, not yet released).",
+                    "now (fixed, released in runtime image 0.0.34).",
                 ],
             },
         },
@@ -113,11 +120,7 @@ app = Application.from_spec(
             "include": ["conversations", "actions", "decisions", "approvals"],
         },
         "deployment": {"hosted": {"visibility": "private"}},
-        "enabled": False,
-        "unavailable_because": (
-            "Asked by a person's own agent, proposing an exchange ends its answer "
-            "until a fix is released."
-        ),
+        "enabled": True,
         "tags": ["example", "companies", "python"],
         "emoji": "🏪",
     }
