@@ -20,10 +20,10 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent / "agentspecs"
 
 def test_the_catalogue_holds_the_protocols_the_plan_targets_as_they_stand():
     catalogue = protocols.PROTOCOL_CATALOGUE
-    # UCP and ACP in applications at test merchants only (decided 2026-10-13).
-    shipped = {"mcp", "a2a", "a2ui", "ag-ui", "pap", "pact", "web-bot-auth", "ucp", "acp"}
-    planned = {"tap"}
-    assert set(catalogue) == shipped | planned
+    # UCP and ACP in applications at test merchants only (decided 2026-10-13); TAP too, a draft
+    # profile signing their purchases there (decided 2026-10-14). No protocol is planned any more.
+    shipped = {"mcp", "a2a", "a2ui", "ag-ui", "pap", "pact", "web-bot-auth", "ucp", "acp", "tap"}
+    assert set(catalogue) == shipped
     assert {p for p, spec in catalogue.items() if spec.status.value == "shipped"} == shipped
     assert {p.id: p.appspec_block.value for p in catalogue.values() if p.appspec_block} == {
         "pap": "pap",
@@ -81,7 +81,6 @@ def test_an_application_lists_what_it_speaks():
         ({"a2a": {"extensions": [{"uri": "https://ext.example/v1"}]}}, "add 'a2a' to `protocols`"),
         ({"protocols": ["smtp"]}, "no protocol named 'smtp'"),
         ({"protocols": ["mcp", "mcp"]}, "twice"),
-        ({"protocols": ["tap"]}, "planned, not shipped"),
     ],
 )
 def test_an_application_is_refused(spec, why):
@@ -89,6 +88,24 @@ def test_an_application_is_refused(spec, why):
         AppSpec.model_validate({**BASE, **spec})
 
 
-def test_a_planned_protocol_is_listed_only_while_the_application_is_not_offered():
+def test_an_application_speaks_tap_now_it_is_shipped():
+    assert AppSpec.model_validate({**BASE, "protocols": ["ucp", "tap"]}).protocols == ["ucp", "tap"]
+
+
+@pytest.fixture
+def planned_tap(monkeypatch):
+    """No protocol of the catalogue is planned (14 October 2026): the rule is held on TAP as it was."""
+    spec = protocols.PROTOCOL_CATALOGUE["tap"]
+    monkeypatch.setitem(
+        protocols.PROTOCOL_CATALOGUE, "tap", spec.model_copy(update={"status": protocols.ProtocolStatus.PLANNED})
+    )
+
+
+def test_a_planned_protocol_is_refused_to_an_application_offered(planned_tap):
+    with pytest.raises(ValidationError, match="planned, not shipped"):
+        AppSpec.model_validate({**BASE, "protocols": ["tap"]})
+
+
+def test_a_planned_protocol_is_listed_only_while_the_application_is_not_offered(planned_tap):
     off = {**BASE, "protocols": ["tap"], "enabled": False, "unavailable_because": "Card networks wait on TAP."}
     assert AppSpec.model_validate(off).protocols == ["tap"]
