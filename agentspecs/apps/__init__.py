@@ -1928,6 +1928,27 @@ class AppVoice(_Strict):
     )
 
 
+def agent_voice_problems(agent_id: str, block: Any) -> List[str]:
+    """What is wrong with the ``voice:`` of an agent spec (``agents/*.yaml``), in sentences (VOICE.md VO-41).
+
+    An agent that is not an application says its voice with the block an
+    Appspec says under ``interface.voice``: the same fields, read the same
+    way, its voice one of the catalogue's and speaking its language. Empty
+    when nothing is wrong.
+    """
+    if not isinstance(block, Mapping):
+        return [f"{agent_id}: voice is a mapping of the fields of interface.voice."]
+    try:
+        voice = AppVoice(**dict(block))
+    except ValidationError as error:
+        return [_sentences(error, f"{agent_id}: voice")]
+    if voice.enabled and voice.output is not VoiceOutput.OFF and voice.voice:
+        from ..speech import voice_problems
+
+        return [f"{agent_id}: {problem}" for problem in voice_problems(voice.voice, voice.language)]
+    return []
+
+
 #: A media type as an output names it: `type/subtype`, lowercase, no parameters.
 MEDIA_TYPE = re.compile(r"[a-z0-9][a-z0-9.+-]*/[a-z0-9][a-z0-9.+-]*")
 
@@ -4107,6 +4128,7 @@ def list_apps(kind: Optional[AppKind] = None) -> List[AppSpec]:
 
 
 __all__ = [
+    "agent_voice_problems",
     "APP_CATALOGUE",
     "APP_SCHEMA",
     "ASSISTANT_CHARACTER_ID",

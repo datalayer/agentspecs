@@ -166,6 +166,19 @@ Jupyter notebook path to show on agent creation (optional)
 ### `welcome_document` (string)
 Lexical document path to show on agent creation (optional)
 
+### `voice` (mapping, optional)
+Its voice, for an agent that is not an application: whether a person may talk to it and whether its answers are heard. The same fields an application says under `interface.voice`, read the same way, and off unless `enabled` is said.
+```yaml
+voice:
+  enabled: true            # off unless said
+  input: push_to_talk      # off | push_to_talk | hands_free
+  output: on_request       # off | on_request (a Read aloud on each answer) | always
+  voice: kokoro-af-heart   # an id of agentspecs/voices; the language's first when unsaid
+  language: en-US          # BCP 47; the person's when unsaid
+  where: auto              # auto | device | server
+```
+A voice the catalogue does not have, or one that does not speak the language, is refused when the specs are generated, and so is a field the block does not have. When its answers may be heard, the runtime tells the agent to write for the ear as well: short sentences, a sentence rather than a table, numbers and links said in words. What is said reaches the agent as text, and what is heard is the answer the conversation shows.
+
 ## Complete Example
 
 ```yaml
