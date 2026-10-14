@@ -15,7 +15,7 @@
 
 schema: loop.app/v1
 id: support-desk
-version: 0.0.4
+version: 0.0.5
 name: Support Desk
 kind: chat
 description: >-

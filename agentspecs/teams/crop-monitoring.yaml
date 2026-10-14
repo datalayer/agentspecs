@@ -30,7 +30,7 @@ orchestration_protocol: a2a
 execution_mode: supervisor
 supervisor:
   name: Crop Monitoring
-  app: crop-monitoring:0.0.1
+  app: crop-monitoring:0.0.2
   can_terminate: true
 entry: crop-monitoring
 routing_instructions: >-
@@ -58,7 +58,7 @@ validation:
 
 agents:
   - id: crop-monitoring
-    app: crop-monitoring:0.0.1
+    app: crop-monitoring:0.0.2
     role: initiator
     runs_in: runtime
     goal: >-

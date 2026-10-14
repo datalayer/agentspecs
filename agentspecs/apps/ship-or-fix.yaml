@@ -7,7 +7,7 @@
 
 schema: loop.app/v1
 id: ship-or-fix
-version: 0.0.2
+version: 0.0.3
 name: Ship or Fix
 kind: decision
 description: >-

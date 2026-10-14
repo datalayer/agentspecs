@@ -15,7 +15,7 @@
 
 schema: loop.app/v1
 id: change-detection
-version: 0.0.1
+version: 0.0.2
 name: Change detection
 kind: chat
 description: >-

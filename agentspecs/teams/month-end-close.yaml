@@ -31,7 +31,7 @@ execution_mode: supervisor
 # the scene's supervisor and its front door.
 supervisor:
   name: Month-end Close
-  app: month-end-close:0.0.1
+  app: month-end-close:0.0.2
   can_terminate: true
 entry: month-end-close
 routing_instructions: >-
@@ -59,7 +59,7 @@ validation:
 
 agents:
   - id: month-end-close
-    app: month-end-close:0.0.1
+    app: month-end-close:0.0.2
     role: initiator
     runs_in: runtime
     goal: >-

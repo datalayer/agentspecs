@@ -331,9 +331,17 @@ What it lists is what its kind, its layout and its blocks put on its page:
 | is a `decision` | `app-page` alone: its page is drawn by where it runs, without a conversation |
 | has components of its own (`interface.custom_components`) | `app-components` |
 
-What the place it runs in adds is not listed: its rules, activity and computer
-beside the page in the Studio's Preview (`app-rules`, `app-activity`,
-`app-computer`), a window around it (`window-frame`).
+`chat` stands for the conversation base the runtime mounts: the one entry
+says the whole conversation, not only its message list. What the place it runs
+in adds is not listed: its rules, activity and computer beside the page in the
+Studio's Preview (`app-rules`, `app-activity`, `app-computer`), a window around
+it (`window-frame`).
+
+The table is one function, `agentspecs.apps.ui_for` (`ui_of` reads it off a
+spec), and agent-runtimes' `uiFor` is the same: both are held to one table of
+cases. A new blank application starts with its kind's — `loop apps init` and
+the Studio's *Start blank* write them in its `ui` — and lists more as its
+layout, outputs, PAP and components grow.
 
 ## Forms
 

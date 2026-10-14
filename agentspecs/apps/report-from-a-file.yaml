@@ -3,7 +3,7 @@
 # loop:code message: run (app.py:215)
 schema: loop.app/v1
 id: report-from-a-file
-version: 0.0.4
+version: 0.0.5
 name: Report from a File
 kind: widget
 description: 'Takes a CSV file, analyses it in the sandbox, and gives back a report:

@@ -7,7 +7,7 @@
 
 schema: loop.app/v1
 id: web-research
-version: 0.0.1
+version: 0.0.2
 name: Web Research
 kind: chat
 description: >-

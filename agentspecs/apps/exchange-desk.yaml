@@ -5,7 +5,7 @@
 # loop:code pap operation orders.exchange: exchange_order (app.py:140)
 schema: loop.app/v1
 id: exchange-desk
-version: 0.0.2
+version: 0.0.3
 name: Exchange Desk
 kind: chat
 description: Answers people's own agents about their orders and exchanges them, each

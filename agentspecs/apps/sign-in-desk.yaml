@@ -9,7 +9,7 @@
 
 schema: loop.app/v1
 id: sign-in-desk
-version: 0.0.1
+version: 0.0.2
 name: Sign-in Desk
 kind: chat
 description: >-

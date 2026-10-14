@@ -37,7 +37,7 @@ execution_mode: supervisor
 # is told: it is the scene's supervisor and its front door.
 supervisor:
   name: Event response
-  app: event-response:0.0.2
+  app: event-response:0.0.3
   can_terminate: true
 entry: event-response
 routing_instructions: >-
@@ -67,7 +67,7 @@ validation:
 
 agents:
   - id: event-response
-    app: event-response:0.0.2
+    app: event-response:0.0.3
     role: initiator
     runs_in: browser
     goal: >-
@@ -79,14 +79,14 @@ agents:
       - member: change-detection
         over: a2a
   - id: disaster-assessment
-    app: disaster-assessment:0.0.1
+    app: disaster-assessment:0.0.2
     role: contributor
     runs_in: runtime
     goal: >-
       Estimate the area the event affected and the extent of the damage from
       the imagery before and after it, over A2A.
   - id: change-detection
-    app: change-detection:0.0.1
+    app: change-detection:0.0.2
     role: contributor
     runs_in: runtime
     goal: >-

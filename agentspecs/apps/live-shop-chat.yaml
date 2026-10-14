@@ -9,7 +9,7 @@
 
 schema: loop.app/v1
 id: live-shop-chat
-version: 0.0.1
+version: 0.0.2
 name: Live Shop Chat
 kind: chat
 description: >-

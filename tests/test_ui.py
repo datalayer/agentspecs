@@ -163,36 +163,15 @@ def test_every_application_of_the_catalogue_names_ui_plugins_its_renderers_allow
                 assert choice["renderer"] in plugin.renderers, path.name
 
 
-def _drawn_with(app) -> list:
-    """The UI plugins agent-runtimes' `appPreset` mounts for an application, by what its spec says.
-
-    A decision: its page alone, drawn by its host. Every other kind: the conversation (`chat`, which brings
-    the plugins every conversation has); the A2UI surfaces when it answers with them; the sign-in card when
-    it signs people in at companies; its page, its layout and the Canvas's blocks when its layout is not
-    `chat`; its own components when it has some. What a host adds (the Preview's sidebar, a frame) is not
-    the application's.
-    """
-    from agentspecs.apps import AppKind, Layout
-
-    if app.kind is AppKind.DECISION:
-        return [{"plugin": "app-page"}]
-    drawn = [{"plugin": "chat"}]
-    if "application/json+a2ui" in app.interface.outputs:
-        drawn.append({"plugin": "a2ui-surface", "renderer": "a2ui"})
-    if app.pap.connections:
-        drawn.append({"plugin": "pap-sign-in"})
-    if app.layout is not Layout.CHAT:
-        drawn += [{"plugin": "page-layout"}, {"plugin": "app-page"}, {"plugin": "canvas-blocks"}]
-    if app.interface.custom_components:
-        drawn.append({"plugin": "app-components"})
-    return drawn
-
-
 def test_an_application_of_the_catalogue_lists_the_ui_plugins_it_is_drawn_with():
-    """What each catalogue application lists in `ui` is what its kind, layout, outputs, PAP and components mount."""
-    from agentspecs.apps import load_apps
+    """What each catalogue application lists in `ui` is what its kind, layout, outputs, PAP and components mount.
+
+    The mapping is `ui_of` (`ui_for` on the spec's facts): agent-runtimes' `uiFor` is held to the same
+    cases (`agent_runtimes/tests/fixtures/app_ui.json`), and seeds a new blank application with it.
+    """
+    from agentspecs.apps import load_apps, ui_of
 
     apps = load_apps()
     assert apps
     for identity, app in apps.items():
-        assert [c.model_dump(exclude_none=True) for c in app.ui] == _drawn_with(app), identity
+        assert [c.model_dump(exclude_none=True) for c in app.ui] == ui_of(app), identity

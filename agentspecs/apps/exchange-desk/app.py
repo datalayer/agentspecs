@@ -39,7 +39,7 @@ app = Application.from_spec(
     {
         "schema": "loop.app/v1",
         "id": "exchange-desk",
-        "version": "0.0.2",
+        "version": "0.0.3",
         "name": "Exchange Desk",
         "kind": "chat",
         "description": (

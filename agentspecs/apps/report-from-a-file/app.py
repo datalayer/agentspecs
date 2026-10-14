@@ -103,7 +103,7 @@ app = Application.from_spec(
     {
         "schema": "loop.app/v1",
         "id": "report-from-a-file",
-        "version": "0.0.4",
+        "version": "0.0.5",
         "name": "Report from a File",
         "kind": "widget",
         "description": (

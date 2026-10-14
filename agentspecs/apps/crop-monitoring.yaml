@@ -15,7 +15,7 @@
 
 schema: loop.app/v1
 id: crop-monitoring
-version: 0.0.1
+version: 0.0.2
 name: Crop Monitoring
 kind: chat
 description: >-

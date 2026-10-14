@@ -176,6 +176,44 @@ DEFAULT_LAYOUTS = {
     AppKind.WORKER: Layout.SPLIT,
 }
 
+#: The media type of an answer drawn as A2UI surfaces.
+A2UI_OUTPUT = "application/json+a2ui"
+
+
+def ui_for(
+    kind: Union[AppKind, str],
+    layout: Union[Layout, str, None] = None,
+    outputs: Sequence[str] = (),
+    signs_in: bool = False,
+    own_components: bool = False,
+) -> List[Dict[str, str]]:
+    """The UI plugins an application is drawn with (AGENTIC_UI R8), as its `ui` lists them.
+
+    What agent-runtimes' `appPreset` mounts for it. A decision: its page alone, drawn by its
+    host. Every other kind: the conversation — `chat`, which stands for the conversation base
+    the runtime mounts — then the A2UI surfaces when it answers in
+    ``application/json+a2ui``, the sign-in card when it signs people in at companies (`pap`),
+    its page, its layout and the Canvas's blocks when its layout is not `chat`, and its own
+    components when it has some. What a host adds (the Preview's sidebar, a frame) is not the
+    application's. The layout is the kind's own when unsaid.
+
+    agent-runtimes' ``uiFor`` (``src/apps/apps/appspec.ts``) is the same function: both are
+    held to ``agent_runtimes/tests/fixtures/app_ui.json``.
+    """
+    kind = AppKind(kind)
+    if kind is AppKind.DECISION:
+        return [{"plugin": "app-page"}]
+    drawn = [{"plugin": "chat"}]
+    if A2UI_OUTPUT in outputs:
+        drawn.append({"plugin": "a2ui-surface", "renderer": "a2ui"})
+    if signs_in:
+        drawn.append({"plugin": "pap-sign-in"})
+    if Layout(layout or DEFAULT_LAYOUTS[kind]) is not Layout.CHAT:
+        drawn += [{"plugin": "page-layout"}, {"plugin": "app-page"}, {"plugin": "canvas-blocks"}]
+    if own_components:
+        drawn.append({"plugin": "app-components"})
+    return drawn
+
 
 class Accent(str, Enum):
     """The one colour of an application; everything else is neutral."""
@@ -4029,6 +4067,17 @@ def press_problems(app: AppSpec) -> List[str]:
     return problems
 
 
+def ui_of(app: AppSpec) -> List[Dict[str, str]]:
+    """The UI plugins an application is drawn with, by what its spec says (:func:`ui_for`)."""
+    return ui_for(
+        app.kind,
+        app.layout,
+        app.interface.outputs,
+        signs_in=bool(app.pap.connections),
+        own_components=bool(app.interface.custom_components),
+    )
+
+
 def load_apps(directory: Optional[Path] = None) -> Dict[str, AppSpec]:
     """Every application of a directory, validated, its references resolved."""
     apps: Dict[str, AppSpec] = {}
@@ -4128,6 +4177,7 @@ def list_apps(kind: Optional[AppKind] = None) -> List[AppSpec]:
 
 
 __all__ = [
+    "A2UI_OUTPUT",
     "agent_voice_problems",
     "APP_CATALOGUE",
     "APP_SCHEMA",
@@ -4135,6 +4185,8 @@ __all__ = [
     "DEFAULT_BEHAVIOURS",
     "DEFAULT_LAYOUTS",
     "DEFAULT_READY_AT",
+    "ui_for",
+    "ui_of",
     "KNOWN_SCHEMAS",
     "KeptRecord",
     "MAX_UPLOAD_MB",
