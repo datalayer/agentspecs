@@ -73,5 +73,27 @@ settings:
       - top
       - bottom
       default: top
+    pageSize:
+      type: object
+      title: Sheet
+      description: 'The sheet: free at its reading width when unsaid, or a paper (letter, a4) whose width
+        it takes, with a width or a height of its own over either.'
+      properties:
+        format:
+          type: string
+          title: Paper
+          description: The paper the sheet is.
+          enum:
+          - free
+          - letter
+          - a4
+        width:
+          type: number
+          title: Width
+          description: The sheet's width in pixels; over a paper, it replaces the paper's.
+        height:
+          type: number
+          title: Height
+          description: The sheet's least height in pixels; what is past it grows the sheet.
 # The UI renderers (agentspecs/ui-renderers) it may be exposed through.
 renderers: []
