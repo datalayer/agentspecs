@@ -302,7 +302,8 @@
       "description": "What the audience reads on a line: rows and sentences, never a credential.",
       "properties": {
         "kind": {
-          "$ref": "#/$defs/SceneCardKind"
+          "$ref": "#/$defs/SceneCardKind",
+          "description": "What the card is: a find, a sign-in, an approval, a done, a record"
         },
         "lines": {
           "description": "Its sentences",
@@ -324,6 +325,7 @@
           "type": "array"
         },
         "title": {
+          "description": "Its title, on top",
           "title": "Title",
           "type": "string"
         }

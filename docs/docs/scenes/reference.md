@@ -513,8 +513,8 @@ What the audience reads on a line: rows and sentences, never a credential.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
-| `kind` (required) | [SceneCardKind](#scenecardkind) |  | — |
-| `title` (required) | text |  | — |
+| `kind` (required) | [SceneCardKind](#scenecardkind) | What the card is: a find, a sign-in, an approval, a done, a record | — |
+| `title` (required) | text | Its title, on top | — |
 | `rows` | list of list of text | Its rows: each a label and a value | — |
 | `lines` | list of text | Its sentences | — |
 
