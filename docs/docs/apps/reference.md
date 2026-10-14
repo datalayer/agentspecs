@@ -152,6 +152,15 @@ rules:
   behaviour: ask_first
 ```
 
+### `ui`
+
+```yaml
+ui:
+- plugin: chat
+- plugin: a2ui-surface
+  renderer: a2ui
+```
+
 ### `interface`
 
 ```yaml
@@ -523,14 +532,6 @@ signed_fetch:
 
 ```yaml
 team: analyze-support-tickets:0.0.1
-```
-
-### `ui`
-
-```yaml
-ui:
-- plugin: a2ui-surface
-  renderer: a2ui
 ```
 
 ### `a2a`

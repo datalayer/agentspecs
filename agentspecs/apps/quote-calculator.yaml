@@ -47,6 +47,14 @@ samples:
         Enterprise,Monthly,55,each month,25
         Enterprise,Annual,528,each year,25
 
+# Its interface: the Reactor plugins of agentspecs/ui it is drawn with, each
+# with the renderer it is exposed through outside Datalayer's page, when it is.
+ui:
+  - plugin: chat
+  - plugin: page-layout
+  - plugin: app-page
+  - plugin: canvas-blocks
+
 interface:
   layout: page
   accent: sun

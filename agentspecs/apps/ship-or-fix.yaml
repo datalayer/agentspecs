@@ -112,6 +112,11 @@ samples:
         Cost per task: 0.7
         Latency: 4.1
 
+# Its interface: the Reactor plugins of agentspecs/ui it is drawn with, each
+# with the renderer it is exposed through outside Datalayer's page, when it is.
+ui:
+  - plugin: app-page
+
 interface:
   layout: page
   accent: green

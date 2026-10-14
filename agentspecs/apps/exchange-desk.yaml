@@ -1,8 +1,8 @@
 # Built from app.py by `loop apps build`: the file is the source; edit it there.
 # What its code decides; without the file, its agent answers:
-# loop:code tool exchange_order: exchange_order (app.py:138)
-# loop:code pap company-role: as_company (app.py:129)
-# loop:code pap operation orders.exchange: exchange_order (app.py:138)
+# loop:code tool exchange_order: exchange_order (app.py:140)
+# loop:code pap company-role: as_company (app.py:131)
+# loop:code pap operation orders.exchange: exchange_order (app.py:140)
 schema: loop.app/v1
 id: exchange-desk
 version: 0.0.2
@@ -37,6 +37,8 @@ pap:
     - action: orders.exchange
       tool: exchange_order
       summary: Exchange order {order_id} for size {size}.
+ui:
+- plugin: chat
 interface:
   layout: chat
   accent: violet

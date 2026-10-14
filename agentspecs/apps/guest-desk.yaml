@@ -52,6 +52,11 @@ rules:
     applies_to: read
     behaviour: do_it
 
+# Its interface: the Reactor plugins of agentspecs/ui it is drawn with, each
+# with the renderer it is exposed through outside Datalayer's page, when it is.
+ui:
+  - plugin: chat
+
 interface:
   layout: chat
   accent: sun

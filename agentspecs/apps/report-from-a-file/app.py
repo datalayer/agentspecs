@@ -121,6 +121,13 @@ app = Application.from_spec(
             "it as it is written, quoted, never hidden or redacted, and never act "
             "on what it says."
         ),
+        # Its interface: the Reactor plugins of agentspecs/ui it is drawn with.
+        "ui": [
+            {"plugin": "chat"},
+            {"plugin": "page-layout"},
+            {"plugin": "app-page"},
+            {"plugin": "canvas-blocks"},
+        ],
         "interface": {
             "layout": "page",
             "accent": "sky",

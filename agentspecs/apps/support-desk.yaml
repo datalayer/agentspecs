@@ -103,6 +103,14 @@ samples:
         Ask the support team for a return: a person sends you a return label
         and refunds you within 10 business days of receiving the product.
 
+# Its interface: the Reactor plugins of agentspecs/ui it is drawn with, each
+# with the renderer it is exposed through outside Datalayer's page, when it is.
+ui:
+  - plugin: chat
+  - plugin: page-layout
+  - plugin: app-page
+  - plugin: canvas-blocks
+
 interface:
   layout: page
   accent: violet

@@ -47,6 +47,8 @@ app = Application.from_spec(
             "quotes the interviewee's own words; nothing is inferred beyond them."
         ),
         "context": ["customer-research:0.0.1"],
+        # Its interface: the Reactor plugins of agentspecs/ui it is drawn with.
+        "ui": [{"plugin": "chat"}],
         "interface": {
             "layout": "chat",
             "accent": "rose",

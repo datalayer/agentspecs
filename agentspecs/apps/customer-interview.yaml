@@ -1,9 +1,9 @@
 # Built from app.py by `loop apps build`: the file is the source; edit it there.
 # What its code decides; without the file, its agent answers:
-# loop:code start: opening (app.py:159)
-# loop:code message: reply (app.py:172)
-# loop:code action save: save (app.py:188)
-# loop:code action finish: finish (app.py:198)
+# loop:code start: opening (app.py:161)
+# loop:code message: reply (app.py:174)
+# loop:code action save: save (app.py:190)
+# loop:code action finish: finish (app.py:200)
 schema: loop.app/v1
 id: customer-interview
 version: 0.0.2
@@ -17,6 +17,8 @@ instructions: Ask one open question at a time, and never a leading one. Each ins
   quotes the interviewee's own words; nothing is inferred beyond them.
 context:
 - customer-research:0.0.1
+ui:
+- plugin: chat
 interface:
   layout: chat
   accent: rose

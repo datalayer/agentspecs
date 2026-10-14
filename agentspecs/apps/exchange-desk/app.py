@@ -62,6 +62,8 @@ app = Application.from_spec(
         # The protocols it speaks: its `pap` block is refused unless listed here.
         "protocols": ["pap"],
         "pap": {"profile": "draft-01"},
+        # Its interface: the Reactor plugins of agentspecs/ui it is drawn with.
+        "ui": [{"plugin": "chat"}],
         "interface": {
             "layout": "chat",
             "accent": "violet",

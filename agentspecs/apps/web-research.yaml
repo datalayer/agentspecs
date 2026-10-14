@@ -25,6 +25,11 @@ connections:
     access: read
     as: owner
 
+# Its interface: the Reactor plugins of agentspecs/ui it is drawn with, each
+# with the renderer it is exposed through outside Datalayer's page, when it is.
+ui:
+  - plugin: chat
+
 interface:
   layout: chat
   accent: sky

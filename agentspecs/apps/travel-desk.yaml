@@ -46,6 +46,11 @@ rules:
     applies_to: write
     behaviour: ask_first
 
+# Its interface: the Reactor plugins of agentspecs/ui it is drawn with, each
+# with the renderer it is exposed through outside Datalayer's page, when it is.
+ui:
+  - plugin: chat
+
 interface:
   layout: chat
   accent: sky

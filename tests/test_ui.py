@@ -145,3 +145,54 @@ def test_an_application_names_its_ui_plugins_and_a_renderer_for_each():
             AppSpec.model_validate({**base, "ui": choices})
     off = {**base, "ui": [{"plugin": "app-page", "renderer": "mcp-apps"}], "enabled": False, "unavailable_because": "Later."}
     assert AppSpec.model_validate(off).ui[0].renderer == "mcp-apps"
+
+
+def test_every_application_of_the_catalogue_names_ui_plugins_its_renderers_allow():
+    """Each catalogue application lists its UI plugins (R8): each a plugin of `ui`, each renderer one it allows.
+
+    The loader refuses any other (`AppSpec`'s check runs `ui_choices_problems`); this reads the files as written.
+    """
+    for path in sorted((ROOT / "apps").glob("*.yaml")):
+        spec = yaml.safe_load(path.read_text()) or {}
+        assert spec.get("ui"), f"{path.name} lists no UI plugin"
+        assert ui.ui_choices_problems(spec["ui"], to_ship=spec.get("enabled", True)) == [], path.name
+        for choice in spec["ui"]:
+            plugin = ui.get_ui(choice["plugin"])
+            assert plugin is not None, path.name
+            if "renderer" in choice:
+                assert choice["renderer"] in plugin.renderers, path.name
+
+
+def _drawn_with(app) -> list:
+    """The UI plugins agent-runtimes' `appPreset` mounts for an application, by what its spec says.
+
+    A decision: its page alone, drawn by its host. Every other kind: the conversation (`chat`, which brings
+    the plugins every conversation has); the A2UI surfaces when it answers with them; the sign-in card when
+    it signs people in at companies; its page, its layout and the Canvas's blocks when its layout is not
+    `chat`; its own components when it has some. What a host adds (the Preview's sidebar, a frame) is not
+    the application's.
+    """
+    from agentspecs.apps import AppKind, Layout
+
+    if app.kind is AppKind.DECISION:
+        return [{"plugin": "app-page"}]
+    drawn = [{"plugin": "chat"}]
+    if "application/json+a2ui" in app.interface.outputs:
+        drawn.append({"plugin": "a2ui-surface", "renderer": "a2ui"})
+    if app.pap.connections:
+        drawn.append({"plugin": "pap-sign-in"})
+    if app.layout is not Layout.CHAT:
+        drawn += [{"plugin": "page-layout"}, {"plugin": "app-page"}, {"plugin": "canvas-blocks"}]
+    if app.interface.custom_components:
+        drawn.append({"plugin": "app-components"})
+    return drawn
+
+
+def test_an_application_of_the_catalogue_lists_the_ui_plugins_it_is_drawn_with():
+    """What each catalogue application lists in `ui` is what its kind, layout, outputs, PAP and components mount."""
+    from agentspecs.apps import load_apps
+
+    apps = load_apps()
+    assert apps
+    for identity, app in apps.items():
+        assert [c.model_dump(exclude_none=True) for c in app.ui] == _drawn_with(app), identity
