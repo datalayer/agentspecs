@@ -52,11 +52,11 @@ tests:
       and exchanges nothing before the person approves.
   verified:
     live:
-    - 'Drilled on r1 on 14 October 2026, once its last fix was out: shipped at its own
-      domain, asked by a person''s own agent signed in through Datalayer with orders:read
-      and orders:write, asked to exchange order ord_7Hk2 for size L, it proposed the
-      exchange (Exchange order ord_7Hk2 for size L., awaiting the person''s approval)
-      and went on to tell them in its own words that nothing was done yet.'
+    - 'Drilled on r1 on 14 October 2026, once its last fix was out: shipped at its
+      own domain, asked by a person''s own agent signed in through Datalayer with
+      orders:read and orders:write, asked to exchange order ord_7Hk2 for size L, it
+      proposed the exchange (Exchange order ord_7Hk2 for size L., awaiting the person''s
+      approval) and went on to tell them in its own words that nothing was done yet.'
     recorded:
     - 'Its exchange_order runs in process in Datalayer''s own tests against a stand-in
       for Manzanita''s back office: one exchange per confirmed operation, a retry
