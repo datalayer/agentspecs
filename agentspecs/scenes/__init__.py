@@ -578,8 +578,8 @@ class SceneCardKind(str, Enum):
 class SceneCard(_Strict):
     """What the audience reads on a line: rows and sentences, never a credential."""
 
-    kind: SceneCardKind
-    title: str
+    kind: SceneCardKind = Field(..., description="What the card is: a find, a sign-in, an approval, a done, a record")
+    title: str = Field(..., description="Its title, on top")
     rows: List[List[str]] = Field(default_factory=list, description="Its rows: each a label and a value")
     lines: List[str] = Field(default_factory=list, description="Its sentences")
 
