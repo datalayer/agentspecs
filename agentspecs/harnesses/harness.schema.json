@@ -186,7 +186,8 @@
         "api_key_only",
         "permitted",
         "refused",
-        "organizations_own"
+        "organizations_own",
+        "unknown"
       ],
       "title": "ThirdPartyServing",
       "type": "string"

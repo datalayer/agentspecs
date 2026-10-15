@@ -684,7 +684,7 @@ One member asking another, directly, over a protocol. Distinct from `depends_on`
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
 | `member` (required) | text | The member asked, by its id in this team | — |
-| `over` | [TeamProtocol](#teamprotocol) | The protocol it is asked over: `a2a` to an agent or an application, `mcp` to a server | `"a2a"` |
+| `over` | [TeamProtocol](#teamprotocol) | The protocol it is asked over: `a2a` to an agent, an application or a harness, `acp` to a harness, `mcp` to a server | `"a2a"` |
 
 ## Choices
 
@@ -697,7 +697,7 @@ One member asking another, directly, over a protocol. Distinct from `depends_on`
 | <a id="scenecardkind"></a>SceneCardKind | `found`, `sign-in`, `approval`, `done`, `record` |
 | <a id="scenekind"></a>SceneKind | `team`, `scripted` |
 | <a id="teamplace"></a>TeamPlace | `browser`, `runtime` |
-| <a id="teamprotocol"></a>TeamProtocol | `a2a`, `mcp` |
+| <a id="teamprotocol"></a>TeamProtocol | `a2a`, `mcp`, `acp` |
 | <a id="teamrole"></a>TeamRole | `coordinator`, `initiator`, `contributor`, `reviewer`, `finalizer` |
 | <a id="watchers"></a>Watchers | `visitors`, `signed-in`, `nobody` |
 | <a id="withheld"></a>Withheld | `credentials`, `ids`, `addresses`, `amounts` |

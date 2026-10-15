@@ -925,7 +925,7 @@
         "over": {
           "$ref": "#/$defs/TeamProtocol",
           "default": "a2a",
-          "description": "The protocol it is asked over: `a2a` to an agent or an application, `mcp` to a server"
+          "description": "The protocol it is asked over: `a2a` to an agent, an application or a harness, `acp` to a harness, `mcp` to a server"
         }
       },
       "required": [
@@ -947,7 +947,8 @@
       "description": "How one member talks to another.",
       "enum": [
         "a2a",
-        "mcp"
+        "mcp",
+        "acp"
       ],
       "title": "TeamProtocol",
       "type": "string"

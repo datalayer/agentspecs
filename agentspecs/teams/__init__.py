@@ -132,6 +132,11 @@ class TeamProtocol(str, Enum):
     """The Model Context Protocol: the member talked to is an MCP server
     (`server`), asked tool by tool; its tools say what it does."""
 
+    ACP = "acp"
+    """The Agent Client Protocol: the member talked to is a harness
+    (`harness`), driven through the Shield in front of it — its plan, its
+    diffs and its permission requests come back (SHIELD §4.7, SH-45)."""
+
 
 class TeamSharing(str, Enum):
     """How much of the conversation each member is told."""
@@ -198,7 +203,8 @@ class TeamLink(BaseModel):
     over: TeamProtocol = Field(
         default=TeamProtocol.A2A,
         description=(
-            "The protocol it is asked over: `a2a` to an agent or an application, `mcp` to a server"
+            "The protocol it is asked over: `a2a` to an agent, an application or a harness, "
+            "`acp` to a harness, `mcp` to a server"
         ),
     )
 
@@ -287,6 +293,16 @@ class TeamMember(BaseModel):
             "answers tool by tool and asks nobody."
         ),
     )
+    harness: str = Field(
+        default="",
+        description=(
+            "Harness catalogue id (`agentspecs/harnesses/`), in place of `ref`, `app` "
+            "and `server`: the member is that agent program over ACP — Claude Code, "
+            "Codex, an organization's own — behind the Shield, asked over `a2a` or "
+            "`acp` with a budget, a deadline and a manifest, and answering with its "
+            "plan and its diffs (SHIELD SH-45)."
+        ),
+    )
     runs_in: Optional[TeamPlace] = Field(
         default=None,
         description="Where its loop turns: `browser` or `runtime`. Unsaid, wherever the team runs.",
@@ -350,12 +366,25 @@ class TeamMember(BaseModel):
 
     @model_validator(mode="after")
     def _needs_a_definition(self) -> "TeamMember":
-        if sum(1 for given in (self.ref, self.app, self.server) if given) > 1:
+        if sum(1 for given in (self.ref, self.app, self.server, self.harness) if given) > 1:
             raise ValueError(
-                f"member {self.id!r} is an agent (`ref`), an application (`app`) "
-                f"or a server (`server`), not two of them"
+                f"member {self.id!r} is an agent (`ref`), an application (`app`), "
+                f"a server (`server`) or a harness (`harness`), not two of them"
             )
-        if not self.ref and not self.app and not self.server and not self.name and not self.goal:
+        if self.harness:
+            from agentspecs.harnesses import harness_problems  # noqa: PLC0415
+
+            problems = harness_problems(
+                self.harness, model=self.model or None, subagents=self.subagents or None
+            )
+            if problems:
+                raise ValueError(f"member {self.id!r}: {' '.join(problems)}")
+            if self.tools or self.mcp_server:
+                raise ValueError(
+                    f"member {self.id!r} is a harness: its tools are its own and the "
+                    "Shield lends it the team's MCP, never `tools` or `mcpServer`"
+                )
+        if not self.ref and not self.app and not self.server and not self.harness and not self.name and not self.goal:
             raise ValueError(
                 f"member {self.id!r} needs a `ref` into the agent catalogue, an "
                 f"`app` from the application catalogue, a `server` from the MCP "
@@ -377,9 +406,14 @@ class TeamMember(BaseModel):
         return bool(self.server)
 
     @property
+    def is_harness(self) -> bool:
+        """Whether the member is a harness, an agent program over ACP behind the Shield."""
+        return bool(self.harness)
+
+    @property
     def display_name(self) -> str:
         """What to show a person: the name, what it references, or the id."""
-        return self.name or (self.ref or self.app or self.server).split(":")[0] or self.id
+        return self.name or (self.ref or self.app or self.server or self.harness).split(":")[0] or self.id
 
 
 class TeamSupervisor(BaseModel):
@@ -606,6 +640,7 @@ class TeamSpec(BaseModel):
         """
         ids = {member.id for member in self.agents}
         servers = {member.id for member in self.agents if member.is_server}
+        harnesses = {member.id for member in self.agents if member.is_harness}
         if self.entry and self.entry not in ids:
             raise ValueError(f"team {self.id!r} enters at {self.entry!r}, which is not a member")
         if self.entry in servers:
@@ -615,7 +650,7 @@ class TeamSpec(BaseModel):
             )
         for member in self.agents:
             for link in member.talks_to:
-                self._link_fits(member, link, ids, servers)
+                self._link_fits(member, link, ids, servers, harnesses)
             for needed in member.depends_on:
                 if needed not in ids:
                     raise ValueError(
@@ -628,7 +663,7 @@ class TeamSpec(BaseModel):
         self.execution_order()
         return self
 
-    def _link_fits(self, member: TeamMember, link: TeamLink, ids: set, servers: set) -> None:
+    def _link_fits(self, member: TeamMember, link: TeamLink, ids: set, servers: set, harnesses: set) -> None:
         """A link names another member of the team, over the protocol that fits it."""
         if link.member not in ids:
             raise ValueError(
@@ -646,6 +681,11 @@ class TeamSpec(BaseModel):
             raise ValueError(
                 f"member {member.id!r} talks to {link.member!r} over {link.over.value}, "
                 f"which is a server: a server is asked over mcp"
+            )
+        if link.over is TeamProtocol.ACP and link.member not in harnesses:
+            raise ValueError(
+                f"member {member.id!r} talks to {link.member!r} over acp, which is not a "
+                "harness: an agent or an application is asked over a2a"
             )
 
     def execution_order(self) -> List[List[str]]:
@@ -710,6 +750,10 @@ class TeamSpec(BaseModel):
         if self.supervisor and self.supervisor.app:
             refs.append(self.supervisor.app)
         return list(dict.fromkeys(refs))
+
+    def referenced_harnesses(self) -> List[str]:
+        """Every harness this team names as a member: agent programs over ACP behind the Shield."""
+        return list(dict.fromkeys(member.harness for member in self.agents if member.harness))
 
     def referenced_servers(self) -> List[str]:
         """Every MCP server this team names as a member: the systems of the scene."""

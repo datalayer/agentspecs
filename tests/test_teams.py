@@ -504,3 +504,41 @@ class TestScenes:
             assert behaviours["earthdata.download_earth_data_granules"] is Behaviour.LEAVE_TO_ME, (
                 identity
             )
+
+
+# --- harnesses as members (SHIELD SH-45) -----------------------------------------------
+
+
+def test_a_team_names_harness_members_asked_over_acp_or_a2a():
+    team = get_team("coding-agents")
+    assert team.referenced_harnesses() == ["claude-code", "codex"]
+    assert all(member.is_harness for member in team.agents)
+    base = {
+        "id": "t", "version": "0.0.1", "name": "T", "description": "d",
+        "supervisor": {"name": "Lead", "model": "m", "instructions": "lead"},
+    }
+    linked = TeamSpec.model_validate(
+        {
+            **base,
+            "agents": [
+                {"id": "lead", "name": "Lead", "goal": "lead", "talks_to": [{"member": "coder", "over": "acp"}]},
+                {"id": "coder", "harness": "claude-code"},
+            ],
+        }
+    )
+    assert linked.links()[0][2].value == "acp"
+    with pytest.raises(ValueError, match="over acp, which is not a harness"):
+        TeamSpec.model_validate(
+            {**base, "agents": [{"id": "a", "name": "A", "goal": "g", "talks_to": [{"member": "b", "over": "acp"}]},
+                                {"id": "b", "name": "B", "goal": "g"}]}
+        )
+    with pytest.raises(ValueError, match="not two of them"):
+        TeamSpec.model_validate({**base, "agents": [{"id": "c", "harness": "codex", "ref": "x"}]})
+    with pytest.raises(ValueError, match="its tools are its own"):
+        TeamSpec.model_validate({**base, "agents": [{"id": "c", "harness": "codex", "tools": ["shell"]}]})
+    with pytest.raises(ValueError, match="no harness named 'nope'"):
+        TeamSpec.model_validate({**base, "agents": [{"id": "c", "harness": "nope"}]})
+    with pytest.raises(ValueError, match="has its own subagents"):
+        TeamSpec.model_validate(
+            {**base, "agents": [{"id": "c", "harness": "claude-code", "subagents": [{"name": "s", "ref": "x"}]}]}
+        )

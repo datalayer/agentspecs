@@ -20,6 +20,52 @@ does not load. None is served by a runtime yet (SHIELD SH-10).
 | [OpenCode](https://opencode.ai/docs/acp/) | `opencode` | `npx -y opencode-ai@1.19.0 acp` | lend | `.opencode/skills` | `AGENTS.md` | permitted | MIT | opencode-ai 1.19.0 |
 | [OpenHands](https://docs.openhands.dev/openhands/usage/run-openhands/acp) | `openhands` | `uvx --from openhands==1.16.0 openhands acp --override-with-envs` | lend | `.agents/skills` | `AGENTS.md` | permitted | MIT | openhands 1.16.0 |
 
+## Listed, not drilled yet
+
+Agents known to speak ACP, registered with their launch command as their projects
+document it, their licence, their terms and the credential they take (SH-57). None is
+offered: naming one is refused, *listed, not drilled yet*, until it is drilled and moved
+to the catalogue with a spec.
+
+| Agent | Id | Documented command | Licence | Third parties | Credential |
+| --- | --- | --- | --- | --- | --- |
+| [AgentPool](https://phil65.github.io/agentpool/advanced/acp-integration/) | `agentpool` | `agentpool serve-acp agents.yml` | MIT | permitted | The configured provider's key (e.g. OPENAI_API_KEY in the agents YAML or the environment) |
+| [Auggie CLI (Augment Code)](https://docs.augmentcode.com/cli/acp) | `augment-code` | `auggie --acp` | Proprietary (Augment CLI licence) | refused | An Augment Code account with an active subscription (auggie login) |
+| [AutoDev (Xiuper)](https://github.com/phodal/auto-dev) | `autodev` | `xiuper acp` | MPL-2.0 | permitted | The configured LLM provider's key (AutoDev's configuration) |
+| [BLACKBOX AI CLI](https://docs.blackbox.ai/features/blackbox-cli/acp-integration) | `blackbox-ai` | `blackbox --experimental-acp` | Proprietary (Blackbox terms of service) | refused | A Blackbox AI API key (BLACKBOX_API_KEY) |
+| [Bub](https://github.com/bubbuild/bub-contrib/tree/main/packages/bub-acp-server) | `bub` | `bub acp` | Apache-2.0 | permitted | A provider key (BUB_API_KEY); its OpenAI Codex login is a subscription credential, refused for third parties |
+| [Claw Orchestrator](https://github.com/Enderfga/claw-orchestrator/blob/main/skills/references/acp.md) | `claw-orchestrator` | `clawo acp` | MIT | permitted | The logins or keys of the engines it drives (Claude Code, Codex, OpenCode, …) |
+| [Cline](https://docs.cline.bot/usage/acp) | `cline` | `cline --acp` | Apache-2.0 | permitted | The person's own provider API key (a Cline account's keys may not be transferred or resold) |
+| [Code Assistant](https://github.com/stippi/code-assistant?tab=readme-ov-file#configuration) | `code-assistant` | `code-assistant acp` | MIT | permitted | The configured provider's key (e.g. ANTHROPIC_API_KEY) |
+| [construct](https://github.com/construct-worlds/construct#acp-agent-client-protocol-server) | `construct` | `construct acp` | MIT | permitted | Provider API keys, or the logins of the harnesses it drives (whose vendors' terms apply) |
+| [crow-cli](https://github.com/crow-cli/crow-cli) | `crow-cli` | `crow-cli acp` | MIT | permitted | An API key for an OpenAI-compatible provider |
+| [CUGA](https://github.com/cuga-project/cuga-agent/tree/main/docs/examples/acp_stdio) | `cuga` | `cuga-acp` | Apache-2.0 | permitted | The configured provider's key (e.g. OPENAI_API_KEY) |
+| [Cursor CLI](https://cursor.com/docs/cli/acp) | `cursor` | `agent acp` | Proprietary (Cursor terms of service) | unknown | A Cursor login or a Cursor API key (CURSOR_API_KEY) |
+| [Docker Agent (formerly cagent)](https://docker.github.io/docker-agent/features/acp/) | `docker-agent` | `docker agent serve acp ./agent.yaml` | Apache-2.0 | permitted | The configured provider's key (OPENAI_API_KEY, ANTHROPIC_API_KEY, …) or Docker Model Runner |
+| [Factory Droid](https://docs.factory.com/ide-integrations.md) | `factory-droid` | `droid exec --output-format acp` | Proprietary (Factory terms of service) | refused | A Factory login or a Factory API key (FACTORY_API_KEY) |
+| [fount](https://github.com/steve02081504/fount) | `fount` | undocumented | unknown | unknown | A fount API key plus the model sources configured in fount |
+| [GitHub Copilot CLI](https://docs.github.com/en/copilot/reference/copilot-cli-reference/acp-server) | `github-copilot` | `copilot --acp --stdio` | Proprietary (GitHub Copilot CLI License) | unknown | A GitHub Copilot subscription login, or a provider of one's own (COPILOT_PROVIDER_*) |
+| [Hermes Agent](https://hermes-agent.nousresearch.com/docs/user-guide/features/acp) | `hermes-agent` | `hermes acp` | MIT | permitted | The configured provider's key, or a Nous Portal login |
+| [Junie by JetBrains](https://junie.jetbrains.com/docs/junie-cli-acp.html) | `junie` | `junie --acp true` | Proprietary (JetBrains AI Service terms) | refused | A JetBrains account entitled to JetBrains AI (models of one's own also taken) |
+| [kaagum](https://git.systemreboot.net/kaagum/about/) | `kaagum` | undocumented | GPL-3.0-or-later | permitted | An API key for an OpenAI-compatible provider (fetched through --api-key-command) |
+| [Kimi Code CLI](https://github.com/MoonshotAI/kimi-code#use-it-in-your-editor-acp) | `kimi-cli` | `kimi acp` | MIT | unknown | A Kimi Code login or a Moonshot AI Open Platform API key |
+| [Kiro CLI](https://kiro.dev/docs/cli/acp/) | `kiro-cli` | `kiro-cli acp` | Proprietary (AWS Customer Agreement and AWS IP License) | unknown | A Kiro login (GitHub, Google, AWS Builder ID, IAM Identity Center) or an API key |
+| [localharness](https://github.com/compusophy/localharness#quickstart) | `localharness` | `localharness acp --as &lt;name>` | Apache-2.0 | permitted | An on-chain agent identity (turns metered in its token) and a model provider's key |
+| [Minion Code](https://github.com/femto/minion-code) | `minion-code` | `mcode acp` | AGPL-3.0 | permitted | The configured provider's key |
+| [Mistral Vibe](https://github.com/mistralai/mistral-vibe/blob/main/docs/acp-setup.md) | `mistral-vibe` | `vibe-acp` | Apache-2.0 | permitted | A Mistral API key (MISTRAL_API_KEY) |
+| [Muse Spark Code](https://github.com/RandyNorthrup/muse-spark-code/blob/main/docs/acp.md) | `muse-spark-code` | `muse-spark-code-acp` | MIT | unknown | A Muse Code subscription, or a Meta Model API key (--backend modelApi) |
+| [OpenClaw](https://docs.openclaw.ai/cli/acp) | `openclaw` | `openclaw acp` | MIT | permitted | An OpenClaw Gateway token, with the Gateway's configured model providers |
+| [pi (through pi-acp)](https://github.com/svkozak/pi-acp) | `pi` | `npx -y pi-acp` | MIT | permitted | pi's configured provider's API key (a subscription login carries its provider's terms) |
+| [Poolside (pool)](https://github.com/poolsideai/pool) | `poolside` | `pool acp` | Proprietary (Poolside End User License Agreement) | refused | A Poolside login or POOLSIDE_API_KEY |
+| [Qoder CLI](https://docs.qoder.com/cli/acp) | `qoder-cli` | `qoder --acp` | Proprietary (Qoder terms of service) | refused | A Qoder account login |
+| [Qwen Code](https://qwenlm.github.io/qwen-code-docs/en/users/integration-zed/) | `qwen-code` | `qwen --acp` | Apache-2.0 | permitted | The configured provider's key (set with /auth) |
+| [Raven](https://evermind-ai.github.io/Raven/agent-protocols/) | `raven` | `raven acp` | Apache-2.0 | permitted | The configured model provider's key |
+| [Raxol](https://github.com/DROOdotFOO/raxol/blob/master/docs/features/CODING_AGENT.md) | `raxol` | `bin/raxol-acp` | MIT | permitted | The configured provider's API key |
+| [siGit Code](https://github.com/getsigit/sigit#acp-support) | `sigit` | `sigit --acp` | Apache-2.0 | permitted | None (an on-device model); cloud inference credentials optional |
+| [Stakpak](https://github.com/stakpak/agent?tab=readme-ov-file#agent-client-protocol-acp) | `stakpak` | `stakpak acp` | Apache-2.0 | permitted | The person's own Anthropic or OpenAI key, or a Stakpak API key (STAKPAK_API_KEY) |
+| [stdio Bus](https://github.com/stdiobus/stdiobus) | `stdio-bus` | undocumented | Apache-2.0 | permitted | The routed worker's (an OpenAI-compatible key, or the ACP registry worker's keys) |
+| [VT Code](https://github.com/vinhnx/VTCode/blob/main/docs/guides/zed-acp.md) | `vtcode` | `vtcode acp` | MIT OR Apache-2.0 | permitted | The configured provider's key (an unofficial ChatGPT login path exists; refused here) |
+
 ## Each harness
 
 ### Claude Code (`claude-code`)

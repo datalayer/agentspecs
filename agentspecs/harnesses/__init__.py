@@ -29,6 +29,25 @@ are unknown is not in the catalogue.
 ``custom`` is the one harness with no ``acp`` block: an organization's own
 spec names its command; in the shared catalogue it is refused to any agent.
 
+**Two tiers** (SH-57). An entry of the register is in the ``catalogue`` tier
+(the default) when a spec beside it launches the harness, drilled by SH-55's
+method; it is ``listed`` when the agent is known to speak ACP — its launch
+command as its project documents it (or none, when undocumented), its
+licence, its terms and the credential it takes, each read and cited — and
+not drilled yet. A listed harness has no spec: it is offered by nothing,
+and naming it is refused in the sentence *listed, not drilled yet*
+(:func:`listed_refusal`). It moves to the catalogue with a spec once drilled.
+
+**An organization's own harness** (SH-46) is ``custom`` made concrete: a
+spec whose id starts with ``org-``, kept in that organization's catalogue
+(IAM's organization document, as its own Frames are), with its register
+entry beside it — the terms, the licence and the credential, required as
+for any harness. It is refused in the shared catalogue.
+:func:`organization_harness` validates the two together, and
+:func:`admission_id` names what an administrator admits on the
+organization's policy (``harnesses.admit``): the id *and* the digest of the
+command reviewed, so a changed command is not admitted until reviewed again.
+
 ``python -m agentspecs.harnesses`` writes the JSON Schema beside the specs and
 the reference page of the documentation.
 """
@@ -66,6 +85,12 @@ BUILTIN_HARNESSES = ("pydantic-ai", "vercel-ai")
 
 #: The one harness whose command an organization's own spec supplies.
 CUSTOM_HARNESS = "custom"
+
+#: What an organization's own harness id starts with (SH-46), as its own Frames' ids do.
+ORGANIZATION_HARNESS_PREFIX = "org-"
+
+#: The sentence a listed harness is refused in (SH-57).
+LISTED_NOT_DRILLED = "listed, not drilled yet"
 
 _ID = re.compile(r"^[a-z][a-z0-9-]{0,40}$")
 
@@ -105,6 +130,19 @@ class ThirdPartyServing(str, Enum):
 
     ORGANIZATIONS_OWN = "organizations_own"
     """The organization that writes the spec answers for it (`custom`)."""
+
+    UNKNOWN = "unknown"
+    """Not determined from what was read: only in the listed tier."""
+
+
+class RegisterTier(str, Enum):
+    """Whether a registered harness is offered (SH-57)."""
+
+    CATALOGUE = "catalogue"
+    """A spec launches it; drilled; offered by `setup`, the Studio and the runtime."""
+
+    LISTED = "listed"
+    """Known to speak ACP, its terms read; not drilled, offered by nothing."""
 
 
 class SkillsFormat(str, Enum):
@@ -233,8 +271,15 @@ class RegisterEntry(_Strict):
     """One line of the register (§3.3): what was checked, and where."""
 
     harness: str = Field(description="The harness id")
-    adapter: str = Field(min_length=1, description="The adapter or binary: an npm or PyPI package, or the program itself")
-    version: str = Field(min_length=1, description="The version pinned; it is in the spec's command or args")
+    tier: RegisterTier = Field(default=RegisterTier.CATALOGUE, description="catalogue (drilled, offered) or listed (not yet)")
+    name: str = Field(default="", description="Its name, for a listed harness, which has no spec to say it")
+    docs: str = Field(default="", description="Where its ACP use is documented, for a listed harness, https")
+    command: Optional[str] = Field(
+        default=None,
+        description="A listed harness's launch command as its project documents it; null when undocumented",
+    )
+    adapter: str = Field(default="", description="The adapter or binary: an npm or PyPI package, or the program itself")
+    version: str = Field(default="", description="The version pinned; it is in the spec's command or args")
     licence: str = Field(min_length=1, description="As the spec's `terms.licence`")
     licence_source: str = Field(description="Where the licence was read, https")
     terms_source: str = Field(description="Where the agent's terms were read, https")
@@ -250,6 +295,39 @@ class RegisterEntry(_Strict):
         if not value.startswith("https://"):
             raise ValueError("a source is read at an https address")
         return value
+
+    @field_validator("docs")
+    @classmethod
+    def _docs_https(cls, value: str) -> str:
+        if value and not value.startswith("https://"):
+            raise ValueError("documentation is read at an https address")
+        return value
+
+    @model_validator(mode="after")
+    def _by_tier(self) -> "RegisterEntry":
+        if self.tier is RegisterTier.CATALOGUE:
+            if not self.adapter or not self.version:
+                raise ValueError(f"{self.harness}: a catalogue harness names its adapter and the version pinned")
+            if self.served_to_third_parties is ThirdPartyServing.UNKNOWN:
+                raise ValueError(
+                    f"{self.harness}: a harness whose terms are unknown is not in the catalogue (listed at most)"
+                )
+            if self.command is not None or self.name or self.docs:
+                raise ValueError(
+                    f"{self.harness}: a catalogue harness's spec says its name, docs and command, not the register"
+                )
+        else:
+            if not self.name:
+                raise ValueError(f"{self.harness}: a listed harness says its name")
+            if not self.docs:
+                raise ValueError(f"{self.harness}: a listed harness cites where its ACP use is documented")
+            if self.command is not None and not self.command.strip():
+                raise ValueError(f"{self.harness}: a listed harness's command is the documented one, or null")
+        return self
+
+    @property
+    def is_listed(self) -> bool:
+        return self.tier is RegisterTier.LISTED
 
 
 class Register(_Strict):
@@ -302,9 +380,20 @@ def load_harnesses(directory: Path = HARNESSES_DIR, register_path: Path = REGIST
         spec = HarnessSpec.model_validate(yaml.safe_load(path.read_text()) or {})
         if spec.id != path.stem:
             raise HarnessError(f"{path.name}: the file is named for {path.stem!r}, the spec says {spec.id!r}")
-        _check_against_register(spec, register.get(spec.id), path.name)
+        if spec.id.startswith(ORGANIZATION_HARNESS_PREFIX):
+            raise HarnessError(
+                f"{path.name}: {spec.id!r} is an organization's own harness id: it is kept in its "
+                "organization's catalogue, never the shared one"
+            )
+        entry = register.get(spec.id)
+        if entry is not None and entry.is_listed:
+            raise HarnessError(
+                f"{path.name}: {spec.id!r} is {LISTED_NOT_DRILLED} in the register: move its entry to the "
+                "catalogue tier once drilled, with its adapter and the version pinned"
+            )
+        _check_against_register(spec, entry, path.name)
         found[spec.id] = spec
-    unknown = sorted(set(register) - set(found))
+    unknown = sorted(set(register) - set(found) - {key for key, entry in register.items() if entry.is_listed})
     if unknown:
         raise HarnessError(f"{register_path.name}: registered but not in the catalogue: {', '.join(unknown)}")
     return found
@@ -313,13 +402,98 @@ def load_harnesses(directory: Path = HARNESSES_DIR, register_path: Path = REGIST
 #: Every harness of the catalogue, by id.
 HARNESS_CATALOGUE: Dict[str, HarnessSpec] = load_harnesses()
 
-#: The register, by harness id.
+#: The register, by harness id: the catalogue's entries and the listed ones.
 HARNESS_REGISTER: Dict[str, RegisterEntry] = load_register()
+
+#: The listed tier (SH-57): known to speak ACP, not drilled, offered by nothing.
+LISTED_HARNESSES: Dict[str, RegisterEntry] = {
+    harness_id: entry for harness_id, entry in HARNESS_REGISTER.items() if entry.is_listed
+}
 
 
 def get_harness(harness_id: str) -> Optional[HarnessSpec]:
     """A harness by id, or None."""
     return HARNESS_CATALOGUE.get(harness_id)
+
+
+def listed_refusal(harness_id: str) -> Optional[str]:
+    """The sentence that refuses a listed harness, or None when it is not listed (SH-57)."""
+    entry = LISTED_HARNESSES.get(harness_id)
+    if entry is None:
+        return None
+    command = f"`{entry.command}`" if entry.command else "no documented command"
+    return (
+        f"The harness {harness_id!r} ({entry.name}) is {LISTED_NOT_DRILLED}: it is registered with "
+        f"{command} and its terms, and is offered once drilled and moved to the catalogue."
+    )
+
+
+# --- an organization's own harness (SH-46) ---------------------------------------------
+
+
+def is_organization_harness(harness_id: str) -> bool:
+    """Whether the id names an organization's own harness (``org-…``)."""
+    return harness_id.startswith(ORGANIZATION_HARNESS_PREFIX)
+
+
+def command_digest(spec: HarnessSpec) -> str:
+    """The digest of what a harness launches — its command, arguments and plain variables.
+
+    What an administrator reviews: a changed command has another digest, and
+    is not admitted until reviewed again.
+    """
+    import hashlib
+
+    if spec.acp is None:
+        raise HarnessError(f"the harness {spec.id!r} launches nothing to review")
+    reviewed = {"command": spec.acp.command, "args": list(spec.acp.args), "env": dict(sorted(spec.acp.env.items()))}
+    canonical = json.dumps(reviewed, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def admission_id(spec: HarnessSpec) -> str:
+    """What an organization's policy admits for its own harness: ``<id>@<the reviewed command's digest, 12>``."""
+    return f"{spec.id}@{command_digest(spec)[:12]}"
+
+
+def organization_harness(spec: Dict[str, Any], entry: Dict[str, Any]) -> tuple:
+    """An organization's own harness and its register entry, validated together (SH-46).
+
+    The spec is a harness spec whose id starts with ``org-``, with an ``acp``
+    block naming its command; the entry is its line of the register, in the
+    catalogue tier, with its licence, its terms, the credential it takes and
+    whether serving it to third parties is permitted — required, as for any
+    harness: a harness whose terms are unknown is served nowhere.
+
+    Returns
+    -------
+    tuple[HarnessSpec, RegisterEntry]
+
+    Raises
+    ------
+    HarnessError
+        In a sentence.
+    """
+    if not isinstance(spec, dict) or not isinstance(entry, dict):
+        raise HarnessError("an organization's own harness is a spec and its register entry, each an object")
+    harness_id = str(spec.get("id") or "")
+    if not is_organization_harness(harness_id):
+        raise HarnessError(
+            f"{harness_id!r} is not an organization's own harness id: it starts with {ORGANIZATION_HARNESS_PREFIX!r}"
+        )
+    try:
+        parsed = HarnessSpec.model_validate(spec)
+        registered = RegisterEntry.model_validate({"harness": harness_id, **entry})
+    except ValueError as invalid:
+        raise HarnessError(f"the organization's harness {harness_id!r} is refused: {invalid}") from None
+    if registered.harness != harness_id:
+        raise HarnessError(f"the register entry names {registered.harness!r}, the spec {harness_id!r}")
+    if registered.is_listed:
+        raise HarnessError(f"an organization's own harness is in the catalogue tier: {harness_id!r} says listed")
+    if registered.served_to_third_parties is ThirdPartyServing.REFUSED:
+        raise HarnessError(f"the organization's harness {harness_id!r}: its terms refuse serving it to third parties")
+    _check_against_register(parsed, registered, harness_id)
+    return parsed, registered
 
 
 def harness_problems(
@@ -342,6 +516,14 @@ def harness_problems(
     catalogue = HARNESS_CATALOGUE if catalogue is None else catalogue
     spec = catalogue.get(harness_id)
     if spec is None:
+        listed = listed_refusal(harness_id)
+        if listed is not None:
+            return [listed]
+        if is_organization_harness(harness_id):
+            return [
+                f"The harness {harness_id!r} is an organization's own: it is read from its organization's "
+                "catalogue on Datalayer, admitted by its policy, and served nowhere else."
+            ]
         return [f"There is no harness named {harness_id!r}: one of {', '.join([*BUILTIN_HARNESSES, *sorted(catalogue)])}."]
     if harness_id == CUSTOM_HARNESS:
         return ["The harness 'custom' names no command: an organization's own harness spec names it, and is never typed into a form."]
@@ -412,6 +594,24 @@ def reference_text() -> str:
             f"| {skills} | {'`' + spec.instructions_file + '`' if spec.instructions_file else ''} "
             f"| {spec.terms.served_to_third_parties.value} | {_cell(spec.terms.licence)} | {_cell(entry.adapter)} {_cell(entry.version)} |"
         )
+    lines += [
+        "",
+        "## Listed, not drilled yet",
+        "",
+        "Agents known to speak ACP, registered with their launch command as their projects",
+        "document it, their licence, their terms and the credential they take (SH-57). None is",
+        "offered: naming one is refused, *listed, not drilled yet*, until it is drilled and moved",
+        "to the catalogue with a spec.",
+        "",
+        "| Agent | Id | Documented command | Licence | Third parties | Credential |",
+        "| --- | --- | --- | --- | --- | --- |",
+    ]
+    for entry in sorted(LISTED_HARNESSES.values(), key=lambda e: e.harness):
+        command = f"`{_cell(entry.command)}`" if entry.command else "undocumented"
+        lines.append(
+            f"| [{_cell(entry.name)}]({entry.docs}) | `{entry.harness}` | {command} | {_cell(entry.licence)} "
+            f"| {entry.served_to_third_parties.value} | {_cell(entry.credential)} |"
+        )
     lines += ["", "## Each harness", ""]
     for spec in sorted(HARNESS_CATALOGUE.values(), key=lambda s: s.id):
         entry = HARNESS_REGISTER[spec.id]
@@ -449,6 +649,15 @@ __all__ = [
     "CUSTOM_HARNESS",
     "HARNESS_CATALOGUE",
     "HARNESS_REGISTER",
+    "LISTED_HARNESSES",
+    "LISTED_NOT_DRILLED",
+    "ORGANIZATION_HARNESS_PREFIX",
+    "RegisterTier",
+    "admission_id",
+    "command_digest",
+    "is_organization_harness",
+    "listed_refusal",
+    "organization_harness",
     "HarnessAcp",
     "HarnessError",
     "HarnessHonours",
