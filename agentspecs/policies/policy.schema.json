@@ -1,0 +1,51 @@
+{
+  "$id": "https://agentspecs.datalayer.tech/policies/policy.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One catalogue entry: a Shield policy document under the catalogue's fields.",
+  "properties": {
+    "description": {
+      "title": "Description",
+      "type": "string"
+    },
+    "enabled": {
+      "default": true,
+      "title": "Enabled",
+      "type": "boolean"
+    },
+    "id": {
+      "description": "The entry's id, the file's name.",
+      "title": "Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "policy": {
+      "$ref": "shield-policy.schema.json",
+      "description": "The Shield's policy document (agent_shield.policy, SHIELD.md \u00a76.7)."
+    },
+    "tags": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "array"
+    },
+    "version": {
+      "description": "The entry's version (semver).",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "name",
+    "description",
+    "policy"
+  ],
+  "title": "Policy spec",
+  "type": "object"
+}

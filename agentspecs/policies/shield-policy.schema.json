@@ -1,0 +1,313 @@
+{
+  "$defs": {
+    "Harnesses": {
+      "additionalProperties": false,
+      "description": "The harnesses an organization admits, and whose credentials run them (\u00a76.7).",
+      "properties": {
+        "admit": {
+          "description": "Harness ids of the catalogue this scope admits; empty admits every registered harness.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Admit",
+          "type": "array"
+        },
+        "credentials": {
+          "default": "account",
+          "description": "Whose key runs a harness: the account's own declared secret (decision 3), the platform's, or either.",
+          "enum": [
+            "account",
+            "platform",
+            "either"
+          ],
+          "title": "Credentials",
+          "type": "string"
+        }
+      },
+      "title": "Harnesses",
+      "type": "object"
+    },
+    "Limits": {
+      "additionalProperties": false,
+      "description": "The stateful limits of a session (SHIELD \u00a76.3).\n\nThree count the harness's actions; two count what its model costs: the\n**model budget** in tokens and the **spend** in credits (the deployment's\nspend limit; 100 credits are one USD). Each has a soft threshold, where the\nnext call asks the person, and a hard one, where each further call is\nrefused and the sentence says what would let it go on.",
+      "properties": {
+        "bytes_written": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Threshold"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Bytes written to the workspace."
+        },
+        "model_tokens": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Threshold"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The model budget: tokens the session's model requests spend, in and out."
+        },
+        "spend": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Threshold"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The spend limit: credits the session spends on models (100 credits a USD)."
+        },
+        "terminals_open": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Threshold"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Terminals open at once."
+        },
+        "tool_calls": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Threshold"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Classed actions per session."
+        }
+      },
+      "title": "Limits",
+      "type": "object"
+    },
+    "Mcp": {
+      "additionalProperties": false,
+      "description": "The MCP servers the agent is lent, by name; everything else is cut from session/new.",
+      "properties": {
+        "allow": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allow",
+          "type": "array"
+        }
+      },
+      "title": "Mcp",
+      "type": "object"
+    },
+    "Network": {
+      "additionalProperties": false,
+      "description": "What the agent may reach over the network, through the Shield.",
+      "properties": {
+        "fetch": {
+          "description": "Hosts a fetch may reach (exact host, or *.example.com); empty refuses every fetch.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Fetch",
+          "type": "array"
+        }
+      },
+      "title": "Network",
+      "type": "object"
+    },
+    "Rule": {
+      "additionalProperties": false,
+      "description": "One line of a policy: what it matches and what it decides.",
+      "properties": {
+        "classes": {
+          "description": "The classes the rule names; empty names every class.",
+          "items": {
+            "enum": [
+              "read",
+              "write",
+              "send",
+              "buy",
+              "delete",
+              "execute"
+            ],
+            "type": "string"
+          },
+          "title": "Classes",
+          "type": "array"
+        },
+        "commands": {
+          "description": "Regular expressions on the whole command line; any matches.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Commands",
+          "type": "array"
+        },
+        "decision": {
+          "enum": [
+            "allow",
+            "ask",
+            "deny"
+          ],
+          "title": "Decision",
+          "type": "string"
+        },
+        "kinds": {
+          "description": "The ACP tool kinds the rule names; empty names every kind.",
+          "items": {
+            "enum": [
+              "read",
+              "edit",
+              "delete",
+              "move",
+              "search",
+              "execute",
+              "think",
+              "fetch",
+              "switch_mode",
+              "other"
+            ],
+            "type": "string"
+          },
+          "title": "Kinds",
+          "type": "array"
+        },
+        "name": {
+          "description": "A short name; every sentence quotes it.",
+          "title": "Name",
+          "type": "string"
+        },
+        "paths": {
+          "description": "Globs on the path relative to the workspace (fnmatch); any matches.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Paths",
+          "type": "array"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Why; shown in the sentence.",
+          "title": "Reason"
+        },
+        "where": {
+          "default": "any",
+          "description": "inside: only a path inside the workspace; outside: only one outside; any: both, and actions with no path.",
+          "enum": [
+            "inside",
+            "outside",
+            "any"
+          ],
+          "title": "Where",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "decision"
+      ],
+      "title": "Rule",
+      "type": "object"
+    },
+    "Threshold": {
+      "additionalProperties": false,
+      "description": "A soft threshold asks once; a hard one refuses each call that would cross it.",
+      "properties": {
+        "hard": {
+          "minimum": 0,
+          "title": "Hard",
+          "type": "integer"
+        },
+        "soft": {
+          "minimum": 0,
+          "title": "Soft",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "soft",
+        "hard"
+      ],
+      "title": "Threshold",
+      "type": "object"
+    }
+  },
+  "$id": "https://agent-shield.datalayer.tech/schema/policy.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One policy document, one scope.",
+  "properties": {
+    "expires": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "When a pulled copy stops being honoured (decision 11).",
+      "title": "Expires"
+    },
+    "harnesses": {
+      "$ref": "#/$defs/Harnesses"
+    },
+    "limits": {
+      "$ref": "#/$defs/Limits"
+    },
+    "mcp": {
+      "$ref": "#/$defs/Mcp"
+    },
+    "network": {
+      "$ref": "#/$defs/Network"
+    },
+    "rules": {
+      "items": {
+        "$ref": "#/$defs/Rule"
+      },
+      "title": "Rules",
+      "type": "array"
+    },
+    "scope": {
+      "enum": [
+        "organization",
+        "team",
+        "session"
+      ],
+      "title": "Scope",
+      "type": "string"
+    },
+    "version": {
+      "default": 1,
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "scope"
+  ],
+  "title": "Agent Shield policy",
+  "type": "object"
+}
