@@ -1,5 +1,110 @@
 {
   "$defs": {
+    "AuthZenAuthorizerConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "headers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Headers",
+          "type": "object"
+        },
+        "url": {
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "AuthZenAuthorizerConfig",
+      "type": "object"
+    },
+    "AuthorizerConfig": {
+      "additionalProperties": false,
+      "description": "``authorizer:`` in a policy document: exactly one decision point (\u00a76.11, standalone).",
+      "properties": {
+        "authzen": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AuthZenAuthorizerConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "local": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/LocalAuthorizerConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "opa": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OpaAuthorizerConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "openfga": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OpenFgaAuthorizerConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "AuthorizerConfig",
+      "type": "object"
+    },
+    "Grant": {
+      "additionalProperties": false,
+      "description": "One line of the ``local`` authorizer: who may do what to what, as patterns (fnmatch).",
+      "properties": {
+        "object": {
+          "description": "workspace:*/src/*, tool:earthdata/*, connection:acme.example",
+          "minLength": 1,
+          "title": "Object",
+          "type": "string"
+        },
+        "relation": {
+          "description": "can_read, can_execute, can_call, can_act, or an action class",
+          "minLength": 1,
+          "title": "Relation",
+          "type": "string"
+        },
+        "subject": {
+          "description": "user:alice, account:*, deployment:01\u2026",
+          "minLength": 1,
+          "title": "Subject",
+          "type": "string"
+        }
+      },
+      "required": [
+        "subject",
+        "relation",
+        "object"
+      ],
+      "title": "Grant",
+      "type": "object"
+    },
     "Harnesses": {
       "additionalProperties": false,
       "description": "The harnesses an organization admits, and whose credentials run them (\u00a76.7).",
@@ -95,6 +200,20 @@
       "title": "Limits",
       "type": "object"
     },
+    "LocalAuthorizerConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "grants": {
+          "items": {
+            "$ref": "#/$defs/Grant"
+          },
+          "title": "Grants",
+          "type": "array"
+        }
+      },
+      "title": "LocalAuthorizerConfig",
+      "type": "object"
+    },
     "Mcp": {
       "additionalProperties": false,
       "description": "The MCP servers the agent is lent, by name; everything else is cut from session/new.",
@@ -124,6 +243,68 @@
         }
       },
       "title": "Network",
+      "type": "object"
+    },
+    "OpaAuthorizerConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "headers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Headers",
+          "type": "object"
+        },
+        "package": {
+          "default": "authzen/evaluation",
+          "description": "The Rego package answering decision and context.",
+          "title": "Package",
+          "type": "string"
+        },
+        "url": {
+          "description": "OPA's address: http://opa:8181",
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "OpaAuthorizerConfig",
+      "type": "object"
+    },
+    "OpenFgaAuthorizerConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model"
+        },
+        "store": {
+          "minLength": 1,
+          "title": "Store",
+          "type": "string"
+        },
+        "url": {
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "url",
+        "store"
+      ],
+      "title": "OpenFgaAuthorizerConfig",
       "type": "object"
     },
     "Rule": {
@@ -256,6 +437,34 @@
   "additionalProperties": false,
   "description": "One policy document, one scope.",
   "properties": {
+    "authorize": {
+      "description": "The classes that need an authorizer's allow beside the Rules (SHIELD \u00a76.11): a deny wins over any Rule, an unreachable authorizer is a deny. Empty needs none (local-only); Datalayer's documents name read, write, execute, send and buy.",
+      "items": {
+        "enum": [
+          "read",
+          "write",
+          "send",
+          "buy",
+          "delete",
+          "execute"
+        ],
+        "type": "string"
+      },
+      "title": "Authorize",
+      "type": "array"
+    },
+    "authorizer": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AuthorizerConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "The decision point a standalone Shield asks: local (grants in this file), openfga {url, store, model} or authzen {url}. On Datalayer the authorizer is IAM's and a managed document names none."
+    },
     "expires": {
       "anyOf": [
         {
