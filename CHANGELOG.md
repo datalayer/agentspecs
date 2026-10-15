@@ -10,6 +10,7 @@ Each version names the LOOP boxes it carries — the plan's ids, as its commits 
 
 ## Unreleased
 
+- A smaller speech model for spoken turns on the server (VOICE.md VO-47, decided by the user 15 October 2026): `whisper-small`, OpenAI's Whisper small in its CTranslate2 conversion (`Systran/faster-whisper-small`, MIT), pinned file by file, kept at `openai/whisper-small`; measured on the fixtures at 3.3% WER in English and 16.1% in French, about four times faster than large-v3-turbo, which keeps long recordings. In the licence register.
 - A speech model for the server (VOICE.md VO-34, decision 4): `whisper-large-v3-turbo`, OpenAI's Whisper large-v3-turbo in its CTranslate2 conversion, run by faster-whisper on Datalayer's servers only, every file pinned by SHA-256 and kept at `openai/whisper-large-v3-turbo` in Datalayer's storage; `transcriber_for(language, "server")` answers it. The licence register names faster-whisper, CTranslate2, tokenizers, av and the FFmpeg its wheel ships as used, on the server.
 - Appspec `interface.voice.input`: `hands_free` is refused in a sentence until it is built (VOICE.md VO-12, decided 14 October 2026), no longer taken for click-to-talk; `VoiceInput` is `off` or `push_to_talk`. JSON Schema and reference regenerated.
 - *Exchange Desk* is on (AGENT_PROTOCOLS PI-42): drilled live on r1 on 14 October 2026 on runtime image 0.0.34 — asked by a person's own agent signed in through Datalayer to exchange order `ord_7Hk2` for size L, it proposed the exchange and went on to tell the person it waits for their approval.

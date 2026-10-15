@@ -122,6 +122,7 @@ entries:
   - {name: tokenizers, kind: library, licence: Apache-2.0, where: server, status: used, source: https://pypi.org/pypi/tokenizers/json, note: "faster-whisper's tokenizer."}
   - {name: av, kind: library, version: 19.0.1, licence: BSD-3-Clause, where: server, status: used, source: https://pypi.org/pypi/av/json, note: "A dependency of faster-whisper, unused by the service (it decodes with soundfile); its wheel ships FFmpeg (LGPL-2.1-or-later), below."}
   - {name: FFmpeg, kind: library, licence: LGPL-2.1-or-later, where: server, status: used, source: https://github.com/PyAV-Org/pyav-ffmpeg, note: "Inside av's wheel, built LGPL; on the server only."}
+  - {name: whisper-small, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/openai/whisper-small, note: "Its CTranslate2 conversion, https://huggingface.co/Systran/faster-whisper-small (MIT), pinned: short spoken turns (VO-47, decided 2026-10-15)."}
   - {name: whisper-large-v3-turbo, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/openai/whisper-large-v3-turbo, note: "Its CTranslate2 conversion, https://huggingface.co/dropbox-dash/faster-whisper-large-v3-turbo (MIT), pinned (VO-34)."}
   - {name: jiwer, kind: library, version: 4.0.0, licence: Apache-2.0, where: server, status: used, source: https://pypi.org/pypi/jiwer/json, note: "The WER check (VO-51), in tests only."}
 

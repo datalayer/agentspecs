@@ -129,6 +129,17 @@ def test_the_server_hears_the_first_languages_with_whisper_turbo():
     assert {item.path for item in turbo.files} >= {"model.bin", "config.json", "tokenizer.json"}
 
 
+
+def test_the_server_hears_short_turns_with_whisper_small():
+    """VO-47 (decided 2026-10-15): a smaller Whisper for turns, never sent to a browser."""
+    small = speech.get_speech_model("whisper-small")
+    assert small.where == ["server"] and small.engine == "faster-whisper"
+    assert small.folder == "openai/whisper-small"
+    assert small.size < speech.get_speech_model("whisper-large-v3-turbo").size / 3
+    # Long recordings, and the language's server model, stay turbo's.
+    assert speech.transcriber_for("fr-FR", "server").id == "whisper-large-v3-turbo"
+
+
 def test_the_browser_hears_only_mit_moonshine():
     """VO-04: only the MIT Moonshine models, English, are listed."""
     for model in speech.list_speech_models("stt"):
