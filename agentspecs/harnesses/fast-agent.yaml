@@ -1,0 +1,40 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A framework's agents over ACP, not a coding agent (SHIELD §2.5): fast-agent
+# exposes each defined agent as an ACP mode; `uvx fast-agent-acp` is its
+# launcher (its ACP guide).
+
+id: fast-agent
+version: 0.0.1
+name: fast-agent
+description: llmindset's agent framework served over ACP; each agent it defines is a session mode, with any model provider it is configured with.
+docs: https://github.com/evalstate/fast-agent/blob/main/docs/docs/acp/index.md
+
+acp:
+  command: uvx
+  args: ["fast-agent-acp==0.10.45"]
+  protocol_version: 1
+  load_session: true
+  mcp: lend
+  modes: []
+
+requires:
+  secrets: [ANTHROPIC_API_KEY]
+  binaries: [uvx]
+
+terms:
+  served_to_third_parties: permitted
+  licence: Apache-2.0
+
+skills:
+  format: skill-md
+  dir: .agents/skills
+
+honours:
+  model: true
+  subagents: false
+
+instructions_file: AGENTS.md
+
+tags: [harness, framework]

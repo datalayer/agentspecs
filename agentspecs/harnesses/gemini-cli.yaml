@@ -1,0 +1,42 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Gemini CLI speaks ACP itself: `gemini --experimental-acp` (its CLI
+# reference). Gemini Code Assist for individuals stopped being served on
+# 18 June 2026: a Google login needs a Standard or Enterprise subscription;
+# an API key is the other credential.
+
+id: gemini-cli
+version: 0.0.1
+name: Gemini CLI
+description: Google's coding agent, which speaks ACP itself when started with --experimental-acp.
+docs: https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/cli-reference.md
+
+acp:
+  command: npx
+  args: ["-y", "@google/gemini-cli@0.64.0", "--experimental-acp"]
+  protocol_version: 1
+  load_session: false
+  mcp: lend
+  modes: [default, auto_edit, yolo, plan]
+
+requires:
+  secrets: [GEMINI_API_KEY]
+  binaries: [node, git]
+
+terms:
+  served_to_third_parties: api_key_only
+  licence: Apache-2.0 (the agent); Gemini API or Gemini Code Assist terms (the model)
+  tier_restrictions: Gemini Code Assist Standard or Enterprise for a Google login (the individuals tier stopped being served on 18 June 2026); a Gemini API key otherwise
+
+skills:
+  format: skill-md
+  dir: .gemini/skills
+
+honours:
+  model: true
+  subagents: false
+
+instructions_file: GEMINI.md
+
+tags: [harness]

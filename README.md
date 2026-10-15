@@ -26,6 +26,7 @@ agentspecs/
 ├── teams/            # Team orchestration specs
 ├── frames/           # Frame specs: owned, scoped context a Cog works under
 ├── cogs/             # Cog specs: an agent, equipped with Frames
+├── harnesses/        # Harness specs: an agent program driven over ACP, and its register
 ├── ops/              # Op specs: Cogs, orchestrated, with a validation strategy
 ├── guards/           # Guard specs: a check, extending a guardrail
 ├── gates/            # Gate specs: what happens on what the Guards found
@@ -212,6 +213,34 @@ from agentspecs.cogs import get_resolved_cog
 
 cog = get_resolved_cog("cog-crawler")   # the agent, the Cog's changes and its Frames, flat
 cog["frame_context"]["guards"]          # what its output answers to
+```
+
+### Harnesses (`agentspecs/harnesses`)
+
+Defines an agent program driven over the Agent Client Protocol (SHIELD.md
+§3.1) — a coding agent such as Claude Code or Codex, or any agent a framework
+exposes over ACP — and the terms it is served under. An agent spec names one
+with `harness: claude-code` where it says `harness: pydantic-ai`; what the
+harness cannot honour of the spec (`model:` it does not take, `subagents:`
+when it has its own, `skills:` in a format it cannot read) is refused at load,
+in a sentence. `register.yaml` is the register (§3.3): every harness with its
+adapter, the version pinned, its licence, the agent's terms, the credential it
+takes and whether serving it to third parties is permitted, each with where it
+was read; a harness without an entry does not load.
+
+Common fields:
+
+- `id`, `version`, `name`, `description`, `enabled`, `docs`
+- `acp` (`command`, `args` with the version pinned, `protocol_version`, `load_session`, `mcp`: `lend`, `own` or `none`, `modes`, `env`) — absent only on `custom`
+- `requires` (`secrets`, ids of `env-vars/`; `binaries`)
+- `terms` (`served_to_third_parties`: `api_key_only`, `permitted`, `refused` or `organizations_own`; `licence`; `tier_restrictions`)
+- `skills` (`format`: `skill-md` or `none`; `dir`), `honours` (`model`, `subagents`), `instructions_file`
+
+```python
+from agentspecs.harnesses import HARNESS_CATALOGUE, agent_harness_problems
+
+print(HARNESS_CATALOGUE["claude-code"].acp.args)
+print(agent_harness_problems({"harness": "claude-code", "subagents": [{"id": "x"}]}))
 ```
 
 ### Ops, Guards, Gates and Tracks
