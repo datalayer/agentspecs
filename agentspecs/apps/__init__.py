@@ -2675,6 +2675,10 @@ class RecordItem(str, Enum):
     FEEDBACK = "feedback"
     AUDIO = "audio"
     """What was said aloud, as sound: off unless named, never for a public deployment (VOICE.md VO-42)."""
+    DIFFS = "diffs"
+    """A harness's edits whole — the file's old and new text — rather than each diff's hash and size (SHIELD.md §6.4)."""
+    TERMINALS = "terminals"
+    """A harness's terminal output, rather than each command and its exit alone (SHIELD.md §6.4)."""
 
 
 _RETENTION = re.compile(r"^(?P<count>[1-9]\d*)_(?P<unit>day|days|month|months|year|years)$")

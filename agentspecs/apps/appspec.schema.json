@@ -2634,7 +2634,9 @@
         "sources",
         "outputs",
         "feedback",
-        "audio"
+        "audio",
+        "diffs",
+        "terminals"
       ],
       "title": "RecordItem",
       "type": "string"

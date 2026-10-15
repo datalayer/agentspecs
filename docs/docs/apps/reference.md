@@ -1324,7 +1324,7 @@ A UI plugin an agent or an application names, and the renderer it is exposed thr
 | <a id="papinterface"></a>PapInterface | `agent`, `openapi`, `mcp`, `web` |
 | <a id="papsignin"></a>PapSignIn | `direct`, `device`, `mediated` |
 | <a id="papstandingaction"></a>PapStandingAction | `write`, `buy` |
-| <a id="recorditem"></a>RecordItem | `conversations`, `actions`, `decisions`, `approvals`, `checks`, `sources`, `outputs`, `feedback`, `audio` |
+| <a id="recorditem"></a>RecordItem | `conversations`, `actions`, `decisions`, `approvals`, `checks`, `sources`, `outputs`, `feedback`, `audio`, `diffs`, `terminals` |
 | <a id="thememode"></a>ThemeMode | `light`, `dark`, `auto` |
 | <a id="themevariant"></a>ThemeVariant | `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop` |
 | <a id="triggertype"></a>TriggerType | `schedule`, `event`, `once` |
