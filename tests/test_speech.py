@@ -118,6 +118,17 @@ def test_the_first_languages_are_heard_and_spoken():
     assert speech.transcriber_for("fr").id == "whisper-base"
 
 
+def test_the_server_hears_the_first_languages_with_whisper_turbo():
+    """VO-34, decision 4: faster-whisper large-v3-turbo on the server, never sent to a browser."""
+    for language in ("en-US", "fr-FR"):
+        heard = speech.transcriber_for(language, "server")
+        assert heard is not None and heard.id == "whisper-large-v3-turbo", language
+    turbo = speech.get_speech_model("whisper-large-v3-turbo")
+    assert turbo.where == ["server"] and turbo.engine == "faster-whisper"
+    assert turbo.folder == "openai/whisper-large-v3-turbo"
+    assert {item.path for item in turbo.files} >= {"model.bin", "config.json", "tokenizer.json"}
+
+
 def test_the_browser_hears_only_mit_moonshine():
     """VO-04: only the MIT Moonshine models, English, are listed."""
     for model in speech.list_speech_models("stt"):

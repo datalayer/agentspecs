@@ -117,6 +117,12 @@ entries:
   - {name: onnxruntime, kind: library, version: 1.30.0, licence: MIT, where: server, status: used, source: https://pypi.org/pypi/onnxruntime/json}
   - {name: soundfile, kind: library, version: 0.14.0, licence: BSD-3-Clause, where: server, status: used, source: https://pypi.org/pypi/soundfile/json}
   - {name: libsndfile, kind: library, version: 1.2.2, licence: LGPL-2.1-or-later, where: server, status: used, source: https://github.com/libsndfile/libsndfile, note: "Inside soundfile's wheel."}
+  - {name: faster-whisper, kind: library, version: 1.2.1, licence: MIT, where: server, status: used, source: https://pypi.org/pypi/faster-whisper/json, note: "Recordings heard on the server (VO-34), checked 2026-10-15."}
+  - {name: ctranslate2, kind: library, version: 4.8.3, licence: MIT, where: server, status: used, source: https://pypi.org/pypi/ctranslate2/json, note: "faster-whisper's engine."}
+  - {name: tokenizers, kind: library, licence: Apache-2.0, where: server, status: used, source: https://pypi.org/pypi/tokenizers/json, note: "faster-whisper's tokenizer."}
+  - {name: av, kind: library, version: 19.0.1, licence: BSD-3-Clause, where: server, status: used, source: https://pypi.org/pypi/av/json, note: "A dependency of faster-whisper, unused by the service (it decodes with soundfile); its wheel ships FFmpeg (LGPL-2.1-or-later), below."}
+  - {name: FFmpeg, kind: library, licence: LGPL-2.1-or-later, where: server, status: used, source: https://github.com/PyAV-Org/pyav-ffmpeg, note: "Inside av's wheel, built LGPL; on the server only."}
+  - {name: whisper-large-v3-turbo, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/openai/whisper-large-v3-turbo, note: "Its CTranslate2 conversion, https://huggingface.co/dropbox-dash/faster-whisper-large-v3-turbo (MIT), pinned (VO-34)."}
   - {name: jiwer, kind: library, version: 4.0.0, licence: Apache-2.0, where: server, status: used, source: https://pypi.org/pypi/jiwer/json, note: "The WER check (VO-51), in tests only."}
 
   # --- voices ----------------------------------------------------------------------------
@@ -130,8 +136,6 @@ entries:
   - {name: Multilingual LibriSpeech (French), kind: dataset, licence: CC-BY-4.0, where: tests, status: used, source: https://www.openslr.org/94, note: "French fixtures of the WER check (VO-50)."}
 
   # --- weighed, not used (§4) ------------------------------------------------------------
-  - {name: faster-whisper, kind: library, version: 1.2.1, licence: MIT, where: server, status: candidate, source: https://pypi.org/pypi/faster-whisper/json, note: "Server speech-to-text, Phase V2."}
-  - {name: whisper-large-v3-turbo, kind: model, licence: MIT, where: server, status: candidate, source: https://huggingface.co/openai/whisper-large-v3-turbo}
   - {name: Parakeet TDT 0.6B v3, kind: model, licence: CC-BY-4.0, where: server, status: candidate, source: https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3}
   - {name: Kyutai STT and TTS, kind: model, licence: CC-BY-4.0, where: server, status: candidate, source: https://github.com/kyutai-labs/delayed-streams-modeling}
   - {name: chatterbox-tts, kind: library, version: 0.1.7, licence: MIT, where: server, status: candidate, source: https://github.com/resemble-ai/chatterbox, note: "Every output carries the Perth watermark."}
