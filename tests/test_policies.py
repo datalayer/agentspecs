@@ -47,6 +47,16 @@ def test_the_shield_schema_is_the_packages_own_verbatim():
         "agent_shield.policy",
         reason="datalayer-agent-shield is not installed here; CI installs it to hold the copy",
     )
+    from agent_shield.__version__ import __version__ as installed
+
+    def parts(version: str) -> tuple[int, ...]:
+        return tuple(int(piece) for piece in version.split(".")[:3])
+
+    if parts(installed) < parts(policies.SHIELD_SCHEMA_SOURCE_VERSION):
+        pytest.skip(
+            f"the carried schema is agent-shield {policies.SHIELD_SCHEMA_SOURCE_VERSION}'s and {installed} is installed: "
+            "the two packages release in turn, each pinning the other's last"
+        )
     carried = json.loads(policies.SHIELD_SCHEMA_PATH.read_text())
     assert carried == agent_shield_policy.policy_json_schema()
     # And every document of the catalogue is one the package's own model takes.

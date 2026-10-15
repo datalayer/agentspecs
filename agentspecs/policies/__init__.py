@@ -46,6 +46,10 @@ POLICIES_DIR = _ROOT / "policies"
 
 #: The Shield's own schema, verbatim (``agent_shield.policy.policy_json_schema()``).
 SHIELD_SCHEMA_PATH = POLICIES_DIR / "shield-policy.schema.json"
+#: The agent-shield release the carried schema was copied from: the test holding the copy
+#: verbatim compares against an installed agent-shield at least this new, and skips an
+#: older one (the two packages release in turn, each pinning the other's last).
+SHIELD_SCHEMA_SOURCE_VERSION = "0.2.0"
 
 #: The catalogue entry's schema, beside the specs.
 SCHEMA_PATH = POLICIES_DIR / "policy.schema.json"
