@@ -1329,6 +1329,6 @@ A UI plugin an agent or an application names, and the renderer it is exposed thr
 | <a id="themevariant"></a>ThemeVariant | `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop` |
 | <a id="triggertype"></a>TriggerType | `schedule`, `event`, `once` |
 | <a id="visibility"></a>Visibility | `private`, `invited`, `organization`, `link`, `public` |
-| <a id="voiceinput"></a>VoiceInput | `off`, `push_to_talk` |
+| <a id="voiceinput"></a>VoiceInput | `off`, `push_to_talk`, `hands_free` |
 | <a id="voiceoutput"></a>VoiceOutput | `off`, `on_request`, `always` |
 | <a id="voicewhere"></a>VoiceWhere | `auto`, `device`, `server` |

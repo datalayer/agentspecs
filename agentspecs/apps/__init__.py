@@ -1905,21 +1905,18 @@ class BalloonDisplay(str, Enum):
 
 
 class VoiceInput(str, Enum):
-    """How a person talks to the application (VOICE.md VO-10).
+    """How a person talks to the application (VOICE.md VO-10, VO-12).
 
-    `hands_free` (VO-12) is not one yet: it is refused in a sentence until it
-    is built, never taken for click-to-talk.
+    `push_to_talk`: the microphone in the composer, clicked or held.
+    `hands_free`: a conversation by voice — the composer offers *Talk with
+    it*; a turn ends after a short silence and is sent, the answer is said,
+    and listening goes on; speaking over the agent stops its voice (VO-13).
+    Hands-free implies answers said as they are written (`output: always`).
     """
 
     OFF = "off"
     PUSH_TO_TALK = "push_to_talk"
-
-
-#: Why ``input: hands_free`` is refused until VOICE.md VO-12 is built (decided 14 October 2026).
-HANDS_FREE_NOT_BUILT = (
-    "hands_free is not built yet (VOICE.md VO-12): say push_to_talk — click the microphone "
-    "or hold it, speak, and it stops when let go or once the person stops speaking"
-)
+    HANDS_FREE = "hands_free"
 
 
 class VoiceOutput(str, Enum):
@@ -1977,14 +1974,6 @@ class AppVoice(_Strict):
         default=VoiceWhere.AUTO,
         description="Where its speech runs: `auto`, `device` (the person's browser) or `server` (Datalayer's)",
     )
-
-    @field_validator("input", mode="before")
-    @classmethod
-    def _hands_free_is_not_built(cls, value: Any) -> Any:
-        if value == "hands_free":
-            raise ValueError(HANDS_FREE_NOT_BUILT)
-        return value
-
 
 def agent_voice_problems(agent_id: str, block: Any) -> List[str]:
     """What is wrong with the ``voice:`` of an agent spec (``agents/*.yaml``), in sentences (VOICE.md VO-41).
@@ -4199,7 +4188,6 @@ def list_apps(kind: Optional[AppKind] = None) -> List[AppSpec]:
 __all__ = [
     "A2UI_OUTPUT",
     "agent_voice_problems",
-    "HANDS_FREE_NOT_BUILT",
     "APP_CATALOGUE",
     "APP_SCHEMA",
     "ASSISTANT_CHARACTER_ID",

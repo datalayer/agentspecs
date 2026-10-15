@@ -212,12 +212,11 @@ def test_the_appspec_voice_is_off_unless_said_and_round_trips():
     assert app_problems(voiced) == app_problems(parse_app(_app()))
 
 
-def test_hands_free_is_refused_until_it_is_built():
-    """Decided 14 October 2026: refused in a sentence, never taken for click-to-talk (VO-12)."""
-    with pytest.raises(AppError) as refused:
-        parse_app(_app(interface={"voice": {"enabled": True, "input": "hands_free"}}))
-    assert "interface.voice.input: hands_free is not built yet (VOICE.md VO-12)" in str(refused.value)
-    assert json_schema()["$defs"]["VoiceInput"]["enum"] == ["off", "push_to_talk"]
+def test_hands_free_is_a_way_to_talk():
+    """VO-12, built 15 October 2026: a conversation by voice, taken as said."""
+    app = parse_app(_app(interface={"voice": {"enabled": True, "input": "hands_free"}}))
+    assert app.interface.voice.input == "hands_free"
+    assert json_schema()["$defs"]["VoiceInput"]["enum"] == ["off", "push_to_talk", "hands_free"]
 
 
 def test_a_voice_not_in_the_catalogue_or_not_speaking_the_language_is_a_problem():
