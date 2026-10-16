@@ -360,9 +360,16 @@ def transcriber_for(language: str, where: str = "device") -> Optional[SpeechMode
         for model in list_speech_models("stt")
         if where in model.where and base in model.languages
     ]
-    # Tiny first: on the fixtures it heard better than base (WER 3.3% against
-    # 4.9%, agent-runtimes tests/voice, 2026-10-05), at half the download.
-    for preferred in ("moonshine-tiny-en", "moonshine-base-en"):
+    # On the device, tiny first: on the fixtures it heard better than base (WER
+    # 3.3% against 4.9%, agent-runtimes tests/voice, 2026-10-05), at half the
+    # download. On the server, large-v3-turbo hears a language at any length;
+    # the speech service picks a turn's model itself (VO-47, decision 18).
+    order = (
+        ("moonshine-tiny-en", "moonshine-base-en")
+        if where == "device"
+        else ("whisper-large-v3-turbo",)
+    )
+    for preferred in order:
         for model in hearing:
             if model.id == preferred:
                 return model

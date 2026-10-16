@@ -140,6 +140,25 @@ def test_the_server_hears_short_turns_with_whisper_small():
     assert speech.transcriber_for("fr-FR", "server").id == "whisper-large-v3-turbo"
 
 
+def test_moonshine_base_is_on_the_server_beside_whisper_small():
+    """Decision 18 (2026-10-16): Moonshine base, the browser's own pinned files, run on the server by onnxruntime."""
+    server = speech.get_speech_model("moonshine-base-en-server")
+    device = speech.get_speech_model("moonshine-base-en")
+    assert server.where == ["server"] and server.engine == "onnxruntime"
+    assert server.languages == ["en"] and server.licence.weights == "MIT"
+    assert server.files == device.files and server.source == device.source
+    assert server.folder == "usefulsensors/moonshine-base-en-server"
+    assert {item.path for item in server.files} >= {
+        "tokenizer.json",
+        "config.json",
+        "onnx/encoder_model_quantized.onnx",
+        "onnx/decoder_model_merged_quantized.onnx",
+    }
+    # The device's choice is unchanged; the server's model for a language is turbo.
+    assert speech.transcriber_for("en", "device").id == "moonshine-tiny-en"
+    assert speech.transcriber_for("en", "server").id == "whisper-large-v3-turbo"
+
+
 def test_the_browser_hears_only_mit_moonshine():
     """VO-04: only the MIT Moonshine models, English, are listed."""
     for model in speech.list_speech_models("stt"):
