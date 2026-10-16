@@ -98,7 +98,11 @@ entries:
     where: server
     status: used
     source: https://pypi.org/pypi/phonemizer/json
-    note: kokoro-onnx's G2P; on the server only, in a private image.
+    note: >-
+      kokoro-onnx's G2P; in the speech service's private image. agent-runtimes' `voice`
+      extra (kokoro-onnx) also has pip install it from PyPI on the person's own machine
+      (VO-16, since agent-runtimes 1.5.45): not admitted there by this register (GPL on the
+      server only) — the user's decision, or counsel's (VO-01), 16 October 2026.
   - name: espeakng-loader
     kind: library
     version: 0.2.4
@@ -113,7 +117,11 @@ entries:
     where: server
     status: used
     source: https://github.com/espeak-ng/espeak-ng
-    note: On the server only. Never in a browser bundle (decision 1, 2026-10-05).
+    note: >-
+      Never in a browser bundle (decision 1, 2026-10-05). In the speech service's image; and,
+      through espeakng-loader's wheel, on the person's own machine when agent-runtimes'
+      `voice` extra is installed (VO-16): not admitted there by this register — the user's
+      decision, or counsel's (VO-01), 16 October 2026.
   - {name: onnxruntime, kind: library, version: 1.30.0, licence: MIT, where: server, status: used, source: https://pypi.org/pypi/onnxruntime/json}
   - {name: soundfile, kind: library, version: 0.14.0, licence: BSD-3-Clause, where: server, status: used, source: https://pypi.org/pypi/soundfile/json}
   - {name: libsndfile, kind: library, version: 1.2.2, licence: LGPL-2.1-or-later, where: server, status: used, source: https://github.com/libsndfile/libsndfile, note: "Inside soundfile's wheel."}
@@ -122,10 +130,18 @@ entries:
   - {name: tokenizers, kind: library, licence: Apache-2.0, where: server, status: used, source: https://pypi.org/pypi/tokenizers/json, note: "faster-whisper's tokenizer."}
   - {name: av, kind: library, version: 19.0.1, licence: BSD-3-Clause, where: server, status: used, source: https://pypi.org/pypi/av/json, note: "A dependency of faster-whisper, unused by the service (it decodes with soundfile); its wheel ships FFmpeg (LGPL-2.1-or-later), below."}
   - {name: FFmpeg, kind: library, licence: LGPL-2.1-or-later, where: server, status: used, source: https://github.com/PyAV-Org/pyav-ffmpeg, note: "Inside av's wheel, built LGPL; on the server only."}
-  - {name: moonshine-base-en-server, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/UsefulSensors/moonshine-base, note: "The browser's 8-bit export (onnx-community/moonshine-base-ONNX, pinned), run by onnxruntime with Datalayer's own greedy decoder and tokenizers: no useful-moonshine-onnx, no new library (decision 18, measured 2026-10-16)."}
+  - {name: moonshine-base-en-server, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/UsefulSensors/moonshine-base, note: "The browser's 8-bit export (onnx-community/moonshine-base-ONNX, pinned), run by onnxruntime with Datalayer's own greedy decoder and tokenizers: no useful-moonshine-onnx, no new library. Hears English spoken turns (decision 18, revised by the user 16 October 2026; speech:0.0.11)."}
   - {name: whisper-small, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/openai/whisper-small, note: "Its CTranslate2 conversion, https://huggingface.co/Systran/faster-whisper-small (MIT), pinned: short spoken turns (VO-47, decided 2026-10-15)."}
   - {name: whisper-large-v3-turbo, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/openai/whisper-large-v3-turbo, note: "Its CTranslate2 conversion, https://huggingface.co/dropbox-dash/faster-whisper-large-v3-turbo (MIT), pinned (VO-34)."}
   - {name: jiwer, kind: library, version: 4.0.0, licence: Apache-2.0, where: server, status: used, source: https://pypi.org/pypi/jiwer/json, note: "The WER check (VO-51), in tests only."}
+
+  # --- on the person's machine (agent-runtimes[voice], VO-16), used ------------------------
+  - {name: sounddevice, kind: library, version: 0.5.6, licence: MIT, where: machine, status: used, source: https://pypi.org/pypi/sounddevice/json, note: "The `voice` extra's microphone and speaker (`loop --voice`); it brings PortAudio, below. Checked 2026-10-16."}
+  - {name: PortAudio, kind: library, licence: MIT, where: machine, status: used, source: https://github.com/PortAudio/portaudio, note: "Inside sounddevice's wheels for macOS and Windows; the system's own on Linux."}
+  - {name: kokoro-onnx, kind: library, version: 0.6.1, licence: MIT, where: machine, status: used, source: https://pypi.org/pypi/kokoro-onnx/json, note: "Answers said on the machine by the `voice` extra (VO-16). It brings onnxruntime, espeakng-loader and phonemizer: the last two carry eSpeak NG (GPL-3.0), listed on the server only — see their notes."}
+  - {name: onnxruntime, kind: library, version: 1.30.0, licence: MIT, where: machine, status: used, source: https://pypi.org/pypi/onnxruntime/json, note: "kokoro-onnx's engine on the machine."}
+  - {name: espeakng-loader, kind: library, version: 0.2.4, licence: MIT, where: machine, status: used, source: https://pypi.org/pypi/espeakng-loader/json, note: "Its wheel ships the eSpeak NG library (GPL-3.0-or-later): see eSpeak NG's note."}
+  - {name: kokoro-82m, kind: model, licence: Apache-2.0, where: machine, status: used, source: https://huggingface.co/hexgrad/Kokoro-82M, note: "The store filled from Datalayer's CDN by `python -m agent_runtimes.voice.store` (VO-16)."}
 
   # --- voices ----------------------------------------------------------------------------
   - {name: kokoro-af-heart, kind: voice, licence: Apache-2.0, where: server, status: used, source: https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md}

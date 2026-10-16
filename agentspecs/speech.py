@@ -205,7 +205,10 @@ class RegisterEntry(_Strict):
     kind: Literal["library", "model", "voice", "dataset"]
     version: str = ""
     licence: str
-    where: Literal["browser", "server", "tests"]
+    #: `machine` is the person's own machine, where an optional extra of agent-runtimes
+    #: installs it from PyPI (`agent-runtimes[voice]`, VO-16); GPL is admitted on the
+    #: server only, so a GPL library used there is not admitted (VO-01, decision 1).
+    where: Literal["browser", "server", "machine", "tests"]
     status: Literal["used", "candidate", "refused"]
     source: str
     note: str = ""

@@ -277,3 +277,32 @@ def test_audio_is_kept_only_when_listening_and_never_in_public():
         )
     with pytest.raises(AppError, match="only when it listens"):
         parse_app(_app(record={"include": ["conversations", "audio"]}))
+
+
+def test_the_voice_extra_is_registered_on_the_person_s_machine():
+    """VO-16, VO-01: agent-runtimes' `voice` extra installs these on the person's own machine."""
+    book = speech.register()
+    on_the_machine = {e.name: e for e in book.entries if e.where == "machine"}
+    for name in ("sounddevice", "PortAudio", "kokoro-onnx", "onnxruntime", "espeakng-loader"):
+        assert on_the_machine[name].status == "used" and on_the_machine[name].licence == "MIT", name
+    # eSpeak NG's GPL is admitted on the server only: on the machine, its notes say it waits on a decision.
+    for name in ("phonemizer", "eSpeak NG"):
+        entry = book.entry(name)
+        assert entry.where == "server" and "person's own machine" in entry.note, name
+
+
+def test_the_register_refuses_gpl_used_on_the_person_s_machine():
+    """Decision 1: GPL is admitted where it is not distributed — the server — and nowhere else."""
+    data = speech.register().model_dump()
+    data["entries"].append(
+        {
+            "name": "x",
+            "kind": "library",
+            "licence": "GPL-3.0-or-later",
+            "where": "machine",
+            "status": "used",
+            "source": "-",
+        }
+    )
+    with pytest.raises(ValidationError, match="lists do not allow"):
+        speech.Register.model_validate(data)
