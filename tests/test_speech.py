@@ -265,18 +265,42 @@ def test_a_language_is_bcp_47():
 
 def test_audio_is_kept_only_when_listening_and_never_in_public():
     listening = {"voice": {"enabled": True}}
-    kept = parse_app(_app(interface=listening, record={"include": ["conversations", "audio"]}))
+    kept = parse_app(
+        _app(interface=listening, record={"keep_for": "30_days", "include": ["conversations", "audio"]})
+    )
     assert RecordItem.AUDIO in kept.record.include
     with pytest.raises(AppError, match="keeps no audio"):
         parse_app(
             _app(
                 interface=listening,
-                record={"include": ["conversations", "audio"]},
+                record={"keep_for": "30_days", "include": ["conversations", "audio"]},
                 deployment={"hosted": {"visibility": "public"}},
             )
         )
     with pytest.raises(AppError, match="only when it listens"):
-        parse_app(_app(record={"include": ["conversations", "audio"]}))
+        parse_app(_app(record={"keep_for": "30_days", "include": ["conversations", "audio"]}))
+
+
+def test_audio_is_kept_thirty_days_at_most():
+    """Decision 10 (VOICE.md VO-63): what was said aloud is kept 30 days at most, by `keep_for` or a Track."""
+    listening = {"voice": {"enabled": True}}
+    for keep_for in ("1_days", "30_days", "1_months"):
+        parse_app(_app(interface=listening, record={"keep_for": keep_for, "include": ["audio"]}))
+    for keep_for, days in (("31_days", 31), ("2_months", 60), ("1_years", 365)):
+        with pytest.raises(AppError, match=f"audio is kept 30 days at most, and `record.keep_for` \\({keep_for}\\) keeps the record {days} days"):
+            parse_app(_app(interface=listening, record={"keep_for": keep_for, "include": ["audio"]}))
+    # Unsaid, the record is kept a year: too long for audio.
+    with pytest.raises(AppError, match="30 days at most"):
+        parse_app(_app(interface=listening, record={"include": ["audio"]}))
+    # A Track's retention is how long the record is kept, whatever `keep_for` says.
+    with pytest.raises(AppError, match="its Track standard"):
+        parse_app(
+            _app(
+                interface=listening,
+                record={"keep_for": "30_days", "include": ["audio"]},
+                checks={"track": "standard"},
+            )
+        )
 
 
 def test_the_voice_extra_is_registered_on_the_person_s_machine():

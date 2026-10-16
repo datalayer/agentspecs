@@ -2674,7 +2674,7 @@ class RecordItem(str, Enum):
     OUTPUTS = "outputs"
     FEEDBACK = "feedback"
     AUDIO = "audio"
-    """What was said aloud, as sound: off unless named, never for a public deployment (VOICE.md VO-42)."""
+    """What was said aloud, as sound: off unless named, kept 30 days at most, never for a public deployment (VOICE.md VO-42, VO-63)."""
     DIFFS = "diffs"
     """A harness's edits whole — the file's old and new text — rather than each diff's hash and size (SHIELD.md §6.4)."""
     TERMINALS = "terminals"
@@ -2682,6 +2682,9 @@ class RecordItem(str, Enum):
 
 
 _RETENTION = re.compile(r"^(?P<count>[1-9]\d*)_(?P<unit>day|days|month|months|year|years)$")
+
+#: How long what was said aloud may be kept, at most (decision 10, VOICE.md VO-63).
+AUDIO_KEPT_DAYS_AT_MOST = 30
 _DAYS = {"day": 1, "month": 30, "year": 365}
 
 
@@ -3450,6 +3453,20 @@ class AppSpec(_Strict):
                 )
             if not self.interface.voice.enabled or self.interface.voice.input is VoiceInput.OFF:
                 raise ValueError("an application keeps audio only when it listens: turn `interface.voice` on")
+            # What was said aloud is kept 30 days at most (decision 10, VOICE.md VO-63) —
+            # as long as the record keeps it: its `keep_for`, or the Track's retention.
+            days, keeper = self.record.retention_days, f"`record.keep_for` ({self.record.keep_for})"
+            from ..tracks import get_track  # noqa: PLC0415 - tracks import apps
+
+            track = get_track(self.checks.track) if self.checks.track.strip() else None
+            if track is not None:
+                days, keeper = track.retention_days, f"its Track {track.id} ({track.retain_for})"
+            if days > AUDIO_KEPT_DAYS_AT_MOST:
+                raise ValueError(
+                    f"audio is kept {AUDIO_KEPT_DAYS_AT_MOST} days at most, and {keeper} keeps the record "
+                    f"{days} days: keep it `{AUDIO_KEPT_DAYS_AT_MOST}_days` or less, or remove `audio` "
+                    "from `record.include`"
+                )
         servers = [_id_of(connection.server) for connection in self.connections]
         if len(set(servers)) != len(servers):
             raise ValueError("the application connects to the same server twice")
