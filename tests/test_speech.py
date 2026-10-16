@@ -70,7 +70,7 @@ def test_a_non_commercial_model_is_refused():
 
 
 def test_gpl_runs_on_the_server_and_never_in_the_browser():
-    """Decision 1: eSpeak NG's GPL is allowed where it is not distributed."""
+    """eSpeak NG's GPL is allowed where it is not distributed."""
     assert speech.admitted("GPL-3.0-or-later", ["server"])
     assert not speech.admitted("GPL-3.0-or-later", ["device"])
     assert not speech.admitted("GPL-3.0-or-later", ["device", "server"])
@@ -141,7 +141,7 @@ def test_the_server_hears_short_turns_with_whisper_small():
 
 
 def test_moonshine_base_is_on_the_server_beside_whisper_small():
-    """Decision 18 (2026-10-16): Moonshine base, the browser's own pinned files, run on the server by onnxruntime."""
+    """Moonshine base, the browser's own pinned files, run on the server by onnxruntime."""
     server = speech.get_speech_model("moonshine-base-en-server")
     device = speech.get_speech_model("moonshine-base-en")
     assert server.where == ["server"] and server.engine == "onnxruntime"
@@ -282,7 +282,7 @@ def test_audio_is_kept_only_when_listening_and_never_in_public():
 
 
 def test_audio_is_kept_thirty_days_at_most():
-    """Decision 10 (VO-63): what was said aloud is kept 30 days at most, by `keep_for` or a Track."""
+    """VO-63: what was said aloud is kept 30 days at most, by `keep_for` or a Track."""
     listening = {"voice": {"enabled": True}}
     for keep_for in ("1_days", "30_days", "1_months"):
         parse_app(_app(interface=listening, record={"keep_for": keep_for, "include": ["audio"]}))
@@ -346,7 +346,7 @@ def test_a_voice_is_given_its_own_language_tag():
 
 
 def test_the_register_refuses_gpl_used_on_the_person_s_machine():
-    """Decision 1: GPL is admitted where it is not distributed — the server — and nowhere else."""
+    """GPL is admitted where it is not distributed — the server — and nowhere else."""
     data = speech.register().model_dump()
     data["entries"].append(
         {

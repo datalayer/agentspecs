@@ -72,7 +72,7 @@ def test_every_control_carries_the_evidence_kinds_cadence_and_crosswalks_the_sta
 
 
 def test_the_spec_is_held_to_the_published_index(monkeypatch):
-    """Decision 16: the control ids and titles of the spec are the ones the standard publishes —
+    """The control ids and titles of the spec are the ones the standard publishes —
     the live index when the network allows, else the stored snapshot it was read from."""
     aiuc = standards.get_standard("aiuc-1")
     snapshot = standards.published_index(standards.AIUC1_INDEX_PATH.read_text(encoding="utf-8"))

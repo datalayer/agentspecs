@@ -10,6 +10,8 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
+- 0.0.113 (16 October 2026). The default policy's description, and the tests' docstrings, say what was decided rather than citing a decision number.
+
 - 0.0.112 (16 October 2026). The spec text, schemas and references no longer cite the private plans: what was decided is said in plain words, box ids alone stay.
 
 - 0.0.111 (VO-63, 16 October 2026). What was said aloud is kept 30 days at most: an Appspec whose `record.include` names `audio` and whose record is kept longer — its `keep_for`, or its Track's retention when `checks.track` names one (`standard` keeps a year) — is refused in a sentence naming both lengths (`AUDIO_KEPT_DAYS_AT_MOST`); with the refusals already there (a public deployment, an application that does not listen). Docs: apps (`record`). Tests: 620 passed (1 new)
@@ -274,7 +276,7 @@ Pages: [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
 
 ## 0.0.46
 
-Inbox triage's rules, with the plan's defaults: a forward outside the organization is left to the person (W-04); its agent carries Gmail's tools and nothing else (W-01).
+Inbox triage's rules, with their defaults: a forward outside the organization is left to the person (W-04); its agent carries Gmail's tools and nothing else (W-01).
 
 Pages: [Applications](https://agentspecs.datalayer.tech/apps).
 
