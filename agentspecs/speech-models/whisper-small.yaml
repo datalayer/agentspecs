@@ -19,7 +19,7 @@ task: stt
 engine: faster-whisper
 dtype: float16
 languages: [en, fr, es, it, pt, de, nl, ja, zh, hi]
-where: [server]
+where: [server, machine]
 streaming: false
 licence:
   weights: MIT

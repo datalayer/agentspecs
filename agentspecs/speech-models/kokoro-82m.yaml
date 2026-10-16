@@ -19,7 +19,7 @@ task: tts
 engine: kokoro-onnx
 dtype: fp32
 languages: [en, fr, es, it, pt, hi, ja, zh]
-where: [server]
+where: [server, machine]
 streaming: false
 licence:
   weights: Apache-2.0

@@ -11,7 +11,7 @@ engine: kokoro
 model: kokoro-82m
 voice: af_heart
 languages: [en-US]
-where: [server]
+where: [server, machine]
 licence:
   weights: Apache-2.0
 attribution: ""

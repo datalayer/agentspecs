@@ -49,8 +49,10 @@ SPEECH_MODELS_DIR = _ROOT / "speech-models"
 #: The licence register.
 REGISTER_PATH = _ROOT / "speech-licences.yaml"
 
-#: Where a step of speech may run: in the person's browser, or on ai-agents.
-Where = Literal["device", "server"]
+#: Where a step of speech may run: in the person's browser (`device`), on ai-agents
+#: (`server`), or on the person's own machine through agent-runtimes' `voice` extra
+#: (`machine`: `loop --voice --speak`, VO-16).
+Where = Literal["device", "server", "machine"]
 
 #: What a speech model does.
 Task = Literal["stt", "tts", "vad"]
@@ -196,6 +198,21 @@ class Voice(_Strict):
         """Whether it speaks a language: `fr` and `fr-FR` are spoken by a `fr-FR` voice."""
         wanted = language.strip()
         return any(own == wanted or own.split("-")[0] == wanted for own in self.languages)
+
+    def spoken_as(self, language: str) -> str:
+        """Its own tag for a language it speaks — `fr` and `fr-FR` are `fr-FR` for a `fr-FR` voice — or `''`.
+
+        The engine is given this tag, never the caller's: eSpeak NG, Kokoro's phonemizer,
+        knows `fr-fr` and refuses `fr` (VO-16).
+        """
+        wanted = language.strip()
+        for own in self.languages:
+            if own == wanted:
+                return own
+        for own in self.languages:
+            if own.split("-")[0] == wanted:
+                return own
+        return ""
 
 
 class RegisterEntry(_Strict):

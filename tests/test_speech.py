@@ -133,7 +133,7 @@ def test_the_server_hears_the_first_languages_with_whisper_turbo():
 def test_the_server_hears_short_turns_with_whisper_small():
     """VO-47 (decided 2026-10-15): a smaller Whisper for turns, never sent to a browser."""
     small = speech.get_speech_model("whisper-small")
-    assert small.where == ["server"] and small.engine == "faster-whisper"
+    assert small.where == ["server", "machine"] and small.engine == "faster-whisper"
     assert small.folder == "openai/whisper-small"
     assert small.size < speech.get_speech_model("whisper-large-v3-turbo").size / 3
     # Long recordings, and the language's server model, stay turbo's.
@@ -283,12 +283,42 @@ def test_the_voice_extra_is_registered_on_the_person_s_machine():
     """VO-16, VO-01: agent-runtimes' `voice` extra installs these on the person's own machine."""
     book = speech.register()
     on_the_machine = {e.name: e for e in book.entries if e.where == "machine"}
-    for name in ("sounddevice", "PortAudio", "kokoro-onnx", "onnxruntime", "espeakng-loader"):
+    for name in (
+        "sounddevice", "PortAudio", "kokoro-onnx", "onnxruntime", "espeakng-loader",
+        "faster-whisper", "ctranslate2",
+    ):
         assert on_the_machine[name].status == "used" and on_the_machine[name].licence == "MIT", name
-    # eSpeak NG's GPL is admitted on the server only: on the machine, its notes say it waits on a decision.
-    for name in ("phonemizer", "eSpeak NG"):
+    assert on_the_machine["av"].licence == "BSD-3-Clause"
+    assert on_the_machine["tokenizers"].licence == "Apache-2.0"
+    # What the catalogue says runs on the machine is registered there, by the licence it has.
+    for item in [*speech.list_speech_models(), *speech.list_voices()]:
+        if "machine" in item.where:
+            assert on_the_machine[item.id].licence == item.licence.weights, item.id
+    # eSpeak NG's GPL and FFmpeg's LGPL are admitted on the server only: on the machine,
+    # their notes say they wait on a decision.
+    for name in ("phonemizer", "eSpeak NG", "FFmpeg"):
         entry = book.entry(name)
         assert entry.where == "server" and "person's own machine" in entry.note, name
+
+
+def test_the_voice_extra_s_models_and_voices_run_on_the_machine():
+    """VO-16: what agent-runtimes' `voice` extra hears and says with on the person's machine."""
+    assert speech.transcriber_for("en-US", "machine").id == "whisper-small"
+    assert "machine" in speech.get_speech_model("kokoro-82m").where
+    for voice in speech.list_voices():
+        assert voice.where == ["server", "machine"], voice.id
+    # Nothing that runs in a browser is said to run on the machine, nor the server's large models.
+    for model_id in ("whisper-large-v3-turbo", "moonshine-base-en-server", "moonshine-tiny-en"):
+        assert "machine" not in speech.get_speech_model(model_id).where, model_id
+
+
+def test_a_voice_is_given_its_own_language_tag():
+    """VO-16: eSpeak NG knows `fr-fr`, not `fr`: the engine is given the voice's own tag."""
+    siwis = speech.get_voice("kokoro-ff-siwis")
+    assert siwis.spoken_as("fr") == "fr-FR" and siwis.spoken_as("fr-FR") == "fr-FR"
+    assert siwis.spoken_as("en") == "" and siwis.spoken_as("fr-CA") == ""
+    heart = speech.get_voice("kokoro-af-heart")
+    assert heart.spoken_as("en") == "en-US" and heart.spoken_as("en-GB") == ""
 
 
 def test_the_register_refuses_gpl_used_on_the_person_s_machine():

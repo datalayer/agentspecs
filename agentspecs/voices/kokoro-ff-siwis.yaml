@@ -13,7 +13,7 @@ engine: kokoro
 model: kokoro-82m
 voice: ff_siwis
 languages: [fr-FR]
-where: [server]
+where: [server, machine]
 licence:
   weights: Apache-2.0
   dataset: CC-BY-4.0
