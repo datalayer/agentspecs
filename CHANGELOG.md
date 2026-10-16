@@ -10,6 +10,8 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
+- 0.0.112 (16 October 2026). The spec text, schemas and references no longer cite the private plans: what was decided is said in plain words, box ids alone stay.
+
 - 0.0.111 (VO-63, 16 October 2026). What was said aloud is kept 30 days at most: an Appspec whose `record.include` names `audio` and whose record is kept longer — its `keep_for`, or its Track's retention when `checks.track` names one (`standard` keeps a year) — is refused in a sentence naming both lengths (`AUDIO_KEPT_DAYS_AT_MOST`); with the refusals already there (a public deployment, an application that does not listen). Docs: apps (`record`). Tests: 620 passed (1 new)
 
 - 0.0.110 (VO-16, 16 October 2026). The catalogue's `where` takes `machine` — the person's own machine, through agent-runtimes' `voice` extra (`loop --voice --speak`) — and says it of what the extra hears and says with: `whisper-small`, `kokoro-82m` and the three Kokoro voices (`[server, machine]`); nothing a browser runs, nor the server's large models. `Voice.spoken_as(language)`: a voice's own tag for a language it speaks (`fr` → `fr-FR`), which the engine is given — eSpeak NG knows `fr-fr` and refuses `fr`. The register lists what faster-whisper brings to the machine (faster-whisper, ctranslate2, tokenizers, av; whisper-small and the voices there); FFmpeg's note says its LGPL reaches the machine through av, not admitted there, with eSpeak NG's decision (VO-01). Tests: 619 passed
