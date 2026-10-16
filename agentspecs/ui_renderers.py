@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The UI renderers, as specs (AGENTIC_UI R8, F-01).
+"""The UI renderers, as specs (R8, F-01).
 
 A UI renderer is how a UI plugin's interface reaches a host that is not
 Datalayer's own page: A2UI, MCP Apps, MCP UI. One YAML per renderer under

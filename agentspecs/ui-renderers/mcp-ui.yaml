@@ -4,7 +4,7 @@
 # UI Renderer Specification: MCP UI
 #
 # How a UI plugin's interface reaches a host that is not Datalayer's own page
-# (AGENTIC_UI R8). Not an interface: a UI plugin (`agentspecs/ui`) says the
+# (R8). Not an interface: a UI plugin (`agentspecs/ui`) says the
 # renderers it may be exposed through, and an application names, per plugin,
 # the one it uses.
 

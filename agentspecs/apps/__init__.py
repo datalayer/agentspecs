@@ -187,7 +187,7 @@ def ui_for(
     signs_in: bool = False,
     own_components: bool = False,
 ) -> List[Dict[str, str]]:
-    """The UI plugins an application is drawn with (AGENTIC_UI R8), as its `ui` lists them.
+    """The UI plugins an application is drawn with (R8), as its `ui` lists them.
 
     What agent-runtimes' `appPreset` mounts for it. A decision: its page alone, drawn by its
     host. Every other kind: the conversation — `chat`, which stands for the conversation base
@@ -3273,7 +3273,7 @@ class AppSpec(_Strict):
     ui: List[UiChoice] = Field(
         default_factory=list,
         description=(
-            "Its UI plugins, each `{plugin, renderer}` (AGENTIC_UI R8): a plugin of `agentspecs/ui`, each once, "
+            "Its UI plugins, each `{plugin, renderer}` (R8): a plugin of `agentspecs/ui`, each once, "
             "and the renderer of `agentspecs/ui-renderers` it is exposed through, when it is — one the plugin "
             "may be exposed through, and one that is not enabled only while the application is not offered"
         ),

@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The UI plugins, as specs (AGENTIC_UI R8, F-02), and their components page.
+"""The UI plugins, as specs (R8, F-02), and their components page.
 
 The interface of an application is made of Reactor plugins: the chat, the
 notebook and its toolbar, the page an application draws, its rules and

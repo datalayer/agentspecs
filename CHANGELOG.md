@@ -10,6 +10,8 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
+- 0.0.114 (16 October 2026). The UI plugins' descriptions cite their box id alone.
+
 - 0.0.113 (16 October 2026). The default policy's description, and the tests' docstrings, say what was decided rather than citing a decision number.
 
 - 0.0.112 (16 October 2026). The spec text, schemas and references no longer cite the private plans: what was decided is said in plain words, box ids alone stay.

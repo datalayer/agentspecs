@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""UI specs are Reactor plugins, UI renderers their own specs (AGENTIC_UI R8, F-01, F-02).
+"""UI specs are Reactor plugins, UI renderers their own specs (R8, F-01, F-02).
 
 Every UI spec is one plugin of agent-runtimes, well formed, and names only
 renderers of the ``ui-renderers`` catalogue; every renderer is well formed;
