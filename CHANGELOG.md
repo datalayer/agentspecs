@@ -10,6 +10,7 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
+- 0.0.115 (16 October 2026). The Shield policy schema copied from agent-shield 0.2.7: its descriptions say what each setting is, with no decision numbers or design-note sections. A catalogue agent on each harness (SH-43).
 - 0.0.114 (16 October 2026). The UI plugins' descriptions cite their box id alone.
 
 - 0.0.113 (16 October 2026). The default policy's description, and the tests' docstrings, say what was decided rather than citing a decision number.

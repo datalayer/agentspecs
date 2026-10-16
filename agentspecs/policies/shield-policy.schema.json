@@ -24,7 +24,7 @@
     },
     "AuthorizerConfig": {
       "additionalProperties": false,
-      "description": "``authorizer:`` in a policy document: exactly one decision point (\u00a76.11, standalone).",
+      "description": "``authorizer:`` in a policy document: exactly one decision point (standalone).",
       "properties": {
         "authzen": {
           "anyOf": [
@@ -107,7 +107,7 @@
     },
     "Harnesses": {
       "additionalProperties": false,
-      "description": "The harnesses an organization admits, and whose credentials run them (\u00a76.7).",
+      "description": "The harnesses an organization admits, and whose credentials run them.",
       "properties": {
         "admit": {
           "description": "Harness ids of the catalogue this scope admits; empty admits every registered harness.",
@@ -119,7 +119,7 @@
         },
         "credentials": {
           "default": "account",
-          "description": "Whose key runs a harness: the account's own declared secret (decision 3), the platform's, or either.",
+          "description": "Whose key runs a harness: the account's own declared secret, the platform's, or either.",
           "enum": [
             "account",
             "platform",
@@ -134,7 +134,7 @@
     },
     "Limits": {
       "additionalProperties": false,
-      "description": "The stateful limits of a session (SHIELD \u00a76.3).\n\nThree count the harness's actions; two count what its model costs: the\n**model budget** in tokens and the **spend** in credits (the deployment's\nspend limit; 100 credits are one USD). Each has a soft threshold, where the\nnext call asks the person, and a hard one, where each further call is\nrefused and the sentence says what would let it go on.",
+      "description": "The stateful limits of a session.\n\nThree count the harness's actions; two count what its model costs: the\n**model budget** in tokens and the **spend** in credits (the deployment's\nspend limit; 100 credits are one USD). Each has a soft threshold, where the\nnext call asks the person, and a hard one, where each further call is\nrefused and the sentence says what would let it go on.",
       "properties": {
         "bytes_written": {
           "anyOf": [
@@ -438,7 +438,7 @@
   "description": "One policy document, one scope.",
   "properties": {
     "authorize": {
-      "description": "The classes that need an authorizer's allow beside the Rules (SHIELD \u00a76.11): a deny wins over any Rule, an unreachable authorizer is a deny. Empty needs none (local-only); Datalayer's documents name read, write, execute, send and buy.",
+      "description": "The classes that need an authorizer's allow beside the Rules: a deny wins over any Rule, an unreachable authorizer is a deny. Empty needs none (local-only); Datalayer's documents name read, write, execute, send and buy.",
       "items": {
         "enum": [
           "read",
@@ -476,7 +476,7 @@
         }
       ],
       "default": null,
-      "description": "When a pulled copy stops being honoured (decision 11).",
+      "description": "When a pulled copy stops being honoured.",
       "title": "Expires"
     },
     "harnesses": {
