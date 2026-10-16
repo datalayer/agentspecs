@@ -31,7 +31,7 @@ contribution_points: []
 renderers:
 - "a2ui"
 
-# The catalog of visual components it renders (LOOP C-13): one catalog for the
+# The catalog of visual components it renders (C-13): one catalog for the
 # spec, the Canvas and Python. The A2UI v0.9 basic catalog's components, named
 # and drawn as A2UI says (`standard: true`), then Datalayer's own, added as an
 # A2UI custom catalog. Every one has its version and its properties as a JSON

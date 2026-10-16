@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""An agent's voice (VOICE.md VO-41): the ``voice:`` of an agent spec, the
+"""An agent's voice (VO-41): the ``voice:`` of an agent spec, the
 block an application says under ``interface.voice``, checked the same way."""
 
 from pathlib import Path

@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Application Specification: Crop Monitoring
-# One agent and its data: the scene `crop-monitoring` (LOOP A-04, A-08) has
+# One agent and its data: the scene `crop-monitoring` (A-04, A-08) has
 # this single member. It follows crop vigour and growth over a season from
 # the satellite imagery NASA Earthdata holds, found through the `earthdata`
 # MCP server at *Can read*: it searches the datasets and the granules that

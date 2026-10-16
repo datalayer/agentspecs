@@ -120,7 +120,7 @@ def test_an_agent_names_ui_plugins_with_their_renderer():
 
 
 def test_the_old_names_are_gone():
-    """`ui-plugins` is `ui` (AGENT_PROTOCOLS PS-03): no spec says the old field, no folder keeps the old name."""
+    """`ui-plugins` is `ui` (PS-03): no spec says the old field, no folder keeps the old name."""
     assert not (ROOT / "ui-plugins").exists()
     for path in sorted([*(ROOT / "agents").rglob("*.yaml"), *(ROOT / "cogs").rglob("*.yaml")]):
         spec = yaml.safe_load(path.read_text()) or {}

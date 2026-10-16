@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # UCP 2026-08-25 shopping, as Datalayer's gateway serves it (its `ucp` toolset,
-# AGENT_PROTOCOLS PI-10) over agent-runtimes' `UcpClient` (PR-31), which names
+# PI-10) over agent-runtimes' `UcpClient` (PR-31), which names
 # its operations without the prefix. A merchant connection is `ucp:<domain>`.
 # After the sale, `ucp_get_order` reads an order the merchant placed.
 id: ucp

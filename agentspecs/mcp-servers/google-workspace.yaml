@@ -6,7 +6,7 @@ version: 0.0.1
 name: Google Workspace
 description: Gmail of the person an application acts for, read or read and send, with a token Datalayer mints per call
 
-# Gmail only, through Datalayer (STUDIO W-02). The person connects Gmail in
+# Gmail only, through Datalayer (W-02). The person connects Gmail in
 # Google's own consent screen, at one of two levels — *can read*
 # (gmail.readonly) or *can read and send* (gmail.modify + gmail.send) — and
 # Datalayer's IAM keeps the refresh token as their secret. The server runs in
@@ -65,7 +65,7 @@ actions:
     to somebody outside the domain of the mailbox it sends from also publishes: that is
     told from the call (agentspecs.actions.FORWARDING), not written here. A mail, a
     draft and a Chat message say the argument holding their words (`signs`): an
-    application's runtime closes it with its byline (LOOP I-10).
+    application's runtime closes it with its byline (I-10).
   tools:
     start_google_auth: write
     search_gmail_messages: read

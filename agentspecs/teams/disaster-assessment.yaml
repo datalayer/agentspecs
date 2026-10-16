@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Team Specification: Disaster Assessment
-# A scene of three applications over A2A (LOOP A-04, A-08). A person tells
+# A scene of three applications over A2A (A-04, A-08). A person tells
 # Event response, in their browser, of a live event. Event response asks
 # Disaster Assessment for the area affected and the damage, and Change
 # detection for what changed on the ground — each on a runtime, each reading

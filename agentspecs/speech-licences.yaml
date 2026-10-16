@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# The licence register of voice (VOICE.md VO-01, §4.6).
+# The licence register of voice (VO-01).
 #
 # Every library, model, voice and dataset voice uses or was weighed, with its
 # licence and where that was read, checked on 2026-10-05. Code and weights are
@@ -11,7 +11,7 @@
 # `allowed`: what may run anywhere, the browser included — and so be
 # distributed. `server_only`: what may run on Datalayer's servers and is never
 # sent to a browser (GPL-3.0 is not the AGPL: running it is not distributing
-# it; decision 1). Everything else is refused. The catalogue's test
+# it). Everything else is refused. The catalogue's test
 # (`tests/test_speech.py`) reads these lists: a voice or a model whose licence
 # is not on them does not load, and every voice and model of the catalogue is
 # named here.
@@ -118,7 +118,7 @@ entries:
     status: used
     source: https://github.com/espeak-ng/espeak-ng
     note: >-
-      Never in a browser bundle (decision 1, 2026-10-05). In the speech service's image; and,
+      Never in a browser bundle (2026-10-05). In the speech service's image; and,
       through espeakng-loader's wheel, on the person's own machine when agent-runtimes'
       `voice` extra is installed (VO-16): not admitted there by this register — the user's
       decision, or counsel's (VO-01), 16 October 2026.
@@ -141,7 +141,7 @@ entries:
       installed (VO-16, since the extra carries faster-whisper): not admitted there by this
       register (LGPL on the server only) — the user's decision, or counsel's (VO-01), with
       eSpeak NG's, 16 October 2026.
-  - {name: moonshine-base-en-server, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/UsefulSensors/moonshine-base, note: "The browser's 8-bit export (onnx-community/moonshine-base-ONNX, pinned), run by onnxruntime with Datalayer's own greedy decoder and tokenizers: no useful-moonshine-onnx, no new library. Hears English spoken turns (decision 18, revised by the user 16 October 2026; speech:0.0.11)."}
+  - {name: moonshine-base-en-server, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/UsefulSensors/moonshine-base, note: "The browser's 8-bit export (onnx-community/moonshine-base-ONNX, pinned), run by onnxruntime with Datalayer's own greedy decoder and tokenizers: no useful-moonshine-onnx, no new library. Hears English spoken turns (revised by the user 16 October 2026; speech:0.0.11)."}
   - {name: whisper-small, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/openai/whisper-small, note: "Its CTranslate2 conversion, https://huggingface.co/Systran/faster-whisper-small (MIT), pinned: short spoken turns (VO-47, decided 2026-10-15)."}
   - {name: whisper-large-v3-turbo, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/openai/whisper-large-v3-turbo, note: "Its CTranslate2 conversion, https://huggingface.co/dropbox-dash/faster-whisper-large-v3-turbo (MIT), pinned (VO-34)."}
   - {name: jiwer, kind: library, version: 4.0.0, licence: Apache-2.0, where: server, status: used, source: https://pypi.org/pypi/jiwer/json, note: "The WER check (VO-51), in tests only."}
@@ -172,7 +172,7 @@ entries:
   - {name: LibriSpeech test-clean, kind: dataset, licence: CC-BY-4.0, where: tests, status: used, source: https://www.openslr.org/12, note: "English fixtures of the WER check (VO-50)."}
   - {name: Multilingual LibriSpeech (French), kind: dataset, licence: CC-BY-4.0, where: tests, status: used, source: https://www.openslr.org/94, note: "French fixtures of the WER check (VO-50)."}
 
-  # --- weighed, not used (§4) ------------------------------------------------------------
+  # --- weighed, not used ------------------------------------------------------------
   - {name: Parakeet TDT 0.6B v3, kind: model, licence: CC-BY-4.0, where: server, status: candidate, source: https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3}
   - {name: Kyutai STT and TTS, kind: model, licence: CC-BY-4.0, where: server, status: candidate, source: https://github.com/kyutai-labs/delayed-streams-modeling}
   - {name: chatterbox-tts, kind: library, version: 0.1.7, licence: MIT, where: server, status: candidate, source: https://github.com/resemble-ai/chatterbox, note: "Every output carries the Perth watermark."}
@@ -186,10 +186,10 @@ entries:
   - {name: piper-tts, kind: library, version: 1.8.0, licence: GPL-3.0-or-later, where: server, status: candidate, source: https://github.com/OHF-Voice/piper1-gpl}
 
   # --- refused ---------------------------------------------------------------------------
-  - {name: kokoro-js, kind: library, version: 1.2.1, licence: Apache-2.0, where: browser, status: refused, source: https://registry.npmjs.org/kokoro-js, note: "Depends on phonemizer (npm), which runs eSpeak NG: GPL-3.0 in the browser (decision 1)."}
+  - {name: kokoro-js, kind: library, version: 1.2.1, licence: Apache-2.0, where: browser, status: refused, source: https://registry.npmjs.org/kokoro-js, note: "Depends on phonemizer (npm), which runs eSpeak NG: GPL-3.0 in the browser."}
   - {name: phonemizer (npm), kind: library, version: 1.2.1, licence: GPL-3.0-or-later, where: browser, status: refused, source: https://github.com/xenova/phonemizer.js, note: "Labelled Apache-2.0 on npm; it is eSpeak NG compiled to WASM."}
   - {name: Piper en_US-lessac, kind: voice, licence: Blizzard-2013, where: server, status: refused, source: https://huggingface.co/rhasspy/piper-voices, note: "Research use only."}
   - {name: Piper en_US-ryan, kind: voice, licence: CC-BY-NC-SA-4.0, where: server, status: refused, source: https://huggingface.co/rhasspy/piper-voices}
   - {name: Moonshine legacy non-English models, kind: model, licence: Moonshine-Community-License, where: browser, status: refused, source: https://github.com/moonshine-ai/moonshine, note: "Non-commercial."}
   - {name: Coqui XTTS-v2, kind: model, licence: CPML, where: server, status: refused, source: https://huggingface.co/coqui/XTTS-v2, note: "Non-commercial, and nobody left to sell a licence."}
-  - {name: Web Speech API, kind: library, licence: proprietary, where: browser, status: refused, source: https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API, note: "Not open source; recognition goes to the browser vendor by default (decision 2)."}
+  - {name: Web Speech API, kind: library, licence: proprietary, where: browser, status: refused, source: https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API, note: "Not open source; recognition goes to the browser vendor by default."}

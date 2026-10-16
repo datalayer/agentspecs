@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Application Specification: Month-end Close
-# One agent and its data: the scene `month-end-close` (LOOP A-04, A-08) has
+# One agent and its data: the scene `month-end-close` (A-04, A-08) has
 # this single member. It drives the month-end close from the Odoo books —
 # the checklist, the accruals it suggests, the reconciliation gaps it finds —
 # read through the Datalayer MCP gateway's `odoo-accounting` toolset, and

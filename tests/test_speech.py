@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The voice catalogue (VOICE.md VO-40, VO-04) and the Appspec's voice (VO-41, VO-42)."""
+"""The voice catalogue (VO-40, VO-04) and the Appspec's voice (VO-41, VO-42)."""
 
 import pytest
 from pydantic import ValidationError
@@ -109,7 +109,7 @@ def test_each_model_is_kept_under_its_provider_the_organisation_its_upstream_nam
 
 
 def test_the_first_languages_are_heard_and_spoken():
-    """English and French first (decision 12): a voice and a speech-to-text model on the device for each."""
+    """English and French first: a voice and a speech-to-text model on the device for each."""
     for language in ("en-US", "fr-FR"):
         assert speech.list_voices(language), language
         heard = speech.transcriber_for(language, "device")
@@ -119,7 +119,7 @@ def test_the_first_languages_are_heard_and_spoken():
 
 
 def test_the_server_hears_the_first_languages_with_whisper_turbo():
-    """VO-34, decision 4: faster-whisper large-v3-turbo on the server, never sent to a browser."""
+    """VO-34: faster-whisper large-v3-turbo on the server, never sent to a browser."""
     for language in ("en-US", "fr-FR"):
         heard = speech.transcriber_for(language, "server")
         assert heard is not None and heard.id == "whisper-large-v3-turbo", language
@@ -282,7 +282,7 @@ def test_audio_is_kept_only_when_listening_and_never_in_public():
 
 
 def test_audio_is_kept_thirty_days_at_most():
-    """Decision 10 (VOICE.md VO-63): what was said aloud is kept 30 days at most, by `keep_for` or a Track."""
+    """Decision 10 (VO-63): what was said aloud is kept 30 days at most, by `keep_for` or a Track."""
     listening = {"voice": {"enabled": True}}
     for keep_for in ("1_days", "30_days", "1_months"):
         parse_app(_app(interface=listening, record={"keep_for": keep_for, "include": ["audio"]}))

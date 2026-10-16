@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # The MCP gateway's `pact` toolset: an application asking a business for each
-# person over PACT 1.0 (AGENT_PROTOCOLS PI-10). Reached through an application's
+# person over PACT 1.0 (PI-10). Reached through an application's
 # `pact.connections[]`, granted as `datalayer_connection` `pact:<brand>`.
 id: pact
 name: PACT

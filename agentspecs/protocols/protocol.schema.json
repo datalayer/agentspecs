@@ -12,7 +12,7 @@
       "type": "string"
     },
     "ProtocolLayer": {
-      "description": "The layer of an agent's visit a protocol answers (AGENT_PROTOCOLS \u00a71, after poppy.md).",
+      "description": "The layer of an agent's visit a protocol answers (after poppy.md).",
       "enum": [
         "transport",
         "consent",

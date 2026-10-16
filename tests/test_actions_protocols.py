@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""Agent protocols' tools classed in the catalogue (AGENT_PROTOCOLS PR-54, PAP_DATALAYER R-02)."""
+"""Agent protocols' tools classed in the catalogue (PR-54, R-02)."""
 
 import pytest
 
@@ -46,7 +46,7 @@ def test_every_protocol_spec_is_sound_and_its_prefix_its_own():
         ("ucp:store.example", "ucp_complete", (BUY,)),
         ("acp:outfitters.example", "acp_update_checkout", (WRITE,)),
         ("acp:outfitters.example", "acp_complete", (BUY,)),
-        # A page read at a site it names, signed (AGENT_PROTOCOLS EX-11): GET only.
+        # A page read at a site it names, signed (EX-11): GET only.
         ("signed-fetch:verify.examples.datalayer.run", "signed_fetch", (READ,)),
         # An MCP server of the catalogue, as before.
         ("tavily", "tavily_search", (READ,)),

@@ -3,11 +3,11 @@
 # Harnesses
 
 An agent program driven over the Agent Client Protocol, one spec each under
-`agentspecs/harnesses/` (SHIELD.md §3.1). An agent spec names one with `harness:`
+`agentspecs/harnesses/`. An agent spec names one with `harness:`
 where it says `pydantic-ai` or `vercel-ai`; what the harness cannot honour of the
-spec is refused at load. The register (`harnesses/register.yaml`, §3.3) says the
+spec is refused at load. The register (`harnesses/register.yaml`) says the
 terms each is served under and where they were read; a harness without an entry
-does not load. None is served by a runtime yet (SHIELD SH-10).
+does not load. None is served by a runtime yet (SH-10).
 
 | Harness | Id | Launch | MCP | Skills | Instructions | Third parties | Licence | Pinned |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -109,7 +109,7 @@ llmindset's agent framework served over ACP; each agent it defines is a session 
 - ACP 1: `session/load` yes; modes none advertised
 - Honours `model:` yes, `subagents:` no
 - Licence read at https://pypi.org/project/fast-agent-acp/; terms read at https://github.com/evalstate/fast-agent/blob/main/LICENSE
-- A framework, not a coding agent (SHIELD §2.5): each agent it defines is an ACP mode; the client's MCP servers are attached; sessions are listed. Launched with uvx fast-agent-acp (docs/docs/acp/index.md); reads skills from .fast-agent/skills, .agents/skills and .claude/skills; its default prompt reads AGENTS.md.
+- A framework, not a coding agent: each agent it defines is an ACP mode; the client's MCP servers are attached; sessions are listed. Launched with uvx fast-agent-acp (docs/docs/acp/index.md); reads skills from .fast-agent/skills, .agents/skills and .claude/skills; its default prompt reads AGENTS.md.
 
 ### Gemini CLI (`gemini-cli`)
 

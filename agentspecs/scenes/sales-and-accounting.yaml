@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Scene: Sales & Accounting (LOOP A-13). The team `sales-and-accounting`
+# Scene: Sales & Accounting (A-13). The team `sales-and-accounting`
 # staged: Sales, in the visitor's browser, takes the request and asks
 # Accounting, on a runtime, which reads Datalayer's own Odoo books and
 # answers. Four beats, each a cue the audience may say, each answered

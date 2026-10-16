@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Speech model: Moonshine Tiny, English, for the browser (VOICE.md, decision 3)
+# Speech model: Moonshine Tiny, English, for the browser
 
 id: moonshine-tiny-en
 version: 0.0.1

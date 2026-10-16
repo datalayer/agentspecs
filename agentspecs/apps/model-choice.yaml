@@ -96,7 +96,7 @@ decision:
         Answer quality: 1
         Follows the format: 1
 
-# What a visitor without an account decides on (STUDIO E-06): three models
+# What a visitor without an account decides on (E-06): three models
 # from a sample benchmark run of fifty support-ticket summaries, read only.
 # A clone decides on its own run.
 samples:

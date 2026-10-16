@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# An agent protocol Datalayer targets (AGENT_PROTOCOLS §1). `status` says it as
+# An agent protocol Datalayer targets. `status` says it as
 # it stands: `shipped` when agent-runtimes implements it today, `planned`
 # otherwise — an application cannot ship speaking a planned one.
 id: a2a

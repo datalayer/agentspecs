@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Application Specification: Order Tracker
-# The Personal Agent Protocol's account-tokens journey (AGENT_PROTOCOLS PR-05,
+# The Personal Agent Protocol's account-tokens journey (PR-05,
 # trace account-tokens) as an application: it only reads orders at the shop,
 # with the narrowest sign-in each person gives it. Datalayer keeps that
 # sign-in, renews it and ends it on Disconnect; the application never holds it.
@@ -42,7 +42,7 @@ rules:
   - action: Read your orders at the shop
     applies_to: read
     behaviour: do_it
-  # A message to the shop goes out in your name (PAP_DATALAYER R-02).
+  # A message to the shop goes out in your name (R-02).
   - action: Ask the shop for you
     applies_to: send
     behaviour: ask_first

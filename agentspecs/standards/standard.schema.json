@@ -398,7 +398,7 @@
       "type": "string"
     },
     "read_on": {
-      "description": "The day the spec was written from the published pages (decision 16)",
+      "description": "The day the spec was written from the published pages",
       "format": "date",
       "title": "Read On",
       "type": "string"

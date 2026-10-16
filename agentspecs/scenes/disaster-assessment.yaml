@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Scene: Disaster Assessment (LOOP A-13). The team `disaster-assessment`
+# Scene: Disaster Assessment (A-13). The team `disaster-assessment`
 # staged: Event response, in the visitor's browser, is told of a live event
 # and asks Disaster Assessment for the area affected and the damage, and
 # Change detection for what changed on the ground — each on a runtime, each

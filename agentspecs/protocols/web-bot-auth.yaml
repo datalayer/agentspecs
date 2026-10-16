@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# An agent protocol Datalayer targets (AGENT_PROTOCOLS §1). `status` says it as
+# An agent protocol Datalayer targets. `status` says it as
 # it stands: `shipped` when agent-runtimes implements it today, `planned`
 # otherwise — an application cannot ship speaking a planned one.
 id: web-bot-auth
@@ -21,5 +21,5 @@ packages:
 # Its tools' action classes, under protocol-tools/ (agentspecs.actions).
 protocol_tools: ["signed-fetch"]
 # The Appspec block it is configured by: refused unless `protocols` lists it.
-# A signed fetch reads a page at a site it names (AGENT_PROTOCOLS EX-11).
+# A signed fetch reads a page at a site it names (EX-11).
 appspec_block: signed_fetch

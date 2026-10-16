@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The policies catalogue (SHIELD.md SH-50, §6.7): the Shield's schema carried verbatim, the documents it holds."""
+"""The policies catalogue (SH-50): the Shield's schema carried verbatim, the documents it holds."""
 
 from __future__ import annotations
 

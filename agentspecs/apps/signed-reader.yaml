@@ -3,7 +3,7 @@
 
 # Application Specification: Signed Reader
 # A chat that reads pages at the one site it names, each request signed with
-# the application's own Web Bot Auth key (AGENT_PROTOCOLS EX-11; decided
+# the application's own Web Bot Auth key (EX-11; decided
 # 2026-10-13: always signed, no switch; a signed fetch names exact sites, GET
 # only, through the gateway's safe egress, under Rules like any read). The
 # site is Example Verifier, the counterpart Datalayer hosts for examples

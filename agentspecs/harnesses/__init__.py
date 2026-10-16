@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""Harness specifications (SHIELD.md SH-01, §3.1).
+"""Harness specifications (SH-01).
 
 A *harness* is an agent program driven over the Agent Client Protocol (ACP):
 a coding agent such as Claude Code, Codex, Gemini CLI, Goose, OpenCode or
@@ -18,7 +18,7 @@ when it takes none, ``subagents:`` when it has its own, ``skills:`` in a
 format it cannot read — is refused at load, in a sentence
 (:func:`agent_harness_problems`).
 
-**The register** (SHIELD.md SH-04, §3.3) is ``harnesses/register.yaml``:
+**The register** (SH-04) is ``harnesses/register.yaml``:
 every harness of the catalogue with its adapter, the version pinned, its
 licence and where that was read, the agent's terms and where they were read,
 the credential it takes, whether serving it to third parties is permitted,
@@ -107,7 +107,7 @@ class McpLending(str, Enum):
     """How the harness gets its MCP servers."""
 
     LEND = "lend"
-    """The Shield lends them through the gateway in `session/new` (SHIELD §4.4)."""
+    """The Shield lends them through the gateway in `session/new`."""
 
     OWN = "own"
     """The harness brings its own MCP servers, which the Shield cannot see."""
@@ -117,7 +117,7 @@ class McpLending(str, Enum):
 
 
 class ThirdPartyServing(str, Enum):
-    """Whether serving the harness to third parties is permitted by its terms (§3.3)."""
+    """Whether serving the harness to third parties is permitted by its terms."""
 
     API_KEY_ONLY = "api_key_only"
     """Permitted with each person's own API key; subscription credentials refused."""
@@ -146,7 +146,7 @@ class RegisterTier(str, Enum):
 
 
 class SkillsFormat(str, Enum):
-    """The format a harness reads skills in (SHIELD §4.10)."""
+    """The format a harness reads skills in."""
 
     SKILL_MD = "skill-md"
     """Folders with a `SKILL.md`, the agentskills.io specification."""
@@ -201,7 +201,7 @@ class HarnessTerms(_Strict):
 
 
 class HarnessSkills(_Strict):
-    """Where the Shield writes an application's skills for it (§4.10)."""
+    """Where the Shield writes an application's skills for it."""
 
     format: SkillsFormat = Field(description="skill-md, or none")
     dir: str = Field(default="", description="The directory of the workspace it reads skills from")
@@ -268,7 +268,7 @@ class HarnessSpec(_Strict):
 
 
 class RegisterEntry(_Strict):
-    """One line of the register (§3.3): what was checked, and where."""
+    """One line of the register: what was checked, and where."""
 
     harness: str = Field(description="The harness id")
     tier: RegisterTier = Field(default=RegisterTier.CATALOGUE, description="catalogue (drilled, offered) or listed (not yet)")
@@ -575,11 +575,11 @@ def reference_text() -> str:
         "# Harnesses",
         "",
         "An agent program driven over the Agent Client Protocol, one spec each under",
-        "`agentspecs/harnesses/` (SHIELD.md §3.1). An agent spec names one with `harness:`",
+        "`agentspecs/harnesses/`. An agent spec names one with `harness:`",
         "where it says `pydantic-ai` or `vercel-ai`; what the harness cannot honour of the",
-        "spec is refused at load. The register (`harnesses/register.yaml`, §3.3) says the",
+        "spec is refused at load. The register (`harnesses/register.yaml`) says the",
         "terms each is served under and where they were read; a harness without an entry",
-        "does not load. None is served by a runtime yet (SHIELD SH-10).",
+        "does not load. None is served by a runtime yet (SH-10).",
         "",
         "| Harness | Id | Launch | MCP | Skills | Instructions | Third parties | Licence | Pinned |",
         "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",

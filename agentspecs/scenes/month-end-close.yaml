@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Scene: Month-end Close (LOOP A-13). The team `month-end-close` staged: one
+# Scene: Month-end Close (A-13). The team `month-end-close` staged: one
 # agent and its data. Month-end Close, on a runtime, reads the Odoo books
 # through odoo-accounting and drives the close; the audience talks to it over
 # A2A from the page. Four beats: the checklist (a table), the accruals (the

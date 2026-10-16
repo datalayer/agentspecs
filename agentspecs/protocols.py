@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The agent protocols Datalayer targets, as specs (AGENT_PROTOCOLS PS-01).
+"""The agent protocols Datalayer targets, as specs (PS-01).
 
 One YAML per protocol under ``protocols/``: what it is, who publishes it, its
 layer (transport, consent, identity, commerce, ui), the specification and the
@@ -44,7 +44,7 @@ _ID = re.compile(r"^[a-z][a-z0-9-]{0,40}$")
 
 
 class ProtocolLayer(str, Enum):
-    """The layer of an agent's visit a protocol answers (AGENT_PROTOCOLS §1, after poppy.md)."""
+    """The layer of an agent's visit a protocol answers (after poppy.md)."""
 
     TRANSPORT = "transport"
     CONSENT = "consent"

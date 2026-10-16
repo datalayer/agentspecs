@@ -3,12 +3,12 @@
 
 # Application Specification: Shopping Desk
 # A chat that shops at merchants for each person who uses it, over UCP
-# 2026-08-25 and ACP 2026-04-17 (AGENT_PROTOCOLS EX-12, PR-32, PR-43): it searches the catalogue and fills a
+# 2026-08-25 and ACP 2026-04-17 (EX-12, PR-32, PR-43): it searches the catalogue and fills a
 # checkout, and buys only once the person approved the exact purchase — every
 # purchase asked of them first, at most once, under a spending limit. Test
 # merchants only, with no real payment (decided 2026-10-13): the merchant is
 # UCP's test store, Example Store, and ACP's test seller, Example
-# Outfitters, as Datalayer hosts them for examples (AGENT_PROTOCOLS PI-42).
+# Outfitters, as Datalayer hosts them for examples (PI-42).
 
 schema: loop.app/v1
 id: shopping-desk

@@ -321,7 +321,7 @@ class TestTeamsOfApplications:
 
 MCP_SERVERS_DIR = pathlib.Path(__file__).parent.parent / "agentspecs" / "mcp-servers"
 
-#: The four scenes of the home page (LOOP A-08), each a team: its entry, its
+#: The four scenes of the home page (A-08), each a team: its entry, its
 #: other members, and the MCP servers under each member.
 SCENES = {
     "sales-and-accounting": ("sales", ["accounting"], {"accounting": ["odoo-accounting"]}),
@@ -336,7 +336,7 @@ SCENES = {
 
 
 class TestScenes:
-    """A scene is a team (LOOP A-04, decided 2026-10-07).
+    """A scene is a team (A-04, decided 2026-10-07).
 
     One member allowed, none refused; each member its role; the team its
     shared context; each link its protocol, fitting who is asked.
@@ -428,7 +428,7 @@ class TestScenes:
                 assert ref.split(":")[0] in known_servers, (team.id, ref)
 
     def test_the_four_scenes_of_the_home_page(self):
-        """LOOP A-08: Sales & Accounting, Month-end Close, Crop Monitoring, Disaster Assessment."""
+        """A-08: Sales & Accounting, Month-end Close, Crop Monitoring, Disaster Assessment."""
         from agentspecs.apps import APP_CATALOGUE, app_problems
         from agentspecs.teams import TeamPlace, TeamProtocol, TeamRole
 
@@ -473,7 +473,7 @@ class TestScenes:
             assert team.delegation.max_depth == 0, scene
 
     def test_what_each_scene_needs_is_said_as_setup(self):
-        """What is not enabled is setup, said in words (LOOP E-01): the agents are off,
+        """What is not enabled is setup, said in words (E-01): the agents are off,
         earthdata is on, odoo-accounting is off."""
         from agentspecs.apps import APP_CATALOGUE, app_setup
 
@@ -506,7 +506,7 @@ class TestScenes:
             )
 
 
-# --- harnesses as members (SHIELD SH-45) -----------------------------------------------
+# --- harnesses as members (SH-45) -----------------------------------------------
 
 
 def test_a_team_names_harness_members_asked_over_acp_or_a2a():

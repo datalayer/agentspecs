@@ -3,11 +3,11 @@
 
 # Application Specification: Travel Desk
 # A chat that asks an airline's own agent for each person who uses it, over
-# PACT 1.0 (AGENT_PROTOCOLS EX-13): as the application alone first; then,
+# PACT 1.0 (EX-13): as the application alone first; then,
 # once the person signs in at the airline and grants what it may do, for
 # them — every answer under their permission carrying the airline's signed
 # receipt. The airline is PACT's test Provider, Example Air, as Datalayer
-# hosts it for examples (AGENT_PROTOCOLS PI-42); it accepts a personal agent
+# hosts it for examples (PI-42); it accepts a personal agent
 # once its issuer is registered there (PACT 1.0 §3.1).
 
 schema: loop.app/v1

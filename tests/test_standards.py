@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The standards catalogue (SHIELD.md SH-60, SH-66, decisions 15 and 16): AIUC-1 at its
+"""The standards catalogue (SH-60, SH-66): AIUC-1 at its
 October 15, 2026 release, held to the published index; ISO/IEC 42001 through the crosswalk."""
 
 from __future__ import annotations
@@ -89,7 +89,7 @@ def test_the_spec_is_held_to_the_published_index(monkeypatch):
     published = standards.published_index(live)
     assert len(published) >= 50, "the live index no longer lists the controls as the snapshot did"
     assert standards.index_differences(aiuc, published) == [], (
-        "the standard has moved on since the spec was read: take the newer release (decision 16)"
+        "the standard has moved on since the spec was read: take the newer release"
     )
 
 

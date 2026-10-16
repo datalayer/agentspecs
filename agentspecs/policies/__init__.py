@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""Policy specifications (SHIELD.md SH-50, §6.7, decision 10).
+"""Policy specifications (SH-50).
 
 A *policy* is the Shield's document: the rules that decide an agent's actions
 by class, kind, path and command, the stateful limits with their soft and hard
@@ -16,7 +16,7 @@ the ``agent-shield`` package's, carried here **verbatim** as
 forked: a test holds the copy to the package's own when it is installed.
 
 The catalogue under ``policies/`` holds one YAML per document the platform
-ships or shows: ``default`` (decision 5's session document, the one every
+ships or shows: ``default`` (the session document, the one every
 Shield decides with under the organization's and the application's) and
 ``organization-baseline`` (an example of what an administrator writes in
 IAM). Each entry wraps the document as ``policy`` under the catalogue's
@@ -60,7 +60,7 @@ REFERENCE_PATH = _ROOT.parent / "docs" / "docs" / "policies" / "index.md"
 _ID = re.compile(r"^[a-z][a-z0-9-]{0,40}$")
 _VERSION = re.compile(r"^\d+\.\d+\.\d+$")
 
-#: The Shield's scopes, strictest first (SHIELD.md §6.3).
+#: The Shield's scopes, strictest first.
 SCOPES = ("organization", "team", "session")
 
 
@@ -173,7 +173,7 @@ def json_schema() -> dict[str, Any]:
     schema["title"] = "Policy spec"
     schema["properties"]["policy"] = {
         "$ref": "shield-policy.schema.json",
-        "description": "The Shield's policy document (agent_shield.policy, SHIELD.md §6.7).",
+        "description": "The Shield's policy document (agent_shield.policy).",
     }
     return schema
 
@@ -200,7 +200,7 @@ def reference_text() -> str:
         "",
         "# Policies",
         "",
-        "The Shield's policy document (SHIELD.md §6.2, §6.3, §6.7): one schema, the",
+        "The Shield's policy document: one schema, the",
         "`agent-shield` package's, carried here verbatim as `policies/shield-policy.schema.json`.",
         "One document per scope — the organization's in IAM, the application's Rules read",
         "into the team's, the session's — the strictest scope deciding first, the first",

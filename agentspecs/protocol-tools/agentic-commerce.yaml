@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Agentic Commerce Protocol 2026-04-17 checkout, as Datalayer's gateway serves
-# it (its `acp` toolset, AGENT_PROTOCOLS PI-10) over agent-runtimes'
+# it (its `acp` toolset, PI-10) over agent-runtimes'
 # `agentic_commerce` client (PR-42), which names its operations without the
 # prefix. A seller connection is `acp:<domain>`.
 id: agentic-commerce

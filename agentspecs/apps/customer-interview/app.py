@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""Customer Interview: a chat written in Python (LOOP §9, E-02).
+"""Customer Interview: a chat written in Python (E-02).
 
 It asks for consent before anything else, then what the interviewer wants to
 learn; it answers each message through its agent inside a step; it saves an

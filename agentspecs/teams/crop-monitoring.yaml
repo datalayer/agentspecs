@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Team Specification: Crop Monitoring
-# A scene of one agent and its data (LOOP A-04, A-08). Crop Monitoring, on a
+# A scene of one agent and its data (A-04, A-08). Crop Monitoring, on a
 # runtime, searches and reads the satellite imagery NASA Earthdata holds
 # through the earthdata server; a person talks to it over A2A. Nobody else
 # is in the scene.

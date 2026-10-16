@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""Scenes: a team, staged (LOOP A-11, A-13).
+"""Scenes: a team, staged (A-11, A-13).
 
 The catalogue loads, the four scenes of the home page are what the plan says,
 and what a scene promises is checked in sentences.
@@ -46,7 +46,7 @@ from agentspecs.teams import TeamPlace, TeamProtocol, get_team
 
 SCENES_DIR = pathlib.Path(agentspecs.scenes.__file__).parent
 
-#: The four scenes of the home page (LOOP A-08, A-13): the team each stages,
+#: The four scenes of the home page (A-08, A-13): the team each stages,
 #: its entry, the members on a runtime, and the system on stage.
 HOME_SCENES = {
     "sales-and-accounting": ("sales", ["accounting"], "odoo-accounting"),
@@ -91,9 +91,9 @@ def _minimal_cast(**overrides: Any) -> Dict[str, Any]:
 # --- the catalogue ----------------------------------------------------------------------
 
 
-#: The Personal Agent Protocol's Stages, scripted (PAP_DATALAYER X-02).
+#: The Personal Agent Protocol's Stages, scripted (X-02).
 PAP_STAGES = ("pap-a-person-and-a-company", "pap-approve-once", "pap-your-application-a-company", "pap-two-companies")
-#: The other protocols' Stages, scripted (AGENT_PROTOCOLS EX-14, EX-15).
+#: The other protocols' Stages, scripted (EX-14, EX-15).
 PROTOCOL_STAGES = ("ucp-a-purchase-approved", "pact-a-personal-agent-at-a-business")
 
 
@@ -129,7 +129,7 @@ def test_every_scene_has_a_face_of_its_own() -> None:
 
 
 def test_the_four_scenes_stage_their_teams() -> None:
-    """LOOP A-13: each with its setting, four beats, stage directions, a visitor audience and a rehearsal."""
+    """A-13: each with its setting, four beats, stage directions, a visitor audience and a rehearsal."""
     for scene_id, (entry, on_runtime, system) in HOME_SCENES.items():
         scene = SCENE_CATALOGUE[scene_id]
         team = scene.team_of()
@@ -188,7 +188,7 @@ def test_a_scene_says_what_each_beat_shows() -> None:
 
 
 def test_each_scene_of_the_home_page_answers_four_kinds() -> None:
-    """STUDIO H-02, H-03: the starters lead to the sources, a table, a chart and an approval."""
+    """H-02, H-03: the starters lead to the sources, a table, a chart and an approval."""
     wanted = {AnswerKind.SOURCES, AnswerKind.TABLE, AnswerKind.CHART, AnswerKind.APPROVAL}
     for scene_id in HOME_SCENES:
         shown = {kind for beat in SCENE_CATALOGUE[scene_id].script for kind in beat.shown}
@@ -524,7 +524,7 @@ def test_a_scene_spec_is_a_pydantic_model_a_host_can_build() -> None:
     assert dump_scene(scene) == {"schema": SCENE_SCHEMA, "id": "solo", "name": "Solo", "emoji": "\U0001f3ad", "team": "month-end-close:0.0.2"}
 
 
-# --- a scripted scene (PAP_DATALAYER X-02) ------------------------------------------------
+# --- a scripted scene (X-02) ------------------------------------------------
 
 
 def _scripted(**overrides: Any) -> Dict[str, Any]:

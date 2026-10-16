@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Application Specification: Event response
-# The front door of the scene `disaster-assessment` (LOOP A-04, A-08). A
+# The front door of the scene `disaster-assessment` (A-04, A-08). A
 # person tells it of a live event — a flood, a fire, a storm — and it asks
 # Disaster Assessment for the area affected and the damage, and Change
 # detection for what changed on the ground, each over A2A, then reports

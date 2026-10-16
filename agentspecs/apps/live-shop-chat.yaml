@@ -2,8 +2,8 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Application Specification: Live Shop Chat
-# The Personal Agent Protocol's conversation-streaming journey (AGENT_PROTOCOLS
-# PR-05, trace conversation-streaming) as an application: what the shop's
+# The Personal Agent Protocol's conversation-streaming journey (PR-05, trace conversation-streaming)
+# as an application: what the shop's
 # agent writes reaches the person as it is written, and a conversation cut
 # off picks up where it was, nothing said twice.
 
@@ -41,7 +41,7 @@ rules:
   - action: Read what the shop writes
     applies_to: read
     behaviour: do_it
-  # A message to the shop goes out in your name (PAP_DATALAYER R-02).
+  # A message to the shop goes out in your name (R-02).
   - action: Write to the shop for you
     applies_to: send
     behaviour: ask_first

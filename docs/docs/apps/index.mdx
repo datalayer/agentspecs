@@ -405,7 +405,7 @@ a property.
 
 #### The nine inputs
 
-A setting is drawn with one of nine inputs (LOOP P-20), each a JSON Schema
+A setting is drawn with one of nine inputs (P-20), each a JSON Schema
 field and, where the field's own widget is not the one wanted, the widget
 `settings_ui` names for it — a uiSchema as `@datalayer/primer-rjsf` reads it,
 by field name, its `ui:` options.
@@ -450,7 +450,7 @@ given them, and an application's code is told (`@app.settings`).
 is offered under that heading, the starters of a category together, those
 without one first.
 
-**Profiles** are several assistants in one application (LOOP P-20): the person
+**Profiles** are several assistants in one application (P-20): the person
 picks one before the conversation starts — the first, unless they pick
 another — and keeps it to the end. A profile's `instructions` are told to the
 agent on top of the application's in every run, its `model` is run in place
@@ -481,8 +481,7 @@ with, and `interface.starters_for(id)` what it offers.
 
 ## Translations
 
-What a person reads of an application may be said in other languages (LOOP
-P-26). `language` is the language its own words are in (`en` unless said),
+What a person reads of an application may be said in other languages (P-26). `language` is the language its own words are in (`en` unless said),
 and `translations` its words in others, by BCP 47 tag (`fr`, `pt-BR`,
 `zh-Hant`): its `name`, `description` and `welcome`, its starters by their
 label, their categories, its settings' fields by name (`title`, `description`,
@@ -519,7 +518,7 @@ or a translation of something the application does not say is refused.
 
 ## Commands and modes
 
-What a person picks in the composer (LOOP P-19). **Commands** are slash
+What a person picks in the composer (P-19). **Commands** are slash
 commands: typing `/` lists them, and picking one sends its `prompt`, the words
 typed after it in place of `{input}` — or after the prompt, when it has no
 `{input}`. **Modes** are switches beside the composer: the option picked goes
@@ -558,7 +557,7 @@ the model it runs on.
 ## What a person sends
 
 What a person may send in the composer without being asked for it — an
-image, a file, a recording (LOOP P-21). `uploads` names the kinds of file it
+image, a file, a recording (P-21). `uploads` names the kinds of file it
 takes, each with the largest it takes in megabytes (`max_mb`, 10 unless said,
 25 at most), and how many go with one message (`max_files`, 5 unless said).
 A kind is a media type (`application/pdf`), a family of them (`image/*`,
@@ -661,7 +660,7 @@ behaviour_for(triage, send, arguments={**mailbox, "to": "lawyer@firm.com"})    #
 ### The host page's values and functions
 
 Embedded in another product's page, an application can read what the page
-passes it and call functions the page offers (LOOP D-10). Both are named
+passes it and call functions the page offers (D-10). Both are named
 under `deployment.embedded.host`, and each is a tool its agent calls — so a
 rule decides it, as any tool:
 
@@ -697,7 +696,7 @@ names is left to the person, and `app_problems` says so.
 
 What the page passes as `user` is a claim: anybody's page can say anything.
 An application that acts in each user's name, or shows data that is theirs,
-takes only a user the host's **server** signed (LOOP D-21):
+takes only a user the host's **server** signed (D-21):
 
 ```yaml
 deployment:
@@ -825,7 +824,7 @@ by somebody who looked.
 
 An application written in Python (an `app.py`) can go where plain words are
 not enough, and says so in its spec, so that the Canvas shows it and
-validation runs it (LOOP P-06). `loop apps build` writes these fields from
+validation runs it (P-06). `loop apps build` writes these fields from
 the decorators; a spec written by hand may hold them too, but only the file
 makes them run.
 
@@ -867,7 +866,7 @@ that are not an object.
 
 ### A widget's page
 
-A widget written in Python can have a page of its code (LOOP P-05): its
+A widget written in Python can have a page of its code (P-05): its
 inputs a form, its outputs values, and the function of its code that turns
 the one into the other. On the page each input is drawn at `/inputs/<name>`
 and each output at `/outputs/<name>`; as an input changes, the function runs
@@ -912,7 +911,7 @@ page at `/inputs/<name>`).
 ### Components of its own
 
 A developer can write a component the catalog does not have — a gauge, a
-map, a diagram — and declare it in the application (LOOP P-17). It is a
+map, a diagram — and declare it in the application (P-17). It is a
 component of that application only: its Canvas places it, its page draws it,
 its code shows it and a widget's page draws an output with it, and no other
 application sees it. The catalog grows for it; it does not open.

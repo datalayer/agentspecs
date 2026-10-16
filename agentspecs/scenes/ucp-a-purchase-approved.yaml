@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Scene: A Purchase, Approved (AGENT_PROTOCOLS EX-14), scripted. It plays a
+# Scene: A Purchase, Approved (EX-14), scripted. It plays a
 # purchase at a test shop over UCP: the application fills a checkout, shows
 # the exact purchase, the person approves it, it is bought once and the
 # record shows it — as written from agent-runtimes' UCP test merchant, Example

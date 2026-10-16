@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Scene: Crop Monitoring (LOOP A-13). The team `crop-monitoring` staged: one
+# Scene: Crop Monitoring (A-13). The team `crop-monitoring` staged: one
 # agent and its data. Crop Monitoring, on a runtime, searches the satellite
 # imagery NASA Earthdata holds through the earthdata server; the audience
 # talks to it over A2A from the page. Four beats: the season (a chart), the

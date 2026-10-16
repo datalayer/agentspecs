@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Speech model: Whisper small, short spoken turns on ai-agents (VOICE.md VO-47)
+# Speech model: Whisper small, short spoken turns on ai-agents (VO-47)
 
 id: whisper-small
 version: 0.0.1

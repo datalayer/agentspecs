@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Team Specification: Month-end Close
-# A scene of one agent and its data (LOOP A-04, A-08). Month-end Close, on a
+# A scene of one agent and its data (A-04, A-08). Month-end Close, on a
 # runtime, reads the Odoo books through odoo-accounting and drives the close;
 # a person talks to it over A2A. Nobody else is in the scene.
 

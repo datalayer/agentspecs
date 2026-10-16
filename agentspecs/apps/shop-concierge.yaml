@@ -2,8 +2,8 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Application Specification: Shop Concierge
-# The Personal Agent Protocol's conversation-control journey (AGENT_PROTOCOLS
-# PR-05, trace conversation-control) as an application: it talks with the
+# The Personal Agent Protocol's conversation-control journey (PR-05, trace conversation-control)
+# as an application: it talks with the
 # shop's own agent for the person, hands the conversation to one of the shop's
 # people when the person asks, and ends it when they are done.
 
@@ -42,7 +42,7 @@ rules:
   - action: Read what the shop answered
     applies_to: read
     behaviour: do_it
-  # A message to the shop, or asking for one of its people, goes out in your name (PAP_DATALAYER R-02).
+  # A message to the shop, or asking for one of its people, goes out in your name (R-02).
   - action: Write to the shop for you
     applies_to: send
     behaviour: ask_first

@@ -15,7 +15,7 @@ tags:
   - insurance
   - agent-worker
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: notebook.validate

@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# The register of harnesses (SHIELD.md SH-04, §3.3), checked on 2026-10-15.
+# The register of harnesses (SH-04), checked on 2026-10-15.
 #
 # Every harness of the catalogue, with its adapter and the version pinned,
 # its licence and where that was read, the agent's terms and where they were
@@ -108,7 +108,7 @@ entries:
     served_to_third_parties: permitted
     binaries: uv (uvx), Python 3.12 to 3.15 (requires_python on PyPI)
     note: >-
-      A framework, not a coding agent (SHIELD §2.5): each agent it defines is an ACP mode; the
+      A framework, not a coding agent: each agent it defines is an ACP mode; the
       client's MCP servers are attached; sessions are listed. Launched with uvx fast-agent-acp
       (docs/docs/acp/index.md); reads skills from .fast-agent/skills, .agents/skills and
       .claude/skills; its default prompt reads AGENTS.md.

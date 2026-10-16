@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The Appspec's `a2a` block: the extensions an application's Agent Card advertises (AGENT_PROTOCOLS PR-02)."""
+"""The Appspec's `a2a` block: the extensions an application's Agent Card advertises (PR-02)."""
 
 import pytest
 from pydantic import ValidationError

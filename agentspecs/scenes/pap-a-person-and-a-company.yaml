@@ -1,8 +1,8 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Scene: A Person and a Company (PAP_DATALAYER X-02), scripted. It plays
-# a person's agent working with a company, signed out then signed in (§1.10 slice 1),
+# Scene: A Person and a Company (X-02), scripted. It plays
+# a person's agent working with a company, signed out then signed in (slice 1),
 # as written from the Personal Agent Protocol SDK's demo companies — their
 # answers, proposals and results word for word — with nothing live behind it.
 # The audience takes the person's part where the person decides.

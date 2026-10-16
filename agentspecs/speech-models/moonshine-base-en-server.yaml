@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Speech model: Moonshine Base, English, on the server (VOICE.md VO-47, decision 18)
+# Speech model: Moonshine Base, English, on the server (VO-47)
 
 id: moonshine-base-en-server
 version: 0.0.1
@@ -11,7 +11,7 @@ description: >-
   Moonshine Base (61M parameters), the same 8-bit ONNX export the browser
   runs, run by onnxruntime on the CPU with a greedy decoder. Its encoder is
   as long as the speech, with no 30-second window: it hears spoken turns in
-  English, about seven times faster than Whisper small (decision 18).
+  English, about seven times faster than Whisper small.
 provider: usefulsensors
 task: stt
 engine: onnxruntime

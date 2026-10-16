@@ -394,7 +394,7 @@ class TestExtensionOverFragments:
 
 
 # ---------------------------------------------------------------------------
-# An organization's Frames (LOOP U-31, U-32)
+# An organization's Frames (U-31, U-32)
 # ---------------------------------------------------------------------------
 
 _VERSION = {

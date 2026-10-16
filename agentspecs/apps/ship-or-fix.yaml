@@ -75,7 +75,7 @@ decision:
         Failure severity: 1
         Formatting failures block shipping: 0
 
-# What a visitor without an account decides on (STUDIO E-06): three
+# What a visitor without an account decides on (E-06): three
 # configurations of an agent from a sample benchmark run, read only. A clone
 # decides on its own run.
 samples:

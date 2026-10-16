@@ -2,7 +2,7 @@
 
 # Policies
 
-The Shield's policy document (SHIELD.md §6.2, §6.3, §6.7): one schema, the
+The Shield's policy document: one schema, the
 `agent-shield` package's, carried here verbatim as `policies/shield-policy.schema.json`.
 One document per scope — the organization's in IAM, the application's Rules read
 into the team's, the session's — the strictest scope deciding first, the first
@@ -33,7 +33,7 @@ Decision 5's default, the session document every Shield decides with under the o
 
 ### An organization's baseline (`organization-baseline`)
 
-An example of the organization scope an administrator writes in IAM (SHIELD.md §6.7): running a command asks, nothing is deleted, nothing outside the workspace; the limits of §6.3 with a model budget of 200 000 then 400 000 tokens and a spend limit of 5 then 10 USD (500 then 1 000 credits); fetches to *.datalayer.io alone; Claude Code and Codex admitted, each on the account's own key; reading, writing, running a command, sending and buying need a permission beside the Rules (§6.11).
+An example of the organization scope an administrator writes in IAM: running a command asks, nothing is deleted, nothing outside the workspace; the limits with a model budget of 200 000 then 400 000 tokens and a spend limit of 5 then 10 USD (500 then 1 000 credits); fetches to *.datalayer.io alone; Claude Code and Codex admitted, each on the account's own key; reading, writing, running a command, sending and buying need a permission beside the Rules.
 
 - **running a command asks**: ask — execute
 - **nothing is deleted**: deny — delete

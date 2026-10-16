@@ -31,7 +31,7 @@ instructions: >-
 contents:
   - Price list
 
-# What a visitor without an account computes a quote from (STUDIO E-11):
+# What a visitor without an account computes a quote from (E-11):
 # Datalayer's sample price list, read only. A clone answers from the Price
 # list its owner gives it on its Build tab.
 samples:

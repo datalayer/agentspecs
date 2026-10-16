@@ -2,19 +2,19 @@
 #
 # BSD 3-Clause License
 
-"""Standard specifications (SHIELD.md SH-60, §6.9, decisions 15 and 16).
+"""Standard specifications (SH-60).
 
 A *standard* is what a conformance report answers: its version, its domains,
 and its controls — each with an id and a title as the standard's own pages
 say them, mandatory or optional, retired or not, the cadence it carries, the
 evidence items it takes (by kind: documentation, config, logs, evals, report,
 demonstration) and its crosswalk references to other frameworks. One YAML per
-standard under ``standards/``: ``aiuc-1`` (the first, decision 15) read from
+standard under ``standards/``: ``aiuc-1`` (the first) read from
 standard.aiuc-1.com's six domain pages at its October 15, 2026 release, and
 ``iso-42001`` read through AIUC-1's crosswalk, each clause naming the AIUC-1
 controls that cover it and how far (``covered_by``, ``coverage``).
 
-**The version is tracked, never applied silently** (decision 16): a spec says
+**The version is tracked, never applied silently**: a spec says
 the standard's ``version``, when that version was ``released_on``, when the
 next is due (``next_release_on``) and the day it was ``read_on``;
 :func:`version_notice` says, in a sentence, when a newer release is due or
@@ -58,7 +58,7 @@ SCHEMA_PATH = STANDARDS_DIR / "standard.schema.json"
 #: The templates of the organization's controls (SH-64).
 TEMPLATES_DIR = STANDARDS_DIR / "templates"
 
-#: The published index of AIUC-1's controls, as its ``llms.txt`` lists them (decision 16).
+#: The published index of AIUC-1's controls, as its ``llms.txt`` lists them.
 AIUC1_INDEX_PATH = STANDARDS_DIR / "aiuc-1.index.txt"
 
 #: Where the reference page is kept in the documentation site, when the checkout has one.
@@ -191,7 +191,7 @@ class StandardSpec(_Strict):
     url: str = Field(min_length=1, description="Where the standard is published, https")
     released_on: date = Field(description="When this version was released")
     next_release_on: Optional[date] = Field(default=None, description="When the next version is due; none when not scheduled")
-    read_on: date = Field(description="The day the spec was written from the published pages (decision 16)")
+    read_on: date = Field(description="The day the spec was written from the published pages")
     read_from: str = Field(default="", description="Where it was read when not at `url`")
     certificate_valid_months: int = Field(ge=1, description="How long a certification against it holds")
     evidence_kinds: Dict[str, str] = Field(description="Each evidence kind the standard names, in a sentence")
@@ -288,7 +288,7 @@ def get_standard(standard_id: str) -> Optional[StandardSpec]:
 
 
 def version_notice(spec: StandardSpec, today: Optional[date] = None) -> Optional[str]:
-    """When the standard has moved on since the spec was read, in a sentence (decision 16); None while current.
+    """When the standard has moved on since the spec was read, in a sentence; None while current.
 
     The notice is offered, never applied: the organization's version stays
     locked until a person takes the newer spec.
@@ -306,7 +306,7 @@ def version_notice(spec: StandardSpec, today: Optional[date] = None) -> Optional
 
 
 # ---------------------------------------------------------------------------
-# The published index (decision 16)
+# The published index
 # ---------------------------------------------------------------------------
 
 _INDEX_LINE = re.compile(r"^- \[([A-F]\d{3}): (.*)\]")
@@ -437,11 +437,11 @@ def reference_text() -> str:
         "",
         "# Standards",
         "",
-        "What a conformance report answers (SHIELD.md §6.9, decision 15): a standard's version,",
+        "What a conformance report answers: a standard's version,",
         "domains and controls, each with the evidence kinds it takes, its cadence and its crosswalks,",
         "one spec each under `agentspecs/standards/`. The Shield's evidence map",
         "(`agent_shield.conformance`) reads them and gives each control one of five statuses; the",
-        "standard's version is tracked and offered, never applied silently (decision 16).",
+        "standard's version is tracked and offered, never applied silently.",
         "",
         "| Standard | Id | Version | Released | Next release | Read on | Controls | Mandatory | Retired |",
         "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
@@ -485,7 +485,7 @@ def reference_text() -> str:
         "## The organization's controls",
         "",
         "The controls a person writes and signs start from a template under `standards/templates/`"
-        " (SHIELD.md SH-64), with what the catalogue knows filled in:",
+        " (SH-64), with what the catalogue knows filled in:",
         "",
     ]
     for control_id, name in TEMPLATES.items():

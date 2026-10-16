@@ -1,4 +1,4 @@
-# The control lines of https://standard.aiuc-1.com/llms.txt, read on 2026-10-15 (decision 16).
+# The control lines of https://standard.aiuc-1.com/llms.txt, read on 2026-10-15.
 - [A001: Establish input data policy]
 - [A002: Establish output data policy]
 - [A003: Limit AI agent data access]

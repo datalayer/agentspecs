@@ -2,8 +2,8 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Application Specification: Sign-in Desk
-# The Personal Agent Protocol's mediated-sign-in journey (AGENT_PROTOCOLS
-# PR-05, trace mediated-sign-in) as an application: the person signs in at the
+# The Personal Agent Protocol's mediated-sign-in journey (PR-05, trace mediated-sign-in)
+# as an application: the person signs in at the
 # shop without leaving the chat, typing what the shop asks into Datalayer's
 # protected form, which the model never reads and which reaches the shop once.
 
@@ -41,7 +41,7 @@ rules:
   - action: Read your orders at the shop
     applies_to: read
     behaviour: do_it
-  # A message to the shop goes out in your name (PAP_DATALAYER R-02).
+  # A message to the shop goes out in your name (R-02).
   - action: Ask the shop for you
     applies_to: send
     behaviour: ask_first

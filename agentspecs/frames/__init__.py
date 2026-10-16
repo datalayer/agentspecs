@@ -539,7 +539,7 @@ def list_frames() -> List[FrameSpec]:
 
 
 # ---------------------------------------------------------------------------
-# An organization's Frames (LOOP U-21, U-31, U-32)
+# An organization's Frames (U-21, U-31, U-32)
 # ---------------------------------------------------------------------------
 
 #: What an organization writes of a Frame: its rules, its words and its voice.

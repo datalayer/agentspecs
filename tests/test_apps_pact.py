@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The Appspec's `pact` block: businesses asked over PACT 1.0 (AGENT_PROTOCOLS PI-01)."""
+"""The Appspec's `pact` block: businesses asked over PACT 1.0 (PI-01)."""
 
 import pytest
 from pydantic import ValidationError
@@ -45,7 +45,7 @@ def test_one_connection_per_business():
         AppSpec.model_validate({**BASE, "pact": {"connections": [AIR, {**AIR, "id": "again"}]}})
 
 
-# --- answering as a business (AGENT_PROTOCOLS PR-13, PI-32; decided 2026-10-13) -------------
+# --- answering as a business (PR-13, PI-32; decided 2026-10-13) -------------
 
 AGENT = {
     "issuer": "https://iam.example/api/iam/v1/pap/agents/app-1",
@@ -95,7 +95,7 @@ def test_a_business_switched_off_may_keep_its_list_empty():
     assert not spec.pact.business.enabled and spec.pact.business.registered_agents == []
 
 
-# --- a pair of examples (AGENT_PROTOCOLS PR-13, E-02; decided 2026-10-13) ------------------
+# --- a pair of examples (PR-13, E-02; decided 2026-10-13) ------------------
 
 
 def test_one_of_a_pair_speaks_pact_as_the_side_it_says():

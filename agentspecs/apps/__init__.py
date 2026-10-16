@@ -89,7 +89,7 @@ _AVATAR_SCHEMA = {
     "pattern": rf"^\s*(emoji:[^\sA-Za-z0-9]{{1,32}}|@datalayer/icons-react:{AVATAR_ICON_NAME})?\s*$"
 }
 
-#: How the character of a floating assistant is named (LOOP T-24): by the id
+#: How the character of a floating assistant is named (T-24): by the id
 #: a UI plugin contributes it under, ``paperclip`` or ``acme-owl``. Which ids
 #: exist is known only where the plugins are, the runtime and the page.
 ASSISTANT_CHARACTER_ID = r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*"
@@ -265,7 +265,7 @@ _PAP_EXTENSION = re.compile(r"^(?:[a-z][a-z0-9_-]{0,63}|[a-z0-9.-]+\.[a-z]{2,63}
 
 
 #: The Personal Agent Protocol profiles Datalayer speaks: the drafts the PAP SDK
-#: implements (`draft-01` is its `PROTOCOL_PROFILE` 0.1; PAP_DATALAYER S-03).
+#: implements (`draft-01` is its `PROTOCOL_PROFILE` 0.1; S-03).
 PapProfile = Literal["draft-01"]
 PAP_PROFILES: Tuple[str, ...] = get_args(PapProfile)
 
@@ -317,7 +317,7 @@ def _pap_extensions(values: List[str]) -> List[str]:
 
 
 class AppPapConnection(_Strict):
-    """A company the application works with as a Personal Agent (PAP_DATALAYER S-01).
+    """A company the application works with as a Personal Agent (S-01).
 
     The company is named by its domain, the discovery input, and nothing else:
     its endpoints, issuer and metadata are what discovery verifies and are kept
@@ -379,7 +379,7 @@ class AppPapConnection(_Strict):
         if PapInterface.WEB in self.interfaces:
             raise ValueError(
                 f"the connection {self.id!r} cannot browse the company's website yet: "
-                "an isolated browser per person comes first (PAP_DATALAYER P-07)"
+                "an isolated browser per person comes first (P-07)"
             )
         return self
 
@@ -424,7 +424,7 @@ class AppPapStandingLimit(_Strict):
 
 
 class AppPapStanding(_Strict):
-    """An operation whose effect is a standing permission (PAP_DATALAYER R-07, the Ledgerly pattern).
+    """An operation whose effect is a standing permission (R-07, the Ledgerly pattern).
 
     Confirmed by the person, it is recorded as the approval in advance they
     would give in Datalayer: this application may confirm, at the company of
@@ -455,7 +455,7 @@ class AppPapStanding(_Strict):
 
 class AppPapOperation(_Strict):
     """Something a personal agent may ask the application to do for the person,
-    done only once they confirm its exact terms (PAP_DATALAYER B-04, Operations v1).
+    done only once they confirm its exact terms (B-04, Operations v1).
 
     Asked by a personal agent, the application's agent does not call `tool`:
     the call is proposed, its arguments the terms, and the person confirms
@@ -526,7 +526,7 @@ class AppPapOperation(_Strict):
 
 
 class AppPapCompany(_Strict):
-    """The application is a company personal agents work with (PAP_DATALAYER S-01, U-04)."""
+    """The application is a company personal agents work with (S-01, U-04)."""
 
     enabled: bool = Field(default=False, description="Whether it publishes itself as a company at Ship")
     signed_out: bool = Field(default=True, description="Whether a personal agent may ask before signing in")
@@ -597,12 +597,12 @@ _PACT_SCOPE = re.compile(r"^[a-z][a-z0-9_.-]{0,63}:[a-z][a-z0-9_.-]{0,63}$")
 
 
 class AppPactConnection(_Strict):
-    """A business the application asks for each person, over PACT 1.0 (AGENT_PROTOCOLS PI-01).
+    """A business the application asks for each person, over PACT 1.0 (PI-01).
 
     The Brand is named by its domain — its Agent Card is at
     `https://<brand>/.well-known/agent-card.json` (PACT §2.1) — and its
     Provider's `audience`, which the Provider assigns at registration and
-    the personal-agent JWT carries (§3.1). Always in each person's own name:
+    the personal-agent JWT carries. Always in each person's own name:
     PACT acts for a person. No credential is ever part of a spec.
     """
 
@@ -669,7 +669,7 @@ def _https_url(value: str, what: str) -> str:
 class AppPactRegisteredAgent(_Strict):
     """A personal agent the business accepts (PACT 1.0 §3.1): its issuer, and where its keys are.
 
-    Registered by the Maker, as `pap.company.registered_agents` (AGENT_PROTOCOLS PR-13,
+    Registered by the Maker, as `pap.company.registered_agents` (PR-13,
     decided 2026-10-13): a personal-agent JWT is verified against the keys of a registered
     issuer only, and any other is refused.
     """
@@ -689,14 +689,14 @@ class AppPactRegisteredAgent(_Strict):
 
 
 class AppPactBusiness(_Strict):
-    """The application answers as a PACT business (AGENT_PROTOCOLS PR-13, PI-32; decided 2026-10-13).
+    """The application answers as a PACT business (PR-13, PI-32; decided 2026-10-13).
 
     Published at its deployment's own address: its A2A Agent Card names
     Datalayer as the Provider and the application's owner as the Brand; its
     A2A interface verifies each personal-agent JWT against a registered
-    issuer's keys (§3.1); with `scopes`, a person delegates to a personal agent
+    issuer's keys; with `scopes`, a person delegates to a personal agent
     through the Provider's device-code sign-in — their Datalayer sign-in — and
-    every answer under their delegation carries a signed receipt (§5).
+    every answer under their delegation carries a signed receipt.
     """
 
     enabled: bool = Field(default=False, description="Whether it is published as a business at Ship")
@@ -744,7 +744,7 @@ class AppPactBusiness(_Strict):
 
 
 class AppPact(_Strict):
-    """PACT: the businesses it asks for each person (AGENT_PROTOCOLS PI-01), and
+    """PACT: the businesses it asks for each person (PI-01), and
     whether it answers as one (PR-13)."""
 
     connections: List[AppPactConnection] = Field(
@@ -765,7 +765,7 @@ class AppPact(_Strict):
 
 
 class PairRole(str, Enum):
-    """Which side of a pair of examples an application is (AGENT_PROTOCOLS PR-13)."""
+    """Which side of a pair of examples an application is (PR-13)."""
 
     BUSINESS = "business"
     PERSONAL_AGENT = "personal_agent"
@@ -773,7 +773,7 @@ class PairRole(str, Enum):
 
 class AppPair(_Strict):
     """One of a pair of examples, a PACT business and the personal agent that asks it
-    (AGENT_PROTOCOLS PR-13, E-02; decided 2026-10-13).
+    (PR-13, E-02; decided 2026-10-13).
 
     A personal agent's issuer is its own application's, known only once a copy
     exists: when a person has copied both of a pair, the Studio registers the
@@ -793,7 +793,7 @@ class AppPair(_Strict):
 
 
 class CommerceProtocol(str, Enum):
-    """The commerce protocol a merchant is reached over (AGENT_PROTOCOLS PI-01)."""
+    """The commerce protocol a merchant is reached over (PI-01)."""
 
     UCP = "ucp"
     ACP = "acp"
@@ -804,7 +804,7 @@ _AMOUNT = re.compile(r"^(0|[1-9][0-9]{0,8})(\.[0-9]{1,2})?$")
 
 
 class AppSpendLimit(_Strict):
-    """The most one purchase may cost at a merchant (AGENT_PROTOCOLS PI-22)."""
+    """The most one purchase may cost at a merchant (PI-22)."""
 
     amount: str = Field(..., description="At most this much, as written: `50`, `12.50`")
     currency: str = Field(..., description="Its currency, ISO 4217: `USD`")
@@ -831,7 +831,7 @@ class AppSpendLimit(_Strict):
 
 
 class AppCommerceMerchant(_Strict):
-    """A merchant the application shops at for each person, over UCP or ACP (AGENT_PROTOCOLS PI-01).
+    """A merchant the application shops at for each person, over UCP or ACP (PI-01).
 
     Decided 2026-10-13: test merchants only, with no real payment — a
     purchase is always asked of the person first (*Ask me first*, PI-21),
@@ -883,7 +883,7 @@ class AppCommerceMerchant(_Strict):
 
 
 class AppCommerce(_Strict):
-    """Commerce: the merchants it shops at for each person (AGENT_PROTOCOLS PI-01)."""
+    """Commerce: the merchants it shops at for each person (PI-01)."""
 
     merchants: List[AppCommerceMerchant] = Field(
         default_factory=list, description="Merchants, over UCP or ACP: test merchants only for now"
@@ -902,7 +902,7 @@ class AppCommerce(_Strict):
 
 
 class AppSignedFetchSite(_Strict):
-    """A website the application reads pages of, each request signed (AGENT_PROTOCOLS EX-11).
+    """A website the application reads pages of, each request signed (EX-11).
 
     Decided 2026-10-13: a *signed fetch* names exact sites, an allow-list.
     Datalayer's gateway reads a page there with `GET` only, on its safe
@@ -931,7 +931,7 @@ class AppSignedFetchSite(_Strict):
 
 
 class AppSignedFetch(_Strict):
-    """Signed fetch: the sites it reads pages of, signed with its Web Bot Auth key (AGENT_PROTOCOLS EX-11)."""
+    """Signed fetch: the sites it reads pages of, signed with its Web Bot Auth key (EX-11)."""
 
     sites: List[AppSignedFetchSite] = Field(
         default_factory=list, description="Sites, each by its exact domain: read with GET only, every request signed"
@@ -974,7 +974,7 @@ def _a2a_params_safe(value: Any, path: str) -> None:
 
 class AppA2AExtension(_Strict):
     """An A2A extension the application's Agent Card advertises (A2A 1.0
-    *Extensions*, AGENT_PROTOCOLS PR-02), beside the runtime's own.
+    *Extensions*, PR-02), beside the runtime's own.
 
     Named by its URI, as `capabilities.extensions` writes it; its params are
     published on the card as they are, so they never hold a credential.
@@ -1017,7 +1017,7 @@ class AppA2AExtension(_Strict):
 
 
 class AppA2A(_Strict):
-    """A2A: what the application's Agent Card says beside its name and skill (AGENT_PROTOCOLS PR-02)."""
+    """A2A: what the application's Agent Card says beside its name and skill (PR-02)."""
 
     extensions: List[AppA2AExtension] = Field(
         default_factory=list, description="Extensions its card advertises, besides the runtime's own"
@@ -1034,7 +1034,7 @@ class AppA2A(_Strict):
 class AppPap(_Strict):
     """Personal Agent Protocol: the companies it works with, and whether it is one.
 
-    A `pap` block names the profile it is written for (PAP_DATALAYER S-03): one
+    A `pap` block names the profile it is written for (S-03): one
     Datalayer speaks, or it is refused in a sentence. An application without the
     block has none.
     """
@@ -1143,7 +1143,7 @@ class AppStarter(_Strict):
         default="",
         description=(
             "The heading it is offered under: the starters of one category are shown together, "
-            "those without one first (LOOP P-20)"
+            "those without one first (P-20)"
         ),
     )
 
@@ -1159,7 +1159,7 @@ MODE_ID = r"[a-z][a-z0-9_-]{0,39}"
 
 
 class AppCommand(_Strict):
-    """A slash command the user picks in the composer (LOOP P-19).
+    """A slash command the user picks in the composer (P-19).
 
     Typing `/` lists the application's commands; picking one sends its
     `prompt`, `{input}` replaced by the words typed after the command.
@@ -1201,7 +1201,7 @@ def command_prompt(command: AppCommand, words: str = "") -> str:
 
 
 class AppModeOption(_Strict):
-    """One position of a mode switch (LOOP P-19): what the agent is told, the model it runs on."""
+    """One position of a mode switch (P-19): what the agent is told, the model it runs on."""
 
     id: str = Field(..., pattern=rf"^{MODE_ID}$", description="Its id, what a run says it is in")
     label: str = Field(..., min_length=1, description="What the switch says")
@@ -1215,7 +1215,7 @@ class AppModeOption(_Strict):
 
 
 class AppMode(_Strict):
-    """A mode switch in the composer (LOOP P-19): the person picks one of its options."""
+    """A mode switch in the composer (P-19): the person picks one of its options."""
 
     id: str = Field(..., pattern=rf"^{MODE_ID}$", description="Its id, the key a run says its option under")
     label: str = Field(..., min_length=1, description="What the switch is called")
@@ -1241,7 +1241,7 @@ class AppMode(_Strict):
 
 
 class AppProfile(_Strict):
-    """One of several assistants in one application (LOOP P-20): a variant of its agent.
+    """One of several assistants in one application (P-20): a variant of its agent.
 
     The person picks a profile before the conversation starts, and keeps it to
     the end: its instructions are told to the agent on top of the
@@ -1265,7 +1265,7 @@ class AppProfile(_Strict):
     )
 
 
-#: The inputs a setting is drawn with (LOOP P-20), each a JSON Schema field and
+#: The inputs a setting is drawn with (P-20), each a JSON Schema field and
 #: the widget its form's ``ui`` names for it (``ui:widget``; the schema's own
 #: when unsaid): what the page draws with ``@datalayer/primer-rjsf``.
 SETTING_INPUTS: Dict[str, Tuple[str, str]] = {
@@ -1328,7 +1328,7 @@ def _widget_refusal(widget: str, field: Mapping[str, Any]) -> Optional[str]:
 
 
 def form_ui_problems(said: str, schema: Mapping[str, Any], ui: Any) -> List[str]:
-    """What is wrong with how a form's fields are drawn (LOOP P-20), in sentences.
+    """What is wrong with how a form's fields are drawn (P-20), in sentences.
 
     ``ui`` is the form's uiSchema as ``@datalayer/primer-rjsf`` reads it: by
     field name, the ``ui:`` options of each — ``ui:widget`` one of
@@ -1364,7 +1364,7 @@ def form_ui_problems(said: str, schema: Mapping[str, Any], ui: Any) -> List[str]
     return problems
 
 
-#: A language, as BCP 47 tags it (LOOP P-26): a language of two or three
+#: A language, as BCP 47 tags it (P-26): a language of two or three
 #: letters, then optionally its script, its region and its variants — ``fr``,
 #: ``pt-BR``, ``zh-Hant-TW``.
 LANGUAGE_TAG = re.compile(
@@ -1373,7 +1373,7 @@ LANGUAGE_TAG = re.compile(
 
 
 def pick_language(available: Sequence[str], preferred: Sequence[str]) -> Optional[str]:
-    """The first language a person prefers that is available (LOOP P-26), or None.
+    """The first language a person prefers that is available (P-26), or None.
 
     Tags are compared without case; a preferred tag also matches an available
     one of its language alone or of the same language (``fr-CA`` takes ``fr``,
@@ -1435,7 +1435,7 @@ class AppProfileTranslation(_Strict):
 
 
 class AppTranslation(_Strict):
-    """What a person reads of an application, in another language (LOOP P-26).
+    """What a person reads of an application, in another language (P-26).
 
     Each part is keyed by what names it in the spec: a starter by its label,
     a category by its words, a setting by its field, a command by its name,
@@ -1489,11 +1489,11 @@ class AppSurface(_Strict):
 
 
 #: The name of a function of an application's code: what `code` and a code
-#: check name, and what an application's own tool is called (LOOP P-06).
+#: check name, and what an application's own tool is called (P-06).
 CODE_NAME = r"[A-Za-z_][A-Za-z0-9_]*"
 
 
-#: The name of a component a developer writes (LOOP P-17): a word starting
+#: The name of a component a developer writes (P-17): a word starting
 #: with a capital letter, as the catalog's components are named.
 CUSTOM_COMPONENT_NAME = r"[A-Z][A-Za-z0-9]{0,63}"
 
@@ -1505,13 +1505,13 @@ CUSTOM_PROPERTY_TYPES = ("string", "integer", "number", "boolean", "array", "obj
 #: component cannot declare again.
 CUSTOM_RESERVED_NAMES = ("id", "component", "action", "weight", "visible_when", "children", "child")
 
-#: Where a custom component's module is loaded from (LOOP P-17): an address
+#: Where a custom component's module is loaded from (P-17): an address
 #: served over HTTPS, or this machine (`localhost`, `127.0.0.1`) while it is
 #: being written.
 CUSTOM_SOURCE = re.compile(r"(?:https://[A-Za-z0-9.-]+(?::\d+)?|http://(?:localhost|127\.0\.0\.1)(?::\d+)?)/\S*")
 
-#: A custom component's module as a file of the application's folder (LOOP
-#: P-29): its path in the folder, a `.js` or `.mjs` file inside it — no
+#: A custom component's module as a file of the application's folder (P-29):
+#: its path in the folder, a `.js` or `.mjs` file inside it — no
 #: absolute path, no `..`. Packaged with the application (`loop apps
 #: package`), it is served by the server its package is installed beside.
 CUSTOM_FILE = re.compile(r"(?:\./)?(?:[A-Za-z0-9_][A-Za-z0-9_.-]*/)*[A-Za-z0-9_][A-Za-z0-9_.-]*\.m?js")
@@ -1561,7 +1561,7 @@ def custom_props_refused(component: "AppCustomComponent", props: Mapping[str, An
 
 
 class AppCustomComponent(_Strict):
-    """A component the developer writes (LOOP P-17), an A2UI component of this
+    """A component the developer writes (P-17), an A2UI component of this
     application only: the catalog grows for it, it does not open.
 
     Reviewed like any component of the catalog — its properties a JSON
@@ -1600,7 +1600,7 @@ class AppCustomComponent(_Strict):
             "(`export default function (root, {props, send})`): an address over `https://`, or "
             "`http://localhost` while it is written; or a file of the application's folder, by its "
             "path in it (`gauge.js`), packaged with the application and served by the server its "
-            "package is installed beside (LOOP P-29)"
+            "package is installed beside (P-29)"
         ),
     )
     integrity: str = Field(
@@ -1684,7 +1684,7 @@ class AppCustomComponent(_Strict):
         return self
 
     def catalog_entry(self, version: str) -> Dict[str, Any]:
-        """It as the catalog lists a component (LOOP C-13): what the palette and the checks read."""
+        """It as the catalog lists a component (C-13): what the palette and the checks read."""
         return {
             "id": self.name,
             "name": self.name,
@@ -1700,14 +1700,14 @@ class AppCustomComponent(_Strict):
         }
 
 
-#: What a page's output may be drawn with (LOOP P-05), and the property of each
+#: What a page's output may be drawn with (P-05), and the property of each
 #: that shows its value: a Text its words, an Image its address, a Table its
 #: rows, a Chart its points.
 PAGE_OUTPUT_COMPONENTS: Dict[str, str] = {"Text": "text", "Image": "url", "Table": "rows", "Chart": "points"}
 
 
 class AppPageOutput(_Strict):
-    """One thing a page shows for its inputs (LOOP P-05): a value, drawn with a component."""
+    """One thing a page shows for its inputs (P-05): a value, drawn with a component."""
 
     name: str = Field(
         ...,
@@ -1719,7 +1719,7 @@ class AppPageOutput(_Strict):
         default="Text",
         description=(
             "What draws it: `Text` (words, unless said), `Image` (an address), `Table` (rows) or `Chart` "
-            "(points), or a component of the application's own (`interface.custom_components`, LOOP P-17), "
+            "(points), or a component of the application's own (`interface.custom_components`, P-17), "
             "its value what it shows first"
         ),
     )
@@ -1757,7 +1757,7 @@ class AppPageOutput(_Strict):
 
 
 class AppPage(_Strict):
-    """A widget's page written in its code (LOOP P-05): `@app.page`.
+    """A widget's page written in its code (P-05): `@app.page`.
 
     Its inputs are a form, drawn on the page; as one changes, the function
     of its code runs again on them and the page shows what it returned, in
@@ -1802,7 +1802,7 @@ PAGE_FUNCTION_ACTION = "page"
 
 
 class AppAction(_Strict):
-    """An action of its code a person presses (`@app.action`, REACTOR_UI RU-5).
+    """An action of its code a person presses (`@app.action`, RU-5).
 
     What its payload is, typed: the JSON Schema of an object, written from the
     pydantic model its code declares (`@app.action(name, payload=Model)`); an
@@ -1859,7 +1859,7 @@ class AppAction(_Strict):
 
 
 class ThemeVariant(str, Enum):
-    """A theme of Datalayer's, as Appearance names it (LOOP T-30)."""
+    """A theme of Datalayer's, as Appearance names it (T-30)."""
 
     DATALAYER = "datalayer"
     SPATIAL = "spatial"
@@ -1881,7 +1881,7 @@ class ThemeMode(str, Enum):
 
 
 class AppTheme(_Strict):
-    """The theme an application runs in by default (LOOP T-30)."""
+    """The theme an application runs in by default (T-30)."""
 
     variant: ThemeVariant = Field(
         description=(
@@ -1895,7 +1895,7 @@ class AppTheme(_Strict):
 
 
 class BalloonDisplay(str, Enum):
-    """How a floating assistant's balloon shows the conversation (LOOP T-23)."""
+    """How a floating assistant's balloon shows the conversation (T-23)."""
 
     HISTORY = "history"
     """Every message, scrolled, the composer last."""
@@ -1905,7 +1905,7 @@ class BalloonDisplay(str, Enum):
 
 
 class VoiceInput(str, Enum):
-    """How a person talks to the application (VOICE.md VO-10, VO-12).
+    """How a person talks to the application (VO-10, VO-12).
 
     `push_to_talk`: the microphone in the composer, clicked or held.
     `hands_free`: a conversation by voice — the composer offers *Talk with
@@ -1928,7 +1928,7 @@ class VoiceOutput(str, Enum):
 
 
 class VoiceWhere(str, Enum):
-    """Where its speech runs: in the person's browser, on Datalayer's servers, or the better of the two (§5)."""
+    """Where its speech runs: in the person's browser, on Datalayer's servers, or the better of the two."""
 
     AUTO = "auto"
     DEVICE = "device"
@@ -1940,7 +1940,7 @@ VOICE_LANGUAGE = r"[a-z]{2,3}(?:-[A-Z]{2})?"
 
 
 class AppVoice(_Strict):
-    """Its voice (VOICE.md VO-41): whether it listens, whether it speaks, with which voice, in which language.
+    """Its voice (VO-41): whether it listens, whether it speaks, with which voice, in which language.
 
     Off unless said. What is said becomes a message, and what is heard is the
     answer the conversation shows: the text stays the truth.
@@ -1976,7 +1976,7 @@ class AppVoice(_Strict):
     )
 
 def agent_voice_problems(agent_id: str, block: Any) -> List[str]:
-    """What is wrong with the ``voice:`` of an agent spec (``agents/*.yaml``), in sentences (VOICE.md VO-41).
+    """What is wrong with the ``voice:`` of an agent spec (``agents/*.yaml``), in sentences (VO-41).
 
     An agent that is not an application says its voice with the block an
     Appspec says under ``interface.voice``: the same fields, read the same
@@ -2021,7 +2021,7 @@ def upload_kind_takes(kind: str, name: str, media_type: str) -> bool:
 
 
 class AppUploadKind(_Strict):
-    """A kind of file a person may send, and how large (LOOP P-21)."""
+    """A kind of file a person may send, and how large (P-21)."""
 
     type: str = Field(
         ...,
@@ -2040,7 +2040,7 @@ class AppUploadKind(_Strict):
 
 
 class AppUploads(_Strict):
-    """What a person may send in the composer without being asked (LOOP P-21): images, files, audio.
+    """What a person may send in the composer without being asked (P-21): images, files, audio.
 
     A file of a kind it does not name, larger than its kind takes, or one too
     many is refused, in a sentence — by the page before it is sent, and by the
@@ -2105,19 +2105,19 @@ class AppInterface(_Strict):
     starters: List[AppStarter] = Field(default_factory=list, description="First messages offered to the user")
     commands: List[AppCommand] = Field(
         default_factory=list,
-        description="Slash commands the user picks in the composer: typing `/` lists them (LOOP P-19)",
+        description="Slash commands the user picks in the composer: typing `/` lists them (P-19)",
     )
     modes: List[AppMode] = Field(
         default_factory=list,
         description=(
             "Mode switches in the composer: the option picked goes with every run, its instructions "
-            "told to the agent and its model run on (LOOP P-19)"
+            "told to the agent and its model run on (P-19)"
         ),
     )
     actions: List[AppAction] = Field(
         default_factory=list,
         description=(
-            "The actions of its code a person presses (`@app.action`, REACTOR_UI RU-5), each with "
+            "The actions of its code a person presses (`@app.action`, RU-5), each with "
             "the JSON Schema of its payload: what its buttons offer, with a token, and nothing else"
         ),
     )
@@ -2126,14 +2126,14 @@ class AppInterface(_Strict):
         description=(
             "Several assistants in one application, two at least: the person picks one before the "
             "conversation starts — the first unless they do — and keeps it to the end; its "
-            "instructions, model and starters go with every run (LOOP P-20). None when unsaid"
+            "instructions, model and starters go with every run (P-20). None when unsaid"
         ),
     )
     settings: Optional[Dict[str, Any]] = Field(
         default=None,
         description=(
             "What the user may set: the JSON Schema of a form, an object of named fields, each with "
-            "its `title` and its `default` (LOOP C-16). Drawn with `@datalayer/primer-rjsf` beside "
+            "its `title` and its `default` (C-16). Drawn with `@datalayer/primer-rjsf` beside "
             "the conversation and on a deployment's Ship card, its values go with every run and are "
             "checked by the runtime against the same schema. None when unsaid"
         ),
@@ -2144,26 +2144,26 @@ class AppInterface(_Strict):
             "How the settings' fields are drawn, as `@datalayer/primer-rjsf` reads a uiSchema: by "
             "field name, its `ui:` options — `ui:widget` one of `select`, `radio`, `range`, "
             "`updown`, `switch`, `checkbox`, `text`, `textarea`, `date`, `checkboxes`, `tags` — and "
-            "`ui:order` (LOOP P-20). Each field's own widget when unsaid"
+            "`ui:order` (P-20). Each field's own widget when unsaid"
         ),
     )
     language: str = Field(
         default="en",
-        description="The language its own words are in, as BCP 47 tags it (`en`, `fr`, `pt-BR`) (LOOP P-26)",
+        description="The language its own words are in, as BCP 47 tags it (`en`, `fr`, `pt-BR`) (P-26)",
     )
     translations: Dict[str, AppTranslation] = Field(
         default_factory=dict,
         description=(
             "What a person reads of it in other languages, by BCP 47 tag: its name, welcome, "
             "starters and their categories, settings, commands, modes and profiles. The page shows "
-            "the person's language when it has it, else its own words (LOOP P-26)"
+            "the person's language when it has it, else its own words (P-26)"
         ),
     )
     uploads: Optional[AppUploads] = Field(
         default=None,
         description=(
             "What a person may send in the composer without being asked — images, files, audio — "
-            "by kind, each with its largest size, and how many at once (LOOP P-21). None when "
+            "by kind, each with its largest size, and how many at once (P-21). None when "
             "unsaid: the composer offers no attachment, and a file sent with a message is refused"
         ),
     )
@@ -2174,7 +2174,7 @@ class AppInterface(_Strict):
     custom_components: List[AppCustomComponent] = Field(
         default_factory=list,
         description=(
-            "Components its developer wrote (LOOP P-17), of this application only: each named, its props "
+            "Components its developer wrote (P-17), of this application only: each named, its props "
             "a JSON Schema, its module's address; placed, shown and drawn as the catalog's own"
         ),
     )
@@ -2182,7 +2182,7 @@ class AppInterface(_Strict):
     page: Optional[AppPage] = Field(
         default=None,
         description=(
-            "A widget's page written in its code (`@app.page`, LOOP P-05): its inputs as a form, its "
+            "A widget's page written in its code (`@app.page`, P-05): its inputs as a form, its "
             "outputs as values; run again as an input changes, its outputs shown in place. None when unsaid"
         ),
     )
@@ -2231,7 +2231,7 @@ class AppInterface(_Strict):
         if isinstance(value, list):
             raise ValueError(
                 "interface.settings is the JSON Schema of a form, an object of named fields "
-                "(LOOP C-16), not a list of settings: say each one as a property, its title "
+                "(C-16), not a list of settings: say each one as a property, its title "
                 "and its default"
             )
         return value
@@ -2273,7 +2273,7 @@ class AppInterface(_Strict):
         return self
 
     def custom_component(self, name: str) -> Optional[AppCustomComponent]:
-        """A component its developer wrote, by name (LOOP P-17), or None."""
+        """A component its developer wrote, by name (P-17), or None."""
         return next((component for component in self.custom_components if component.name == name), None)
 
     def _custom_components_hold(self) -> None:
@@ -2338,7 +2338,7 @@ class AppInterface(_Strict):
                 raise ValueError(f"{said} translates what the application does not say: {', '.join(unknown)}")
 
     def profile(self, profile_id: str) -> Optional[AppProfile]:
-        """A profile by id (LOOP P-20), or None."""
+        """A profile by id (P-20), or None."""
         return next((profile for profile in self.profiles if profile.id == profile_id), None)
 
     def profile_choice(self, chosen: Optional[str] = None) -> Optional[AppProfile]:
@@ -2357,12 +2357,12 @@ class AppInterface(_Strict):
         return self.profiles[0] if self.profiles else None
 
     def starters_for(self, profile_id: Optional[str] = None) -> List[AppStarter]:
-        """The starters offered: the profile's, else the application's (LOOP P-20)."""
+        """The starters offered: the profile's, else the application's (P-20)."""
         profile = self.profile_choice(profile_id)
         return list(profile.starters) if profile is not None and profile.starters else list(self.starters)
 
     def translated(self, preferred: Sequence[str]) -> "AppInterface":
-        """What a person who prefers these languages reads (LOOP P-26): its words in
+        """What a person who prefers these languages reads (P-26): its words in
         the first of them it has a translation into, else its own.
         """
         tag = pick_language([self.language, *self.translations], preferred)
@@ -2584,7 +2584,7 @@ class AppTestCase(_Strict):
     application answered the turn before — and what it should do is judged
     on the whole conversation.
 
-    When plain words are not enough, its code decides it (LOOP P-06): `code`
+    When plain words are not enough, its code decides it (P-06): `code`
     names the function of the application's `app.py` that is given the
     conversation and says whether it passed — `@app.test` writes it. `expect`
     still says it in words: without its file, the case is judged by them.
@@ -2631,7 +2631,7 @@ class AppTestCase(_Strict):
 
 
 class AppVerified(_Strict):
-    """What was verified, and how, each in a sentence a person reads (LOOP E-14).
+    """What was verified, and how, each in a sentence a person reads (E-14).
 
     An example says it on its card and on its page: what was tried live,
     what runs on recorded data instead, and what is not verified yet. Said
@@ -2674,16 +2674,16 @@ class RecordItem(str, Enum):
     OUTPUTS = "outputs"
     FEEDBACK = "feedback"
     AUDIO = "audio"
-    """What was said aloud, as sound: off unless named, kept 30 days at most, never for a public deployment (VOICE.md VO-42, VO-63)."""
+    """What was said aloud, as sound: off unless named, kept 30 days at most, never for a public deployment (VO-42, VO-63)."""
     DIFFS = "diffs"
-    """A harness's edits whole — the file's old and new text — rather than each diff's hash and size (SHIELD.md §6.4)."""
+    """A harness's edits whole — the file's old and new text — rather than each diff's hash and size."""
     TERMINALS = "terminals"
-    """A harness's terminal output, rather than each command and its exit alone (SHIELD.md §6.4)."""
+    """A harness's terminal output, rather than each command and its exit alone."""
 
 
 _RETENTION = re.compile(r"^(?P<count>[1-9]\d*)_(?P<unit>day|days|month|months|year|years)$")
 
-#: How long what was said aloud may be kept, at most (decision 10, VOICE.md VO-63).
+#: How long what was said aloud may be kept, at most (VO-63).
 AUDIO_KEPT_DAYS_AT_MOST = 30
 _DAYS = {"day": 1, "month": 30, "year": 365}
 
@@ -2725,7 +2725,7 @@ class AppRecord(_Strict):
 
 
 #: What each item a Track includes keeps of an application's record, in the
-#: words of `record.include` (LOOP R-07). A Track's other items — the Op, the
+#: words of `record.include` (R-07). A Track's other items — the Op, the
 #: Frames, the model versions, who read it — are not entries of an
 #: application's record: its session already says the application, its
 #: version and who opened it.
@@ -2753,7 +2753,7 @@ class KeptRecord(BaseModel):
 
 
 def kept_record(keep_for: str, include: Sequence[Any], track: str = "") -> KeptRecord:
-    """What an application's record keeps, and for how long (LOOP R-07).
+    """What an application's record keeps, and for how long (R-07).
 
     As its `record` says — or, when it names a Track under `checks`, as the
     Track says: the Track's retention in place of `keep_for`, and what its
@@ -2776,7 +2776,7 @@ def kept_record(keep_for: str, include: Sequence[Any], track: str = "") -> KeptR
 
 
 class CheckStage(str, Enum):
-    """Where a check of its code runs (LOOP P-06), as the built-in checks do (R-06)."""
+    """Where a check of its code runs (P-06), as the built-in checks do (R-06)."""
 
     ANSWER = "answer"
     """On every answer, before it is given: one it refuses is asked again."""
@@ -2786,7 +2786,7 @@ class CheckStage(str, Enum):
 
 
 class AppCodeCheck(_Strict):
-    """A check written in the application's code (LOOP P-06): `@app.check`.
+    """A check written in the application's code (P-06): `@app.check`.
 
     Run at its stage beside the built-in checks and the catalogue's Guards;
     what it refuses is said in its own sentence. Without its file nothing
@@ -2806,12 +2806,12 @@ class AppChecks(_Strict):
     track: str = Field(default="", description="A Track, `id` or `id:version`")
     code: List[AppCodeCheck] = Field(
         default_factory=list,
-        description="Checks written in its code (`@app.check`), each run at its stage (LOOP P-06)",
+        description="Checks written in its code (`@app.check`), each run at its stage (P-06)",
     )
 
 
 class AppTool(_Strict):
-    """A tool of the application's own, written in its code (LOOP P-06): `@app.tool`.
+    """A tool of the application's own, written in its code (P-06): `@app.tool`.
 
     Its agent calls it as any tool; the rules decide each call by what it
     `does` — a rule may name it, by its name alone — and the Canvas lists it.
@@ -2905,7 +2905,7 @@ class EmbedMode(str, Enum):
     """A side panel."""
 
     ASSISTANT = "assistant"
-    """A character on the page that speaks in a balloon (LOOP §6.9)."""
+    """A character on the page that speaks in a balloon."""
 
 
 class HostedDeployment(_Strict):
@@ -2934,7 +2934,7 @@ _ORIGIN = re.compile(r"^https://[A-Za-z0-9.-]+(?::\d+)?$|^http://(?:localhost|12
 
 _HOST_NAME = re.compile(r"^[a-z][a-z0-9_]{0,62}$")
 
-#: The tool its agent reads what the host page passes it with (LOOP D-10).
+#: The tool its agent reads what the host page passes it with (D-10).
 HOST_CONTEXT_TOOL = "host_context"
 
 
@@ -2944,7 +2944,7 @@ def host_tool(function: str) -> str:
 
 
 class HostFunction(_Strict):
-    """A function of the host page the application's agent may call (LOOP D-10)."""
+    """A function of the host page the application's agent may call (D-10)."""
 
     name: str = Field(..., description="Its name, lower-case words joined by `_`: `open_ticket`")
     description: str = Field(..., description="What it does, for the agent: when to call it")
@@ -2976,7 +2976,7 @@ class HostFunction(_Strict):
 
 
 class HostUser(str, Enum):
-    """What the host page's word on its visitor is worth (LOOP D-21)."""
+    """What the host page's word on its visitor is worth (D-21)."""
 
     CLAIMED = "claimed"
     """What the page says, taken as it says it: anybody's page can say anything."""
@@ -2986,15 +2986,15 @@ class HostUser(str, Enum):
     unsigned or bad one is refused, and no session is opened."""
 
 
-#: The longest a host's signed token naming its user may live, in seconds (LOOP D-21).
+#: The longest a host's signed token naming its user may live, in seconds (D-21).
 HOST_USER_TOKEN_MAX_SECONDS = 3600
 
-#: The one algorithm a host signs its user's token with (LOOP D-21).
+#: The one algorithm a host signs its user's token with (D-21).
 HOST_USER_TOKEN_ALGORITHM = "HS256"
 
 
 class HostBridge(_Strict):
-    """What the host page and the application say to each other (LOOP D-10).
+    """What the host page and the application say to each other (D-10).
 
     The values of the host it reads (`context`: `user`, `page`, or a name of
     the host's own), through the tool `host_context`; the functions of the
@@ -3002,7 +3002,7 @@ class HostBridge(_Strict):
     decided by a rule that names it, as any tool is: one no rule names is
     left to the person.
 
-    Who its user is (`user`, LOOP D-21): what the page says (`claimed`), or
+    Who its user is (`user`, D-21): what the page says (`claimed`), or
     only what the host's server signed (`signed`) — a short token, HS256
     with the deployment's secret, naming `sub`, `name` and `exp` at most an
     hour away. An application that acts in each user's name, or shows data
@@ -3214,7 +3214,7 @@ class AppSampleAlternative(_Strict):
 
 
 class AppSamples(_Strict):
-    """What it is tried on before it is anybody's (STUDIO E-06, E-11).
+    """What it is tried on before it is anybody's (E-06, E-11).
 
     Published with it by Datalayer and read only: what a visitor without an
     account tries it on, in the browser.
@@ -3264,7 +3264,7 @@ class AppSpec(_Strict):
     protocols: List[str] = Field(
         default_factory=list,
         description=(
-            "The agent protocols it speaks, ids of the protocols catalogue (AGENT_PROTOCOLS PS-02): "
+            "The agent protocols it speaks, ids of the protocols catalogue (PS-02): "
             "its `pap`, `pact`, `signed_fetch` and `a2a` blocks, and each merchant of `commerce`, are refused unless "
             "their protocol is listed, "
             "and a planned protocol only while it is not offered"
@@ -3453,7 +3453,7 @@ class AppSpec(_Strict):
                 )
             if not self.interface.voice.enabled or self.interface.voice.input is VoiceInput.OFF:
                 raise ValueError("an application keeps audio only when it listens: turn `interface.voice` on")
-            # What was said aloud is kept 30 days at most (decision 10, VOICE.md VO-63) —
+            # What was said aloud is kept 30 days at most (VO-63) —
             # as long as the record keeps it: its `keep_for`, or the Track's retention.
             days, keeper = self.record.retention_days, f"`record.keep_for` ({self.record.keep_for})"
             from ..tracks import get_track  # noqa: PLC0415 - tracks import apps
@@ -3473,7 +3473,7 @@ class AppSpec(_Strict):
         actions = [rule.action.lower() for rule in self.rules]
         if len(set(actions)) != len(actions):
             raise ValueError("two rules have the same action")
-        # What its code declares is known by name (LOOP P-06): each name once.
+        # What its code declares is known by name (P-06): each name once.
         tools = [tool.name for tool in self.tools]
         if len(set(tools)) != len(tools):
             raise ValueError("two of its tools have the same name")
@@ -3588,7 +3588,7 @@ class AppSpec(_Strict):
         return self.interface.layout or DEFAULT_LAYOUTS[self.kind]
 
     def translated(self, preferred: Sequence[str]) -> "AppSpec":
-        """The application as a person who prefers these languages reads it (LOOP P-26):
+        """The application as a person who prefers these languages reads it (P-26):
         its name, description and interface in the first of them it is translated
         into, else in its own words. What it does — its agent, rules, ids — is the same.
         """
@@ -3605,7 +3605,7 @@ class AppSpec(_Strict):
         )
 
     def tool(self, name: str) -> Optional[AppTool]:
-        """Its own tool of that name (LOOP P-06), or None."""
+        """Its own tool of that name (P-06), or None."""
         for tool in self.tools:
             if tool.name == name:
                 return tool
@@ -3658,7 +3658,7 @@ def behaviour_for(
     """What an application does when its agent calls a tool.
 
     ``tool`` is ``server.tool`` for a tool of an MCP server, the id of a
-    tool of the catalogue, or the name of one of its own tools (LOOP P-06).
+    tool of the catalogue, or the name of one of its own tools (P-06).
     Its classes are the catalogue's — or, for its own, what it says it
     ``does`` — unless given.
     What a tool does can depend on what it is asked: with the ``arguments``
@@ -3679,7 +3679,7 @@ def behaviour_for(
        by :data:`DEFAULT_BEHAVIOURS`, and the most restricted wins.
     """
     server, name = split_ref(tool)
-    # Its own tool does what it says it does (LOOP P-06).
+    # Its own tool does what it says it does (P-06).
     own_tool = app.tool(name) if server is None and classes is None else None
     if own_tool is not None:
         classes = own_tool.does
@@ -3773,7 +3773,7 @@ def _agent_of(app: AppSpec) -> Optional[Dict[str, Any]]:
 
 
 def component_named(name: str) -> Optional[Dict[str, Any]]:
-    """The component a layout names (LOOP C-13), from the catalogs of the UI
+    """The component a layout names (C-13), from the catalogs of the UI
     plugins (`ui/*.yaml`, `components`), by the name a surface gives it. None
     when no UI plugin renders it."""
     for plugin in _catalogue("ui").values():
@@ -3784,7 +3784,7 @@ def component_named(name: str) -> Optional[Dict[str, Any]]:
 
 
 def form_problems(node: Mapping[str, Any]) -> List[str]:
-    """What stops a Form block from asking (LOOP C-16), in sentences.
+    """What stops a Form block from asking (C-16), in sentences.
 
     A form is what an application asks of a person — a quote's parameters, an
     approval's reason — as the JSON Schema of its fields: an object whose
@@ -3817,7 +3817,7 @@ def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = No
     Every reference resolves, every rule applies to something the application
     can reach, and what it asks of the catalogue's Gates is run by its Guards.
 
-    A context of an organization's own (``org-…``, LOOP U-32) is not the
+    A context of an organization's own (``org-…``, U-32) is not the
     catalogue's: it resolves among ``organization_frames``, the ids of the
     organization the application belongs to, and is refused when they are not
     known — no organization was said.
@@ -3842,7 +3842,7 @@ def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = No
 
     if app.model and get_model(app.model) is None:
         problems.append(f"There is no model named {app.model!r}.")
-    # The model a mode runs on is the catalogue's (LOOP P-19).
+    # The model a mode runs on is the catalogue's (P-19).
     for mode in app.interface.modes:
         for option in mode.options:
             if option.model and get_model(option.model) is None:
@@ -3856,7 +3856,7 @@ def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = No
             problems.append(f"There is no model named {app.decision.decision_model!r} to decide with.")
         elif "decisions" not in decider.capabilities:
             problems.append(f"The model {app.decision.decision_model!r} does not answer typed decisions.")
-    # Its voice is one of the catalogue's, and speaks its language (VOICE.md VO-41).
+    # Its voice is one of the catalogue's, and speaks its language (VO-41).
     voice = app.interface.voice
     if voice.enabled and voice.output is not VoiceOutput.OFF and voice.voice:
         from ..speech import voice_problems
@@ -4074,7 +4074,7 @@ def load_raw_apps(directory: Optional[Path] = None) -> Dict[str, Dict[str, Any]]
 
 def press_problems(app: AppSpec) -> List[str]:
     """What its tests press that its code does not declare, in sentences
-    (REACTOR_UI RU-5): each press an action of ``interface.actions``, with
+    (RU-5): each press an action of ``interface.actions``, with
     the fields its payload takes. Asked of a whole Appspec — one built from
     its code, or the catalogue's — not of one its code is still declaring.
     """

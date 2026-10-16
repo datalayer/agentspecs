@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Speech model: Whisper base, multilingual, for the browser (VOICE.md, decision 3)
+# Speech model: Whisper base, multilingual, for the browser
 
 id: whisper-base
 version: 0.0.1

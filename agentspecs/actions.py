@@ -43,7 +43,7 @@ domain of the mailbox it sends from (``user_google_email``) — or the mailbox
 is not said — the call also ``publish``-es: it makes the message reachable by
 people who could not reach it. A reply is not a forward.
 
-**What it sends says who wrote it** (LOOP I-10). A tool that puts words in
+**What it sends says who wrote it** (I-10). A tool that puts words in
 front of other people outside Datalayer — a mail, a message — writes them as
 the account its connection acts as, so the words alone do not say that an
 application wrote them, nor for whom. Such a tool says which of its arguments
@@ -71,7 +71,7 @@ Where the class is written:
   through a protocol connection (``pap:<domain>``, ``pact:<brand>``), or the
   operations of a protocol client (``ucp:``, ``acp:``) — are written the same
   way in ``agentspecs/protocol-tools``, each naming its ``connection`` prefix
-  (AGENT_PROTOCOLS PR-54): :func:`connection_tool_classes` answers for a
+  (PR-54): :func:`connection_tool_classes` answers for a
   tool reached through any connection, so a Rule decides a protocol's tool
   with no code of that protocol.
 
@@ -319,7 +319,7 @@ def _server_entry(server: Mapping[str, Any], tool_name: str) -> Tuple[Classes, T
 
 def server_tool_signs(server: Mapping[str, Any], tool_name: str) -> str:
     """The argument of a server's tool that carries what it sends, which is
-    signed with the application's byline (LOOP I-10); ``""`` when it says none.
+    signed with the application's byline (I-10); ``""`` when it says none.
     """
     value = _server_value(server, tool_name)
     if not isinstance(value, Mapping) or "signs" not in value:
@@ -346,7 +346,7 @@ def server_tool_classes(
     for condition in conditions:
         if arguments is None or condition.holds(arguments):
             classes.extend(item for item in condition.classes if item not in classes)
-    # A forward outside the organization is told from the call (LOOP W-04).
+    # A forward outside the organization is told from the call (W-04).
     if (
         arguments is not None
         and classes

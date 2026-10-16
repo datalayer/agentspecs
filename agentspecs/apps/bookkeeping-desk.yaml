@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Application Specification: Bookkeeping Desk
-# The Personal Agent Protocol's two-companies journey (AGENT_PROTOCOLS PR-05,
+# The Personal Agent Protocol's two-companies journey (PR-05,
 # trace two-companies) as an application: an accounting firm that is a
 # company to its clients' own agents, and their agent at their bank, where
 # every payment is an operation the client approves. The SDK's demo worlds:
@@ -63,7 +63,7 @@ rules:
   - action: Read balances at the bank
     applies_to: read
     behaviour: do_it
-  # A message to the bank goes out in the client's name (PAP_DATALAYER R-02).
+  # A message to the bank goes out in the client's name (R-02).
   - action: Write to the bank for a client
     applies_to: send
     behaviour: ask_first

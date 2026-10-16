@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Scene: A Personal Agent at a Business (AGENT_PROTOCOLS EX-15), scripted. It
+# Scene: A Personal Agent at a Business (EX-15), scripted. It
 # plays a personal agent asking a business over PACT: the business asks the
 # person to sign in at its own page, the person allows one permission of the
 # two asked, the business answers, and the receipt it signs reaches the

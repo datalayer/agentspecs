@@ -24,7 +24,7 @@
     },
     "policy": {
       "$ref": "shield-policy.schema.json",
-      "description": "The Shield's policy document (agent_shield.policy, SHIELD.md \u00a76.7)."
+      "description": "The Shield's policy document (agent_shield.policy)."
     },
     "tags": {
       "items": {

@@ -2,11 +2,11 @@
 
 # Standards
 
-What a conformance report answers (SHIELD.md §6.9, decision 15): a standard's version,
+What a conformance report answers: a standard's version,
 domains and controls, each with the evidence kinds it takes, its cadence and its crosswalks,
 one spec each under `agentspecs/standards/`. The Shield's evidence map
 (`agent_shield.conformance`) reads them and gives each control one of five statuses; the
-standard's version is tracked and offered, never applied silently (decision 16).
+standard's version is tracked and offered, never applied silently.
 
 | Standard | Id | Version | Released | Next release | Read on | Controls | Mandatory | Retired |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -227,7 +227,7 @@ The international standard for an AI management system: clauses 4 to 10 of the m
 
 ## The organization's controls
 
-The controls a person writes and signs start from a template under `standards/templates/` (SHIELD.md SH-64), with what the catalogue knows filled in:
+The controls a person writes and signs start from a template under `standards/templates/` (SH-64), with what the catalogue knows filled in:
 
 - `E001`: `e001-failure-plan-security-breaches.md`
 - `E002`: `e002-failure-plan-harmful-outputs.md`

@@ -61,7 +61,7 @@ actions:
     what it changes is what it is given. Launching a sandbox spends credits; a
     snapshot of one is storage that is billed. An application's connection to
     this server is what the gateway grants it, tool by tool, by these classes
-    (LOOP I-12): reading reaches only the tools that only read.
+    (I-12): reading reaches only the tools that only read.
   tools:
     read_notebook: read
     read_cell: read

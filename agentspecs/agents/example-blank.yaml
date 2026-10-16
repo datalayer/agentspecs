@@ -4,7 +4,7 @@
 # Agent Specification: A Blank Agent
 # A model and nothing else: no prompt of its own, no MCP servers, no skills,
 # no tools. An application that runs it is what its instructions say, and an
-# app.py runs it in its own process (LOOP P-32).
+# app.py runs it in its own process (P-32).
 
 id: example-blank
 version: 0.0.1

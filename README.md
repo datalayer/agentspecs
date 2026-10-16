@@ -217,13 +217,12 @@ cog["frame_context"]["guards"]          # what its output answers to
 
 ### Harnesses (`agentspecs/harnesses`)
 
-Defines an agent program driven over the Agent Client Protocol (SHIELD.md
-§3.1) — a coding agent such as Claude Code or Codex, or any agent a framework
+Defines an agent program driven over the Agent Client Protocol — a coding agent such as Claude Code or Codex, or any agent a framework
 exposes over ACP — and the terms it is served under. An agent spec names one
 with `harness: claude-code` where it says `harness: pydantic-ai`; what the
 harness cannot honour of the spec (`model:` it does not take, `subagents:`
 when it has its own, `skills:` in a format it cannot read) is refused at load,
-in a sentence. `register.yaml` is the register (§3.3): every harness with its
+in a sentence. `register.yaml` is the register: every harness with its
 adapter, the version pinned, its licence, the agent's terms, the credential it
 takes and whether serving it to third parties is permitted, each with where it
 was read; a harness without an entry does not load.

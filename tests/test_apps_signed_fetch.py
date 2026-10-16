@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-"""The Appspec's `signed_fetch` block (AGENT_PROTOCOLS EX-11, decided 2026-10-13): exact sites,
+"""The Appspec's `signed_fetch` block (EX-11, decided 2026-10-13): exact sites,
 read with GET only through the gateway, every request signed with the application's key."""
 
 from __future__ import annotations

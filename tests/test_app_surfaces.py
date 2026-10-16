@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""Every application's surface is valid A2UI v0.9 (LOOP R-01, C-04).
+"""Every application's surface is valid A2UI v0.9 (R-01, C-04).
 
 Each block of a catalogue application's surface that is one of A2UI's basic
 components is validated against the shape A2UI v0.9 gives it — the basic

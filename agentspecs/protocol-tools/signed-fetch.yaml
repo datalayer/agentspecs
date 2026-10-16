@@ -3,7 +3,7 @@
 
 # The MCP gateway's `signed-fetch` toolset: an application reading a page at a
 # website it names, each request signed with its own Web Bot Auth key
-# (AGENT_PROTOCOLS EX-11, decided 2026-10-13). Reached through an application's
+# (EX-11, decided 2026-10-13). Reached through an application's
 # `signed_fetch.sites[]`, granted as `datalayer_connection` `signed-fetch:<domain>`.
 id: signed-fetch
 name: Signed fetch

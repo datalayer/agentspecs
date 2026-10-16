@@ -4,7 +4,7 @@
 
 """Scene specifications: the scene spec.
 
-A *scene* stages a team (LOOP A-11, decided 2026-10-07). The team says who is
+A *scene* stages a team (A-11, decided 2026-10-07). The team says who is
 on stage — its members, their roles, who asks whom over what
 (:mod:`agentspecs.teams`); the scene says what happens there, and nothing of
 membership twice. What a scene spec holds:
@@ -44,7 +44,7 @@ it is) and writes its ``lines`` — who acts, to whom, what they say or do, a
 ``turn`` where they decide — and says what of it is ``live`` on Datalayer
 today. It is played as written, with nothing live behind it: the Personal
 Agent Protocol's Stages are scripted from the SDK's demo companies
-(PAP_DATALAYER X-02).
+(X-02).
 
 What is wrong is said in sentences (:func:`scene_problems`): a cast member
 not in the team, a beat's mover not in the cast, a move over ``mcp`` to one
@@ -463,7 +463,7 @@ class RehearsalBeat(_Strict):
 
 
 class SceneRecording(_Strict):
-    """A transcript recorded once, played when the scene cannot play live (LOOP H-08)."""
+    """A transcript recorded once, played when the scene cannot play live (H-08)."""
 
     path: str = Field(..., description="Its file, beside the scenes: `sales-and-accounting/recording.json`")
     taken: str = Field(default="", description="When it was recorded")
@@ -492,7 +492,7 @@ class ScenePlayedBeat(_Strict):
 
 
 class ScenePlayed(_Strict):
-    """What came of the last rehearsal `loop scenes rehearse --cloud` played (LOOP A-14).
+    """What came of the last rehearsal `loop scenes rehearse --cloud` played (A-14).
 
     Written by the command to the scene's file beside the specs
     (:func:`played_path`: ``<id>/rehearsal.json``), never by hand; read by

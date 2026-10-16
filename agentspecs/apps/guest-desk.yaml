@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Application Specification: Guest Desk
-# A business people's own agents ask over PACT 1.0 (AGENT_PROTOCOLS PR-13,
+# A business people's own agents ask over PACT 1.0 (PR-13,
 # PI-32; decided 2026-10-13): Datalayer is the Provider on its card, its
 # owner the Brand. It answers a personal agent alone about what it offers
 # and, once the person signs in with Datalayer and lets their agent see who
@@ -82,7 +82,7 @@ tests:
     live:
       - "Drilled as a pair on r1 on 13 October 2026: two clones joined as the Studio joins them, the business shipped at its own domain with the cloning account as its Brand; asked by Errand Runner's clone as itself, it named nobody; once the person signed in by device code and granted profile:read, it named them by their Datalayer account, with a verified receipt."
     recorded:
-      - "A shipped business at its own domain was drilled on r1 on 13 October 2026 (AGENT_PROTOCOLS PR-13): its card naming Datalayer the Provider, a registered personal agent answered alone and for a person who signed in by device code, a stranger refused."
+      - "A shipped business at its own domain was drilled on r1 on 13 October 2026 (PR-13): its card naming Datalayer the Provider, a registered personal agent answered alone and for a person who signed in by device code, a stranger refused."
 
 record:
   keep_for: 90_days

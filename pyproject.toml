@@ -26,7 +26,7 @@ dependencies = [
     "mcp[cli]>=2.0",
     "pydantic>=2.0",
     "httpx>=0.24",
-    # The policies catalogue validates each document against the Shield's JSON Schema (SHIELD.md SH-50).
+    # The policies catalogue validates each document against the Shield's JSON Schema (SH-50).
     "jsonschema>=4.18",
 ]
 

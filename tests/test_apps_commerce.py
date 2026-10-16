@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-"""The Appspec's `commerce` block (AGENT_PROTOCOLS PI-01): merchants over UCP or ACP,
+"""The Appspec's `commerce` block (PI-01): merchants over UCP or ACP,
 test merchants only, each purchase asked of the person (decided 2026-10-13)."""
 
 from __future__ import annotations
@@ -60,7 +60,7 @@ def test_an_application_shopping_is_refused(commerce, protocols, why):
 
 def test_the_shopping_desk_buys_at_a_test_store_asking_first():
     app = APP_CATALOGUE["shopping-desk"]
-    # On since drilled live at the hosted test merchants (AGENT_PROTOCOLS PI-42).
+    # On since drilled live at the hosted test merchants (PI-42).
     assert app.protocols == ["ucp", "acp"] and app.enabled
     store, outfitters = app.commerce.merchants
     assert (store.merchant, store.limit.amount, store.limit.currency) == ("store.examples.datalayer.run", "50", "USD")

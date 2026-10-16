@@ -3,11 +3,11 @@
 
 # Application Specification: Order Desk
 # A chat that works with a shop for each person who uses it, through the
-# Personal Agent Protocol (PAP_DATALAYER E-01): the person signs in at the
+# Personal Agent Protocol (E-01): the person signs in at the
 # shop itself, the application reads their orders, and what the shop
 # proposes to change is approved by the person, its exact terms, once.
 # The shop is the protocol's demo company, Manzanita Outfitters, as Datalayer
-# hosts it for examples (AGENT_PROTOCOLS PI-42).
+# hosts it for examples (PI-42).
 
 schema: loop.app/v1
 id: order-desk
@@ -45,7 +45,7 @@ rules:
   - action: Read your orders at the shop
     applies_to: read
     behaviour: do_it
-  # A message to the shop goes out in your name (PAP_DATALAYER R-02).
+  # A message to the shop goes out in your name (R-02).
   - action: Send the shop a message for you
     applies_to: send
     behaviour: ask_first

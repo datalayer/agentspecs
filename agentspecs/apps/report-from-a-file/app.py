@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""Report from a File: a widget written in Python (LOOP §9, E-02).
+"""Report from a File: a widget written in Python (E-02).
 
 Run it: it asks for a CSV file, has its agent analyse it
 in the sandbox — in code, never by estimation — and gives back a report,

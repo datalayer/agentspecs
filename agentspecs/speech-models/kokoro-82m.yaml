@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Speech model: Kokoro-82M, text to speech on ai-agents (VOICE.md, decision 5)
+# Speech model: Kokoro-82M, text to speech on ai-agents
 
 id: kokoro-82m
 version: 0.0.1

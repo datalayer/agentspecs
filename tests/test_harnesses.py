@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The harnesses catalogue (SHIELD.md SH-01, §3.1) and its register (SH-04, §3.3)."""
+"""The harnesses catalogue (SH-01) and its register (SH-04)."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent / "agentspecs"
 def test_the_catalogue_holds_the_harnesses_of_decision_4_and_one_framework():
     # Claude Code and Codex first, then goose and OpenCode; Gemini CLI with its tier
     # restriction; OpenHands; `custom` only as an organization's own; and one framework
-    # exposing its agents over ACP (§2.5), fast-agent.
+    # exposing its agents over ACP, fast-agent.
     assert set(harnesses.HARNESS_CATALOGUE) == {
         "claude-code", "codex", "gemini-cli", "goose", "opencode", "openhands", "fast-agent", "custom",
     }

@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-"""Personal Agent Protocol in the Appspec (PAP_DATALAYER S-01, S-02, S-03)."""
+"""Personal Agent Protocol in the Appspec (S-01, S-02, S-03)."""
 
 from pathlib import Path
 
@@ -172,7 +172,7 @@ def test_a_company_reached_over_mcp_and_by_registered_agents_only() -> None:
         app(company={**company, "interfaces": ["web"]})
 
 
-#: The Ledgerly pattern (PAP_DATALAYER R-07): confirming it lets the application pay at its bank without asking.
+#: The Ledgerly pattern (R-07): confirming it lets the application pay at its bank without asking.
 STANDING = {
     "action": "payments.allow",
     "summary": "Let it pay {payee} from your bank account without asking, up to {currency} {maximum} each, "

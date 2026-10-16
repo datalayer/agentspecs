@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Speech model: Silero VAD, voice activity in the browser (VOICE.md §4.5)
+# Speech model: Silero VAD, voice activity in the browser
 
 id: silero-vad
 version: 0.0.1

@@ -55,7 +55,7 @@ decision:
         row?
       direction: higher
 
-# What a visitor without an account decides on (STUDIO E-06): four anomalies
+# What a visitor without an account decides on (E-06): four anomalies
 # Datalayer found in a sample orders dataset, read only. A clone decides on
 # its own dataset.
 samples:

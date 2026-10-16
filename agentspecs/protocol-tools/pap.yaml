@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # The MCP gateway's `pap` toolset: an application acting as a person's agent at
-# a Personal Agent Protocol company (PAP_DATALAYER ADR-1, B-03). Reached through
+# a Personal Agent Protocol company (ADR-1, B-03). Reached through
 # an application's `pap.connections[]`, granted as `datalayer_connection`
 # `pap:<domain>` and admitted at the connection's level.
 id: pap
@@ -11,19 +11,19 @@ description: A person's agent at a company, through Datalayer's MCP gateway.
 # The connection's `server` is `<connection>:<domain>`.
 connection: pap
 
-# What each tool does to the world (agentspecs.actions, PAP_DATALAYER R-02,
-# AGENT_PROTOCOLS PR-54). A tool not named here is unknown, and unknown is the
+# What each tool does to the world (agentspecs.actions, R-02,
+# PR-54). A tool not named here is unknown, and unknown is the
 # most restricted.
 actions:
   checked: "2026-10-13"
   note: >-
     Read off the gateway's `extensions/pap/pap.py`. Asking the company's agent
-    is `send` (decided by the user, 13 October 2026, PAP_DATALAYER R-02): a
+    is `send` (decided by the user, 13 October 2026, R-02): a
     message goes out to the company in the person's name, so it is a Rule's to
     decide, *Ask me first* unless the Maker says otherwise. Asking for one of the
     company's people (`pap_handoff`) is the same conversation's control and is
     classed with `pap_ask`, `send` too. Proposing through the company's API
-    (`pap_propose`, decided by the user, 13 October 2026, PAP_DATALAYER R-07)
+    (`pap_propose`, decided by the user, 13 October 2026, R-07)
     sends a request in the person's name and is `send` too: what it proposes
     is done only by confirming it. Signing in records the
     person's consent and changes nothing at the company. A company MCP tool is

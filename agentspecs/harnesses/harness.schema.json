@@ -107,7 +107,7 @@
     },
     "HarnessSkills": {
       "additionalProperties": false,
-      "description": "Where the Shield writes an application's skills for it (\u00a74.10).",
+      "description": "Where the Shield writes an application's skills for it.",
       "properties": {
         "dir": {
           "default": "",
@@ -172,7 +172,7 @@
       "type": "string"
     },
     "SkillsFormat": {
-      "description": "The format a harness reads skills in (SHIELD \u00a74.10).",
+      "description": "The format a harness reads skills in.",
       "enum": [
         "skill-md",
         "none"
@@ -181,7 +181,7 @@
       "type": "string"
     },
     "ThirdPartyServing": {
-      "description": "Whether serving the harness to third parties is permitted by its terms (\u00a73.3).",
+      "description": "Whether serving the harness to third parties is permitted by its terms.",
       "enum": [
         "api_key_only",
         "permitted",

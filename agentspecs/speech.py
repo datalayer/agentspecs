@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The voice catalogue: voices, speech models, and the licence register (VOICE.md VO-40).
+"""The voice catalogue: voices, speech models, and the licence register (VO-40).
 
 Three kinds of YAML, beside the other catalogues:
 
@@ -20,7 +20,7 @@ Three kinds of YAML, beside the other catalogues:
   model, voice and dataset weighed, with its licence and its source, and the
   two lists a licence is checked against: ``allowed`` (anywhere, the browser
   included) and ``server_only`` (GPL code that runs on Datalayer's servers
-  and is never sent to a browser, decision 1).
+  and is never sent to a browser).
 
 A voice or a model whose licence is on neither list does not load: the
 catalogue refuses it with a sentence (VO-04). Only the dependencies of the
@@ -224,7 +224,7 @@ class RegisterEntry(_Strict):
     licence: str
     #: `machine` is the person's own machine, where an optional extra of agent-runtimes
     #: installs it from PyPI (`agent-runtimes[voice]`, VO-16); GPL is admitted on the
-    #: server only, so a GPL library used there is not admitted (VO-01, decision 1).
+    #: server only, so a GPL library used there is not admitted (VO-01).
     where: Literal["browser", "server", "machine", "tests"]
     status: Literal["used", "candidate", "refused"]
     source: str
@@ -373,7 +373,7 @@ def voice_problems(voice_id: str, language: str = "") -> List[str]:
 
 
 def transcriber_for(language: str, where: str = "device") -> Optional[SpeechModel]:
-    """The speech-to-text model for a language, where it runs: Moonshine where it hears it, Whisper otherwise (decision 3)."""
+    """The speech-to-text model for a language, where it runs: Moonshine where it hears it, Whisper otherwise."""
     base = language.split("-")[0]
     hearing = [
         model
@@ -383,7 +383,7 @@ def transcriber_for(language: str, where: str = "device") -> Optional[SpeechMode
     # On the device, tiny first: on the fixtures it heard better than base (WER
     # 3.3% against 4.9%, agent-runtimes tests/voice, 2026-10-05), at half the
     # download. On the server, large-v3-turbo hears a language at any length;
-    # the speech service picks a turn's model itself (VO-47, decision 18).
+    # the speech service picks a turn's model itself (VO-47).
     order = (
         ("moonshine-tiny-en", "moonshine-base-en")
         if where == "device"

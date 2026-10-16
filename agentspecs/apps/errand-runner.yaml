@@ -3,7 +3,7 @@
 
 # Application Specification: Errand Runner
 # A personal agent that asks a business's own agent for each person who uses
-# it, over PACT 1.0 (AGENT_PROTOCOLS PR-13): as the application alone first;
+# it, over PACT 1.0 (PR-13): as the application alone first;
 # then, once the person signs in at the business and grants what it may see,
 # for them. One of a pair (decided 2026-10-13): its partner is Guest Desk,
 # the business it asks. The business answers at its copy's own domain,
