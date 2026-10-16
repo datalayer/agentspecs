@@ -1,0 +1,42 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# goose speaks ACP itself: `goose acp` (its GDK's ACP guide). The provider
+# and the model are its GOOSE_PROVIDER and GOOSE_MODEL variables; the
+# provider's key is the secret.
+
+id: goose
+version: 0.0.1
+name: goose
+description: Block's open agent (now the Agentic AI Foundation's), which speaks ACP itself with goose acp; any model provider it is configured with.
+docs: https://block.github.io/goose/docs/gdk/acp/
+
+acp:
+  command: goose
+  args: ["acp"]
+  protocol_version: 1
+  load_session: false
+  mcp: lend
+  modes: []
+  env:
+    GOOSE_PROVIDER: anthropic
+
+requires:
+  secrets: [ANTHROPIC_API_KEY]
+  binaries: ["goose@1.54.0", git]
+
+terms:
+  served_to_third_parties: permitted
+  licence: Apache-2.0
+
+skills:
+  format: skill-md
+  dir: .agents/skills
+
+honours:
+  model: true
+  subagents: false
+
+instructions_file: .goosehints
+
+tags: [harness]

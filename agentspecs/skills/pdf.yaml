@@ -20,5 +20,5 @@ tags:
   - documents
   - extraction
 
-icon: file
+icon: "@primer/octicons-react:file"
 emoji: 📄

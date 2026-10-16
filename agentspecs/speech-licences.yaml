@@ -1,0 +1,195 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The licence register of voice (VO-01).
+#
+# Every library, model, voice and dataset voice uses or was weighed, with its
+# licence and where that was read, checked on 2026-10-05. Code and weights are
+# licensed apart: a model is admitted by the licence of its weights, a voice by
+# its weights and the data it was trained on.
+#
+# `allowed`: what may run anywhere, the browser included — and so be
+# distributed. `server_only`: what may run on Datalayer's servers and is never
+# sent to a browser (GPL-3.0 is not the AGPL: running it is not distributing
+# it). Everything else is refused. The catalogue's test
+# (`tests/test_speech.py`) reads these lists: a voice or a model whose licence
+# is not on them does not load, and every voice and model of the catalogue is
+# named here.
+#
+# Reviewed by counsel: not yet (VO-01).
+
+reviewed_by_counsel: false
+checked_on: "2026-10-05"
+
+allowed:
+  - MIT
+  - Apache-2.0
+  - BSD-2-Clause
+  - BSD-3-Clause
+  - 0BSD
+  - ISC
+  - CC0-1.0
+  - CC-BY-4.0
+
+server_only:
+  - GPL-3.0-or-later
+  - GPL-3.0-only
+  - LGPL-2.1-or-later
+  - LGPL-3.0-or-later
+
+entries:
+  # --- in the browser, used ----------------------------------------------------------
+  - name: "@huggingface/transformers"
+    kind: library
+    version: 4.3.0
+    licence: Apache-2.0
+    where: browser
+    status: used
+    source: https://registry.npmjs.org/@huggingface/transformers
+    note: Runs Moonshine and Whisper. Its own dependencies below; sharp is Node's only, never in the browser build.
+  - name: onnxruntime-web
+    kind: library
+    version: 1.31.0-dev.20260914-8d85527a0
+    licence: MIT
+    where: browser
+    status: used
+    source: https://registry.npmjs.org/onnxruntime-web
+    note: What transformers.js 4.3.0 pins; vad-web's peer (^1.17.0) is the same one.
+  - {name: onnxruntime-common, kind: library, version: 1.31.0-dev, licence: MIT, where: browser, status: used, source: https://registry.npmjs.org/onnxruntime-common}
+  - {name: "@huggingface/jinja", kind: library, version: 0.5.10, licence: MIT, where: browser, status: used, source: https://registry.npmjs.org/@huggingface/jinja}
+  - {name: "@huggingface/tokenizers", kind: library, version: 0.2.0, licence: Apache-2.0, where: browser, status: used, source: https://registry.npmjs.org/@huggingface/tokenizers}
+  - {name: flatbuffers, kind: library, version: 25.9.23, licence: Apache-2.0, where: browser, status: used, source: https://registry.npmjs.org/flatbuffers}
+  - {name: guid-typescript, kind: library, version: 1.0.9, licence: ISC, where: browser, status: used, source: https://registry.npmjs.org/guid-typescript}
+  - {name: long, kind: library, version: 5.3.2, licence: Apache-2.0, where: browser, status: used, source: https://registry.npmjs.org/long}
+  - {name: platform, kind: library, version: 1.3.6, licence: MIT, where: browser, status: used, source: https://registry.npmjs.org/platform}
+  - {name: protobufjs, kind: library, version: 7.6.6, licence: BSD-3-Clause, where: browser, status: used, source: https://registry.npmjs.org/protobufjs}
+  - name: "@ricky0123/vad-web"
+    kind: library
+    version: 0.0.31
+    licence: ISC
+    where: browser
+    status: used
+    source: https://registry.npmjs.org/@ricky0123/vad-web
+    note: Silero VAD on onnxruntime-web; push-to-talk keeps the speech it finds.
+  - name: moonshine-tiny-en
+    kind: model
+    licence: MIT
+    where: browser
+    status: used
+    source: https://huggingface.co/UsefulSensors/moonshine-tiny
+    note: Only the English and the streaming Moonshine models are MIT (VO-04).
+  - {name: moonshine-base-en, kind: model, licence: MIT, where: browser, status: used, source: https://huggingface.co/UsefulSensors/moonshine-base}
+  - {name: whisper-base, kind: model, licence: MIT, where: browser, status: used, source: https://huggingface.co/openai/whisper-base}
+  - {name: silero-vad, kind: model, licence: MIT, where: browser, status: used, source: https://github.com/snakers4/silero-vad}
+
+  # --- on the server (datalayer-speech), used ------------------------------------------
+  - {name: kokoro-82m, kind: model, licence: Apache-2.0, where: server, status: used, source: https://huggingface.co/hexgrad/Kokoro-82M}
+  - name: kokoro-onnx
+    kind: library
+    version: 0.6.1
+    licence: MIT
+    where: server
+    status: used
+    source: https://pypi.org/pypi/kokoro-onnx/json
+  - name: phonemizer
+    kind: library
+    version: 3.4.0
+    licence: GPL-3.0-or-later
+    where: server
+    status: used
+    source: https://pypi.org/pypi/phonemizer/json
+    note: >-
+      kokoro-onnx's G2P; in the speech service's private image. agent-runtimes' `voice`
+      extra (kokoro-onnx) also has pip install it from PyPI on the person's own machine
+      (VO-16, since agent-runtimes 1.5.45): not admitted there by this register (GPL on the
+      server only) — the user's decision, or counsel's (VO-01), 16 October 2026.
+  - name: espeakng-loader
+    kind: library
+    version: 0.2.4
+    licence: MIT
+    where: server
+    status: used
+    source: https://pypi.org/pypi/espeakng-loader/json
+    note: Ships the eSpeak NG library (GPL-3.0-or-later), below.
+  - name: eSpeak NG
+    kind: library
+    licence: GPL-3.0-or-later
+    where: server
+    status: used
+    source: https://github.com/espeak-ng/espeak-ng
+    note: >-
+      Never in a browser bundle (2026-10-05). In the speech service's image; and,
+      through espeakng-loader's wheel, on the person's own machine when agent-runtimes'
+      `voice` extra is installed (VO-16): not admitted there by this register — the user's
+      decision, or counsel's (VO-01), 16 October 2026.
+  - {name: onnxruntime, kind: library, version: 1.30.0, licence: MIT, where: server, status: used, source: https://pypi.org/pypi/onnxruntime/json}
+  - {name: soundfile, kind: library, version: 0.14.0, licence: BSD-3-Clause, where: server, status: used, source: https://pypi.org/pypi/soundfile/json}
+  - {name: libsndfile, kind: library, version: 1.2.2, licence: LGPL-2.1-or-later, where: server, status: used, source: https://github.com/libsndfile/libsndfile, note: "Inside soundfile's wheel."}
+  - {name: faster-whisper, kind: library, version: 1.2.1, licence: MIT, where: server, status: used, source: https://pypi.org/pypi/faster-whisper/json, note: "Recordings heard on the server (VO-34), checked 2026-10-15."}
+  - {name: ctranslate2, kind: library, version: 4.8.3, licence: MIT, where: server, status: used, source: https://pypi.org/pypi/ctranslate2/json, note: "faster-whisper's engine."}
+  - {name: tokenizers, kind: library, licence: Apache-2.0, where: server, status: used, source: https://pypi.org/pypi/tokenizers/json, note: "faster-whisper's tokenizer."}
+  - {name: av, kind: library, version: 19.0.1, licence: BSD-3-Clause, where: server, status: used, source: https://pypi.org/pypi/av/json, note: "A dependency of faster-whisper, unused by the service (it decodes with soundfile); its wheel ships FFmpeg (LGPL-2.1-or-later), below."}
+  - name: FFmpeg
+    kind: library
+    licence: LGPL-2.1-or-later
+    where: server
+    status: used
+    source: https://github.com/PyAV-Org/pyav-ffmpeg
+    note: >-
+      Inside av's wheel, built LGPL. On the server; and, through av (faster-whisper's
+      dependency), on the person's own machine when agent-runtimes' `voice` extra is
+      installed (VO-16, since the extra carries faster-whisper): not admitted there by this
+      register (LGPL on the server only) — the user's decision, or counsel's (VO-01), with
+      eSpeak NG's, 16 October 2026.
+  - {name: moonshine-base-en-server, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/UsefulSensors/moonshine-base, note: "The browser's 8-bit export (onnx-community/moonshine-base-ONNX, pinned), run by onnxruntime with Datalayer's own greedy decoder and tokenizers: no useful-moonshine-onnx, no new library. Hears English spoken turns (revised by the user 16 October 2026; speech:0.0.11)."}
+  - {name: whisper-small, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/openai/whisper-small, note: "Its CTranslate2 conversion, https://huggingface.co/Systran/faster-whisper-small (MIT), pinned: short spoken turns (VO-47, decided 2026-10-15)."}
+  - {name: whisper-large-v3-turbo, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/openai/whisper-large-v3-turbo, note: "Its CTranslate2 conversion, https://huggingface.co/dropbox-dash/faster-whisper-large-v3-turbo (MIT), pinned (VO-34)."}
+  - {name: jiwer, kind: library, version: 4.0.0, licence: Apache-2.0, where: server, status: used, source: https://pypi.org/pypi/jiwer/json, note: "The WER check (VO-51), in tests only."}
+
+  # --- on the person's machine (agent-runtimes[voice], VO-16), used ------------------------
+  - {name: sounddevice, kind: library, version: 0.5.6, licence: MIT, where: machine, status: used, source: https://pypi.org/pypi/sounddevice/json, note: "The `voice` extra's microphone and speaker (`loop --voice`); it brings PortAudio, below. Checked 2026-10-16."}
+  - {name: PortAudio, kind: library, licence: MIT, where: machine, status: used, source: https://github.com/PortAudio/portaudio, note: "Inside sounddevice's wheels for macOS and Windows; the system's own on Linux."}
+  - {name: kokoro-onnx, kind: library, version: 0.6.1, licence: MIT, where: machine, status: used, source: https://pypi.org/pypi/kokoro-onnx/json, note: "Answers said on the machine by the `voice` extra (VO-16). It brings onnxruntime, espeakng-loader and phonemizer: the last two carry eSpeak NG (GPL-3.0), listed on the server only — see their notes."}
+  - {name: onnxruntime, kind: library, version: 1.30.0, licence: MIT, where: machine, status: used, source: https://pypi.org/pypi/onnxruntime/json, note: "kokoro-onnx's engine on the machine."}
+  - {name: espeakng-loader, kind: library, version: 0.2.4, licence: MIT, where: machine, status: used, source: https://pypi.org/pypi/espeakng-loader/json, note: "Its wheel ships the eSpeak NG library (GPL-3.0-or-later): see eSpeak NG's note."}
+  - {name: kokoro-82m, kind: model, licence: Apache-2.0, where: machine, status: used, source: https://huggingface.co/hexgrad/Kokoro-82M, note: "The store filled from Datalayer's CDN by `python -m agent_runtimes.voice.store` (VO-16)."}
+  - {name: faster-whisper, kind: library, version: 1.2.1, licence: MIT, where: machine, status: used, source: https://pypi.org/pypi/faster-whisper/json, note: "What is said heard on the machine by the `voice` extra (VO-16, 16 October 2026). It brings ctranslate2, tokenizers and av: av's wheel carries FFmpeg (LGPL-2.1-or-later), listed on the server only — see its note."}
+  - {name: ctranslate2, kind: library, version: 4.8.3, licence: MIT, where: machine, status: used, source: https://pypi.org/pypi/ctranslate2/json, note: "faster-whisper's engine on the machine."}
+  - {name: tokenizers, kind: library, licence: Apache-2.0, where: machine, status: used, source: https://pypi.org/pypi/tokenizers/json, note: "faster-whisper's tokenizer on the machine."}
+  - {name: av, kind: library, version: 19.0.1, licence: BSD-3-Clause, where: machine, status: used, source: https://pypi.org/pypi/av/json, note: "A dependency of faster-whisper; the machine's recordings reach it as 16 kHz samples, not files. Its wheel ships FFmpeg: see FFmpeg's note."}
+  - {name: whisper-small, kind: model, licence: MIT, where: machine, status: used, source: https://huggingface.co/openai/whisper-small, note: "Its CTranslate2 conversion (Systran/faster-whisper-small, MIT), pinned; the store filled from Datalayer's CDN by `python -m agent_runtimes.voice.store` (VO-16)."}
+  - {name: kokoro-af-heart, kind: voice, licence: Apache-2.0, where: machine, status: used, source: https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md, note: "Said by kokoro-82m on the machine (VO-16)."}
+  - {name: kokoro-bf-emma, kind: voice, licence: Apache-2.0, where: machine, status: used, source: https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md, note: "Said by kokoro-82m on the machine (VO-16)."}
+  - {name: kokoro-ff-siwis, kind: voice, licence: Apache-2.0, where: machine, status: used, source: https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md, note: "Said by kokoro-82m on the machine (VO-16); trained on the SIWIS database (CC-BY-4.0), attributed in the catalogue."}
+
+  # --- voices ----------------------------------------------------------------------------
+  - {name: kokoro-af-heart, kind: voice, licence: Apache-2.0, where: server, status: used, source: https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md}
+  - {name: kokoro-bf-emma, kind: voice, licence: Apache-2.0, where: server, status: used, source: https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md}
+  - {name: kokoro-ff-siwis, kind: voice, licence: Apache-2.0, where: server, status: used, source: https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md, note: "Weights Apache-2.0; trained on the SIWIS database (CC-BY-4.0), attributed in the catalogue."}
+
+  # --- datasets ----------------------------------------------------------------------------
+  - {name: SIWIS French Speech Synthesis Database, kind: dataset, licence: CC-BY-4.0, where: server, status: used, source: https://datashare.ed.ac.uk/handle/10283/2353}
+  - {name: LibriSpeech test-clean, kind: dataset, licence: CC-BY-4.0, where: tests, status: used, source: https://www.openslr.org/12, note: "English fixtures of the WER check (VO-50)."}
+  - {name: Multilingual LibriSpeech (French), kind: dataset, licence: CC-BY-4.0, where: tests, status: used, source: https://www.openslr.org/94, note: "French fixtures of the WER check (VO-50)."}
+
+  # --- weighed, not used ------------------------------------------------------------
+  - {name: Parakeet TDT 0.6B v3, kind: model, licence: CC-BY-4.0, where: server, status: candidate, source: https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3}
+  - {name: Kyutai STT and TTS, kind: model, licence: CC-BY-4.0, where: server, status: candidate, source: https://github.com/kyutai-labs/delayed-streams-modeling}
+  - {name: chatterbox-tts, kind: library, version: 0.1.7, licence: MIT, where: server, status: candidate, source: https://github.com/resemble-ai/chatterbox, note: "Every output carries the Perth watermark."}
+  - {name: sherpa-onnx, kind: library, version: 1.13.8, licence: Apache-2.0, where: browser, status: candidate, source: https://github.com/k2-fsa/sherpa-onnx}
+  - {name: "@moonshine-ai/moonshine-js", kind: library, version: 0.1.29, licence: MIT, where: browser, status: candidate, source: https://registry.npmjs.org/@moonshine-ai/moonshine-js, note: "transformers.js runs the same weights and lets Datalayer serve them."}
+  - {name: Parler-TTS, kind: model, licence: Apache-2.0, where: server, status: candidate, source: https://github.com/huggingface/parler-tts, note: "English only, last checkpoints 2024."}
+  - {name: Piper fr_FR-siwis, kind: voice, licence: CC-BY-4.0, where: server, status: candidate, source: https://huggingface.co/rhasspy/piper-voices}
+  - {name: Piper de_DE-thorsten, kind: voice, licence: CC0-1.0, where: server, status: candidate, source: https://huggingface.co/rhasspy/piper-voices}
+  - {name: Piper en_GB-alba, kind: voice, licence: CC-BY-4.0, where: server, status: candidate, source: https://huggingface.co/rhasspy/piper-voices}
+
+  - {name: piper-tts, kind: library, version: 1.8.0, licence: GPL-3.0-or-later, where: server, status: candidate, source: https://github.com/OHF-Voice/piper1-gpl}
+
+  # --- refused ---------------------------------------------------------------------------
+  - {name: kokoro-js, kind: library, version: 1.2.1, licence: Apache-2.0, where: browser, status: refused, source: https://registry.npmjs.org/kokoro-js, note: "Depends on phonemizer (npm), which runs eSpeak NG: GPL-3.0 in the browser."}
+  - {name: phonemizer (npm), kind: library, version: 1.2.1, licence: GPL-3.0-or-later, where: browser, status: refused, source: https://github.com/xenova/phonemizer.js, note: "Labelled Apache-2.0 on npm; it is eSpeak NG compiled to WASM."}
+  - {name: Piper en_US-lessac, kind: voice, licence: Blizzard-2013, where: server, status: refused, source: https://huggingface.co/rhasspy/piper-voices, note: "Research use only."}
+  - {name: Piper en_US-ryan, kind: voice, licence: CC-BY-NC-SA-4.0, where: server, status: refused, source: https://huggingface.co/rhasspy/piper-voices}
+  - {name: Moonshine legacy non-English models, kind: model, licence: Moonshine-Community-License, where: browser, status: refused, source: https://github.com/moonshine-ai/moonshine, note: "Non-commercial."}
+  - {name: Coqui XTTS-v2, kind: model, licence: CPML, where: server, status: refused, source: https://huggingface.co/coqui/XTTS-v2, note: "Non-commercial, and nobody left to sell a licence."}
+  - {name: Web Speech API, kind: library, licence: proprietary, where: browser, status: refused, source: https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API, note: "Not open source; recognition goes to the browser vendor by default."}

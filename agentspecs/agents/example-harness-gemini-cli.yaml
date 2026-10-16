@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: A Gemini CLI Agent
+# An agent that is a harness of the catalogue (SH-43): Gemini CLI, driven over
+# the Agent Client Protocol by the Datalayer runtime's adapter behind the
+# Shield. Off in the shared catalogue: it needs the account's own
+# GEMINI_API_KEY (the register: API keys only), which the harness declares and
+# the runtime is given by name.
+
+id: example-harness-gemini-cli
+version: 0.0.1
+name: A Gemini CLI Agent
+description: >
+  Google's Gemini CLI as a Datalayer agent: launched in the runtime over the Agent
+  Client Protocol, its files, terminals and permissions decided by the
+  Shield under the application's Rules, every action in the record. Needs
+  the account's GEMINI_API_KEY.
+
+tags:
+  - coding
+  - harness
+  - acp
+
+enabled: false
+harness: gemini-cli
+
+sandbox_variant: jupyter-server
+memory: ephemeral
+
+mcp_servers: []
+skills: []
+backend_tools: []
+frontend_tools: []
+
+environment_name: ai-agents-env

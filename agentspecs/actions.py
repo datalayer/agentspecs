@@ -35,13 +35,45 @@ says its class, and ``when`` an argument makes it another:
 With the arguments of a call, its classes are those of that call. Without
 them — nobody said what it is asked — they are everything it *can* do.
 
+One thing a call does is told from two of its arguments at once, and is
+written here rather than in a spec: a mail **forwarded outside the
+organization** (``FORWARDING``). Gmail's send tool forwards a message when it
+names one (``forward_message_id``); when one of its recipients is outside the
+domain of the mailbox it sends from (``user_google_email``) — or the mailbox
+is not said — the call also ``publish``-es: it makes the message reachable by
+people who could not reach it. A reply is not a forward.
+
+**What it sends says who wrote it** (I-10). A tool that puts words in
+front of other people outside Datalayer — a mail, a message — writes them as
+the account its connection acts as, so the words alone do not say that an
+application wrote them, nor for whom. Such a tool says which of its arguments
+carries those words (``signs``), and an application's runtime closes that
+argument with its byline — *Written by 📬 Inbox Triage, for Ana Lopez.* —
+before the call is made, or asked of the person:
+
+.. code-block:: yaml
+
+    send_gmail_message:
+      class: send
+      signs: body
+
+Only a tool that acts says ``signs``: what only reads sends nothing.
+
 Where the class is written:
 
-- a tool of ``agentspecs/tools`` says ``action: send``;
+- a backend tool of ``agentspecs/backend-tools`` says ``action: send``;
 - an MCP server of ``agentspecs/mcp-servers`` says, under ``actions``, the
   class of each tool it serves, by name or by a pattern (``search_*``: ``*``
   is any run of characters, ``?`` any one, and nothing else is special), and
   the day those names were read off the running server (``checked``).
+
+- an agent protocol's tools — a toolset of Datalayer's MCP gateway reached
+  through a protocol connection (``pap:<domain>``, ``pact:<brand>``), or the
+  operations of a protocol client (``ucp:``, ``acp:``) — are written the same
+  way in ``agentspecs/protocol-tools``, each naming its ``connection`` prefix
+  (PR-54): :func:`connection_tool_classes` answers for a
+  tool reached through any connection, so a Rule decides a protocol's tool
+  with no code of that protocol.
 
 **A tool with no class is unknown, and unknown is the most restricted**: it
 is never taken for a reader. What a server says of its own tools — the
@@ -52,6 +84,8 @@ here: the class is the catalogue's, written by somebody who looked.
 from __future__ import annotations
 
 import re
+from dataclasses import dataclass
+from email.utils import getaddresses
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
@@ -121,7 +155,7 @@ def is_read_only(classes: Sequence[ActionClass]) -> bool:
 
 
 def tool_classes(tool: Mapping[str, Any]) -> Classes:
-    """The classes of a tool spec of ``agentspecs/tools``: its ``action``."""
+    """The classes of a backend tool spec of ``agentspecs/backend-tools``: its ``action``."""
     return classes_from(tool.get("action"), where=f"tool {tool.get('id', '?')!r}")
 
 
@@ -211,13 +245,23 @@ def _same(value: Any, wanted: Any) -> bool:
     return is_comparable(value) and is_comparable(wanted) and bool(value == wanted)
 
 
+#: What an argument a tool signs is called: a name, as a tool's arguments are named.
+_ARGUMENT = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+
+
 def _entry(value: Any, *, where: str) -> Tuple[Classes, Tuple[Condition, ...]]:
     """One tool's entry as (its classes, the conditions that add to them)."""
     if not isinstance(value, Mapping):
         return classes_from(value, where=where), ()
-    unknown = sorted(set(value) - {"class", "when"})
+    unknown = sorted(set(value) - {"class", "when", "signs"})
     if unknown:
-        raise ActionError(f"{where}: an entry says `class` and `when`, not {', '.join(unknown)}")
+        raise ActionError(f"{where}: an entry says `class`, `when` and `signs`, not {', '.join(unknown)}")
+    if "signs" in value:
+        signs = value["signs"]
+        if not isinstance(signs, str) or not _ARGUMENT.match(signs):
+            raise ActionError(f"{where}: `signs` names one argument of the tool, the one carrying what it sends")
+        if not any(item is not ActionClass.READ for item in classes_from(value.get("class"), where=where)):
+            raise ActionError(f"{where}: only a tool that acts signs what it sends; this one only reads")
     conditions: List[Condition] = []
     for condition in value.get("when") or []:
         extra = sorted(set(condition) - {"argument", "equals", "includes", "class"})
@@ -253,17 +297,35 @@ def _listed(value: Any) -> List[Any]:
     return list(value) if isinstance(value, (list, tuple)) else [value]
 
 
-def _server_entry(server: Mapping[str, Any], tool_name: str) -> Tuple[Classes, Tuple[Condition, ...]]:
-    """The entry that answers for a tool of a server: its name, a pattern, or the default."""
-    actions = server.get("actions") or {}
-    tools = actions.get("tools") or {}
-    where = f"MCP server {server.get('id', '?')!r}, tool {tool_name!r}"
+def _server_value(server: Mapping[str, Any], tool_name: str) -> Any:
+    """What a server's spec writes for a tool: under its name, a pattern, or ``None``."""
+    tools = (server.get("actions") or {}).get("tools") or {}
     if tool_name in tools:
-        return _entry(tools[tool_name], where=where)
+        return tools[tool_name]
     for pattern, value in tools.items():
         if is_pattern(pattern) and matches(tool_name, pattern):
-            return _entry(value, where=where)
-    return classes_from(actions.get("default"), where=where), ()
+            return value
+    return None
+
+
+def _server_entry(server: Mapping[str, Any], tool_name: str) -> Tuple[Classes, Tuple[Condition, ...]]:
+    """The entry that answers for a tool of a server: its name, a pattern, or the default."""
+    where = f"MCP server {server.get('id', '?')!r}, tool {tool_name!r}"
+    value = _server_value(server, tool_name)
+    if value is not None:
+        return _entry(value, where=where)
+    return classes_from((server.get("actions") or {}).get("default"), where=where), ()
+
+
+def server_tool_signs(server: Mapping[str, Any], tool_name: str) -> str:
+    """The argument of a server's tool that carries what it sends, which is
+    signed with the application's byline (I-10); ``""`` when it says none.
+    """
+    value = _server_value(server, tool_name)
+    if not isinstance(value, Mapping) or "signs" not in value:
+        return ""
+    _entry(value, where=f"MCP server {server.get('id', '?')!r}, tool {tool_name!r}")
+    return str(value["signs"])
 
 
 def server_tool_classes(
@@ -284,7 +346,66 @@ def server_tool_classes(
     for condition in conditions:
         if arguments is None or condition.holds(arguments):
             classes.extend(item for item in condition.classes if item not in classes)
+    # A forward outside the organization is told from the call (W-04).
+    if (
+        arguments is not None
+        and classes
+        and ActionClass.PUBLISH not in classes
+        and forwards_outside(str(server.get("id") or ""), tool_name, arguments)
+    ):
+        classes.append(ActionClass.PUBLISH)
     return tuple(classes)
+
+
+@dataclass(frozen=True)
+class Forwarding:
+    """Where a call of a tool that forwards mail says what it forwards, from where, and to whom."""
+
+    message: str
+    """The argument naming the message forwarded; a call without it does not forward."""
+
+    mailbox: str
+    """The argument holding the address of the mailbox it sends from."""
+
+    recipients: Tuple[str, ...]
+    """The arguments holding its recipients."""
+
+
+#: The tools that forward a message, by (server, tool).
+FORWARDING: Dict[Tuple[str, str], Forwarding] = {
+    ("google-workspace", "send_gmail_message"): Forwarding(
+        message="forward_message_id",
+        mailbox="user_google_email",
+        recipients=("to", "cc", "bcc"),
+    ),
+}
+
+
+def addresses(value: Any) -> List[str]:
+    """The mail addresses an argument holds — one, several separated by commas, or a list — in lower case."""
+    items = value if isinstance(value, (list, tuple)) else [value]
+    words = [str(item) for item in items if isinstance(item, str) and item.strip()]
+    return [address.strip().lower() for _, address in getaddresses(words) if "@" in address]
+
+
+def _domain(address: str) -> str:
+    return address.rpartition("@")[2].strip().lower()
+
+
+def forwards_outside(server: str, tool_name: str, arguments: Mapping[str, Any]) -> bool:
+    """Whether a call forwards a message to somebody outside the organization.
+
+    The organization is the domain of the mailbox the call sends from. Fails
+    closed: a forward that does not say its mailbox is outside.
+    """
+    forwarding = FORWARDING.get((server, tool_name))
+    if forwarding is None or not str(arguments.get(forwarding.message) or "").strip():
+        return False
+    home = addresses(arguments.get(forwarding.mailbox))
+    recipients = [address for name in forwarding.recipients for address in addresses(arguments.get(name))]
+    if not home:
+        return True
+    return any(_domain(address) != _domain(home[0]) for address in recipients)
 
 
 def server_tool_conditions(server: Mapping[str, Any], tool_name: str) -> Tuple[Condition, ...]:
@@ -308,7 +429,7 @@ _SERVERS: Dict[str, Dict[str, Any]] = {}
 def tool_specs() -> Dict[str, Dict[str, Any]]:
     """This package's tools, as plain data, read once."""
     if not _TOOLS:
-        _TOOLS.update(_load(_ROOT / "tools"))
+        _TOOLS.update(_load(_ROOT / "backend-tools"))
     return _TOOLS
 
 
@@ -317,6 +438,55 @@ def server_specs() -> Dict[str, Dict[str, Any]]:
     if not _SERVERS:
         _SERVERS.update(_load(_ROOT / "mcp-servers"))
     return _SERVERS
+
+
+_PROTOCOLS: Dict[str, Dict[str, Any]] = {}
+
+
+def protocol_tool_specs() -> Dict[str, Dict[str, Any]]:
+    """The agent protocols' tools, as plain data, by protocol id, read once (PR-54)."""
+    if not _PROTOCOLS:
+        _PROTOCOLS.update(_load(_ROOT / "protocol-tools"))
+    return _PROTOCOLS
+
+
+def protocol_of_connection(server: str) -> Optional[Dict[str, Any]]:
+    """The protocol a connection's ``server`` names (``pap:example.com``), or ``None``
+    for a connection to an MCP server of the catalogue."""
+    prefix, colon, rest = str(server).partition(":")
+    if not colon or not rest or "." not in rest:
+        return None
+    for spec in protocol_tool_specs().values():
+        if spec.get("connection") == prefix:
+            return spec
+    return None
+
+
+def protocol_tool_classes(
+    protocol: str, tool_name: str, arguments: Optional[Mapping[str, Any]] = None
+) -> Classes:
+    """The classes of one tool of an agent protocol, by the protocol's id; empty when
+    nothing says (unknown, the most restricted)."""
+    spec = protocol_tool_specs().get(protocol)
+    return server_tool_classes(spec, tool_name, arguments) if spec else ()
+
+
+def protocol_tool_names(protocol: str) -> Tuple[str, ...]:
+    """The tools an agent protocol's spec names (its patterns left out)."""
+    tools = ((protocol_tool_specs().get(protocol) or {}).get("actions") or {}).get("tools") or {}
+    return tuple(name for name in tools if not is_pattern(name))
+
+
+def connection_tool_classes(
+    server: str, tool_name: str, arguments: Optional[Mapping[str, Any]] = None
+) -> Classes:
+    """The classes of a tool reached through a connection to ``server``: an agent
+    protocol's (``pap:example.com``, ``pact:air.example``) or an MCP server's of the
+    catalogue (``tavily``); empty when nothing says."""
+    spec = protocol_of_connection(server)
+    if spec is not None:
+        return server_tool_classes(spec, tool_name, arguments)
+    return classes_of(f"{server}.{tool_name}", arguments) if server else ()
 
 
 #: `server.tool`, the server with or without its version: `tavily.tavily_search`,
@@ -365,6 +535,18 @@ def _id_of(ref: str) -> str:
     return base if base and "." in version else str(ref)
 
 
+def protocol_tools_problems(spec: Mapping[str, Any]) -> List[str]:
+    """What is wrong with an agent protocol's tools spec; empty when nothing is."""
+    identity = spec.get("id", "?")
+    problems = [problem.replace("MCP server", "Protocol", 1) for problem in server_actions_problems(spec)]
+    connection = spec.get("connection")
+    if not isinstance(connection, str) or not re.fullmatch(r"[a-z][a-z0-9-]*", connection):
+        problems.append(f"Protocol {identity!r} names the `connection` prefix its connections take (`pap`)")
+    if not (spec.get("actions") or {}).get("tools"):
+        problems.append(f"Protocol {identity!r} names no tool")
+    return problems
+
+
 def server_actions_problems(server: Mapping[str, Any]) -> List[str]:
     """What is wrong with the ``actions`` of an MCP server spec; empty when nothing is."""
     identity = server.get("id", "?")
@@ -396,17 +578,28 @@ __all__ = [
     "ActionError",
     "Classes",
     "Condition",
+    "FORWARDING",
+    "Forwarding",
     "MAX_SAFE_INTEGER",
+    "addresses",
     "classes_from",
     "classes_of",
+    "forwards_outside",
     "is_comparable",
     "is_pattern",
     "is_read_only",
     "matches",
+    "connection_tool_classes",
+    "protocol_of_connection",
+    "protocol_tool_classes",
+    "protocol_tool_names",
+    "protocol_tool_specs",
+    "protocol_tools_problems",
     "server_actions_problems",
     "server_specs",
     "server_tool_classes",
     "server_tool_conditions",
+    "server_tool_signs",
     "split_ref",
     "tool_classes",
     "tool_specs",

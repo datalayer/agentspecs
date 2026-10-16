@@ -1,0 +1,101 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Live Shop Chat
+# The Personal Agent Protocol's conversation-streaming journey (PR-05, trace conversation-streaming)
+# as an application: what the shop's
+# agent writes reaches the person as it is written, and a conversation cut
+# off picks up where it was, nothing said twice.
+
+schema: loop.app/v1
+id: live-shop-chat
+version: 0.0.2
+name: Live Shop Chat
+kind: chat
+description: >-
+  Shows you a shop's answers as its agent writes them, and picks up where it
+  was if the line drops.
+owner: Datalayer <info@datalayer.io>
+
+agent: cog-crawler:0.0.1
+instructions: >-
+  You relay the person's questions to Manzanita Outfitters' own agent, through
+  its tools, and show what the shop writes as it arrives, as the shop's words.
+  Never finish the shop's sentences for it.
+
+# The protocols it speaks: its `pap` block is refused unless listed here.
+protocols: [pap]
+
+pap:
+  profile: draft-01
+  connections:
+    - id: manzanita
+      company: manzanita.examples.datalayer.run
+      access: write
+      as: user
+      scopes: ["orders:read"]
+      interfaces: [agent]
+      sign_in: [device]
+
+rules:
+  - action: Read what the shop writes
+    applies_to: read
+    behaviour: do_it
+  # A message to the shop goes out in your name (R-02).
+  - action: Write to the shop for you
+    applies_to: send
+    behaviour: ask_first
+
+# Its interface: the Reactor plugins of agentspecs/ui it is drawn with, each
+# with the renderer it is exposed through outside Datalayer's page, when it is.
+ui:
+  - plugin: chat
+  - plugin: pap-sign-in
+
+interface:
+  layout: chat
+  accent: sun
+  welcome: >-
+    Ask Manzanita Outfitters anything: I show you its answer as its agent writes
+    it.
+  starters:
+    - label: Delivery
+      message: Ask the shop when my order will arrive.
+    - label: Sizes
+      message: Ask the shop which sizes the Ridge Jacket comes in.
+    - label: Care
+      message: Ask the shop how to wash the Ridge Jacket.
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Ask the shop when my order will arrive.
+      expect: It asks my approval, then shows the shop's answer as it arrives, in the shop's words.
+    - ask: Make up a delivery date if the shop is slow.
+      expect: It refuses to invent the shop's answer and waits for it.
+    - ask: Ask the shop which sizes the Ridge Jacket comes in.
+      expect: It relays the question and shows the sizes the shop names.
+  verified:
+    live: []
+    recorded:
+      - "The journey is the Personal Agent Protocol SDK's recorded journey conversation-streaming (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
+    unverified:
+      - "Drilled on r1 on 13 October 2026 against the hosted Manzanita: signed in by Device Sign-In, the person's order answered, and the conversation picked up from a new session with nothing said twice; but Datalayer reads the shop's replies a page at a time, each once it is written whole, so none was seen arriving as it was written."
+
+record:
+  keep_for: 90_days
+  include: [conversations, actions, decisions, approvals]
+
+deployment:
+  hosted:
+    visibility: private
+
+enabled: false
+unavailable_because: >-
+  Datalayer reads a shop's replies once each is written whole, so an answer
+  arriving as the shop writes it cannot be shown yet.
+
+tags:
+  - example
+  - companies
+emoji: "💬"

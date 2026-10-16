@@ -1,0 +1,284 @@
+{
+  "$defs": {
+    "HarnessAcp": {
+      "additionalProperties": false,
+      "description": "How the harness is launched and driven over ACP.",
+      "properties": {
+        "args": {
+          "description": "Its arguments, the adapter's version pinned among them",
+          "items": {
+            "type": "string"
+          },
+          "title": "Args",
+          "type": "array"
+        },
+        "command": {
+          "description": "The executable, as the runtime image has it",
+          "minLength": 1,
+          "title": "Command",
+          "type": "string"
+        },
+        "env": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Plain variables the launch needs, never a secret: a secret is declared under `requires.secrets`",
+          "title": "Env",
+          "type": "object"
+        },
+        "load_session": {
+          "default": false,
+          "description": "Whether it answers `session/load`; read from `initialize`, refused if it lies",
+          "title": "Load Session",
+          "type": "boolean"
+        },
+        "mcp": {
+          "$ref": "#/$defs/McpLending",
+          "description": "lend, own or none"
+        },
+        "modes": {
+          "description": "The session modes it advertises, as it names them",
+          "items": {
+            "type": "string"
+          },
+          "title": "Modes",
+          "type": "array"
+        },
+        "protocol_version": {
+          "default": 1,
+          "description": "The ACP protocol version it speaks",
+          "minimum": 1,
+          "title": "Protocol Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "command",
+        "mcp"
+      ],
+      "title": "HarnessAcp",
+      "type": "object"
+    },
+    "HarnessHonours": {
+      "additionalProperties": false,
+      "description": "What of an agent spec the harness can honour; the rest is refused at load.",
+      "properties": {
+        "model": {
+          "description": "Whether it takes the agent's `model:`",
+          "title": "Model",
+          "type": "boolean"
+        },
+        "subagents": {
+          "description": "Whether it takes the agent's `subagents:`; false when it has its own",
+          "title": "Subagents",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "model",
+        "subagents"
+      ],
+      "title": "HarnessHonours",
+      "type": "object"
+    },
+    "HarnessRequires": {
+      "additionalProperties": false,
+      "description": "What the harness needs in the pod.",
+      "properties": {
+        "binaries": {
+          "description": "The executables it needs on the path; one the image installs for it is pinned as name@version",
+          "items": {
+            "type": "string"
+          },
+          "title": "Binaries",
+          "type": "array"
+        },
+        "secrets": {
+          "description": "The secrets it reads, each an id of the env-vars catalogue",
+          "items": {
+            "type": "string"
+          },
+          "title": "Secrets",
+          "type": "array"
+        }
+      },
+      "title": "HarnessRequires",
+      "type": "object"
+    },
+    "HarnessSkills": {
+      "additionalProperties": false,
+      "description": "Where the Shield writes an application's skills for it.",
+      "properties": {
+        "dir": {
+          "default": "",
+          "description": "The directory of the workspace it reads skills from",
+          "title": "Dir",
+          "type": "string"
+        },
+        "format": {
+          "$ref": "#/$defs/SkillsFormat",
+          "description": "skill-md, or none"
+        }
+      },
+      "required": [
+        "format"
+      ],
+      "title": "HarnessSkills",
+      "type": "object"
+    },
+    "HarnessTerms": {
+      "additionalProperties": false,
+      "description": "The terms it is served under, as the register says them.",
+      "properties": {
+        "licence": {
+          "description": "The adapter's licence, SPDX; and the agent's terms when they are not the same",
+          "minLength": 1,
+          "title": "Licence",
+          "type": "string"
+        },
+        "served_to_third_parties": {
+          "$ref": "#/$defs/ThirdPartyServing",
+          "description": "Whether serving it to third parties is permitted"
+        },
+        "tier_restrictions": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The plans or tiers it may be served under, when its terms restrict them",
+          "title": "Tier Restrictions"
+        }
+      },
+      "required": [
+        "served_to_third_parties",
+        "licence"
+      ],
+      "title": "HarnessTerms",
+      "type": "object"
+    },
+    "McpLending": {
+      "description": "How the harness gets its MCP servers.",
+      "enum": [
+        "lend",
+        "own",
+        "none"
+      ],
+      "title": "McpLending",
+      "type": "string"
+    },
+    "SkillsFormat": {
+      "description": "The format a harness reads skills in.",
+      "enum": [
+        "skill-md",
+        "none"
+      ],
+      "title": "SkillsFormat",
+      "type": "string"
+    },
+    "ThirdPartyServing": {
+      "description": "Whether serving the harness to third parties is permitted by its terms.",
+      "enum": [
+        "api_key_only",
+        "permitted",
+        "refused",
+        "organizations_own",
+        "unknown"
+      ],
+      "title": "ThirdPartyServing",
+      "type": "string"
+    }
+  },
+  "$id": "https://agentspecs.datalayer.tech/schemas/harness.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One harness.",
+  "properties": {
+    "acp": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/HarnessAcp"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "How it is launched; absent only on `custom`"
+    },
+    "description": {
+      "description": "What it is, in a sentence or two",
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "docs": {
+      "default": "",
+      "description": "Where its ACP use is documented, https",
+      "title": "Docs",
+      "type": "string"
+    },
+    "enabled": {
+      "default": true,
+      "description": "Whether the shared catalogue offers it",
+      "title": "Enabled",
+      "type": "boolean"
+    },
+    "honours": {
+      "$ref": "#/$defs/HarnessHonours"
+    },
+    "id": {
+      "description": "Its id, the file's name: what an agent's `harness:` names",
+      "title": "Id",
+      "type": "string"
+    },
+    "instructions_file": {
+      "default": "",
+      "description": "The file of the workspace it reads its instructions from",
+      "title": "Instructions File",
+      "type": "string"
+    },
+    "name": {
+      "description": "Its name",
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "requires": {
+      "$ref": "#/$defs/HarnessRequires"
+    },
+    "skills": {
+      "$ref": "#/$defs/HarnessSkills"
+    },
+    "tags": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "array"
+    },
+    "terms": {
+      "$ref": "#/$defs/HarnessTerms"
+    },
+    "version": {
+      "description": "The version of this spec",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "name",
+    "description",
+    "terms",
+    "skills",
+    "honours"
+  ],
+  "title": "Harness",
+  "type": "object"
+}

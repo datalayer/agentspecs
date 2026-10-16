@@ -22,7 +22,7 @@ memory: ephemeral
 
 mcp_servers: []
 skills: []
-tools: []
+backend_tools: []
 frontend_tools: []
 
 environment_name: ai-agents-env

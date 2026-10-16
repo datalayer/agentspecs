@@ -24,7 +24,7 @@ tags:
   - compliance
   - regulatory
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: notebook.validate
@@ -70,9 +70,11 @@ goal: >-
   reconcile positions, validate against Basel III/IV, MiFID II, and SOX rules,
   and generate submission-ready compliance reports with full audit trails.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Evals
 evals:

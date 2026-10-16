@@ -1,0 +1,522 @@
+{
+  "$defs": {
+    "AuthZenAuthorizerConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "headers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Headers",
+          "type": "object"
+        },
+        "url": {
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "AuthZenAuthorizerConfig",
+      "type": "object"
+    },
+    "AuthorizerConfig": {
+      "additionalProperties": false,
+      "description": "``authorizer:`` in a policy document: exactly one decision point (standalone).",
+      "properties": {
+        "authzen": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AuthZenAuthorizerConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "local": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/LocalAuthorizerConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "opa": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OpaAuthorizerConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "openfga": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OpenFgaAuthorizerConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "AuthorizerConfig",
+      "type": "object"
+    },
+    "Grant": {
+      "additionalProperties": false,
+      "description": "One line of the ``local`` authorizer: who may do what to what, as patterns (fnmatch).",
+      "properties": {
+        "object": {
+          "description": "workspace:*/src/*, tool:earthdata/*, connection:acme.example",
+          "minLength": 1,
+          "title": "Object",
+          "type": "string"
+        },
+        "relation": {
+          "description": "can_read, can_execute, can_call, can_act, or an action class",
+          "minLength": 1,
+          "title": "Relation",
+          "type": "string"
+        },
+        "subject": {
+          "description": "user:alice, account:*, deployment:01\u2026",
+          "minLength": 1,
+          "title": "Subject",
+          "type": "string"
+        }
+      },
+      "required": [
+        "subject",
+        "relation",
+        "object"
+      ],
+      "title": "Grant",
+      "type": "object"
+    },
+    "Harnesses": {
+      "additionalProperties": false,
+      "description": "The harnesses an organization admits, and whose credentials run them.",
+      "properties": {
+        "admit": {
+          "description": "Harness ids of the catalogue this scope admits; empty admits every registered harness.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Admit",
+          "type": "array"
+        },
+        "credentials": {
+          "default": "account",
+          "description": "Whose key runs a harness: the account's own declared secret, the platform's, or either.",
+          "enum": [
+            "account",
+            "platform",
+            "either"
+          ],
+          "title": "Credentials",
+          "type": "string"
+        }
+      },
+      "title": "Harnesses",
+      "type": "object"
+    },
+    "Limits": {
+      "additionalProperties": false,
+      "description": "The stateful limits of a session.\n\nThree count the harness's actions; two count what its model costs: the\n**model budget** in tokens and the **spend** in credits (the deployment's\nspend limit; 100 credits are one USD). Each has a soft threshold, where the\nnext call asks the person, and a hard one, where each further call is\nrefused and the sentence says what would let it go on.",
+      "properties": {
+        "bytes_written": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Threshold"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Bytes written to the workspace."
+        },
+        "model_tokens": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Threshold"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The model budget: tokens the session's model requests spend, in and out."
+        },
+        "spend": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Threshold"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The spend limit: credits the session spends on models (100 credits a USD)."
+        },
+        "terminals_open": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Threshold"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Terminals open at once."
+        },
+        "tool_calls": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Threshold"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Classed actions per session."
+        }
+      },
+      "title": "Limits",
+      "type": "object"
+    },
+    "LocalAuthorizerConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "grants": {
+          "items": {
+            "$ref": "#/$defs/Grant"
+          },
+          "title": "Grants",
+          "type": "array"
+        }
+      },
+      "title": "LocalAuthorizerConfig",
+      "type": "object"
+    },
+    "Mcp": {
+      "additionalProperties": false,
+      "description": "The MCP servers the agent is lent, by name; everything else is cut from session/new.",
+      "properties": {
+        "allow": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allow",
+          "type": "array"
+        }
+      },
+      "title": "Mcp",
+      "type": "object"
+    },
+    "Network": {
+      "additionalProperties": false,
+      "description": "What the agent may reach over the network, through the Shield.",
+      "properties": {
+        "fetch": {
+          "description": "Hosts a fetch may reach (exact host, or *.example.com); empty refuses every fetch.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Fetch",
+          "type": "array"
+        }
+      },
+      "title": "Network",
+      "type": "object"
+    },
+    "OpaAuthorizerConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "headers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Headers",
+          "type": "object"
+        },
+        "package": {
+          "default": "authzen/evaluation",
+          "description": "The Rego package answering decision and context.",
+          "title": "Package",
+          "type": "string"
+        },
+        "url": {
+          "description": "OPA's address: http://opa:8181",
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "OpaAuthorizerConfig",
+      "type": "object"
+    },
+    "OpenFgaAuthorizerConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model"
+        },
+        "store": {
+          "minLength": 1,
+          "title": "Store",
+          "type": "string"
+        },
+        "url": {
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "url",
+        "store"
+      ],
+      "title": "OpenFgaAuthorizerConfig",
+      "type": "object"
+    },
+    "Rule": {
+      "additionalProperties": false,
+      "description": "One line of a policy: what it matches and what it decides.",
+      "properties": {
+        "classes": {
+          "description": "The classes the rule names; empty names every class.",
+          "items": {
+            "enum": [
+              "read",
+              "write",
+              "send",
+              "buy",
+              "delete",
+              "execute"
+            ],
+            "type": "string"
+          },
+          "title": "Classes",
+          "type": "array"
+        },
+        "commands": {
+          "description": "Regular expressions on the whole command line; any matches.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Commands",
+          "type": "array"
+        },
+        "decision": {
+          "enum": [
+            "allow",
+            "ask",
+            "deny"
+          ],
+          "title": "Decision",
+          "type": "string"
+        },
+        "kinds": {
+          "description": "The ACP tool kinds the rule names; empty names every kind.",
+          "items": {
+            "enum": [
+              "read",
+              "edit",
+              "delete",
+              "move",
+              "search",
+              "execute",
+              "think",
+              "fetch",
+              "switch_mode",
+              "other"
+            ],
+            "type": "string"
+          },
+          "title": "Kinds",
+          "type": "array"
+        },
+        "name": {
+          "description": "A short name; every sentence quotes it.",
+          "title": "Name",
+          "type": "string"
+        },
+        "paths": {
+          "description": "Globs on the path relative to the workspace (fnmatch); any matches.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Paths",
+          "type": "array"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Why; shown in the sentence.",
+          "title": "Reason"
+        },
+        "where": {
+          "default": "any",
+          "description": "inside: only a path inside the workspace; outside: only one outside; any: both, and actions with no path.",
+          "enum": [
+            "inside",
+            "outside",
+            "any"
+          ],
+          "title": "Where",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "decision"
+      ],
+      "title": "Rule",
+      "type": "object"
+    },
+    "Threshold": {
+      "additionalProperties": false,
+      "description": "A soft threshold asks once; a hard one refuses each call that would cross it.",
+      "properties": {
+        "hard": {
+          "minimum": 0,
+          "title": "Hard",
+          "type": "integer"
+        },
+        "soft": {
+          "minimum": 0,
+          "title": "Soft",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "soft",
+        "hard"
+      ],
+      "title": "Threshold",
+      "type": "object"
+    }
+  },
+  "$id": "https://agent-shield.datalayer.tech/schema/policy.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One policy document, one scope.",
+  "properties": {
+    "authorize": {
+      "description": "The classes that need an authorizer's allow beside the Rules: a deny wins over any Rule, an unreachable authorizer is a deny. Empty needs none (local-only); Datalayer's documents name read, write, execute, send and buy.",
+      "items": {
+        "enum": [
+          "read",
+          "write",
+          "send",
+          "buy",
+          "delete",
+          "execute"
+        ],
+        "type": "string"
+      },
+      "title": "Authorize",
+      "type": "array"
+    },
+    "authorizer": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AuthorizerConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "The decision point a standalone Shield asks: local (grants in this file), openfga {url, store, model} or authzen {url}. On Datalayer the authorizer is IAM's and a managed document names none."
+    },
+    "expires": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "When a pulled copy stops being honoured.",
+      "title": "Expires"
+    },
+    "harnesses": {
+      "$ref": "#/$defs/Harnesses"
+    },
+    "limits": {
+      "$ref": "#/$defs/Limits"
+    },
+    "mcp": {
+      "$ref": "#/$defs/Mcp"
+    },
+    "network": {
+      "$ref": "#/$defs/Network"
+    },
+    "rules": {
+      "items": {
+        "$ref": "#/$defs/Rule"
+      },
+      "title": "Rules",
+      "type": "array"
+    },
+    "scope": {
+      "enum": [
+        "organization",
+        "team",
+        "session"
+      ],
+      "title": "Scope",
+      "type": "string"
+    },
+    "version": {
+      "default": 1,
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "scope"
+  ],
+  "title": "Agent Shield policy",
+  "type": "object"
+}

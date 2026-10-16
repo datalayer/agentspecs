@@ -1,0 +1,18 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Renderer Specification: MCP Apps
+#
+# How a UI plugin's interface reaches a host that is not Datalayer's own page
+# (R8). Not an interface: a UI plugin (`agentspecs/ui`) says the
+# renderers it may be exposed through, and an application names, per plugin,
+# the one it uses.
+
+id: "mcp-apps"
+version: 0.0.1
+name: MCP Apps
+description: >-
+  An MCP server ships an interactive app with a tool: the host renders it in a sandboxed frame beside the conversation, and the app calls the server's tools through the host.
+docs_url: "https://modelcontextprotocol.io/docs/extensions/apps"
+# Whether an application may be exposed through it today.
+enabled: false

@@ -15,7 +15,7 @@ tags:
   - insurance
   - agent-worker
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.analyse
@@ -40,7 +40,7 @@ skills:
   - pdf:0.0.1
 
 # Runtime tools — sensitive actions require human approval
-tools:
+backend_tools:
   - runtime-echo:0.0.1
   - runtime-sensitive-echo:0.0.1
 frontend_tools:
@@ -63,9 +63,11 @@ color: "#EF4444"
 goal: >-
   Compare catastrophe models and scenarios and explain the drivers behind divergent results.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Model configuration
 model_config:

@@ -1,0 +1,109 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# MCP Server Specification: Odoo Accounting
+# The Datalayer MCP server (the gateway behind `datalayer`) with its
+# `odoo-accounting` toolset and nothing else: invoices, vendor bills, journal
+# entries, reconciliations, bank lines, exchange rates and tax returns of an
+# Odoo database, read and written with the person's own Odoo key.
+
+id: odoo-accounting
+version: 0.0.1
+name: Odoo Accounting
+description: >-
+  An accountant's day in Odoo — invoices, bills, journal entries, reconciliations,
+  bank lines and tax returns — through the Datalayer MCP server
+
+# The same hosted server and bridge as `datalayer`, the toolset chosen in the
+# URL. `only=` asks for exactly that toolset (and the gateway's always-on ones):
+# an agent given both servers then never sees one tool twice. The gateway
+# reaches Odoo with DATALAYER_ODOO_URL and DATALAYER_ODOO_API_KEY (and
+# DATALAYER_ODOO_DATABASE where the host does not say it), kept in the
+# person's Datalayer environment and never handed to the runtime. One company
+# per session: the person's default in Odoo, or the one a URL names with
+# `&odoo-company=<name or id>`.
+command: npx
+args:
+  - "-y"
+  - "mcp-remote"
+  - "https://mcp.datalayer.run/mcp?only=odoo-accounting"
+  - "--header"
+  - "Authorization: Bearer ${DATALAYER_API_KEY}"
+
+transport: stdio
+
+# Not on by default: it writes to somebody's books.
+enabled: false
+
+envvars:
+  - DATALAYER_API_KEY:0.0.1
+
+env: {}
+
+tags:
+  - erp
+  - accounting
+  - finance
+  - odoo
+  - datalayer
+
+icon: "@datalayer/icons-react:odoo"
+emoji: "🧮"
+
+# What each tool does to the world (agentspecs.actions), as the `datalayer`
+# server classes the same tools: read off the gateway's own table.
+actions:
+  checked: "2026-10-05"
+  note: >-
+    The odoo_accounting_* rows of the datalayer server, which classes every tool
+    the gateway serves (datalayer-mcp-server's tool_policy).
+  tools:
+    odoo_accounting_list_invoices: read
+    odoo_accounting_get_invoice: read
+    odoo_accounting_list_journal_entries: read
+    odoo_accounting_list_open_balances: read
+    odoo_accounting_list_accounts: read
+    odoo_accounting_list_journals: read
+    odoo_accounting_get_journal_entry: read
+    odoo_accounting_trial_balance: read
+    odoo_accounting_general_ledger: read
+    odoo_accounting_create_draft_invoice: write
+    odoo_accounting_post_invoice: write
+    odoo_accounting_create_draft_journal_entry: write
+    odoo_accounting_post_journal_entry: write
+    odoo_accounting_list_partners: read
+    odoo_accounting_partner_ledger: read
+    odoo_accounting_aged_balance: read
+    odoo_accounting_list_taxes: read
+    odoo_accounting_list_assets: read
+    odoo_accounting_get_asset: read
+    odoo_accounting_reconcile_lines: write
+    odoo_accounting_unreconcile_lines: write
+    odoo_accounting_bank_status: read
+    odoo_accounting_list_bank_lines: read
+    odoo_accounting_get_bank_line: read
+    odoo_accounting_suggest_bank_matches: read
+    odoo_accounting_suggest_reconciliations: read
+    odoo_accounting_explain_account_balance: read
+    odoo_accounting_list_bank_feeds: read
+    odoo_accounting_list_currency_rates: read
+    odoo_accounting_get_lock_dates: read
+    odoo_accounting_book_bank_line: write
+    odoo_accounting_match_bank_line: write
+    odoo_accounting_reset_bank_line: write
+    odoo_accounting_remove_duplicate_bank_lines: delete
+    odoo_accounting_link_bank_feed: write
+    odoo_accounting_create_vendor_bill: write
+    odoo_accounting_create_customer_invoice: write
+    odoo_accounting_set_currency_rates: write
+    odoo_accounting_set_lock_date: write
+    odoo_accounting_create_matching_model: write
+    odoo_accounting_get_tax_settings: read
+    odoo_accounting_list_tax_returns: read
+    odoo_accounting_get_tax_return: read
+    odoo_accounting_tax_grids: read
+    odoo_accounting_list_tax_grid_lines: read
+    odoo_accounting_check_tax_period: read
+    odoo_accounting_list_untagged_tax_lines: read
+    odoo_accounting_set_tax_periodicity: write
+    odoo_accounting_set_tax_grids: write

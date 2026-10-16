@@ -1,0 +1,100 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Order Tracker
+# The Personal Agent Protocol's account-tokens journey (PR-05,
+# trace account-tokens) as an application: it only reads orders at the shop,
+# with the narrowest sign-in each person gives it. Datalayer keeps that
+# sign-in, renews it and ends it on Disconnect; the application never holds it.
+
+schema: loop.app/v1
+id: order-tracker
+version: 0.0.2
+name: Order Tracker
+kind: chat
+description: >-
+  Tells you where your orders are at a shop, reading only, with a sign-in you
+  can narrow or end at any time.
+owner: Datalayer <info@datalayer.io>
+
+agent: cog-crawler:0.0.1
+instructions: >-
+  You read the person's orders at Manzanita Outfitters, through its tools, and
+  change nothing. When the shop asks the person to sign in, say so and wait.
+  If they ask to stop, tell them Disconnect under In your name ends the
+  sign-in.
+
+# The protocols it speaks: its `pap` block is refused unless listed here.
+protocols: [pap]
+
+pap:
+  profile: draft-01
+  connections:
+    - id: manzanita
+      company: manzanita.examples.datalayer.run
+      access: read
+      as: user
+      scopes: ["orders:read"]
+      interfaces: [agent]
+      sign_in: [device]
+
+rules:
+  - action: Read your orders at the shop
+    applies_to: read
+    behaviour: do_it
+  # A message to the shop goes out in your name (R-02).
+  - action: Ask the shop for you
+    applies_to: send
+    behaviour: ask_first
+
+# Its interface: the Reactor plugins of agentspecs/ui it is drawn with, each
+# with the renderer it is exposed through outside Datalayer's page, when it is.
+ui:
+  - plugin: chat
+  - plugin: pap-sign-in
+
+interface:
+  layout: chat
+  accent: sun
+  welcome: >-
+    I tell you where your orders are at Manzanita Outfitters. I only read, and
+    you can end my sign-in there whenever you like.
+  starters:
+    - label: My orders
+      message: What did I order at Manzanita?
+    - label: Has it shipped
+      message: Has my Ridge Jacket shipped yet?
+    - label: Stop
+      message: Stop reading my orders.
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: What did I order at Manzanita?
+      expect: It asks the shop, asks me to sign in there with a code when the shop needs it, then lists my orders.
+    - ask: Exchange my jacket.
+      expect: It says it only reads my orders and changes nothing at the shop.
+    - ask: Stop reading my orders.
+      expect: It tells me Disconnect under In your name ends its sign-in at the shop.
+  verified:
+    live:
+      - "Drilled on r1 on 13 October 2026 against the hosted Manzanita (manzanita.examples.datalayer.run), as its Preview reaches the gateway's pap toolset: a question answered signed out, the person signed in by Device Sign-In with the code entered at its /device page, granting orders:read alone, and their latest order answered for them; the sign-in erased with the clone (Can read cannot disconnect)."
+    recorded:
+      - "The journey is the Personal Agent Protocol SDK's recorded journey of a sign-in kept for each person (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
+    unverified:
+      - "A model's turns in the Studio's Preview were not watched in that drill."
+
+record:
+  keep_for: 90_days
+  include: [conversations, actions, decisions, approvals]
+
+deployment:
+  hosted:
+    visibility: private
+
+enabled: true
+
+tags:
+  - example
+  - companies
+emoji: "🔖"

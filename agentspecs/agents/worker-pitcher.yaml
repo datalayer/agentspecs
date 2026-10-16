@@ -26,7 +26,7 @@ tags:
   - pitch
   - fundraising
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: document.author
@@ -47,7 +47,7 @@ skills: []
 # deck it holds. `decks` names that toolset (`frontend-tools/decks.yaml`) so
 # the spec says which page it sits beside; the handlers never come from here.
 # See reactor.datalayer.tech/agent-tools.
-tools: []
+backend_tools: []
 frontend_tools:
   - decks:0.0.1
 

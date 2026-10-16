@@ -1,0 +1,44 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The MCP gateway's `pap` toolset: an application acting as a person's agent at
+# a Personal Agent Protocol company (ADR-1, B-03). Reached through
+# an application's `pap.connections[]`, granted as `datalayer_connection`
+# `pap:<domain>` and admitted at the connection's level.
+id: pap
+name: Personal Agent Protocol
+description: A person's agent at a company, through Datalayer's MCP gateway.
+# The connection's `server` is `<connection>:<domain>`.
+connection: pap
+
+# What each tool does to the world (agentspecs.actions, R-02,
+# PR-54). A tool not named here is unknown, and unknown is the
+# most restricted.
+actions:
+  checked: "2026-10-13"
+  note: >-
+    Read off the gateway's `extensions/pap/pap.py`. Asking the company's agent
+    is `send` (decided by the user, 13 October 2026, R-02): a
+    message goes out to the company in the person's name, so it is a Rule's to
+    decide, *Ask me first* unless the Maker says otherwise. Asking for one of the
+    company's people (`pap_handoff`) is the same conversation's control and is
+    classed with `pap_ask`, `send` too. Proposing through the company's API
+    (`pap_propose`, decided by the user, 13 October 2026, R-07)
+    sends a request in the person's name and is `send` too: what it proposes
+    is done only by confirming it. Signing in records the
+    person's consent and changes nothing at the company. A company MCP tool is
+    unknown here, so it is taken as changing something. Confirming an operation
+    does what the operation does: the terms decide at the call (`buy` when a term
+    moves money, `write` otherwise); without them, everything it can do.
+  tools:
+    pap_company: read
+    pap_ask: send
+    pap_handoff: send
+    pap_sign_in: read
+    pap_sign_in_status: read
+    pap_read: read
+    pap_propose: send
+    pap_mcp_tools: read
+    pap_mcp_call: write
+    pap_confirm: [write, buy]
+    pap_disconnect: write

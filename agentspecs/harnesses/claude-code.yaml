@@ -1,0 +1,41 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Claude Code over ACP, through the Agent Client Protocol project's adapter
+# (the former @zed-industries/claude-agent-acp: its repository moved to
+# github.com/agentclientprotocol/claude-agent-acp, and the npm package with
+# it; the Zed-scoped package stopped at 0.23.1 in March 2026).
+
+id: claude-code
+version: 0.0.1
+name: Claude Code
+description: Anthropic's coding agent, driven over ACP through the Agent Client Protocol project's adapter on the Claude Agent SDK.
+docs: https://github.com/agentclientprotocol/claude-agent-acp
+
+acp:
+  command: npx
+  args: ["-y", "@agentclientprotocol/claude-agent-acp@0.91.0"]
+  protocol_version: 1
+  load_session: true
+  mcp: lend
+  modes: [default, plan, acceptEdits, bypassPermissions]
+
+requires:
+  secrets: [ANTHROPIC_API_KEY]
+  binaries: [node, git]
+
+terms:
+  served_to_third_parties: api_key_only
+  licence: Apache-2.0 (adapter); Anthropic Commercial Terms of Service (the agent)
+
+skills:
+  format: skill-md
+  dir: .claude/skills
+
+honours:
+  model: true
+  subagents: false
+
+instructions_file: CLAUDE.md
+
+tags: [harness]

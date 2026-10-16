@@ -1,0 +1,180 @@
+---
+sidebar_position: 1
+title: Scenes
+---
+
+# Scenes
+
+A scene stages a [team](../agent-teams/applications#scenes). The team says
+who is on stage — its members, their roles, who asks whom over what; the
+scene says what happens there: the setting, the script, the stage
+directions, the audience, the rehearsal and where it plays. Its spec is the
+**scene spec**, `schema: loop.scene/v1`, one YAML per scene under
+`agentspecs/scenes/`. Nothing of membership is said twice: a scene names its
+team, or writes a `cast` that makes one.
+
+Four scenes are the home page's, each with its face, drawn before its name
+wherever scenes are listed:
+
+| Scene | Face | Stages | On stage |
+| --- | --- | --- | --- |
+| `sales-and-accounting` | 🤝 | `sales-and-accounting` | Odoo, through `odoo-accounting` |
+| `month-end-close` | 📒 | `month-end-close` | Odoo, through `odoo-accounting` |
+| `crop-monitoring` | 🛰️ | `crop-monitoring` | NASA Earthdata, through `earthdata` |
+| `disaster-assessment` | 🚨 | `disaster-assessment` | NASA Earthdata, under each specialist |
+
+```yaml
+# scenes/sales-and-accounting.yaml
+schema: loop.scene/v1
+id: sales-and-accounting
+name: Sales & Accounting
+description: A sales desk asks Accounting for the figures and hands them over.
+icon: people
+emoji: "🤝"
+
+team: sales-and-accounting:0.0.1
+cast:
+  - member: sales
+    persona: { name: Sales, line: I take your request and bring the figures back. }
+    brief: Ask Accounting for every figure; report what it answers.
+  - member: accounting
+    persona: { name: Accounting, line: I read the books and answer; I change nothing. }
+
+setting:
+  systems:
+    - server: odoo-accounting:0.0.1
+      as: Odoo
+      holds: Datalayer's own books, read only.
+  assumes: Two agents over A2A, on Datalayer's own books in Odoo, read only.
+
+script:
+  - id: open-invoices
+    cue: { say: Which customer invoices are still open, and how much is due in total? }
+    narration: Sales takes the request and asks Accounting, which reads the books.
+    moves:
+      - { who: sales, asks: accounting, over: a2a, what: the open invoices and the total due }
+      - { who: accounting, asks: odoo, over: mcp, tool: odoo_accounting_list_invoices, does: read }
+      - { who: accounting, answers: table, what: the open invoices by customer }
+      - { who: sales, answers: words, what: what Accounting answered }
+    expect: A table of the open invoices with one total that matches the books.
+    shows: [table]
+    branch:
+      - decision: the books hold no open invoice
+        expect: Sales says so in a sentence, and invents no figure.
+
+stage:
+  positions: { sales: { x: 0.25, y: 0.5 }, accounting: { x: 0.75, y: 0.5 } }
+  opens_first: sales
+  transcript: { tools: true, withhold: [ids] }
+  inspectors: [agent, a2a, tools]
+  rests_after: 10m
+
+audience: { who: visitors, ceiling_per_ask: 0.05, asks_a_day: 5 }
+
+rehearsal:
+  beats:
+    - beat: open-invoices
+      lines:
+        - "You → Sales"
+        - "Sales → Accounting"
+        - "Accounting → Odoo: odoo_accounting_list_invoices"
+        - "Accounting: a table"
+      must_say: [invoice]
+      within: 60s
+
+deployment:
+  account: demo
+  page: /
+  addresses: { accounting: DATALAYER_DEMO_TEAM_ACCOUNTING_A2A_URL }
+```
+
+## What a scene spec holds
+
+| Part | What it says |
+| --- | --- |
+| `name`, `description`, `icon`, `emoji` | Its face, exactly as an application has one: the tabs and the lists draw the emoji before the name. A scene's face is its own, never a member's. |
+| `team` or `cast` | The team it stages, or a `cast` written inline that makes one. On either, a cast member's `persona` on stage — the `name` the audience sees, its `face`, one `line` of *who I am here* — and its `brief`, laid over its application's instructions. |
+| `setting` | The stage: the `systems` on it (the MCP servers the cast reaches, each with the name the audience reads, `as`, and what it `holds`), the shared `frames`, the `contents` in play, the `period` and the `language`, and `assumes`: what the audience is told before it starts — the line under the title. |
+| `script` | The beats, in order. Each a `cue` (something the audience may `say` — the entry's suggestions on the page — a `schedule` or an `event`), its `moves`, `expect` in words, a `narration` line for the audience, what it `shows` (a table, a chart, a notebook — so the page can promise it), its `pace`, and the `branch` it takes on a `decision`. |
+| `stage` | Directions for the page: where each member stands (`positions`, fractions of the box), whose balloon `opens_first`, what the `transcript` shows (tool lines, narration) and withholds (credentials, ids), which `inspectors` are offered, how long the scene plays before it rests (`rests_after`), and the `pace` of the beats that say none. |
+| `audience` | Who may watch and ask — `visitors` on the trial key, `signed-in` people, `nobody` (a rehearsal only) — and what a visitor's ask may cost (`ceiling_per_ask`, `asks_a_day`). |
+| `rehearsal` | The scene's tests: for each beat, the shape the transcript must take (`lines`), the words that `must_say` and `must_not_say`, and the time it may take (`within`); a `recording` for when the scene cannot play live; what was `verified`, as an application's tests say it. A passing rehearsal is the gallery's *Live*. |
+| `deployment` | Under which `account` the scene plays, on which `page`, and for each member on a runtime the variable its address is read from at build (`addresses`). |
+
+## A move
+
+A move is one member asking another over a protocol, or answering the
+audience:
+
+| Field | What it says |
+| --- | --- |
+| `who` | The member moving, by its id in the cast. |
+| `asks` | Whom: a member (over `a2a`) or a system of the setting (over `mcp`), by its id or the name it is shown as. Nobody when the member answers the audience. |
+| `over` | `a2a` to a member, `mcp` to a system. |
+| `what` | What it asks for, or what it answers, in words. |
+| `tool`, `does` | Over `mcp`: the tool, by name or pattern (`odoo_accounting_*`), and what kind of tool it is (`read`, `write`, …), checked against what the server says of it. |
+| `answers` | What kind of answer comes back: `words`, `table`, `chart`, `notebook`, `map`, `file`, `image`, `sources` (cards that open), `choice` (buttons that answer the application), `approval` (a choice whose option does more than read: asked of a person, refused to a visitor). |
+
+## The transcript's shape
+
+A rehearsal says the shape a beat's transcript must take, line by line, in
+the words the transcript writes: `You → Sales` (the audience asks), `Sales →
+Accounting` (an ask over A2A), `Accounting → Odoo: odoo_accounting_*` (a tool
+of a system, by name or pattern) and `Accounting: a table` (an answer, and
+what kind). Every name is one on stage; every tool one a connection offers.
+
+## The rehearsal that was played
+
+What the last rehearsal found is kept beside the specs, in the scene's own
+file `<id>/rehearsal.json` (`played_path`), written by
+`loop scenes rehearse --cloud` and never by hand: when it was played, where,
+whether every beat `passed`, the verdict in one sentence, each beat's verdict
+(`passed`, `failed` with what differed, `not_run` with why) and the
+agent-runtimes that played it. `scene_played(id)` reads it as a `ScenePlayed`,
+`write_played` keeps one, and a file that is not a rehearsal's result is
+refused in a sentence rather than read as a pass. A scene whose last
+rehearsal passed is *Live* — in `loop scenes ls`, in the catalogue
+agent-runtimes generates and on the home page; one that did not says so with
+the verdict's sentence. The hand-written `verified` sentences stay what a
+person says of the scene beside it.
+
+## What is refused
+
+`scene_problems` says what stops a scene from being played, in sentences:
+
+- A cast member that is not a member of the team, or one that says what it
+  is when the team already does.
+- A beat's mover not in the cast; a system that moves (it answers tool by
+  tool and asks nobody).
+- A move over `mcp` to one that is not a system of the scene; a move over
+  `a2a` to a system; a member asking one the team does not have it talk to;
+  a system a member reaches through no connection.
+- A cue that nobody answers: a beat with no move of the entry's.
+- A tool no connection offers, in a move or in a rehearsal line; a tool
+  asked to `read` when the server says it writes.
+- A system on stage that no member of the cast reaches; a Frame or a server
+  the catalogue does not have.
+- A visitor audience on a scene whose member on a runtime has no address in
+  `deployment.addresses`; an address for a member in the browser.
+- A rehearsal naming a beat that is not in the script, or a name that is
+  not on stage; a recording that is not beside the scenes.
+- A scene wearing a member's face.
+
+What a scene needs that is not offered today is setup, not a mistake
+(`scene_setup`): its members' applications' own.
+
+```python
+from agentspecs.scenes import get_scene, scene_problems, scene_setup
+
+scene = get_scene("sales-and-accounting")
+scene.team_of().links()       # [('sales', 'accounting', a2a)]
+[m.persona.name for m in scene.cast_of()]  # ['Sales', 'Accounting']
+scene.cues()                  # the three things the audience may say
+scene.script[0].shown         # [AnswerKind.TABLE]
+scene_problems(scene)         # []
+scene_setup(scene)            # what is not enabled yet, in sentences
+```
+
+The JSON Schema of the spec is written beside the scenes
+(`agentspecs/scenes/loop.scene.schema.json`) by `python -m agentspecs.scenes`,
+with the [reference](./reference) of every field.

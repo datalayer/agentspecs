@@ -1,0 +1,22 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# An agent protocol Datalayer targets. `status` says it as
+# it stands: `shipped` when agent-runtimes implements it today, `planned`
+# otherwise — an application cannot ship speaking a planned one.
+id: a2ui
+version: 0.0.1
+name: A2UI
+description: >-
+  How an agent's answer becomes an interface: components the host renders from a declarative surface.
+publisher: Google
+layer: ui
+spec_url: https://a2ui.org
+spec_version: "0.9"
+status: shipped
+connects: The person, through components an answer draws
+packages:
+  python: ["agent-runtimes"]
+  typescript: ["@a2ui/react", "@a2ui/web_core"]
+# Its tools' action classes, under protocol-tools/ (agentspecs.actions).
+protocol_tools: []

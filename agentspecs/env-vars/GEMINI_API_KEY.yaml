@@ -1,0 +1,16 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: GEMINI_API_KEY
+version: 0.0.1
+name: Gemini API Key
+description: API key for Google's Gemini API. Required by the Gemini CLI harness in place of a Google login; the person's own.
+registrationUrl: https://aistudio.google.com/apikey
+tags:
+  - authentication
+  - api-key
+  - google
+  - harness
+
+icon: key
+emoji: 🔑

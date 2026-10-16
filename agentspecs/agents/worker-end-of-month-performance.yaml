@@ -22,7 +22,7 @@ tags:
   - analytics
   - sales
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.analyse
@@ -65,9 +65,11 @@ icon: graph
 emoji: 📊
 color: "#1f883d"  # Green — performance & growth
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Trigger configuration
 trigger:

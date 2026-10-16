@@ -32,7 +32,7 @@ mcp_servers: []
 skills: []
 
 # Runtime tools
-tools:
+backend_tools:
   - example-display-recipe:0.0.1
 frontend_tools: []
 

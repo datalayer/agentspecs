@@ -1,0 +1,447 @@
+{
+  "$defs": {
+    "Activity": {
+      "additionalProperties": false,
+      "description": "One control activity, as the standard words it.",
+      "properties": {
+        "activity": {
+          "minLength": 1,
+          "title": "Activity",
+          "type": "string"
+        },
+        "required": {
+          "enum": [
+            "core",
+            "supplemental"
+          ],
+          "title": "Required",
+          "type": "string"
+        }
+      },
+      "required": [
+        "required",
+        "activity"
+      ],
+      "title": "Activity",
+      "type": "object"
+    },
+    "Control": {
+      "additionalProperties": false,
+      "description": "One control (AIUC-1 says *requirement*; ISO 42001 a clause).",
+      "properties": {
+        "activities": {
+          "items": {
+            "$ref": "#/$defs/Activity"
+          },
+          "title": "Activities",
+          "type": "array"
+        },
+        "application": {
+          "enum": [
+            "mandatory",
+            "optional"
+          ],
+          "title": "Application",
+          "type": "string"
+        },
+        "cadence_months": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "How often it is demonstrated again: 3, 6 or 12 months; none when retired",
+          "title": "Cadence Months"
+        },
+        "capabilities": {
+          "description": "The agent capabilities it applies to",
+          "items": {
+            "type": "string"
+          },
+          "title": "Capabilities",
+          "type": "array"
+        },
+        "coverage": {
+          "anyOf": [
+            {
+              "enum": [
+                "full",
+                "partial",
+                "none"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The crosswalk's gap analysis as published: full (no gap), partial, none (a full gap)",
+          "title": "Coverage"
+        },
+        "coverage_note": {
+          "default": "",
+          "title": "Coverage Note",
+          "type": "string"
+        },
+        "covered_by": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "For a standard that maps to another: that standard's controls covering this one",
+          "title": "Covered By"
+        },
+        "crosswalks": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "description": "Framework id \u2192 the references of that framework this control maps to",
+          "title": "Crosswalks",
+          "type": "object"
+        },
+        "domain": {
+          "description": "The id of its domain",
+          "minLength": 1,
+          "title": "Domain",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceItem"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "id": {
+          "description": "The standard's own id, e.g. D003, or an ISO clause such as A.9.4",
+          "title": "Id",
+          "type": "string"
+        },
+        "keywords": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Keywords",
+          "type": "array"
+        },
+        "retired": {
+          "default": false,
+          "description": "Retired in a release; kept so an older certification still reads",
+          "title": "Retired",
+          "type": "boolean"
+        },
+        "retired_in": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The release that retired it",
+          "title": "Retired In"
+        },
+        "summary": {
+          "default": "",
+          "title": "Summary",
+          "type": "string"
+        },
+        "title": {
+          "description": "The standard's own title, verbatim",
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "preventative",
+                "detective"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Type"
+        },
+        "url": {
+          "default": "",
+          "description": "Its page, https",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "domain",
+        "application"
+      ],
+      "title": "Control",
+      "type": "object"
+    },
+    "Domain": {
+      "additionalProperties": false,
+      "description": "One domain (AIUC-1 says *principle*; ISO 42001 a clause group).",
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "url": {
+          "default": "",
+          "description": "The domain's page, https",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "Domain",
+      "type": "object"
+    },
+    "EvidenceItem": {
+      "additionalProperties": false,
+      "description": "One evidence item of a control, as the standard lists it (``D003.1 Config: \u2026``).",
+      "properties": {
+        "category": {
+          "default": "",
+          "description": "The standard's evidence category, e.g. technical-implementation",
+          "title": "Category",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "id": {
+          "description": "The standard's id of the item, e.g. D003.1",
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "documentation",
+            "config",
+            "logs",
+            "evals",
+            "report",
+            "demonstration",
+            "retired"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "locations": {
+          "description": "Where the standard typically finds it",
+          "items": {
+            "type": "string"
+          },
+          "title": "Locations",
+          "type": "array"
+        },
+        "required": {
+          "description": "core: must be demonstrated; supplemental: opted into",
+          "enum": [
+            "core",
+            "supplemental"
+          ],
+          "title": "Required",
+          "type": "string"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "title",
+        "required"
+      ],
+      "title": "EvidenceItem",
+      "type": "object"
+    }
+  },
+  "$id": "https://agentspecs.datalayer.tech/schemas/standard.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One standard.",
+  "properties": {
+    "certificate_valid_months": {
+      "description": "How long a certification against it holds",
+      "minimum": 1,
+      "title": "Certificate Valid Months",
+      "type": "integer"
+    },
+    "controls": {
+      "items": {
+        "$ref": "#/$defs/Control"
+      },
+      "title": "Controls",
+      "type": "array"
+    },
+    "description": {
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "domains": {
+      "items": {
+        "$ref": "#/$defs/Domain"
+      },
+      "title": "Domains",
+      "type": "array"
+    },
+    "enabled": {
+      "default": true,
+      "title": "Enabled",
+      "type": "boolean"
+    },
+    "evidence_kinds": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Each evidence kind the standard names, in a sentence",
+      "title": "Evidence Kinds",
+      "type": "object"
+    },
+    "frameworks": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Framework id \u2192 its name, for the crosswalks",
+      "title": "Frameworks",
+      "type": "object"
+    },
+    "id": {
+      "description": "Its id, the file's name",
+      "title": "Id",
+      "type": "string"
+    },
+    "maps_to": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "The standard its controls are covered by (iso-42001 \u2192 aiuc-1)",
+      "title": "Maps To"
+    },
+    "name": {
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "next_release_on": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "When the next version is due; none when not scheduled",
+      "title": "Next Release On"
+    },
+    "published_by": {
+      "minLength": 1,
+      "title": "Published By",
+      "type": "string"
+    },
+    "read_from": {
+      "default": "",
+      "description": "Where it was read when not at `url`",
+      "title": "Read From",
+      "type": "string"
+    },
+    "read_on": {
+      "description": "The day the spec was written from the published pages",
+      "format": "date",
+      "title": "Read On",
+      "type": "string"
+    },
+    "released_on": {
+      "description": "When this version was released",
+      "format": "date",
+      "title": "Released On",
+      "type": "string"
+    },
+    "tags": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "array"
+    },
+    "url": {
+      "description": "Where the standard is published, https",
+      "minLength": 1,
+      "title": "Url",
+      "type": "string"
+    },
+    "version": {
+      "description": "The standard's version: AIUC-1's quarter (2026.4), ISO's year (2023)",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "name",
+    "description",
+    "published_by",
+    "url",
+    "released_on",
+    "read_on",
+    "certificate_valid_months",
+    "evidence_kinds",
+    "domains",
+    "controls"
+  ],
+  "title": "Standard",
+  "type": "object"
+}

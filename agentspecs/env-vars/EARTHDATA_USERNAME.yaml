@@ -1,0 +1,16 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: EARTHDATA_USERNAME
+version: 0.0.1
+name: Earthdata Login Username
+description: The username of a NASA Earthdata Login. Read in the code sandbox by the script that the download tool of the Earthdata MCP server writes, to download granules; searching needs none.
+registrationUrl: https://urs.earthdata.nasa.gov/users/new
+tags:
+  - authentication
+  - username
+  - earthdata
+  - sandbox
+
+icon: key
+emoji: 🔑
