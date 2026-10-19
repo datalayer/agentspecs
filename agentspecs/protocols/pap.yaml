@@ -11,8 +11,9 @@ description: >-
   A person's agent working with a company for them — signed out, then signed in at the company, its changes confirmed by the person — and an application being a company personal agents reach.
 publisher: Sierra, Meta
 layer: consent
-spec_url: https://poppy.md
-spec_version: "draft 0.1"
+# The specification, published from github.com/personal-agent-protocol/personal-agent-protocol.
+spec_url: https://personalagentprotocol.org
+spec_version: "draft 0.2"
 status: shipped
 connects: Companies, as a person's agent there, or being one
 packages:
