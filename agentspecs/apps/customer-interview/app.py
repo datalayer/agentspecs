@@ -52,7 +52,7 @@ app = Application.from_spec(
         "interface": {
             "layout": "chat",
             "accent": "rose",
-            "assistant": "cat",
+            "avatar": "cat",
             "welcome": (
                 "I interview your customer. I ask for their consent first, then one "
                 "open question at a time."

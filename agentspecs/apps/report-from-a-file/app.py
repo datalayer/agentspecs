@@ -131,7 +131,7 @@ app = Application.from_spec(
         "interface": {
             "layout": "page",
             "accent": "sky",
-            "assistant": "wizard",
+            "avatar": "wizard",
             "components": [
                 "Card",
                 "Column",
