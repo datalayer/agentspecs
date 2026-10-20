@@ -45,10 +45,10 @@ import json
 import re
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Mapping, Optional, Sequence, Tuple, Union, get_args
+from typing import Annotated, Any, Dict, List, Literal, Mapping, Optional, Sequence, Tuple, Union, get_args
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, ValidationError, field_validator, model_validator
 
 from ..actions import (
     ActionClass,
@@ -89,10 +89,20 @@ _AVATAR_SCHEMA = {
     "pattern": rf"^\s*(emoji:[^\sA-Za-z0-9]{{1,32}}|@datalayer/icons-react:{AVATAR_ICON_NAME})?\s*$"
 }
 
-#: How the character of a floating assistant is named (T-24): by the id
-#: a UI plugin contributes it under, ``paperclip`` or ``acme-owl``. Which ids
-#: exist is known only where the plugins are, the runtime and the page.
-ASSISTANT_CHARACTER_ID = r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*"
+#: How the avatar of a floating assistant is named (T-24): by the id a UI
+#: plugin contributes it under, ``paperclip`` or ``acme-owl``. Which ids exist
+#: is known only where the plugins are, the runtime and the page.
+ASSISTANT_AVATAR_ID = r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*"
+
+#: The 3D model an avatar of kind ``model3d`` shows when it names no ``url``:
+#: RobotExpressive, by Tomás Laulhé (Quaternius), CC0 1.0, with Don McCurdy's
+#: facial morph targets, from the three.js repository at r170, served by jsDelivr.
+DEFAULT_AVATAR_MODEL_URL = (
+    "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r170/examples/models/gltf/RobotExpressive/RobotExpressive.glb"
+)
+
+#: What a 3D avatar's ``url`` may be: an https address of a glTF model.
+AVATAR_MODEL_URL = r"https://[^\s]+\.(?:glb|gltf)(?:[?#][^\s]*)?"
 
 #: The share of test conversations that has to pass for an application to be ready.
 DEFAULT_READY_AT = 0.8
@@ -2083,8 +2093,58 @@ class AppUploads(_Strict):
         return None
 
 
+#: An avatar named by the id a plugin contributes it under.
+AvatarId = Annotated[str, StringConstraints(max_length=64, pattern=rf"^{ASSISTANT_AVATAR_ID}$")]
+
+
+class AvatarKind(str, Enum):
+    """What an avatar is, beside one named by id."""
+
+    MODEL3D = "model3d"
+    """A glTF model, drawn in 3D: idle when quiet, talking with its voice."""
+
+
+class Model3DAvatar(_Strict):
+    """An avatar that is a 3D model (glTF), drawn in the page with three.js."""
+
+    kind: Literal[AvatarKind.MODEL3D] = Field(..., description="`model3d`")
+    url: str = Field(
+        default="",
+        max_length=2048,
+        json_schema_extra={"pattern": rf"^(?:{AVATAR_MODEL_URL})?$"},
+        description=(
+            "The https address of its model, a `.glb` or `.gltf`; when unsaid, Datalayer's "
+            "default robot (RobotExpressive, CC0). Its animation named `Idle` plays while it is "
+            "quiet; while it speaks, its mouth and head move with its voice"
+        ),
+    )
+
+    @field_validator("url")
+    @classmethod
+    def _is_a_model_address(cls, url: str) -> str:
+        if url and not re.fullmatch(AVATAR_MODEL_URL, url):
+            raise ValueError("a 3D avatar's `url` is the https address of a `.glb` or `.gltf` model")
+        return url
+
+
+#: What the avatar was called before (T-24): refused, each with its new name.
+_RENAMED_INTERFACE_KEYS = {
+    "assistant": "`interface.assistant` is now `interface.avatar`: rename the key, its value is the same",
+    "character": "`interface.character` is now `interface.avatar`: rename the key, its value is the same",
+}
+
+
 class AppInterface(_Strict):
     """What the user sees."""
+
+    @model_validator(mode="before")
+    @classmethod
+    def _refuses_the_character(cls, data: Any) -> Any:
+        if isinstance(data, Mapping):
+            for key, said in _RENAMED_INTERFACE_KEYS.items():
+                if key in data:
+                    raise ValueError(said)
+        return data
 
     layout: Optional[Layout] = Field(default=None, description="`chat`, `page` or `split`; the kind's own when unsaid")
     accent: Optional[Accent] = Field(
@@ -2186,16 +2246,16 @@ class AppInterface(_Strict):
             "outputs as values; run again as an input changes, its outputs shown in place. None when unsaid"
         ),
     )
-    assistant: Optional[str] = Field(
+    avatar: Optional[Union[AvatarId, Model3DAvatar]] = Field(
         default=None,
-        max_length=64,
-        pattern=rf"^{ASSISTANT_CHARACTER_ID}$",
         description=(
-            "The character its floating assistant shows, by the id a plugin contributes it under "
-            "(lowercase letters and digits, words joined by a hyphen): Datalayer's are `paperclip`, "
-            "`wizard`, `cat` and `eyes`. The paper clip when unsaid; an id no enabled plugin "
-            "contributes is refused where the plugins are known, the runtime and the page. Said "
-            "here, it wins over a person's own choice in their settings"
+            "The avatar its floating assistant shows, its appearance: by the id a plugin "
+            "contributes it under (lowercase letters and digits, words joined by a hyphen), "
+            "Datalayer's own drawings `paperclip`, `wizard`, `cat` and `eyes` or a Microsoft "
+            "Agent character a plugin brings; or a 3D model, `{kind: model3d, url}`. The paper "
+            "clip when unsaid; an id no enabled plugin contributes is refused where the plugins "
+            "are known, the runtime and the page. Said here, it wins over a person's own choice "
+            "in their settings"
         ),
     )
     balloon: Optional[BalloonDisplay] = Field(
@@ -2224,6 +2284,26 @@ class AppInterface(_Strict):
             "Plain text alone when unsaid"
         ),
     )
+
+    @field_validator("avatar", mode="before")
+    @classmethod
+    def _is_an_avatar(cls, value: Any) -> Any:
+        # Said in one sentence, rather than as each shape of the union it is not.
+        if isinstance(value, str) and not (len(value) <= 64 and re.fullmatch(ASSISTANT_AVATAR_ID, value)):
+            raise ValueError(
+                "an avatar is named by the id a plugin contributes it under, lowercase words joined "
+                "by a hyphen (`paperclip`, `acme-owl`), or is a 3D model, `{kind: model3d, url}`"
+            )
+        if isinstance(value, Mapping):
+            if value.get("kind") != AvatarKind.MODEL3D.value:
+                raise ValueError(
+                    f"an avatar's kind is `model3d`, not {value.get('kind')!r}; "
+                    "the others are named by id, as `wizard`"
+                )
+            url = value.get("url", "")
+            if not isinstance(url, str) or (url and not re.fullmatch(AVATAR_MODEL_URL, url)):
+                raise ValueError("a 3D avatar's `url` is the https address of a `.glb` or `.gltf` model")
+        return value
 
     @field_validator("settings", mode="before")
     @classmethod
@@ -2905,7 +2985,7 @@ class EmbedMode(str, Enum):
     """A side panel."""
 
     ASSISTANT = "assistant"
-    """A character on the page that speaks in a balloon."""
+    """An avatar on the page that speaks in a balloon."""
 
 
 class HostedDeployment(_Strict):
@@ -2913,13 +2993,22 @@ class HostedDeployment(_Strict):
 
     visibility: Visibility = Field(default=Visibility.PRIVATE, description="Who can open it")
     slug: str = Field(default="", description="The readable part of its address")
-    character_alone: bool = Field(
+    avatar_alone: bool = Field(
         default=False,
         description=(
-            "At its address, only its character: the conversation opens in its balloon, "
+            "At its address, only its avatar: the conversation opens in its balloon, "
             "as when it is shipped as `assistant`"
         ),
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def _refuses_the_character(cls, data: Any) -> Any:
+        if isinstance(data, Mapping) and "character_alone" in data:
+            raise ValueError(
+                "`deployment.hosted.character_alone` is now `deployment.hosted.avatar_alone`: rename the key"
+            )
+        return data
 
     @field_validator("slug")
     @classmethod
@@ -4211,7 +4300,11 @@ __all__ = [
     "agent_voice_problems",
     "APP_CATALOGUE",
     "APP_SCHEMA",
-    "ASSISTANT_CHARACTER_ID",
+    "ASSISTANT_AVATAR_ID",
+    "AVATAR_MODEL_URL",
+    "AvatarKind",
+    "DEFAULT_AVATAR_MODEL_URL",
+    "Model3DAvatar",
     "DEFAULT_BEHAVIOURS",
     "DEFAULT_LAYOUTS",
     "DEFAULT_READY_AT",

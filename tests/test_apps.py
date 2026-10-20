@@ -44,7 +44,8 @@ from agentspecs.actions import (
 from agentspecs.apps import (
     APP_CATALOGUE,
     APP_SCHEMA,
-    ASSISTANT_CHARACTER_ID,
+    ASSISTANT_AVATAR_ID,
+    DEFAULT_AVATAR_MODEL_URL,
     DEFAULT_BEHAVIOURS,
     MAX_UPLOAD_MB,
     SCHEMA_PATH,
@@ -504,13 +505,19 @@ def test_an_application_survives_being_written_and_read_again() -> None:
         )
 
 
-def test_its_address_shows_only_its_character_when_said() -> None:
+def test_its_address_shows_only_its_avatar_when_said() -> None:
     """T-21: off unless said; said, it is written and read again."""
-    assert app(deployment={"hosted": {"slug": "desk"}}).deployment.hosted.character_alone is False
-    alone = app(deployment={"hosted": {"slug": "desk", "character_alone": True}})
-    assert alone.deployment.hosted.character_alone is True
-    assert dump_app(alone)["deployment"]["hosted"]["character_alone"] is True
-    assert "character_alone" not in dump_app(app(deployment={"hosted": {"slug": "desk"}}))["deployment"]["hosted"]
+    assert app(deployment={"hosted": {"slug": "desk"}}).deployment.hosted.avatar_alone is False
+    alone = app(deployment={"hosted": {"slug": "desk", "avatar_alone": True}})
+    assert alone.deployment.hosted.avatar_alone is True
+    assert dump_app(alone)["deployment"]["hosted"]["avatar_alone"] is True
+    assert "avatar_alone" not in dump_app(app(deployment={"hosted": {"slug": "desk"}}))["deployment"]["hosted"]
+
+
+def test_the_old_character_alone_key_is_refused_with_its_new_name() -> None:
+    """The character is now the avatar: the old key is refused, never read as the new one."""
+    with pytest.raises(AppError, match="`deployment.hosted.character_alone` is now `deployment.hosted.avatar_alone`"):
+        app(deployment={"hosted": {"slug": "desk", "character_alone": True}})
 
 
 def test_the_host_page_passes_values_and_offers_functions_each_decided_by_a_rule() -> None:
@@ -973,7 +980,7 @@ def test_the_examples_are_in_the_catalogue() -> None:
     for identity in ["support-desk", "customer-interview", "report-from-a-file", "pipeline-report"]:
         found = APP_CATALOGUE[identity]
         assert 3 <= len(found.tests.cases) <= 5, identity
-        assert found.interface.assistant is not None, identity
+        assert found.interface.avatar is not None, identity
 
 
 def test_decide_answers_by_asking_typed_decisions_and_deciding_is_a_read() -> None:
@@ -993,7 +1000,7 @@ def test_sales_reports_what_accounting_answers_and_reaches_nothing() -> None:
     assert found.connections == [] and found.rules == [] and found.backend_tools == []
     assert "ask_accounting" in found.instructions
     assert "Never invent" in found.instructions
-    assert found.interface.assistant == "paperclip"
+    assert found.interface.avatar == "paperclip"
     assert len(found.interface.starters) == 4
     assert 3 <= len(found.tests.cases) <= 5
     assert app_problems(found) == []
@@ -1024,8 +1031,8 @@ def test_accounting_only_reads_the_books_and_asks_before_anything_that_would_cha
     )
     assert behaviour_for(found, "odoo-accounting.odoo_accounting_trial_balance") is Behaviour.DO_IT
     # Its face is another Office Assistant than the one at the sales desk.
-    assert found.interface.assistant == "wizard"
-    assert found.interface.assistant != APP_CATALOGUE["sales"].interface.assistant
+    assert found.interface.avatar == "wizard"
+    assert found.interface.avatar != APP_CATALOGUE["sales"].interface.avatar
     assert app_problems(found) == []
     assert app_setup(found) == [
         "The agent 'worker-accountant:0.0.1' is not enabled.",
@@ -1075,7 +1082,7 @@ def test_the_weekly_pipeline_report_runs_the_op_s_checks_and_asks_before_sending
 
 
 def test_an_application_embeds_in_four_modes() -> None:
-    """D-07: inline, bubble, panel, and the assistant — a character that speaks in a balloon."""
+    """D-07: inline, bubble, panel, and the assistant — an avatar that speaks in a balloon."""
     from agentspecs.apps import EmbedMode
 
     assert [mode.value for mode in EmbedMode] == ["inline", "bubble", "panel", "assistant"]
@@ -1089,26 +1096,56 @@ def test_an_application_embeds_in_four_modes() -> None:
         app(deployment={"embedded": {"mode": "popup"}})
 
 
-def test_an_application_names_the_character_of_its_assistant() -> None:
-    """T-24: any character an enabled plugin contributes, by id, or none.
+def test_an_application_names_the_avatar_of_its_assistant() -> None:
+    """T-24: any avatar an enabled plugin contributes, by id, or none.
 
     Which ids exist is known where the plugins are, the runtime and the page:
     the spec takes any id of the right shape, a plugin's own as Datalayer's."""
     plain = app()
-    assert plain.interface.assistant is None
+    assert plain.interface.avatar is None
     assert "interface" not in dump_app(plain)
-    for character in ("wizard", "owl", "acme-owl-2"):
-        named = app(interface={"assistant": character})
-        assert named.interface.assistant == character
-        assert dump_app(named)["interface"] == {"assistant": character}
+    for avatar in ("wizard", "owl", "acme-owl-2"):
+        named = app(interface={"avatar": avatar})
+        assert named.interface.avatar == avatar
+        assert dump_app(named)["interface"] == {"avatar": avatar}
         assert parse_app(dump_app(named)) == named
     assert "AssistantCharacter" not in json_schema()["$defs"]
-    assistant = json_schema()["$defs"]["AppInterface"]["properties"]["assistant"]["anyOf"][0]
-    assert assistant["pattern"] == f"^{ASSISTANT_CHARACTER_ID}$"
-    assert assistant["maxLength"] == 64
+    by_id = json_schema()["$defs"]["AppInterface"]["properties"]["avatar"]["anyOf"][0]
+    assert by_id["pattern"] == f"^{ASSISTANT_AVATAR_ID}$"
+    assert by_id["maxLength"] == 64
     for wrong in ("Clippy", "acme owl", "-owl", "owl-", "acme--owl", "acme.owl", "o" * 65, ""):
-        with pytest.raises(AppError, match="interface.assistant"):
-            app(interface={"assistant": wrong})
+        with pytest.raises(AppError, match="interface.avatar: an avatar is named by the id"):
+            app(interface={"avatar": wrong})
+
+
+def test_an_avatar_is_a_3d_model_its_default_or_one_at_an_address() -> None:
+    """A third kind of avatar: a glTF model, the default robot when no url is said."""
+    default = app(interface={"avatar": {"kind": "model3d"}})
+    assert default.interface.avatar is not None
+    assert dump_app(default)["interface"] == {"avatar": {"kind": "model3d"}}
+    assert parse_app(dump_app(default)) == default
+    url = "https://example.com/models/fox.glb?v=2"
+    at = app(interface={"avatar": {"kind": "model3d", "url": url}})
+    assert dump_app(at)["interface"] == {"avatar": {"kind": "model3d", "url": url}}
+    assert parse_app(yaml.safe_load(yaml.safe_dump(dump_app(at)))) == at
+    assert DEFAULT_AVATAR_MODEL_URL.startswith("https://") and DEFAULT_AVATAR_MODEL_URL.endswith(".glb")
+    model = json_schema()["$defs"]["Model3DAvatar"]
+    assert model["properties"]["kind"]["const"] == "model3d"
+    assert model["additionalProperties"] is False
+    for wrong in ("http://example.com/fox.glb", "https://example.com/fox.png", "fox.glb"):
+        with pytest.raises(AppError, match="a 3D avatar's `url` is the https address"):
+            app(interface={"avatar": {"kind": "model3d", "url": wrong}})
+    with pytest.raises(AppError, match="an avatar's kind is `model3d`, not 'vrm'"):
+        app(interface={"avatar": {"kind": "vrm"}})
+    with pytest.raises(AppError, match="interface.avatar"):
+        app(interface={"avatar": {"kind": "model3d", "scale": 2}})
+
+
+def test_the_old_assistant_and_character_keys_are_refused_with_the_new_name() -> None:
+    """The character is now the avatar (fail fast): no alias, the old key said in one sentence."""
+    for old in ("assistant", "character"):
+        with pytest.raises(AppError, match=f"`interface.{old}` is now `interface.avatar`"):
+            app(interface={old: "wizard"})
 
 
 def test_an_application_says_how_its_balloon_shows_the_conversation() -> None:

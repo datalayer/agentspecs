@@ -63,7 +63,7 @@ interface:
   layout: chat
   accent: lime
   # The eyes, who watch the fields from above.
-  assistant: eyes
+  avatar: eyes
   welcome: >-
     Give me a field and a period, and I'll follow its crops across the
     satellite imagery NASA Earthdata holds: vigour, growth and what needs

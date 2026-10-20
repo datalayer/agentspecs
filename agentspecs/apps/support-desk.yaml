@@ -114,7 +114,7 @@ ui:
 interface:
   layout: page
   accent: violet
-  assistant: paperclip
+  avatar: paperclip
   welcome: >-
     Ask me about the product. I answer from its documentation and show you
     where; when it does not say, I tell you.

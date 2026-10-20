@@ -84,7 +84,7 @@ interface:
   layout: chat
   accent: sun
   # The cat, who watches the ledger line by line.
-  assistant: cat
+  avatar: cat
   welcome: >-
     Ask me where the month-end close stands: the checklist, the accruals to
     book, the open items and the reconciliation gaps. I read Odoo; I change

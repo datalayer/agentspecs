@@ -56,7 +56,7 @@ interface:
   accent: sky
   # Clippy, the Office Assistant who greets you at the desk: the one the
   # person meets and talks to. Accounting, the wizard, works behind it.
-  assistant: paperclip
+  avatar: paperclip
   welcome: >-
     Hello! I'm at the sales desk. Ask me for a financial report, such as
     revenue for a quarter, open invoices or a customer's balance, and I'll

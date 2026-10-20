@@ -70,7 +70,7 @@ interface:
   layout: chat
   accent: rose
   # The paper clip, who meets the person and asks the others.
-  assistant: paperclip
+  avatar: paperclip
   welcome: >-
     Tell me of an event — a flood, a fire, a storm — where and when, and
     I'll get the area affected and the damage from Disaster Assessment and

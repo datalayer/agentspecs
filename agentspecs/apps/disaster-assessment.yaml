@@ -69,7 +69,7 @@ interface:
   layout: chat
   accent: rose
   # The wizard, who reads before and after in the imagery.
-  assistant: wizard
+  avatar: wizard
   welcome: >-
     Name an event, a place and a date, and I'll compare the satellite
     imagery NASA Earthdata holds before and after it: the area affected

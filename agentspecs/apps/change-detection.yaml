@@ -63,7 +63,7 @@ interface:
   layout: chat
   accent: violet
   # The cat, who spots what moved between two frames.
-  assistant: cat
+  avatar: cat
   welcome: >-
     Give me a place and two dates, and I'll tell you what changed on the
     ground between them from the satellite imagery NASA Earthdata holds. I

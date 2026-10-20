@@ -96,7 +96,7 @@ ui:
 interface:
   layout: split
   accent: lime
-  assistant: eyes
+  avatar: eyes
   welcome: >-
     I build the pipeline report every Monday and ask you before it goes to
     the board.

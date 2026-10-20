@@ -10,6 +10,7 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
+- 0.0.116 (20 October 2026). **The character is now the avatar**, its appearance: `interface.assistant` becomes `interface.avatar` and `deployment.hosted.character_alone` becomes `deployment.hosted.avatar_alone`; the old keys (and `interface.character`) are refused in one sentence naming the new one, with no alias. `ASSISTANT_CHARACTER_ID` is `ASSISTANT_AVATAR_ID`. A third kind of avatar beside Datalayer's drawings and the Microsoft Agent characters a plugin brings: a 3D model, `{kind: model3d, url}` (`Model3DAvatar`, `AvatarKind`), a `.glb` or `.gltf` at an https address, or `DEFAULT_AVATAR_MODEL_URL` when unsaid — RobotExpressive by Tomás Laulhé (CC0 1.0), from the three.js repository at r170. The twelve examples say `avatar`. JSON Schema and reference regenerated. Docs: apps (`interface`, `deployment`). Tests: 623 passed (3 new)
 - 0.0.115 (16 October 2026). The Shield policy schema copied from agent-shield 0.2.7: its descriptions say what each setting is, with no decision numbers or design-note sections. A catalogue agent on each harness (SH-43).
 - 0.0.114 (16 October 2026). The UI plugins' descriptions cite their box id alone.
 

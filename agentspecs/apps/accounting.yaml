@@ -71,7 +71,7 @@ interface:
   accent: green
   # Merlin, the Office Assistant who knows the books: he works behind the
   # sales desk and answers when Sales asks.
-  assistant: wizard
+  avatar: wizard
   welcome: >-
     Ask me for a report from the books: open invoices, aged balances, a
     trial balance or a customer's ledger. I read Odoo; I change nothing.

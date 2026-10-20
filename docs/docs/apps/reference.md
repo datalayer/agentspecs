@@ -167,7 +167,7 @@ ui:
 interface:
   layout: chat
   accent: green
-  assistant: wizard
+  avatar: wizard
   welcome: 'Ask me for a report from the books: open invoices, aged balances, a trial
     balance or a customer''s ledger. I read Odoo; I change nothing.'
   outputs:
@@ -773,7 +773,7 @@ What the user sees.
 | `custom_components` | list of [AppCustomComponent](#appcustomcomponent) | Components its developer wrote (P-17), of this application only: each named, its props a JSON Schema, its module's address; placed, shown and drawn as the catalog's own | — |
 | `surface` | [AppSurface](#appsurface) | The component tree, when there is one | empty |
 | `page` | [AppPage](#apppage) | A widget's page written in its code (`@app.page`, P-05): its inputs as a form, its outputs as values; run again as an input changes, its outputs shown in place. None when unsaid | empty |
-| `assistant` | text | The character its floating assistant shows, by the id a plugin contributes it under (lowercase letters and digits, words joined by a hyphen): Datalayer's are `paperclip`, `wizard`, `cat` and `eyes`. The paper clip when unsaid; an id no enabled plugin contributes is refused where the plugins are known, the runtime and the page. Said here, it wins over a person's own choice in their settings | empty |
+| `avatar` | text or [Model3DAvatar](#model3davatar) | The avatar its floating assistant shows, its appearance: by the id a plugin contributes it under (lowercase letters and digits, words joined by a hyphen), Datalayer's own drawings `paperclip`, `wizard`, `cat` and `eyes` or a Microsoft Agent character a plugin brings; or a 3D model, `{kind: model3d, url}`. The paper clip when unsaid; an id no enabled plugin contributes is refused where the plugins are known, the runtime and the page. Said here, it wins over a person's own choice in their settings | empty |
 | `balloon` | [BalloonDisplay](#balloondisplay) | How its floating assistant's balloon shows the conversation: `history` (every message, scrolled, the composer last) or `current` (only what it says or does now, the answer being written or the tool it calls, in one balloon). The page's own when unsaid: `history` for the floating chat | empty |
 | `voice` | [AppVoice](#appvoice) | Its voice: whether it listens and speaks, with which voice, in which language (off unless said) | — |
 | `outputs` | list of text | The formats its answers come in, by media type, words first: `text/markdown`, then `application/x-ipynb+json` for a Jupyter notebook. Over A2A, its agent card's output modes; a caller asks for some of them (`acceptedOutputModes`). Plain text alone when unsaid | — |
@@ -1291,7 +1291,16 @@ The application at an address of its own.
 | --- | --- | --- | --- |
 | `visibility` | [Visibility](#visibility) | Who can open it | `"private"` |
 | `slug` | text | The readable part of its address | empty |
-| `character_alone` | true or false | At its address, only its character: the conversation opens in its balloon, as when it is shipped as `assistant` | `false` |
+| `avatar_alone` | true or false | At its address, only its avatar: the conversation opens in its balloon, as when it is shipped as `assistant` | `false` |
+
+### Model3DAvatar
+
+An avatar that is a 3D model (glTF), drawn in the page with three.js.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `kind` (required) | `model3d` | `model3d` | — |
+| `url` | text | The https address of its model, a `.glb` or `.gltf`; when unsaid, Datalayer's default robot (RobotExpressive, CC0). Its animation named `Idle` plays while it is quiet; while it speaks, its mouth and head move with its voice | empty |
 
 ### UiChoice
 
