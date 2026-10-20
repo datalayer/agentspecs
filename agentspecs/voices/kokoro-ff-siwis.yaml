@@ -19,7 +19,8 @@ licence:
   dataset: CC-BY-4.0
 attribution: >-
   Trained on the SIWIS French Speech Synthesis Database, by Pierre-Edouard
-  Honnet, Alexandros Lazaridis, Philip N. Garner and Junichi Yamagishi (Idiap
-  Research Institute), under CC BY 4.0.
+  Honnet, Alexandros Lazaridis and Philip N. Garner (Idiap Research Institute)
+  and Junichi Yamagishi (National Institute of Informatics, Japan, and the
+  University of Edinburgh), under CC BY 4.0.
 watermark: false
 sample: Bonjour. Je lis les réponses à voix haute, phrase par phrase, à mesure qu'elles s'écrivent.

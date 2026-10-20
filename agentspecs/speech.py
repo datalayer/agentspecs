@@ -20,7 +20,10 @@ Three kinds of YAML, beside the other catalogues:
   model, voice and dataset weighed, with its licence and its source, and the
   two lists a licence is checked against: ``allowed`` (anywhere, the browser
   included) and ``server_only`` (GPL code that runs on Datalayer's servers
-  and is never sent to a browser).
+  and is never sent to a browser), and ``accepted_on_the_machine``: the
+  server-only libraries, by name and licence, that agent-runtimes' ``voice``
+  extra has pip install on the person's own machine, accepted there by the
+  owner; any other one there is refused.
 
 A voice or a model whose licence is on neither list does not load: the
 catalogue refuses it with a sentence (VO-04). Only the dependencies of the
@@ -223,25 +226,46 @@ class RegisterEntry(_Strict):
     version: str = ""
     licence: str
     #: `machine` is the person's own machine, where an optional extra of agent-runtimes
-    #: installs it from PyPI (`agent-runtimes[voice]`, VO-16); GPL is admitted on the
-    #: server only, so a GPL library used there is not admitted (VO-01).
+    #: installs it from PyPI (`agent-runtimes[voice]`, VO-16); a server-only licence is
+    #: admitted there only for a library the register names in `accepted_on_the_machine`.
     where: Literal["browser", "server", "machine", "tests"]
     status: Literal["used", "candidate", "refused"]
     source: str
     note: str = ""
 
 
+class AcceptedOnTheMachine(_Strict):
+    """A server-only library pip installs on the person's machine, accepted there by name and licence."""
+
+    name: str
+    licence: str
+
+
 class Register(_Strict):
     """The licence register (VO-01)."""
 
-    reviewed_by_counsel: bool = False
+    #: Who reviewed it — the owner, or counsel — and on which day; both or neither.
+    reviewed_by: Optional[Literal["owner", "counsel"]] = None
+    reviewed_on: str = ""
     checked_on: str
     allowed: List[str] = Field(..., min_length=1)
     server_only: List[str] = Field(default_factory=list)
+    #: The server-only libraries accepted on the person's machine (`agent-runtimes[voice]`).
+    accepted_on_the_machine: List[AcceptedOnTheMachine] = Field(default_factory=list)
     entries: List[RegisterEntry]
 
     @model_validator(mode="after")
     def _used_is_admitted(self) -> Register:
+        if bool(self.reviewed_by) != bool(self.reviewed_on):
+            raise ValueError("the register names who reviewed it and when, both or neither")
+        accepted = {(item.name, item.licence) for item in self.accepted_on_the_machine}
+        for name, licence in accepted:
+            if licence not in self.server_only:
+                raise ValueError(
+                    f"the register accepts {name} ({licence}) on the person's machine, "
+                    "but that licence is not server-only"
+                )
+        on_the_machine = set()
         for entry in self.entries:
             if entry.status != "used":
                 continue
@@ -249,9 +273,21 @@ class Register(_Strict):
                 continue
             if entry.licence in self.server_only and entry.where == "server":
                 continue
+            if (
+                entry.licence in self.server_only
+                and entry.where == "machine"
+                and (entry.name, entry.licence) in accepted
+            ):
+                on_the_machine.add((entry.name, entry.licence))
+                continue
             raise ValueError(
                 f"the register uses {entry.name} ({entry.licence}) in the {entry.where}, "
                 "which its lists do not allow"
+            )
+        for name, licence in sorted(accepted - on_the_machine):
+            raise ValueError(
+                f"the register accepts {name} ({licence}) on the person's machine "
+                "without a used entry there"
             )
         return self
 
@@ -400,6 +436,7 @@ __all__ = [
     "REGISTER_PATH",
     "SPEECH_MODELS_DIR",
     "VOICES_DIR",
+    "AcceptedOnTheMachine",
     "Licence",
     "PinnedFile",
     "Register",
