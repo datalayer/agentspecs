@@ -48,6 +48,26 @@ capabilities:
   images: true
   compaction: own
   modes: [default, plan, acceptEdits, bypassPermissions]
+  # What it runs without asking its client: Claude Code's read-only command
+  # allowlist, read on 21 October 2026 from the Claude Code 2.1.300 binary
+  # (the Claude Agent SDK 0.3.300 that claude-agent-acp@0.91.0 pins; the
+  # list was taken from the 2.1.302 build at hand, the nearest). A simple
+  # command of a listed family whose flags it checks is allowed, and a
+  # pipeline whose every segment is; a redirection to a file, a subshell,
+  # `$(…)`, an unquoted variable, `&`, a `find -delete/-exec`, `sed` with a
+  # writing script or `xargs` over anything but grep/head/tail put the
+  # command back on the asking path, where the Shield decides it. One
+  # pattern per family, anchored at the start of a pipeline segment; the
+  # platform's rule on commands excludes these knowingly.
+  auto_run:
+    - '^(cal|uptime|cat|head|tail|wc|stat|strings|hexdump|od|nl|id|uname|free|df|du|locale|groups|nproc|basename|dirname|realpath|cut|paste|tr|column|tac|rev|fold|expand|unexpand|fmt|comm|cmp|numfmt|readlink|diff|true|false|sleep|which|type|expr|seq|tsort|pr)(\s|$)'
+    - '^(pwd|whoami|alias|history|arch|ifconfig|ip addr)(\s|$)'
+    - '^(claude (-h|--help)|node (-v|--version)|python3? --version)$'
+    - '^(echo|uniq|jq|cd|ls|find)(\s|$)'
+    - '^(xargs|file|sed|sort|man|help|netstat|ps|base64|grep|egrep|fgrep|rg|sha256sum|sha1sum|md5sum|tree|date|hostname|lsof|pgrep|tput|ss|fd|fdfind|test)(\s|$)'
+    - '^git (diff|log|show|shortlog|reflog|stash (list|show)|ls-remote|status|blame|ls-files|config --get|remote( show)?|merge-base|rev-parse|rev-list|describe|cat-file|for-each-ref|grep|worktree list|tag|branch)(\s|$)'
+    - '^gh (pr (view|list|diff|checks|status)|issue (view|list|status)|repo view|run (list|view)|auth status|release (list|view)|workflow (list|view)|label list|search (repos|issues|prs|commits|code))(\s|$)'
+    - '^docker (ps|images|logs|inspect)(\s|$)'
 
 instructions_file: CLAUDE.md
 

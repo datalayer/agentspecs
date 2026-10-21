@@ -87,6 +87,14 @@
       "additionalProperties": false,
       "description": "What a session may rely on of the harness: declared here, verified by the drill, read by the session's operations instead of `if harness == \u2026`.",
       "properties": {
+        "auto_run": {
+          "description": "The commands the harness runs without asking its client, as it ships them: one regular expression per family, anchored at the start of a pipeline segment; empty when it asks about every command. Read from the harness's own source for the version the register pins, never guessed, so the platform's rule on commands knowingly excludes them and a run of one is never an action against the rules",
+          "items": {
+            "type": "string"
+          },
+          "title": "Auto Run",
+          "type": "array"
+        },
         "compaction": {
           "$ref": "#/$defs/Compaction",
           "description": "own or none: who compacts the context"

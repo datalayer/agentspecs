@@ -35,6 +35,11 @@ none, load or native), what a clone carries of its history
 (``fork_history``: none, replay or rebuild), whether a turn can be
 interrupted, whether it takes input mid-turn, whether a prompt may carry an
 image, who compacts the context, and the modes a swap or a clone may set.
+``auto_run`` lists the commands the harness runs without asking its client
+(Claude Code's read-only allowlist: ``cat``, ``wc``, ``git status``…), one
+regular expression per family read from the harness's own source for the
+pinned version: the platform's *ask me first* on a command knowingly
+excludes them, and a run of one is never an action against the rules.
 A harness without the table is refused; a table that contradicts the ``acp``
 block (``resume`` without ``load_session``, ``modes`` that disagree) is
 refused in a sentence. ``acp.native_session`` says whether the adapter
@@ -223,6 +228,27 @@ class HarnessCapabilities(_Strict):
     images: bool = Field(description="Whether a prompt may carry an image (`promptCapabilities.image`)")
     compaction: Compaction = Field(description="own or none: who compacts the context")
     modes: List[str] = Field(default_factory=list, description="The session modes a swap or a clone may set, as `acp.modes` names them")
+    auto_run: List[str] = Field(
+        default_factory=list,
+        description=(
+            "The commands the harness runs without asking its client, as it ships them: one regular expression per "
+            "family, anchored at the start of a pipeline segment; empty when it asks about every command. Read from the "
+            "harness's own source for the version the register pins, never guessed, so the platform's rule on commands "
+            "knowingly excludes them and a run of one is never an action against the rules"
+        ),
+    )
+
+    @field_validator("auto_run")
+    @classmethod
+    def _patterns_compile(cls, value: List[str]) -> List[str]:
+        for pattern in value:
+            try:
+                re.compile(pattern)
+            except re.error as error:
+                raise ValueError(f"capabilities.auto_run: {pattern!r} is not a regular expression: {error}") from None
+            if not pattern.startswith("^"):
+                raise ValueError(f"capabilities.auto_run: {pattern!r} is anchored at the segment's start with ^")
+        return value
 
 
 class HarnessAcp(_Strict):
@@ -728,6 +754,11 @@ def reference_text() -> str:
             f"interrupt {'yes' if caps.interrupt else 'no'}, steering {'yes' if caps.steering else 'no'}, "
             f"images {'yes' if caps.images else 'no'}, compaction `{caps.compaction.value}`"
             + (f"; vendor session id `{spec.acp.native_session.value}`" if spec.acp else "")
+            + (
+                f"; runs unasked {len(caps.auto_run)} command families (its own read-only allowlist)"
+                if caps.auto_run
+                else "; asks about every command"
+            )
         )
         if spec.terms.tier_restrictions:
             lines.append(f"- Tiers: {_cell(spec.terms.tier_restrictions)}")

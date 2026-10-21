@@ -285,3 +285,32 @@ def test_a_table_that_contradicts_the_acp_block_is_refused():
         harnesses.HarnessSpec.model_validate({**good, "capabilities": {**good["capabilities"], "modes": ["plan"]}})
     with pytest.raises(ValidationError, match="native_session"):
         harnesses.HarnessSpec.model_validate({**good, "acp": {**good["acp"], "native_session": "hook"}})
+
+
+def test_claude_code_says_what_it_runs_unasked_and_the_others_ask_about_every_command():
+    """`capabilities.auto_run` is the harness's own read-only allowlist as data: one
+    regular expression per family, anchored, read from Claude Code 2.1.300 (the SDK
+    claude-agent-acp@0.91.0 pins); every other catalogue harness lists nothing."""
+    import re
+
+    tables = {spec.id: spec.capabilities for spec in harnesses.HARNESS_CATALOGUE.values()}
+    patterns = [re.compile(p) for p in tables["claude-code"].auto_run]
+    assert len(patterns) == 8
+    for command in ("cat hello.txt", "wc -c hello.txt", "git status", "git diff --stat", "ls -la", "echo hi", "gh pr view 3", "docker ps"):
+        assert any(p.search(command) for p in patterns), command
+    for command in ("rm hello.txt", "git push origin main", "pytest -q", "catalog x", "python app.py", "npm install"):
+        assert not any(p.search(command) for p in patterns), command
+    assert all(not table.auto_run for name, table in tables.items() if name != "claude-code")
+
+
+@pytest.mark.parametrize(
+    "change,why",
+    [
+        ({"auto_run": ["cat("]}, "not a regular expression"),
+        ({"auto_run": ["cat"]}, "anchored"),
+    ],
+)
+def test_an_allowlist_pattern_that_cannot_be_read_is_refused(change, why):
+    good = yaml.safe_load((ROOT / "harnesses" / "claude-code.yaml").read_text())
+    with pytest.raises(ValidationError, match=why):
+        harnesses.HarnessSpec.model_validate({**good, "capabilities": {**good["capabilities"], **change}})
