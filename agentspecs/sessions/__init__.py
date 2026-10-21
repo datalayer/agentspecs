@@ -165,11 +165,16 @@ class ForkedFrom(_Strict):
 
 
 class ImportedFrom(_Strict):
-    """An import's source: the file's digest, when and by whom it was exported."""
+    """An import's source: the file's digest, when and by whom it was exported.
+
+    ``exported_by`` is the exporter's uid, a string — the shape the record's
+    ``imported`` entry and the services' listing say it in (one shape, no
+    second one for older readers).
+    """
 
     digest: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
     exported_at: str = Field(min_length=1)
-    exported_by: Owner
+    exported_by: str = Field(min_length=1, description="The exporter's uid")
 
 
 class Lineage(_Strict):

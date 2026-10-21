@@ -101,7 +101,7 @@ def test_a_line_that_is_none_of_the_three_is_refused():
     with pytest.raises(sessions.SessionFileError, match="Line 2 is refused: uid"):
         sessions.parse_line({**SESSION, "uid": "x"}, line=2)
     with pytest.raises(sessions.SessionFileError, match="Line 1 is refused: lineage.imported_from.digest"):
-        sessions.parse_line({**SESSION, "lineage": {"forked_from": None, "imported_from": {"digest": "md5:1", "exported_at": "x", "exported_by": {"uid": "a"}}}})
+        sessions.parse_line({**SESSION, "lineage": {"forked_from": None, "imported_from": {"digest": "md5:1", "exported_at": "x", "exported_by": "a"}}})
 
 
 def test_the_caps():
