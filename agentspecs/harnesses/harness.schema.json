@@ -1,5 +1,24 @@
 {
   "$defs": {
+    "Compaction": {
+      "description": "Who compacts the context window.",
+      "enum": [
+        "own",
+        "none"
+      ],
+      "title": "Compaction",
+      "type": "string"
+    },
+    "ForkHistory": {
+      "description": "What a clone of a session carries of the harness's own history.",
+      "enum": [
+        "none",
+        "replay",
+        "rebuild"
+      ],
+      "title": "ForkHistory",
+      "type": "string"
+    },
     "HarnessAcp": {
       "additionalProperties": false,
       "description": "How the harness is launched and driven over ACP.",
@@ -44,6 +63,11 @@
           "title": "Modes",
           "type": "array"
         },
+        "native_session": {
+          "$ref": "#/$defs/NativeSession",
+          "default": "none",
+          "description": "meta when the adapter exposes the vendor's own session id, none when it does not: found by the drill, never guessed"
+        },
         "protocol_version": {
           "default": 1,
           "description": "The ACP protocol version it speaks",
@@ -57,6 +81,57 @@
         "mcp"
       ],
       "title": "HarnessAcp",
+      "type": "object"
+    },
+    "HarnessCapabilities": {
+      "additionalProperties": false,
+      "description": "What a session may rely on of the harness: declared here, verified by the drill, read by the session's operations instead of `if harness == \u2026`.",
+      "properties": {
+        "compaction": {
+          "$ref": "#/$defs/Compaction",
+          "description": "own or none: who compacts the context"
+        },
+        "fork_history": {
+          "$ref": "#/$defs/ForkHistory",
+          "description": "none, replay or rebuild: what a clone carries of its history"
+        },
+        "images": {
+          "description": "Whether a prompt may carry an image (`promptCapabilities.image`)",
+          "title": "Images",
+          "type": "boolean"
+        },
+        "interrupt": {
+          "description": "Whether a running turn can be cancelled (`session/cancel`)",
+          "title": "Interrupt",
+          "type": "boolean"
+        },
+        "modes": {
+          "description": "The session modes a swap or a clone may set, as `acp.modes` names them",
+          "items": {
+            "type": "string"
+          },
+          "title": "Modes",
+          "type": "array"
+        },
+        "resume": {
+          "$ref": "#/$defs/ResumeCapability",
+          "description": "none, load or native: how its own session comes back"
+        },
+        "steering": {
+          "description": "Whether it takes input mid-turn; ACP has none, so false for every catalogue harness",
+          "title": "Steering",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "resume",
+        "fork_history",
+        "interrupt",
+        "steering",
+        "images",
+        "compaction"
+      ],
+      "title": "HarnessCapabilities",
       "type": "object"
     },
     "HarnessHonours": {
@@ -171,6 +246,25 @@
       "title": "McpLending",
       "type": "string"
     },
+    "NativeSession": {
+      "description": "Whether the adapter exposes the vendor's own session id.",
+      "enum": [
+        "meta",
+        "none"
+      ],
+      "title": "NativeSession",
+      "type": "string"
+    },
+    "ResumeCapability": {
+      "description": "How a harness's own session comes back after its process ended.",
+      "enum": [
+        "none",
+        "load",
+        "native"
+      ],
+      "title": "ResumeCapability",
+      "type": "string"
+    },
     "SkillsFormat": {
       "description": "The format a harness reads skills in.",
       "enum": [
@@ -209,6 +303,10 @@
       ],
       "default": null,
       "description": "How it is launched; absent only on `custom`"
+    },
+    "capabilities": {
+      "$ref": "#/$defs/HarnessCapabilities",
+      "description": "What a session may rely on of it: resume, fork_history, interrupt, steering, images, compaction, modes"
     },
     "description": {
       "description": "What it is, in a sentence or two",
@@ -277,7 +375,8 @@
     "description",
     "terms",
     "skills",
-    "honours"
+    "honours",
+    "capabilities"
   ],
   "title": "Harness",
   "type": "object"

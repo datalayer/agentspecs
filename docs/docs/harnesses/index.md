@@ -76,6 +76,7 @@ Anthropic's coding agent, driven over ACP through the Agent Client Protocol proj
 - Needs: Node 22 (engines.node >=22 on npm), git
 - ACP 1: `session/load` yes; modes `default`, `plan`, `acceptEdits`, `bypassPermissions`
 - Honours `model:` yes, `subagents:` no
+- Capabilities: resume `load`, fork history `replay`, interrupt yes, steering no, images yes, compaction `own`; vendor session id `none`
 - Licence read at https://www.npmjs.com/package/@agentclientprotocol/claude-agent-acp; terms read at https://code.claude.com/docs/en/legal-and-compliance
 - Anthropic's legal page (read 2026-10-15): running Claude Code in hosted sandboxes or agent infrastructure requires the Commercial Terms; each end user authenticates with their own API key or subscription; developers may not route requests through Free, Pro or Max plan credentials on behalf of their users, nor collect or intermediate Claude.ai credentials. So only API keys are taken; a subscription login is refused. The npm package moved from @zed-industries (0.23.1, March 2026) to @agentclientprotocol.
 
@@ -87,6 +88,7 @@ OpenAI's coding agent, driven over ACP through the Agent Client Protocol project
 - Needs: Node 22 (as the Agent Client Protocol project's adapters; unstated on npm), git
 - ACP 1: `session/load` yes; modes `read-only`, `workspace-write`, `agent`, `agent-full-access`
 - Honours `model:` yes, `subagents:` no
+- Capabilities: resume `load`, fork history `replay`, interrupt yes, steering no, images yes, compaction `own`; vendor session id `none`
 - Licence read at https://www.npmjs.com/package/@agentclientprotocol/codex-acp; terms read at https://learn.chatgpt.com/docs/auth
 - Codex's authentication page (read 2026-10-15) recommends API keys for automation and device-code login for headless machines; a ChatGPT login needs a browser and is hidden with NO_BROWSER=1 in the adapter. Only API keys are taken; a ChatGPT login is refused. The Zed-scoped package was archived on 22 July 2026 and names this one.
 
@@ -97,6 +99,7 @@ An organization's own ACP agent, its command named by the organization's own har
 - Credential: The organization's own; secrets declared: none
 - Needs: nothing
 - Honours `model:` no, `subagents:` no
+- Capabilities: resume `none`, fork history `none`, interrupt yes, steering no, images no, compaction `own`
 - Licence read at https://agentspecs.datalayer.tech/harnesses; terms read at https://agentspecs.datalayer.tech/harnesses
 - Not launchable from the shared catalogue; an organization's own harness spec names the command and answers for its terms.
 
@@ -108,6 +111,7 @@ llmindset's agent framework served over ACP; each agent it defines is a session 
 - Needs: uv (uvx), Python 3.12 to 3.15 (requires_python on PyPI)
 - ACP 1: `session/load` yes; modes none advertised
 - Honours `model:` yes, `subagents:` no
+- Capabilities: resume `load`, fork history `replay`, interrupt yes, steering no, images no, compaction `own`; vendor session id `none`
 - Licence read at https://pypi.org/project/fast-agent-acp/; terms read at https://github.com/evalstate/fast-agent/blob/main/LICENSE
 - A framework, not a coding agent: each agent it defines is an ACP mode; the client's MCP servers are attached; sessions are listed. Launched with uvx fast-agent-acp (docs/docs/acp/index.md); reads skills from .fast-agent/skills, .agents/skills and .claude/skills; its default prompt reads AGENTS.md.
 
@@ -119,6 +123,7 @@ Google's coding agent, which speaks ACP itself when started with --experimental-
 - Needs: Node 20 or later (engines.node >=20 on npm), git
 - ACP 1: `session/load` no; modes `default`, `auto_edit`, `yolo`, `plan`
 - Honours `model:` yes, `subagents:` no
+- Capabilities: resume `none`, fork history `replay`, interrupt yes, steering no, images yes, compaction `own`; vendor session id `none`
 - Tiers: Gemini Code Assist Standard or Enterprise for a Google login (the individuals tier stopped being served on 18 June 2026); a Gemini API key otherwise
 - Licence read at https://www.npmjs.com/package/@google/gemini-cli; terms read at https://developers.google.com/gemini-code-assist/resources/privacy-notice-gemini-code-assist-individuals
 - Google's notice (read 2026-10-15): "Starting June 18, 2026, Gemini Code Assist IDE extensions stopped serving requests for the Gemini Code Assist for individuals"; Standard and Enterprise follow a separate schedule. The ACP flag is --experimental-acp in the CLI reference (docs/cli/cli-reference.md).
@@ -131,6 +136,7 @@ Block's open agent (now the Agentic AI Foundation's), which speaks ACP itself wi
 - Needs: The goose CLI (release v1.54.0 of 8 October 2026), git
 - ACP 1: `session/load` no; modes none advertised
 - Honours `model:` yes, `subagents:` no
+- Capabilities: resume `none`, fork history `replay`, interrupt yes, steering no, images no, compaction `own`; vendor session id `none`
 - Licence read at https://github.com/aaif-goose/goose; terms read at https://github.com/aaif-goose/goose/blob/main/LICENSE
 - Open source under Apache-2.0, no vendor terms of its own; the model provider's terms apply to the key. Launched as goose acp (documentation/docs/gdk/acp/index.md).
 
@@ -142,6 +148,7 @@ Anomaly's open coding agent, which speaks ACP itself with opencode acp; any mode
 - Needs: Node (the opencode-ai package), git
 - ACP 1: `session/load` no; modes none advertised
 - Honours `model:` yes, `subagents:` no
+- Capabilities: resume `none`, fork history `replay`, interrupt yes, steering no, images no, compaction `own`; vendor session id `none`
 - Licence read at https://www.npmjs.com/package/opencode-ai; terms read at https://github.com/anomalyco/opencode/blob/dev/LICENSE
 - Open source under MIT, no vendor terms of its own; the model provider's terms apply to the key. Launched as opencode acp (opencode.ai/docs/acp); reads skills from .opencode/skills, .claude/skills and .agents/skills.
 
@@ -153,5 +160,6 @@ The OpenHands CLI, which speaks ACP itself with openhands acp; any model provide
 - Needs: uv (uvx), Python 3.12 or later, git
 - ACP 1: `session/load` yes; modes `always-ask`, `always-approve`, `llm-approve`
 - Honours `model:` yes, `subagents:` no
+- Capabilities: resume `load`, fork history `replay`, interrupt yes, steering no, images no, compaction `own`; vendor session id `none`
 - Licence read at https://pypi.org/project/openhands/; terms read at https://github.com/OpenHands/OpenHands-CLI/blob/main/LICENSE
 - Open source under MIT, no vendor terms of its own; the model provider's terms apply to the key. Launched as openhands acp (OpenHands-CLI README; docs.openhands.dev's ACP page); resumes with --resume; reads skills from .agents/skills (.openhands/skills is legacy).

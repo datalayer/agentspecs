@@ -241,3 +241,47 @@ def test_the_tiers_hold_their_fields():
         {**base, "tier": "listed", "name": "X", "docs": "https://x", "command": None, "served_to_third_parties": "unknown"}
     )
     assert listed.is_listed and listed.command is None
+
+
+# --- the capabilities table (MH-20) -----------------------------------------------------
+
+
+def test_every_catalogue_harness_declares_its_capabilities_table():
+    tables = {spec.id: spec.capabilities for spec in harnesses.HARNESS_CATALOGUE.values()}
+    assert {h: t.resume.value for h, t in tables.items()} == {
+        "claude-code": "load", "codex": "load", "fast-agent": "load", "openhands": "load",
+        "gemini-cli": "none", "goose": "none", "opencode": "none", "custom": "none",
+    }
+    assert {t.fork_history.value for h, t in tables.items() if h != "custom"} == {"replay"}
+    assert all(t.interrupt and not t.steering and t.compaction.value == "own" for t in tables.values())
+    for spec in harnesses.HARNESS_CATALOGUE.values():
+        if spec.acp is not None:
+            assert spec.capabilities.modes == spec.acp.modes
+            assert spec.acp.native_session is harnesses.NativeSession.NONE
+
+
+@pytest.mark.parametrize(
+    "change,why",
+    [
+        ({"capabilities": None}, "capabilities"),
+        ({"capabilities": {"resume": "load"}}, "fork_history"),
+        ({"capabilities": {"resume": "warm", "fork_history": "replay", "interrupt": True, "steering": False, "images": True, "compaction": "own", "modes": []}}, "resume"),
+    ],
+)
+def test_a_harness_without_the_table_is_refused(change, why):
+    good = yaml.safe_load((ROOT / "harnesses" / "claude-code.yaml").read_text())
+    spec = {k: v for k, v in good.items() if k != "capabilities"} if change.get("capabilities") is None else {**good, **change}
+    with pytest.raises(ValidationError, match=why):
+        harnesses.HarnessSpec.model_validate(spec)
+
+
+def test_a_table_that_contradicts_the_acp_block_is_refused():
+    good = yaml.safe_load((ROOT / "harnesses" / "claude-code.yaml").read_text())
+    with pytest.raises(ValidationError, match="acp.load_session true but capabilities.resume none"):
+        harnesses.HarnessSpec.model_validate({**good, "capabilities": {**good["capabilities"], "resume": "none"}})
+    with pytest.raises(ValidationError, match="but acp.load_session false"):
+        harnesses.HarnessSpec.model_validate({**good, "acp": {**good["acp"], "load_session": False}})
+    with pytest.raises(ValidationError, match="capabilities.modes .* and acp.modes .* disagree"):
+        harnesses.HarnessSpec.model_validate({**good, "capabilities": {**good["capabilities"], "modes": ["plan"]}})
+    with pytest.raises(ValidationError, match="native_session"):
+        harnesses.HarnessSpec.model_validate({**good, "acp": {**good["acp"], "native_session": "hook"}})
