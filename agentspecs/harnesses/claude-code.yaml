@@ -40,6 +40,11 @@ honours:
 # What a session may rely on of it (MH-20): read by swap, clone and resume,
 # never guessed per harness in code. `images` is the claim `initialize`'s
 # promptCapabilities must confirm; `native_session` is the drill's to answer.
+# Drilled on r1, 21 October 2026 (claude-agent-acp 0.91.0, agent-runtimes
+# 1.5.70): `session/new`'s `_meta` carries no id; Claude Code's own session
+# uuid comes in each prompt's stop result (`session_id`); a swap back starts
+# a new Claude Code session (a new uuid), the earlier turns not replayed —
+# so `none` stands: nothing is loaded back.
 capabilities:
   resume: load
   fork_history: replay
