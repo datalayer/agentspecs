@@ -18,7 +18,7 @@ file's bytes; it is imported as a new session whose author is the importer.
 
 ## Entry kinds
 
-`session`, `run`, `tool_call`, `decision`, `check`, `approval`, `output`, `feedback`, `turn`, `notification`, `step`, `thread`, `asked`, `audio`, `diff`, `terminal`, `file`, `paused`, `ended`, `swapped`, `cloned`, `imported`, `exported`, `titled`
+`session`, `run`, `tool_call`, `decision`, `check`, `approval`, `output`, `feedback`, `turn`, `notification`, `step`, `thread`, `asked`, `audio`, `diff`, `terminal`, `file`, `rule`, `paused`, `ended`, `swapped`, `cloned`, `imported`, `exported`, `titled`
 
 ## Redaction rules
 

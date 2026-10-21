@@ -46,6 +46,7 @@ entry_kinds:
   - diff
   - terminal
   - file
+  - rule
   - paused
   - ended
   - swapped
