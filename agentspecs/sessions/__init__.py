@@ -207,7 +207,10 @@ class SessionLine(_Strict):
     title: str = Field(max_length=TITLE_LIMIT)
     archived: bool
     lineage: Lineage
-    kinds: List[str] = Field(description="The kinds the application's record keeps: what is in the file")
+    kinds: List[str] = Field(
+        description="The kinds the application's record keeps: what is in the file",
+        json_schema_extra={"items": {"enum": list(ENTRY_KINDS), "type": "string"}},
+    )
     entries: int = Field(ge=0, description="How many entry lines follow")
     exported_at: str = Field(min_length=1)
     exported_by: Owner
@@ -233,7 +236,7 @@ class EntryLine(_Strict):
     """One entry of the record, as the record holds it, redacted."""
 
     record_type: str = Field(pattern=r"^entry$")
-    kind: str
+    kind: str = Field(json_schema_extra={"enum": list(ENTRY_KINDS)})
     at: str = Field(min_length=1, description="When it was recorded, ISO 8601")
     summary: str = ""
     payload: Dict[str, Any] = Field(default_factory=dict)
