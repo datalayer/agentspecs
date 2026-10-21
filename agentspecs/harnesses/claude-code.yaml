@@ -19,6 +19,7 @@ acp:
   load_session: true
   mcp: lend
   modes: [default, plan, acceptEdits, bypassPermissions]
+  native_session: none
 
 requires:
   secrets: [ANTHROPIC_API_KEY]
@@ -35,6 +36,18 @@ skills:
 honours:
   model: true
   subagents: false
+
+# What a session may rely on of it (MH-20): read by swap, clone and resume,
+# never guessed per harness in code. `images` is the claim `initialize`'s
+# promptCapabilities must confirm; `native_session` is the drill's to answer.
+capabilities:
+  resume: load
+  fork_history: replay
+  interrupt: true
+  steering: false
+  images: true
+  compaction: own
+  modes: [default, plan, acceptEdits, bypassPermissions]
 
 instructions_file: CLAUDE.md
 

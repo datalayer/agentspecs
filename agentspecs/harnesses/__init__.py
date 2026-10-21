@@ -29,6 +29,18 @@ are unknown is not in the catalogue.
 ``custom`` is the one harness with no ``acp`` block: an organization's own
 spec names its command; in the shared catalogue it is refused to any agent.
 
+**The capabilities table** (MH-20, ``capabilities:``) says what a session
+may rely on of the harness — how its own session comes back (``resume``:
+none, load or native), what a clone carries of its history
+(``fork_history``: none, replay or rebuild), whether a turn can be
+interrupted, whether it takes input mid-turn, whether a prompt may carry an
+image, who compacts the context, and the modes a swap or a clone may set.
+A harness without the table is refused; a table that contradicts the ``acp``
+block (``resume`` without ``load_session``, ``modes`` that disagree) is
+refused in a sentence. ``acp.native_session`` says whether the adapter
+exposes the vendor's own session id (``meta``) or not (``none``); the
+session's operations read the table, never ``if harness == …``.
+
 **Two tiers** (SH-57). An entry of the register is in the ``catalogue`` tier
 (the default) when a spec beside it launches the harness, drilled by SH-55's
 method; it is ``listed`` when the agent is known to speak ACP — its launch
@@ -155,6 +167,64 @@ class SkillsFormat(str, Enum):
     """It reads no skills."""
 
 
+class ResumeCapability(str, Enum):
+    """How a harness's own session comes back after its process ended."""
+
+    NONE = "none"
+    """It cannot: a swap back to it, or a runtime restarted, starts it over (said in a sentence)."""
+
+    LOAD = "load"
+    """ACP's `session/load`: the adapter replays the session's history, compared with the record."""
+
+    NATIVE = "native"
+    """The vendor's own resume (`claude --resume`, `codex resume`) through the adapter, by the vendor's id."""
+
+
+class ForkHistory(str, Enum):
+    """What a clone of a session carries of the harness's own history."""
+
+    NONE = "none"
+    """Nothing: a clone starts the harness over, and is told so."""
+
+    REPLAY = "replay"
+    """The conversation up to the turn replayed as text — the harness reads it as history, not as its own turns."""
+
+    REBUILD = "rebuild"
+    """The vendor's resumable session file rebuilt from the copied entries, so the clone resumes the harness's own history."""
+
+
+class Compaction(str, Enum):
+    """Who compacts the context window."""
+
+    OWN = "own"
+    """The harness compacts its own context; the record is never compacted."""
+
+    NONE = "none"
+    """Nothing compacts: the context grows until the harness refuses."""
+
+
+class NativeSession(str, Enum):
+    """Whether the adapter exposes the vendor's own session id."""
+
+    META = "meta"
+    """In `session/new`'s `_meta`, or the first `session/update`'s: kept beside the ACP session id."""
+
+    NONE = "none"
+    """It does not: the ACP session id is all there is, and `session/load` the only way back."""
+
+
+class HarnessCapabilities(_Strict):
+    """What a session may rely on of the harness: declared here, verified by the drill, read by the session's operations instead of `if harness == …`."""
+
+    resume: ResumeCapability = Field(description="none, load or native: how its own session comes back")
+    fork_history: ForkHistory = Field(description="none, replay or rebuild: what a clone carries of its history")
+    interrupt: bool = Field(description="Whether a running turn can be cancelled (`session/cancel`)")
+    steering: bool = Field(description="Whether it takes input mid-turn; ACP has none, so false for every catalogue harness")
+    images: bool = Field(description="Whether a prompt may carry an image (`promptCapabilities.image`)")
+    compaction: Compaction = Field(description="own or none: who compacts the context")
+    modes: List[str] = Field(default_factory=list, description="The session modes a swap or a clone may set, as `acp.modes` names them")
+
+
 class HarnessAcp(_Strict):
     """How the harness is launched and driven over ACP."""
 
@@ -169,6 +239,10 @@ class HarnessAcp(_Strict):
     env: Dict[str, str] = Field(
         default_factory=dict,
         description="Plain variables the launch needs, never a secret: a secret is declared under `requires.secrets`",
+    )
+    native_session: NativeSession = Field(
+        default=NativeSession.NONE,
+        description="meta when the adapter exposes the vendor's own session id, none when it does not: found by the drill, never guessed",
     )
 
 
@@ -237,6 +311,7 @@ class HarnessSpec(_Strict):
     terms: HarnessTerms
     skills: HarnessSkills
     honours: HarnessHonours
+    capabilities: HarnessCapabilities = Field(description="What a session may rely on of it: resume, fork_history, interrupt, steering, images, compaction, modes")
     instructions_file: str = Field(default="", description="The file of the workspace it reads its instructions from")
 
     @field_validator("id")
@@ -264,6 +339,29 @@ class HarnessSpec(_Strict):
                 raise ValueError("`custom` is served under the organization's own terms")
         elif self.acp is None:
             raise ValueError(f"the harness {self.id!r} says how it is launched: an `acp` block with its command")
+        return self
+
+    @model_validator(mode="after")
+    def _capabilities_agree_with_acp(self) -> "HarnessSpec":
+        """The table says nothing the `acp` block contradicts: one truth, said twice, must agree."""
+        if self.acp is None:
+            return self
+        loads = self.capabilities.resume is not ResumeCapability.NONE
+        if loads and not self.acp.load_session:
+            raise ValueError(
+                f"the harness {self.id!r} says capabilities.resume {self.capabilities.resume.value!r} "
+                "but acp.load_session false: a session that comes back is one the adapter loads"
+            )
+        if self.acp.load_session and not loads:
+            raise ValueError(
+                f"the harness {self.id!r} says acp.load_session true but capabilities.resume none: "
+                "say load (or native) or drop load_session"
+            )
+        if list(self.capabilities.modes) != list(self.acp.modes):
+            raise ValueError(
+                f"the harness {self.id!r}: capabilities.modes {self.capabilities.modes!r} and "
+                f"acp.modes {self.acp.modes!r} disagree; they name the same modes"
+            )
         return self
 
 
@@ -624,6 +722,13 @@ def reference_text() -> str:
                 f"modes {', '.join(f'`{m}`' for m in spec.acp.modes) or 'none advertised'}"
             )
         lines.append(f"- Honours `model:` {'yes' if spec.honours.model else 'no'}, `subagents:` {'yes' if spec.honours.subagents else 'no'}")
+        caps = spec.capabilities
+        lines.append(
+            f"- Capabilities: resume `{caps.resume.value}`, fork history `{caps.fork_history.value}`, "
+            f"interrupt {'yes' if caps.interrupt else 'no'}, steering {'yes' if caps.steering else 'no'}, "
+            f"images {'yes' if caps.images else 'no'}, compaction `{caps.compaction.value}`"
+            + (f"; vendor session id `{spec.acp.native_session.value}`" if spec.acp else "")
+        )
         if spec.terms.tier_restrictions:
             lines.append(f"- Tiers: {_cell(spec.terms.tier_restrictions)}")
         lines.append(f"- Licence read at {entry.licence_source}; terms read at {entry.terms_source}")

@@ -22,4 +22,15 @@ honours:
   model: false
   subagents: false
 
+# As declared by the organization's own spec; the shared catalogue's `custom`
+# claims the least (MH-20).
+capabilities:
+  resume: none
+  fork_history: none
+  interrupt: true
+  steering: false
+  images: false
+  compaction: own
+  modes: []
+
 tags: [harness]

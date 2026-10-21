@@ -18,6 +18,7 @@ acp:
   load_session: true
   mcp: lend
   modes: [read-only, workspace-write, agent, agent-full-access]
+  native_session: none
   env:
     NO_BROWSER: "1"
 
@@ -36,6 +37,18 @@ skills:
 honours:
   model: true
   subagents: false
+
+# What a session may rely on of it (MH-20): read by swap, clone and resume,
+# never guessed per harness in code. `images` is the claim `initialize`'s
+# promptCapabilities must confirm; `native_session` is the drill's to answer.
+capabilities:
+  resume: load
+  fork_history: replay
+  interrupt: true
+  steering: false
+  images: true
+  compaction: own
+  modes: [read-only, workspace-write, agent, agent-full-access]
 
 instructions_file: AGENTS.md
 

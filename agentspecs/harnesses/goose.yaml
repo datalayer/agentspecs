@@ -18,6 +18,7 @@ acp:
   load_session: false
   mcp: lend
   modes: []
+  native_session: none
   env:
     GOOSE_PROVIDER: anthropic
 
@@ -36,6 +37,18 @@ skills:
 honours:
   model: true
   subagents: false
+
+# What a session may rely on of it (MH-20): read by swap, clone and resume,
+# never guessed per harness in code. `images` is the claim `initialize`'s
+# promptCapabilities must confirm; `native_session` is the drill's to answer.
+capabilities:
+  resume: none
+  fork_history: replay
+  interrupt: true
+  steering: false
+  images: false
+  compaction: own
+  modes: []
 
 instructions_file: .goosehints
 

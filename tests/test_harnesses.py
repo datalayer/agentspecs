@@ -147,6 +147,15 @@ ORG_SPEC = {
     "terms": {"served_to_third_parties": "organizations_own", "licence": "Proprietary (Acme)"},
     "skills": {"format": "none"},
     "honours": {"model": False, "subagents": False},
+    "capabilities": {
+        "resume": "none",
+        "fork_history": "replay",
+        "interrupt": True,
+        "steering": False,
+        "images": False,
+        "compaction": "own",
+        "modes": [],
+    },
 }
 ORG_ENTRY = {
     "adapter": "acme-coder",
