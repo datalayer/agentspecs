@@ -1,0 +1,55 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Codex over ACP, through the Agent Client Protocol project's adapter (the
+# former @zed-industries/codex-acp, archived on 22 July 2026; it ships a
+# compatible @openai/codex with it).
+
+id: codex
+version: 0.0.1
+name: Codex
+description: OpenAI's coding agent, driven over ACP through the Agent Client Protocol project's adapter, which ships the Codex binary it drives.
+docs: https://github.com/agentclientprotocol/codex-acp
+
+acp:
+  command: npx
+  args: ["-y", "@agentclientprotocol/codex-acp@2.2.2"]
+  protocol_version: 1
+  load_session: true
+  mcp: lend
+  modes: [read-only, workspace-write, agent, agent-full-access]
+  native_session: none
+  env:
+    NO_BROWSER: "1"
+
+requires:
+  secrets: [OPENAI_API_KEY]
+  binaries: [node, git]
+
+terms:
+  served_to_third_parties: api_key_only
+  licence: Apache-2.0 (adapter); OpenAI Terms of Use (the agent)
+
+skills:
+  format: skill-md
+  dir: .agents/skills
+
+honours:
+  model: true
+  subagents: false
+
+# What a session may rely on of it (MH-20): read by swap, clone and resume,
+# never guessed per harness in code. `images` is the claim `initialize`'s
+# promptCapabilities must confirm; `native_session` is the drill's to answer.
+capabilities:
+  resume: load
+  fork_history: replay
+  interrupt: true
+  steering: false
+  images: true
+  compaction: own
+  modes: [read-only, workspace-write, agent, agent-full-access]
+
+instructions_file: AGENTS.md
+
+tags: [harness]

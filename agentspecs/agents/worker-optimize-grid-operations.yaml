@@ -23,7 +23,7 @@ tags:
   - sustainability
   - automation
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.analyse
@@ -64,9 +64,11 @@ goal: >-
   failures 2–4 weeks in advance, and optimise grid load balancing across
   renewable and conventional sources to reduce unplanned downtime by 50%.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Evals
 evals:

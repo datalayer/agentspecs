@@ -22,7 +22,7 @@ tags:
   - analytics
   - email
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.transform
@@ -67,9 +67,11 @@ goal: >-
   ROAS, and CTR definitions. Detect performance anomalies in real time and
   generate budget reallocation recommendations to maximise ROAS.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Evals
 evals:

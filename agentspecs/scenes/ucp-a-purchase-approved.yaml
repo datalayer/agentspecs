@@ -1,0 +1,110 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Scene: A Purchase, Approved (EX-14), scripted. It plays a
+# purchase at a test shop over UCP: the application fills a checkout, shows
+# the exact purchase, the person approves it, it is bought once and the
+# record shows it — as written from agent-runtimes' UCP test merchant, Example
+# Store (its product, price and tax word for word), with nothing live
+# behind it. Test merchants only, with no real payment (decided 2026-10-13).
+# The audience takes the person's part where the person decides.
+
+schema: loop.scene/v1
+id: ucp-a-purchase-approved
+version: 0.0.1
+kind: scripted
+name: A Purchase, Approved
+description: Ada’s Shopping Desk fills a basket at a test shop, and buys only once she approves the exact purchase.
+tags:
+- stage
+- ucp
+- commerce
+emoji: 🛍️
+actors:
+- id: ada
+  name: Ada
+  face: 🧑
+  is: the person
+- id: agent
+  name: Shopping Desk
+  face: 🤖
+  is: an application on Datalayer, shopping for Ada
+- id: store
+  name: Example Store
+  face: 🍵
+  is: a test shop, at store.examples.datalayer.run
+lines:
+- from: ada
+  to: agent
+  says: “Buy me a stoneware mug.”
+- from: agent
+  to: store
+  says: Searches the shop for a mug.
+  how: The application reads the page every shop publishes for agents, then its catalogue; reading changes
+    nothing, so its rule lets it do it.
+- from: store
+  to: agent
+  says: '“Stoneware mug: USD 24.00.”'
+- from: agent
+  to: store
+  says: Fills a checkout with one stoneware mug, for Ada.
+  how: A checkout the shop can cancel; nothing is bought yet.
+- from: store
+  to: agent
+  says: “Your checkout is ready to complete.”
+- from: agent
+  to: ada
+  says: 'Every purchase is asked first, whatever its rule says: it waits for Ada.'
+  card:
+    kind: approval
+    title: Shopping Desk asks you to approve a purchase
+    rows:
+    - - Shop
+      - Example Store
+    - - What
+      - Stoneware mug × 1
+    - - Tax
+      - USD 1.92
+    - - Total
+      - USD 25.92
+    - - The most one purchase may cost
+      - USD 50.00
+    lines:
+    - Buy 1 Stoneware mug at Example Store for USD 25.92.
+  how: The purchase is the shop’s own checkout, read again before it is shown; approving this one never
+    approves a changed basket.
+  turn:
+    'yes': Approve
+    'no': Decline
+    declined: 'Ada declined: the checkout is cancelled, and nothing is bought.'
+- from: agent
+  to: store
+  says: Completes the checkout, exactly as Ada approved it, with a test payment.
+  how: 'Datalayer writes down that it buys before it does: asked again, it reads the order back instead
+    of paying twice. No card is ever in the conversation.'
+- from: store
+  to: agent
+  says: “Your order is placed.”
+- from: agent
+  to: ada
+  says: Tells Ada what the shop says it did.
+  card:
+    kind: done
+    title: Bought, once
+    lines:
+    - 1 Stoneware mug, USD 25.92, at Example Store.
+- from: agent
+  says: Keeps a record of the purchase, for Ada and for whoever built it.
+  card:
+    kind: record
+    title: Activity
+    rows:
+    - - Bought at
+      - Example Store, for Ada
+    - - Amount
+      - USD 25.92
+    - - Approved by
+      - Ada, once
+  how: The purchase shows in the application’s Activity with its amount.
+live: Buying at a test shop is built in the Studio and its services, always asked first, under a limit,
+  with no real payment; the test shops answering on Datalayer wait for them to be shipped.

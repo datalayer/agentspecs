@@ -1,0 +1,100 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Shop Concierge
+# The Personal Agent Protocol's conversation-control journey (PR-05, trace conversation-control)
+# as an application: it talks with the
+# shop's own agent for the person, hands the conversation to one of the shop's
+# people when the person asks, and ends it when they are done.
+
+schema: loop.app/v1
+id: shop-concierge
+version: 0.0.2
+name: Shop Concierge
+kind: chat
+description: >-
+  Talks with a shop's own agent for you, and hands you to one of the shop's
+  people when you ask.
+owner: Datalayer <info@datalayer.io>
+
+agent: cog-crawler:0.0.1
+instructions: >-
+  You talk with Manzanita Outfitters' own agent for the person, through its
+  tools, in one conversation. When they ask for a person at the shop, ask the
+  shop for one of its people and say who answers. Every message to the shop
+  goes out in their name: send it only once they agreed.
+
+# The protocols it speaks: its `pap` block is refused unless listed here.
+protocols: [pap]
+
+pap:
+  profile: draft-01
+  connections:
+    - id: manzanita
+      company: manzanita.examples.datalayer.run
+      access: write
+      as: user
+      scopes: ["orders:read"]
+      interfaces: [agent]
+      sign_in: [direct, device]
+
+rules:
+  - action: Read what the shop answered
+    applies_to: read
+    behaviour: do_it
+  # A message to the shop, or asking for one of its people, goes out in your name (R-02).
+  - action: Write to the shop for you
+    applies_to: send
+    behaviour: ask_first
+
+# Its interface: the Reactor plugins of agentspecs/ui it is drawn with, each
+# with the renderer it is exposed through outside Datalayer's page, when it is.
+ui:
+  - plugin: chat
+  - plugin: pap-sign-in
+
+interface:
+  layout: chat
+  accent: sun
+  welcome: >-
+    I talk with Manzanita Outfitters' own agent for you, and bring in one of
+    the shop's people when you want one.
+  starters:
+    - label: Ask the shop
+      message: Ask Manzanita whether the Ridge Jacket runs small.
+    - label: A person
+      message: I would rather talk to a person at the shop.
+    - label: Done
+      message: That is all, thank you.
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Ask Manzanita whether the Ridge Jacket runs small.
+      expect: It asks my approval, then asks the shop's agent and says what the shop answered, as the shop's words.
+    - ask: I would rather talk to a person at the shop.
+      expect: It asks the shop for one of its people, in the same conversation, and says who answers.
+    - ask: That is all, thank you.
+      expect: It ends the conversation with the shop.
+  verified:
+    live:
+      - "Drilled on r1 on 13 October 2026 against the hosted Manzanita (counterparts 0.0.6), as its Preview reaches the gateway's pap toolset: asked signed out, signed in by Device Sign-In with orders:read, the person's latest order answered; asked for one of the shop's people, the conversation went to Marta, of Manzanita's staff (responder human), who answered in it."
+    recorded:
+      - "The journey is the Personal Agent Protocol SDK's recorded journey conversation-control (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
+    unverified:
+      - "A model's turns in the Studio's Preview were not watched in that drill; Marta is a scripted member of the test shop's staff."
+
+record:
+  keep_for: 90_days
+  include: [conversations, actions, decisions, approvals]
+
+deployment:
+  hosted:
+    visibility: private
+
+enabled: true
+
+tags:
+  - example
+  - companies
+emoji: "🛎️"

@@ -1,0 +1,79 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Claude Code over ACP, through the Agent Client Protocol project's adapter
+# (the former @zed-industries/claude-agent-acp: its repository moved to
+# github.com/agentclientprotocol/claude-agent-acp, and the npm package with
+# it; the Zed-scoped package stopped at 0.23.1 in March 2026).
+
+id: claude-code
+version: 0.0.1
+name: Claude Code
+description: Anthropic's coding agent, driven over ACP through the Agent Client Protocol project's adapter on the Claude Agent SDK.
+docs: https://github.com/agentclientprotocol/claude-agent-acp
+
+acp:
+  command: npx
+  args: ["-y", "@agentclientprotocol/claude-agent-acp@0.91.0"]
+  protocol_version: 1
+  load_session: true
+  mcp: lend
+  modes: [default, plan, acceptEdits, bypassPermissions]
+  native_session: none
+
+requires:
+  secrets: [ANTHROPIC_API_KEY]
+  binaries: [node, git]
+
+terms:
+  served_to_third_parties: api_key_only
+  licence: Apache-2.0 (adapter); Anthropic Commercial Terms of Service (the agent)
+
+skills:
+  format: skill-md
+  dir: .claude/skills
+
+honours:
+  model: true
+  subagents: false
+
+# What a session may rely on of it (MH-20): read by swap, clone and resume,
+# never guessed per harness in code. `images` is the claim `initialize`'s
+# promptCapabilities must confirm; `native_session` is the drill's to answer.
+# Drilled on r1, 21 October 2026 (claude-agent-acp 0.91.0, agent-runtimes
+# 1.5.70): `session/new`'s `_meta` carries no id; Claude Code's own session
+# uuid comes in each prompt's stop result (`session_id`); a swap back starts
+# a new Claude Code session (a new uuid), the earlier turns not replayed —
+# so `none` stands: nothing is loaded back.
+capabilities:
+  resume: load
+  fork_history: replay
+  interrupt: true
+  steering: false
+  images: true
+  compaction: own
+  modes: [default, plan, acceptEdits, bypassPermissions]
+  # What it runs without asking its client: Claude Code's read-only command
+  # allowlist, read on 21 October 2026 from the Claude Code 2.1.300 binary
+  # (the Claude Agent SDK 0.3.300 that claude-agent-acp@0.91.0 pins; the
+  # list was taken from the 2.1.302 build at hand, the nearest). A simple
+  # command of a listed family whose flags it checks is allowed, and a
+  # pipeline whose every segment is; a redirection to a file, a subshell,
+  # `$(…)`, an unquoted variable, `&`, a `find -delete/-exec`, `sed` with a
+  # writing script or `xargs` over anything but grep/head/tail put the
+  # command back on the asking path, where the Shield decides it. One
+  # pattern per family, anchored at the start of a pipeline segment; the
+  # platform's rule on commands excludes these knowingly.
+  auto_run:
+    - '^(cal|uptime|cat|head|tail|wc|stat|strings|hexdump|od|nl|id|uname|free|df|du|locale|groups|nproc|basename|dirname|realpath|cut|paste|tr|column|tac|rev|fold|expand|unexpand|fmt|comm|cmp|numfmt|readlink|diff|true|false|sleep|which|type|expr|seq|tsort|pr)(\s|$)'
+    - '^(pwd|whoami|alias|history|arch|ifconfig|ip addr)(\s|$)'
+    - '^(claude (-h|--help)|node (-v|--version)|python3? --version)$'
+    - '^(echo|uniq|jq|cd|ls|find)(\s|$)'
+    - '^(xargs|file|sed|sort|man|help|netstat|ps|base64|grep|egrep|fgrep|rg|sha256sum|sha1sum|md5sum|tree|date|hostname|lsof|pgrep|tput|ss|fd|fdfind|test)(\s|$)'
+    - '^git (diff|log|show|shortlog|reflog|stash (list|show)|ls-remote|status|blame|ls-files|config --get|remote( show)?|merge-base|rev-parse|rev-list|describe|cat-file|for-each-ref|grep|worktree list|tag|branch)(\s|$)'
+    - '^gh (pr (view|list|diff|checks|status)|issue (view|list|status)|repo view|run (list|view)|auth status|release (list|view)|workflow (list|view)|label list|search (repos|issues|prs|commits|code))(\s|$)'
+    - '^docker (ps|images|logs|inspect)(\s|$)'
+
+instructions_file: CLAUDE.md
+
+tags: [harness]

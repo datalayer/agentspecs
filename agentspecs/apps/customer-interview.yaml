@@ -1,0 +1,137 @@
+# Built from app.py by `loop apps build`: the file is the source; edit it there.
+# What its code decides; without the file, its agent answers:
+# loop:code start: opening (app.py:161)
+# loop:code message: reply (app.py:174)
+# loop:code action save: save (app.py:190)
+# loop:code action finish: finish (app.py:200)
+schema: loop.app/v1
+id: customer-interview
+version: 0.0.3
+name: Customer Interview
+kind: chat
+description: Interviews a customer about what you want to learn, without leading questions,
+  and turns the conversation into insights that each cite what was said.
+owner: Datalayer <info@datalayer.io>
+agent: cog-customer-interviewer:0.0.1
+instructions: Ask one open question at a time, and never a leading one. Each insight
+  quotes the interviewee's own words; nothing is inferred beyond them.
+context:
+- customer-research:0.0.1
+ui:
+- plugin: chat
+interface:
+  layout: chat
+  accent: rose
+  avatar: cat
+  welcome: I interview your customer. I ask for their consent first, then one open
+    question at a time.
+  starters:
+  - label: Trial churn
+    message: Interview me about why I stopped after the trial.
+  - label: Onboarding
+    message: Interview me about my first week with the product.
+  settings:
+    type: object
+    properties:
+      language:
+        type: string
+        title: Language
+        enum:
+        - English
+        - French
+        default: English
+      length:
+        type: integer
+        title: Questions
+        minimum: 3
+        maximum: 15
+        default: 8
+  actions:
+  - name: save
+    description: Save an insight, with the words it cites.
+    payload:
+      description: An insight, in the interviewer's words, and the interviewee's own
+        that it cites.
+      properties:
+        insight:
+          description: What was learned
+          minLength: 1
+          title: Insight
+          type: string
+        quote:
+          description: The interviewee's words it cites
+          minLength: 1
+          title: Quote
+          type: string
+      required:
+      - insight
+      - quote
+      title: Insight
+      type: object
+  - name: finish
+    description: End the interview, and record its result.
+tests:
+  ready_at: 0.8
+  cases:
+  - turns:
+    - choose: 'No'
+    - say: Ask me why I stopped after the trial.
+    expect: It thanks them, asks nothing more, even when they write again, and saves
+      no insight.
+  - turns:
+    - choose: 'Yes'
+    - say: We want to learn why people leave after the trial.
+    - say: I stopped using it when the trial ended.
+    expect: It asks one open question at a time about the trial, and none that suggests
+      an answer.
+  - turns:
+    - choose: 'Yes'
+    - say: We want to learn why people leave after the trial.
+    - say: The price was fine, but the setup took a week.
+    - press: save
+      payload:
+        insight: The setup, not the price, held them back.
+        quote: The price was fine, but the setup took a week.
+    expect: It follows up on the setup, and the insight saved quotes their words about
+      it.
+  - turns:
+    - choose: 'Yes'
+    - say: We want to learn why people leave after the trial.
+    - say: The price was fine, but the setup took a week.
+    - press: save
+      payload:
+        insight: The setup, not the price, held them back.
+        quote: The price was fine, but the setup took a week.
+    - press: finish
+    expect: 'It records the result: the goal, the insight saved with its quote, and
+      the questions the interview left open, which it lists.'
+  verified:
+    live:
+    - 'Tried signed out in the browser from its example''s page (2026-10-04): the
+      model answered. Its Python code did not run there.'
+    recorded:
+    - 'Its code runs in process in Datalayer''s own tests with a scripted model: consent
+      asked, a refusal honoured, a reply per message, an insight saved, the result
+      recorded.'
+    unverified:
+    - 'Its code has not run with a real model: its agent was switched on in the catalogue
+      on 2026-10-06, and its tests have not been run.'
+record:
+  keep_for: 1_years
+  include:
+  - conversations
+  - outputs
+  - feedback
+deployment:
+  hosted:
+    visibility: private
+tags:
+- example
+- research
+- python
+icon: comment-discussion
+emoji: 🎙️
+rules:
+- action: Send the summary by email
+  applies_to: send
+  behaviour: ask_first

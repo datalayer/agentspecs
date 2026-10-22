@@ -30,7 +30,7 @@ mcp_servers: []
 # the run failed on a skill nobody had enabled; channels are the subject here.
 skills: []
 
-tools: []
+backend_tools: []
 
 # The channels the agent notifies through; the example's panel turns email
 # and Slack on and gives them their targets.

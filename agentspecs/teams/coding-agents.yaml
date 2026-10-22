@@ -1,0 +1,77 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Coding agents as a team (SH-45: "an agent delegates to a
+# coding agent").
+#
+# Two harnesses, each an agent program over ACP behind the Shield: Claude
+# Code writes the change and Codex reviews it. A supervisor of the platform's
+# own hands each its task with a budget, a deadline and a manifest (the
+# orchestration contract), and gets back what a harness
+# answers over A2A or ACP: the plan, a `text/x-diff` artifact per file
+# changed, and the answer. Neither harness reaches the other except through
+# the supervisor, and every file it edits, every command it runs and every
+# tool it is lent is decided by the Shield in front of it — the Rules of the
+# application that runs the team, the organization's policy, the platform's
+# default.
+#
+# The members name no model: a harness runs on its own, with the person's
+# own key. Its `tools` are its own, its MCP the gateway's lent.
+
+id: coding-agents
+version: 0.0.1
+name: Coding Agents
+description: >-
+  Claude Code writes the change and Codex reviews it, each behind the
+  Shield: a supervisor delegates to them over ACP with a budget, a deadline
+  and the files it may touch, and reads back their plans and their diffs.
+
+tags:
+  - coding
+  - harness
+  - review
+
+enabled: true
+icon: code
+emoji: "🛡️"
+color: "#1F6FEB"
+
+orchestration_protocol: datalayer
+execution_mode: sequential
+
+supervisor:
+  name: Lead
+  model: "bedrock:us.anthropic.claude-sonnet-4-6"
+  instructions: >-
+    You lead two coding agents. Hand the change to the Coder with the files it
+    may touch and a deadline, wait for its diff, hand the diff to the Reviewer,
+    and answer with the change and the review. Never edit a file yourself.
+  goal: >-
+    Split the request into a change and its review: hand the change to the
+    Coder with the files it may touch, then the diff to the Reviewer, and
+    answer with the change and what the review found.
+  approval: auto
+  can_terminate: true
+
+agents:
+  - id: coder
+    name: Coder
+    harness: claude-code
+    role: contributor
+    goal: >-
+      Make the change asked, inside the workspace, in the files the manifest
+      names; answer with what changed and why.
+  - id: reviewer
+    name: Reviewer
+    harness: codex
+    role: reviewer
+    goal: >-
+      Read the Coder's diff and say what is wrong with it, file by file; edit
+      nothing.
+    depends_on: [coder]
+
+suggestions:
+  - text: Add a test for the function in the open file, then review it.
+    summary: "A change and its review"
+    icon: code
+    emoji: "🧪"

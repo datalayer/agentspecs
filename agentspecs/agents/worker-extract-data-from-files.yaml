@@ -23,7 +23,7 @@ tags:
   - automation
   - document-processing
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.acquire
@@ -68,9 +68,11 @@ goal: >-
   spreadsheets, and scanned documents. Output clean JSON and CSV with
   confidence scores for each extracted field.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Trigger configuration
 trigger:
