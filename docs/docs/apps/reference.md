@@ -1169,7 +1169,7 @@ The theme an application runs in by default (T-30).
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
-| `variant` (required) | [ThemeVariant](#themevariant) | The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun` or `loop` | — |
+| `variant` (required) | [ThemeVariant](#themevariant) | The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop` or `vscode` | — |
 | `mode` | [ThemeMode](#thememode) | `light`, `dark` or `auto` (the device's); the person's own when unsaid | empty |
 
 ### AppTool
@@ -1335,7 +1335,7 @@ A UI plugin an agent or an application names, and the renderer it is exposed thr
 | <a id="papstandingaction"></a>PapStandingAction | `write`, `buy` |
 | <a id="recorditem"></a>RecordItem | `conversations`, `actions`, `decisions`, `approvals`, `checks`, `sources`, `outputs`, `feedback`, `audio`, `diffs`, `terminals` |
 | <a id="thememode"></a>ThemeMode | `light`, `dark`, `auto` |
-| <a id="themevariant"></a>ThemeVariant | `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop` |
+| <a id="themevariant"></a>ThemeVariant | `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop`, `vscode` |
 | <a id="triggertype"></a>TriggerType | `schedule`, `event`, `once` |
 | <a id="visibility"></a>Visibility | `private`, `invited`, `organization`, `link`, `public` |
 | <a id="voiceinput"></a>VoiceInput | `off`, `push_to_talk`, `hands_free` |

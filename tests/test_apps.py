@@ -1174,7 +1174,7 @@ def test_an_application_names_the_theme_it_runs_in_by_default() -> None:
     assert plain.interface.theme is None
     assert "interface" not in dump_app(plain)
     assert [variant.value for variant in ThemeVariant] == [
-        "datalayer", "spatial", "lovely", "matrix", "earth", "sand", "ivory", "sun", "loop",
+        "datalayer", "spatial", "lovely", "matrix", "earth", "sand", "ivory", "sun", "loop", "vscode",
     ]
     assert [mode.value for mode in ThemeMode] == ["light", "dark", "auto"]
     for theme in ({"variant": "earth"}, {"variant": "matrix", "mode": "dark"}, {"variant": "loop", "mode": "auto"}):

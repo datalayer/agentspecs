@@ -2089,7 +2089,7 @@
         },
         "variant": {
           "$ref": "#/$defs/ThemeVariant",
-          "description": "The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun` or `loop`"
+          "description": "The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop` or `vscode`"
         }
       },
       "required": [
@@ -2690,7 +2690,8 @@
         "sand",
         "ivory",
         "sun",
-        "loop"
+        "loop",
+        "vscode"
       ],
       "title": "ThemeVariant",
       "type": "string"

@@ -1880,6 +1880,7 @@ class ThemeVariant(str, Enum):
     IVORY = "ivory"
     SUN = "sun"
     LOOP = "loop"
+    VSCODE = "vscode"
 
 
 class ThemeMode(str, Enum):
@@ -1895,7 +1896,7 @@ class AppTheme(_Strict):
 
     variant: ThemeVariant = Field(
         description=(
-            "The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun` or `loop`"
+            "The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop` or `vscode`"
         ),
     )
     mode: Optional[ThemeMode] = Field(
