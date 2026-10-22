@@ -25,6 +25,7 @@ contributions:
   - "loop.command"
   - "loop.document.toolbar.item"
   - "loop.notebook.toolbar.item"
+  - "loop.session.action"
   - "loop.viewType"
   commands:
   - "chat"
