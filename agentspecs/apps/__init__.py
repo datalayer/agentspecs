@@ -2251,9 +2251,14 @@ class AppInterface(_Strict):
         default=None,
         description=(
             "The avatar its floating assistant shows, its appearance: by the id a plugin "
-            "contributes it under (lowercase letters and digits, words joined by a hyphen), "
-            "Datalayer's own drawings `paperclip`, `wizard`, `cat` and `eyes` or a Microsoft "
-            "Agent character a plugin brings; or a 3D model, `{kind: model3d, url}`. The paper "
+            "contributes it under (lowercase letters and digits, words joined by a hyphen): "
+            "Datalayer's orb `orb` (iridescent) or `orb-theme` (the theme's colours), thinking "
+            "while a turn runs; Datalayer's own drawings `paperclip`, `wizard`, `cat` and `eyes`; "
+            "the characters clippy.js publishes, Microsoft's, fetched from jsDelivr when shown "
+            "(`clippy-js-clippy`, `clippy-js-merlin`, `clippy-js-links`, `clippy-js-rover`, "
+            "`clippy-js-genie`, `clippy-js-genius`, `clippy-js-f1`, `clippy-js-peedy`, "
+            "`clippy-js-rocky`, `clippy-js-bonzi`); or a Microsoft Agent character a plugin "
+            "brings; or a 3D model, `{kind: model3d, url}`. The paper "
             "clip when unsaid; an id no enabled plugin contributes is refused where the plugins "
             "are known, the runtime and the page. Said here, it wins over a person's own choice "
             "in their settings"
