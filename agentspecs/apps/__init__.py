@@ -668,7 +668,11 @@ class AppPapCompany(_Strict):
     enabled: bool = Field(default=False, description="Whether it publishes itself as a company at Ship")
     signed_out: bool = Field(default=True, description="Whether a personal agent may ask before signing in")
     interfaces: List[PapInterface] = Field(
-        default_factory=lambda: [PapInterface.AGENT], description="How personal agents reach it"
+        default_factory=lambda: [PapInterface.AGENT],
+        description=(
+            "How personal agents reach it: `agent`, `openapi`, `mcp`, and `web` — its pages, "
+            "a browser joining the person's Session through the one-time-code form (PAP draft 0.3 §6)"
+        ),
     )
     scopes: List[AppPapCompanyScope] = Field(
         default_factory=list, description="The scopes it offers, each with what it allows and its hints"
@@ -731,10 +735,8 @@ class AppPapCompany(_Strict):
     def _coherent(self) -> "AppPapCompany":
         if self.enabled and not self.scopes and not self.signed_out:
             raise ValueError("a company that admits nobody signed out offers at least one scope")
-        if PapInterface.WEB in self.interfaces:
-            raise ValueError(
-                "a company application is reached through its agent, its API or its MCP server for now"
-            )
+        if not self.interfaces or len(set(self.interfaces)) != len(self.interfaces):
+            raise ValueError("a company is reached in at least one way, each once")
         if self.personal_agents is PapAgents.REGISTERED and not self.registered_agents:
             raise ValueError("a company for registered personal agents names at least one")
         if self.registered_agents and self.personal_agents is not PapAgents.REGISTERED:

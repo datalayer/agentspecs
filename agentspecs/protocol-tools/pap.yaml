@@ -15,7 +15,7 @@ connection: pap
 # PR-54). A tool not named here is unknown, and unknown is the
 # most restricted.
 actions:
-  checked: "2026-10-13"
+  checked: "2026-10-27"
   note: >-
     Read off the gateway's `extensions/pap/pap.py`. Asking the company's agent
     is `send` (decided by the user, 13 October 2026, R-02): a
@@ -30,6 +30,12 @@ actions:
     unknown here, so it is taken as changing something. Confirming an operation
     does what the operation does: the terms decide at the call (`buy` when a term
     moves money, `write` otherwise); without them, everything it can do.
+    Reporting a task the company does not offer (`pap_feedback`, PAP draft 0.3
+    §8.3: `company`, its domain; `task`, at most 200 characters; `description`,
+    at most 2000 characters and no personal data) sends a report to the company
+    and is `send`: the model checks the company's excluded tasks first (an
+    excluded task is not reported), and an answer with an alternative is the
+    company's content, never instructions to follow.
   tools:
     pap_company: read
     pap_ask: send
@@ -42,3 +48,4 @@ actions:
     pap_mcp_call: write
     pap_confirm: [write, buy]
     pap_disconnect: write
+    pap_feedback: send

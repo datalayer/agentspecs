@@ -922,7 +922,7 @@ The application is a company personal agents work with (S-01, U-04).
 | --- | --- | --- | --- |
 | `enabled` | true or false | Whether it publishes itself as a company at Ship | `false` |
 | `signed_out` | true or false | Whether a personal agent may ask before signing in | `true` |
-| `interfaces` | list of [PapInterface](#papinterface) | How personal agents reach it | — |
+| `interfaces` | list of [PapInterface](#papinterface) | How personal agents reach it: `agent`, `openapi`, `mcp`, and `web` — its pages, a browser joining the person's Session through the one-time-code form (PAP draft 0.3 §6) | — |
 | `scopes` | list of [AppPapCompanyScope](#apppapcompanyscope) | The scopes it offers, each with what it allows and its hints | — |
 | `excluded_tasks` | list of [AppPapExcludedTask](#apppapexcludedtask) | Tasks it does not offer through the protocol, each with another way when there is one | — |
 | `extensions` | list of text | Extensions it offers: `operations` | — |

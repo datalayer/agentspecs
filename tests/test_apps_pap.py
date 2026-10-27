@@ -173,8 +173,15 @@ def test_a_company_reached_over_mcp_and_by_registered_agents_only() -> None:
             app(company={**registered, "registered_agents": [wrong]})
     with pytest.raises(ValueError, match="twice"):
         app(company={**registered, "registered_agents": [agent, agent]})
-    with pytest.raises(ValueError, match="for now"):
-        app(company={**company, "interfaces": ["web"]})
+    # Its pages too: a browser joins the person's Session through the one-time-code form (draft 0.3).
+    assert [i.value for i in app(company={**company, "interfaces": ["agent", "web"]}).pap.company.interfaces] == [
+        "agent",
+        "web",
+    ]
+    with pytest.raises(ValueError, match="each once"):
+        app(company={**company, "interfaces": ["web", "web"]})
+    with pytest.raises(ValueError, match="at least one way"):
+        app(company={**company, "interfaces": []})
 
 
 #: The Ledgerly pattern (R-07): confirming it lets the application pay at its bank without asking.

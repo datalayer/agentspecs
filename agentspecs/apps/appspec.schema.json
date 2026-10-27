@@ -1295,7 +1295,7 @@
           "type": "array"
         },
         "interfaces": {
-          "description": "How personal agents reach it",
+          "description": "How personal agents reach it: `agent`, `openapi`, `mcp`, and `web` \u2014 its pages, a browser joining the person's Session through the one-time-code form (PAP draft 0.3 \u00a76)",
           "items": {
             "$ref": "#/$defs/PapInterface"
           },
