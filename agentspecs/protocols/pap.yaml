@@ -13,7 +13,7 @@ publisher: Sierra, Meta
 layer: consent
 # The specification, published from github.com/personal-agent-protocol/personal-agent-protocol.
 spec_url: https://personalagentprotocol.org
-spec_version: "draft 0.2"
+spec_version: "draft 0.3"
 status: shipped
 connects: Companies, as a person's agent there, or being one
 packages:

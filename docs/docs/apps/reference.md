@@ -287,7 +287,10 @@ pap:
     interfaces:
     - agent
     scopes:
-    - books:read
+    - name: books:read
+      description: Read your books and balances
+      changes: none
+      personal_data: true
     personal_agents: any
   connections:
   - id: northwind
@@ -902,6 +905,15 @@ Personal Agent Protocol: the companies it works with, and whether it is one. A `
 | `connections` | list of [AppPapConnection](#apppapconnection) | Companies, as a personal agent | — |
 | `company` | [AppPapCompany](#apppapcompany) | As a company | — |
 
+### AppPapAlternative
+
+Another way to do an excluded task (PAP draft 0.3 §8.2): instructions, references, or both.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `instructions` | text | What the person or their agent can do instead, at most 2000 characters | empty |
+| `references` | list of [AppPapReference](#apppapreference) | Where to do it instead | — |
+
 ### AppPapCompany
 
 The application is a company personal agents work with (S-01, U-04).
@@ -911,11 +923,23 @@ The application is a company personal agents work with (S-01, U-04).
 | `enabled` | true or false | Whether it publishes itself as a company at Ship | `false` |
 | `signed_out` | true or false | Whether a personal agent may ask before signing in | `true` |
 | `interfaces` | list of [PapInterface](#papinterface) | How personal agents reach it | — |
-| `scopes` | list of text | The scopes it offers | — |
+| `scopes` | list of [AppPapCompanyScope](#apppapcompanyscope) | The scopes it offers, each with what it allows and its hints | — |
+| `excluded_tasks` | list of [AppPapExcludedTask](#apppapexcludedtask) | Tasks it does not offer through the protocol, each with another way when there is one | — |
 | `extensions` | list of text | Extensions it offers: `operations` | — |
 | `personal_agents` | [PapAgents](#papagents) | `any`, or `registered` only | `"any"` |
 | `registered_agents` | list of text | The personal agents it accepts when `registered` only: each one's `client_id` URL | — |
 | `operations` | list of [AppPapOperation](#apppapoperation) | What it does for the person once they confirm (the `operations` extension) | — |
+
+### AppPapCompanyScope
+
+A scope the company offers: its name, what it allows, and its hints (PAP draft 0.3 §4.4). The description is published in `auth.scopes`; the hints, when given, in `auth.scope_hints`. Without them the hints are derived from the Rules classes of the tools behind the scope.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `name` (required) | text | The scope, in OAuth syntax and never `poppy:`: `orders:read` | — |
+| `description` (required) | text | What it allows, as a person reads it: `Read your orders` | — |
+| `changes` | [PapScopeChanges](#papscopechanges) | What its most consequential use changes: `none`, `reversible` or `irreversible` | empty |
+| `personal_data` | true or false | Whether it reads or changes the person's personal data | empty |
 
 ### AppPapConnection
 
@@ -929,8 +953,17 @@ A company the application works with as a Personal Agent (S-01). The company is 
 | `as` | [ActsAs](#actsas) | In whose account: `user` (each person signs in to their own) or `owner` | `"user"` |
 | `scopes` | list of text | The fewest scopes the application needs | — |
 | `interfaces` | list of [PapInterface](#papinterface) | How it reaches the company | — |
-| `sign_in` | list of [PapSignIn](#papsignin) | Sign-in modes the application accepts, preferred first | — |
+| `sign_in` | list of [PapSignIn](#papsignin) | Sign-in modes the application accepts, preferred first; which of them the company offers is read from its issuer (`grant_types_supported`, Mediated from its `poppy.json`) | — |
 | `extensions` | list of text | Extensions it uses: `operations` | — |
+
+### AppPapExcludedTask
+
+A task the company chose not to offer through the protocol (PAP draft 0.3 §8.1).
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `task` (required) | text | The task, as a person says it, at most 200 characters | — |
+| `alternative` | [AppPapAlternative](#apppapalternative) | Another way to do it | empty |
 
 ### AppPapOperation
 
@@ -943,6 +976,17 @@ Something a personal agent may ask the application to do for the person, done on
 | `allows` | [AppPapStanding](#apppapstanding) | Instead of a tool: the standing permission confirming it gives (R-07) | empty |
 | `summary` (required) | text | What the person is shown, with `{term}` for each term, e.g. `Exchange order {order_id} for size {size}`; never written by the model | — |
 | `user_approval_required` | true or false | Whether only the person may confirm it, never an approval in advance | `true` |
+
+### AppPapReference
+
+One place an alternative points to: an OpenAPI operation, an MCP tool, or a page.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `type` (required) | [PapReferenceType](#papreferencetype) | `openapi`, `mcp` or `web` | — |
+| `url` (required) | text | Its HTTPS URL: the API's or server's the company lists, or the page | — |
+| `operation_id` | text | For `openapi`: the operation | empty |
+| `tool` | text | For `mcp`: the tool | empty |
 
 ### AppPapStanding
 
@@ -1331,6 +1375,8 @@ A UI plugin an agent or an application names, and the renderer it is exposed thr
 | <a id="pairrole"></a>PairRole | `business`, `personal_agent` |
 | <a id="papagents"></a>PapAgents | `any`, `registered` |
 | <a id="papinterface"></a>PapInterface | `agent`, `openapi`, `mcp`, `web` |
+| <a id="papreferencetype"></a>PapReferenceType | `openapi`, `mcp`, `web` |
+| <a id="papscopechanges"></a>PapScopeChanges | `none`, `reversible`, `irreversible` |
 | <a id="papsignin"></a>PapSignIn | `direct`, `device`, `mediated` |
 | <a id="papstandingaction"></a>PapStandingAction | `write`, `buy` |
 | <a id="recorditem"></a>RecordItem | `conversations`, `actions`, `decisions`, `approvals`, `checks`, `sources`, `outputs`, `feedback`, `audio`, `diffs`, `terminals` |

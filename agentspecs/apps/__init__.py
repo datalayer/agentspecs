@@ -274,8 +274,9 @@ _PAP_SCOPE = re.compile(r"^[\x21\x23-\x5b\x5d-\x7e]{1,128}$")
 _PAP_EXTENSION = re.compile(r"^(?:[a-z][a-z0-9_-]{0,63}|[a-z0-9.-]+\.[a-z]{2,63}/[a-z0-9_.-]{1,64})$")
 
 
-#: The Personal Agent Protocol profiles Datalayer speaks: the drafts the PAP SDK
-#: implements (`draft-01` is its `PROTOCOL_PROFILE` 0.1; S-03).
+#: The Personal Agent Protocol profiles Datalayer speaks (S-03): `draft-01` names
+#: the profile the Appspec has said since the first draft; the SDK it is read
+#: with implements draft 0.3 (`PROTOCOL_PROFILE` 0.3).
 PapProfile = Literal["draft-01"]
 PAP_PROFILES: Tuple[str, ...] = get_args(PapProfile)
 
@@ -307,12 +308,21 @@ class PapSignIn(str, Enum):
     MEDIATED = "mediated"
 
 
+def _pap_scope(value: str) -> str:
+    if not _PAP_SCOPE.fullmatch(value):
+        raise ValueError(f"{value!r} is not an OAuth scope")
+    if value.startswith("poppy:"):
+        # The protocol reserves the prefix and defines no scope (PAP draft 0.3 §4.4):
+        # a company names its own, `orders:read`.
+        raise ValueError(f"{value!r} uses the reserved `poppy:` prefix: name the company's own scope")
+    return value
+
+
 def _pap_scopes(values: List[str]) -> List[str]:
     if len(set(values)) != len(values):
         raise ValueError("a scope is named twice")
     for value in values:
-        if not _PAP_SCOPE.fullmatch(value):
-            raise ValueError(f"{value!r} is not an OAuth scope")
+        _pap_scope(value)
     return values
 
 
@@ -349,7 +359,10 @@ class AppPapConnection(_Strict):
     )
     sign_in: List[PapSignIn] = Field(
         default_factory=lambda: [PapSignIn.DIRECT, PapSignIn.DEVICE],
-        description="Sign-in modes the application accepts, preferred first",
+        description=(
+            "Sign-in modes the application accepts, preferred first; which of them the company "
+            "offers is read from its issuer (`grant_types_supported`, Mediated from its `poppy.json`)"
+        ),
     )
     extensions: List[str] = Field(default_factory=list, description="Extensions it uses: `operations`")
 
@@ -535,6 +548,120 @@ class AppPapOperation(_Strict):
         return self
 
 
+class PapScopeChanges(str, Enum):
+    """The most consequential thing a scope lets an agent do (PAP draft 0.3 §4.4)."""
+
+    NONE = "none"
+    REVERSIBLE = "reversible"
+    IRREVERSIBLE = "irreversible"
+
+
+class AppPapCompanyScope(_Strict):
+    """A scope the company offers: its name, what it allows, and its hints (PAP draft 0.3 §4.4).
+
+    The description is published in `auth.scopes`; the hints, when given, in
+    `auth.scope_hints`. Without them the hints are derived from the Rules
+    classes of the tools behind the scope.
+    """
+
+    name: str = Field(description="The scope, in OAuth syntax and never `poppy:`: `orders:read`")
+    description: str = Field(description="What it allows, as a person reads it: `Read your orders`")
+    changes: Optional[PapScopeChanges] = Field(
+        default=None,
+        description="What its most consequential use changes: `none`, `reversible` or `irreversible`",
+    )
+    personal_data: Optional[bool] = Field(
+        default=None, description="Whether it reads or changes the person's personal data"
+    )
+
+    @field_validator("name")
+    @classmethod
+    def _a_scope(cls, value: str) -> str:
+        return _pap_scope(value)
+
+    @field_validator("description")
+    @classmethod
+    def _described(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("a scope says what it allows")
+        return value
+
+
+class PapReferenceType(str, Enum):
+    """Where an alternative points (PAP draft 0.3 §8.2)."""
+
+    OPENAPI = "openapi"
+    MCP = "mcp"
+    WEB = "web"
+
+
+class AppPapReference(_Strict):
+    """One place an alternative points to: an OpenAPI operation, an MCP tool, or a page."""
+
+    type: PapReferenceType = Field(description="`openapi`, `mcp` or `web`")
+    url: str = Field(description="Its HTTPS URL: the API's or server's the company lists, or the page")
+    operation_id: Optional[str] = Field(default=None, description="For `openapi`: the operation")
+    tool: Optional[str] = Field(default=None, description="For `mcp`: the tool")
+
+    @field_validator("url")
+    @classmethod
+    def _https(cls, value: str) -> str:
+        from urllib.parse import urlsplit  # noqa: PLC0415
+
+        parts = urlsplit(value)
+        if parts.scheme != "https" or not parts.hostname or parts.username or parts.password:
+            raise ValueError(f"`{value}` is not an HTTPS URL")
+        return value
+
+    @model_validator(mode="after")
+    def _complete(self) -> "AppPapReference":
+        if self.type is PapReferenceType.OPENAPI and not self.operation_id:
+            raise ValueError("an `openapi` reference names its `operation_id`")
+        if self.type is PapReferenceType.MCP and not self.tool:
+            raise ValueError("an `mcp` reference names its `tool`")
+        if self.type is not PapReferenceType.OPENAPI and self.operation_id is not None:
+            raise ValueError("only an `openapi` reference names an `operation_id`")
+        if self.type is not PapReferenceType.MCP and self.tool is not None:
+            raise ValueError("only an `mcp` reference names a `tool`")
+        return self
+
+
+class AppPapAlternative(_Strict):
+    """Another way to do an excluded task (PAP draft 0.3 §8.2): instructions, references, or both."""
+
+    instructions: Optional[str] = Field(
+        default=None, description="What the person or their agent can do instead, at most 2000 characters"
+    )
+    references: List[AppPapReference] = Field(default_factory=list, description="Where to do it instead")
+
+    @field_validator("instructions")
+    @classmethod
+    def _instructions(cls, value: Optional[str]) -> Optional[str]:
+        if value is not None and not (value.strip() and len(value) <= 2000):
+            raise ValueError("an alternative's instructions are 1 to 2000 characters")
+        return value
+
+    @model_validator(mode="after")
+    def _says_something(self) -> "AppPapAlternative":
+        if self.instructions is None and not self.references:
+            raise ValueError("an alternative gives instructions or references")
+        return self
+
+
+class AppPapExcludedTask(_Strict):
+    """A task the company chose not to offer through the protocol (PAP draft 0.3 §8.1)."""
+
+    task: str = Field(description="The task, as a person says it, at most 200 characters")
+    alternative: Optional[AppPapAlternative] = Field(default=None, description="Another way to do it")
+
+    @field_validator("task")
+    @classmethod
+    def _task(cls, value: str) -> str:
+        if not value.strip() or len(value) > 200:
+            raise ValueError("an excluded task is said in 1 to 200 characters")
+        return value
+
+
 class AppPapCompany(_Strict):
     """The application is a company personal agents work with (S-01, U-04)."""
 
@@ -543,7 +670,13 @@ class AppPapCompany(_Strict):
     interfaces: List[PapInterface] = Field(
         default_factory=lambda: [PapInterface.AGENT], description="How personal agents reach it"
     )
-    scopes: List[str] = Field(default_factory=list, description="The scopes it offers")
+    scopes: List[AppPapCompanyScope] = Field(
+        default_factory=list, description="The scopes it offers, each with what it allows and its hints"
+    )
+    excluded_tasks: List[AppPapExcludedTask] = Field(
+        default_factory=list,
+        description="Tasks it does not offer through the protocol, each with another way when there is one",
+    )
     extensions: List[str] = Field(default_factory=list, description="Extensions it offers: `operations`")
     personal_agents: PapAgents = Field(default=PapAgents.ANY, description="`any`, or `registered` only")
     registered_agents: List[str] = Field(
@@ -557,13 +690,28 @@ class AppPapCompany(_Strict):
 
     @field_validator("scopes")
     @classmethod
-    def _scopes(cls, values: List[str]) -> List[str]:
-        return _pap_scopes(values)
+    def _scopes(cls, values: List[AppPapCompanyScope]) -> List[AppPapCompanyScope]:
+        names = [scope.name for scope in values]
+        if len(set(names)) != len(names):
+            raise ValueError("a scope is named twice")
+        return values
+
+    @field_validator("excluded_tasks")
+    @classmethod
+    def _excluded_tasks(cls, values: List[AppPapExcludedTask]) -> List[AppPapExcludedTask]:
+        tasks = [task.task.strip().lower() for task in values]
+        if len(set(tasks)) != len(tasks):
+            raise ValueError("an excluded task is listed twice")
+        return values
 
     @field_validator("extensions")
     @classmethod
     def _extensions(cls, values: List[str]) -> List[str]:
         return _pap_extensions(values)
+
+    def scope_names(self) -> List[str]:
+        """The names of the scopes it offers, in order."""
+        return [scope.name for scope in self.scopes]
 
     @field_validator("registered_agents")
     @classmethod

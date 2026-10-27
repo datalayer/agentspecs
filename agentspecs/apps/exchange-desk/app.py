@@ -131,7 +131,28 @@ app = Application.from_spec(
 app.as_company(
     signed_out=True,
     interfaces=["agent", "openapi"],
-    scopes=["orders:read", "orders:write"],
+    scopes=[
+        {
+            "name": "orders:read",
+            "description": "Read your orders and their status",
+            "changes": "none",
+            "personal_data": True,
+        },
+        {
+            "name": "orders:write",
+            "description": "Exchange an order you approved",
+            "changes": "reversible",
+            "personal_data": True,
+        },
+    ],
+    excluded_tasks=[
+        {
+            "task": "Cancel an order",
+            "alternative": {
+                "instructions": "Cancel it from your account on the shop's website, under Orders."
+            },
+        }
+    ],
     extensions=["operations"],
     personal_agents="any",
 )

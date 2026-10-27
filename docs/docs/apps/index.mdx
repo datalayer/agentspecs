@@ -148,11 +148,31 @@ pap:
       access: write          # read, or write
       as: user               # each person's own account, or owner
       scopes: ["orders:read", "orders:write"]
+      sign_in: [direct, device]  # preferred first; what the company offers is read from its issuer
       extensions: [operations]
   # The application itself as a company to people's own agents.
   company:
     enabled: true
-    scopes: ["orders:read", "orders:write"]
+    # Its own scopes (never `poppy:`), each with what it allows, as a person reads it,
+    # and, when the Maker says so, its hints: what its most consequential use changes
+    # (none, reversible, irreversible) and whether it touches personal data. Left out,
+    # the hints are derived from the Rules classes of the tools behind the scope.
+    scopes:
+      - name: orders:read
+        description: Read your orders and their status
+        changes: none
+        personal_data: true
+      - name: orders:write
+        description: Exchange an order you approved
+        changes: reversible
+    # What it does not do through the protocol, each with another way when there is one:
+    # instructions, references (a page, an OpenAPI operation or an MCP tool it lists), or both.
+    excluded_tasks:
+      - task: Cancel an order
+        alternative:
+          instructions: Cancel it from your account on the website, under Orders.
+          references:
+            - {type: web, url: "https://manzanita.example/account/orders"}
     extensions: [operations]
     operations:
       - action: orders.exchange

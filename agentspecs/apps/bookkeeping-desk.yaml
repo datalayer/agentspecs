@@ -44,7 +44,11 @@ pap:
     enabled: true
     signed_out: false
     interfaces: [agent]
-    scopes: ["books:read"]
+    scopes:
+      - name: books:read
+        description: Read your books and balances
+        changes: none
+        personal_data: true
     personal_agents: any
   connections:
     - id: northwind

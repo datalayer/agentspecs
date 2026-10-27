@@ -25,12 +25,17 @@ CONNECTION = {
 }
 
 
+#: A company's scopes (PAP draft 0.3 §4.4): each with what it allows, and its hints when the Maker gives them.
+READ = {"name": "orders:read", "description": "Read your orders", "changes": "none", "personal_data": True}
+WRITE = {"name": "orders:write", "description": "Exchange an order you approved"}
+
+
 def app(**pap: object):  # type: ignore[no-untyped-def]
     return parse_app({**BASE, "pap": {"profile": "draft-01", **pap}})
 
 
 def test_a_company_connection_and_the_company_role_parse() -> None:
-    spec = app(connections=[CONNECTION], company={"enabled": True, "scopes": ["poppy:read"]})
+    spec = app(connections=[CONNECTION], company={"enabled": True, "scopes": [READ]})
     assert spec.pap.connections[0].company == "manzanita.example"
     assert spec.pap.connections[0].acts_as.value == "user"
     assert spec.pap.company.enabled
@@ -119,7 +124,7 @@ OPERATION = {
 
 
 def test_a_company_declares_what_it_does_once_the_person_confirms() -> None:
-    spec = app(company={"enabled": True, "scopes": ["orders:write"], "extensions": ["operations"],
+    spec = app(company={"enabled": True, "scopes": [WRITE], "extensions": ["operations"],
                         "operations": [OPERATION]})
     operation = spec.pap.company.operations[0]
     assert (operation.action, operation.tool) == ("orders.exchange", "exchange_order")
@@ -138,24 +143,24 @@ def test_a_company_declares_what_it_does_once_the_person_confirms() -> None:
 )
 def test_an_operation_is_checked(change: dict, says: str) -> None:
     with pytest.raises(ValueError, match=says):
-        app(company={"enabled": True, "scopes": ["orders:write"], "extensions": ["operations"],
+        app(company={"enabled": True, "scopes": [WRITE], "extensions": ["operations"],
                      "operations": [{**OPERATION, **change}]})
 
 
 def test_operations_need_the_extension_and_each_action_and_tool_once() -> None:
     with pytest.raises(ValueError, match="`operations` extension"):
-        app(company={"enabled": True, "scopes": ["orders:write"], "operations": [OPERATION]})
+        app(company={"enabled": True, "scopes": [WRITE], "operations": [OPERATION]})
     with pytest.raises(ValueError, match="declared twice"):
-        app(company={"enabled": True, "scopes": ["orders:write"], "extensions": ["operations"],
+        app(company={"enabled": True, "scopes": [WRITE], "extensions": ["operations"],
                      "operations": [OPERATION, {**OPERATION, "tool": "other"}]})
     with pytest.raises(ValueError, match="one action"):
-        app(company={"enabled": True, "scopes": ["orders:write"], "extensions": ["operations"],
+        app(company={"enabled": True, "scopes": [WRITE], "extensions": ["operations"],
                      "operations": [OPERATION, {**OPERATION, "action": "orders.other"}]})
 
 
 def test_a_company_reached_over_mcp_and_by_registered_agents_only() -> None:
     agent = "https://agents.example/agent.json"
-    company = {"enabled": True, "scopes": ["poppy:read"]}
+    company = {"enabled": True, "scopes": [READ]}
     registered = {**company, "personal_agents": "registered"}
     spec = app(company={**registered, "interfaces": ["agent", "mcp"], "registered_agents": [agent]})
     assert spec.pap.company.registered_agents == [agent]
@@ -194,7 +199,7 @@ STANDING = {
 def test_a_standing_permission_is_an_operation_the_person_confirms() -> None:
     """R-07, decided 2026-10-13: given through a company's Operation, recorded as the approval in advance
     the person would give in Datalayer — at one of its own companies, in the person's account there."""
-    company = {"enabled": True, "scopes": ["books:write"], "extensions": ["operations"], "operations": [STANDING]}
+    company = {"enabled": True, "scopes": [{"name": "books:write", "description": "Give a standing permission"}], "extensions": ["operations"], "operations": [STANDING]}
     spec = app(connections=[CONNECTION], company=company)
     [operation] = spec.pap.company.operations
     assert operation.tool is None and operation.allows is not None
@@ -218,3 +223,94 @@ def test_a_standing_permission_is_an_operation_the_person_confirms() -> None:
             app(connections=[connection], company=company)
     with pytest.raises(ValueError, match="calls a tool or allows"):
         app(company={**company, "operations": [{key: value for key, value in STANDING.items() if key != "allows"}]})
+
+
+def test_a_company_scope_says_what_it_allows_with_its_hints() -> None:
+    spec = app(company={"enabled": True, "scopes": [READ, WRITE]})
+    read, write = spec.pap.company.scopes
+    assert (read.name, read.description, read.changes.value, read.personal_data) == (
+        "orders:read",
+        "Read your orders",
+        "none",
+        True,
+    )
+    # Hints left out are derived from the tools behind the scope.
+    assert (write.changes, write.personal_data) == (None, None)
+    assert spec.pap.company.scope_names() == ["orders:read", "orders:write"]
+
+
+@pytest.mark.parametrize(
+    ("scope", "says"),
+    [
+        ("orders:read", "valid dictionary"),
+        ({"name": "orders:read"}, "description"),
+        ({"name": "orders:read", "description": " "}, "says what it allows"),
+        ({"name": "poppy:read", "description": "Read"}, "reserved `poppy:` prefix"),
+        ({"name": "orders read", "description": "Read"}, "not an OAuth scope"),
+        ({"name": "orders:read", "description": "Read", "changes": "some"}, "changes"),
+    ],
+)
+def test_a_company_scope_is_checked(scope: object, says: str) -> None:
+    with pytest.raises(ValueError, match=says):
+        app(company={"enabled": True, "scopes": [scope]})
+
+
+def test_a_scope_is_offered_once_and_a_connection_never_asks_for_poppy() -> None:
+    with pytest.raises(ValueError, match="named twice"):
+        app(company={"enabled": True, "scopes": [READ, {**READ, "description": "Again"}]})
+    with pytest.raises(ValueError, match="reserved `poppy:` prefix"):
+        app(connections=[{**CONNECTION, "scopes": ["poppy:read"]}])
+
+
+def test_a_company_lists_the_tasks_it_does_not_offer_with_another_way() -> None:
+    change = {
+        "references": [
+            {"type": "web", "url": "https://manzanita.example/account"},
+            {"type": "mcp", "url": "https://manzanita.example/mcp", "tool": "change_address"},
+            {"type": "openapi", "url": "https://manzanita.example/openapi.json", "operation_id": "changeAddress"},
+        ]
+    }
+    spec = app(
+        company={
+            "enabled": True,
+            "scopes": [READ],
+            "excluded_tasks": [
+                {"task": "Cancel an order", "alternative": {"instructions": "Cancel it on the website."}},
+                {"task": "Change the delivery address", "alternative": change},
+                {"task": "Talk to the warehouse"},
+            ],
+        }
+    )
+    cancel, address, warehouse = spec.pap.company.excluded_tasks
+    assert cancel.alternative is not None and cancel.alternative.instructions == "Cancel it on the website."
+    assert address.alternative is not None
+    assert [ref.type.value for ref in address.alternative.references] == ["web", "mcp", "openapi"]
+    assert warehouse.alternative is None
+
+
+def _refer(**reference: str) -> dict:
+    return {"task": "Cancel", "alternative": {"references": [reference]}}
+
+
+@pytest.mark.parametrize(
+    ("task", "says"),
+    [
+        ({"task": ""}, "1 to 200 characters"),
+        ({"task": "x" * 201}, "1 to 200 characters"),
+        ({"task": "Cancel", "alternative": {}}, "instructions or references"),
+        ({"task": "Cancel", "alternative": {"instructions": "x" * 2001}}, "1 to 2000"),
+        (_refer(type="mcp", url="https://a.example/mcp"), "`tool`"),
+        (_refer(type="openapi", url="https://a.example/o.json"), "`operation_id`"),
+        (_refer(type="web", url="http://a.example/"), "HTTPS"),
+        (_refer(type="web", url="https://a.example/", tool="t"), "only an `mcp` reference"),
+        (_refer(type="email", url="https://a.example/"), "type"),
+    ],
+)
+def test_an_excluded_task_is_checked(task: dict, says: str) -> None:
+    with pytest.raises(ValueError, match=says):
+        app(company={"enabled": True, "scopes": [READ], "excluded_tasks": [task]})
+
+
+def test_an_excluded_task_is_listed_once() -> None:
+    with pytest.raises(ValueError, match="listed twice"):
+        app(company={"enabled": True, "excluded_tasks": [{"task": "Cancel"}, {"task": "cancel "}]})

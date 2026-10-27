@@ -75,7 +75,7 @@ EXTRA_EXAMPLES: Dict[str, Any] = {
                 "company": "example.com",
                 "access": "read",
                 "as": "user",
-                "scopes": ["poppy:read"],
+                "scopes": ["orders:read"],
                 "interfaces": ["agent", "openapi"],
                 "sign_in": ["direct", "device"],
                 "extensions": ["operations"],
@@ -83,6 +83,24 @@ EXTRA_EXAMPLES: Dict[str, Any] = {
         ],
         "company": {
             "enabled": False,
+            "scopes": [
+                {
+                    "name": "orders:read",
+                    "description": "Read your orders",
+                    "changes": "none",
+                    "personal_data": True,
+                },
+                {"name": "orders:write", "description": "Exchange an order you approved"},
+            ],
+            "excluded_tasks": [
+                {
+                    "task": "Close an account",
+                    "alternative": {
+                        "instructions": "Close it on the website, under Settings.",
+                        "references": [{"type": "web", "url": "https://example.com/settings"}],
+                    },
+                }
+            ],
             "extensions": ["operations"],
             "operations": [
                 {
