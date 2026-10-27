@@ -21,6 +21,10 @@ description: Gmail of the person an application acts for, read or read and send,
 #
 # `GOOGLE_OAUTH_CLIENT_ID` is a name, not Datalayer's client: in this mode the
 # server only validates tokens, which Google issued to IAM's client.
+#
+# On Datalayer the runtime image carries workspace-mcp installed as a uv tool,
+# so `uvx` runs that one and fetches nothing; a runtime pod reaches Google's
+# APIs and nothing else of Google's.
 command: uvx
 args:
   - "workspace-mcp"
@@ -39,9 +43,8 @@ env:
   WORKSPACE_MCP_HOST: "127.0.0.1"
   WORKSPACE_MCP_PORT: "9711"
 
-# Not offered on the platform yet: switched on once Gmail is connected through
-# IAM on the platform (W-02's deploy and consent drill).
-enabled: false
+# Offered on the platform: the person connects Gmail through IAM (W-02).
+enabled: true
 
 tags:
   - google

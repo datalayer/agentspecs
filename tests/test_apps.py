@@ -387,13 +387,17 @@ def test_every_example_says_what_was_verified_and_how() -> None:
 def test_what_is_not_enabled_is_said_as_setup_and_not_as_a_mistake() -> None:
     # The chat that only searches the web runs on what is enabled today.
     assert app_setup(APP_CATALOGUE["web-research"]) == []
-    # The worker names an agent and a server that are not: that is setup, said in words,
-    # and not a problem of the spec.
+    # Inbox triage's agent and Gmail's server are offered since 0.0.128.
     triage = APP_CATALOGUE["inbox-triage"]
     assert app_problems(triage) == []
-    assert app_setup(triage) == [
-        "The agent 'worker-mail-triage:0.0.1' is not enabled.",
-        "The MCP server 'google-workspace:0.0.1' is not enabled.",
+    assert app_setup(triage) == []
+    # An application naming an agent and a server that are not: that is setup, said in
+    # words, and not a problem of the spec.
+    accounting = APP_CATALOGUE["accounting"]
+    assert app_problems(accounting) == []
+    assert app_setup(accounting) == [
+        "The agent 'worker-accountant:0.0.1' is not enabled.",
+        "The MCP server 'odoo-accounting:0.0.1' is not enabled.",
     ]
 
 
@@ -408,8 +412,9 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
     # Travel Desk and Shopping Desk are on since drilled live at the hosted counterparts (PI-42).
     # Signed Reader is on since drilled live at the hosted Example Verifier (EX-11).
     # Guest Desk and Errand Runner are on since drilled live as a pair (PR-13).
+    # Inbox triage is on since 0.0.128: Gmail connected through Datalayer (W-02).
     assert sorted(off) == sorted(
-        ["inbox-triage", "pipeline-report"]
+        ["pipeline-report"]
         + [identity for identity in PAP_JOURNEYS if identity not in PAP_JOURNEYS_LIVE]
     )
     for identity, spec in off.items():

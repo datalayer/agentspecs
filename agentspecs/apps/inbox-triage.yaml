@@ -9,8 +9,9 @@
 # to somebody outside the mailbox's domain also publishes, and publishing is
 # left to the person.
 #
-# Not offered today: its agent and the Google Workspace server are disabled.
-# It has run end to end on a test mailbox of example mail only.
+# Its mailbox is the Gmail of the person it acts for, connected in Google's
+# own consent screen through Datalayer; a version that can send is deployed
+# only once its safety tests passed on it.
 
 schema: loop.app/v1
 id: inbox-triage
@@ -116,7 +117,7 @@ tests:
     recorded:
       - "Run end to end in Datalayer's own tests on a test mailbox of example mail, a scripted model in place of its agent's (2026-10-06): it labelled, archived and drafted alone, asked before sending, and forwarded and deleted nothing."
     unverified:
-      - "Its agent and the Google Workspace server are switched off in the catalogue: no real mail has been read, drafted or sent."
+      - "No real mail has been read, drafted or sent yet: the drill on a Datalayer mailbox comes first."
       - "Its tests have not been run against its own model."
 
 record:
@@ -127,10 +128,7 @@ deployment:
   hosted:
     visibility: private
 
-enabled: false
-unavailable_because: >-
-  It reads and sorts your mail, and a mailbox cannot be connected yet: the
-  Google Workspace connection is still being built.
+enabled: true
 
 tags:
   - example
