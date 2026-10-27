@@ -2252,8 +2252,8 @@ class AppInterface(_Strict):
         description=(
             "The avatar its floating assistant shows, its appearance: by the id a plugin "
             "contributes it under (lowercase letters and digits, words joined by a hyphen): "
-            "Datalayer's orb `orb` (iridescent) or `orb-theme` (the theme's colours), thinking "
-            "while a turn runs; Datalayer's own drawings `paperclip`, `wizard`, `cat` and `eyes`; "
+            "Datalayer's orb `orb`, in the theme's colours, acting out each of the assistant's "
+            "states; Datalayer's own drawings `paperclip`, `wizard`, `cat` and `eyes`; "
             "the characters clippy.js publishes, Microsoft's, fetched from jsDelivr when shown "
             "(`clippy-js-clippy`, `clippy-js-merlin`, `clippy-js-links`, `clippy-js-rover`, "
             "`clippy-js-genie`, `clippy-js-genius`, `clippy-js-f1`, `clippy-js-peedy`, "
