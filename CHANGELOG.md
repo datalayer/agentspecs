@@ -10,6 +10,10 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
+## 0.0.133
+
+28 October 2026. `example-output` gains a SPREADSHEET mode: one fenced ```csv block named by its first line (`# filename: <name>.csv`), drawn with Datalayer Cells in the agent-runtimes outputs example's Sheet tab; the *Sales spreadsheet* suggestion asks for twelve months of sales by region; the FILE mode now takes any extension but csv and tsv, and its suggestion asks for a YAML file.
+
 ## 0.0.132
 
 28 October 2026. The fourth harness is pi, not Gemini CLI (the user's decision): `pi` is offered — Earendil's pi coding agent 1.4.0 as published, driven through the pi-acp 0.0.34 adapter (MIT), which speaks ACP over stdio and spawns the `pi` executable; `session/load` through pi's own session files (`resume: load`); `AGENTS.md`, `.pi/skills`; the register says why pi-acp over @automatalabs/pi-acp (in-process, an older pi). Gemini CLI is described and not offered (`enabled: false`, `unavailable_because`: its API host is outside a Datalayer runtime's boundary, unrouted and unfunded); the three other sentences name the four as Claude Code, Codex, OpenCode and pi. `example-harness-pi` beside the other harness agents. Reference page regenerated.
