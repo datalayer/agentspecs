@@ -9,7 +9,7 @@ id: fast-agent
 version: 0.0.1
 enabled: false
 unavailable_because: >-
-  the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and Gemini CLI (28 October 2026); fast-agent is a framework served over ACP, not a coding agent, its adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer.
+  the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); fast-agent is a framework served over ACP, not a coding agent, its adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer.
 name: fast-agent
 description: llmindset's agent framework served over ACP; each agent it defines is a session mode, with any model provider it is configured with.
 docs: https://github.com/evalstate/fast-agent/blob/main/docs/docs/acp/index.md

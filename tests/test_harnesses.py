@@ -22,12 +22,12 @@ def test_the_catalogue_holds_the_harnesses_of_decision_4_and_one_framework():
     # restriction; OpenHands; `custom` only as an organization's own; and one framework
     # exposing its agents over ACP, fast-agent.
     assert set(harnesses.HARNESS_CATALOGUE) == {
-        "claude-code", "codex", "gemini-cli", "goose", "opencode", "openhands", "fast-agent", "custom",
+        "claude-code", "codex", "gemini-cli", "goose", "opencode", "openhands", "fast-agent", "pi", "custom",
     }
     # Four are offered (28 October 2026): the ones the runtime image carries and that were
     # drilled. The three others are described with the reason they are not offered.
     assert {spec.id for spec in harnesses.HARNESS_CATALOGUE.values() if spec.enabled} == {
-        "claude-code", "codex", "opencode", "gemini-cli",
+        "claude-code", "codex", "opencode", "pi",
     }
     for spec in harnesses.HARNESS_CATALOGUE.values():
         if spec.id == "custom":
@@ -51,7 +51,7 @@ def test_every_harness_has_a_register_entry_and_its_version_is_pinned():
             assert entry.version in " ".join([spec.acp.command, *spec.acp.args, *spec.requires.binaries])
     assert set(harnesses.HARNESS_REGISTER) - set(harnesses.LISTED_HARNESSES) == set(harnesses.HARNESS_CATALOGUE)
     # The long tail (SH-57): every other agent of the ACP agents page, 36 of 43 on 16 October 2026.
-    assert len(harnesses.LISTED_HARNESSES) == 36
+    assert len(harnesses.LISTED_HARNESSES) == 35
 
 
 def test_a_harness_without_a_register_entry_does_not_load(tmp_path):
@@ -270,7 +270,7 @@ def test_every_catalogue_harness_declares_its_capabilities_table():
     tables = {spec.id: spec.capabilities for spec in harnesses.HARNESS_CATALOGUE.values()}
     assert {h: t.resume.value for h, t in tables.items()} == {
         "claude-code": "load", "codex": "load", "fast-agent": "load", "openhands": "load",
-        "gemini-cli": "none", "goose": "none", "opencode": "none", "custom": "none",
+        "gemini-cli": "none", "goose": "none", "opencode": "none", "pi": "load", "custom": "none",
     }
     assert {t.fork_history.value for h, t in tables.items() if h != "custom"} == {"replay"}
     assert all(t.interrupt and not t.steering and t.compaction.value == "own" for t in tables.values())

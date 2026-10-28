@@ -1,9 +1,9 @@
 # Built from app.py by `loop apps build`: the file is the source; edit it there.
 # What its code decides; without the file, its agent answers:
-# loop:code start: opening (app.py:161)
-# loop:code message: reply (app.py:174)
-# loop:code action save: save (app.py:190)
-# loop:code action finish: finish (app.py:200)
+# loop:code start: opening (app.py:160)
+# loop:code message: reply (app.py:173)
+# loop:code action save: save (app.py:189)
+# loop:code action finish: finish (app.py:199)
 schema: loop.app/v1
 id: customer-interview
 version: 0.0.3

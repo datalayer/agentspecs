@@ -14,8 +14,8 @@ described here and not offered is refused in its own sentence wherever it is nam
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [Claude Code](https://github.com/agentclientprotocol/claude-agent-acp) | `claude-code` | `npx -y @agentclientprotocol/claude-agent-acp@0.91.0` | lend | `.claude/skills` | `CLAUDE.md` | api_key_only | Apache-2.0 (adapter); Anthropic Commercial Terms of Service (the agent) | @agentclientprotocol/claude-agent-acp 0.91.0 |
 | [Codex](https://github.com/agentclientprotocol/codex-acp) | `codex` | `npx -y @agentclientprotocol/codex-acp@2.2.2` | lend | `.agents/skills` | `AGENTS.md` | api_key_only | Apache-2.0 (adapter); OpenAI Terms of Use (the agent) | @agentclientprotocol/codex-acp 2.2.2 |
-| [Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/cli-reference.md) | `gemini-cli` | `npx -y @google/gemini-cli@0.64.0 --experimental-acp` | lend | `.gemini/skills` | `GEMINI.md` | api_key_only | Apache-2.0 (the agent); Gemini API or Gemini Code Assist terms (the model) | @google/gemini-cli 0.64.0 |
 | [OpenCode](https://opencode.ai/docs/acp/) | `opencode` | `npx -y opencode-ai@1.19.0 acp` | lend | `.opencode/skills` | `AGENTS.md` | permitted | MIT | opencode-ai 1.19.0 |
+| [pi](https://github.com/svkozak/pi-acp) | `pi` | `npx -y pi-acp@0.0.34` | lend | `.pi/skills` | `AGENTS.md` | permitted | MIT (adapter); MIT (the agent, @earendil-works/pi-coding-agent 1.4.0) | pi-acp 0.0.34 |
 
 ## Not offered today
 
@@ -24,9 +24,10 @@ is refused with the sentence below, by the runtime, by `loop --harness` and by t
 
 | Harness | Id | Why not |
 | --- | --- | --- |
-| [fast-agent](https://github.com/evalstate/fast-agent/blob/main/docs/docs/acp/index.md) | `fast-agent` | the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and Gemini CLI (28 October 2026); fast-agent is a framework served over ACP, not a coding agent, its adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer. |
-| [goose](https://block.github.io/goose/docs/gdk/acp/) | `goose` | the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and Gemini CLI (28 October 2026); goose is a binary of its own release, not an npm adapter, the runtime image does not carry it, and it has not been drilled on Datalayer. |
-| [OpenHands](https://docs.openhands.dev/openhands/usage/run-openhands/acp) | `openhands` | the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and Gemini CLI (28 October 2026); OpenHands' adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer. |
+| [fast-agent](https://github.com/evalstate/fast-agent/blob/main/docs/docs/acp/index.md) | `fast-agent` | the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); fast-agent is a framework served over ACP, not a coding agent, its adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer. |
+| [Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/cli-reference.md) | `gemini-cli` | the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); Gemini CLI's API host (generativelanguage.googleapis.com) is outside a Datalayer runtime's egress boundary and is not routed through ai-inference, so it stays unfunded and unoffered there (the user's decision, 28 October 2026). |
+| [goose](https://block.github.io/goose/docs/gdk/acp/) | `goose` | the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); goose is a binary of its own release, not an npm adapter, the runtime image does not carry it, and it has not been drilled on Datalayer. |
+| [OpenHands](https://docs.openhands.dev/openhands/usage/run-openhands/acp) | `openhands` | the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); OpenHands' adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer. |
 
 ## Listed, not drilled yet
 
@@ -63,7 +64,6 @@ to the catalogue with a spec.
 | [Mistral Vibe](https://github.com/mistralai/mistral-vibe/blob/main/docs/acp-setup.md) | `mistral-vibe` | `vibe-acp` | Apache-2.0 | permitted | A Mistral API key (MISTRAL_API_KEY) |
 | [Muse Spark Code](https://github.com/RandyNorthrup/muse-spark-code/blob/main/docs/acp.md) | `muse-spark-code` | `muse-spark-code-acp` | MIT | unknown | A Muse Code subscription, or a Meta Model API key (--backend modelApi) |
 | [OpenClaw](https://docs.openclaw.ai/cli/acp) | `openclaw` | `openclaw acp` | MIT | permitted | An OpenClaw Gateway token, with the Gateway's configured model providers |
-| [pi (through pi-acp)](https://github.com/svkozak/pi-acp) | `pi` | `npx -y pi-acp` | MIT | permitted | pi's configured provider's API key (a subscription login carries its provider's terms) |
 | [Poolside (pool)](https://github.com/poolsideai/pool) | `poolside` | `pool acp` | Proprietary (Poolside End User License Agreement) | refused | A Poolside login or POOLSIDE_API_KEY |
 | [Qoder CLI](https://docs.qoder.com/cli/acp) | `qoder-cli` | `qoder --acp` | Proprietary (Qoder terms of service) | refused | A Qoder account login |
 | [Qwen Code](https://qwenlm.github.io/qwen-code-docs/en/users/integration-zed/) | `qwen-code` | `qwen --acp` | Apache-2.0 | permitted | The configured provider's key (set with /auth) |
@@ -115,7 +115,7 @@ An organization's own ACP agent, its command named by the organization's own har
 
 llmindset's agent framework served over ACP; each agent it defines is a session mode, with any model provider it is configured with.
 
-- Not offered: the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and Gemini CLI (28 October 2026); fast-agent is a framework served over ACP, not a coding agent, its adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer.
+- Not offered: the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); fast-agent is a framework served over ACP, not a coding agent, its adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer.
 - Credential: The provider's key fast-agent is given (ANTHROPIC_API_KEY, OPENAI_API_KEY or HF_TOKEN); ANTHROPIC_API_KEY declared; secrets declared: `ANTHROPIC_API_KEY`
 - Needs: uv (uvx), Python 3.12 to 3.15 (requires_python on PyPI)
 - ACP 1: `session/load` yes; modes none advertised
@@ -128,6 +128,7 @@ llmindset's agent framework served over ACP; each agent it defines is a session 
 
 Google's coding agent, which speaks ACP itself when started with --experimental-acp.
 
+- Not offered: the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); Gemini CLI's API host (generativelanguage.googleapis.com) is outside a Datalayer runtime's egress boundary and is not routed through ai-inference, so it stays unfunded and unoffered there (the user's decision, 28 October 2026).
 - Credential: A Gemini API key (GEMINI_API_KEY), the person's own; or a Google login on a Code Assist Standard or Enterprise subscription; secrets declared: `GEMINI_API_KEY`
 - Needs: Node 20 or later (engines.node >=20 on npm), git
 - ACP 1: `session/load` no; modes `default`, `auto_edit`, `yolo`, `plan`
@@ -141,7 +142,7 @@ Google's coding agent, which speaks ACP itself when started with --experimental-
 
 Block's open agent (now the Agentic AI Foundation's), which speaks ACP itself with goose acp; any model provider it is configured with.
 
-- Not offered: the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and Gemini CLI (28 October 2026); goose is a binary of its own release, not an npm adapter, the runtime image does not carry it, and it has not been drilled on Datalayer.
+- Not offered: the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); goose is a binary of its own release, not an npm adapter, the runtime image does not carry it, and it has not been drilled on Datalayer.
 - Credential: The provider's key goose is configured with (GOOSE_PROVIDER); ANTHROPIC_API_KEY declared; secrets declared: `ANTHROPIC_API_KEY`
 - Needs: The goose CLI (release v1.54.0 of 8 October 2026), git
 - ACP 1: `session/load` no; modes none advertised
@@ -166,7 +167,7 @@ Anomaly's open coding agent, which speaks ACP itself with opencode acp; any mode
 
 The OpenHands CLI, which speaks ACP itself with openhands acp; any model provider it is configured with.
 
-- Not offered: the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and Gemini CLI (28 October 2026); OpenHands' adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer.
+- Not offered: the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); OpenHands' adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer.
 - Credential: The provider's key OpenHands reads as LLM_API_KEY, with LLM_MODEL, under --override-with-envs; secrets declared: `LLM_API_KEY`
 - Needs: uv (uvx), Python 3.12 or later, git
 - ACP 1: `session/load` yes; modes `always-ask`, `always-approve`, `llm-approve`
@@ -174,3 +175,15 @@ The OpenHands CLI, which speaks ACP itself with openhands acp; any model provide
 - Capabilities: resume `load`, fork history `replay`, interrupt yes, steering no, images no, compaction `own`; vendor session id `none`; asks about every command
 - Licence read at https://pypi.org/project/openhands/; terms read at https://github.com/OpenHands/OpenHands-CLI/blob/main/LICENSE
 - Open source under MIT, no vendor terms of its own; the model provider's terms apply to the key. Launched as openhands acp (OpenHands-CLI README; docs.openhands.dev's ACP page); resumes with --resume; reads skills from .agents/skills (.openhands/skills is legacy).
+
+### pi (`pi`)
+
+Earendil's pi coding agent, driven over ACP through the pi-acp adapter, which spawns the published pi executable; any model provider pi is configured with.
+
+- Credential: The provider's key pi is configured with; ANTHROPIC_API_KEY declared, the person's own; secrets declared: `ANTHROPIC_API_KEY`
+- Needs: Node 22 (pi-coding-agent engines.node >=22.19.0; pi-acp >=20), the pi executable 1.4.0 on the PATH (@earendil-works/pi-coding-agent), git
+- ACP 1: `session/load` yes; modes none advertised
+- Honours `model:` yes, `subagents:` no
+- Capabilities: resume `load`, fork history `replay`, interrupt yes, steering no, images no, compaction `own`; vendor session id `none`; asks about every command
+- Licence read at https://www.npmjs.com/package/pi-acp; terms read at https://github.com/earendil-works/pi/blob/main/LICENSE
+- Read 2026-10-28. pi speaks no ACP itself; pi-acp 0.0.34 (MIT, an individual's, github.com/svkozak/pi-acp) speaks ACP JSON-RPC over stdio and spawns the published `pi` executable with `pi --mode rpc`, so pi 1.4.0 runs as published — chosen over @automatalabs/pi-acp 0.9.4 (Apache-2.0, in-process, which embeds pi 0.87.1 through its SDK on a fork's package). Open source under MIT on both sides, no vendor terms of their own; the model provider's terms apply to the key. Session persistence through pi's own session files (session/load).

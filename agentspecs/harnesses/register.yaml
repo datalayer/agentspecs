@@ -85,6 +85,21 @@ entries:
       Open source under MIT, no vendor terms of its own; the model provider's terms apply to the
       key. Launched as opencode acp (opencode.ai/docs/acp); reads skills from .opencode/skills,
       .claude/skills and .agents/skills.
+  - harness: pi
+    adapter: pi-acp
+    version: 0.0.34
+    licence: MIT (adapter); MIT (the agent, @earendil-works/pi-coding-agent 1.4.0)
+    licence_source: https://www.npmjs.com/package/pi-acp
+    terms_source: https://github.com/earendil-works/pi/blob/main/LICENSE
+    credential: The provider's key pi is configured with; ANTHROPIC_API_KEY declared, the person's own
+    served_to_third_parties: permitted
+    binaries: Node 22 (pi-coding-agent engines.node >=22.19.0; pi-acp >=20), the pi executable 1.4.0 on the PATH (@earendil-works/pi-coding-agent), git
+    note: >-
+      Read 2026-10-28. pi speaks no ACP itself; pi-acp 0.0.34 (MIT, an individual's, github.com/svkozak/pi-acp)
+      speaks ACP JSON-RPC over stdio and spawns the published `pi` executable with `pi --mode rpc`, so pi 1.4.0 runs
+      as published — chosen over @automatalabs/pi-acp 0.9.4 (Apache-2.0, in-process, which embeds pi 0.87.1 through
+      its SDK on a fork's package). Open source under MIT on both sides, no vendor terms of their own; the model
+      provider's terms apply to the key. Session persistence through pi's own session files (session/load).
   - harness: openhands
     adapter: openhands
     version: 1.16.0
@@ -494,19 +509,6 @@ entries:
     credential: An OpenClaw Gateway token, with the Gateway's configured model providers
     served_to_third_parties: permitted
     note: Bridges ACP to an OpenClaw Gateway, whose providers keep their own terms.
-  - harness: pi
-    tier: listed
-    name: pi (through pi-acp)
-    docs: https://github.com/svkozak/pi-acp
-    adapter: pi-acp
-    version: "0.0.34"
-    command: "npx -y pi-acp"
-    licence: MIT
-    licence_source: https://github.com/svkozak/pi-acp/blob/main/LICENSE
-    terms_source: https://github.com/svkozak/pi-acp/blob/main/LICENSE
-    credential: pi's configured provider's API key (a subscription login carries its provider's terms)
-    served_to_third_parties: permitted
-    note: Spawns pi --mode rpc from @earendil-works/pi-coding-agent (MIT).
   - harness: poolside
     tier: listed
     name: Poolside (pool)

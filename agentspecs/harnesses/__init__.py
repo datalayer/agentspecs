@@ -5,7 +5,7 @@
 """Harness specifications (SH-01).
 
 A *harness* is an agent program driven over the Agent Client Protocol (ACP):
-a coding agent such as Claude Code, Codex, Gemini CLI, Goose, OpenCode or
+a coding agent such as Claude Code, Codex, OpenCode, pi, Gemini CLI, Goose or
 OpenHands, or any agent a framework exposes over ACP (fast-agent, LangChain's
 Deep Agents, …). One YAML per harness under ``harnesses/``: how it is
 launched (``acp``), what it needs (``requires``), what it can honour of an
