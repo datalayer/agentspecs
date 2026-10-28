@@ -10,23 +10,21 @@ version: 0.0.1
 name: Datalayer
 description: Read, edit and run Jupyter notebooks on Datalayer, with sandboxes and data
 
-# A hosted server, reached through `mcp-remote`: the runtime speaks stdio to
-# a bridge that speaks streamable HTTP to https://mcp.datalayer.run.
+# A hosted server, reached by the runtime itself over Streamable HTTP: no
+# command, the url and the headers sent with every request. (It went through
+# `npx -y mcp-remote` until 28 October 2026, a stdio bridge a runtime pod can
+# neither fetch — it reaches the gateway and no package registry — nor finds
+# in its image.)
 #
-# The header rather than the OAuth flow, and deliberately. `mcp-remote` can
-# do OAuth 2.1 with PKCE, which is right for a person at a desktop client and
-# wrong here: it opens a browser and waits for somebody to approve a consent
-# screen. An agent runtime has nobody at the keyboard, so it presents a
-# credential it already holds — the same token the Datalayer CLI and SDK use.
-command: npx
-args:
-  - "-y"
-  - "mcp-remote"
-  - "https://mcp.datalayer.run/mcp"
-  - "--header"
-  - "Authorization: Bearer ${DATALAYER_API_KEY}"
-
-transport: stdio
+# The header rather than an OAuth flow, and deliberately: OAuth 2.1 with PKCE
+# is right for a person at a desktop client and wrong here, since it opens a
+# browser and waits for somebody to approve a consent screen. An agent
+# runtime has nobody at the keyboard, so it presents a credential it already
+# holds — the same token the Datalayer CLI and SDK use.
+transport: streamable-http
+url: "https://mcp.datalayer.run/mcp"
+headers:
+  Authorization: "Bearer ${DATALAYER_API_KEY}"
 
 # Not on by default. Every other server here reaches something outside
 # Datalayer; this one reaches *this* platform, and an agent running inside a

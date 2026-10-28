@@ -8,20 +8,19 @@ description: Access NASA Earthdata search and metadata capabilities
 
 # The Datalayer MCP server (the gateway behind `datalayer`) with its
 # `earthdata` toolset, as `odoo-accounting` reaches the books: `only=` asks
-# for exactly that toolset. `earthdata-mcp-server` is a Python package, so
-# `npx` never started it on a runtime (2026-10-07: every Earthdata scene
-# member failed with "Connection closed"). Searching NASA's catalogue is
-# anonymous — the toolset asks for no Earthdata login; a download, run on the
-# sandbox, reads EARTHDATA_USERNAME and EARTHDATA_PASSWORD there
-# (`sandbox_envvars`).
-command: npx
-args:
-  - "-y"
-  - "mcp-remote"
-  - "https://mcp.datalayer.run/mcp?only=earthdata"
-  - "--header"
-  - "Authorization: Bearer ${DATALAYER_API_KEY}"
-transport: stdio
+# for exactly that toolset. A remote server: no command, the runtime connects
+# to the url itself and sends the headers with every request.
+# `earthdata-mcp-server` is a Python package, so `npx` never started it on a
+# runtime (2026-10-07: every Earthdata scene member failed with "Connection
+# closed"); the `npx -y mcp-remote` bridge that followed could not start
+# there either (28 October 2026: the pod fetches nothing). Searching NASA's
+# catalogue is anonymous — the toolset asks for no Earthdata login; a
+# download, run on the sandbox, reads EARTHDATA_USERNAME and
+# EARTHDATA_PASSWORD there (`sandbox_envvars`).
+transport: streamable-http
+url: "https://mcp.datalayer.run/mcp?only=earthdata"
+headers:
+  Authorization: "Bearer ${DATALAYER_API_KEY}"
 enabled: true
 env: {}
 envvars:

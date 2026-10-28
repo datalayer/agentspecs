@@ -14,23 +14,24 @@ description: >-
   An accountant's day in Odoo — invoices, bills, journal entries, reconciliations,
   bank lines and tax returns — through the Datalayer MCP server
 
-# The same hosted server and bridge as `datalayer`, the toolset chosen in the
-# URL. `only=` asks for exactly that toolset (and the gateway's always-on ones):
+# The same hosted server as `datalayer`, the toolset chosen in the URL.
+# `only=` asks for exactly that toolset (and the gateway's always-on ones):
 # an agent given both servers then never sees one tool twice. The gateway
 # reaches Odoo with DATALAYER_ODOO_URL and DATALAYER_ODOO_API_KEY (and
 # DATALAYER_ODOO_DATABASE where the host does not say it), kept in the
 # person's Datalayer environment and never handed to the runtime. One company
 # per session: the person's default in Odoo, or the one a URL names with
 # `&odoo-company=<name or id>`.
-command: npx
-args:
-  - "-y"
-  - "mcp-remote"
-  - "https://mcp.datalayer.run/mcp?only=odoo-accounting"
-  - "--header"
-  - "Authorization: Bearer ${DATALAYER_API_KEY}"
-
-transport: stdio
+#
+# A remote server: no command, the runtime connects to the url itself over
+# Streamable HTTP and sends the headers with every request, the bearer's
+# `${DATALAYER_API_KEY}` expanded as it starts (the `npx -y mcp-remote` shim
+# this went through could never start on a runtime: its pod reaches the
+# gateway and no package registry — 28 October 2026).
+transport: streamable-http
+url: "https://mcp.datalayer.run/mcp?only=odoo-accounting"
+headers:
+  Authorization: "Bearer ${DATALAYER_API_KEY}"
 
 # Not on by default: it writes to somebody's books.
 enabled: false

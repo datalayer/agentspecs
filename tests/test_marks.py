@@ -91,7 +91,9 @@ def test_the_odoo_accounting_server_is_the_datalayer_server_with_one_toolset():
     spec = yaml.safe_load((ROOT / "mcp-servers" / "odoo-accounting.yaml").read_text())
     datalayer = yaml.safe_load((ROOT / "mcp-servers" / "datalayer.yaml").read_text())
     assert spec["icon"] == "@datalayer/icons-react:odoo"
-    assert "https://mcp.datalayer.run/mcp?only=odoo-accounting" in spec["args"]
+    assert spec["url"] == "https://mcp.datalayer.run/mcp?only=odoo-accounting"
+    assert spec["transport"] == "streamable-http" and "command" not in spec
+    assert spec["headers"] == datalayer["headers"]
     assert spec["envvars"] == datalayer["envvars"]
     accounting = {
         name: classes

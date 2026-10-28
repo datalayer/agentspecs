@@ -8,7 +8,19 @@ MCP (Model Context Protocol) server specifications define how agents connect to 
 
 ## Overview
 
-MCP servers provide tools and resources to agents through a standardized protocol. Each specification defines the command to run, arguments, environment variables, and transport method.
+MCP servers provide tools and resources to agents through a standardized protocol. A specification
+is one of two shapes:
+
+- a **remote server** names the `url` it is reached at and the `headers` sent with every request
+  (the bearer among them): the runtime connects to it over Streamable HTTP itself, no process is
+  started and nothing is fetched. The Datalayer MCP server and its toolsets (`datalayer`,
+  `odoo-accounting`, `earthdata`), Hugging Face's and Kaggle's hosted servers are remote;
+- a **local server** names the `command` that runs it and its `args`: over stdio, or, with
+  `transport: streamable-http` and a `url`, as a local HTTP process the runtime reaches at that
+  url (`google-workspace`).
+
+A specification names a `command` or a `url`, never neither. One that names both is a local HTTP
+process.
 
 ## Required Fields
 
@@ -24,31 +36,57 @@ Display name shown in the UI
 ### `description` (string)
 Server capabilities description
 
+## A remote server
+
+### `url` (string)
+Where the server is reached, over Streamable HTTP. A query may choose what it serves: the
+Datalayer gateway's `only=` asks for one toolset.
+```yaml
+transport: streamable-http
+url: "https://mcp.datalayer.run/mcp?only=odoo-accounting"
+```
+
+### `headers` (object)
+The headers sent with every request. A credential belongs in a `${VAR}` reference, expanded by
+the runtime as the server starts and never written down: the runtime holds what it expanded and
+withholds it from everything the model reads.
+```yaml
+headers:
+  Authorization: "Bearer ${DATALAYER_API_KEY}"
+```
+
+A remote server names no `command` and no `args`.
+
+## A local server
+
 ### `command` (string)
 Executable command to start the server
 ```yaml
 command: python
 command: npx
-command: node
+command: uvx
 ```
 
 ### `args` (list of strings)
 Command arguments including environment variable references
 ```yaml
 args:
-  - "-m"
-  - "mcp_remote"
-  - "--Authorization"
-  - "Bearer ${KAGGLE_API_TOKEN}"
+  - "workspace-mcp"
+  - "--transport"
+  - "streamable-http"
 ```
+
+A local server that listens over HTTP names `transport: streamable-http` and the `url` its
+command listens at; the runtime starts the command and reaches it there.
 
 ## Optional Fields
 
 ### `transport` (string)
-Transport protocol (`"stdio"` or `"remote"`)
+Transport protocol: `stdio` (a local process spoken to over its standard streams, the default)
+or `streamable-http` (a remote server at its `url`, or a local command listening at its `url`).
 ```yaml
-transport: stdio   # Standard input/output
-transport: remote  # Remote HTTP connection
+transport: stdio             # A local process, over its standard streams
+transport: streamable-http   # Reached at its url: remote without a command, local with one
 ```
 
 ### `envvars` (list of strings)
@@ -60,12 +98,16 @@ envvars:
 ```
 
 ### `env` (object)
-Environment variables to set for the server process
+Environment variables to set for a local server's process
 ```yaml
 env:
   NODE_ENV: production
   LOG_LEVEL: info
 ```
+
+### `sandbox_envvars` (list of strings)
+Environment variables the code a server's tools write reads in the code sandbox (a download's
+script): given to the sandbox when the account has them, never to the server, never required.
 
 ### `tags` (list of strings)
 Categorization tags
@@ -89,26 +131,23 @@ Drawn where there is no icon; where there is neither, nothing is.
 
 ## Environment Variable Expansion
 
-Use `${VAR_NAME}` syntax in args for environment variable expansion:
+Use `${VAR_NAME}` syntax in `args`, `env` and `headers` for environment variable expansion:
 
 ```yaml
-args:
-  - "-m"
-  - "mcp_remote"
-  - "--Authorization"
-  - "Bearer ${KAGGLE_API_TOKEN}"
-  - "--accept"
-  - "application/json"
-  - "--"
-  - "https://mcp.kaggle.com"
+headers:
+  Authorization: "Bearer ${KAGGLE_API_TOKEN}"
 
 envvars:
   - KAGGLE_API_TOKEN
 ```
 
-The `${KAGGLE_API_TOKEN}` will be expanded at runtime by consuming systems.
+The `${KAGGLE_API_TOKEN}` will be expanded at runtime by consuming systems. A bearer that would
+expand to nothing is refused before anything is sent: the server is not started, and the
+reason names the variable.
 
 ## Complete Example
+
+A remote server:
 
 ```yaml
 # Copyright (c) 2025-2026 Datalayer, Inc.
@@ -116,21 +155,15 @@ The `${KAGGLE_API_TOKEN}` will be expanded at runtime by consuming systems.
 
 id: kaggle
 version: 0.0.1
-name: Kaggle MCP Server
-description: Access Kaggle datasets, competitions, and kernels
+name: Kaggle
+description: Kaggle datasets, models, competitions, and notebooks access
 
-command: python
-args:
-  - "-m"
-  - "mcp_remote"
-  - "--Authorization"
-  - "Bearer ${KAGGLE_API_TOKEN}"
-  - "--accept"
-  - "application/json"
-  - "--"
-  - "https://mcp.kaggle.com"
+transport: streamable-http
+url: "https://www.kaggle.com/mcp"
+headers:
+  Authorization: "Bearer ${KAGGLE_API_TOKEN}"
 
-transport: remote
+enabled: false
 
 envvars:
   - KAGGLE_API_TOKEN:0.0.1
@@ -144,15 +177,37 @@ icon: "@datalayer/icons-react:kaggle"
 emoji: "🏆"
 ```
 
+A local server:
+
+```yaml
+id: tavily
+version: 0.0.1
+name: Tavily
+description: Web search
+
+command: npx
+args:
+  - "-y"
+  - "tavily-mcp"
+
+transport: stdio
+
+envvars:
+  - TAVILY_API_KEY:0.0.1
+```
+
 ## MCP Server Hierarchy
 
 ```
 MCP Server Specification
 ├── Basic Info (id, name, description, tags)
-├── Execution (command, args, transport)
+├── Where it is
+│   ├── remote: url, headers (transport streamable-http)
+│   └── local: command, args (transport stdio; or streamable-http with the url it listens at)
 ├── Environment
 │   ├── envvars (required environment variables)
-│   └── env (variables to set for the process)
+│   ├── env (variables to set for a local process)
+│   └── sandbox_envvars (read by the code its tools write, in the sandbox)
 └── UI (icon, emoji)
 ```
 
@@ -183,7 +238,7 @@ what was available.
 ### Odoo accounting, through the Datalayer server
 
 `odoo-accounting` is the `datalayer` server with one toolset: the same hosted
-gateway and bridge, reached at `https://mcp.datalayer.run/mcp?only=odoo-accounting`.
+gateway, reached at `https://mcp.datalayer.run/mcp?only=odoo-accounting`.
 `only=` asks for that toolset alone — invoices, vendor bills, journal entries,
 reconciliations, bank lines, exchange rates and tax returns — so an agent given
 both servers never sees one tool twice. The gateway reaches Odoo with the
@@ -199,22 +254,37 @@ has the notebook it was given — enabling it says "this agent should also act
 on my other notebooks", which is a choice somebody makes rather than a
 default they discover.
 
-It is reached through `mcp-remote` with a bearer token from
-`DATALAYER_API_KEY`, not through the OAuth flow. `mcp-remote` can do OAuth
-2.1 with PKCE, which is right for a person at a desktop client and wrong
-here: it opens a browser and waits for a consent screen to be approved. An
-agent runtime has nobody at the keyboard.
+### Remote servers are reached by the runtime itself
+
+`datalayer`, `odoo-accounting` and `earthdata` (the Datalayer gateway),
+`huggingface` and `kaggle` name a `url` and `headers`, no command: the
+runtime connects to the url over Streamable HTTP and sends the bearer with
+every request. Until 28 October 2026 they went through `npx -y mcp-remote`,
+a stdio bridge: a Datalayer runtime's pod reaches the gateway and no package
+registry, and its image carries no `mcp-remote`, so the bridge never started
+there and the home page's demo scenes answered that their tools could not be
+reached.
+
+The bearer rather than an OAuth flow, and deliberately: OAuth 2.1 with PKCE
+is right for a person at a desktop client and wrong here, since it opens a
+browser and waits for a consent screen to be approved. An agent runtime has
+nobody at the keyboard, so it presents a credential it already holds — the
+same token the Datalayer CLI and SDK use. A gateway that refuses the key
+answers in a sentence, and the runtime says that sentence as the reason the
+server did not start.
 
 ## Best Practices
 
 1. **ID Format**: Use kebab-case (`kaggle`, not `Kaggle` or `kaggle_mcp`)
-2. **Command**: Use full command names (`python`, not `py`)
-3. **Args**: Break arguments into separate list items for clarity
-4. **Environment Variables**: Always define required envvars in the `envvars` field
-5. **Variable Expansion**: Use `${VAR_NAME}` syntax consistently
-6. **Transport**: Specify `stdio` for local processes, `remote` for HTTP connections
-7. **Tags**: Use consistent tags for better categorization
-8. **Description**: Be specific about what tools and resources the server provides
+2. **Remote or local**: A hosted server names its `url` and `headers`; a server that runs on the
+   runtime's computer names its `command`. Never a bridge from one to the other.
+3. **Command**: Use full command names (`python`, not `py`)
+4. **Args**: Break arguments into separate list items for clarity
+5. **Environment Variables**: Always define required envvars in the `envvars` field
+6. **Variable Expansion**: Use `${VAR_NAME}` syntax consistently
+7. **Transport**: `stdio` for a local process; `streamable-http` for a server reached at a url
+8. **Tags**: Use consistent tags for better categorization
+9. **Description**: Be specific about what tools and resources the server provides
 
 ## Full Field Coverage
 
@@ -224,13 +294,13 @@ Required fields:
 - `version`
 - `name`
 - `description`
-- `command`
-- `args`
+- one of: `url` with `headers` (a remote server), or `command` with `args` (a local one)
 
 Common optional fields:
 
-- `transport` (`stdio` or `remote`)
+- `transport` (`stdio` or `streamable-http`)
 - `envvars` (prefer versioned refs)
-- `env` (process env injection)
+- `env` (a local process's env injection)
+- `sandbox_envvars`
 - `tags`
 - `icon`, `emoji`
