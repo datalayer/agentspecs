@@ -24,12 +24,18 @@ def test_the_catalogue_holds_the_harnesses_of_decision_4_and_one_framework():
     assert set(harnesses.HARNESS_CATALOGUE) == {
         "claude-code", "codex", "gemini-cli", "goose", "opencode", "openhands", "fast-agent", "custom",
     }
+    # Four are offered (28 October 2026): the ones the runtime image carries and that were
+    # drilled. The three others are described with the reason they are not offered.
+    assert {spec.id for spec in harnesses.HARNESS_CATALOGUE.values() if spec.enabled} == {
+        "claude-code", "codex", "opencode", "gemini-cli",
+    }
     for spec in harnesses.HARNESS_CATALOGUE.values():
         if spec.id == "custom":
-            assert spec.acp is None and not spec.enabled
+            assert spec.acp is None and not spec.enabled and not spec.unavailable_because
         else:
-            assert spec.acp is not None and spec.enabled and spec.acp.protocol_version == 1
+            assert spec.acp is not None and spec.acp.protocol_version == 1
             assert spec.acp.mcp is harnesses.McpLending.LEND
+            assert spec.enabled != bool(spec.unavailable_because.strip()), spec.id
     assert harnesses.get_harness("claude-code").terms.served_to_third_parties is harnesses.ThirdPartyServing.API_KEY_ONLY
     assert harnesses.get_harness("codex").terms.served_to_third_parties is harnesses.ThirdPartyServing.API_KEY_ONLY
     assert "18 June 2026" in harnesses.get_harness("gemini-cli").terms.tier_restrictions
@@ -104,6 +110,20 @@ def test_custom_names_no_command_and_is_not_offered():
         harnesses.HarnessSpec.model_validate({**good, "acp": {"command": "mine", "mcp": "lend"}})
     with pytest.raises(ValidationError, match="not offered"):
         harnesses.HarnessSpec.model_validate({**good, "enabled": True})
+
+
+def test_a_harness_not_offered_says_why_and_is_refused_in_its_sentence():
+    good = yaml.safe_load((ROOT / "harnesses" / "claude-code.yaml").read_text())
+    with pytest.raises(ValidationError, match="not offered: say why"):
+        harnesses.HarnessSpec.model_validate({**good, "enabled": False})
+    with pytest.raises(ValidationError, match="is offered: remove `unavailable_because`"):
+        harnesses.HarnessSpec.model_validate({**good, "unavailable_because": "later"})
+    assert harnesses.offered_refusal("goose").startswith(
+        "The harness 'goose' (goose) is not offered: the catalogue offers four harnesses today"
+    )
+    assert harnesses.offered_refusal("claude-code") is None
+    assert harnesses.offered_refusal("custom") is None
+    assert harnesses.offered_refusal("nope") is None
 
 
 def test_every_agent_names_a_harness_it_can_ask_for():

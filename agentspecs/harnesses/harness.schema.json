@@ -370,6 +370,12 @@
     "terms": {
       "$ref": "#/$defs/HarnessTerms"
     },
+    "unavailable_because": {
+      "default": "",
+      "description": "Why it is not offered today, in a sentence the runtime, `loop` and the Studio say when it is named: said when `enabled` is false, and only then (`custom` needs none)",
+      "title": "Unavailable Because",
+      "type": "string"
+    },
     "version": {
       "description": "The version of this spec",
       "title": "Version",

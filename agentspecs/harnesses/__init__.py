@@ -330,6 +330,13 @@ class HarnessSpec(_Strict):
     name: str = Field(min_length=1, description="Its name")
     description: str = Field(min_length=1, description="What it is, in a sentence or two")
     enabled: bool = Field(default=True, description="Whether the shared catalogue offers it")
+    unavailable_because: str = Field(
+        default="",
+        description=(
+            "Why it is not offered today, in a sentence the runtime, `loop` and the Studio say "
+            "when it is named: said when `enabled` is false, and only then (`custom` needs none)"
+        ),
+    )
     tags: List[str] = Field(default_factory=list)
     docs: str = Field(default="", description="Where its ACP use is documented, https")
     acp: Optional[HarnessAcp] = Field(default=None, description="How it is launched; absent only on `custom`")
@@ -365,6 +372,21 @@ class HarnessSpec(_Strict):
                 raise ValueError("`custom` is served under the organization's own terms")
         elif self.acp is None:
             raise ValueError(f"the harness {self.id!r} says how it is launched: an `acp` block with its command")
+        return self
+
+    @model_validator(mode="after")
+    def _not_offered_says_why(self) -> "HarnessSpec":
+        """A harness the catalogue does not offer says why, and an offered one says nothing."""
+        if self.id == CUSTOM_HARNESS:
+            return self
+        if not self.enabled and not self.unavailable_because.strip():
+            raise ValueError(
+                f"the harness {self.id!r} is not offered: say why, under `unavailable_because`"
+            )
+        if self.enabled and self.unavailable_because.strip():
+            raise ValueError(
+                f"the harness {self.id!r} is offered: remove `unavailable_because`, or set `enabled: false`"
+            )
         return self
 
     @model_validator(mode="after")
@@ -540,6 +562,21 @@ def get_harness(harness_id: str) -> Optional[HarnessSpec]:
     return HARNESS_CATALOGUE.get(harness_id)
 
 
+def offered_refusal(harness_id: str) -> Optional[str]:
+    """The sentence that refuses a catalogue harness the catalogue does not offer, or None.
+
+    A harness with a spec and `enabled: false` is described, never launched:
+    the sentence is its `unavailable_because`, said wherever it is named — the
+    runtime, `loop --harness`, the Studio. `custom` is refused by its own
+    sentence (it names no command), not this one; a harness the catalogue
+    does not know is none of this (see `listed_refusal`).
+    """
+    spec = HARNESS_CATALOGUE.get(harness_id)
+    if spec is None or spec.enabled or spec.id == CUSTOM_HARNESS:
+        return None
+    return f"The harness {harness_id!r} ({spec.name}) is not offered: {spec.unavailable_because.strip()}"
+
+
 def listed_refusal(harness_id: str) -> Optional[str]:
     """The sentence that refuses a listed harness, or None when it is not listed (SH-57)."""
     entry = LISTED_HARNESSES.get(harness_id)
@@ -703,12 +740,15 @@ def reference_text() -> str:
         "where it says `pydantic-ai` or `vercel-ai`; what the harness cannot honour of the",
         "spec is refused at load. The register (`harnesses/register.yaml`) says the",
         "terms each is served under and where they were read; a harness without an entry",
-        "does not load. None is served by a runtime yet (SH-10).",
+        "does not load. The Datalayer runtime serves the offered ones (SH-10); a harness",
+        "described here and not offered is refused in its own sentence wherever it is named.",
         "",
         "| Harness | Id | Launch | MCP | Skills | Instructions | Third parties | Licence | Pinned |",
         "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
-    for spec in sorted(HARNESS_CATALOGUE.values(), key=lambda s: s.id):
+    offered = [spec for spec in HARNESS_CATALOGUE.values() if spec.enabled]
+    not_offered = [spec for spec in HARNESS_CATALOGUE.values() if not spec.enabled and spec.id != CUSTOM_HARNESS]
+    for spec in sorted(offered, key=lambda s: s.id):
         entry = HARNESS_REGISTER[spec.id]
         launch = " ".join([spec.acp.command, *spec.acp.args]) if spec.acp else "the organization's own"
         skills = f"`{spec.skills.dir}`" if spec.skills.format is SkillsFormat.SKILL_MD else "none"
@@ -718,6 +758,19 @@ def reference_text() -> str:
             f"| {skills} | {'`' + spec.instructions_file + '`' if spec.instructions_file else ''} "
             f"| {spec.terms.served_to_third_parties.value} | {_cell(spec.terms.licence)} | {_cell(entry.adapter)} {_cell(entry.version)} |"
         )
+    lines += [
+        "",
+        "## Not offered today",
+        "",
+        "Described — a spec, a register entry, a capabilities table — and not offered: naming one",
+        "is refused with the sentence below, by the runtime, by `loop --harness` and by the Studio.",
+        "",
+        "| Harness | Id | Why not |",
+        "| --- | --- | --- |",
+    ]
+    for spec in sorted(not_offered, key=lambda s: s.id):
+        title = f"[{_cell(spec.name)}]({spec.docs})" if spec.docs else _cell(spec.name)
+        lines.append(f"| {title} | `{spec.id}` | {_cell(spec.unavailable_because)} |")
     lines += [
         "",
         "## Listed, not drilled yet",
@@ -740,6 +793,8 @@ def reference_text() -> str:
     for spec in sorted(HARNESS_CATALOGUE.values(), key=lambda s: s.id):
         entry = HARNESS_REGISTER[spec.id]
         lines += [f"### {spec.name} (`{spec.id}`)", "", " ".join(spec.description.split()), ""]
+        if not spec.enabled and spec.id != CUSTOM_HARNESS:
+            lines.append(f"- Not offered: {_cell(spec.unavailable_because)}")
         lines.append(f"- Credential: {_cell(entry.credential)}; secrets declared: {', '.join(f'`{s}`' for s in spec.requires.secrets) or 'none'}")
         lines.append(f"- Needs: {_cell(entry.binaries) or ', '.join(spec.requires.binaries) or 'nothing'}")
         if spec.acp:
@@ -793,6 +848,7 @@ __all__ = [
     "command_digest",
     "is_organization_harness",
     "listed_refusal",
+    "offered_refusal",
     "organization_harness",
     "HarnessAcp",
     "HarnessError",

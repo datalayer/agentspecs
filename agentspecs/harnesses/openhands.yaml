@@ -6,6 +6,9 @@
 
 id: openhands
 version: 0.0.1
+enabled: false
+unavailable_because: >-
+  the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and Gemini CLI (28 October 2026); OpenHands' adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer.
 name: OpenHands
 description: The OpenHands CLI, which speaks ACP itself with openhands acp; any model provider it is configured with.
 docs: https://docs.openhands.dev/openhands/usage/run-openhands/acp

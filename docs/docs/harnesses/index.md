@@ -7,18 +7,26 @@ An agent program driven over the Agent Client Protocol, one spec each under
 where it says `pydantic-ai` or `vercel-ai`; what the harness cannot honour of the
 spec is refused at load. The register (`harnesses/register.yaml`) says the
 terms each is served under and where they were read; a harness without an entry
-does not load. None is served by a runtime yet (SH-10).
+does not load. The Datalayer runtime serves the offered ones (SH-10); a harness
+described here and not offered is refused in its own sentence wherever it is named.
 
 | Harness | Id | Launch | MCP | Skills | Instructions | Third parties | Licence | Pinned |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [Claude Code](https://github.com/agentclientprotocol/claude-agent-acp) | `claude-code` | `npx -y @agentclientprotocol/claude-agent-acp@0.91.0` | lend | `.claude/skills` | `CLAUDE.md` | api_key_only | Apache-2.0 (adapter); Anthropic Commercial Terms of Service (the agent) | @agentclientprotocol/claude-agent-acp 0.91.0 |
 | [Codex](https://github.com/agentclientprotocol/codex-acp) | `codex` | `npx -y @agentclientprotocol/codex-acp@2.2.2` | lend | `.agents/skills` | `AGENTS.md` | api_key_only | Apache-2.0 (adapter); OpenAI Terms of Use (the agent) | @agentclientprotocol/codex-acp 2.2.2 |
-| Custom harness | `custom` | `the organization's own` |  | none |  | organizations_own | The organization's own | The organization's own 0 |
-| [fast-agent](https://github.com/evalstate/fast-agent/blob/main/docs/docs/acp/index.md) | `fast-agent` | `uvx fast-agent-acp==0.10.45` | lend | `.agents/skills` | `AGENTS.md` | permitted | Apache-2.0 | fast-agent-acp 0.10.45 |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/cli-reference.md) | `gemini-cli` | `npx -y @google/gemini-cli@0.64.0 --experimental-acp` | lend | `.gemini/skills` | `GEMINI.md` | api_key_only | Apache-2.0 (the agent); Gemini API or Gemini Code Assist terms (the model) | @google/gemini-cli 0.64.0 |
-| [goose](https://block.github.io/goose/docs/gdk/acp/) | `goose` | `goose acp` | lend | `.agents/skills` | `.goosehints` | permitted | Apache-2.0 | goose 1.54.0 |
 | [OpenCode](https://opencode.ai/docs/acp/) | `opencode` | `npx -y opencode-ai@1.19.0 acp` | lend | `.opencode/skills` | `AGENTS.md` | permitted | MIT | opencode-ai 1.19.0 |
-| [OpenHands](https://docs.openhands.dev/openhands/usage/run-openhands/acp) | `openhands` | `uvx --from openhands==1.16.0 openhands acp --override-with-envs` | lend | `.agents/skills` | `AGENTS.md` | permitted | MIT | openhands 1.16.0 |
+
+## Not offered today
+
+Described — a spec, a register entry, a capabilities table — and not offered: naming one
+is refused with the sentence below, by the runtime, by `loop --harness` and by the Studio.
+
+| Harness | Id | Why not |
+| --- | --- | --- |
+| [fast-agent](https://github.com/evalstate/fast-agent/blob/main/docs/docs/acp/index.md) | `fast-agent` | the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and Gemini CLI (28 October 2026); fast-agent is a framework served over ACP, not a coding agent, its adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer. |
+| [goose](https://block.github.io/goose/docs/gdk/acp/) | `goose` | the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and Gemini CLI (28 October 2026); goose is a binary of its own release, not an npm adapter, the runtime image does not carry it, and it has not been drilled on Datalayer. |
+| [OpenHands](https://docs.openhands.dev/openhands/usage/run-openhands/acp) | `openhands` | the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and Gemini CLI (28 October 2026); OpenHands' adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer. |
 
 ## Listed, not drilled yet
 
@@ -107,6 +115,7 @@ An organization's own ACP agent, its command named by the organization's own har
 
 llmindset's agent framework served over ACP; each agent it defines is a session mode, with any model provider it is configured with.
 
+- Not offered: the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and Gemini CLI (28 October 2026); fast-agent is a framework served over ACP, not a coding agent, its adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer.
 - Credential: The provider's key fast-agent is given (ANTHROPIC_API_KEY, OPENAI_API_KEY or HF_TOKEN); ANTHROPIC_API_KEY declared; secrets declared: `ANTHROPIC_API_KEY`
 - Needs: uv (uvx), Python 3.12 to 3.15 (requires_python on PyPI)
 - ACP 1: `session/load` yes; modes none advertised
@@ -132,6 +141,7 @@ Google's coding agent, which speaks ACP itself when started with --experimental-
 
 Block's open agent (now the Agentic AI Foundation's), which speaks ACP itself with goose acp; any model provider it is configured with.
 
+- Not offered: the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and Gemini CLI (28 October 2026); goose is a binary of its own release, not an npm adapter, the runtime image does not carry it, and it has not been drilled on Datalayer.
 - Credential: The provider's key goose is configured with (GOOSE_PROVIDER); ANTHROPIC_API_KEY declared; secrets declared: `ANTHROPIC_API_KEY`
 - Needs: The goose CLI (release v1.54.0 of 8 October 2026), git
 - ACP 1: `session/load` no; modes none advertised
@@ -156,6 +166,7 @@ Anomaly's open coding agent, which speaks ACP itself with opencode acp; any mode
 
 The OpenHands CLI, which speaks ACP itself with openhands acp; any model provider it is configured with.
 
+- Not offered: the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and Gemini CLI (28 October 2026); OpenHands' adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer.
 - Credential: The provider's key OpenHands reads as LLM_API_KEY, with LLM_MODEL, under --override-with-envs; secrets declared: `LLM_API_KEY`
 - Needs: uv (uvx), Python 3.12 or later, git
 - ACP 1: `session/load` yes; modes `always-ask`, `always-approve`, `llm-approve`
