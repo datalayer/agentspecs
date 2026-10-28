@@ -53,6 +53,8 @@ allow-direct-references = true
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+# pytest-asyncio 1.4.1 (28 October 2026) warns when this is unset, and `filterwarnings = error` made the warning an INTERNALERROR.
+asyncio_default_fixture_loop_scope = "function"
 filterwarnings = [
   "error",
   "ignore:There is no current event loop:DeprecationWarning",

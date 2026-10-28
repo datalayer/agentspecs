@@ -10,9 +10,9 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
-## 0.0.129
+## 0.0.130
 
-28 October 2026. The catalogue offers four harnesses — Claude Code, Codex, OpenCode and Gemini CLI — and says why the others are not offered.
+28 October 2026 (0.0.129 was tagged with the same content and never published: its release tests failed on pytest-asyncio 1.4.1's new warning under `filterwarnings = error`; the loop scope is now set). The catalogue offers four harnesses — Claude Code, Codex, OpenCode and Gemini CLI — and says why the others are not offered.
 
 - **`unavailable_because` on a harness** (META_HARNESS, the restriction to four): a harness with `enabled: false` says why in a sentence, and an offered one says nothing — refused at load otherwise, as an application's is. `offered_refusal(id)` is the sentence the runtime, `loop --harness` and the Studio say when a harness that is not offered is named; `custom` keeps its own sentence.
 - **fast-agent, goose and OpenHands are not offered today**: described as before (their specs, register entries and capabilities tables stay), each with its reason — not drilled on Datalayer, and the runtime image carries no adapter for them. The reference page lists them under *Not offered today*, apart from the offered four and the listed tier.
