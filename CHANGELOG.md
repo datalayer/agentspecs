@@ -10,6 +10,10 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
+## 0.0.134
+
+28 October 2026. A `cells` frontend toolset (`frontend-tools/cells.yaml`, 0.0.1): the Cells plugin's `AgentTools` bundle — `cells_read_range`, `cells_write_range`, `cells_insert_chart`, `cells_list_charts`, `cells_select_range` — run on the page, on the grid the person sees. `example-output` names it (`frontend_tools: - cells:0.0.1`) and gains a SHEET CHART mode: asked to chart the spreadsheet already shown, it reads the grid's used range and inserts the chart over it, below the data, instead of writing a block; the *Chart the spreadsheet* suggestion asks for a column chart of the three regions by month.
+
 ## 0.0.133
 
 28 October 2026. `example-output` gains a SPREADSHEET mode: one fenced ```csv block named by its first line (`# filename: <name>.csv`), drawn with Datalayer Cells in the agent-runtimes outputs example's Sheet tab; the *Sales spreadsheet* suggestion asks for twelve months of sales by region; the FILE mode now takes any extension but csv and tsv, and its suggestion asks for a YAML file.
