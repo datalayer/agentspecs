@@ -10,6 +10,10 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
+## 0.0.131
+
+28 October 2026. The catalogue's three applications written in Python — `customer-interview`, `exchange-desk`, `report-from-a-file` — import the application API from `agent_runtimes.apps`, where agent-runtimes 1.5.88 moved it from `agent_runtimes.loop.apps` (REVIEWS P-11: no compatibility alias, so an older runtime does not load them and a newer one loads nothing from the old path).
+
 ## 0.0.130
 
 28 October 2026 (0.0.129 was tagged with the same content and never published: its release tests failed on pytest-asyncio 1.4.1's new warning under `filterwarnings = error`; the loop scope is now set). The catalogue offers four harnesses — Claude Code, Codex, OpenCode and Gemini CLI — and says why the others are not offered.

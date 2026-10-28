@@ -21,7 +21,7 @@ What was verified, and how, is said in its spec (``tests.verified``), on its
 card and on its page.
 """
 
-from agent_runtimes.loop.apps import Application, FileQuestion, Session, UploadedFile
+from agent_runtimes.apps import Application, FileQuestion, Session, UploadedFile
 
 SURFACE = [
     {"id": "root", "component": "Column", "children": ["title", "inputs", "run", "result"]},

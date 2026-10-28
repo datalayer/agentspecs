@@ -28,9 +28,8 @@ import uuid
 from typing import Any
 
 import httpx
-
-from agent_runtimes.loop.apps import Application
-from agent_runtimes.loop.apps.pap_company import current_pap_turn
+from agent_runtimes.apps import Application
+from agent_runtimes.apps.pap_company import current_pap_turn
 
 #: The hosted Manzanita's back office: where its exchanges are done.
 MANZANITA_EXCHANGES = "https://manzanita.examples.datalayer.run/back-office/exchanges"

@@ -16,9 +16,8 @@ What was verified, and how, is said in its spec (``tests.verified``), on its
 card and on its page.
 """
 
+from agent_runtimes.apps import Application, ChoiceQuestion, Session
 from pydantic import BaseModel, Field
-
-from agent_runtimes.loop.apps import Application, ChoiceQuestion, Session
 
 
 class Insight(BaseModel):
