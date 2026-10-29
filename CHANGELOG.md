@@ -10,6 +10,10 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
+## 0.0.138
+
+29 October 2026. An Appspec may lend its computer one repository, `permissions.computer.repository` (an `https://` URL at a full commit sha, never a branch), checked out as a harness's workspace when it starts; `code-explainer` is lent Jupyter Kernel Client at `69a6f13`, its commands decided by its Rules. A fourth scene backdrop, `space`: glowing round marks with a halo, on a ground of dots, grid, triangle mesh and rings, luminous lines and a light that flows with each message. `example-harness-opencode`: on Datalayer its model calls go through ai-inference, on the platform's models and paid in credits, with no `ANTHROPIC_API_KEY` of the account's.
+
 ## 0.0.137
 
 29 October 2026. A sixth demo stage, `coding-agent-behind-the-shield`: a coding agent lent one repository to read, asked to explain a file, on the `hero` backdrop, with its script and its rehearsal. Its one member, written inline, is a new application, `code-explainer`, whose agent is OpenCode (`example-harness-opencode`) behind the Shield: *Read the repository* is done, *Change a file* (write, delete) is left to a person, so the edit it is asked for is refused under that rule. A member whose agent runs a coding harness acts in **its workspace**: `WORKSPACE` (*its workspace*) is a name a rehearsal line may use for such a member's steps — `Code Explainer → its workspace: *README*` — and `harness_of` says which harness a member runs; a step in the workspace of a member that runs none is refused in a sentence. A scene's recording has its place and its reader: `recording_path` (`<id>/recording.json`, beside the specs) and `scene_recording`, which reads the transcript a stage exports (version 1) and refuses anything else in a sentence. The demo scenes are held whole by a test — a cue said and a narration per beat, every member placed, every beat rehearsed with words it must say and its time — and every one says `backdrop: hero`. The [scenes page](https://agentspecs.datalayer.tech/docs/scenes) says the backdrops, the workspace lines and the recording.
