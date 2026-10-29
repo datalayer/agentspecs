@@ -38,6 +38,8 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `page-layout` (Page layout) | `@datalayer/loop-plugin-page-layout` | — | — | none of its own |
 | `pap-sign-in` (Sign in at a company) | `@datalayer/loop-plugin-pap-sign-in` | `mcp-ui` | — | none of its own |
 | `prompt` (Floating composer) | `@datalayer/loop-plugin-prompt` | — | — | none of its own |
+| `spreadsheet` (Spreadsheet) | `@datalayer/loop-plugin-spreadsheet` | — | — | none of its own |
+| `spreadsheet-view` (Spreadsheet button) | `@datalayer/loop-plugin-spreadsheet-view` | — | — | none of its own |
 | `subagent-activity` (Delegated work) | `@datalayer/loop-plugin-subagent-activity` | — | — | none of its own |
 | `window-frame` (Window) | `@datalayer/loop-plugin-window-frame` | — | — | none of its own |
 
