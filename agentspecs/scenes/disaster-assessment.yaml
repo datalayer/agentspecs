@@ -205,6 +205,7 @@ script:
       - approval
 
 stage:
+  backdrop: hero
   positions:
     event-response: { x: 0.5, y: 0.2 }
     disaster-assessment: { x: 0.25, y: 0.75 }

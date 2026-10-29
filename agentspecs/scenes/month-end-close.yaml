@@ -152,6 +152,7 @@ script:
         expect: It leaves the posting to a person, and says what they would do.
 
 stage:
+  backdrop: hero
   positions:
     month-end-close: { x: 0.5, y: 0.5 }
   opens_first: month-end-close

@@ -182,6 +182,7 @@ script:
     pace: slow
 
 stage:
+  backdrop: hero
   positions:
     sales: { x: 0.25, y: 0.5 }
     accounting: { x: 0.75, y: 0.5 }

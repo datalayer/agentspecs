@@ -147,6 +147,7 @@ script:
       - approval
 
 stage:
+  backdrop: hero
   positions:
     crop-monitoring: { x: 0.5, y: 0.5 }
   opens_first: crop-monitoring
