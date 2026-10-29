@@ -4,9 +4,11 @@
 # Agent Specification: An OpenCode Agent
 # An agent that is a harness of the catalogue (SH-43): OpenCode, driven over
 # the Agent Client Protocol by the Datalayer runtime's adapter behind the
-# Shield. Off in the shared catalogue: it needs the account's own
-# ANTHROPIC_API_KEY (the register: API keys only), which the harness declares and
-# the runtime is given by name.
+# Shield. Off in the shared catalogue. On Datalayer its model calls go
+# through ai-inference, on the platform's models and the account's credits,
+# with the runtime's token: no key of the account's is needed. Elsewhere it
+# takes the ANTHROPIC_API_KEY its harness declares (the register: API keys
+# only).
 
 id: example-harness-opencode
 version: 0.0.1
@@ -14,8 +16,8 @@ name: An OpenCode Agent
 description: >
   OpenCode as a Datalayer agent: launched in the runtime over the Agent
   Client Protocol, its files, terminals and permissions decided by the
-  Shield under the application's Rules, every action in the record. Needs
-  the account's ANTHROPIC_API_KEY.
+  Shield under the application's Rules, every action in the record. Its
+  model calls go through Datalayer's ai-inference, paid in credits.
 
 tags:
   - coding
