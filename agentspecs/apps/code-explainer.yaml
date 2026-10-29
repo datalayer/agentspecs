@@ -99,7 +99,7 @@ tests:
     live: []
     recorded: []
     unverified:
-      - "It has not run live yet: its agent is set up, not enabled, and the repository it is lent is the workspace of the runtime it runs on."
+      - "It has not run live yet: its agent is set up, not enabled, and the repository it is lent is the workspace it is given on Datalayer."
 
 record:
   keep_for: 30_days
