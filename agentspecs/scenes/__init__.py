@@ -96,6 +96,12 @@ LANGUAGE = r"[a-z]{2,3}(?:-[A-Z]{2})?"
 #: The audience, as the transcript names it (*You → Sales*).
 AUDIENCE = "You"
 
+#: Where a member whose agent runs a harness acts — the files it reads, the
+#: commands it runs, the edits it tries — as the transcript names it: *Code
+#: Explainer → its workspace: Read README.md*. Each step is a decision of the
+#: Shield in front of the harness.
+WORKSPACE = "its workspace"
+
 
 class SceneError(ValueError):
     """A scene that cannot be played — named plainly."""
@@ -862,9 +868,25 @@ def _tool_problem(member: TeamMember, name: str, server_id: str, tool: str, does
     return None
 
 
+def harness_of(member: TeamMember) -> str:
+    """The harness of the catalogue a member's agent runs (`opencode`, `claude-code`), or empty.
+
+    A member that runs one acts in a workspace, its steps decided by the
+    Shield; the framework agents (`pydantic-ai`, `vercel-ai`) do not.
+    """
+    app = _app_of(member)
+    if app is None or not app.agent:
+        return ""
+    from ..apps import _agent_of
+    from ..harnesses import BUILTIN_HARNESSES
+
+    harness = str((_agent_of(app) or {}).get("harness") or "")
+    return "" if harness in BUILTIN_HARNESSES else harness
+
+
 def _names(scene: SceneSpec, cast: List[SceneCastMember]) -> Dict[str, str]:
     """Every name the transcript may use, to the id it stands for."""
-    names: Dict[str, str] = {AUDIENCE: AUDIENCE}
+    names: Dict[str, str] = {AUDIENCE: AUDIENCE, WORKSPACE: WORKSPACE}
     for member in cast:
         names[member.member] = member.member
         names[member.persona.name] = member.member
@@ -963,6 +985,13 @@ def scene_problems(scene: SceneSpec) -> List[str]:
             for name in (line.who, line.whom):
                 if name and name not in names:
                     problems.append(f"The rehearsal of '{rehearsal.beat}' names '{name}', which is not on stage.")
+            if line.whom == WORKSPACE:
+                actor = team.member(names.get(line.who, ""))
+                if actor is None or not harness_of(actor):
+                    problems.append(
+                        f"The rehearsal of '{rehearsal.beat}' has '{line.who}' act in its workspace, "
+                        "and it runs no harness: only a coding agent's steps are lines there."
+                    )
             whom = names.get(line.whom, "")
             if whom in systems and line.detail and names.get(line.who, "") in ids:
                 member = team.member(names[line.who])
@@ -1129,6 +1158,51 @@ def write_played(scene_id: str, played: ScenePlayed, directory: Optional[Path] =
     return path
 
 
+# --- the recording ---------------------------------------------------------------------
+
+#: The version of a recording's file: the transcript JSON a stage exports
+#: (*Export JSON*) and `loop scenes record` writes — `{version, scene, lines}`.
+RECORDING_VERSION = 1
+
+
+def recording_path(scene_id: str, directory: Optional[Path] = None) -> Path:
+    """Where a scene's recording is kept: ``<id>/recording.json`` beside the specs."""
+    return (directory or Path(__file__).parent) / _id_of(scene_id) / "recording.json"
+
+
+def scene_recording(scene_id: str, directory: Optional[Path] = None) -> Optional[Dict[str, Any]]:
+    """A scene's recording as its file holds it, or None when it has none.
+
+    A transcript of version 1 with its lines, each said by somebody at a
+    time; a file that is not one is refused in a sentence (`SceneError`),
+    never played.
+    """
+    path = recording_path(scene_id, directory)
+    if not path.is_file():
+        return None
+    try:
+        data = json.loads(path.read_text())
+    except ValueError:
+        raise SceneError(f"{path.name} of '{_id_of(scene_id)}' is not JSON.") from None
+    if not isinstance(data, dict) or data.get("version") != RECORDING_VERSION:
+        raise SceneError(
+            f"{path.name} of '{_id_of(scene_id)}' is not a transcript of version {RECORDING_VERSION}."
+        )
+    lines = data.get("lines")
+    if not isinstance(lines, list) or not lines:
+        raise SceneError(f"{path.name} of '{_id_of(scene_id)}' holds no lines.")
+    for index, line in enumerate(lines, start=1):
+        if not (
+            isinstance(line, dict)
+            and isinstance(line.get("from"), str)
+            and isinstance(line.get("text"), str)
+            and isinstance(line.get("at"), int)
+            and line.get("kind") in ("said", "asked", "called")
+        ):
+            raise SceneError(f"Line {index} of the recording of '{_id_of(scene_id)}' is not a line.")
+    return data
+
+
 def json_schema() -> Dict[str, Any]:
     """The JSON Schema of the scene spec, for editors and for validation outside Python."""
     schema = SceneSpec.model_json_schema(by_alias=True)
@@ -1178,6 +1252,8 @@ __all__ = [
     "AUDIENCE",
     "AnswerKind",
     "Backdrop",
+    "RECORDING_VERSION",
+    "WORKSPACE",
     "DURATION",
     "Inspector",
     "KNOWN_SCHEMAS",
@@ -1217,6 +1293,9 @@ __all__ = [
     "Withheld",
     "dump_scene",
     "get_scene",
+    "harness_of",
+    "recording_path",
+    "scene_recording",
     "json_schema",
     "list_scenes",
     "load_raw_scenes",

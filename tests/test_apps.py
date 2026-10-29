@@ -871,6 +871,7 @@ EXAMPLES = {
     # The scenes of A-08: one agent and its data, and a desk that asks two.
     "month-end-close": AppKind.CHAT,
     "crop-monitoring": AppKind.CHAT,
+    "code-explainer": AppKind.CHAT,
     "event-response": AppKind.CHAT,
     "disaster-assessment": AppKind.CHAT,
     "change-detection": AppKind.CHAT,

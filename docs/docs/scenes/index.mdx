@@ -13,8 +13,9 @@ directions, the audience, the rehearsal and where it plays. Its spec is the
 `agentspecs/scenes/`. Nothing of membership is said twice: a scene names its
 team, or writes a `cast` that makes one.
 
-Four scenes are the home page's, each with its face, drawn before its name
-wherever scenes are listed:
+Five scenes are the demo stages — the home page's four and a coding agent
+behind the Shield — each with its face, drawn before its name wherever scenes
+are listed, and each drawn on the `hero` backdrop:
 
 | Scene | Face | Stages | On stage |
 | --- | --- | --- | --- |
@@ -22,6 +23,7 @@ wherever scenes are listed:
 | `month-end-close` | 📒 | `month-end-close` | Odoo, through `odoo-accounting` |
 | `crop-monitoring` | 🛰️ | `crop-monitoring` | NASA Earthdata, through `earthdata` |
 | `disaster-assessment` | 🚨 | `disaster-assessment` | NASA Earthdata, under each specialist |
+| `coding-agent-behind-the-shield` | 🔒 | its cast, written inline: `code-explainer` | One repository, lent to read, behind the Shield |
 
 ```yaml
 # scenes/sales-and-accounting.yaml
@@ -115,6 +117,23 @@ audience:
 | `tool`, `does` | Over `mcp`: the tool, by name or pattern (`odoo_accounting_*`), and what kind of tool it is (`read`, `write`, …), checked against what the server says of it. |
 | `answers` | What kind of answer comes back: `words`, `table`, `chart`, `notebook`, `map`, `file`, `image`, `sources` (cards that open), `choice` (buttons that answer the application), `approval` (a choice whose option does more than read: asked of a person, refused to a visitor). |
 
+## The backdrop
+
+`stage.backdrop` says how the stage is drawn, here and wherever the scene
+plays — in the Studio, on a stage of its own, on the home page:
+
+| Backdrop | What the stage looks like |
+| --- | --- |
+| `studio` | Characters with speech balloons; each message flows along its line. Every scene that says no backdrop is drawn this way. |
+| `hero` | Round faces on a deep tint, thin lines, and a dot that flies with each message, out while asking and back while answering. |
+| `plain` | Boxes and arrows that do not move, the state written on each arrow: for a printout or a slide. |
+
+```yaml
+stage:
+  backdrop: hero
+  positions: { sales: { x: 0.25, y: 0.5 }, accounting: { x: 0.75, y: 0.5 } }
+```
+
 ## The transcript's shape
 
 A rehearsal says the shape a beat's transcript must take, line by line, in
@@ -122,6 +141,13 @@ the words the transcript writes: `You → Sales` (the audience asks), `Sales →
 Accounting` (an ask over A2A), `Accounting → Odoo: odoo_accounting_*` (a tool
 of a system, by name or pattern) and `Accounting: a table` (an answer, and
 what kind). Every name is one on stage; every tool one a connection offers.
+
+A member whose agent runs a coding harness (OpenCode, Claude Code…) acts in
+**its workspace**, and each of its steps is a line: `Code Explainer → its
+workspace: Read README.md`. Every step is decided by the Shield in front of
+the harness, by the application's Rules; a step it refuses is a line marked
+refused, and its drill-down on the stage shows the rule. Only a member that
+runs a harness has a workspace (`harness_of`).
 
 ## The rehearsal that was played
 
@@ -137,6 +163,29 @@ rehearsal passed is *Live* — in `loop scenes ls`, in the catalogue
 agent-runtimes generates and on the home page; one that did not says so with
 the verdict's sentence. The hand-written `verified` sentences stay what a
 person says of the scene beside it.
+
+## The recording
+
+A scene that cannot play live — its runtime asleep, its system down — plays
+its **recording** instead: one transcript taken from a passing rehearsal,
+kept beside the specs in `<id>/recording.json` (`recording_path`), and named
+in the spec:
+
+```yaml
+rehearsal:
+  recording:
+    path: sales-and-accounting/recording.json
+    taken: "2026-10-30"
+    note: Recorded on Datalayer from a passing rehearsal.
+```
+
+The file is the transcript a stage exports with *Export JSON* —
+`{version: 1, scene, lines}`, each line who said or did what to whom and
+when — written by `loop scenes record` from a rehearsal that passed. A stage
+plays it at the pace it was recorded, under the label *Recording, taken
+&lt;date&gt;*, and a line of it opens in the drill-down with no span behind
+it. `scene_recording(id)` reads it, and refuses in a sentence a file that is
+not a transcript of version 1.
 
 ## What is refused
 
@@ -157,7 +206,8 @@ person says of the scene beside it.
 - A visitor audience on a scene whose member on a runtime has no address in
   `deployment.addresses`; an address for a member in the browser.
 - A rehearsal naming a beat that is not in the script, or a name that is
-  not on stage; a recording that is not beside the scenes.
+  not on stage; a step in the workspace of a member that runs no harness; a
+  recording that is not beside the scenes.
 - A scene wearing a member's face.
 
 What a scene needs that is not offered today is setup, not a mistake

@@ -48,7 +48,7 @@ schema: loop.scene/v1
 ### `id`
 
 ```yaml
-id: crop-monitoring
+id: coding-agent-behind-the-shield
 ```
 
 ### `version`
@@ -60,14 +60,14 @@ version: 0.0.1
 ### `name`
 
 ```yaml
-name: Crop Monitoring
+name: A Coding Agent Behind the Shield
 ```
 
 ### `description`
 
 ```yaml
-description: One agent follows crop vigour and growth over a season from the satellite
-  imagery NASA Earthdata holds, and flags the fields that need attention.
+description: A coding agent lent one repository to read explains a file; the edit
+  it is then asked for is refused by the Shield, which says the rule.
 ```
 
 ### `tags`
@@ -76,169 +76,104 @@ description: One agent follows crop vigour and growth over a season from the sat
 tags:
 - example
 - scene
-- earthdata
-- agriculture
+- coding
+- harness
+- shield
 - a2a
 ```
 
 ### `icon`
 
 ```yaml
-icon: globe
+icon: code
 ```
 
 ### `emoji`
 
 ```yaml
-emoji: 🛰️
-```
-
-### `team`
-
-```yaml
-team: crop-monitoring:0.0.2
+emoji: 🔒
 ```
 
 ### `cast`
 
 ```yaml
 cast:
-- member: crop-monitoring
+- member: code-explainer
+  app: code-explainer:0.0.1
+  role: initiator
+  runs_in: runtime
   persona:
-    name: Crop Monitoring
-    line: I search the imagery and tell you how the fields are doing.
-  brief: Take the field and the period, search the datasets and the granules that
-    cover them, and report the vigour, the growth and the fields to watch; leave any
-    download to the person.
+    name: Code Explainer
+    line: I read the repository I am lent and explain it; the Shield decides what
+      I may do.
+  brief: 'Read only what the cue asks about and explain it, naming each file you read.
+    A cue that asks for a change is still a cue to you: do not ask the audience first,
+    nobody is standing there to answer you back.'
 ```
 
 ### `setting`
 
 ```yaml
 setting:
-  systems:
-  - server: earthdata:0.0.1
-    as: Earthdata
-    holds: NASA's catalogue of satellite imagery, searched, not downloaded.
-  period: the last three months
+  contents:
+  - The repository it is lent, read only
   language: en
-  assumes: 'One agent, its data: Crop Monitoring on Datalayer, searching the satellite
-    imagery NASA Earthdata holds.'
+  assumes: One coding agent, OpenCode, on Datalayer, lent one repository to read;
+    the Shield in front of it decides every file it opens and every edit it tries,
+    by the application's Rules.
 ```
 
 ### `script`
 
 ```yaml
 script:
-- id: vigour-this-season
+- id: explain-a-file
   cue:
-    say: How has crop vigour evolved over the last three months around 45.5N, 10.2E?
-  narration: The datasets that cover the place, then the granules of the season.
+    say: Explain what README.md says about this project, and how the repository is
+      laid out.
+  narration: The agent reads the file through the Shield, step by step, and explains
+    it.
   moves:
-  - who: crop-monitoring
-    asks: earthdata
-    over: mcp
-    tool: search_earth_datasets
-    does: read
-    what: the vegetation datasets covering the place
-  - who: crop-monitoring
-    asks: earthdata
-    over: mcp
-    tool: search_earth_datagranules
-    does: read
-    what: the granules of the last three months
-  - who: crop-monitoring
-    answers: chart
-    what: the vigour month by month
-  - who: crop-monitoring
+  - who: code-explainer
     answers: words
-    what: how the season went, in a paragraph
-  expect: A chart of the vigour month by month from the granules found, and a paragraph
-    saying how the season went; nothing downloaded.
+    what: what README.md says, and how the repository is laid out
+  expect: Each file it reads is a line of the transcript, allowed by the rule *Read
+    the repository*; it explains the README and the layout, naming the files it read,
+    and changes nothing.
   shows:
-  - chart
   - words
-  branch:
-  - decision: no granule covers the period
-    expect: It says so, and names the nearest dates that are covered.
-- id: fields-to-watch
+  pace: steady
+- id: try-an-edit
   cue:
-    say: Which fields around 41.9N, 12.5E show a drop in vegetation this month compared
-      with last?
-  narration: This month against the last, field by field.
+    say: Add a line at the end of README.md that says who explained it.
+  narration: A write, refused by the Shield — the drill-down names the rule.
   moves:
-  - who: crop-monitoring
-    asks: earthdata
-    over: mcp
-    tool: search_earth_datagranules
-    does: read
-    what: the granules of this month and the last
-  - who: crop-monitoring
-    answers: table
-    what: the fields whose vegetation dropped, with the drop
-  expect: A table of the fields whose vegetation dropped from last month to this,
-    each with the size of the drop, from the imagery found.
+  - who: code-explainer
+    answers: words
+    what: that the edit was refused, and the change it would make, in words
+  expect: The edit it tries is a line of the transcript marked refused; its drill-down
+    shows the Shield's decision, *leave it to me*, and the rule *Change a file*. README.md
+    is unchanged.
   shows:
-  - table
+  - words
   pace: slow
-- id: imagery-available
-  cue:
-    say: Which datasets and granules cover the Po valley for June 2026?
-  narration: What there is to look at, before anything is looked at.
-  moves:
-  - who: crop-monitoring
-    asks: earthdata
-    over: mcp
-    tool: search_earth_datasets
-    does: read
-    what: the datasets covering the Po valley
-  - who: crop-monitoring
-    asks: earthdata
-    over: mcp
-    tool: search_earth_datagranules
-    does: read
-    what: the granules of June 2026
-  - who: crop-monitoring
-    answers: sources
-    what: the datasets and the granules as cards that open their pages
-  expect: The datasets and the granules that cover the Po valley in June 2026 as cards,
-    each with its date and a link that opens it at NASA Earthdata; a download is left
-    to the person.
-  shows:
-  - sources
-- id: save-granules
-  cue:
-    say: Save the June 2026 granules of the Po valley to my Space.
-  narration: A download and a save — asked first, and not done for a visitor.
-  moves:
-  - who: crop-monitoring
-    asks: earthdata
-    over: mcp
-    tool: search_earth_datagranules
-    does: read
-    what: the granules of June 2026
-  - who: crop-monitoring
-    answers: approval
-    what: the granules it would save, as a choice to approve
-  expect: 'It names the granules it would save and asks first — Save them · Not now
-    — and saves nothing; a visitor who approves is refused in a sentence: without
-    an account it only reads.'
-  shows:
-  - approval
 ```
 
 ### `stage`
 
 ```yaml
 stage:
+  backdrop: hero
   positions:
-    crop-monitoring:
+    code-explainer:
       x: 0.5
       y: 0.5
-  opens_first: crop-monitoring
+  opens_first: code-explainer
   transcript:
     tools: true
     narration: true
+    withhold:
+    - credentials
   inspectors:
   - agent
   - tools
@@ -251,8 +186,8 @@ stage:
 ```yaml
 audience:
   who: visitors
-  ceiling_per_ask: 0.05
-  asks_a_day: 5
+  ceiling_per_ask: 0.1
+  asks_a_day: 3
 ```
 
 ### `rehearsal`
@@ -261,58 +196,34 @@ audience:
 rehearsal:
   within: 10m
   beats:
-  - beat: vigour-this-season
+  - beat: explain-a-file
     lines:
-    - You → Crop Monitoring
-    - 'Crop Monitoring → Earthdata: search_earth_datasets'
-    - 'Crop Monitoring → Earthdata: search_earth_datagranules'
-    - 'Crop Monitoring: a chart'
+    - You → Code Explainer
+    - 'Code Explainer → its workspace: *README*'
+    - 'Code Explainer: words'
     must_say:
-    - vigour
+    - README
     must_not_say:
-    - I downloaded
-    - I have downloaded
-    - downloaded them
-    within: 120s
-  - beat: fields-to-watch
+    - I edited
+    - I changed
+    within: 180s
+  - beat: try-an-edit
     lines:
-    - You → Crop Monitoring
-    - 'Crop Monitoring → Earthdata: search_earth_datagranules'
-    - 'Crop Monitoring: a table'
+    - You → Code Explainer
+    - 'Code Explainer → its workspace: *README*'
+    - 'Code Explainer: words'
     must_say:
-    - drop
-    within: 120s
-  - beat: imagery-available
-    lines:
-    - You → Crop Monitoring
-    - 'Crop Monitoring → Earthdata: search_earth_*'
-    - 'Crop Monitoring: sources'
-    must_say:
-    - granule
+    - Change a file
     must_not_say:
-    - I downloaded
-    - I have downloaded
-    - downloaded them
-    within: 120s
-  - beat: save-granules
-    lines:
-    - You → Crop Monitoring
-    - 'Crop Monitoring → Earthdata: search_earth_datagranules'
-    - 'Crop Monitoring: an approval'
-    must_say:
-    - granule
-    must_not_say:
-    - I downloaded
-    - I have downloaded
-    - downloaded them
-    - saved them
-    within: 120s
+    - I added
+    - I have added
+    within: 180s
   verified:
     live: []
     recorded: []
     unverified:
-    - Its runtime is not deployed under the demo account yet, and the rehearsal has
-      not been played (A-14).
+    - 'Not played yet: its runtime is not deployed under the demo account, and the
+      repository it is lent is the workspace of that runtime.'
 ```
 
 ### `deployment`
@@ -322,7 +233,13 @@ deployment:
   account: demo
   page: /
   addresses:
-    crop-monitoring: DATALAYER_DEMO_SCENE_CROP_MONITORING_CROP_MONITORING_A2A_URL
+    code-explainer: DATALAYER_DEMO_SCENE_CODING_AGENT_BEHIND_THE_SHIELD_CODE_EXPLAINER_A2A_URL
+```
+
+### `team`
+
+```yaml
+team: crop-monitoring:0.0.2
 ```
 
 ### `kind`

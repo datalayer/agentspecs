@@ -321,18 +321,26 @@ unavailable_because: It is one of the Personal Agent Protocol's recorded journey
   written as an application, and it has not run in the Studio against a company yet.
 ```
 
+### `contents`
+
+```yaml
+contents:
+- The repository it is lent, read only
+```
+
+### `permissions`
+
+```yaml
+permissions:
+  computer:
+    files: true
+```
+
 ### `context`
 
 ```yaml
 context:
 - customer-research:0.0.1
-```
-
-### `contents`
-
-```yaml
-contents:
-- The dataset under investigation
 ```
 
 ### `decision`
@@ -562,17 +570,6 @@ model: bedrock:us.anthropic.claude-sonnet-4-6
 ```yaml
 skills:
 - crawl:0.0.1
-```
-
-### `permissions`
-
-```yaml
-permissions:
-  spaces:
-  - space: support
-    access: read
-  computer:
-    browse: true
 ```
 
 ### `avatar`

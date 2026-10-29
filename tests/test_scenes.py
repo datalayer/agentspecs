@@ -92,6 +92,9 @@ def _minimal_cast(**overrides: Any) -> Dict[str, Any]:
 # --- the catalogue ----------------------------------------------------------------------
 
 
+#: The demo stages: the home page's four, and a coding agent behind the Shield.
+DEMO_SCENES = (*HOME_SCENES, "coding-agent-behind-the-shield")
+
 #: The Personal Agent Protocol's Stages, scripted (X-02).
 PAP_STAGES = ("pap-a-person-and-a-company", "pap-approve-once", "pap-your-application-a-company", "pap-two-companies")
 #: The other protocols' Stages, scripted (EX-14, EX-15).
@@ -99,7 +102,7 @@ PROTOCOL_STAGES = ("ucp-a-purchase-approved", "pact-a-personal-agent-at-a-busine
 
 
 def test_the_catalogue_holds_the_four_scenes_of_the_home_page() -> None:
-    assert set(SCENE_CATALOGUE) == set(HOME_SCENES) | set(PAP_STAGES) | set(PROTOCOL_STAGES)
+    assert set(SCENE_CATALOGUE) == set(DEMO_SCENES) | set(PAP_STAGES) | set(PROTOCOL_STAGES)
     assert get_scene("sales-and-accounting:0.0.1") is SCENE_CATALOGUE["sales-and-accounting"]
     assert get_scene("no-such-scene") is None
     assert [scene.id for scene in list_scenes("earthdata")] == ["crop-monitoring", "disaster-assessment"]
@@ -175,6 +178,49 @@ def test_the_four_scenes_stage_their_teams() -> None:
             )
             assert variable == expected, (scene_id, member_id)
         assert scene.deployment.account == "demo" and scene.deployment.page == "/", scene_id
+
+
+def test_the_demo_scenes_are_whole_scripts_on_the_hero_backdrop() -> None:
+    """Each demo stage plays a whole script: a cue said per beat, every member placed, every beat rehearsed."""
+    for scene_id in DEMO_SCENES:
+        scene = SCENE_CATALOGUE[scene_id]
+        assert scene.stage.backdrop is Backdrop.HERO, scene_id
+        members = {member.member for member in scene.cast_of()}
+        assert set(scene.stage.positions) == members, scene_id
+        assert scene.stage.opens_first == scene.entry_of(), scene_id
+        assert scene.rehearsal.within, scene_id
+        rehearsed = {item.beat: item for item in scene.rehearsal.beats}
+        for beat in scene.script:
+            assert beat.cue.say.strip() and beat.narration and beat.expect, (scene_id, beat.id)
+            item = rehearsed[beat.id]
+            assert item.lines and item.must_say and item.within, (scene_id, beat.id)
+
+
+def test_a_coding_agent_acts_in_its_workspace_behind_the_shield() -> None:
+    """A harness's steps are lines *Member → its workspace: …*; only a member that runs one has a workspace."""
+    from agentspecs.scenes import WORKSPACE, harness_of
+
+    scene = SCENE_CATALOGUE["coding-agent-behind-the-shield"]
+    team = scene.team_of()
+    [member] = team.agents
+    assert harness_of(member) == "opencode" and member.runs_in is TeamPlace.RUNTIME
+    assert scene_problems(scene) == []
+    assert any(line.whom == WORKSPACE for item in scene.rehearsal.beats for line in item.parsed())
+    app = APP_CATALOGUE["code-explainer"]
+    # Reading is done; changing or deleting a file is left to a person: the Shield refuses it.
+    assert [(rule.action, rule.behaviour.value) for rule in app.rules] == [
+        ("Read the repository", "do_it"),
+        ("Change a file", "leave_to_me"),
+    ]
+    [edit] = [item for item in scene.rehearsal.beats if item.beat == "try-an-edit"]
+    assert "Change a file" in edit.must_say
+    # A member that runs no harness has no workspace to act in.
+    sales = raw("sales-and-accounting")
+    beats = [{"beat": "open-invoices", "lines": ["You → Sales", "Accounting → its workspace: Read README.md"]}]
+    assert problems(rehearsal={**sales["rehearsal"], "beats": beats}) == [
+        "The rehearsal of 'open-invoices' has 'Accounting' act in its workspace, and it runs no harness: "
+        "only a coding agent's steps are lines there."
+    ]
 
 
 def test_a_scene_says_what_each_beat_shows() -> None:
@@ -286,12 +332,14 @@ def test_the_stage_says_its_backdrop_and_is_drawn_as_the_studio_when_it_says_non
     assert hero.stage.backdrop is Backdrop.HERO
     assert dump_scene(hero)["stage"]["backdrop"] == "hero"
     assert scene_problems(hero) == []
-    # Every scene written before the backdrop existed is drawn as before.
-    unsaid = parse_scene(raw("sales-and-accounting"))
+    # A scene that says no backdrop is drawn as every scene was before it existed.
+    unsaid = parse_scene({**sales, "stage": {key: value for key, value in sales["stage"].items() if key != "backdrop"}})
     assert unsaid.stage.backdrop is Backdrop.STUDIO
     assert "backdrop" not in dump_scene(unsaid)["stage"]
+    # The demo scenes play on the hero backdrop; every other scene keeps the studio.
     for scene in SCENE_CATALOGUE.values():
-        assert scene.stage.backdrop is Backdrop.STUDIO, scene.id
+        wanted = Backdrop.HERO if scene.id in DEMO_SCENES else Backdrop.STUDIO
+        assert scene.stage.backdrop is wanted, scene.id
     with pytest.raises(SceneError, match="stage.backdrop: Input should be 'studio', 'hero' or 'plain'"):
         parse_scene({**raw("sales-and-accounting"), "stage": {"backdrop": "neon"}})
     schema = json_schema()
@@ -492,7 +540,7 @@ def test_a_scene_of_the_catalogue_that_cannot_be_played_is_refused_when_loading(
     from agentspecs.scenes import load_scenes
 
     folder = SCENES_DIR
-    assert set(load_scenes(folder)) == set(HOME_SCENES) | set(PAP_STAGES) | set(PROTOCOL_STAGES)
+    assert set(load_scenes(folder)) == set(DEMO_SCENES) | set(PAP_STAGES) | set(PROTOCOL_STAGES)
     with pytest.raises(SceneError, match="Visitors may watch"):
         load_scenes(_folder_with(problems_in={"deployment": {}}))
 
@@ -537,6 +585,27 @@ def test_the_rehearsal_that_was_played_is_kept_beside_the_specs(tmp_path: pathli
     for scene_id in SCENE_CATALOGUE:
         found = scene_played(scene_id)
         assert found is None or isinstance(found, ScenePlayed)
+
+
+def test_a_recording_is_a_transcript_kept_beside_the_specs(tmp_path: pathlib.Path) -> None:
+    from agentspecs.scenes import recording_path, scene_recording
+
+    assert recording_path("sales-and-accounting:0.0.1", tmp_path) == tmp_path / "sales-and-accounting" / "recording.json"
+    assert scene_recording("sales-and-accounting", tmp_path) is None
+    path = recording_path("sales-and-accounting", tmp_path)
+    path.parent.mkdir(parents=True)
+    line = {"key": "s1:asked", "at": 1, "from": "You", "to": "Sales", "kind": "asked", "text": "Hello?"}
+    path.write_text(json.dumps({"version": 1, "scene": "sales-and-accounting", "lines": [line]}))
+    assert scene_recording("sales-and-accounting", tmp_path)["lines"] == [line]
+    path.write_text(json.dumps({"version": 2, "lines": [line]}))
+    with pytest.raises(SceneError, match="is not a transcript of version 1"):
+        scene_recording("sales-and-accounting", tmp_path)
+    path.write_text(json.dumps({"version": 1, "lines": [{**line, "kind": "sang"}]}))
+    with pytest.raises(SceneError, match="Line 1 of the recording of 'sales-and-accounting' is not a line"):
+        scene_recording("sales-and-accounting", tmp_path)
+    path.write_text(json.dumps({"version": 1, "lines": []}))
+    with pytest.raises(SceneError, match="holds no lines"):
+        scene_recording("sales-and-accounting", tmp_path)
 
 
 def test_a_scene_spec_is_a_pydantic_model_a_host_can_build() -> None:
