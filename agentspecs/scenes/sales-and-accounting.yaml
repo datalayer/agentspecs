@@ -262,6 +262,10 @@ rehearsal:
         - I sent
         - reminders sent
       within: 120s
+  recording:
+    path: sales-and-accounting/recording.json
+    taken: "2026-10-29"
+    note: "Rehearsed on Datalayer, under the demo account."
   verified:
     live:
       - "Sales asked Accounting live over A2A on a developer's machine (2026-10-06) for the open customer invoices: Accounting read the aged receivables and said the list of invoices had failed; one column total was wrong."

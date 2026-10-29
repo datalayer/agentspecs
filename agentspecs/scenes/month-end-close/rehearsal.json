@@ -1,5 +1,5 @@
 {
-  "at": "2026-10-10T02:37:17+00:00",
+  "at": "2026-10-29T14:17:04+00:00",
   "where": "on Datalayer",
   "passed": true,
   "says": "Rehearsal: 4 of 4 beats passed. The scene is Live.",
@@ -8,26 +8,26 @@
       "beat": "close-checklist",
       "state": "passed",
       "says": "",
-      "seconds": 97.45903585400083
+      "seconds": 115.16930352199779
     },
     {
       "beat": "accruals",
       "state": "passed",
       "says": "",
-      "seconds": 126.1125528449993
+      "seconds": 81.98463336400164
     },
     {
       "beat": "expenses-by-month",
       "state": "passed",
       "says": "",
-      "seconds": 68.2978395099999
+      "seconds": 58.18933799399747
     },
     {
       "beat": "post-accruals",
       "state": "passed",
       "says": "",
-      "seconds": 94.95879093399708
+      "seconds": 71.78365175200088
     }
   ],
-  "runtime": "1.3.93"
+  "runtime": "1.5.80"
 }

@@ -226,6 +226,10 @@ rehearsal:
       # 'the accruals you suggested' points at nothing), it met every line in
       # 145 s on r1, 2026-10-10. Raised to 180 s that day (Eric), as flood was.
       within: 180s
+  recording:
+    path: month-end-close/recording.json
+    taken: "2026-10-29"
+    note: "Rehearsed on Datalayer, under the demo account."
   verified:
     live: []
     recorded: []

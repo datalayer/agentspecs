@@ -301,6 +301,10 @@ rehearsal:
       must_not_say:
         - I sent
       within: 240s
+  recording:
+    path: disaster-assessment/recording.json
+    taken: "2026-10-29"
+    note: "Rehearsed on Datalayer, under the demo account."
   verified:
     live: []
     recorded: []

@@ -1,5 +1,5 @@
 {
-  "at": "2026-10-09T17:40:33+00:00",
+  "at": "2026-10-29T14:24:34+00:00",
   "where": "on Datalayer",
   "passed": true,
   "says": "Rehearsal: 4 of 4 beats passed. The scene is Live.",
@@ -8,26 +8,26 @@
       "beat": "vigour-this-season",
       "state": "passed",
       "says": "",
-      "seconds": 55.53831131900006
+      "seconds": 67.73760564999975
     },
     {
       "beat": "fields-to-watch",
       "state": "passed",
       "says": "",
-      "seconds": 57.56524624400117
+      "seconds": 48.32110785199984
     },
     {
       "beat": "imagery-available",
       "state": "passed",
       "says": "",
-      "seconds": 58.75493016499968
+      "seconds": 78.49201327000264
     },
     {
       "beat": "save-granules",
       "state": "passed",
       "says": "",
-      "seconds": 49.41034528199998
+      "seconds": 37.01923025799988
     }
   ],
-  "runtime": "1.3.93"
+  "runtime": "1.5.80"
 }

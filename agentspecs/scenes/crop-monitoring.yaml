@@ -230,6 +230,10 @@ rehearsal:
         - downloaded them
         - saved them
       within: 120s
+  recording:
+    path: crop-monitoring/recording.json
+    taken: "2026-10-29"
+    note: "Rehearsed on Datalayer, under the demo account."
   verified:
     live: []
     recorded: []

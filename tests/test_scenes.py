@@ -531,8 +531,8 @@ def test_the_rehearsal_names_the_script_and_the_stage() -> None:
     assert problems(rehearsal={"beats": [{"beat": "open-invoices", "lines": ["Accounting → Odoo: odoo_accounting_nothing"]}]}) == [
         "The rehearsal of 'open-invoices' expects 'odoo_accounting_nothing', which odoo-accounting does not offer.",
     ]
-    assert problems(rehearsal={"recording": {"path": "sales-and-accounting/recording.json"}}) == [
-        "The recording 'sales-and-accounting/recording.json' is not beside the scenes."
+    assert problems(rehearsal={"recording": {"path": "sales-and-accounting/not-kept.json"}}) == [
+        "The recording 'sales-and-accounting/not-kept.json' is not beside the scenes."
     ]
 
 
