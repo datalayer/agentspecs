@@ -222,8 +222,9 @@ rehearsal:
     live: []
     recorded: []
     unverified:
-    - 'Not played yet: its runtime is not deployed under the demo account, and the
-      repository it is lent is the workspace of that runtime.'
+    - 'Not played yet: the repository it is lent (Jupyter Kernel Client, checked out
+      as its workspace) and its commands decided by its Rules need the runtime that
+      carries them.'
 ```
 
 ### `deployment`
