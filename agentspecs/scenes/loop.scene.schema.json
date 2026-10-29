@@ -62,6 +62,16 @@
       "title": "AppVerified",
       "type": "object"
     },
+    "Backdrop": {
+      "description": "How a stage is drawn, wherever the scene plays: the same cast, systems and links, in another look.",
+      "enum": [
+        "studio",
+        "hero",
+        "plain"
+      ],
+      "title": "Backdrop",
+      "type": "string"
+    },
     "Inspector": {
       "description": "The inspectors a page may offer under a scene.",
       "enum": [
@@ -764,6 +774,11 @@
       "additionalProperties": false,
       "description": "Directions for the page.",
       "properties": {
+        "backdrop": {
+          "$ref": "#/$defs/Backdrop",
+          "default": "studio",
+          "description": "How the stage is drawn, here and wherever the scene plays: `studio`, characters with speech balloons and each message flowing along its line; `hero`, round faces on a deep tint, thin lines and a dot that flies with each message; `plain`, boxes and arrows that do not move, for a printout or a slide"
+        },
         "inspectors": {
           "description": "The inspectors offered",
           "items": {

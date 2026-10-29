@@ -637,6 +637,7 @@ Directions for the page.
 | `inspectors` | list of [Inspector](#inspector) | The inspectors offered | — |
 | `rests_after` | text | How long the scene plays before it rests | empty |
 | `pace` | [Pace](#pace) | The pace of the beats that say none | `"steady"` |
+| `backdrop` | [Backdrop](#backdrop) | How the stage is drawn, here and wherever the scene plays: `studio`, characters with speech balloons and each message flowing along its line; `hero`, round faces on a deep tint, thin lines and a dot that flies with each message; `plain`, boxes and arrows that do not move, for a printout or a slide | `"studio"` |
 
 ### SceneSystem
 
@@ -692,6 +693,7 @@ One member asking another, directly, over a protocol. Distinct from `depends_on`
 | --- | --- |
 | <a id="actionclass"></a>ActionClass | `read`, `write`, `send`, `buy`, `delete`, `publish` |
 | <a id="answerkind"></a>AnswerKind | `words`, `table`, `chart`, `notebook`, `map`, `file`, `image`, `sources`, `choice`, `approval` |
+| <a id="backdrop"></a>Backdrop | `studio`, `hero`, `plain` |
 | <a id="inspector"></a>Inspector | `agent`, `tools`, `a2a`, `notebook`, `cost` |
 | <a id="pace"></a>Pace | `quick`, `steady`, `slow` |
 | <a id="scenecardkind"></a>SceneCardKind | `found`, `sign-in`, `approval`, `done`, `record` |

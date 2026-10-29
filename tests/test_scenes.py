@@ -27,6 +27,7 @@ from agentspecs.scenes import (
     SCENE_SCHEMA,
     SCHEMA_PATH,
     AnswerKind,
+    Backdrop,
     SceneError,
     SceneKind,
     SceneSpec,
@@ -276,6 +277,26 @@ def test_the_json_schema_is_the_one_beside_the_specs() -> None:
     assert "as" in schema["$defs"]["SceneSystem"]["properties"]
     assert json.loads(SCHEMA_PATH.read_text())["$id"].endswith(f"{SCENE_SCHEMA}.json")
     assert SCHEMA_PATH.read_text() == schema_text(), "run `python -m agentspecs.scenes`"
+
+
+def test_the_stage_says_its_backdrop_and_is_drawn_as_the_studio_when_it_says_none() -> None:
+    """SCENES S0-02: `stage.backdrop` is how the stage is drawn wherever the scene plays."""
+    sales = raw("sales-and-accounting")
+    hero = parse_scene({**sales, "stage": {**sales["stage"], "backdrop": "hero"}})
+    assert hero.stage.backdrop is Backdrop.HERO
+    assert dump_scene(hero)["stage"]["backdrop"] == "hero"
+    assert scene_problems(hero) == []
+    # Every scene written before the backdrop existed is drawn as before.
+    unsaid = parse_scene(raw("sales-and-accounting"))
+    assert unsaid.stage.backdrop is Backdrop.STUDIO
+    assert "backdrop" not in dump_scene(unsaid)["stage"]
+    for scene in SCENE_CATALOGUE.values():
+        assert scene.stage.backdrop is Backdrop.STUDIO, scene.id
+    with pytest.raises(SceneError, match="stage.backdrop: Input should be 'studio', 'hero' or 'plain'"):
+        parse_scene({**raw("sales-and-accounting"), "stage": {"backdrop": "neon"}})
+    schema = json_schema()
+    assert schema["$defs"]["Backdrop"]["enum"] == ["studio", "hero", "plain"]
+    assert schema["$defs"]["SceneStage"]["properties"]["backdrop"]["default"] == "studio"
 
 
 def test_the_reference_says_every_field_and_is_the_one_in_the_docs() -> None:

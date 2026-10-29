@@ -261,6 +261,14 @@ class Pace(str, Enum):
     SLOW = "slow"
 
 
+class Backdrop(str, Enum):
+    """How a stage is drawn, wherever the scene plays: the same cast, systems and links, in another look."""
+
+    STUDIO = "studio"
+    HERO = "hero"
+    PLAIN = "plain"
+
+
 class SceneMove(_Strict):
     """One member asking another over a protocol, or answering the audience."""
 
@@ -374,6 +382,14 @@ class SceneStage(_Strict):
         default="", pattern=rf"^(?:{DURATION})?$", description="How long the scene plays before it rests"
     )
     pace: Pace = Field(default=Pace.STEADY, description="The pace of the beats that say none")
+    backdrop: Backdrop = Field(
+        default=Backdrop.STUDIO,
+        description=(
+            "How the stage is drawn, here and wherever the scene plays: `studio`, characters with speech balloons "
+            "and each message flowing along its line; `hero`, round faces on a deep tint, thin lines and a dot that "
+            "flies with each message; `plain`, boxes and arrows that do not move, for a printout or a slide"
+        ),
+    )
 
 
 # --- the audience ----------------------------------------------------------------------
@@ -1161,6 +1177,7 @@ __all__ = [
     "ADDRESS_VARIABLE",
     "AUDIENCE",
     "AnswerKind",
+    "Backdrop",
     "DURATION",
     "Inspector",
     "KNOWN_SCHEMAS",

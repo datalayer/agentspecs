@@ -10,6 +10,10 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
+## 0.0.136
+
+29 October 2026. A scene's stage says its `backdrop`: how the stage is drawn, here and wherever the scene plays — `studio` (characters with speech balloons, each message flowing along its line: the drawing every scene had), `hero` (round faces on a deep tint, thin lines, a dot that flies with each message) or `plain` (boxes and arrows that do not move, for a printout or a slide); `studio` when unsaid, so every scene written before draws as before. `Backdrop` is an enum of the spec and `SceneStage.backdrop` its field, with its default; the [scene spec reference](https://agentspecs.datalayer.tech/docs/scenes/reference) and the [scenes page](https://agentspecs.datalayer.tech/docs/scenes) say it.
+
 ## 0.0.135
 
 28 October 2026. The five hosted MCP servers are remote servers, reached by the runtime itself: `datalayer`, `odoo-accounting` and `earthdata` (the Datalayer gateway, `https://mcp.datalayer.run/mcp`, the toolset chosen with `only=`), `huggingface` and `kaggle` (their own hosts) name `transport: streamable-http`, a `url` and `headers: {Authorization: "Bearer ${…}"}`, no `command` and no `args`; the `npx -y mcp-remote` bridge they went through stops existing (a Datalayer runtime's pod reaches the gateway and no package registry, and its image carries no `mcp-remote`: the home page's demo scenes on r1 answered that their tools could not be reached). Their envvars, actions tables and everything else kept. The [MCP servers reference](https://agentspecs.datalayer.tech/docs/agents/mcp-servers) says the two shapes: a remote server names a url and headers, a local one a command (and, listening over HTTP, the url its command listens at). agent-runtimes 1.5.89 connects to a remote server with these fields.
