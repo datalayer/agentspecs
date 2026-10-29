@@ -9,7 +9,13 @@
 # Shield in front of it, by the Rules below over the platform's default. It is
 # lent one repository, its workspace, and may only read it: reading is done,
 # changing or deleting a file is left to a person, so a write it tries is
-# refused, and the refusal names the rule.
+# refused, and the refusal names the rule. A command it runs is decided by
+# the same Rules: one that only reads (`ls`, `cat`, `grep`, `git log`…) as
+# reading, any other as changing a file — nobody is asked, so a turn never
+# waits for a person who is not there.
+#
+# The repository is Datalayer's Jupyter Kernel Client, public, checked out at
+# one commit as the workspace when its harness starts.
 #
 # OpenCode, not Claude Code: its terms permit serving it to third parties,
 # and a scene's audience is visitors. On Datalayer its model calls go through
@@ -59,6 +65,9 @@ rules:
 permissions:
   computer:
     files: true
+    repository:
+      url: https://github.com/datalayer/jupyter-kernel-client
+      revision: 69a6f130189ab9229fb888ca48755c76e99ccf39
 
 # Its interface: the Reactor plugins of agentspecs/ui it is drawn with, each
 # with the renderer it is exposed through outside Datalayer's page, when it is.
@@ -99,7 +108,7 @@ tests:
     live: []
     recorded: []
     unverified:
-      - "It has not run live yet: its agent is set up, not enabled, and the repository it is lent is the workspace it is given on Datalayer."
+      - "It has not run live yet: its agent is set up, not enabled; the repository it is lent, Jupyter Kernel Client at one commit, is checked out as its workspace when it starts."
 
 record:
   keep_for: 30_days

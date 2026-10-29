@@ -305,6 +305,18 @@
           "title": "Files",
           "type": "boolean"
         },
+        "repository": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AppRepository"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A repository lent to it, checked out as its workspace"
+        },
         "shell": {
           "default": false,
           "description": "Run commands",
@@ -1787,6 +1799,28 @@
         }
       },
       "title": "AppRecord",
+      "type": "object"
+    },
+    "AppRepository": {
+      "additionalProperties": false,
+      "description": "A repository lent to its computer: checked out at one revision, as its workspace.\n\nThe same git content an Environment brings (a public repository at a\npinned commit): an agent that works in a workspace \u2014 a coding harness \u2014\nfinds it there when it starts. What it may do to it is its Rules'.",
+      "properties": {
+        "revision": {
+          "description": "The full commit sha it is checked out at",
+          "title": "Revision",
+          "type": "string"
+        },
+        "url": {
+          "description": "The repository, an https:// git URL anyone may clone",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "url",
+        "revision"
+      ],
+      "title": "AppRepository",
       "type": "object"
     },
     "AppRule": {

@@ -2614,3 +2614,17 @@ def test_a_widgets_page_shows_an_output_with_a_component_of_its_own() -> None:
     blind = {**GAUGE, "shows": [], "example": {"label": "Load"}}
     with pytest.raises(AppError, match="which shows nothing"):
         app(kind="widget", interface={"custom_components": [blind], "page": {**PAGE, "outputs": [gauge]}})
+
+
+def test_a_lent_repository_is_a_public_url_at_one_commit() -> None:
+    explainer = agentspecs.apps.APP_CATALOGUE["code-explainer"]
+    lent = explainer.permissions.computer.repository
+    assert lent is not None and lent.url.startswith("https://") and len(lent.revision) == 40
+    document = yaml.safe_load(pathlib.Path(agentspecs.apps.__file__).with_name("code-explainer.yaml").read_text())
+    for repository, said in (
+        ({"url": "git@github.com:a/b.git", "revision": lent.revision}, "https://"),
+        ({"url": lent.url, "revision": "main"}, "full commit sha"),
+    ):
+        document["permissions"]["computer"]["repository"] = repository
+        with pytest.raises(agentspecs.apps.AppError, match=said):
+            parse_app(document)

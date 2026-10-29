@@ -3093,12 +3093,45 @@ class AppSpaceGrant(_Strict):
     access: Access = Field(default=Access.READ, description="`read`, or `write`")
 
 
+#: A full commit sha: a repository is lent at one revision, never at a branch that moves.
+_FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
+
+
+class AppRepository(_Strict):
+    """A repository lent to its computer: checked out at one revision, as its workspace.
+
+    The same git content an Environment brings (a public repository at a
+    pinned commit): an agent that works in a workspace — a coding harness —
+    finds it there when it starts. What it may do to it is its Rules'.
+    """
+
+    url: str = Field(..., description="The repository, an https:// git URL anyone may clone")
+    revision: str = Field(..., description="The full commit sha it is checked out at")
+
+    @field_validator("url")
+    @classmethod
+    def _https(cls, url: str) -> str:
+        if not url.startswith("https://") or any(ch.isspace() for ch in url):
+            raise ValueError("a lent repository is an https:// git URL")
+        return url
+
+    @field_validator("revision")
+    @classmethod
+    def _pinned(cls, revision: str) -> str:
+        if not _FULL_SHA.match(revision):
+            raise ValueError("a lent repository is checked out at a full commit sha, never at a branch")
+        return revision
+
+
 class AppComputer(_Strict):
     """What the application may do on its own computer. Each is off until it is turned on."""
 
     browse: bool = Field(default=False, description="Open pages in a browser")
     files: bool = Field(default=False, description="Read and write files")
     shell: bool = Field(default=False, description="Run commands")
+    repository: Optional[AppRepository] = Field(
+        default=None, description="A repository lent to it, checked out as its workspace"
+    )
 
 
 class AppPermissions(_Strict):
@@ -4508,6 +4541,7 @@ __all__ = [
     "AppProfile",
     "AppProfileTranslation",
     "AppRecord",
+    "AppRepository",
     "AppRule",
     "AppSampleAlternative",
     "AppSampleDocument",

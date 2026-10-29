@@ -334,6 +334,9 @@ contents:
 permissions:
   computer:
     files: true
+    repository:
+      url: https://github.com/datalayer/jupyter-kernel-client
+      revision: 69a6f130189ab9229fb888ca48755c76e99ccf39
 ```
 
 ### `context`
@@ -675,6 +678,7 @@ What the application may do on its own computer. Each is off until it is turned 
 | `browse` | true or false | Open pages in a browser | `false` |
 | `files` | true or false | Read and write files | `false` |
 | `shell` | true or false | Run commands | `false` |
+| `repository` | [AppRepository](#apprepository) | A repository lent to it, checked out as its workspace | empty |
 
 ### AppConnection
 
@@ -1047,6 +1051,15 @@ What is kept of what the application did, and for how long.
 | `keep_for` | text | How long: `90_days`, `18_months`, `1_years` | `"1_years"` |
 | `include` | list of [RecordItem](#recorditem) | What is kept | — |
 | `suggest_tests` | true or false | Whether its conversations may be used to suggest tests: a few, sampled from those kept while it is on, proposed to its builder; off unless said | `false` |
+
+### AppRepository
+
+A repository lent to its computer: checked out at one revision, as its workspace. The same git content an Environment brings (a public repository at a pinned commit): an agent that works in a workspace — a coding harness — finds it there when it starts. What it may do to it is its Rules'.
+
+| Field | Type | Meaning | Default |
+| --- | --- | --- | --- |
+| `url` (required) | text | The repository, an https:// git URL anyone may clone | — |
+| `revision` (required) | text | The full commit sha it is checked out at | — |
 
 ### AppRule
 
