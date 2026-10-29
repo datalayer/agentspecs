@@ -340,10 +340,10 @@ def test_the_stage_says_its_backdrop_and_is_drawn_as_the_studio_when_it_says_non
     for scene in SCENE_CATALOGUE.values():
         wanted = Backdrop.HERO if scene.id in DEMO_SCENES else Backdrop.STUDIO
         assert scene.stage.backdrop is wanted, scene.id
-    with pytest.raises(SceneError, match="stage.backdrop: Input should be 'studio', 'hero' or 'plain'"):
+    with pytest.raises(SceneError, match="stage.backdrop: Input should be 'studio', 'hero', 'plain' or 'space'"):
         parse_scene({**raw("sales-and-accounting"), "stage": {"backdrop": "neon"}})
     schema = json_schema()
-    assert schema["$defs"]["Backdrop"]["enum"] == ["studio", "hero", "plain"]
+    assert schema["$defs"]["Backdrop"]["enum"] == ["studio", "hero", "plain", "space"]
     assert schema["$defs"]["SceneStage"]["properties"]["backdrop"]["default"] == "studio"
 
 
