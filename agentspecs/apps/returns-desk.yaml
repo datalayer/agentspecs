@@ -86,11 +86,11 @@ tests:
       expect: It asks the shop, shows the repair it proposes, and does nothing before I approve.
   verified:
     live:
-      - "Drilled on r1 on 13 October 2026 against the hosted Manzanita, as its Preview reaches the gateway's pap toolset (gateway 0.0.81): signed in by Device Sign-In with orders:read and orders:write; a return asked through the shop's API with pap_propose came back as the shop's operation (Return the Ridge Jacket (M) from order ord_7Hk2 for a refund of USD 180.00), approved by the person on Waiting for you, done once — the test shop's return fails as written, its label emailed and no money moved, which it said — and already confirmed the second time; a repair proposed the same way (a zip repair, free)."
+      - "Tried live on Datalayer on 13 October 2026 against the hosted Manzanita, as its Preview reaches the gateway's pap toolset: signed in by Device Sign-In with orders:read and orders:write; a return asked through the shop's API with pap_propose came back as the shop's operation (Return the Ridge Jacket (M) from order ord_7Hk2 for a refund of USD 180.00), approved by the person on Waiting for you, done once — the test shop's return fails as written, its label emailed and no money moved, which it said — and already confirmed the second time; a repair proposed the same way (a zip repair, free)."
     recorded:
       - "The journey is the Personal Agent Protocol SDK's recorded journey operations (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
     unverified:
-      - "A model's turns in the Studio's Preview were not watched in that drill."
+      - "A model's turns in the Studio's Preview were not watched in that trial."
 
 record:
   keep_for: 90_days

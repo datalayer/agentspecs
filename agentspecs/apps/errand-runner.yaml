@@ -73,7 +73,7 @@ tests:
       expect: It refuses and sends me to the business's own sign-in page.
   verified:
     live:
-      - "Drilled as a pair on r1 on 13 October 2026, its clone and Guest Desk's joined as the Studio joins them, the business shipped at its own domain: asked as itself, the business named nobody; once the person signed in at the business by device code and granted profile:read, asked for them, it named the person by their Datalayer account, with a verified receipt."
+      - "Tried live on Datalayer as a pair on 13 October 2026, its copy and Guest Desk's joined as the Studio joins them, the business shipped at its own domain: asked as itself, the business named nobody; once the person signed in at the business by device code and granted profile:read, asked for them, it named the person by their Datalayer account, with a verified receipt."
     recorded:
       - "The PACT journey is the developers' example (examples/protocols/pact/personal_agent.py) against its local Provider, run in its own tests."
 

@@ -89,12 +89,12 @@ tests:
       expect: It refuses the card number and says it never takes payment details in the conversation.
   verified:
     live:
-      - "Drilled on r1 on 13 October 2026 against the hosted test merchants, as its Preview reaches the gateway's ucp and acp toolsets: at Example Store (store.examples.datalayer.run) a search, a checkout filled, the exact purchase asked of the person, approved on Waiting for you, bought once and refused a second time, its order read; at Example Outfitters (outfitters.examples.datalayer.run) the same checkout over ACP. Test merchants only: paid with a test instrument."
+      - "Tried live on Datalayer on 13 October 2026 against the hosted test merchants, as its Preview reaches the gateway's ucp and acp toolsets: at Example Store (store.examples.datalayer.run) a search, a checkout filled, the exact purchase asked of the person, approved on Waiting for you, bought once and refused a second time, its order read; at Example Outfitters (outfitters.examples.datalayer.run) the same checkout over ACP. Test merchants only: paid with a test instrument."
     recorded:
       - "The purchase is the developers' UCP example (examples/protocols/ucp/shopping.py) against its local test store, Example Store, run in its own tests."
       - "The checkout at Example Outfitters is the developers' ACP example (examples/protocols/agentic_commerce/checkout.py), run in its own tests."
     unverified:
-      - "A model's turns in the Studio's Preview were not watched in that drill (no dev server ran)."
+      - "A model's turns in the Studio's Preview were not watched in that trial."
 
 record:
   keep_for: 90_days

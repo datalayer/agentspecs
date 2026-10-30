@@ -10,7 +10,7 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
-The documentation brought up to the specs: the Appspec page says the repository lent to a computer, the avatar and the voice, tests and what was verified, what is kept and where it goes, and lists the whole catalogue; the scenes page the scripted scenes and the real recording; a Frontend Tools page (the `cells` set, the example-output modes); the agents page the `harness` field; the models and outputs pages the current catalogue. The schema descriptions, and so the generated references, no longer cite planning ids; Gemini CLI's reason for not being offered and OpenCode's description say it in plain words.
+The documentation brought up to the specs: the Appspec page says the repository lent to a computer, the avatar and the voice, tests and what was verified, what is kept and where it goes, and lists the whole catalogue; the scenes page the scripted scenes and the real recording; a Frontend Tools page (the `cells` set, the example-output modes); the agents page the `harness` field; the models and outputs pages the current catalogue. The schema descriptions, and so the generated references, no longer cite planning ids; Gemini CLI's reason for not being offered and OpenCode's description say it in plain words. The references' choices are headings, so their links resolve (no broken anchors). The catalogue's verified sentences say where an application was tried in a builder's words (live on Datalayer, on its date), without cluster names or planning ids; so do the scenes' unverified lines, the speech register's notes and the pap protocol tools' note.
 
 ## 0.0.138
 

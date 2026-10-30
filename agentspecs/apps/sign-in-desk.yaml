@@ -77,11 +77,11 @@ tests:
       expect: Once I signed in, it answers from my order at the shop.
   verified:
     live:
-      - "Drilled on r1 on 13 October 2026 against the hosted Manzanita (manzanita.examples.datalayer.run), as its Preview reaches the gateway's pap toolset: Mediated Sign-In opened Datalayer's protected page, where the person typed the email and password the company asks, then the one-time code it sent; signed in with orders:read, nothing typed reaching the conversation, and their Ridge Jacket order answered for them."
+      - "Tried live on Datalayer on 13 October 2026 against the hosted Manzanita (manzanita.examples.datalayer.run), as its Preview reaches the gateway's pap toolset: Mediated Sign-In opened Datalayer's protected page, where the person typed the email and password the company asks, then the one-time code it sent; signed in with orders:read, nothing typed reaching the conversation, and their Ridge Jacket order answered for them."
     recorded:
       - "The journey is the Personal Agent Protocol SDK's recorded journey mediated-sign-in (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
     unverified:
-      - "A model's turns in the Studio's Preview were not watched in that drill."
+      - "A model's turns in the Studio's Preview were not watched in that trial."
 
 record:
   keep_for: 90_days

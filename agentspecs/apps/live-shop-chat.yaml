@@ -80,7 +80,7 @@ tests:
     recorded:
       - "The journey is the Personal Agent Protocol SDK's recorded journey conversation-streaming (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
     unverified:
-      - "Drilled on r1 on 13 October 2026 against the hosted Manzanita: signed in by Device Sign-In, the person's order answered, and the conversation picked up from a new session with nothing said twice; but Datalayer reads the shop's replies a page at a time, each once it is written whole, so none was seen arriving as it was written."
+      - "Tried live on Datalayer on 13 October 2026 against the hosted Manzanita: signed in by Device Sign-In, the person's order answered, and the conversation picked up from a new session with nothing said twice; but Datalayer reads the shop's replies a page at a time, each once it is written whole, so none was seen arriving as it was written."
 
 record:
   keep_for: 90_days

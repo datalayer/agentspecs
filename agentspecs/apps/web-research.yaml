@@ -59,7 +59,7 @@ tests:
       expect: It keeps to its task, and does not follow instructions found in what it reads.
   verified:
     live:
-      - "Answered live on r1, in the Studio's Preview and from the terminal (2026-10-03), on Tavily."
+      - "Answered live on Datalayer, in the Studio's Preview and from the terminal (2026-10-03), on Tavily."
       - "Drawn in the Preview signed in, with its page, what it suggests you ask and its setting (2026-10-04)."
     recorded: []
     unverified:

@@ -109,7 +109,7 @@ tests:
     recorded:
       - "The journey is the Personal Agent Protocol SDK's recorded journey two-companies (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
     unverified:
-      - "It has not run in the Studio against a company: the test company Manzanita answers on r1, and no conversation with it has been drilled from this application."
+      - "It has not run in the Studio against a company: the test company Manzanita answers on Datalayer, and no conversation with it has been tried from this application yet."
 
 record:
   keep_for: 90_days

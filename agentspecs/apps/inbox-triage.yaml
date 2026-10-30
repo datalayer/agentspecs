@@ -117,7 +117,7 @@ tests:
     recorded:
       - "Run end to end in Datalayer's own tests on a test mailbox of example mail, a scripted model in place of its agent's (2026-10-06): it labelled, archived and drafted alone, asked before sending, and forwarded and deleted nothing."
     unverified:
-      - "No real mail has been read, drafted or sent yet: the drill on a Datalayer mailbox comes first."
+      - "No real mail has been read, drafted or sent yet: a trial on a Datalayer mailbox comes first."
       - "Its tests have not been run against its own model."
 
 record:

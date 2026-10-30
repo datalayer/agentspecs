@@ -234,7 +234,7 @@ rehearsal:
     live: []
     recorded: []
     unverified:
-      - "Its runtime is not deployed under the demo account yet, and the rehearsal has not been played (A-14)."
+      - "Its runtime is not deployed under the demo account yet, and the rehearsal has not been played."
 
 deployment:
   account: demo

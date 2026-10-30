@@ -271,7 +271,7 @@ rehearsal:
       - "Sales asked Accounting live over A2A on a developer's machine (2026-10-06) for the open customer invoices: Accounting read the aged receivables and said the list of invoices had failed; one column total was wrong."
     recorded: []
     unverified:
-      - "The rehearsal has not been played as a set (A-14): the scene is not Live yet."
+      - "The rehearsal has not been played as a set: the scene is not Live yet."
 
 deployment:
   account: demo
