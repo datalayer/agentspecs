@@ -215,9 +215,8 @@ MCP Server Specification
 
 The following MCP servers are defined in `agentspecs/mcp-servers/`, one
 specification file each, and launched from `MCP_SERVER_CATALOG`. A test holds
-the two together with this list, because it named eight while thirteen
-existed — five servers invisible to anybody reading this page to find out
-what was available.
+the two together with this list, so that every server of the catalogue is
+named here.
 
 - **`alphavantage`** - Financial market data
 - **`chart`** - Chart generation
@@ -259,11 +258,8 @@ default they discover.
 `datalayer`, `odoo-accounting` and `earthdata` (the Datalayer gateway),
 `huggingface` and `kaggle` name a `url` and `headers`, no command: the
 runtime connects to the url over Streamable HTTP and sends the bearer with
-every request. Until 28 October 2026 they went through `npx -y mcp-remote`,
-a stdio bridge: a Datalayer runtime's pod reaches the gateway and no package
-registry, and its image carries no `mcp-remote`, so the bridge never started
-there and the home page's demo scenes answered that their tools could not be
-reached.
+every request. No local bridge (such as `npx -y mcp-remote`) is needed: a
+runtime that cannot install packages reaches a remote server all the same.
 
 The bearer rather than an OAuth flow, and deliberately: OAuth 2.1 with PKCE
 is right for a person at a desktop client and wrong here, since it opens a

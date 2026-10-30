@@ -10,6 +10,8 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
+The documentation brought up to the specs: the Appspec page says the repository lent to a computer, the avatar and the voice, tests and what was verified, what is kept and where it goes, and lists the whole catalogue; the scenes page the scripted scenes and the real recording; a Frontend Tools page (the `cells` set, the example-output modes); the agents page the `harness` field; the models and outputs pages the current catalogue. The schema descriptions, and so the generated references, no longer cite planning ids; Gemini CLI's reason for not being offered and OpenCode's description say it in plain words.
+
 ## 0.0.138
 
 29 October 2026. An Appspec may lend its computer one repository, `permissions.computer.repository` (an `https://` URL at a full commit sha, never a branch), checked out as a harness's workspace when it starts; `code-explainer` is lent Jupyter Kernel Client at `69a6f13`, its commands decided by its Rules. A fourth scene backdrop, `space`: glowing round marks with a halo, on a ground of dots, grid, triangle mesh and rings, luminous lines and a light that flows with each message. `example-harness-opencode`: on Datalayer its model calls go through ai-inference, on the platform's models and paid in credits, with no `ANTHROPIC_API_KEY` of the account's.

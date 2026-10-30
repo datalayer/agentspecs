@@ -8,7 +8,7 @@ Model specifications define the AI models available to agents. Each specificatio
 
 ## Overview
 
-Model IDs follow the format `provider:model-name` (e.g., `bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0`, `openai:gpt-4.1`). This convention makes it easy to identify both the provider and the specific model variant at a glance.
+Model IDs follow the format `provider:model-name` (e.g., `bedrock:us.anthropic.claude-sonnet-4-6`, `openai:gpt-4.1`). This convention makes it easy to identify both the provider and the specific model variant at a glance.
 
 ## Required Fields
 
@@ -63,6 +63,17 @@ Whether this model is the system default (default: `false`). Exactly one model s
 default: true
 ```
 
+### `available` (boolean)
+Whether the model is offered to a person choosing one (default: `false`). The catalogue is
+what the platform knows how to talk to; `available` is what it is worth offering today, so a
+model picker does not list every superseded model.
+```yaml
+available: true
+```
+
+### `tokens_limit` (integer)
+The most output tokens the model may generate in a single run.
+
 ### `capabilities` (list of strings)
 What the model can be trusted with, from a closed vocabulary: `chat`, `tools`, `codemode`,
 `vision`, `thinking`, `decisions` (a typed-decision model: noul, choice and score questions
@@ -110,22 +121,35 @@ required_env_vars:
 ## Complete Example
 
 ```yaml
-# Copyright (c) 2025-2026 Datalayer, Inc.
-# Distributed under the terms of the Modified BSD License.
+# AI Model Specification: Bedrock Claude Sonnet 4.6
 
-# AI Model Specification: Bedrock Claude Sonnet 4.5
-
-id: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+id: "bedrock:us.anthropic.claude-sonnet-4-6"
 version: 0.0.1
-name: Bedrock Claude Sonnet 4.5
-description: Claude Sonnet 4.5 via AWS Bedrock - balanced performance
+name: Bedrock Claude Sonnet 4.6
+description: Claude Sonnet 4.6 via AWS Bedrock - balanced performance
 provider: bedrock
+provider_url: "https://aws.amazon.com/bedrock/anthropic/"
 default: true
+available: true
+tokens_limit: 64000
+context_window: 200000
+
+pricing:
+  input_usd_per_million: 3.3
+  output_usd_per_million: 16.5
 
 required_env_vars:
   - AWS_ACCESS_KEY_ID
   - AWS_SECRET_ACCESS_KEY
   - AWS_DEFAULT_REGION
+
+# Asked the typed decision questions and made to answer in the adapter's
+# shape, for comparing with Jev on the same cases; its probabilities are
+# what it says they are.
+capabilities:
+  - chat
+  - tools
+  - decider
 ```
 
 ## Model Hierarchy
@@ -155,12 +179,28 @@ Required env vars: `ANTHROPIC_API_KEY`
 
 | Model | ID | Description |
 |-------|-----|-------------|
-| **Claude Sonnet 4** | `bedrock:us.anthropic.claude-sonnet-4-20250514-v1:0` | Strong reasoning |
-| **Claude Sonnet 4.5** ⭐ | `bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0` | Balanced performance (default) |
-| **Claude Opus 4** | `bedrock:us.anthropic.claude-opus-4-20250514-v1:0` | Highest capability |
-| **Claude Opus 4.6** | `bedrock:us.anthropic.claude-opus-4-6-v1:0` | Latest flagship model |
+| **Claude Fable 5** | `bedrock:us.anthropic.claude-fable-5` | Claude Fable 5 |
+| **Claude Opus 4.6** | `bedrock:us.anthropic.claude-opus-4-6-v1` | Claude Opus 4.6 |
+| **Claude Opus 4.8** | `bedrock:us.anthropic.claude-opus-4-8` | Claude Opus 4.8 |
+| **Claude Opus 4** | `bedrock:us.anthropic.claude-opus-4-20250514-v1:0` | highest capability |
+| **Claude Opus 5** | `bedrock:us.anthropic.claude-opus-5` | the current frontier model |
+| **Claude Sonnet 4.5** | `bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0` | balanced performance |
+| **Claude Sonnet 4.6** ⭐ | `bedrock:us.anthropic.claude-sonnet-4-6` | balanced performance (default) |
+| **Claude Sonnet 4** | `bedrock:us.anthropic.claude-sonnet-4-20250514-v1:0` | strong reasoning |
 
 Required env vars: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`
+
+### Alibaba Cloud Model Studio
+
+| Model | ID | Description |
+|-------|-----|-------------|
+| **Qwen-Max** | `alibaba:qwen-max` | highest capability Qwen model |
+| **Qwen3-32B** | `alibaba:qwen3-32b` | open-weight 32B model with tool calling |
+| **Qwen3.6-Flash** | `alibaba:qwen3.6-flash` | fast and low cost |
+| **Qwen3.6-Plus** | `alibaba:qwen3.6-plus` | balanced performance and cost |
+| **Qwen3.7-Plus** | `alibaba:qwen3.7-plus` | balanced flagship Qwen3 model |
+
+Hosted through `datalayer-ai-inference`, which holds the Model Studio credentials: `required_env_vars` is empty.
 
 ### Azure OpenAI
 
@@ -253,13 +293,23 @@ models that have tool calling and no spec yet.
 
 Required env vars: `OPENAI_API_KEY`
 
+### Ollama (on your machine)
+
+| Model | ID | Description |
+|-------|-----|-------------|
+| **Gemma 3 4B (Ollama)** | `ollama:gemma3:4b` | small and fast, no tool calling |
+| **Llama 3.1 8B (Ollama)** | `ollama:llama3.1:8b` | tool calling, no data leaves the machine |
+| **Qwen2.5 Coder 7B (Ollama)** | `ollama:qwen2.5-coder:7b` | code-focused with tool calling |
+
+Run on the person's own machine through Ollama: no API key, and selecting one moves execution to a local sandbox, so the code stays where the tokens do. None is offered in a picker today (`available: false`).
+
 ## Linking Models to Agents
 
 Agents can specify a model in their YAML spec using the model ID:
 
 ```yaml
 # In agent spec
-model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
 ```
 
 If an agent does not specify a `model` field, the system default model (marked with `default: true`) is used.
@@ -279,7 +329,7 @@ Run `make specs` in the agent-runtimes repository to regenerate from the YAML fi
 2. **Single Default**: Ensure exactly one model has `default: true`
 3. **Environment Variables**: Always list all required credentials in `required_env_vars`
 4. **Descriptions**: Keep descriptions short — mention the provider, model tier, and key characteristic
-5. **Provider Consistency**: Use the canonical provider names (`anthropic`, `bedrock`, `azure-openai`, `openai`)
+5. **Provider Consistency**: Use the canonical provider names (`anthropic`, `bedrock`, `azure-openai`, `openai`, `alibaba`, `cloudflare`, `ollama`), one of the [model providers](../model-providers)
 6. **File Naming**: Use kebab-case matching the provider and model name (e.g., `bedrock-claude-sonnet-4-5.yaml`)
 
 ## Full Field Coverage

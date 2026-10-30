@@ -81,10 +81,37 @@ skills:
 ### `environment_name` (string)
 Runtime environment name (default: `"ai-agents"`)
 
+### `harness` (string)
+What runs the agent. `pydantic-ai` (the default of the catalogue's agents) and
+`vercel-ai` are built into the runtime; any other value is a
+[harness](../harnesses) of the catalogue — an agent program driven over the Agent
+Client Protocol, behind the Shield. Four are offered today: `claude-code`, `codex`,
+`opencode` and `pi`. What a harness cannot honour of the spec (a `model:`, skills,
+MCP servers it does not take) is refused in a sentence.
+```yaml
+# agents/example-harness-opencode.yaml
+id: example-harness-opencode
+version: 0.0.1
+name: An OpenCode Agent
+enabled: false
+harness: opencode
+sandbox_variant: jupyter-server
+memory: ephemeral
+mcp_servers: []
+skills: []
+environment_name: ai-agents-env
+```
+On Datalayer, OpenCode's model calls go through Datalayer's ai-inference, on the
+platform's models and paid in credits, so the account gives it no key of its own;
+elsewhere it takes the `ANTHROPIC_API_KEY` its harness declares. Claude Code, Codex
+and pi each take the account's own provider key, declared by their harness. The
+catalogue has one such agent per harness (`example-harness-<harness>`), each off in
+the shared catalogue.
+
 ### `model` (string)
 AI model ID to use for this agent. References a model spec in `models/` directory by its `id` field. If omitted, the system default model is used.
 ```yaml
-model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
 model: "openai:gpt-4.1"
 model: "anthropic:claude-opus-4-20250514"
 ```
@@ -188,7 +215,7 @@ name: Data Acquisition Agent
 description: Acquire and manage data from external and local sources.
 
 enabled: true
-model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 mcp_servers:
   - kaggle:0.0.1
@@ -210,13 +237,14 @@ color: "#3B82F6"
 Commonly used fields:
 
 - `enabled`
+- `harness`
 - `model`
 - `model_additionals`
 - `sandbox_variant`
 - `memory`
 - `mcp_servers` (use `id:version` refs)
 - `skills` (use `id:version` refs)
-- `backend_tools` (use `id:version` refs): tools that run on the runtime; `frontend_tools`, the page's
+- `backend_tools` (use `id:version` refs): tools that run on the runtime; `frontend_tools`, the page's ([Frontend Tools](./frontend-tools))
 - `environment_name`
 - `tags`
 - `icon`, `emoji`, `color`
@@ -247,7 +275,7 @@ Generated catalogs are keyed by unversioned id only (e.g. `crawler`). The `getAg
 ## Best Practices
 
 1. **ID Format**: Use kebab-case (`financial-viz`, not `financial_viz`)
-2. **Folder Selection**: Choose the most appropriate category folder
+2. **One file per agent**: agents are flat under `agents/`, the file named for the id
 3. **Description**: 1-2 sentences, present tense, focus on capabilities
 4. **Tags**: 2-5 relevant keywords for categorization
 5. **Suggestions**: Provide 3-5 concrete, actionable examples
