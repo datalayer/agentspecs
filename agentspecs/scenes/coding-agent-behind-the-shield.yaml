@@ -138,6 +138,10 @@ rehearsal:
         - I added
         - I have added
       within: 180s
+  recording:
+    path: coding-agent-behind-the-shield/recording.json
+    taken: "2026-10-30"
+    note: "Rehearsed on Datalayer on 30 October 2026: OpenCode read README.md and explained the repository; asked to edit it, the Shield refused the edit under the rule Change a file, and README.md was unchanged."
   verified:
     live: []
     recorded: []
