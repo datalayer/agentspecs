@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""Harness specifications (SH-01).
+"""Harness specifications.
 
 A *harness* is an agent program driven over the Agent Client Protocol (ACP):
 a coding agent such as Claude Code, Codex, OpenCode, pi, Gemini CLI, Goose or
@@ -18,7 +18,7 @@ when it takes none, ``subagents:`` when it has its own, ``skills:`` in a
 format it cannot read — is refused at load, in a sentence
 (:func:`agent_harness_problems`).
 
-**The register** (SH-04) is ``harnesses/register.yaml``:
+**The register** is ``harnesses/register.yaml``:
 every harness of the catalogue with its adapter, the version pinned, its
 licence and where that was read, the agent's terms and where they were read,
 the credential it takes, whether serving it to third parties is permitted,
@@ -29,7 +29,7 @@ are unknown is not in the catalogue.
 ``custom`` is the one harness with no ``acp`` block: an organization's own
 spec names its command; in the shared catalogue it is refused to any agent.
 
-**The capabilities table** (MH-20, ``capabilities:``) says what a session
+**The capabilities table** (``capabilities:``) says what a session
 may rely on of the harness — how its own session comes back (``resume``:
 none, load or native), what a clone carries of its history
 (``fork_history``: none, replay or rebuild), whether a turn can be
@@ -46,16 +46,16 @@ refused in a sentence. ``acp.native_session`` says whether the adapter
 exposes the vendor's own session id (``meta``) or not (``none``); the
 session's operations read the table, never ``if harness == …``.
 
-**Two tiers** (SH-57). An entry of the register is in the ``catalogue`` tier
-(the default) when a spec beside it launches the harness, drilled by SH-55's
-method; it is ``listed`` when the agent is known to speak ACP — its launch
+**Two tiers**. An entry of the register is in the ``catalogue`` tier
+(the default) when a spec beside it launches the harness, drilled on Datalayer;
+it is ``listed`` when the agent is known to speak ACP — its launch
 command as its project documents it (or none, when undocumented), its
 licence, its terms and the credential it takes, each read and cited — and
 not drilled yet. A listed harness has no spec: it is offered by nothing,
 and naming it is refused in the sentence *listed, not drilled yet*
 (:func:`listed_refusal`). It moves to the catalogue with a spec once drilled.
 
-**An organization's own harness** (SH-46) is ``custom`` made concrete: a
+**An organization's own harness** is ``custom`` made concrete: a
 spec whose id starts with ``org-``, kept in that organization's catalogue
 (IAM's organization document, as its own Frames are), with its register
 entry beside it — the terms, the licence and the credential, required as
@@ -85,7 +85,7 @@ _ROOT = Path(__file__).resolve().parent.parent
 #: The harness specs.
 HARNESSES_DIR = _ROOT / "harnesses"
 
-#: The register (SH-04).
+#: The register.
 REGISTER_PATH = HARNESSES_DIR / "register.yaml"
 
 #: The env-vars catalogue a harness's secrets are declared in.
@@ -103,10 +103,10 @@ BUILTIN_HARNESSES = ("pydantic-ai", "vercel-ai")
 #: The one harness whose command an organization's own spec supplies.
 CUSTOM_HARNESS = "custom"
 
-#: What an organization's own harness id starts with (SH-46), as its own Frames' ids do.
+#: What an organization's own harness id starts with, as its own Frames' ids do.
 ORGANIZATION_HARNESS_PREFIX = "org-"
 
-#: The sentence a listed harness is refused in (SH-57).
+#: The sentence a listed harness is refused in.
 LISTED_NOT_DRILLED = "listed, not drilled yet"
 
 _ID = re.compile(r"^[a-z][a-z0-9-]{0,40}$")
@@ -153,7 +153,7 @@ class ThirdPartyServing(str, Enum):
 
 
 class RegisterTier(str, Enum):
-    """Whether a registered harness is offered (SH-57)."""
+    """Whether a registered harness is offered."""
 
     CATALOGUE = "catalogue"
     """A spec launches it; drilled; offered by `setup`, the Studio and the runtime."""
@@ -551,7 +551,7 @@ HARNESS_CATALOGUE: Dict[str, HarnessSpec] = load_harnesses()
 #: The register, by harness id: the catalogue's entries and the listed ones.
 HARNESS_REGISTER: Dict[str, RegisterEntry] = load_register()
 
-#: The listed tier (SH-57): known to speak ACP, not drilled, offered by nothing.
+#: The listed tier: known to speak ACP, not drilled, offered by nothing.
 LISTED_HARNESSES: Dict[str, RegisterEntry] = {
     harness_id: entry for harness_id, entry in HARNESS_REGISTER.items() if entry.is_listed
 }
@@ -578,7 +578,7 @@ def offered_refusal(harness_id: str) -> Optional[str]:
 
 
 def listed_refusal(harness_id: str) -> Optional[str]:
-    """The sentence that refuses a listed harness, or None when it is not listed (SH-57)."""
+    """The sentence that refuses a listed harness, or None when it is not listed."""
     entry = LISTED_HARNESSES.get(harness_id)
     if entry is None:
         return None
@@ -589,7 +589,7 @@ def listed_refusal(harness_id: str) -> Optional[str]:
     )
 
 
-# --- an organization's own harness (SH-46) ---------------------------------------------
+# --- an organization's own harness ---------------------------------------------
 
 
 def is_organization_harness(harness_id: str) -> bool:
@@ -618,7 +618,7 @@ def admission_id(spec: HarnessSpec) -> str:
 
 
 def organization_harness(spec: Dict[str, Any], entry: Dict[str, Any]) -> tuple:
-    """An organization's own harness and its register entry, validated together (SH-46).
+    """An organization's own harness and its register entry, validated together.
 
     The spec is a harness spec whose id starts with ``org-``, with an ``acp``
     block naming its command; the entry is its line of the register, in the
@@ -740,7 +740,7 @@ def reference_text() -> str:
         "where it says `pydantic-ai` or `vercel-ai`; what the harness cannot honour of the",
         "spec is refused at load. The register (`harnesses/register.yaml`) says the",
         "terms each is served under and where they were read; a harness without an entry",
-        "does not load. The Datalayer runtime serves the offered ones (SH-10); a harness",
+        "does not load. The Datalayer runtime serves the offered ones; a harness",
         "described here and not offered is refused in its own sentence wherever it is named.",
         "",
         "| Harness | Id | Launch | MCP | Skills | Instructions | Third parties | Licence | Pinned |",
@@ -776,7 +776,7 @@ def reference_text() -> str:
         "## Listed, not drilled yet",
         "",
         "Agents known to speak ACP, registered with their launch command as their projects",
-        "document it, their licence, their terms and the credential they take (SH-57). None is",
+        "document it, their licence, their terms and the credential they take. None is",
         "offered: naming one is refused, *listed, not drilled yet*, until it is drilled and moved",
         "to the catalogue with a spec.",
         "",

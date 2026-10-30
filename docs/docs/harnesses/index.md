@@ -7,7 +7,7 @@ An agent program driven over the Agent Client Protocol, one spec each under
 where it says `pydantic-ai` or `vercel-ai`; what the harness cannot honour of the
 spec is refused at load. The register (`harnesses/register.yaml`) says the
 terms each is served under and where they were read; a harness without an entry
-does not load. The Datalayer runtime serves the offered ones (SH-10); a harness
+does not load. The Datalayer runtime serves the offered ones; a harness
 described here and not offered is refused in its own sentence wherever it is named.
 
 | Harness | Id | Launch | MCP | Skills | Instructions | Third parties | Licence | Pinned |
@@ -25,14 +25,14 @@ is refused with the sentence below, by the runtime, by `loop --harness` and by t
 | Harness | Id | Why not |
 | --- | --- | --- |
 | [fast-agent](https://github.com/evalstate/fast-agent/blob/main/docs/docs/acp/index.md) | `fast-agent` | the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); fast-agent is a framework served over ACP, not a coding agent, its adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer. |
-| [Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/cli-reference.md) | `gemini-cli` | the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); Gemini CLI's API host (generativelanguage.googleapis.com) is outside a Datalayer runtime's egress boundary and is not routed through ai-inference, so it stays unfunded and unoffered there (the user's decision, 28 October 2026). |
+| [Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/cli-reference.md) | `gemini-cli` | the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); Gemini CLI's API host (generativelanguage.googleapis.com) is outside a Datalayer runtime's egress boundary and is not routed through ai-inference, so it is not offered there. |
 | [goose](https://block.github.io/goose/docs/gdk/acp/) | `goose` | the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); goose is a binary of its own release, not an npm adapter, the runtime image does not carry it, and it has not been drilled on Datalayer. |
 | [OpenHands](https://docs.openhands.dev/openhands/usage/run-openhands/acp) | `openhands` | the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); OpenHands' adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer. |
 
 ## Listed, not drilled yet
 
 Agents known to speak ACP, registered with their launch command as their projects
-document it, their licence, their terms and the credential they take (SH-57). None is
+document it, their licence, their terms and the credential they take. None is
 offered: naming one is refused, *listed, not drilled yet*, until it is drilled and moved
 to the catalogue with a spec.
 
@@ -128,7 +128,7 @@ llmindset's agent framework served over ACP; each agent it defines is a session 
 
 Google's coding agent, which speaks ACP itself when started with --experimental-acp.
 
-- Not offered: the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); Gemini CLI's API host (generativelanguage.googleapis.com) is outside a Datalayer runtime's egress boundary and is not routed through ai-inference, so it stays unfunded and unoffered there (the user's decision, 28 October 2026).
+- Not offered: the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); Gemini CLI's API host (generativelanguage.googleapis.com) is outside a Datalayer runtime's egress boundary and is not routed through ai-inference, so it is not offered there.
 - Credential: A Gemini API key (GEMINI_API_KEY), the person's own; or a Google login on a Code Assist Standard or Enterprise subscription; secrets declared: `GEMINI_API_KEY`
 - Needs: Node 20 or later (engines.node >=20 on npm), git
 - ACP 1: `session/load` no; modes `default`, `auto_edit`, `yolo`, `plan`
@@ -153,7 +153,7 @@ Block's open agent (now the Agentic AI Foundation's), which speaks ACP itself wi
 
 ### OpenCode (`opencode`)
 
-Anomaly's open coding agent, which speaks ACP itself with opencode acp; any model provider it is configured with.
+Anomaly's open coding agent, which speaks ACP itself with opencode acp; any model provider it is configured with. On Datalayer its model calls go through Datalayer's ai-inference, on the platform's models and paid in credits, with no key of the account's.
 
 - Credential: The provider's key OpenCode is configured with; ANTHROPIC_API_KEY declared; secrets declared: `ANTHROPIC_API_KEY`
 - Needs: Node (the opencode-ai package), git

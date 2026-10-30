@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The Appspec reference, generated from its JSON Schema (S-07).
+"""The Appspec reference, generated from its JSON Schema.
 
 Every field, what it means in a sentence, its default, and an example taken
 from the applications of the catalogue — so that the reference cannot drift

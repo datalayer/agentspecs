@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The scene spec reference, generated from its JSON Schema (A-11).
+"""The scene spec reference, generated from its JSON Schema.
 
 Every field, what it means in a sentence, its default, and an example taken
 from the scenes of the catalogue — the Appspec's reference, for scenes.

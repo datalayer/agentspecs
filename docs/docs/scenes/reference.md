@@ -358,7 +358,7 @@ entry: sales
 
 ### AppVerified
 
-What was verified, and how, each in a sentence a person reads (E-14). An example says it on its card and on its page: what was tried live, what runs on recorded data instead, and what is not verified yet. Said by whoever tried it; nothing here is computed.
+What was verified, and how, each in a sentence a person reads. An example says it on its card and on its page: what was tried live, what runs on recorded data instead, and what is not verified yet. Said by whoever tried it; nothing here is computed.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -511,7 +511,7 @@ How a member appears to the audience, in this scene.
 
 ### SceneRecording
 
-A transcript recorded once, played when the scene cannot play live (H-08).
+A transcript recorded once, played when the scene cannot play live.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |

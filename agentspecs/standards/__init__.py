@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""Standard specifications (SH-60).
+"""Standard specifications.
 
 A *standard* is what a conformance report answers: its version, its domains,
 and its controls — each with an id and a title as the standard's own pages
@@ -23,7 +23,7 @@ has been published since the spec was read, and the test in
 published index (``aiuc-1.index.txt``, the control lines of the standard's
 ``llms.txt``; the live page when the network allows).
 
-**The organization's controls** (SH-64) start from the templates under
+**The organization's controls** start from the templates under
 ``standards/templates/``: one Markdown text per control a person must write
 and sign (the failure plans, acceptable use, processing locations, regulatory
 compliance, the data policies, the risk taxonomy, vendor due diligence), with
@@ -55,7 +55,7 @@ STANDARDS_DIR = _ROOT / "standards"
 #: Where the JSON Schema is kept, beside the specs.
 SCHEMA_PATH = STANDARDS_DIR / "standard.schema.json"
 
-#: The templates of the organization's controls (SH-64).
+#: The templates of the organization's controls.
 TEMPLATES_DIR = STANDARDS_DIR / "templates"
 
 #: The published index of AIUC-1's controls, as its ``llms.txt`` lists them.
@@ -342,7 +342,7 @@ def index_differences(spec: StandardSpec, published: Dict[str, str]) -> List[str
 
 
 # ---------------------------------------------------------------------------
-# The organization's controls: templates (SH-64)
+# The organization's controls: templates
 # ---------------------------------------------------------------------------
 
 #: The controls a person writes and signs, and the template each starts from.
@@ -485,7 +485,7 @@ def reference_text() -> str:
         "## The organization's controls",
         "",
         "The controls a person writes and signs start from a template under `standards/templates/`"
-        " (SH-64), with what the catalogue knows filled in:",
+        ", with what the catalogue knows filled in:",
         "",
     ]
     for control_id, name in TEMPLATES.items():

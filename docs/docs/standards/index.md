@@ -227,7 +227,7 @@ The international standard for an AI management system: clauses 4 to 10 of the m
 
 ## The organization's controls
 
-The controls a person writes and signs start from a template under `standards/templates/` (SH-64), with what the catalogue knows filled in:
+The controls a person writes and signs start from a template under `standards/templates/`, with what the catalogue knows filled in:
 
 - `E001`: `e001-failure-plan-security-breaches.md`
 - `E002`: `e002-failure-plan-harmful-outputs.md`

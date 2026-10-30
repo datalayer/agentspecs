@@ -30,8 +30,8 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `context` | list of text | The Frames it works under: the catalogue's, or its organization's own (`org-…`) | — |
 | `contents` | list of text | The documents and datasets it answers from | — |
 | `connections` | list of [AppConnection](#appconnection) | What it reaches | — |
-| `protocols` | list of text | The agent protocols it speaks, ids of the protocols catalogue (PS-02): its `pap`, `pact`, `signed_fetch` and `a2a` blocks, and each merchant of `commerce`, are refused unless their protocol is listed, and a planned protocol only while it is not offered | — |
-| `ui` | list of [UiChoice](#uichoice) | Its UI plugins, each `{plugin, renderer}` (R8): a plugin of `agentspecs/ui`, each once, and the renderer of `agentspecs/ui-renderers` it is exposed through, when it is — one the plugin may be exposed through, and one that is not enabled only while the application is not offered | — |
+| `protocols` | list of text | The agent protocols it speaks, ids of the protocols catalogue: its `pap`, `pact`, `signed_fetch` and `a2a` blocks, and each merchant of `commerce`, are refused unless their protocol is listed, and a planned protocol only while it is not offered | — |
+| `ui` | list of [UiChoice](#uichoice) | Its UI plugins, each `{plugin, renderer}`: a plugin of `agentspecs/ui`, each once, and the renderer of `agentspecs/ui-renderers` it is exposed through, when it is — one the plugin may be exposed through, and one that is not enabled only while the application is not offered | — |
 | `pap` | [AppPap](#apppap) | Personal Agent Protocol: companies it works with, or being one | — |
 | `pact` | [AppPact](#apppact) | PACT: businesses it asks for each person | — |
 | `commerce` | [AppCommerce](#appcommerce) | UCP and ACP: merchants it shops at for each person | — |
@@ -591,7 +591,7 @@ banner: SvgTutorialsHero
 
 ### AppA2A
 
-A2A: what the application's Agent Card says beside its name and skill (PR-02).
+A2A: what the application's Agent Card says beside its name and skill.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -599,7 +599,7 @@ A2A: what the application's Agent Card says beside its name and skill (PR-02).
 
 ### AppA2AExtension
 
-An A2A extension the application's Agent Card advertises (A2A 1.0 *Extensions*, PR-02), beside the runtime's own. Named by its URI, as `capabilities.extensions` writes it; its params are published on the card as they are, so they never hold a credential. Datalayer's own extensions (orchestration, the face) are the runtime's, never declared here.
+An A2A extension the application's Agent Card advertises (A2A 1.0 *Extensions*), beside the runtime's own. Named by its URI, as `capabilities.extensions` writes it; its params are published on the card as they are, so they never hold a credential. Datalayer's own extensions (orchestration, the face) are the runtime's, never declared here.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -627,11 +627,11 @@ Optional: checks from the catalogue, for a builder who wants them — and its co
 | `guards` | list of text | Guards, `id` or `id:version` | — |
 | `gates` | list of text | Gates, `id` or `id:version` | — |
 | `track` | text | A Track, `id` or `id:version` | empty |
-| `code` | list of [AppCodeCheck](#appcodecheck) | Checks written in its code (`@app.check`), each run at its stage (P-06) | — |
+| `code` | list of [AppCodeCheck](#appcodecheck) | Checks written in its code (`@app.check`), each run at its stage | — |
 
 ### AppCodeCheck
 
-A check written in the application's code (P-06): `@app.check`. Run at its stage beside the built-in checks and the catalogue's Guards; what it refuses is said in its own sentence. Without its file nothing runs it, and validation says so.
+A check written in the application's code: `@app.check`. Run at its stage beside the built-in checks and the catalogue's Guards; what it refuses is said in its own sentence. Without its file nothing runs it, and validation says so.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -641,7 +641,7 @@ A check written in the application's code (P-06): `@app.check`. Run at its stage
 
 ### AppCommand
 
-A slash command the user picks in the composer (P-19). Typing `/` lists the application's commands; picking one sends its `prompt`, `{input}` replaced by the words typed after the command.
+A slash command the user picks in the composer. Typing `/` lists the application's commands; picking one sends its `prompt`, `{input}` replaced by the words typed after the command.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -651,7 +651,7 @@ A slash command the user picks in the composer (P-19). Typing `/` lists the appl
 
 ### AppCommerce
 
-Commerce: the merchants it shops at for each person (PI-01).
+Commerce: the merchants it shops at for each person.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -659,7 +659,7 @@ Commerce: the merchants it shops at for each person (PI-01).
 
 ### AppCommerceMerchant
 
-A merchant the application shops at for each person, over UCP or ACP (PI-01). Decided 2026-10-13: test merchants only, with no real payment — a purchase is always asked of the person first (*Ask me first*, PI-21), as the exact checkout, and made at most once; Datalayer's gateway pays with a test instrument and refuses any merchant it does not know as a test one. Named by its domain (its profile at `/.well-known/ucp`, or `/.well-known/acp.json`), always in each person's own name. No credential is ever part of a spec.
+A merchant the application shops at for each person, over UCP or ACP. Decided 2026-10-13: test merchants only, with no real payment — a purchase is always asked of the person first (*Ask me first*), as the exact checkout, and made at most once; Datalayer's gateway pays with a test instrument and refuses any merchant it does not know as a test one. Named by its domain (its profile at `/.well-known/ucp`, or `/.well-known/acp.json`), always in each person's own name. No credential is ever part of a spec.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -707,7 +707,7 @@ What an alternative is weighed on.
 
 ### AppCustomComponent
 
-A component the developer writes (P-17), an A2UI component of this application only: the catalog grows for it, it does not open. Reviewed like any component of the catalog — its properties a JSON Schema, what it shows and sends bindings into the page's data — and drawn in a sandboxed frame of no origin, its module loaded from `source` and nothing else: what it is given is its properties and data, and what it gives back is what it sends.
+A component the developer writes, an A2UI component of this application only: the catalog grows for it, it does not open. Reviewed like any component of the catalog — its properties a JSON Schema, what it shows and sends bindings into the page's data — and drawn in a sandboxed frame of no origin, its module loaded from `source` and nothing else: what it is given is its properties and data, and what it gives back is what it sends.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -716,7 +716,7 @@ A component the developer writes (P-17), an A2UI component of this application o
 | `props` | mapping | Its properties, as the JSON Schema of an object: each typed `string`, `integer`, `number`, `boolean`, `array` or `object`, or an `enum` of words, with its `title`, `description` and `default`; `required` among them | — |
 | `shows` | list of text | What it shows from the page's data: each a binding, given a path or a value in place | — |
 | `sends` | list of text | What it sends back: each a binding it writes, then its `action` dispatched | — |
-| `source` (required) | text | Its module, a built ES module whose default export draws it (`export default function (root, {props, send})`): an address over `https://`, or `http://localhost` while it is written; or a file of the application's folder, by its path in it (`gauge.js`), packaged with the application and served by the server its package is installed beside (P-29) | — |
+| `source` (required) | text | Its module, a built ES module whose default export draws it (`export default function (root, {props, send})`): an address over `https://`, or `http://localhost` while it is written; or a file of the application's folder, by its path in it (`gauge.js`), packaged with the application and served by the server its package is installed beside | — |
 | `integrity` | text | The module as it was reviewed: its Subresource Integrity hash (`sha384-…`); a module that differs is not drawn. Any module at the address when unsaid | empty |
 | `height` | integer | Its height on the page, in pixels | `240` |
 | `example` | mapping | A configuration of it its schema accepts: what the palette previews | empty |
@@ -764,19 +764,19 @@ What the user sees.
 | `theme` | [AppTheme](#apptheme) | The theme it runs in by default, at its address, embedded, in the Studio's Preview and as an example: a `variant` and, optionally, a colour `mode`. The person's own when unsaid. Its `accent`, when it names one, colours it, whichever theme it is | empty |
 | `welcome` | text | What the application says first | empty |
 | `starters` | list of [AppStarter](#appstarter) | First messages offered to the user | — |
-| `commands` | list of [AppCommand](#appcommand) | Slash commands the user picks in the composer: typing `/` lists them (P-19) | — |
-| `modes` | list of [AppMode](#appmode) | Mode switches in the composer: the option picked goes with every run, its instructions told to the agent and its model run on (P-19) | — |
+| `commands` | list of [AppCommand](#appcommand) | Slash commands the user picks in the composer: typing `/` lists them | — |
+| `modes` | list of [AppMode](#appmode) | Mode switches in the composer: the option picked goes with every run, its instructions told to the agent and its model run on | — |
 | `actions` | list of [AppAction](#appaction) | The actions of its code a person presses (`@app.action`, RU-5), each with the JSON Schema of its payload: what its buttons offer, with a token, and nothing else | — |
-| `profiles` | list of [AppProfile](#appprofile) | Several assistants in one application, two at least: the person picks one before the conversation starts — the first unless they do — and keeps it to the end; its instructions, model and starters go with every run (P-20). None when unsaid | — |
-| `settings` | mapping | What the user may set: the JSON Schema of a form, an object of named fields, each with its `title` and its `default` (C-16). Drawn with `@datalayer/primer-rjsf` beside the conversation and on a deployment's Ship card, its values go with every run and are checked by the runtime against the same schema. None when unsaid | empty |
-| `settings_ui` | mapping | How the settings' fields are drawn, as `@datalayer/primer-rjsf` reads a uiSchema: by field name, its `ui:` options — `ui:widget` one of `select`, `radio`, `range`, `updown`, `switch`, `checkbox`, `text`, `textarea`, `date`, `checkboxes`, `tags` — and `ui:order` (P-20). Each field's own widget when unsaid | empty |
-| `language` | text | The language its own words are in, as BCP 47 tags it (`en`, `fr`, `pt-BR`) (P-26) | `"en"` |
-| `translations` | mapping of [AppTranslation](#apptranslation) | What a person reads of it in other languages, by BCP 47 tag: its name, welcome, starters and their categories, settings, commands, modes and profiles. The page shows the person's language when it has it, else its own words (P-26) | — |
-| `uploads` | [AppUploads](#appuploads) | What a person may send in the composer without being asked — images, files, audio — by kind, each with its largest size, and how many at once (P-21). None when unsaid: the composer offers no attachment, and a file sent with a message is refused | empty |
+| `profiles` | list of [AppProfile](#appprofile) | Several assistants in one application, two at least: the person picks one before the conversation starts — the first unless they do — and keeps it to the end; its instructions, model and starters go with every run. None when unsaid | — |
+| `settings` | mapping | What the user may set: the JSON Schema of a form, an object of named fields, each with its `title` and its `default`. Drawn with `@datalayer/primer-rjsf` beside the conversation and on a deployment's Ship card, its values go with every run and are checked by the runtime against the same schema. None when unsaid | empty |
+| `settings_ui` | mapping | How the settings' fields are drawn, as `@datalayer/primer-rjsf` reads a uiSchema: by field name, its `ui:` options — `ui:widget` one of `select`, `radio`, `range`, `updown`, `switch`, `checkbox`, `text`, `textarea`, `date`, `checkboxes`, `tags` — and `ui:order`. Each field's own widget when unsaid | empty |
+| `language` | text | The language its own words are in, as BCP 47 tags it (`en`, `fr`, `pt-BR`) | `"en"` |
+| `translations` | mapping of [AppTranslation](#apptranslation) | What a person reads of it in other languages, by BCP 47 tag: its name, welcome, starters and their categories, settings, commands, modes and profiles. The page shows the person's language when it has it, else its own words | — |
+| `uploads` | [AppUploads](#appuploads) | What a person may send in the composer without being asked — images, files, audio — by kind, each with its largest size, and how many at once. None when unsaid: the composer offers no attachment, and a file sent with a message is refused | empty |
 | `components` | list of text | The components of the catalog the surface may use; the kind's own when empty | — |
-| `custom_components` | list of [AppCustomComponent](#appcustomcomponent) | Components its developer wrote (P-17), of this application only: each named, its props a JSON Schema, its module's address; placed, shown and drawn as the catalog's own | — |
+| `custom_components` | list of [AppCustomComponent](#appcustomcomponent) | Components its developer wrote, of this application only: each named, its props a JSON Schema, its module's address; placed, shown and drawn as the catalog's own | — |
 | `surface` | [AppSurface](#appsurface) | The component tree, when there is one | empty |
-| `page` | [AppPage](#apppage) | A widget's page written in its code (`@app.page`, P-05): its inputs as a form, its outputs as values; run again as an input changes, its outputs shown in place. None when unsaid | empty |
+| `page` | [AppPage](#apppage) | A widget's page written in its code (`@app.page`): its inputs as a form, its outputs as values; run again as an input changes, its outputs shown in place. None when unsaid | empty |
 | `avatar` | text or [Model3DAvatar](#model3davatar) | The avatar its floating assistant shows, its appearance: by the id a plugin contributes it under (lowercase letters and digits, words joined by a hyphen): Datalayer's orb `orb`, in the theme's colours, acting out each of the assistant's states; Datalayer's own drawings `paperclip`, `wizard`, `cat` and `eyes`; the characters clippy.js publishes, Microsoft's, fetched from jsDelivr when shown (`clippy-js-clippy`, `clippy-js-merlin`, `clippy-js-links`, `clippy-js-rover`, `clippy-js-genie`, `clippy-js-genius`, `clippy-js-f1`, `clippy-js-peedy`, `clippy-js-rocky`, `clippy-js-bonzi`); or a Microsoft Agent character a plugin brings; or a 3D model, `{kind: model3d, url}`. The paper clip when unsaid; an id no enabled plugin contributes is refused where the plugins are known, the runtime and the page. Said here, it wins over a person's own choice in their settings | empty |
 | `balloon` | [BalloonDisplay](#balloondisplay) | How its floating assistant's balloon shows the conversation: `history` (every message, scrolled, the composer last) or `current` (only what it says or does now, the answer being written or the tool it calls, in one balloon). The page's own when unsaid: `history` for the floating chat | empty |
 | `voice` | [AppVoice](#appvoice) | Its voice: whether it listens and speaks, with which voice, in which language (off unless said) | — |
@@ -784,7 +784,7 @@ What the user sees.
 
 ### AppMode
 
-A mode switch in the composer (P-19): the person picks one of its options.
+A mode switch in the composer: the person picks one of its options.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -795,7 +795,7 @@ A mode switch in the composer (P-19): the person picks one of its options.
 
 ### AppModeOption
 
-One position of a mode switch (P-19): what the agent is told, the model it runs on.
+One position of a mode switch: what the agent is told, the model it runs on.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -825,7 +825,7 @@ An option of a mode in another language.
 
 ### AppPact
 
-PACT: the businesses it asks for each person (PI-01), and whether it answers as one (PR-13).
+PACT: the businesses it asks for each person, and whether it answers as one.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -834,7 +834,7 @@ PACT: the businesses it asks for each person (PI-01), and whether it answers as 
 
 ### AppPactBusiness
 
-The application answers as a PACT business (PR-13, PI-32; decided 2026-10-13). Published at its deployment's own address: its A2A Agent Card names Datalayer as the Provider and the application's owner as the Brand; its A2A interface verifies each personal-agent JWT against a registered issuer's keys; with `scopes`, a person delegates to a personal agent through the Provider's device-code sign-in — their Datalayer sign-in — and every answer under their delegation carries a signed receipt.
+The application answers as a PACT business. Published at its deployment's own address: its A2A Agent Card names Datalayer as the Provider and the application's owner as the Brand; its A2A interface verifies each personal-agent JWT against a registered issuer's keys; with `scopes`, a person delegates to a personal agent through the Provider's device-code sign-in — their Datalayer sign-in — and every answer under their delegation carries a signed receipt.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -845,7 +845,7 @@ The application answers as a PACT business (PR-13, PI-32; decided 2026-10-13). P
 
 ### AppPactConnection
 
-A business the application asks for each person, over PACT 1.0 (PI-01). The Brand is named by its domain — its Agent Card is at `https://<brand>/.well-known/agent-card.json` (PACT §2.1) — and its Provider's `audience`, which the Provider assigns at registration and the personal-agent JWT carries. Always in each person's own name: PACT acts for a person. No credential is ever part of a spec.
+A business the application asks for each person, over PACT 1.0. The Brand is named by its domain — its Agent Card is at `https://<brand>/.well-known/agent-card.json` (PACT §2.1) — and its Provider's `audience`, which the Provider assigns at registration and the personal-agent JWT carries. Always in each person's own name: PACT acts for a person. No credential is ever part of a spec.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -857,7 +857,7 @@ A business the application asks for each person, over PACT 1.0 (PI-01). The Bran
 
 ### AppPactRegisteredAgent
 
-A personal agent the business accepts (PACT 1.0 §3.1): its issuer, and where its keys are. Registered by the Maker, as `pap.company.registered_agents` (PR-13, decided 2026-10-13): a personal-agent JWT is verified against the keys of a registered issuer only, and any other is refused.
+A personal agent the business accepts (PACT 1.0 §3.1): its issuer, and where its keys are. Registered by the Maker, as `pap.company.registered_agents`: a personal-agent JWT is verified against the keys of a registered issuer only, and any other is refused.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -866,7 +866,7 @@ A personal agent the business accepts (PACT 1.0 §3.1): its issuer, and where it
 
 ### AppPage
 
-A widget's page written in its code (P-05): `@app.page`. Its inputs are a form, drawn on the page; as one changes, the function of its code runs again on them and the page shows what it returned, in place. Without its file nothing runs it, and validation says so.
+A widget's page written in its code: `@app.page`. Its inputs are a form, drawn on the page; as one changes, the function of its code runs again on them and the page shows what it returned, in place. Without its file nothing runs it, and validation says so.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -878,18 +878,18 @@ A widget's page written in its code (P-05): `@app.page`. Its inputs are a form, 
 
 ### AppPageOutput
 
-One thing a page shows for its inputs (P-05): a value, drawn with a component.
+One thing a page shows for its inputs: a value, drawn with a component.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
 | `name` (required) | text | Its name: what its code returns it under, and where the page shows it (`/outputs/<name>`) | — |
 | `title` | text | What a person reads above it; none when unsaid | empty |
-| `component` | text | What draws it: `Text` (words, unless said), `Image` (an address), `Table` (rows) or `Chart` (points), or a component of the application's own (`interface.custom_components`, P-17), its value what it shows first | `"Text"` |
+| `component` | text | What draws it: `Text` (words, unless said), `Image` (an address), `Table` (rows) or `Chart` (points), or a component of the application's own (`interface.custom_components`), its value what it shows first | `"Text"` |
 | `props` | mapping | The component's other properties: a Table's `columns`, a Chart's `kind`, `x` and `y` | — |
 
 ### AppPair
 
-One of a pair of examples, a PACT business and the personal agent that asks it (PR-13, E-02; decided 2026-10-13). A personal agent's issuer is its own application's, known only once a copy exists: when a person has copied both of a pair, the Studio registers the personal agent's copy with the business's copy (`pact.business.registered_agents`) and points the personal agent at the business's own domain.
+One of a pair of examples, a PACT business and the personal agent that asks it. A personal agent's issuer is its own application's, known only once a copy exists: when a person has copied both of a pair, the Studio registers the personal agent's copy with the business's copy (`pact.business.registered_agents`) and points the personal agent at the business's own domain.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -898,7 +898,7 @@ One of a pair of examples, a PACT business and the personal agent that asks it (
 
 ### AppPap
 
-Personal Agent Protocol: the companies it works with, and whether it is one. A `pap` block names the profile it is written for (S-03): one Datalayer speaks, or it is refused in a sentence. An application without the block has none.
+Personal Agent Protocol: the companies it works with, and whether it is one. A `pap` block names the profile it is written for: one Datalayer speaks, or it is refused in a sentence. An application without the block has none.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -917,7 +917,7 @@ Another way to do an excluded task (PAP draft 0.3 §8.2): instructions, referenc
 
 ### AppPapCompany
 
-The application is a company personal agents work with (S-01, U-04).
+The application is a company personal agents work with.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -944,7 +944,7 @@ A scope the company offers: its name, what it allows, and its hints (PAP draft 0
 
 ### AppPapConnection
 
-A company the application works with as a Personal Agent (S-01). The company is named by its domain, the discovery input, and nothing else: its endpoints, issuer and metadata are what discovery verifies and are kept by the deployment, never here, and no credential is ever part of a spec. `access` and `as` mean what they mean for every connection.
+A company the application works with as a Personal Agent. The company is named by its domain, the discovery input, and nothing else: its endpoints, issuer and metadata are what discovery verifies and are kept by the deployment, never here, and no credential is ever part of a spec. `access` and `as` mean what they mean for every connection.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -968,13 +968,13 @@ A task the company chose not to offer through the protocol (PAP draft 0.3 §8.1)
 
 ### AppPapOperation
 
-Something a personal agent may ask the application to do for the person, done only once they confirm its exact terms (B-04, Operations v1). Asked by a personal agent, the application's agent does not call `tool`: the call is proposed, its arguments the terms, and the person confirms that revision before the tool runs, with those arguments and only once. An operation that `allows` instead gives a standing permission once the person confirms it (R-07): it calls no tool, and is asked for through the application's API or its server for agents.
+Something a personal agent may ask the application to do for the person, done only once they confirm its exact terms (Operations v1). Asked by a personal agent, the application's agent does not call `tool`: the call is proposed, its arguments the terms, and the person confirms that revision before the tool runs, with those arguments and only once. An operation that `allows` instead gives a standing permission once the person confirms it: it calls no tool, and is asked for through the application's API or its server for agents.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
 | `action` (required) | text | The action's name at this company, e.g. `orders.exchange` | — |
 | `tool` | text | The application's tool that does it, called with the terms | empty |
-| `allows` | [AppPapStanding](#apppapstanding) | Instead of a tool: the standing permission confirming it gives (R-07) | empty |
+| `allows` | [AppPapStanding](#apppapstanding) | Instead of a tool: the standing permission confirming it gives | empty |
 | `summary` (required) | text | What the person is shown, with `{term}` for each term, e.g. `Exchange order {order_id} for size {size}`; never written by the model | — |
 | `user_approval_required` | true or false | Whether only the person may confirm it, never an approval in advance | `true` |
 
@@ -991,7 +991,7 @@ One place an alternative points to: an OpenAPI operation, an MCP tool, or a page
 
 ### AppPapStanding
 
-An operation whose effect is a standing permission (R-07, the Ledgerly pattern). Confirmed by the person, it is recorded as the approval in advance they would give in Datalayer: this application may confirm, at the company of one of its own connections and in the person's account there, operations of that class whose terms stay within these limits, so many times, for so many days — and the person reads it back and withdraws it there.
+An operation whose effect is a standing permission (the Ledgerly pattern). Confirmed by the person, it is recorded as the approval in advance they would give in Datalayer: this application may confirm, at the company of one of its own connections and in the person's account there, operations of that class whose terms stay within these limits, so many times, for so many days — and the person reads it back and withdraws it there.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -1022,7 +1022,7 @@ What the application may reach beside its connections. Nothing, unless said.
 
 ### AppProfile
 
-One of several assistants in one application (P-20): a variant of its agent. The person picks a profile before the conversation starts, and keeps it to the end: its instructions are told to the agent on top of the application's in every run, its model run in place of the application's (a mode's model wins over it), and its starters offered in place of the application's.
+One of several assistants in one application: a variant of its agent. The person picks a profile before the conversation starts, and keeps it to the end: its instructions are told to the agent on top of the application's in every run, its model run in place of the application's (a mode's model wins over it), and its starters offered in place of the application's.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -1093,7 +1093,7 @@ A document it answers from, as Datalayer publishes it with the application.
 
 ### AppSamples
 
-What it is tried on before it is anybody's (E-06, E-11). Published with it by Datalayer and read only: what a visitor without an account tries it on, in the browser.
+What it is tried on before it is anybody's. Published with it by Datalayer and read only: what a visitor without an account tries it on, in the browser.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -1111,7 +1111,7 @@ A named set of weights: one way of looking at the same findings.
 
 ### AppSignedFetch
 
-Signed fetch: the sites it reads pages of, signed with its Web Bot Auth key (EX-11).
+Signed fetch: the sites it reads pages of, signed with its Web Bot Auth key.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -1119,7 +1119,7 @@ Signed fetch: the sites it reads pages of, signed with its Web Bot Auth key (EX-
 
 ### AppSignedFetchSite
 
-A website the application reads pages of, each request signed (EX-11). Decided 2026-10-13: a *signed fetch* names exact sites, an allow-list. Datalayer's gateway reads a page there with `GET` only, on its safe egress path (public addresses only), each request signed with the application's own Web Bot Auth key and recorded; reading is under the application's Rules like any read. Named by its domain: no other host is reached, and no credential is ever part of a spec.
+A website the application reads pages of, each request signed. Decided 2026-10-13: a *signed fetch* names exact sites, an allow-list. Datalayer's gateway reads a page there with `GET` only, on its safe egress path (public addresses only), each request signed with the application's own Web Bot Auth key and recorded; reading is under the application's Rules like any read. Named by its domain: no other host is reached, and no credential is ever part of a spec.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -1137,7 +1137,7 @@ A Space the application may reach.
 
 ### AppSpendLimit
 
-The most one purchase may cost at a merchant (PI-22).
+The most one purchase may cost at a merchant.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -1152,7 +1152,7 @@ A first message offered to the user.
 | --- | --- | --- | --- |
 | `label` (required) | text | What the button says | — |
 | `message` (required) | text | What is sent when it is chosen | — |
-| `category` | text | The heading it is offered under: the starters of one category are shown together, those without one first (P-20) | empty |
+| `category` | text | The heading it is offered under: the starters of one category are shown together, those without one first | empty |
 
 ### AppStarterTranslation
 
@@ -1176,7 +1176,7 @@ The component tree the user meets, over the approved catalog (A2UI).
 
 ### AppTestCase
 
-An example of what the application should do, in plain words. A case is one message (`ask`) or a short conversation (`turns`): what the person says, chooses and presses, in order, each after the application answered the turn before — and what it should do is judged on the whole conversation. When plain words are not enough, its code decides it (P-06): `code` names the function of the application's `app.py` that is given the conversation and says whether it passed — `@app.test` writes it. `expect` still says it in words: without its file, the case is judged by them.
+An example of what the application should do, in plain words. A case is one message (`ask`) or a short conversation (`turns`): what the person says, chooses and presses, in order, each after the application answered the turn before — and what it should do is judged on the whole conversation. When plain words are not enough, its code decides it: `code` names the function of the application's `app.py` that is given the conversation and says whether it passed — `@app.test` writes it. `expect` still says it in words: without its file, the case is judged by them.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -1219,7 +1219,7 @@ How the application is verified.
 
 ### AppTheme
 
-The theme an application runs in by default (T-30).
+The theme an application runs in by default.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -1228,7 +1228,7 @@ The theme an application runs in by default (T-30).
 
 ### AppTool
 
-A tool of the application's own, written in its code (P-06): `@app.tool`. Its agent calls it as any tool; the rules decide each call by what it `does` — a rule may name it, by its name alone — and the Canvas lists it. Without its file the agent is not given it.
+A tool of the application's own, written in its code: `@app.tool`. Its agent calls it as any tool; the rules decide each call by what it `does` — a rule may name it, by its name alone — and the Canvas lists it. Without its file the agent is not given it.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -1239,7 +1239,7 @@ A tool of the application's own, written in its code (P-06): `@app.tool`. Its ag
 
 ### AppTranslation
 
-What a person reads of an application, in another language (P-26). Each part is keyed by what names it in the spec: a starter by its label, a category by its words, a setting by its field, a command by its name, a mode and a profile by their ids. What is not translated is shown in the spec's own words; what is translated is shown, never sent, but a starter's message — the agent is written to in the person's language.
+What a person reads of an application, in another language. Each part is keyed by what names it in the spec: a starter by its label, a category by its words, a setting by its field, a command by its name, a mode and a profile by their ids. What is not translated is shown in the spec's own words; what is translated is shown, never sent, but a starter's message — the agent is written to in the person's language.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -1268,7 +1268,7 @@ What starts a worker's work.
 
 ### AppUploadKind
 
-A kind of file a person may send, and how large (P-21).
+A kind of file a person may send, and how large.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -1277,7 +1277,7 @@ A kind of file a person may send, and how large (P-21).
 
 ### AppUploads
 
-What a person may send in the composer without being asked (P-21): images, files, audio. A file of a kind it does not name, larger than its kind takes, or one too many is refused, in a sentence — by the page before it is sent, and by the runtime when it is sent all the same.
+What a person may send in the composer without being asked: images, files, audio. A file of a kind it does not name, larger than its kind takes, or one too many is refused, in a sentence — by the page before it is sent, and by the runtime when it is sent all the same.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -1286,7 +1286,7 @@ What a person may send in the composer without being asked (P-21): images, files
 
 ### AppVerified
 
-What was verified, and how, each in a sentence a person reads (E-14). An example says it on its card and on its page: what was tried live, what runs on recorded data instead, and what is not verified yet. Said by whoever tried it; nothing here is computed.
+What was verified, and how, each in a sentence a person reads. An example says it on its card and on its page: what was tried live, what runs on recorded data instead, and what is not verified yet. Said by whoever tried it; nothing here is computed.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -1296,7 +1296,7 @@ What was verified, and how, each in a sentence a person reads (E-14). An example
 
 ### AppVoice
 
-Its voice (VO-41): whether it listens, whether it speaks, with which voice, in which language. Off unless said. What is said becomes a message, and what is heard is the answer the conversation shows: the text stays the truth.
+Its voice: whether it listens, whether it speaks, with which voice, in which language. Off unless said. What is said becomes a message, and what is heard is the answer the conversation shows: the text stays the truth.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -1319,7 +1319,7 @@ The application inside another product's page.
 
 ### HostBridge
 
-What the host page and the application say to each other (D-10). The values of the host it reads (`context`: `user`, `page`, or a name of the host's own), through the tool `host_context`; the functions of the host it may call, each through `host_<name>`. Every one of these tools is decided by a rule that names it, as any tool is: one no rule names is left to the person. Who its user is (`user`, D-21): what the page says (`claimed`), or only what the host's server signed (`signed`) — a short token, HS256 with the deployment's secret, naming `sub`, `name` and `exp` at most an hour away. An application that acts in each user's name, or shows data that is theirs, says `signed`.
+What the host page and the application say to each other. The values of the host it reads (`context`: `user`, `page`, or a name of the host's own), through the tool `host_context`; the functions of the host it may call, each through `host_<name>`. Every one of these tools is decided by a rule that names it, as any tool is: one no rule names is left to the person. Who its user is (`user`): what the page says (`claimed`), or only what the host's server signed (`signed`) — a short token, HS256 with the deployment's secret, naming `sub`, `name` and `exp` at most an hour away. An application that acts in each user's name, or shows data that is theirs, says `signed`.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
@@ -1329,7 +1329,7 @@ What the host page and the application say to each other (D-10). The values of t
 
 ### HostFunction
 
-A function of the host page the application's agent may call (D-10).
+A function of the host page the application's agent may call.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
