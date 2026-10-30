@@ -88,7 +88,7 @@ app = Application.from_spec(
             ],
             "verified": {
                 "live": [
-                    "Drilled on r1 on 14 October 2026, once its last fix was out: shipped at "
+                    "Tried live on Datalayer on 14 October 2026, once its last fix was out: shipped at "
                     "its own domain, asked by a person's own agent signed in through "
                     "Datalayer with orders:read and orders:write, asked to exchange order "
                     "ord_7Hk2 for size L, it proposed the exchange (Exchange order "
@@ -101,15 +101,15 @@ app = Application.from_spec(
                     "operation, a retry answered as already done.",
                 ],
                 "unverified": [
-                    "Drilled on r1 on 13 October 2026, twice: shipped at its own domain, "
+                    "Tried live on Datalayer on 13 October 2026, twice: shipped at its own domain, "
                     "it answered a personal agent signed out, and a person signed in "
                     "through Datalayer granted orders:read and orders:write. The second "
                     "time it knew who had signed in, but asked to exchange, it looked "
                     "for the order first and proposed nothing; it now proposes the "
                     "exchange at once, and Manzanita checks the order when it is done. "
-                    "Drilled a third time the same evening: signed in, asked to "
+                    "Tried a third time the same evening: signed in, asked to "
                     "exchange, it said it could not — asked by a person's own agent, "
-                    "it was not given its exchange_order (fixed). Drilled a fourth "
+                    "it was not given its exchange_order (fixed). Tried a fourth "
                     "time the same night, given it: proposing the exchange ended its "
                     "answer, and the personal agent was told it could not answer just "
                     "now (fixed, and the fix released on 14 October).",
