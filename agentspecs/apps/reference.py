@@ -107,7 +107,6 @@ EXTRA_EXAMPLES: Dict[str, Any] = {
                     "action": "orders.exchange",
                     "tool": "exchange_order",
                     "summary": "Exchange order {order_id} for size {size}",
-                    "user_approval_required": True,
                 }
             ],
         },

@@ -22,10 +22,9 @@ actions:
     message goes out to the company in the person's name, so it is a Rule's to
     decide, *Ask me first* unless the Maker says otherwise. Asking for one of the
     company's people (`pap_handoff`) is the same conversation's control and is
-    classed with `pap_ask`, `send` too. Proposing through the company's API
-    (`pap_propose`, decided 13 October 2026)
-    sends a request in the person's name and is `send` too: what it proposes
-    is done only by confirming it. Signing in records the
+    classed with `pap_ask`, `send` too. Asking through the company's API
+    (`pap_propose`) is a request a company may perform at once, or answer with
+    an operation for the person to approve, so it is `write`. Signing in records the
     person's consent and changes nothing at the company. A company MCP tool is
     unknown here, so it is taken as changing something. Confirming an operation
     does what the operation does: the terms decide at the call (`buy` when a term
@@ -43,7 +42,7 @@ actions:
     pap_sign_in: read
     pap_sign_in_status: read
     pap_read: read
-    pap_propose: send
+    pap_propose: write
     pap_mcp_tools: read
     pap_mcp_call: write
     pap_confirm: [write, buy]

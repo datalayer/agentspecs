@@ -128,8 +128,6 @@ def test_a_company_declares_what_it_does_once_the_person_confirms() -> None:
                         "operations": [OPERATION]})
     operation = spec.pap.company.operations[0]
     assert (operation.action, operation.tool) == ("orders.exchange", "exchange_order")
-    # Only the person confirms it unless the Maker says otherwise.
-    assert operation.user_approval_required is True
 
 
 @pytest.mark.parametrize(
@@ -184,52 +182,17 @@ def test_a_company_reached_over_mcp_and_by_registered_agents_only() -> None:
         app(company={**company, "interfaces": []})
 
 
-#: The Ledgerly pattern (R-07): confirming it lets the application pay at its bank without asking.
-STANDING = {
-    "action": "payments.allow",
-    "summary": "Let it pay {payee} from your bank account without asking, up to {currency} {maximum} each, "
-    "at most {uses} payments, for {days} days",
-    "allows": {
-        "connection": "orders",
-        "action": "buy",
-        "limits": [
-            {"path": "payee", "allowed": "payee"},
-            {"path": "amount.amount", "maximum": "maximum"},
-            {"path": "amount.currency", "allowed": "currency"},
-        ],
-        "uses": "uses",
-        "days": "days",
-    },
-}
-
-
-def test_a_standing_permission_is_an_operation_the_person_confirms() -> None:
-    """R-07, decided 2026-10-13: given through a company's Operation, recorded as the approval in advance
-    the person would give in Datalayer — at one of its own companies, in the person's account there."""
-    company = {"enabled": True, "scopes": [{"name": "books:write", "description": "Give a standing permission"}], "extensions": ["operations"], "operations": [STANDING]}
-    spec = app(connections=[CONNECTION], company=company)
-    [operation] = spec.pap.company.operations
-    assert operation.tool is None and operation.allows is not None
-    assert operation.allows.terms() == ["payee", "maximum", "currency", "uses", "days"]
-    assert operation.user_approval_required is True
-    for change, says in (
-        ({"tool": "allow_payments"}, "calls a tool or allows a standing permission, one of them"),
-        ({"user_approval_required": False}, "only the person confirms it"),
-        ({"summary": "Let it pay {payee} up to {currency} {maximum}"}, r"`\{uses\}` is not in it"),
-        ({"allows": {**STANDING["allows"], "connection": "bank"}}, "not one of its company connections"),
-        ({"allows": {**STANDING["allows"], "action": "delete"}}, "allows"),
-        ({"allows": {**STANDING["allows"], "limits": []}}, "between 1 and 20"),
-        ({"allows": {**STANDING["allows"], "limits": [{"path": "payee", "allowed": "payee", "maximum": "m"}]}},
-         "one of them"),
-    ):
-        with pytest.raises(ValueError, match=says):
-            app(connections=[CONNECTION], company={**company, "operations": [{**STANDING, **change}]})
-    for connection, says in (({**CONNECTION, "as": "owner"}, "each person's own account"),
-                             ({**CONNECTION, "access": "read", "scopes": ["orders:read"]}, "reads and changes")):
-        with pytest.raises(ValueError, match=says):
-            app(connections=[connection], company=company)
-    with pytest.raises(ValueError, match="calls a tool or allows"):
-        app(company={**company, "operations": [{key: value for key, value in STANDING.items() if key != "allows"}]})
+def test_an_operation_is_a_tool_the_person_approves_each_time() -> None:
+    """Operations v2: the agent asks the person about every operation, so nothing declares an
+    operation approved in advance or gives a standing permission through one."""
+    company = {"enabled": True, "scopes": [WRITE], "extensions": ["operations"]}
+    for gone in ({"user_approval_required": True}, {"user_approval_required": False},
+                 {"allows": {"connection": "orders", "action": "buy", "limits": [], "uses": "u", "days": "d"}}):
+        with pytest.raises(ValueError, match="is not a field of the spec"):
+            app(company={**company, "operations": [{**OPERATION, **gone}]})
+    with pytest.raises(ValueError, match="tool"):
+        app(company={**company, "operations": [{"action": "orders.exchange", "summary": "Exchange {order_id}"}]})
+    assert not hasattr(agentspecs.apps, "AppPapStanding")
 
 
 def test_a_company_scope_says_what_it_allows_with_its_hints() -> None:

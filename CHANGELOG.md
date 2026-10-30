@@ -11,6 +11,7 @@ Each version names the boxes it carries, as its commits say them, and links the 
 ## Unreleased
 
 - **Personal Agent Protocol:** a `poppy:` scope name is accepted like any other, on a company and on a connection: draft 0.3 no longer reserves the prefix.
+- **Personal Agent Protocol:** a company's operations are version 2 of the extension: the personal agent asks the person about every one, so `pap.company.operations[].allows` and `user_approval_required` are gone with the standing permissions they gave, refused as unknown fields, and each operation names its `tool`. `pap_propose` is a `write`: a company may do a POST at once. Bookkeeping Desk 0.0.3 and the two-companies scene say each payment is approved every time.
 
 ## 0.0.140
 

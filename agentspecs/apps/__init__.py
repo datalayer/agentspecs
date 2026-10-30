@@ -413,91 +413,21 @@ class PapAgents(str, Enum):
 _PAP_ACTION = re.compile(r"^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)*$")
 
 
-class PapStandingAction(str, Enum):
-    """What a standing permission lets the application confirm at another company: a class of action."""
-
-    WRITE = "write"
-    BUY = "buy"
-
-
-class AppPapStandingLimit(_Strict):
-    """One bound of a standing permission: a term of the other company's operations,
-    bounded by a term of this one — its maximum, or the one value allowed."""
-
-    path: str = Field(description="The other company's term, by its dotted path: `amount.amount`, `payee`")
-    maximum: Optional[str] = Field(default=None, description="The term of this operation giving its maximum")
-    allowed: Optional[str] = Field(default=None, description="The term of this operation giving the value allowed")
-
-    @field_validator("path")
-    @classmethod
-    def _a_path(cls, value: str) -> str:
-        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{0,63}(\.[A-Za-z_][A-Za-z0-9_]{0,63}){0,7}", value):
-            raise ValueError(f"{value!r} is not a term's dotted path")
-        return value
-
-    @model_validator(mode="after")
-    def _one_bound(self) -> "AppPapStandingLimit":
-        if (self.maximum is None) == (self.allowed is None):
-            raise ValueError(f"the limit on `{self.path}` is a maximum or the value allowed, one of them")
-        return self
-
-
-class AppPapStanding(_Strict):
-    """An operation whose effect is a standing permission (the Ledgerly pattern).
-
-    Confirmed by the person, it is recorded as the approval in advance they
-    would give in Datalayer: this application may confirm, at the company of
-    one of its own connections and in the person's account there, operations
-    of that class whose terms stay within these limits, so many times, for so
-    many days — and the person reads it back and withdraws it there.
-    """
-
-    connection: str = Field(description="The id of its own company connection the permission is used at")
-    action: PapStandingAction = Field(description="What confirming there does: `write`, or `buy`")
-    limits: List[AppPapStandingLimit] = Field(description="Every term bounded, 1 to 20")
-    uses: str = Field(description="The term of this operation giving how many times, at most")
-    days: str = Field(description="The term of this operation giving for how many days, at most 90")
-
-    @model_validator(mode="after")
-    def _bounded(self) -> "AppPapStanding":
-        if not 1 <= len(self.limits) <= 20:
-            raise ValueError("a standing permission bounds between 1 and 20 terms")
-        if len({limit.path for limit in self.limits}) != len(self.limits):
-            raise ValueError("a standing permission bounds a term once")
-        return self
-
-    def terms(self) -> List[str]:
-        """The terms of the operation it is given by, each once."""
-        named = [limit.maximum or limit.allowed or "" for limit in self.limits] + [self.uses, self.days]
-        return list(dict.fromkeys(named))
-
-
 class AppPapOperation(_Strict):
     """Something a personal agent may ask the application to do for the person,
-    done only once they confirm its exact terms (Operations v1).
+    done only once they approve its exact terms (Operations v2).
 
     Asked by a personal agent, the application's agent does not call `tool`:
-    the call is proposed, its arguments the terms, and the person confirms
-    that revision before the tool runs, with those arguments and only once.
-    An operation that `allows` instead gives a standing permission once the
-    person confirms it: it calls no tool, and is asked for through the
-    application's API or its server for agents.
+    the company answers with the operation, its arguments the terms, and the
+    personal agent asks the person about that revision. Its request sent again
+    with their approval runs the tool, with those arguments and only once.
     """
 
     action: str = Field(description="The action's name at this company, e.g. `orders.exchange`")
-    tool: Optional[str] = Field(
-        default=None, description="The application's tool that does it, called with the terms"
-    )
-    allows: Optional[AppPapStanding] = Field(
-        default=None, description="Instead of a tool: the standing permission confirming it gives"
-    )
+    tool: str = Field(description="The application's tool that does it, called with the terms")
     summary: str = Field(
         description="What the person is shown, with `{term}` for each term, e.g. "
         "`Exchange order {order_id} for size {size}`; never written by the model"
-    )
-    user_approval_required: bool = Field(
-        default=True,
-        description="Whether only the person may confirm it, never an approval in advance",
     )
 
     @field_validator("action")
@@ -522,26 +452,6 @@ class AppPapOperation(_Strict):
             if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", name):
                 raise ValueError(f"`{{{name}}}` names no term: a term is one plain name")
         return value
-
-    @model_validator(mode="after")
-    def _does_one_thing(self) -> "AppPapOperation":
-        import string  # noqa: PLC0415
-
-        if (self.tool is None) == (self.allows is None):
-            raise ValueError(f"the operation {self.action!r} calls a tool or allows a standing permission, one of them")
-        if self.allows is not None:
-            if not self.user_approval_required:
-                raise ValueError(
-                    f"the operation {self.action!r} gives a standing permission: only the person confirms it"
-                )
-            said = {name for _, name, _, _ in string.Formatter().parse(self.summary) if name}
-            unsaid = [term for term in self.allows.terms() if term not in said]
-            if unsaid:
-                raise ValueError(
-                    f"the operation {self.action!r} gives a standing permission: its summary says every bound "
-                    f"the person gives — `{{{unsaid[0]}}}` is not in it"
-                )
-        return self
 
 
 class PapScopeChanges(str, Enum):
@@ -1218,23 +1128,6 @@ class AppPap(_Strict):
         companies = [connection.company for connection in self.connections]
         if len(set(companies)) != len(companies):
             raise ValueError("the application connects to the same company twice")
-        # A standing permission is used at one of its own companies, in the person's
-        # account there, by a connection that may change things.
-        by_id = {connection.id: connection for connection in self.connections}
-        for operation in self.company.operations:
-            if operation.allows is None:
-                continue
-            connection = by_id.get(operation.allows.connection)
-            if connection is None:
-                raise ValueError(
-                    f"the operation {operation.action!r} allows a standing permission at "
-                    f"{operation.allows.connection!r}, which is not one of its company connections"
-                )
-            if connection.acts_as is not ActsAs.USER or connection.access is not Access.WRITE:
-                raise ValueError(
-                    f"the operation {operation.action!r} allows a standing permission at {connection.company}: "
-                    "its connection there reads and changes things in each person's own account"
-                )
         return self
 
 
