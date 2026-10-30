@@ -10,6 +10,10 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
+## 0.0.140
+
+30 October 2026. A fifth scene backdrop, `minimal`: each member a glowing circle in its own colour, no name and no emoji, thin luminous lines between them, on a dark ground in every theme.
+
 ## 0.0.139
 
 30 October 2026. A spec's `color` is a palette name — a role (`primary`, `accent`, `glow`…) or a hue (`red` … `rose`, `slate`, `gray`, `stone`) — or a `#RGB`/`#RRGGBB` hex; any other value is refused in a sentence that lists the names, which follow primer-addons' palette (`agentspecs.colors`, checked against it). Every colour of the catalogue is a name, so it follows the theme. code-explainer, asked to change a file, tries the edit and the Shield refuses it. The catalogue's verified sentences in a builder's words; the references with an anchor per choice.
