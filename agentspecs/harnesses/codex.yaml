@@ -8,7 +8,7 @@
 id: codex
 version: 0.0.1
 name: Codex
-description: OpenAI's coding agent, driven over ACP through the Agent Client Protocol project's adapter, which ships the Codex binary it drives. Local only, on the person's own key; not offered on Datalayer until ai-inference serves OpenAI's Responses API.
+description: OpenAI's coding agent, driven over ACP through the Agent Client Protocol project's adapter, which ships the Codex binary it drives. On Datalayer its model calls go through Datalayer's ai-inference, answered from AWS Bedrock on the platform's models and paid in credits, with no key of the account's.
 docs: https://github.com/agentclientprotocol/codex-acp
 
 acp:
@@ -24,9 +24,9 @@ acp:
 
 requires:
   # Local only: run with `loop --harness`, the CLI or a laptop demo, it takes this
-  # key from the environment. On a Datalayer runtime no key is given: Codex is refused
-  # there, in a sentence: it speaks OpenAI's Responses API, which ai-inference
-  # does not serve from AWS Bedrock or Alibaba.
+  # key from the environment. On a Datalayer runtime no key is given: it is given a
+  # configuration directory (CODEX_HOME) naming ai-inference's Responses route,
+  # answered from AWS Bedrock, with no token in it. No call reaches OpenAI.
   secrets: [OPENAI_API_KEY]
   binaries: [node, git]
 

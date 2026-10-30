@@ -90,15 +90,15 @@ Anthropic's coding agent, driven over ACP through the Agent Client Protocol proj
 
 ### Codex (`codex`)
 
-OpenAI's coding agent, driven over ACP through the Agent Client Protocol project's adapter, which ships the Codex binary it drives. Local only, on the person's own key; not offered on Datalayer until ai-inference serves OpenAI's Responses API.
+OpenAI's coding agent, driven over ACP through the Agent Client Protocol project's adapter, which ships the Codex binary it drives. On Datalayer its model calls go through Datalayer's ai-inference, answered from AWS Bedrock on the platform's models and paid in credits, with no key of the account's.
 
-- Credential: Locally, an OpenAI API key (OPENAI_API_KEY or CODEX_API_KEY), the person's own; not offered on Datalayer; secrets declared: `OPENAI_API_KEY`
+- Credential: Locally, an OpenAI API key (OPENAI_API_KEY or CODEX_API_KEY), the person's own; on Datalayer none, its calls answered from AWS Bedrock through ai-inference in credits; secrets declared: `OPENAI_API_KEY`
 - Needs: Node 22 (as the Agent Client Protocol project's adapters; unstated on npm), git
 - ACP 1: `session/load` yes; modes `read-only`, `workspace-write`, `agent`, `agent-full-access`
 - Honours `model:` yes, `subagents:` no
 - Capabilities: resume `load`, fork history `replay`, interrupt yes, steering no, images yes, compaction `own`; vendor session id `none`; asks about every command
 - Licence read at https://www.npmjs.com/package/@agentclientprotocol/codex-acp; terms read at https://learn.chatgpt.com/docs/auth
-- Codex's authentication page (read 2026-10-15) recommends API keys for automation and device-code login for headless machines; a ChatGPT login needs a browser and is hidden with NO_BROWSER=1 in the adapter. Only API keys are taken; a ChatGPT login is refused. The Zed-scoped package was archived on 22 July 2026 and names this one. Local only since 30 October 2026: Codex needs OpenAI's Responses API, which ai-inference does not serve, so a Datalayer runtime refuses it in a sentence.
+- Codex's authentication page (read 2026-10-15) recommends API keys for automation and device-code login for headless machines; a ChatGPT login needs a browser and is hidden with NO_BROWSER=1 in the adapter. Only API keys are taken; a ChatGPT login is refused. The Zed-scoped package was archived on 22 July 2026 and names this one. On a Datalayer runtime the end user holds no key and OpenAI is not reached: the model calls are AWS Bedrock's, on Datalayer's account, metered in credits. The user decided on 30 October 2026 to offer it that way. Counsel has not reviewed this entry's api_key_only reading against that use, nor whether running Codex on another vendor's model fits OpenAI's terms.
 
 ### Custom harness (`custom`)
 

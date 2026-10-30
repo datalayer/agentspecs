@@ -41,16 +41,18 @@ entries:
     licence: Apache-2.0 (adapter); OpenAI Terms of Use (the agent)
     licence_source: https://www.npmjs.com/package/@agentclientprotocol/codex-acp
     terms_source: https://learn.chatgpt.com/docs/auth
-    credential: Locally, an OpenAI API key (OPENAI_API_KEY or CODEX_API_KEY), the person's own; not offered on Datalayer
+    credential: Locally, an OpenAI API key (OPENAI_API_KEY or CODEX_API_KEY), the person's own; on Datalayer none, its calls answered from AWS Bedrock through ai-inference in credits
     served_to_third_parties: api_key_only
     binaries: Node 22 (as the Agent Client Protocol project's adapters; unstated on npm), git
     note: >-
       Codex's authentication page (read 2026-10-15) recommends API keys for automation and
       device-code login for headless machines; a ChatGPT login needs a browser and is hidden with
       NO_BROWSER=1 in the adapter. Only API keys are taken; a ChatGPT login is refused. The
-      Zed-scoped package was archived on 22 July 2026 and names this one. Local only since 30 October
-      2026: Codex needs OpenAI's Responses API, which ai-inference does not serve, so a Datalayer
-      runtime refuses it in a sentence.
+      Zed-scoped package was archived on 22 July 2026 and names this one. On a Datalayer runtime the
+      end user holds no key and OpenAI is not reached: the model calls are AWS Bedrock's, on
+      Datalayer's account, metered in credits. The user decided on 30 October 2026 to offer it that
+      way. Counsel has not reviewed this entry's api_key_only reading against that use, nor whether
+      running Codex on another vendor's model fits OpenAI's terms.
   - harness: gemini-cli
     adapter: "@google/gemini-cli"
     version: 0.64.0

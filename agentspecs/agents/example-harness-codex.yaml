@@ -4,18 +4,19 @@
 # Agent Specification: A Codex Agent
 # An agent that is a harness of the catalogue (SH-43): Codex, driven over
 # the Agent Client Protocol by the Datalayer runtime's adapter behind the
-# Shield. Off in the shared catalogue: it runs locally, on the person's own
-# OPENAI_API_KEY (the register: API keys only). A Datalayer runtime refuses
-# Codex in a sentence until ai-inference serves OpenAI's Responses API.
+# Shield. Off in the shared catalogue, and offered from the Studio's Toolbox.
+# On Datalayer its model calls go through ai-inference, answered from AWS
+# Bedrock in the account's credits, on no key of the account's. Elsewhere it
+# takes the OPENAI_API_KEY its harness declares (the register: API keys only).
 
 id: example-harness-codex
 version: 0.0.1
 name: A Codex Agent
 description: >
-  OpenAI's Codex as a local agent: launched over the Agent Client Protocol,
-  its files, terminals and permissions decided by the Shield under the
-  application's Rules, every action in the record. Runs locally on your own
-  OPENAI_API_KEY; not offered on Datalayer.
+  OpenAI's Codex as a Datalayer agent: launched in the runtime over the Agent
+  Client Protocol, its files, terminals and permissions decided by the Shield
+  under the application's Rules, every action in the record. Its model calls
+  go through Datalayer's ai-inference, paid in credits.
 
 tags:
   - coding
