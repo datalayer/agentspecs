@@ -44,7 +44,7 @@ lines:
   how: 'The company does not do it yet: it proposes it, with its exact terms and a version.'
 - from: agent
   to: ada
-  says: 'Its rule says Ask me first: it waits for Ada.'
+  says: 'Every operation is Ada’s to approve: it waits for her.'
   card:
     kind: approval
     title: Manzanita Outfitters asks you to confirm
