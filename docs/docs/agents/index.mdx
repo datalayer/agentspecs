@@ -103,8 +103,9 @@ environment_name: ai-agents-env
 ```
 On Datalayer, OpenCode's model calls go through Datalayer's ai-inference, on the
 platform's models and paid in credits, so the account gives it no key of its own;
-elsewhere it takes the `ANTHROPIC_API_KEY` its harness declares. Claude Code, Codex
-and pi each take the account's own provider key, declared by their harness. The
+elsewhere it takes the `ANTHROPIC_API_KEY` its harness declares. Claude Code and pi
+do the same, answered from AWS Bedrock. Codex runs locally on the person's own key
+and is not offered on Datalayer. The
 catalogue has one such agent per harness (`example-harness-<harness>`), each off in
 the shared catalogue.
 
