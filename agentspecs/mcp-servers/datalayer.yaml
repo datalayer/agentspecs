@@ -58,8 +58,8 @@ actions:
     on (contents, library, odoo, earthdata, marimo). Running code is a write:
     what it changes is what it is given. Launching a sandbox spends credits; a
     snapshot of one is storage that is billed. An application's connection to
-    this server is what the gateway grants it, tool by tool, by these classes
-    (I-12): reading reaches only the tools that only read.
+    this server is what the gateway grants it, tool by tool, by these classes:
+    reading reaches only the tools that only read.
   tools:
     read_notebook: read
     read_cell: read

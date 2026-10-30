@@ -144,7 +144,7 @@ entries:
     status: used
     source: https://github.com/PyAV-Org/pyav-ffmpeg
     note: Inside av's wheel, built LGPL. On the person's machine too, below.
-  - {name: moonshine-base-en-server, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/UsefulSensors/moonshine-base, note: "The browser's 8-bit export (onnx-community/moonshine-base-ONNX, pinned), run by onnxruntime with Datalayer's own greedy decoder and tokenizers: no useful-moonshine-onnx, no new library. Hears English spoken turns (revised by the user 16 October 2026; speech:0.0.11)."}
+  - {name: moonshine-base-en-server, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/UsefulSensors/moonshine-base, note: "The browser's 8-bit export (onnx-community/moonshine-base-ONNX, pinned), run by onnxruntime with Datalayer's own greedy decoder and tokenizers: no useful-moonshine-onnx, no new library. Hears English spoken turns (since 16 October 2026; speech:0.0.11)."}
   - {name: whisper-small, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/openai/whisper-small, note: "Its CTranslate2 conversion, https://huggingface.co/Systran/faster-whisper-small (MIT), pinned: short spoken turns (decided 2026-10-15)."}
   - {name: whisper-large-v3-turbo, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/openai/whisper-large-v3-turbo, note: "Its CTranslate2 conversion, https://huggingface.co/dropbox-dash/faster-whisper-large-v3-turbo (MIT), pinned."}
   - {name: jiwer, kind: library, version: 4.0.0, licence: Apache-2.0, where: server, status: used, source: https://pypi.org/pypi/jiwer/json, note: "The WER check, in tests only."}
