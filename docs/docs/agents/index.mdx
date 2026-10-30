@@ -81,13 +81,49 @@ skills:
 ### `environment_name` (string)
 Runtime environment name (default: `"ai-agents"`)
 
+### `harness` (string)
+What runs the agent. `pydantic-ai` (the default of the catalogue's agents) and
+`vercel-ai` are built into the runtime; any other value is a
+[harness](../harnesses) of the catalogue — an agent program driven over the Agent
+Client Protocol, behind the Shield. Four are offered today: `claude-code`, `codex`,
+`opencode` and `pi`. What a harness cannot honour of the spec (a `model:`, skills,
+MCP servers it does not take) is refused in a sentence.
+```yaml
+# agents/example-harness-opencode.yaml
+id: example-harness-opencode
+version: 0.0.1
+name: An OpenCode Agent
+enabled: false
+harness: opencode
+sandbox_variant: jupyter-server
+memory: ephemeral
+mcp_servers: []
+skills: []
+environment_name: ai-agents-env
+```
+On Datalayer, OpenCode's model calls go through Datalayer's ai-inference, on the
+platform's models and paid in credits, so the account gives it no key of its own;
+elsewhere it takes the `ANTHROPIC_API_KEY` its harness declares. Claude Code, pi and
+Codex do the same, answered from AWS Bedrock; Codex takes `OPENAI_API_KEY` elsewhere. The
+catalogue has one such agent per harness (`example-harness-<harness>`), each off in
+the shared catalogue.
+
 ### `model` (string)
 AI model ID to use for this agent. References a model spec in `models/` directory by its `id` field. If omitted, the system default model is used.
 ```yaml
-model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
 model: "openai:gpt-4.1"
 model: "anthropic:claude-opus-4-20250514"
 ```
+
+### `model_additionals` (list of strings, optional)
+Other models of the catalogue the agent may be switched to, beside its `model`. Each is a model's `id` in `models/`; an id the catalogue does not know is refused, and so is a typed-decision model (`capabilities: [decisions]`), which runs no chat.
+```yaml
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model_additionals:
+  - "alibaba:qwen-max"
+```
+A runtime offers the agent's `model` and those of its `model_additionals` its inference can run: routed through datalayer-ai-inference, those the service lists at `GET /api/ai-inference/v1/models` when the runtime starts. The chat's model menu and the `loop` CLI's `/models` show that list, and a switch to a model outside it is refused. The enabled agents list as additionals the chat models datalayer-ai-inference serves from the catalogue.
 
 ### `icon` (string)
 UI icon identifier (e.g., `"trending-up"`, `"code"`, `"database"`)
@@ -96,12 +132,16 @@ UI icon identifier (e.g., `"trending-up"`, `"code"`, `"database"`)
 UI emoji identifier (e.g., `"📈"`, `"💻"`, `"🔍"`)
 
 ### `color` (string)
-Hex color code for UI theming
+A name of the Datalayer palette, drawn in the value the current theme and mode give it, so the agent's colour follows light and dark:
+
+- the hues, which keep their hue in every theme, deep on a light page and bright on a dark one: `red`, `orange`, `amber`, `yellow`, `lime`, `green`, `emerald`, `teal`, `cyan`, `sky`, `blue`, `indigo`, `violet`, `purple`, `fuchsia`, `pink`, `rose`, and the neutrals `slate`, `gray`, `stone`;
+- the roles, whose colour changes with the theme: `bg`, `bgPanel`, `bgAlt`, `primary`, `secondary`, `accent`, `glow`, `pop`, `spark`, `blaze`, `surge`, `flame`, `gold`, `textLight`, `textMuted`.
+
+A hex, `#RGB` or `#RRGGBB`, is still taken where no name fits, such as a brand's own colour, and is drawn as it is in every theme. Anything else is refused.
 ```yaml
-color: "#3B82F6"  # Blue
-color: "#10B981"  # Green  
-color: "#F59E0B"  # Amber
-color: "#6366F1"  # Indigo
+color: blue
+color: indigo
+color: "#F38020"  # a hex, where no name fits
 ```
 
 ### `suggestions` (list of strings)
@@ -157,6 +197,19 @@ Jupyter notebook path to show on agent creation (optional)
 ### `welcome_document` (string)
 Lexical document path to show on agent creation (optional)
 
+### `voice` (mapping, optional)
+Its voice, for an agent that is not an application: whether a person may talk to it and whether its answers are heard. The same fields an application says under `interface.voice`, read the same way, and off unless `enabled` is said.
+```yaml
+voice:
+  enabled: true            # off unless said
+  input: push_to_talk      # off | push_to_talk | hands_free
+  output: on_request       # off | on_request (a Read aloud on each answer) | always
+  voice: kokoro-af-heart   # an id of agentspecs/voices; the language's first when unsaid
+  language: en-US          # BCP 47; the person's when unsaid
+  where: auto              # auto | device | server
+```
+A voice the catalogue does not have, or one that does not speak the language, is refused when the specs are generated, and so is a field the block does not have. When its answers may be heard, the runtime tells the agent to write for the ear as well: short sentences, a sentence rather than a table, numbers and links said in words. What is said reaches the agent as text, and what is heard is the answer the conversation shows.
+
 ## Complete Example
 
 ```yaml
@@ -166,7 +219,7 @@ name: Data Acquisition Agent
 description: Acquire and manage data from external and local sources.
 
 enabled: true
-model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
 
 mcp_servers:
   - kaggle:0.0.1
@@ -180,7 +233,7 @@ skills:
 environment_name: ai-agents-env
 icon: database
 emoji: "📊"
-color: "#3B82F6"
+color: blue
 ```
 
 ## Full Field Coverage
@@ -188,12 +241,14 @@ color: "#3B82F6"
 Commonly used fields:
 
 - `enabled`
+- `harness`
 - `model`
+- `model_additionals`
 - `sandbox_variant`
 - `memory`
 - `mcp_servers` (use `id:version` refs)
 - `skills` (use `id:version` refs)
-- `tools` (use `id:version` refs)
+- `backend_tools` (use `id:version` refs): tools that run on the runtime; `frontend_tools`, the page's ([Frontend Tools](./frontend-tools))
 - `environment_name`
 - `tags`
 - `icon`, `emoji`, `color`
@@ -205,7 +260,7 @@ Advanced workflow fields:
 
 - `goal`
 - `protocol`
-- `ui_plugin` (one of `agentspecs/ui-plugins`; it was `ui_extension` before 0.0.11)
+- `ui` (one of `agentspecs/ui`)
 - `trigger`
 - `model_configuration`
 - `mcp_server_tools`
@@ -224,13 +279,13 @@ Generated catalogs are keyed by unversioned id only (e.g. `crawler`). The `getAg
 ## Best Practices
 
 1. **ID Format**: Use kebab-case (`financial-viz`, not `financial_viz`)
-2. **Folder Selection**: Choose the most appropriate category folder
+2. **One file per agent**: agents are flat under `agents/`, the file named for the id
 3. **Description**: 1-2 sentences, present tense, focus on capabilities
 4. **Tags**: 2-5 relevant keywords for categorization
 5. **Suggestions**: Provide 3-5 concrete, actionable examples
 6. **Colors**: Use hex codes consistently based on agent type:
    - Blue (`#3B82F6`): Data and information
-   - Green (`#10B981`): Web and networking  
+   - Green (`#10B981`): Web and networking
    - Indigo (`#6366F1`): Development and code
    - Amber (`#F59E0B`): Finance and analytics
    - Pink (`#EC4899`): Communication and workflow

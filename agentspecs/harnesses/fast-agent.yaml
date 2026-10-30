@@ -1,0 +1,56 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A framework's agents over ACP, not a coding agent: fast-agent
+# exposes each defined agent as an ACP mode; `uvx fast-agent-acp` is its
+# launcher (its ACP guide).
+
+id: fast-agent
+version: 0.0.1
+enabled: false
+unavailable_because: >-
+  the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); fast-agent is a framework served over ACP, not a coding agent, its adapter is a Python tool the runtime image does not carry, and it has not been drilled on Datalayer.
+name: fast-agent
+description: llmindset's agent framework served over ACP; each agent it defines is a session mode, with any model provider it is configured with.
+docs: https://github.com/evalstate/fast-agent/blob/main/docs/docs/acp/index.md
+
+acp:
+  command: uvx
+  args: ["fast-agent-acp==0.10.45"]
+  protocol_version: 1
+  load_session: true
+  mcp: lend
+  modes: []
+  native_session: none
+
+requires:
+  secrets: [ANTHROPIC_API_KEY]
+  binaries: [uvx]
+
+terms:
+  served_to_third_parties: permitted
+  licence: Apache-2.0
+
+skills:
+  format: skill-md
+  dir: .agents/skills
+
+honours:
+  model: true
+  subagents: false
+
+# What a session may rely on of it (MH-20): read by swap, clone and resume,
+# never guessed per harness in code. `images` is the claim `initialize`'s
+# promptCapabilities must confirm; `native_session` is the drill's to answer.
+capabilities:
+  resume: load
+  fork_history: replay
+  interrupt: true
+  steering: false
+  images: false
+  compaction: own
+  modes: []
+
+instructions_file: AGENTS.md
+
+tags: [harness, framework]

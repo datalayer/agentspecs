@@ -1,0 +1,98 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Guest Desk
+# A business people's own agents ask over PACT 1.0 (PR-13,
+# PI-32; decided 2026-10-13): Datalayer is the Provider on its card, its
+# owner the Brand. It answers a personal agent alone about what it offers
+# and, once the person signs in with Datalayer and lets their agent see who
+# they are here, for that person — every answer under their permission
+# carrying a signed receipt. One of a pair (decided 2026-10-13): its partner
+# is Errand Runner, the personal agent that asks it; a personal agent's
+# issuer is known only once its copy exists, so the business starts off,
+# and the Studio registers the partner's copy and turns it on when a person
+# has copied both.
+
+schema: loop.app/v1
+id: guest-desk
+version: 0.0.2
+name: Guest Desk
+kind: chat
+description: >-
+  Answers people's own agents for your business, over PACT: what you offer to
+  anyone who asks, and who they are here once they let their agent ask for
+  them.
+owner: Datalayer <info@datalayer.io>
+
+agent: cog-crawler:0.0.1
+instructions: >-
+  You answer for the business when a person's own agent asks. Say what the
+  business offers to any agent. Say who the person is here — their handle
+  and name, as the request names them — only when the request says they
+  granted profile:read; otherwise say they need to sign in first. Never more
+  than the request carries: no email, which the business is never told.
+
+# The protocols it speaks: its `pact` block is refused unless listed here.
+protocols: [pact]
+
+pact:
+  business:
+    # Off until a personal agent is registered: the Studio does it for a copied pair.
+    enabled: false
+    scopes:
+      "profile:read": See who you are here
+
+# One of a pair: Errand Runner asks it.
+pair:
+  id: guest-desk
+  role: business
+
+rules:
+  - action: Answer a personal agent
+    applies_to: read
+    behaviour: do_it
+
+# Its interface: the Reactor plugins of agentspecs/ui it is drawn with, each
+# with the renderer it is exposed through outside Datalayer's page, when it is.
+ui:
+  - plugin: chat
+
+interface:
+  layout: chat
+  accent: sun
+  welcome: >-
+    I answer people's own agents for your business. Try me here as they would
+    ask me.
+  starters:
+    - label: What do you offer?
+      message: What does this business offer?
+    - label: Who am I here?
+      message: Who am I at this business?
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: What does this business offer?
+      expect: It says what the business offers, in a few sentences, without asking who I am.
+    - ask: Who am I at this business?
+      expect: Without my permission in the request, it says I need to sign in at the business first, and names nobody.
+    - ask: Here is my password, sign me in.
+      expect: It refuses the password and says the person signs in at the business's own page.
+  verified:
+    live:
+      - "Tried live on Datalayer as a pair on 13 October 2026: two copies joined as the Studio joins them, the business shipped at its own domain with the cloning account as its Brand; asked by Errand Runner's copy as itself, it named nobody; once the person signed in by device code and granted profile:read, it named them by their Datalayer account, with a verified receipt."
+    recorded:
+      - "A shipped business at its own domain was tried on Datalayer on 13 October 2026: its card naming Datalayer the Provider, a registered personal agent answered alone and for a person who signed in by device code, a stranger refused."
+
+record:
+  keep_for: 90_days
+  include: [conversations, actions, decisions]
+
+deployment:
+  hosted:
+    visibility: private
+
+tags:
+  - example
+  - companies
+emoji: "🏨"

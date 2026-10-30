@@ -26,6 +26,7 @@ agentspecs/
 ├── teams/            # Team orchestration specs
 ├── frames/           # Frame specs: owned, scoped context a Cog works under
 ├── cogs/             # Cog specs: an agent, equipped with Frames
+├── harnesses/        # Harness specs: an agent program driven over ACP, and its register
 ├── ops/              # Op specs: Cogs, orchestrated, with a validation strategy
 ├── guards/           # Guard specs: a check, extending a guardrail
 ├── gates/            # Gate specs: what happens on what the Guards found
@@ -36,19 +37,19 @@ agentspecs/
 ├── skills/           # Skill specs
 ├── tools/            # Runtime tool specs
 ├── frontend-tools/   # Frontend tool specs
-├── envvars/          # Environment variable specs
+├── env-vars/          # Environment variable specs
 ├── models/           # Model specs
 ├── model-providers/  # Model provider specs
 ├── memory/           # Memory backend specs
 ├── guardrails/       # Guardrail policy specs
 ├── evals/            # Evaluator specs
 ├── benchmarks/       # Benchmark suite specs
-├── loops/            # Loop specs
+├── strategies/       # Strategy specs (control-loop reasoning)
 ├── triggers/         # Trigger specs
 ├── events/           # Event specs
 ├── outputs/          # Output format specs
 ├── notifications/    # Notification channel specs
-└── ui-plugins/       # UI plugin specs
+└── ui/       # UI specs
 ```
 
 Current YAML file counts:
@@ -74,12 +75,12 @@ Current YAML file counts:
 - Guardrails: 6
 - Evals: 9
 - Benchmarks: 8
-- Loops: 4
+- Strategies: 4
 - Triggers: 3
 - Events: 6
 - Outputs: 9
 - Notifications: 5
-- UI plugins: 3
+- UI specs: 3
 
 ## Versioning
 
@@ -143,7 +144,7 @@ Common fields:
 
 - `id`, `version`, `name`, `description`, `enabled`
 - `model`, `sandbox_variant`, `memory`
-- `mcp_servers`, `skills`, `tools`
+- `mcp_servers`, `skills`, `backend_tools`, `frontend_tools`
 - `environment_name`
 - `icon`, `emoji`, `color`
 - `suggestions`, `welcome_message`, `welcome_notebook`, `welcome_document`
@@ -175,7 +176,7 @@ Common fields:
 - `scope` (`organization`, `department`, `team`, `project`, `role`, `relationship`) and `owner` — both required
 - `extends` (the parent Frame, versioned)
 - `rules`, `terminology`, `goals`, `style`, `norms`, `process`, `architecture`, `prompts`
-- `skills`, `tools`, `mcp_servers` (versioned references)
+- `skills`, `backend_tools`, `mcp_servers` (versioned references)
 - `guards` (`id`, `category`, `description`, `required`)
 
 ```python
@@ -212,6 +213,33 @@ from agentspecs.cogs import get_resolved_cog
 
 cog = get_resolved_cog("cog-crawler")   # the agent, the Cog's changes and its Frames, flat
 cog["frame_context"]["guards"]          # what its output answers to
+```
+
+### Harnesses (`agentspecs/harnesses`)
+
+Defines an agent program driven over the Agent Client Protocol — a coding agent such as Claude Code or Codex, or any agent a framework
+exposes over ACP — and the terms it is served under. An agent spec names one
+with `harness: claude-code` where it says `harness: pydantic-ai`; what the
+harness cannot honour of the spec (`model:` it does not take, `subagents:`
+when it has its own, `skills:` in a format it cannot read) is refused at load,
+in a sentence. `register.yaml` is the register: every harness with its
+adapter, the version pinned, its licence, the agent's terms, the credential it
+takes and whether serving it to third parties is permitted, each with where it
+was read; a harness without an entry does not load.
+
+Common fields:
+
+- `id`, `version`, `name`, `description`, `enabled`, `docs`
+- `acp` (`command`, `args` with the version pinned, `protocol_version`, `load_session`, `mcp`: `lend`, `own` or `none`, `modes`, `env`) — absent only on `custom`
+- `requires` (`secrets`, ids of `env-vars/`; `binaries`)
+- `terms` (`served_to_third_parties`: `api_key_only`, `permitted`, `refused` or `organizations_own`; `licence`; `tier_restrictions`)
+- `skills` (`format`: `skill-md` or `none`; `dir`), `honours` (`model`, `subagents`), `instructions_file`
+
+```python
+from agentspecs.harnesses import HARNESS_CATALOGUE, agent_harness_problems
+
+print(HARNESS_CATALOGUE["claude-code"].acp.args)
+print(agent_harness_problems({"harness": "claude-code", "subagents": [{"id": "x"}]}))
 ```
 
 ### Ops, Guards, Gates and Tracks
@@ -287,9 +315,11 @@ Common fields:
 - `envvars`, `optional_env_vars`, `dependencies`
 - `tags`, `icon`, `emoji`
 
-### Tools (`agentspecs/tools`)
+### Backend Tools (`agentspecs/backend-tools`)
 
-Defines runtime tool metadata and implementation binding.
+Defines the tools that run on the runtime, in Python: their metadata and implementation
+binding. An agent names them under `backend_tools`, as it names the page's under
+`frontend_tools`; the old `tools` field is refused.
 
 Common fields:
 
@@ -298,7 +328,28 @@ Common fields:
 - `runtime.language`, `runtime.package`, `runtime.method`
 - `tags`, `icon`, `emoji`
 
-### Env Vars (`agentspecs/envvars`)
+### Frontend Tools (`agentspecs/frontend-tools`)
+
+Names tools that run on the page rather than on the runtime (`frontend_tools` of an agent), a set at a time: the
+notebook's, the Lexical document's, the decks'.
+
+Common fields:
+
+- `id`, `version`, `name`, `description`, `enabled`
+- `toolset` (the names of the tools of the set)
+- `tags`, `icon`, `emoji`
+
+### Marks: `icon` and `emoji`
+
+An MCP server, a skill, a backend tool and a frontend tool set each have an icon and an emoji
+(`agentspecs.marks`, its JSON Schema `MARKS_SCHEMA`, checked by `tests/test_marks.py`).
+The icon says the package it is in: `<package>:<name>`, the package one of
+`@datalayer/icons-react` and `@primer/octicons-react`, the name in kebab case as that
+package names it — `@datalayer/icons-react:odoo`, `@primer/octicons-react:mark-github`.
+A page draws the icon, the emoji where there is no icon, and nothing where there is
+neither.
+
+### Env Vars (`agentspecs/env-vars`)
 
 Defines environment variable metadata.
 

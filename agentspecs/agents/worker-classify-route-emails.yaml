@@ -22,7 +22,7 @@ tags:
   - email
   - routing
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.analyse
@@ -56,7 +56,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: mail
 emoji: 📬
-color: "#0969da"  # Blue
+color: blue
 
 # Goal / Prompt
 goal: >-
@@ -65,9 +65,11 @@ goal: >-
   subject, account ID, product), and route to the correct department queue.
   Flag urgent items for immediate human review.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Trigger configuration
 trigger:

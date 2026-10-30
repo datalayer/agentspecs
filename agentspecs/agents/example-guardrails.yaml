@@ -29,7 +29,7 @@ mcp_servers: []
 skills:
   - events:0.0.1
 
-tools:
+backend_tools:
   - runtime-echo:0.0.1
   - runtime-sensitive-echo:0.0.1
 
@@ -45,7 +45,7 @@ guardrails:
 
 icon: shield
 emoji: "🛡️"
-color: "#EF4444"
+color: red
 
 suggestions:
   # First: a tool the guardrail holds for approval — the approval card and

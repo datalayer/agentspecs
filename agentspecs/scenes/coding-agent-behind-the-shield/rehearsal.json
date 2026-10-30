@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-30T06:00:14+00:00",
+  "where": "on Datalayer",
+  "passed": true,
+  "says": "Rehearsal: 2 of 2 beats passed. The scene is Live.",
+  "beats": [
+    {
+      "beat": "explain-a-file",
+      "state": "passed",
+      "says": "",
+      "seconds": 18.51475361300072
+    },
+    {
+      "beat": "try-an-edit",
+      "state": "passed",
+      "says": "",
+      "seconds": 6.578561589999481
+    }
+  ],
+  "runtime": "1.5.80"
+}

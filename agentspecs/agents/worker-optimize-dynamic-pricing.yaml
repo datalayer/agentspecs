@@ -23,7 +23,7 @@ tags:
   - pricing
   - forecasting
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.analyse
@@ -56,7 +56,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: tag
 emoji: 🏷️
-color: "#bf8700"  # Amber — pricing & commerce
+color: amber  # pricing & commerce
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-
@@ -65,9 +65,11 @@ goal: >-
   sales, seasonality, and external signals. Generate margin-optimised pricing
   recommendations with confidence intervals and projected revenue impact.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Trigger configuration
 trigger:

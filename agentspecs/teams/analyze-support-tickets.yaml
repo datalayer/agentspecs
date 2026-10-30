@@ -19,7 +19,7 @@ tags:
 enabled: true
 icon: issue-opened
 emoji: 🎫
-color: '#bf8700'
+color: amber
 agent_spec_id: analyze-support-tickets:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential

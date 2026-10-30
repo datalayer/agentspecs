@@ -29,7 +29,7 @@ mcp_servers: []
 skills:
   - events:0.0.1
 
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 
 frontend_tools: []
@@ -38,7 +38,7 @@ environment_name: ai-agents-env
 
 icon: pulse
 emoji: "📊"
-color: "#0EA5E9"
+color: sky
 
 suggestions:
   - text: Show my current monitoring context summary

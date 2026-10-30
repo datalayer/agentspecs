@@ -1,0 +1,55 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# OpenCode speaks ACP itself: `opencode acp` (opencode.ai/docs/acp); the
+# npm package is opencode-ai.
+
+id: opencode
+version: 0.0.1
+name: OpenCode
+description: Anomaly's open coding agent, which speaks ACP itself with opencode acp; any model provider it is configured with. On Datalayer its model calls go through Datalayer's ai-inference, on the platform's models and paid in credits, with no key of the account's.
+docs: https://opencode.ai/docs/acp/
+
+acp:
+  command: npx
+  args: ["-y", "opencode-ai@1.19.0", "acp"]
+  protocol_version: 1
+  load_session: false
+  mcp: lend
+  modes: []
+  native_session: none
+
+requires:
+  # Local only: run with `loop --harness`, the CLI or a laptop demo, it takes this
+  # key from the environment. On a Datalayer runtime no key is given: its model calls go
+  # through ai-inference's chat completions, with the runtime's token.
+  secrets: [ANTHROPIC_API_KEY]
+  binaries: [node, git]
+
+terms:
+  served_to_third_parties: permitted
+  licence: MIT
+
+skills:
+  format: skill-md
+  dir: .opencode/skills
+
+honours:
+  model: true
+  subagents: false
+
+# What a session may rely on of it (MH-20): read by swap, clone and resume,
+# never guessed per harness in code. `images` is the claim `initialize`'s
+# promptCapabilities must confirm; `native_session` is the drill's to answer.
+capabilities:
+  resume: none
+  fork_history: replay
+  interrupt: true
+  steering: false
+  images: false
+  compaction: own
+  modes: []
+
+instructions_file: AGENTS.md
+
+tags: [harness]

@@ -22,13 +22,13 @@ memory: ephemeral
 
 mcp_servers: []
 skills: []
-tools: []
+backend_tools: []
 frontend_tools: []
 
 environment_name: ai-agents-env
 icon: notebook
 emoji: 📓
-color: "#0969DA"
+color: blue
 
 # What to ask for, in the words somebody would actually use.
 #

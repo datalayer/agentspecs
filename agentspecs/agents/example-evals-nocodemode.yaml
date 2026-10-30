@@ -30,7 +30,7 @@ mcp_servers: []
 skills:
   - events:0.0.1
 
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 
 disable_tool_approvals: true
@@ -43,7 +43,7 @@ environment_name: ai-agents-env
 
 icon: pulse
 emoji: "🧪"
-color: "#0284C7"
+color: sky
 
 suggestions:
   - text: "hello world"

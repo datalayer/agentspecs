@@ -33,7 +33,7 @@ disable_tool_approvals: true
 skills:
   - events:0.0.1
 
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 
 frontend_tools: []
@@ -42,7 +42,7 @@ environment_name: ai-agents-env
 
 icon: code
 emoji: "⚙️"
-color: "#8250DF"
+color: purple
 
 suggestions:
   # First: the same task the no-codemode agent gets, so the two panes of the

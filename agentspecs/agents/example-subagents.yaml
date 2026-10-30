@@ -48,7 +48,7 @@ mcp_servers: []
 skills:
   - events:0.0.1
 
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 
 frontend_tools: []
@@ -57,7 +57,7 @@ environment_name: ai-agents-env
 
 icon: people
 emoji: "👥"
-color: "#2563EB"
+color: blue
 
 suggestions:
   # First: both subagents in one request — the roster's Running badge moves

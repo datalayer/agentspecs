@@ -16,7 +16,7 @@ tags:
   - kpi
   - reporting
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.acquire
@@ -33,7 +33,7 @@ memory: ephemeral
 mcp_servers: []
 skills:
   - events:0.0.1
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 frontend_tools:
   - jupyter-notebook:0.0.1
@@ -41,7 +41,7 @@ frontend_tools:
 environment_name: ai-agents-env
 icon: pulse
 emoji: "📊"
-color: "#1F883D"
+color: green
 
 suggestions:
   - text: >-

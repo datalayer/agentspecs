@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: A goose Agent
+# An agent that is a harness of the catalogue (SH-43): goose, driven over
+# the Agent Client Protocol by the Datalayer runtime's adapter behind the
+# Shield. Off in the shared catalogue: it needs the account's own
+# ANTHROPIC_API_KEY (the register: API keys only), which the harness declares and
+# the runtime is given by name.
+
+id: example-harness-goose
+version: 0.0.1
+name: A goose Agent
+description: >
+  goose as a Datalayer agent: launched in the runtime over the Agent
+  Client Protocol, its files, terminals and permissions decided by the
+  Shield under the application's Rules, every action in the record. Needs
+  the account's ANTHROPIC_API_KEY.
+
+tags:
+  - coding
+  - harness
+  - acp
+
+enabled: false
+harness: goose
+
+sandbox_variant: jupyter-server
+memory: ephemeral
+
+mcp_servers: []
+skills: []
+backend_tools: []
+frontend_tools: []
+
+environment_name: ai-agents-env

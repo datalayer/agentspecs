@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-29T14:17:04+00:00",
+  "where": "on Datalayer",
+  "passed": true,
+  "says": "Rehearsal: 4 of 4 beats passed. The scene is Live.",
+  "beats": [
+    {
+      "beat": "close-checklist",
+      "state": "passed",
+      "says": "",
+      "seconds": 115.16930352199779
+    },
+    {
+      "beat": "accruals",
+      "state": "passed",
+      "says": "",
+      "seconds": 81.98463336400164
+    },
+    {
+      "beat": "expenses-by-month",
+      "state": "passed",
+      "says": "",
+      "seconds": 58.18933799399747
+    },
+    {
+      "beat": "post-accruals",
+      "state": "passed",
+      "says": "",
+      "seconds": 71.78365175200088
+    }
+  ],
+  "runtime": "1.5.80"
+}

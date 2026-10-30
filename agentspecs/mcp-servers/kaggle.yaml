@@ -9,17 +9,13 @@ version: 0.0.1
 name: Kaggle
 description: Kaggle datasets, models, competitions, and notebooks access
 
-# Command to start the server
-command: npx
-args:
-  - "-y"
-  - "mcp-remote"
-  - "https://www.kaggle.com/mcp"
-  - "--header"
-  - "Authorization: Bearer ${KAGGLE_API_TOKEN}"
-
-# Transport type
-transport: stdio
+# Kaggle's own hosted server, reached by the runtime itself over Streamable
+# HTTP: no command, the url and the headers sent with every request, the
+# token's `${KAGGLE_API_TOKEN}` expanded as it starts.
+transport: streamable-http
+url: "https://www.kaggle.com/mcp"
+headers:
+  Authorization: "Bearer ${KAGGLE_API_TOKEN}"
 
 # Whether the server is enabled by default
 enabled: false
@@ -37,8 +33,8 @@ tags:
   - competitions
   - machine-learning
 
-icon: database
-emoji: 📊
+icon: "@datalayer/icons-react:kaggle"
+emoji: "🏆"
 
 # What each tool does to the world (agentspecs.actions). A tool not named here is
 # unknown, and unknown is the most restricted.

@@ -1,0 +1,20 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The MCP gateway's `signed-fetch` toolset: an application reading a page at a
+# website it names, each request signed with its own Web Bot Auth key
+# (EX-11, decided 2026-10-13). Reached through an application's
+# `signed_fetch.sites[]`, granted as `datalayer_connection` `signed-fetch:<domain>`.
+id: signed-fetch
+name: Signed fetch
+description: Reading a page at a site the application names, signed, through Datalayer's MCP gateway.
+connection: signed-fetch
+
+actions:
+  checked: "2026-10-13"
+  note: >-
+    Read off the gateway's `extensions/signed_fetch/signed_fetch.py`. GET
+    only, at the exact site the connection names, on the safe egress path:
+    it changes nothing there.
+  tools:
+    signed_fetch: read

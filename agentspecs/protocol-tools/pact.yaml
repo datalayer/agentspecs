@@ -1,0 +1,24 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The MCP gateway's `pact` toolset: an application asking a business for each
+# person over PACT 1.0 (PI-10). Reached through an application's
+# `pact.connections[]`, granted as `datalayer_connection` `pact:<brand>`.
+id: pact
+name: PACT
+description: A personal agent at a business's agent, through Datalayer's MCP gateway.
+connection: pact
+
+actions:
+  checked: "2026-10-12"
+  note: >-
+    Read off the gateway's `extensions/pact/pact.py`. Asking as the application
+    alone and signing in change nothing at the business; asking for the person,
+    under their delegation, may change what they own there.
+  tools:
+    pact_brand: read
+    pact_ask: read
+    pact_sign_in: read
+    pact_sign_in_status: read
+    pact_ask_for_person: write
+    pact_disconnect: write

@@ -1,0 +1,245 @@
+{
+  "version": 1,
+  "exported": "2026-10-29T14:00:27.996Z",
+  "scene": "sales-and-accounting",
+  "rehearsal": {
+    "at": "2026-10-29T14:00:27+00:00",
+    "where": "on Datalayer",
+    "passed": true,
+    "says": "Rehearsal: 4 of 4 beats passed. The scene is Live."
+  },
+  "beats": [
+    {
+      "beat": "open-invoices",
+      "cue": "Which customer invoices are still open, and how much is due in total?",
+      "state": "passed",
+      "seconds": 22.688,
+      "first": 0,
+      "count": 6
+    },
+    {
+      "beat": "aged-receivables",
+      "cue": "Chart the aged receivables as of today, by customer.",
+      "state": "passed",
+      "seconds": 21.643,
+      "first": 6,
+      "count": 6
+    },
+    {
+      "beat": "largest-balance",
+      "cue": "Which invoices make up the largest balance due? Show me each one.",
+      "state": "passed",
+      "seconds": 26.707,
+      "first": 12,
+      "count": 7
+    },
+    {
+      "beat": "payment-reminders",
+      "cue": "Send a payment reminder to every customer whose invoice is overdue.",
+      "state": "passed",
+      "seconds": 19.099,
+      "first": 19,
+      "count": 6
+    }
+  ],
+  "taken": "2026-10-29",
+  "note": "Rehearsed on Datalayer, under the demo account.",
+  "lines": [
+    {
+      "key": "cd8e2b7ce87745f5:asked",
+      "at": 1793282337856,
+      "from": "You",
+      "to": "Sales",
+      "kind": "asked",
+      "text": "Which customer invoices are still open, and how much is due in total?"
+    },
+    {
+      "key": "b4174f0aa73e497b:asked",
+      "at": 1793282340050,
+      "from": "Sales",
+      "to": "Accounting",
+      "kind": "asked",
+      "text": "Please provide a list of all open customer invoices, showing each invoice individually with the customer name, invoice number, invoice date, due date, and amount due, along with the total amount outstanding across all open invoices."
+    },
+    {
+      "key": "5f873b4e3a5b449a:called",
+      "at": 1793282343711,
+      "from": "Accounting",
+      "to": "Odoo",
+      "kind": "called",
+      "text": "odoo_accounting_list_invoices"
+    },
+    {
+      "key": "b84837cc31794108:called",
+      "at": 1793282351849,
+      "from": "Accounting",
+      "to": "its runtime",
+      "kind": "called",
+      "text": "show_components"
+    },
+    {
+      "key": "b4174f0aa73e497b:said",
+      "at": 1793282355941,
+      "from": "Accounting",
+      "to": "Sales",
+      "kind": "said",
+      "text": "Here are all 4 open (unpaid, posted) customer invoices from the Odoo books, covering the default company. The total outstanding across all invoices is **EUR 15,185.50**.The table above lists all 4 open customer invoices retrieved via `odoo_accounting_list_invoices`, with a total outstanding balance of **EUR 15,185.50**. Key observations:\n\n- **INV/2026/00001** (Demo customer A, due 2026-09-19) is the **oldest overdue invoice** — its due date has already passed.\n- **INV/2026/00002** (Demo customer B, due 2026-10-15) is also likely past due depending on today's date.\n- **INV/2026/00003** (Demo customer C) is the **largest single invoice** at EUR 7,381.00.\n\nTo collect on overdue invoices, a person would need to send payment reminders or record payments directly in Odoo — no changes have been made here."
+    },
+    {
+      "key": "cd8e2b7ce87745f5:said",
+      "at": 1793282360542,
+      "from": "Sales",
+      "kind": "said",
+      "text": "Accounting has pulled all open customer invoices and is displaying the detail table directly below. Here is a summary of what it reported:\n\n---\n\n### Open Customer Invoices — Summary\n\n| # | Customer | Invoice | Due Date | Amount Due |\n|---|----------|---------|----------|------------|\n| 1 | Demo Customer A | INV/2026/00001 | 2026-09-19 | (per table) |\n| 2 | Demo Customer B | INV/2026/00002 | 2026-10-15 | (per table) |\n| 3 | Demo Customer C | INV/2026/00003 | — | EUR 7,381.00 |\n| 4 | *(see table)* | INV/2026/00004 | — | (per table) |\n\n**Total Outstanding: EUR 15,185.50** (4 open invoices, default company, current fiscal year)\n\n---\n\n### Key Flags from Accounting:\n- **INV/2026/00001** (Demo Customer A) — oldest invoice, due date **already passed** → overdue.\n- **INV/2026/00002** (Demo Customer B) — due 2026-10-15 → likely past due.\n- **INV/2026/00003** (Demo Customer C) — largest single balance at **EUR 7,381.00**.\n\n---\n\n### Recommended Next Actions:\n1. **Send payment reminders** to Demo Customer A and Demo Customer B for the overdue invoices — let me know if you'd like me to request that from Accounting.\n2. **Monitor Demo Customer C's** EUR 7,381.00 invoice closely as it represents nearly half the total outstanding.\n3. **Escalate collections** on INV/2026/00001 if no response is received, given it is the oldest overdue item.\n\nWould you like me to ask Accounting to send reminders to the overdue customers?"
+    },
+    {
+      "key": "a911e2363ed14dc2:asked",
+      "at": 1793282360543,
+      "from": "You",
+      "to": "Sales",
+      "kind": "asked",
+      "text": "Chart the aged receivables as of today, by customer."
+    },
+    {
+      "key": "ca31a1feb14040ea:asked",
+      "at": 1793282362191,
+      "from": "Sales",
+      "to": "Accounting",
+      "kind": "asked",
+      "text": "Please provide the aged receivables as of today, by customer, shown as a chart."
+    },
+    {
+      "key": "c18f20141d4f4100:called",
+      "at": 1793282364924,
+      "from": "Accounting",
+      "to": "Odoo",
+      "kind": "called",
+      "text": "odoo_accounting_aged_balance"
+    },
+    {
+      "key": "04cc692798db4953:called",
+      "at": 1793282372955,
+      "from": "Accounting",
+      "to": "its runtime",
+      "kind": "called",
+      "text": "show_components"
+    },
+    {
+      "key": "ca31a1feb14040ea:said",
+      "at": 1793282377552,
+      "from": "Accounting",
+      "to": "Sales",
+      "kind": "said",
+      "text": "Here is the aged receivables report as of **today, 2026-10-29**, for the default company, covering **3 customers** with a combined outstanding balance of **15,185.50**.\n\nKey highlights from the books:\n\n- **Demo customer C** holds the largest balance at **7,381.00** — all of it not yet due.\n- **Demo customer A** has **5,445.00** outstanding, split between not-due (1,452.00) and **31–60 days overdue (3,993.00)** — the only overdue amount in the portfolio.\n- **Demo customer B** has **2,359.50** in the 1–30 day bucket.\n\nThe chart shows total receivables per customer; the table breaks each balance down by aging bucket. No amounts are beyond 60 days overdue."
+    },
+    {
+      "key": "a911e2363ed14dc2:said",
+      "at": 1793282382186,
+      "from": "Sales",
+      "kind": "said",
+      "text": "Accounting has produced the aged-receivables chart and breakdown table as of **29 October 2026**, displayed above. Here is what the books show:\n\n| Customer | Not Yet Due | 1–30 Days | 31–60 Days | Total |\n|---|---|---|---|---|\n| Demo Customer C | 7,381.00 | — | — | **7,381.00** |\n| Demo Customer A | 1,452.00 | — | 3,993.00 | **5,445.00** |\n| Demo Customer B | — | 2,359.50 | — | **2,359.50** |\n| **Total** | **8,833.00** | **2,359.50** | **3,993.00** | **15,185.50** |\n\n---\n\n**Key decision points for the pipeline board:**\n\n1. **Immediate action — Demo Customer A** is the only customer carrying overdue balances. The **3,993.00 in the 31–60-day bucket** warrants a collections outreach now before it ages further.\n2. **Watch — Demo Customer B** has 2,359.50 in the 1–30-day window; no action yet, but worth monitoring through next cycle.\n3. **Healthy pipeline — Demo Customer C**'s 7,381.00 is entirely current (not yet due), posing no near-term collections risk.\n\n**No balances exceed 60 days**, which is a positive signal for overall receivables health. Recommended next step: issue a payment reminder to **Demo Customer A** — just say the word and I will put that request to Accounting."
+    },
+    {
+      "key": "3b9655ee95744405:asked",
+      "at": 1793282382188,
+      "from": "You",
+      "to": "Sales",
+      "kind": "asked",
+      "text": "Which invoices make up the largest balance due? Show me each one."
+    },
+    {
+      "key": "5eaf12d974db4558:asked",
+      "at": 1793282383753,
+      "from": "Sales",
+      "to": "Accounting",
+      "kind": "asked",
+      "text": "Show me the invoices that make up the largest balance due, listed one by one, for the current fiscal year and default company."
+    },
+    {
+      "key": "4ccba0b86489439d:called",
+      "at": 1793282386584,
+      "from": "Accounting",
+      "to": "Odoo",
+      "kind": "called",
+      "text": "odoo_accounting_aged_balance"
+    },
+    {
+      "key": "bab9df02b50e455b:called",
+      "at": 1793282391980,
+      "from": "Accounting",
+      "to": "Odoo",
+      "kind": "called",
+      "text": "odoo_accounting_list_invoices"
+    },
+    {
+      "key": "d190a4a88b904ea6:called",
+      "at": 1793282398182,
+      "from": "Accounting",
+      "to": "its runtime",
+      "kind": "called",
+      "text": "show_components"
+    },
+    {
+      "key": "5eaf12d974db4558:said",
+      "at": 1793282404206,
+      "from": "Accounting",
+      "to": "Sales",
+      "kind": "said",
+      "text": "The largest balance due belongs to **Demo customer C** at **€7,381.00**. Let me pull the individual invoices for that partner.Here is the breakdown for the **current fiscal year (2026)**, default company, in **EUR**:\n\n---\n\n**Largest balance due: Demo customer C — €7,381.00**\n\nThere is a single open invoice making up the entire balance:\n\n| # | Invoice | Date | Due | Amount Due |\n|---|---------|------|-----|-----------|\n| 1 | **INV/2026/00003** | 2026-09-30 | 2026-10-30 | **€7,381.00** |\n\n- **Untaxed:** €6,100.00 | **Tax:** €1,281.00 | **Total / Residual:** €7,381.00\n- State: **Posted**, Payment state: **Not paid**\n- The due date of 2026-10-30 is just 1 day away (as of the aged balance date of 2026-10-29), so this invoice is still in the *not due* bucket but will become overdue imminently.\n\n> **Note:** No changes have been made to the books. If you'd like to follow up (e.g. send a payment reminder), a person would need to act on this from the Odoo Sales or Accounting application."
+    },
+    {
+      "key": "3b9655ee95744405:said",
+      "at": 1793282408894,
+      "from": "Sales",
+      "kind": "said",
+      "text": "Accounting has shown the full invoice breakdown directly. Here is what it reported:\n\n---\n\n### 📋 Largest Balance Due — Demo Customer C: €7,381.00\n\nThe entire balance is carried by **one open invoice**:\n\n| Invoice | Date | Due Date | Amount Due |\n|---|---|---|---|\n| **INV/2026/00003** | 2026-09-30 | 2026-10-30 | **€7,381.00** |\n\n- **Subtotal (excl. tax):** €6,100.00 | **Tax:** €1,281.00\n- **Status:** Posted / Not Paid\n- **Period:** Current fiscal year 2026, default company, in EUR\n\n---\n\n### ⚠️ Key Flag for the Board\nThis invoice hits its due date **imminently** (2026-10-30) and will flip to **overdue** if not settled. It is currently still in the \"not due\" bucket, but the window is closing.\n\n### ✅ Recommended Next Actions\n1. **Send a payment reminder** to Demo Customer C now, before the due date passes — flag this to your AR team today.\n2. **Monitor for overdue status** — if unpaid after 2026-10-30, escalate to collections workflow.\n3. **Pipeline note:** Ensure this balance is reflected in your weighted forecast if there is any dependency on this customer's receivables for cash flow planning.\n\nWould you like me to ask Accounting to send a payment reminder, or pull the full aged receivables report for broader context?"
+    },
+    {
+      "key": "489235f170d9490c:asked",
+      "at": 1793282408895,
+      "from": "You",
+      "to": "Sales",
+      "kind": "asked",
+      "text": "Send a payment reminder to every customer whose invoice is overdue."
+    },
+    {
+      "key": "127a65eec5c44498:asked",
+      "at": 1793282410878,
+      "from": "Sales",
+      "to": "Accounting",
+      "kind": "asked",
+      "text": "Send a payment reminder to every customer whose invoice is overdue."
+    },
+    {
+      "key": "88307a47816e444e:called",
+      "at": 1793282414157,
+      "from": "Accounting",
+      "to": "Odoo",
+      "kind": "called",
+      "text": "odoo_accounting_aged_balance"
+    },
+    {
+      "key": "144b6cfe51e94fa5:called",
+      "at": 1793282422187,
+      "from": "Accounting",
+      "to": "its runtime",
+      "kind": "called",
+      "text": "show_components"
+    },
+    {
+      "key": "127a65eec5c44498:said",
+      "at": 1793282425223,
+      "from": "Accounting",
+      "to": "Sales",
+      "kind": "said",
+      "text": "I've read the aged receivables as of **2026-10-29**. Two customers have overdue balances:\n\n- **Demo customer A** — €3,993.00 overdue (31–60 days)\n- **Demo customer B** — €2,359.50 overdue (1–30 days)\n\nDemo customer C has no overdue amount (all balance is not yet due).\n\nSending payment reminders is a write/send action — I don't do that myself. Here is what a person would need to do: open each overdue customer in Odoo, go to their outstanding invoices, and use **Send & Print** (or the *Payment Reminder* email template) to dispatch the reminder. The choice below captures that action.The table above shows the two customers with overdue balances. **I cannot send reminders myself** — a person must confirm and trigger the action in Odoo. Press **\"Yes, send reminders to both\"** above to proceed, or **\"Not now\"** to leave it."
+    },
+    {
+      "key": "489235f170d9490c:said",
+      "at": 1793282427995,
+      "from": "Sales",
+      "kind": "said",
+      "text": "Accounting has reviewed the aged receivables as of **2026-10-29** and identified **two customers with overdue balances**:\n\n| Customer | Overdue Amount | Days Overdue |\n|---|---|---|\n| **Demo Customer A** | €3,993.00 | 31–60 days |\n| **Demo Customer B** | €2,359.50 | 1–30 days |\n\n*(Demo Customer C has no overdue amount — their balance is not yet due.)*\n\nHowever, **Accounting confirms it cannot send the reminders itself.** The action must be triggered manually in Odoo:\n\n1. Open each overdue customer's record.\n2. Navigate to their outstanding invoices.\n3. Use **Send & Print** with the *Payment Reminder* email template to dispatch the reminder.\n\nNo reminder has been sent. Please action this directly in Odoo to complete the send. Let me know if you need anything else — such as a breakdown of the individual overdue invoices per customer."
+    }
+  ]
+}

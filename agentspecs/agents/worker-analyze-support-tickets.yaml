@@ -22,7 +22,7 @@ tags:
   - analytics
   - data-acquisition
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.acquire
@@ -58,7 +58,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: issue-opened
 emoji: 🎫
-color: "#bf8700"  # Amber — paused status
+color: amber  # paused status
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-
@@ -66,9 +66,11 @@ goal: >-
   sentiment, identify recurring patterns, and generate resolution
   recommendations with escalation paths for critical issues.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Evals
 evals:

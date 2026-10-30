@@ -9,17 +9,13 @@ version: 0.0.1
 name: Hugging Face
 description: Hugging Face models, datasets, spaces, and papers access
 
-# Command to start the server
-command: npx
-args:
-  - "-y"
-  - "mcp-remote"
-  - "https://huggingface.co/mcp"
-  - "--header"
-  - "Authorization: Bearer ${HF_TOKEN}"
-
-# Transport type
-transport: stdio
+# Hugging Face's own hosted server, reached by the runtime itself over
+# Streamable HTTP: no command, the url and the headers sent with every
+# request, the token's `${HF_TOKEN}` expanded as it starts.
+transport: streamable-http
+url: "https://huggingface.co/mcp"
+headers:
+  Authorization: "Bearer ${HF_TOKEN}"
 
 # Whether the server is enabled by default
 enabled: false
@@ -38,7 +34,7 @@ tags:
   - huggingface
   - papers
 
-icon: brain
+icon: "@primer/octicons-react:hubot"
 emoji: 🤗
 
 # What each tool does to the world (agentspecs.actions). A tool not named here is

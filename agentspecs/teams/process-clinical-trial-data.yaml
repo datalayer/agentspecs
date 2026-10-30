@@ -22,7 +22,7 @@ tags:
 enabled: true
 icon: heart
 emoji: 🏥
-color: '#cf222e'
+color: red
 agent_spec_id: process-clinical-trial-data:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential

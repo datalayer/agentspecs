@@ -21,7 +21,7 @@ memory: ephemeral
 
 mcp_servers: []
 skills: []
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 frontend_tools: []
 
@@ -29,7 +29,7 @@ environment_name: ai-agents-env
 
 icon: sliders
 emoji: "🎛️"
-color: "#0F766E"
+color: teal
 
 parameters:
   type: object

@@ -1,0 +1,50 @@
+{
+  "$id": "https://agentspecs.datalayer.tech/schemas/ui-renderer.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One UI renderer: a way a UI plugin's interface reaches a host.",
+  "properties": {
+    "description": {
+      "description": "What it does, in a sentence or two",
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "docs_url": {
+      "description": "Its own documentation, https",
+      "title": "Docs Url",
+      "type": "string"
+    },
+    "enabled": {
+      "description": "Whether an application may be exposed through it today",
+      "title": "Enabled",
+      "type": "boolean"
+    },
+    "id": {
+      "description": "Its id, the file's name: what a UI plugin's `renderers` and an application's `renderer` say",
+      "title": "Id",
+      "type": "string"
+    },
+    "name": {
+      "description": "Its name",
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "version": {
+      "description": "The version of this spec",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "name",
+    "description",
+    "docs_url",
+    "enabled"
+  ],
+  "title": "UI renderer",
+  "type": "object"
+}

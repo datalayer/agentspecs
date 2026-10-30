@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-29T14:31:19+00:00",
+  "where": "on Datalayer",
+  "passed": true,
+  "says": "Rehearsal: 4 of 4 beats passed. The scene is Live.",
+  "beats": [
+    {
+      "beat": "flood",
+      "state": "passed",
+      "says": "",
+      "seconds": 177.86574391100294
+    },
+    {
+      "beat": "wildfire",
+      "state": "passed",
+      "says": "",
+      "seconds": 88.12401191100071
+    },
+    {
+      "beat": "storm",
+      "state": "passed",
+      "says": "",
+      "seconds": 45.252418705997115
+    },
+    {
+      "beat": "alert",
+      "state": "passed",
+      "says": "",
+      "seconds": 68.9234332269989
+    }
+  ],
+  "runtime": "1.5.80"
+}

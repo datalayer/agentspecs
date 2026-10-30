@@ -23,7 +23,7 @@ tags:
 enabled: true
 icon: organization
 emoji: 🏛️
-color: '#0550ae'
+color: blue
 agent_spec_id: process-citizen-requests:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential

@@ -24,7 +24,7 @@ tags:
   - government
   - audit
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: document.extract
@@ -57,7 +57,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: organization
 emoji: 🏛️
-color: "#0550ae"  # Dark blue — government & civic
+color: blue  # government & civic
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-
@@ -66,9 +66,11 @@ goal: >-
   model policy impacts across population datasets with Monte Carlo simulation,
   and generate explainable, auditable decision documentation for public record.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Evals
 evals:

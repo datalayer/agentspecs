@@ -19,7 +19,7 @@ tags:
   - github
   - email
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: workflow.orchestrate
@@ -51,14 +51,14 @@ environment_name: ai-agents-env
 # UI customization
 icon: git-branch
 emoji: 🐙
-color: "#6366F1"  # Indigo
+color: indigo
 
 # Chat suggestions to show users what this agent can do
 suggestions:
   - text: List my open pull requests across all repositories
     summary: "My open pull requests"
-  - text: Create an issue for a bug I found in datalayer/ui
-    summary: "File an issue in datalayer/ui"
+  - text: Create an issue for a bug I found in datalayer/core
+    summary: "File an issue in datalayer/core"
   - text: Show recent commits on the main branch
     summary: "Recent main commits"
   - text: Search for repositories related to Jupyter notebooks

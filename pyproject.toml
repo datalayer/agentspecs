@@ -26,14 +26,16 @@ dependencies = [
     "mcp[cli]>=2.0",
     "pydantic>=2.0",
     "httpx>=0.24",
+    # The policies catalogue validates each document against the Shield's JSON Schema (SH-50).
+    "jsonschema>=4.18",
 ]
 
 [project.optional-dependencies]
 pydantic-ai = [
-    "pydantic-graph",
-    "pydantic-ai-slim",
+  "pydantic-graph>=1.94.0",
+  "pydantic-ai-slim>=1.94.0",
 ]
-test = ["ipykernel", "jupyter_server>=1.6,<3", "pytest>=7.0", "pytest-asyncio>=0.21"]
+test = ["datalayer-agent-shield>=0.2.7", "ipykernel", "jsonschema>=4.18", "jupyter_server>=1.6,<3", "pytest>=7.0", "pytest-asyncio>=0.21"]
 lint = ["mdformat>0.7", "mdformat-gfm>=0.3.5", "ruff"]
 typing = ["mypy>=0.990"]
 
@@ -51,6 +53,8 @@ allow-direct-references = true
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+# pytest-asyncio 1.4.1 (28 October 2026) warns when this is unset, and `filterwarnings = error` made the warning an INTERNALERROR.
+asyncio_default_fixture_loop_scope = "function"
 filterwarnings = [
   "error",
   "ignore:There is no current event loop:DeprecationWarning",

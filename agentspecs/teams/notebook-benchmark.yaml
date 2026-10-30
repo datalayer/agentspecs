@@ -3,7 +3,7 @@
 
 # Team Specification: Notebook Benchmark
 #
-# Section 17 of ORCHESTRATOR.md, the recommended first vertical slice: one
+# The recommended first vertical slice of orchestration: one
 # benchmark, three specialists, one tree. It is a team rather than three
 # separate delegations because the order matters and the supervisor has to
 # answer from all three — which is exactly what `execution_mode: sequential`
@@ -30,7 +30,7 @@ tags:
 enabled: true
 icon: beaker
 emoji: 🧪
-color: '#1ABC9C'
+color: teal
 agent_spec_id: jupyter-data-analyst:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential

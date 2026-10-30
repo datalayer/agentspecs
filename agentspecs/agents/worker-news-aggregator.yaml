@@ -19,7 +19,7 @@ tags:
   - summarization
   - monitoring
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: document.summarise
@@ -45,7 +45,7 @@ skills:
   - events:0.0.1
 
 # Runtime tools available to this agent
-tools:
+backend_tools:
   - runtime-echo:0.0.1
   - runtime-send-mail:0.0.1
 frontend_tools:
@@ -58,7 +58,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: rss
 emoji: "📰"
-color: "#EF4444"  # Red
+color: red
 
 # Launch-time parameters that personalize the briefing
 parameters:
@@ -100,9 +100,11 @@ goal: >-
   topics, sources, companies, and industries, filtering out noise and
   surfacing the most important developments in a concise summary.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Trigger configuration — run every morning
 trigger:

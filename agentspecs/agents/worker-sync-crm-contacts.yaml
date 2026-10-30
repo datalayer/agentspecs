@@ -22,7 +22,7 @@ tags:
   - crm
   - data-acquisition
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.acquire
@@ -59,7 +59,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: people
 emoji: 🔄
-color: "#0969da"  # Blue
+color: blue
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-
@@ -67,9 +67,11 @@ goal: >-
   deduplicate records, write cleaned data back to CRM systems, and generate
   sync summary reports with notifications.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Guardrails
 guardrails:
