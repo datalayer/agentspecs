@@ -25,6 +25,19 @@ are listed, and each drawn on the `hero` backdrop:
 | `disaster-assessment` | 🚨 | `disaster-assessment` | NASA Earthdata, under each specialist |
 | `coding-agent-behind-the-shield` | 🔒 | its cast, written inline: `code-explainer` | One repository, lent to read, behind the Shield |
 
+Six more stage the agent protocols — a person's own agent and a company, a
+business, a merchant — played as written, with nothing live behind them, on
+the `studio` backdrop:
+
+| Scene | Face | What it shows |
+| --- | --- | --- |
+| `pact-a-personal-agent-at-a-business` | ✈️ | Ada’s Travel Desk asks an airline about her flight, and she allows it to read her bookings, not to change them. |
+| `pap-a-person-and-a-company` | 🧥 | Ada’s agent asks a shop about her order, and she signs in at the shop itself. |
+| `pap-approve-once` | 🔁 | The shop proposes an exchange; Ada approves its exact terms, and it is done once. |
+| `pap-two-companies` | 🏦 | An accounting firm pays a bill at Ada’s bank, and every payment is Ada’s approval. |
+| `pap-your-application-a-company` | 🏪 | An application built in the Studio answers people’s own agents as a company does. |
+| `ucp-a-purchase-approved` | 🛍️ | Ada’s Shopping Desk fills a basket at a test shop, and buys only once she approves the exact purchase. |
+
 ```yaml
 # scenes/sales-and-accounting.yaml
 schema: loop.scene/v1
@@ -34,7 +47,7 @@ description: A sales desk asks Accounting for the figures and hands them over.
 icon: people
 emoji: "🤝"
 
-team: sales-and-accounting:0.0.1
+team: sales-and-accounting:0.0.2
 cast:
   - member: sales
     persona: { name: Sales, line: I take your request and bring the figures back. }
@@ -65,6 +78,7 @@ script:
         expect: Sales says so in a sentence, and invents no figure.
 
 stage:
+  backdrop: hero
   positions: { sales: { x: 0.25, y: 0.5 }, accounting: { x: 0.75, y: 0.5 } }
   opens_first: sales
   transcript: { tools: true, withhold: [ids] }
@@ -82,7 +96,12 @@ rehearsal:
         - "Accounting → Odoo: odoo_accounting_list_invoices"
         - "Accounting: a table"
       must_say: [invoice]
-      within: 60s
+      must_not_say: [I cannot, error]
+      within: 120s
+  recording:
+    path: sales-and-accounting/recording.json
+    taken: "2026-10-29"
+    note: Rehearsed on Datalayer, under the demo account.
 
 deployment:
   account: demo
@@ -102,6 +121,54 @@ deployment:
 | `audience` | Who may watch and ask — `visitors` on the trial key, `signed-in` people, `nobody` (a rehearsal only) — and what a visitor's ask may cost (`ceiling_per_ask`, `asks_a_day`). |
 | `rehearsal` | The scene's tests: for each beat, the shape the transcript must take (`lines`), the words that `must_say` and `must_not_say`, and the time it may take (`within`); a `recording` for when the scene cannot play live; what was `verified`, as an application's tests say it. A passing rehearsal is the gallery's *Live*. |
 | `deployment` | Under which `account` the scene plays, on which `page`, and for each member on a runtime the variable its address is read from at build (`addresses`). |
+
+## A scripted scene
+
+A scene that says `kind: scripted` stages no team. It names its `actors` — a
+person, an application, a company, each an `id`, a `name`, a `face` and what
+it `is` — and writes its `lines`, played as written with nothing live behind
+them. `live` says, in a sentence, what of it is live on Datalayer today. The
+six protocol scenes above are written this way.
+
+```yaml
+# scenes/pap-approve-once.yaml
+schema: loop.scene/v1
+id: pap-approve-once
+kind: scripted
+name: A Change, Approved Once
+emoji: 🔁
+
+actors:
+  - { id: ada, name: Ada, face: 🧑, is: the person }
+  - { id: agent, name: Her agent, face: 🤖, is: "an application on Datalayer, working for Ada" }
+  - { id: manzanita, name: Manzanita Outfitters, face: 🧥, is: "a company, at manzanita.example" }
+
+lines:
+  - from: ada
+    to: agent
+    says: "“It is not warm enough: exchange it for the insulated one.”"
+  - from: agent
+    to: ada
+    says: "Its rule says Ask me first: it waits for Ada."
+    card:
+      kind: approval
+      title: Manzanita Outfitters asks you to confirm
+      rows: [[Order, ord_7Hk2], [Price difference, USD 70.00], [Version, "1"]]
+    how: The summary is the company’s own sentence, never the model’s.
+    turn:
+      "yes": Approve
+      "no": Decline
+      declined: "Ada declined: her agent tells Manzanita no, and nothing is exchanged."
+
+live: >-
+  The approval card on Waiting for you is built in the Studio; a company’s
+  exchange approved through Datalayer waits for the services to be shipped.
+```
+
+Each line is `from` an actor, optionally `to` another, and `says` what they
+say or do; a `card` is what the audience reads (`kind`, `title`, `rows`,
+`lines`), `how` what happened underneath, and `turn` where the audience takes
+the person's part and decides.
 
 ## A move
 
@@ -176,8 +243,8 @@ in the spec:
 rehearsal:
   recording:
     path: sales-and-accounting/recording.json
-    taken: "2026-10-30"
-    note: Recorded on Datalayer from a passing rehearsal.
+    taken: "2026-10-29"
+    note: Rehearsed on Datalayer, under the demo account.
 ```
 
 The file is the transcript a stage exports with *Export JSON* —
