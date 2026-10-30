@@ -21,7 +21,7 @@ entries:
     licence: Apache-2.0 (adapter); Anthropic Commercial Terms of Service (the agent)
     licence_source: https://www.npmjs.com/package/@agentclientprotocol/claude-agent-acp
     terms_source: https://code.claude.com/docs/en/legal-and-compliance
-    credential: An Anthropic API key (ANTHROPIC_API_KEY), the person's own
+    credential: Locally, an Anthropic API key (ANTHROPIC_API_KEY), the person's own; on Datalayer none, its calls answered from AWS Bedrock through ai-inference in credits
     served_to_third_parties: api_key_only
     binaries: Node 22 (engines.node >=22 on npm), git
     note: >-
@@ -30,21 +30,25 @@ entries:
       API key or subscription; developers may not route requests through Free, Pro or Max plan
       credentials on behalf of their users, nor collect or intermediate Claude.ai credentials.
       So only API keys are taken; a subscription login is refused. The npm package moved from
-      @zed-industries (0.23.1, March 2026) to @agentclientprotocol.
+      @zed-industries (0.23.1, March 2026) to @agentclientprotocol. On a Datalayer runtime the end
+      user holds no key and Anthropic is not reached: the model calls are AWS Bedrock's, on
+      Datalayer's account, metered in credits (decided 30 October 2026; not reviewed by counsel).
   - harness: codex
     adapter: "@agentclientprotocol/codex-acp"
     version: 2.2.2
     licence: Apache-2.0 (adapter); OpenAI Terms of Use (the agent)
     licence_source: https://www.npmjs.com/package/@agentclientprotocol/codex-acp
     terms_source: https://learn.chatgpt.com/docs/auth
-    credential: An OpenAI API key (OPENAI_API_KEY or CODEX_API_KEY), the person's own
+    credential: Locally, an OpenAI API key (OPENAI_API_KEY or CODEX_API_KEY), the person's own; not offered on Datalayer
     served_to_third_parties: api_key_only
     binaries: Node 22 (as the Agent Client Protocol project's adapters; unstated on npm), git
     note: >-
       Codex's authentication page (read 2026-10-15) recommends API keys for automation and
       device-code login for headless machines; a ChatGPT login needs a browser and is hidden with
       NO_BROWSER=1 in the adapter. Only API keys are taken; a ChatGPT login is refused. The
-      Zed-scoped package was archived on 22 July 2026 and names this one.
+      Zed-scoped package was archived on 22 July 2026 and names this one. Local only since 30 October
+      2026: Codex needs OpenAI's Responses API, which ai-inference does not serve, so a Datalayer
+      runtime refuses it in a sentence.
   - harness: gemini-cli
     adapter: "@google/gemini-cli"
     version: 0.64.0
@@ -78,7 +82,7 @@ entries:
     licence: MIT
     licence_source: https://www.npmjs.com/package/opencode-ai
     terms_source: https://github.com/anomalyco/opencode/blob/dev/LICENSE
-    credential: The provider's key OpenCode is configured with; ANTHROPIC_API_KEY declared
+    credential: Locally, the provider's key OpenCode is configured with, ANTHROPIC_API_KEY declared; on Datalayer none, its calls go through ai-inference in credits
     served_to_third_parties: permitted
     binaries: Node (the opencode-ai package), git
     note: >-
@@ -91,7 +95,7 @@ entries:
     licence: MIT (adapter); MIT (the agent, @earendil-works/pi-coding-agent 1.4.0)
     licence_source: https://www.npmjs.com/package/pi-acp
     terms_source: https://github.com/earendil-works/pi/blob/main/LICENSE
-    credential: The provider's key pi is configured with; ANTHROPIC_API_KEY declared, the person's own
+    credential: Locally, the provider's key pi is configured with, ANTHROPIC_API_KEY declared, the person's own; on Datalayer none, its calls answered from AWS Bedrock through ai-inference in credits
     served_to_third_parties: permitted
     binaries: Node 22 (pi-coding-agent engines.node >=22.19.0; pi-acp >=20), the pi executable 1.4.0 on the PATH (@earendil-works/pi-coding-agent), git
     note: >-

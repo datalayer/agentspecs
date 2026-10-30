@@ -11,7 +11,7 @@
 id: pi
 version: 0.0.1
 name: pi
-description: Earendil's pi coding agent, driven over ACP through the pi-acp adapter, which spawns the published pi executable; any model provider pi is configured with.
+description: Earendil's pi coding agent, driven over ACP through the pi-acp adapter, which spawns the published pi executable; any model provider pi is configured with. On Datalayer its model calls go through Datalayer's ai-inference, answered from AWS Bedrock on the platform's models and paid in credits, with no key of the account's.
 docs: https://github.com/svkozak/pi-acp
 
 acp:
@@ -24,6 +24,10 @@ acp:
   native_session: none
 
 requires:
+  # Local only: run with `loop --harness`, the CLI or a laptop demo, it takes this
+  # key from the environment. On a Datalayer runtime no key is given: pi is given a
+  # configuration directory (PI_CODING_AGENT_DIR) naming ai-inference's
+  # Anthropic-shaped route, with no token in it.
   secrets: [ANTHROPIC_API_KEY]
   binaries: [node, git]
 

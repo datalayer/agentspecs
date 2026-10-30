@@ -78,27 +78,27 @@ to the catalogue with a spec.
 
 ### Claude Code (`claude-code`)
 
-Anthropic's coding agent, driven over ACP through the Agent Client Protocol project's adapter on the Claude Agent SDK.
+Anthropic's coding agent, driven over ACP through the Agent Client Protocol project's adapter on the Claude Agent SDK. On Datalayer its model calls go through Datalayer's ai-inference, answered from AWS Bedrock on the platform's models and paid in credits, with no key of the account's.
 
-- Credential: An Anthropic API key (ANTHROPIC_API_KEY), the person's own; secrets declared: `ANTHROPIC_API_KEY`
+- Credential: Locally, an Anthropic API key (ANTHROPIC_API_KEY), the person's own; on Datalayer none, its calls answered from AWS Bedrock through ai-inference in credits; secrets declared: `ANTHROPIC_API_KEY`
 - Needs: Node 22 (engines.node >=22 on npm), git
 - ACP 1: `session/load` yes; modes `default`, `plan`, `acceptEdits`, `bypassPermissions`
 - Honours `model:` yes, `subagents:` no
 - Capabilities: resume `load`, fork history `replay`, interrupt yes, steering no, images yes, compaction `own`; vendor session id `none`; runs unasked 8 command families (its own read-only allowlist)
 - Licence read at https://www.npmjs.com/package/@agentclientprotocol/claude-agent-acp; terms read at https://code.claude.com/docs/en/legal-and-compliance
-- Anthropic's legal page (read 2026-10-15): running Claude Code in hosted sandboxes or agent infrastructure requires the Commercial Terms; each end user authenticates with their own API key or subscription; developers may not route requests through Free, Pro or Max plan credentials on behalf of their users, nor collect or intermediate Claude.ai credentials. So only API keys are taken; a subscription login is refused. The npm package moved from @zed-industries (0.23.1, March 2026) to @agentclientprotocol.
+- Anthropic's legal page (read 2026-10-15): running Claude Code in hosted sandboxes or agent infrastructure requires the Commercial Terms; each end user authenticates with their own API key or subscription; developers may not route requests through Free, Pro or Max plan credentials on behalf of their users, nor collect or intermediate Claude.ai credentials. So only API keys are taken; a subscription login is refused. The npm package moved from @zed-industries (0.23.1, March 2026) to @agentclientprotocol. On a Datalayer runtime the end user holds no key and Anthropic is not reached: the model calls are AWS Bedrock's, on Datalayer's account, metered in credits (decided 30 October 2026; not reviewed by counsel).
 
 ### Codex (`codex`)
 
-OpenAI's coding agent, driven over ACP through the Agent Client Protocol project's adapter, which ships the Codex binary it drives.
+OpenAI's coding agent, driven over ACP through the Agent Client Protocol project's adapter, which ships the Codex binary it drives. Local only, on the person's own key; not offered on Datalayer until ai-inference serves OpenAI's Responses API.
 
-- Credential: An OpenAI API key (OPENAI_API_KEY or CODEX_API_KEY), the person's own; secrets declared: `OPENAI_API_KEY`
+- Credential: Locally, an OpenAI API key (OPENAI_API_KEY or CODEX_API_KEY), the person's own; not offered on Datalayer; secrets declared: `OPENAI_API_KEY`
 - Needs: Node 22 (as the Agent Client Protocol project's adapters; unstated on npm), git
 - ACP 1: `session/load` yes; modes `read-only`, `workspace-write`, `agent`, `agent-full-access`
 - Honours `model:` yes, `subagents:` no
 - Capabilities: resume `load`, fork history `replay`, interrupt yes, steering no, images yes, compaction `own`; vendor session id `none`; asks about every command
 - Licence read at https://www.npmjs.com/package/@agentclientprotocol/codex-acp; terms read at https://learn.chatgpt.com/docs/auth
-- Codex's authentication page (read 2026-10-15) recommends API keys for automation and device-code login for headless machines; a ChatGPT login needs a browser and is hidden with NO_BROWSER=1 in the adapter. Only API keys are taken; a ChatGPT login is refused. The Zed-scoped package was archived on 22 July 2026 and names this one.
+- Codex's authentication page (read 2026-10-15) recommends API keys for automation and device-code login for headless machines; a ChatGPT login needs a browser and is hidden with NO_BROWSER=1 in the adapter. Only API keys are taken; a ChatGPT login is refused. The Zed-scoped package was archived on 22 July 2026 and names this one. Local only since 30 October 2026: Codex needs OpenAI's Responses API, which ai-inference does not serve, so a Datalayer runtime refuses it in a sentence.
 
 ### Custom harness (`custom`)
 
@@ -155,7 +155,7 @@ Block's open agent (now the Agentic AI Foundation's), which speaks ACP itself wi
 
 Anomaly's open coding agent, which speaks ACP itself with opencode acp; any model provider it is configured with. On Datalayer its model calls go through Datalayer's ai-inference, on the platform's models and paid in credits, with no key of the account's.
 
-- Credential: The provider's key OpenCode is configured with; ANTHROPIC_API_KEY declared; secrets declared: `ANTHROPIC_API_KEY`
+- Credential: Locally, the provider's key OpenCode is configured with, ANTHROPIC_API_KEY declared; on Datalayer none, its calls go through ai-inference in credits; secrets declared: `ANTHROPIC_API_KEY`
 - Needs: Node (the opencode-ai package), git
 - ACP 1: `session/load` no; modes none advertised
 - Honours `model:` yes, `subagents:` no
@@ -178,9 +178,9 @@ The OpenHands CLI, which speaks ACP itself with openhands acp; any model provide
 
 ### pi (`pi`)
 
-Earendil's pi coding agent, driven over ACP through the pi-acp adapter, which spawns the published pi executable; any model provider pi is configured with.
+Earendil's pi coding agent, driven over ACP through the pi-acp adapter, which spawns the published pi executable; any model provider pi is configured with. On Datalayer its model calls go through Datalayer's ai-inference, answered from AWS Bedrock on the platform's models and paid in credits, with no key of the account's.
 
-- Credential: The provider's key pi is configured with; ANTHROPIC_API_KEY declared, the person's own; secrets declared: `ANTHROPIC_API_KEY`
+- Credential: Locally, the provider's key pi is configured with, ANTHROPIC_API_KEY declared, the person's own; on Datalayer none, its calls answered from AWS Bedrock through ai-inference in credits; secrets declared: `ANTHROPIC_API_KEY`
 - Needs: Node 22 (pi-coding-agent engines.node >=22.19.0; pi-acp >=20), the pi executable 1.4.0 on the PATH (@earendil-works/pi-coding-agent), git
 - ACP 1: `session/load` yes; modes none advertised
 - Honours `model:` yes, `subagents:` no

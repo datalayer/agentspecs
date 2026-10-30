@@ -15,8 +15,10 @@
 # application that runs the team, the organization's policy, the platform's
 # default.
 #
-# The members name no model: a harness runs on its own, with the person's
-# own key. Its `tools` are its own, its MCP the gateway's lent.
+# The members name no model. Locally a harness runs on the person's own key.
+# On Datalayer a harness's calls go through ai-inference, and Codex, which
+# speaks OpenAI's Responses API, is not offered: this team's reviewer seat is
+# refused there in a sentence. Its `tools` are its own, its MCP the gateway's lent.
 
 id: coding-agents
 version: 0.0.1

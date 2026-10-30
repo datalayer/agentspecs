@@ -20,6 +20,9 @@ acp:
   native_session: none
 
 requires:
+  # Local only: run with `loop --harness`, the CLI or a laptop demo, it takes this
+  # key from the environment. On a Datalayer runtime no key is given: its model calls go
+  # through ai-inference's chat completions, with the runtime's token.
   secrets: [ANTHROPIC_API_KEY]
   binaries: [node, git]
 

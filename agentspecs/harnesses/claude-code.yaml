@@ -9,7 +9,7 @@
 id: claude-code
 version: 0.0.1
 name: Claude Code
-description: Anthropic's coding agent, driven over ACP through the Agent Client Protocol project's adapter on the Claude Agent SDK.
+description: Anthropic's coding agent, driven over ACP through the Agent Client Protocol project's adapter on the Claude Agent SDK. On Datalayer its model calls go through Datalayer's ai-inference, answered from AWS Bedrock on the platform's models and paid in credits, with no key of the account's.
 docs: https://github.com/agentclientprotocol/claude-agent-acp
 
 acp:
@@ -22,6 +22,9 @@ acp:
   native_session: none
 
 requires:
+  # Local only: run with `loop --harness`, the CLI or a laptop demo, it takes this
+  # key from the environment. On a Datalayer runtime no key is given: its model calls go
+  # through ai-inference's Anthropic-shaped route, answered from AWS Bedrock.
   secrets: [ANTHROPIC_API_KEY]
   binaries: [node, git]
 

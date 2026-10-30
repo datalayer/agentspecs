@@ -4,7 +4,7 @@
 id: ANTHROPIC_API_KEY
 version: 0.0.1
 name: Anthropic API Key
-description: API key for Anthropic's Claude API. Required by the Claude Code harness, and by any harness configured with Anthropic as its model provider; the person's own, never a Claude.ai subscription login.
+description: API key for Anthropic's Claude API. Required by the Claude Code harness run locally, and by any harness configured with Anthropic as its model provider there; the person's own, never a Claude.ai subscription login. A Datalayer runtime takes no key: its model calls go through ai-inference.
 registrationUrl: https://platform.claude.com/settings/keys
 tags:
   - authentication
