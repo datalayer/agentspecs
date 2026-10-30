@@ -273,6 +273,7 @@ class Backdrop(str, Enum):
     HERO = "hero"
     PLAIN = "plain"
     SPACE = "space"
+    MINIMAL = "minimal"
 
 
 class SceneMove(_Strict):
@@ -395,7 +396,8 @@ class SceneStage(_Strict):
             "and each message flowing along its line; `hero`, round faces on a deep tint, thin lines and a dot that "
             "flies with each message; `plain`, boxes and arrows that do not move, for a printout or a slide; "
             "`space`, glowing marks on a dotted, meshed ground, luminous lines and a light that flows with each "
-            "message, as the site's hero drawings"
+            "message, as the site's hero drawings; `minimal`, glowing circles in each member's colour on a dark "
+            "ground, nothing more"
         ),
     )
 
