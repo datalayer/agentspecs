@@ -58,7 +58,7 @@ environment_name: ai-agents-env
 
 icon: broadcast
 emoji: "📡"
-color: "#7C3AED"
+color: violet
 
 suggestions:
   # First: the one request that launches both remote agents, one handing to

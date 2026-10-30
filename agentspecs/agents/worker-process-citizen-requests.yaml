@@ -57,7 +57,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: organization
 emoji: 🏛️
-color: "#0550ae"  # Dark blue — government & civic
+color: blue  # government & civic
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

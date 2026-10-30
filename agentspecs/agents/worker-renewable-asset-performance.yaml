@@ -57,7 +57,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: zap
 emoji: "⚡"
-color: "#EAB308"
+color: yellow
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

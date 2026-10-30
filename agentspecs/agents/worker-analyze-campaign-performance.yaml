@@ -58,7 +58,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: megaphone
 emoji: 📢
-color: "#8250df"  # Purple — media & creativity
+color: purple  # media & creativity
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

@@ -38,7 +38,7 @@ environment_name: ai-agents-env
 
 icon: pulse
 emoji: "📊"
-color: "#0EA5E9"
+color: sky
 
 suggestions:
   - text: Show my current monitoring context summary

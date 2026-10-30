@@ -54,7 +54,7 @@ frontend_tools:
 environment_name: ai-agents-env
 icon: project
 emoji: 🖼️
-color: "#8250DF"
+color: purple
 
 suggestions:
   - text: Draft a five-slide deck introducing our Q3 roadmap

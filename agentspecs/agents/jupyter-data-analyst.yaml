@@ -77,7 +77,7 @@ includes:
 environment_name: ai-agents-env
 icon: graph
 emoji: "📊"
-color: "#1F883D"
+color: green
 
 # What to ask it, in the order a visitor arrives at.
 #

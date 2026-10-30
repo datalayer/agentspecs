@@ -67,7 +67,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: graph
 emoji: 📈
-color: "#1a7f37"  # Dark green
+color: green
 
 # Goal / Prompt
 goal: >-

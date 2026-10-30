@@ -56,6 +56,8 @@ from typing import List, Optional, Tuple
 import yaml
 from pydantic import BaseModel, Field, field_validator, model_validator
 
+from ..colors import check_color
+
 
 class TeamRole(str, Enum):
     """What a member is *for*, structurally.
@@ -564,7 +566,17 @@ class TeamSpec(BaseModel):
 
     icon: str = Field(default="people", description="Icon identifier")
     emoji: str = Field(default="\U0001f465", description="Emoji representation")
-    color: str = Field(default="", description="Accent colour")
+    color: str = Field(
+        default="",
+        description=(
+            "A name of the palette (`indigo`, `teal`, `primary`…), drawn in the current theme's value for it, or a hex (`#RGB`, `#RRGGBB`) where no name fits"
+        ),
+    )
+
+    @field_validator("color")
+    @classmethod
+    def _names_a_colour(cls, color: str) -> str:
+        return check_color(color)
 
     agent_spec_id: str = Field(
         default="",

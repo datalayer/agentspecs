@@ -57,7 +57,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: file
 emoji: 📝
-color: "#cf222e"  # Red — error status in UI
+color: red  # error status in UI
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

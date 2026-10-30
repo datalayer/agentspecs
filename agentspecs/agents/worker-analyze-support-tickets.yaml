@@ -58,7 +58,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: issue-opened
 emoji: 🎫
-color: "#bf8700"  # Amber — paused status
+color: amber  # paused status
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

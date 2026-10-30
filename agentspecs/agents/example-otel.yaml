@@ -38,7 +38,7 @@ environment_name: ai-agents-env
 
 icon: telescope
 emoji: "🔭"
-color: "#7C3AED"
+color: violet
 
 suggestions:
   - text: What do the most recent traces show?

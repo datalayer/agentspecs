@@ -55,7 +55,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: zap
 emoji: ⚡
-color: "#1a7f37"  # Green — energy & sustainability
+color: green  # energy & sustainability
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

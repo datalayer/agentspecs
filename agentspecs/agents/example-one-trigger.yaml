@@ -51,7 +51,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: zap
 emoji: ⚡
-color: "#f59e0b"  # Amber
+color: amber
 
 # Goal / Prompt
 goal: >-

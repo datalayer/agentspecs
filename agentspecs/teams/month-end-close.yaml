@@ -23,7 +23,7 @@ tags:
 enabled: true
 icon: sync
 emoji: "🧾"
-color: "#bf8700"
+color: amber
 
 orchestration_protocol: a2a
 execution_mode: supervisor

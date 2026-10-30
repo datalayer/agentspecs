@@ -43,7 +43,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: list-unordered
 emoji: 📋
-color: "#6366F1"
+color: indigo
 
 # Chat suggestions
 suggestions:

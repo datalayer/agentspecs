@@ -35,7 +35,7 @@ environment_name: ai-agents-env
 
 icon: pulse
 emoji: "🧠"
-color: "#2563EB"
+color: blue
 
 suggestions:
   - text: Compare local and datalayer inference providers for latency and routing.

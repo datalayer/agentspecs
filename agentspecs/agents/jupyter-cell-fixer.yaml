@@ -51,7 +51,7 @@ frontend_tools:
 environment_name: ai-agents-env
 icon: bug
 emoji: "🩹"
-color: "#CF222E"
+color: red
 
 suggestions:
   - text: Fix the cell that just failed.

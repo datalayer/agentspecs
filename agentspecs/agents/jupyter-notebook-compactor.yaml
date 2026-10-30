@@ -64,7 +64,7 @@ frontend_tools:
 environment_name: ai-agents-env
 icon: fold
 emoji: "🗜️"
-color: "#8250DF"
+color: purple
 
 suggestions:
   - text: Compact this notebook without changing any of its results.

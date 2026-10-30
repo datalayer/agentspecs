@@ -24,7 +24,7 @@ tags:
 enabled: true
 icon: people
 emoji: "🤝"
-color: "#0969da"
+color: blue
 
 orchestration_protocol: a2a
 execution_mode: supervisor

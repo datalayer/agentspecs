@@ -58,7 +58,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: rss
 emoji: "📰"
-color: "#EF4444"  # Red
+color: red
 
 # Launch-time parameters that personalize the briefing
 parameters:

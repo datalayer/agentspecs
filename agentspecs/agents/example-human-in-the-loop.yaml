@@ -42,7 +42,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: tasklist
 emoji: 🧑‍⚖️
-color: "#6366F1"
+color: indigo
 
 # Chat suggestions
 suggestions:

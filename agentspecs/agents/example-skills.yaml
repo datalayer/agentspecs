@@ -44,7 +44,7 @@ environment_name: ai-agents-env
 
 icon: briefcase
 emoji: "🧰"
-color: "#0D9488"
+color: teal
 
 suggestions:
   - text: List all your available skills and group them by source type

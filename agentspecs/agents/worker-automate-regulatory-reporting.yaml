@@ -61,7 +61,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: shield-check
 emoji: 🏦
-color: "#0969da"  # Blue — compliance & trust
+color: blue  # compliance & trust
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

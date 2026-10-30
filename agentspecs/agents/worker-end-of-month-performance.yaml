@@ -63,7 +63,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: graph
 emoji: 📊
-color: "#1f883d"  # Green — performance & growth
+color: green  # performance & growth
 
 # Protocols & UI
 protocol: vercel-ai

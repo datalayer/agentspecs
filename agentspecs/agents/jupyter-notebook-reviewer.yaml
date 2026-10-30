@@ -42,7 +42,7 @@ frontend_tools: []
 environment_name: ai-agents-env
 icon: checklist
 emoji: 🧐
-color: "#BF8700"
+color: amber
 
 suggestions:
   - text: Find what is wrong

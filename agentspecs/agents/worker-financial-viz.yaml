@@ -51,7 +51,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: trending-up
 emoji: 📈
-color: "#F59E0B"  # Amber
+color: amber
 
 # Chat suggestions to show users what this agent can do
 suggestions:

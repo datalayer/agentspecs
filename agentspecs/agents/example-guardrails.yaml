@@ -45,7 +45,7 @@ guardrails:
 
 icon: shield
 emoji: "🛡️"
-color: "#EF4444"
+color: red
 
 suggestions:
   # First: a tool the guardrail holds for approval — the approval card and

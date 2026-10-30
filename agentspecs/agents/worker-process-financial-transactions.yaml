@@ -55,7 +55,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: credit-card
 emoji: 💳
-color: "#8250df"  # Purple
+color: purple
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

@@ -42,7 +42,7 @@ environment_name: ai-agents-env
 
 icon: globe
 emoji: "🌐"
-color: "#0969DA"
+color: blue
 
 suggestions:
   # First: the same task the codemode agent gets, so the two panes of the

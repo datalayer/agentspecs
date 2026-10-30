@@ -54,7 +54,7 @@ frontend_tools:
 environment_name: ai-agents-env
 icon: rocket
 emoji: 🚀
-color: "#BF3989"
+color: pink
 
 suggestions:
   - text: "Draft a seed pitch deck: problem, solution, traction, market, team, ask"

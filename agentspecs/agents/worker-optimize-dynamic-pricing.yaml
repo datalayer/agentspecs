@@ -56,7 +56,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: tag
 emoji: 🏷️
-color: "#bf8700"  # Amber — pricing & commerce
+color: amber  # pricing & commerce
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

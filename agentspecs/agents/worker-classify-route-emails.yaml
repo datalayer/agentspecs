@@ -56,7 +56,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: mail
 emoji: 📬
-color: "#0969da"  # Blue
+color: blue
 
 # Goal / Prompt
 goal: >-

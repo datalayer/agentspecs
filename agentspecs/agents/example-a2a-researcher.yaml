@@ -32,7 +32,7 @@ environment_name: ai-agents-env
 
 icon: search
 emoji: "🔎"
-color: "#0EA5E9"
+color: sky
 
 suggestions:
   - text: Gather the key facts on a topic, with sources

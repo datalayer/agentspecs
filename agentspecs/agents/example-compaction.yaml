@@ -38,7 +38,7 @@ environment_name: ai-agents-env
 
 icon: history
 emoji: "🗜️"
-color: "#BF8700"
+color: amber
 
 suggestions:
   # First: enough text to reach a small budget in one or two turns.

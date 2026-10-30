@@ -24,7 +24,7 @@ tags:
 enabled: true
 icon: telescope
 emoji: "🛰️"
-color: "#1a7f37"
+color: green
 
 orchestration_protocol: a2a
 execution_mode: supervisor

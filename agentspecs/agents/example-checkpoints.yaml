@@ -44,7 +44,7 @@ environment_name: ai-agents-env
 
 icon: versions
 emoji: "💾"
-color: "#0969DA"
+color: blue
 
 suggestions:
   # First: a save and a list in one turn — the checkpoints appear in the

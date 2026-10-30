@@ -55,7 +55,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: database
 emoji: 📊
-color: "#3B82F6"  # Blue
+color: blue
 
 # Chat suggestions to show users what this agent can do
 suggestions:

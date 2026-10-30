@@ -29,7 +29,7 @@ environment_name: ai-agents-env
 
 icon: sliders
 emoji: "🎛️"
-color: "#0F766E"
+color: teal
 
 parameters:
   type: object

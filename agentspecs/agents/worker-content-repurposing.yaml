@@ -60,7 +60,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: share-2
 emoji: "📣"
-color: "#8B5CF6"
+color: violet
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

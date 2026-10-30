@@ -48,7 +48,7 @@ environment_name: ai-agents-env
 
 icon: bell
 emoji: "🔔"
-color: "#F59E0B"
+color: amber
 
 suggestions:
   # First: a notification the panel shows at once, and the channels' state.

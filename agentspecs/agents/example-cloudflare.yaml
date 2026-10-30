@@ -37,7 +37,7 @@ environment_name: ai-agents-env
 
 icon: cloud
 emoji: "☁️"
-color: "#F38020"
+color: "#F38020"  # Cloudflare's own orange, a brand colour: the same in every theme
 
 suggestions:
   - text: Multiply 12 by 34 with a tool call, then explain which model answered and where it ran.

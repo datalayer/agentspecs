@@ -58,7 +58,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: globe
 emoji: 🌐
-color: "#10B981"  # Green
+color: green
 
 # Chat suggestions to show users what this agent can do
 suggestions:

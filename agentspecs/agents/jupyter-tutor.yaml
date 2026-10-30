@@ -65,7 +65,7 @@ frontend_tools:
 environment_name: ai-agents-env
 icon: mortar-board
 emoji: "🎓"
-color: "#0969DA"
+color: blue
 
 # What to ask, for the two people who arrive here.
 #

@@ -57,7 +57,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: file
 emoji: 📄
-color: "#8250df"  # Purple
+color: purple
 
 # Goal / Prompt
 goal: >-

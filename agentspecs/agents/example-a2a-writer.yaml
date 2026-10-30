@@ -32,7 +32,7 @@ environment_name: ai-agents-env
 
 icon: pencil
 emoji: "✍️"
-color: "#F59E0B"
+color: amber
 
 suggestions:
   - text: Turn a set of notes into a short, structured write-up

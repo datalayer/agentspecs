@@ -29,7 +29,7 @@ tags:
 enabled: true
 icon: pulse
 emoji: "🛰️"
-color: "#cf222e"
+color: red
 
 orchestration_protocol: a2a
 execution_mode: supervisor

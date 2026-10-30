@@ -42,7 +42,7 @@ environment_name: ai-agents-env
 
 icon: code
 emoji: "⚙️"
-color: "#8250DF"
+color: purple
 
 suggestions:
   # First: the same task the no-codemode agent gets, so the two panes of the

@@ -59,7 +59,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: database
 emoji: 🗃️
-color: "#bf8700"  # Amber
+color: amber
 
 # Goal / Prompt
 goal: >-

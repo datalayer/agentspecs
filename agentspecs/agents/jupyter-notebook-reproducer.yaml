@@ -45,7 +45,7 @@ frontend_tools:
 environment_name: ai-agents-env
 icon: sync
 emoji: "🔁"
-color: "#0969DA"
+color: blue
 
 suggestions:
   - text: Run this notebook on a clean kernel and tell me what breaks.

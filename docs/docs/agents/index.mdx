@@ -132,12 +132,16 @@ UI icon identifier (e.g., `"trending-up"`, `"code"`, `"database"`)
 UI emoji identifier (e.g., `"📈"`, `"💻"`, `"🔍"`)
 
 ### `color` (string)
-Hex color code for UI theming
+A name of the Datalayer palette, drawn in the value the current theme and mode give it, so the agent's colour follows light and dark:
+
+- the hues, which keep their hue in every theme, deep on a light page and bright on a dark one: `red`, `orange`, `amber`, `yellow`, `lime`, `green`, `teal`, `cyan`, `sky`, `blue`, `indigo`, `violet`, `purple`, `pink`, `rose`, `gray`;
+- the roles, whose colour changes with the theme: `bg`, `bgPanel`, `bgAlt`, `primary`, `secondary`, `accent`, `glow`, `pop`, `spark`, `blaze`, `surge`, `flame`, `gold`, `textLight`, `textMuted`.
+
+A hex, `#RGB` or `#RRGGBB`, is still taken where no name fits, such as a brand's own colour, and is drawn as it is in every theme. Anything else is refused.
 ```yaml
-color: "#3B82F6"  # Blue
-color: "#10B981"  # Green
-color: "#F59E0B"  # Amber
-color: "#6366F1"  # Indigo
+color: blue
+color: indigo
+color: "#F38020"  # a brand's own orange
 ```
 
 ### `suggestions` (list of strings)
@@ -229,7 +233,7 @@ skills:
 environment_name: ai-agents-env
 icon: database
 emoji: "📊"
-color: "#3B82F6"
+color: blue
 ```
 
 ## Full Field Coverage

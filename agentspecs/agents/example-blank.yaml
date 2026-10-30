@@ -43,7 +43,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: agent
 emoji: ⬜
-color: "#6B7280"  # Gray
+color: gray
 
 suggestions: []
 

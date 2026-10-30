@@ -59,7 +59,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: tools
 emoji: "🛡️"
-color: "#EF4444"
+color: red
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-

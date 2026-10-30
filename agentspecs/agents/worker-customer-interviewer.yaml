@@ -62,7 +62,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: comment-discussion
 emoji: "🎙️"
-color: "#0EA5E9"  # Sky blue
+color: sky
 
 # Launch-time parameters that frame the interview
 parameters:

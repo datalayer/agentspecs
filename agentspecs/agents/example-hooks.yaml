@@ -30,7 +30,7 @@ environment_name: ai-agents-env
 
 icon: zap
 emoji: "🪝"
-color: "#0E7490"
+color: cyan
 
 suggestions:
   - text: "Read the pre-hook marker file at /tmp/agent_runtimes_pre_hook_demo.txt using execute_code."

@@ -47,7 +47,7 @@ tags:
 enabled: true
 icon: book
 emoji: "📓"
-color: "#F37726"
+color: "#F37726"  # Jupyter's own orange, a brand colour: the same in every theme
 
 orchestration_protocol: datalayer
 execution_mode: supervisor

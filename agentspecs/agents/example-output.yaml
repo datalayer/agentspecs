@@ -46,7 +46,7 @@ environment_name: ai-agents-env
 
 icon: table
 emoji: "📦"
-color: "#7C3AED"
+color: violet
 
 suggestions:
   # One opener per output mode, each precise enough to land in its panel tab;

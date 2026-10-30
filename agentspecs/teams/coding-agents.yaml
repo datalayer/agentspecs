@@ -34,7 +34,7 @@ tags:
 enabled: true
 icon: code
 emoji: "🛡️"
-color: "#1F6FEB"
+color: blue
 
 orchestration_protocol: datalayer
 execution_mode: sequential

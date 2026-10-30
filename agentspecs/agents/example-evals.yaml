@@ -41,7 +41,7 @@ environment_name: ai-agents-env
 
 icon: pulse
 emoji: "🧪"
-color: "#0EA5E9"
+color: sky
 
 suggestions:
   - text: "hello world"

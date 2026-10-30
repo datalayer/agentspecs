@@ -52,7 +52,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: share-2
 emoji: 🔀
-color: "#EC4899"  # Pink
+color: pink
 
 # Chat suggestions to show users what this agent can do
 suggestions:

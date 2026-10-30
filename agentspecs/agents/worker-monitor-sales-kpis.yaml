@@ -65,7 +65,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: graph
 emoji: 📊
-color: "#2da44e"  # Green — running status
+color: green  # running status
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-
