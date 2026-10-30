@@ -134,14 +134,14 @@ UI emoji identifier (e.g., `"📈"`, `"💻"`, `"🔍"`)
 ### `color` (string)
 A name of the Datalayer palette, drawn in the value the current theme and mode give it, so the agent's colour follows light and dark:
 
-- the hues, which keep their hue in every theme, deep on a light page and bright on a dark one: `red`, `orange`, `amber`, `yellow`, `lime`, `green`, `teal`, `cyan`, `sky`, `blue`, `indigo`, `violet`, `purple`, `pink`, `rose`, `gray`;
+- the hues, which keep their hue in every theme, deep on a light page and bright on a dark one: `red`, `orange`, `amber`, `yellow`, `lime`, `green`, `emerald`, `teal`, `cyan`, `sky`, `blue`, `indigo`, `violet`, `purple`, `fuchsia`, `pink`, `rose`, and the neutrals `slate`, `gray`, `stone`;
 - the roles, whose colour changes with the theme: `bg`, `bgPanel`, `bgAlt`, `primary`, `secondary`, `accent`, `glow`, `pop`, `spark`, `blaze`, `surge`, `flame`, `gold`, `textLight`, `textMuted`.
 
 A hex, `#RGB` or `#RRGGBB`, is still taken where no name fits, such as a brand's own colour, and is drawn as it is in every theme. Anything else is refused.
 ```yaml
 color: blue
 color: indigo
-color: "#F38020"  # a brand's own orange
+color: "#F38020"  # a hex, where no name fits
 ```
 
 ### `suggestions` (list of strings)

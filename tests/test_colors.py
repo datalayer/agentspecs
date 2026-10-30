@@ -78,12 +78,9 @@ def test_every_colour_of_the_catalogue_is_a_name_or_a_hex():
 
 
 def test_the_catalogue_names_its_colours():
-    """A hex is kept only for a brand's own colour, which no theme should change."""
+    """Every colour of the catalogue is a name of the palette: none falls back to a hex."""
     hexes = {str(where): color for where, color in _colors() if color.startswith("#")}
-    assert hexes == {
-        "agents/example-cloudflare.yaml": "#F38020",
-        "teams/jupyter.yaml": "#F37726",
-    }
+    assert hexes == {}
 
 
 def test_the_names_are_the_palettes():

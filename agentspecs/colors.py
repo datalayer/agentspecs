@@ -8,8 +8,8 @@ An agent, a team and an Op each carry a ``color``. It names a colour of the Data
 (`@datalayer/primer-addons`, its ``paletteColorNames``), so that the page drawing it gives the
 value the current theme and mode give that name: ``indigo`` is a deep indigo on a light page
 and a bright one on a dark page, in every theme. The names are the palette's roles — ``primary``,
-``glow``, ``surge``…, whose colour changes with the theme — and its hues, ``red`` … ``rose`` and
-``gray``, whose hue does not.
+``glow``, ``surge``…, whose colour changes with the theme — and its hues, ``red`` … ``rose``
+round the wheel and the neutrals ``slate``, ``gray`` and ``stone``, whose hue does not.
 
 A hex, ``#RGB`` or ``#RRGGBB``, is still taken, and drawn as it is in every theme: for a colour
 that is not one of the palette's, such as a brand's own.
@@ -42,7 +42,8 @@ COLOR_ROLE_NAMES: tuple[str, ...] = (
     "textMuted",
 )
 
-#: The palette's hues: each keeps its hue in every theme, deep on light and bright on dark.
+#: The palette's hues, round the wheel, then the neutrals: each keeps its hue in every theme, deep
+#: on light and bright on dark.
 COLOR_HUE_NAMES: tuple[str, ...] = (
     "red",
     "orange",
@@ -50,6 +51,7 @@ COLOR_HUE_NAMES: tuple[str, ...] = (
     "yellow",
     "lime",
     "green",
+    "emerald",
     "teal",
     "cyan",
     "sky",
@@ -57,9 +59,12 @@ COLOR_HUE_NAMES: tuple[str, ...] = (
     "indigo",
     "violet",
     "purple",
+    "fuchsia",
     "pink",
     "rose",
+    "slate",
     "gray",
+    "stone",
 )
 
 #: Every name of the palette, in its order: the roles, then the hues.
