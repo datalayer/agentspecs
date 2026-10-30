@@ -218,9 +218,10 @@ def reference_markdown(schema: Optional[Mapping[str, Any]] = None) -> str:
                 lines += [_cell(spec["description"]), ""]
             lines += [*_table(spec["properties"], list(spec.get("required") or [])), ""]
     if choices:
-        lines += ["## Choices", "", "| Name | Values |", "| --- | --- |"]
+        # Each choice is a heading, so that a link to it (`#recorditem`) is to an anchor
+        # Docusaurus knows: an `<a id>` inside a table cell is not collected as one.
+        lines += ["## Choices", ""]
         for name, spec in choices.items():
             values = ", ".join(f"`{value}`" for value in spec["enum"] if value != "")
-            lines.append(f'| <a id="{name.lower()}"></a>{name} | {values} |')
-        lines.append("")
+            lines += [f"### {name} {{#{name.lower()}}}", "", values, ""]
     return "\n".join(lines).rstrip() + "\n"

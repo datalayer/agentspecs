@@ -1367,33 +1367,114 @@ A UI plugin an agent or an application names, and the renderer it is exposed thr
 
 ## Choices
 
-| Name | Values |
-| --- | --- |
-| <a id="accent"></a>Accent | `green`, `rose`, `sky`, `lime`, `sun`, `violet` |
-| <a id="access"></a>Access | `read`, `write` |
-| <a id="actionclass"></a>ActionClass | `read`, `write`, `send`, `buy`, `delete`, `publish` |
-| <a id="actsas"></a>ActsAs | `owner`, `user` |
-| <a id="appkind"></a>AppKind | `chat`, `widget`, `decision`, `worker` |
-| <a id="balloondisplay"></a>BalloonDisplay | `history`, `current` |
-| <a id="behaviour"></a>Behaviour | `do_it`, `if_asked`, `ask_first`, `leave_to_me` |
-| <a id="checkstage"></a>CheckStage | `answer`, `tool_call` |
-| <a id="commerceprotocol"></a>CommerceProtocol | `ucp`, `acp` |
-| <a id="criterionkind"></a>CriterionKind | `metric`, `noul`, `choice`, `score` |
-| <a id="embedmode"></a>EmbedMode | `inline`, `bubble`, `panel`, `assistant` |
-| <a id="hostuser"></a>HostUser | `claimed`, `signed` |
-| <a id="layout"></a>Layout | `chat`, `page`, `split` |
-| <a id="pairrole"></a>PairRole | `business`, `personal_agent` |
-| <a id="papagents"></a>PapAgents | `any`, `registered` |
-| <a id="papinterface"></a>PapInterface | `agent`, `openapi`, `mcp`, `web` |
-| <a id="papreferencetype"></a>PapReferenceType | `openapi`, `mcp`, `web` |
-| <a id="papscopechanges"></a>PapScopeChanges | `none`, `reversible`, `irreversible` |
-| <a id="papsignin"></a>PapSignIn | `direct`, `device`, `mediated` |
-| <a id="papstandingaction"></a>PapStandingAction | `write`, `buy` |
-| <a id="recorditem"></a>RecordItem | `conversations`, `actions`, `decisions`, `approvals`, `checks`, `sources`, `outputs`, `feedback`, `audio`, `diffs`, `terminals` |
-| <a id="thememode"></a>ThemeMode | `light`, `dark`, `auto` |
-| <a id="themevariant"></a>ThemeVariant | `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop`, `vscode` |
-| <a id="triggertype"></a>TriggerType | `schedule`, `event`, `once` |
-| <a id="visibility"></a>Visibility | `private`, `invited`, `organization`, `link`, `public` |
-| <a id="voiceinput"></a>VoiceInput | `off`, `push_to_talk`, `hands_free` |
-| <a id="voiceoutput"></a>VoiceOutput | `off`, `on_request`, `always` |
-| <a id="voicewhere"></a>VoiceWhere | `auto`, `device`, `server` |
+### Accent {#accent}
+
+`green`, `rose`, `sky`, `lime`, `sun`, `violet`
+
+### Access {#access}
+
+`read`, `write`
+
+### ActionClass {#actionclass}
+
+`read`, `write`, `send`, `buy`, `delete`, `publish`
+
+### ActsAs {#actsas}
+
+`owner`, `user`
+
+### AppKind {#appkind}
+
+`chat`, `widget`, `decision`, `worker`
+
+### BalloonDisplay {#balloondisplay}
+
+`history`, `current`
+
+### Behaviour {#behaviour}
+
+`do_it`, `if_asked`, `ask_first`, `leave_to_me`
+
+### CheckStage {#checkstage}
+
+`answer`, `tool_call`
+
+### CommerceProtocol {#commerceprotocol}
+
+`ucp`, `acp`
+
+### CriterionKind {#criterionkind}
+
+`metric`, `noul`, `choice`, `score`
+
+### EmbedMode {#embedmode}
+
+`inline`, `bubble`, `panel`, `assistant`
+
+### HostUser {#hostuser}
+
+`claimed`, `signed`
+
+### Layout {#layout}
+
+`chat`, `page`, `split`
+
+### PairRole {#pairrole}
+
+`business`, `personal_agent`
+
+### PapAgents {#papagents}
+
+`any`, `registered`
+
+### PapInterface {#papinterface}
+
+`agent`, `openapi`, `mcp`, `web`
+
+### PapReferenceType {#papreferencetype}
+
+`openapi`, `mcp`, `web`
+
+### PapScopeChanges {#papscopechanges}
+
+`none`, `reversible`, `irreversible`
+
+### PapSignIn {#papsignin}
+
+`direct`, `device`, `mediated`
+
+### PapStandingAction {#papstandingaction}
+
+`write`, `buy`
+
+### RecordItem {#recorditem}
+
+`conversations`, `actions`, `decisions`, `approvals`, `checks`, `sources`, `outputs`, `feedback`, `audio`, `diffs`, `terminals`
+
+### ThemeMode {#thememode}
+
+`light`, `dark`, `auto`
+
+### ThemeVariant {#themevariant}
+
+`datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop`, `vscode`
+
+### TriggerType {#triggertype}
+
+`schedule`, `event`, `once`
+
+### Visibility {#visibility}
+
+`private`, `invited`, `organization`, `link`, `public`
+
+### VoiceInput {#voiceinput}
+
+`off`, `push_to_talk`, `hands_free`
+
+### VoiceOutput {#voiceoutput}
+
+`off`, `on_request`, `always`
+
+### VoiceWhere {#voicewhere}
+
+`auto`, `device`, `server`

@@ -607,17 +607,50 @@ One member asking another, directly, over a protocol. Distinct from `depends_on`
 
 ## Choices
 
-| Name | Values |
-| --- | --- |
-| <a id="actionclass"></a>ActionClass | `read`, `write`, `send`, `buy`, `delete`, `publish` |
-| <a id="answerkind"></a>AnswerKind | `words`, `table`, `chart`, `notebook`, `map`, `file`, `image`, `sources`, `choice`, `approval` |
-| <a id="backdrop"></a>Backdrop | `studio`, `hero`, `plain`, `space` |
-| <a id="inspector"></a>Inspector | `agent`, `tools`, `a2a`, `notebook`, `cost` |
-| <a id="pace"></a>Pace | `quick`, `steady`, `slow` |
-| <a id="scenecardkind"></a>SceneCardKind | `found`, `sign-in`, `approval`, `done`, `record` |
-| <a id="scenekind"></a>SceneKind | `team`, `scripted` |
-| <a id="teamplace"></a>TeamPlace | `browser`, `runtime` |
-| <a id="teamprotocol"></a>TeamProtocol | `a2a`, `mcp`, `acp` |
-| <a id="teamrole"></a>TeamRole | `coordinator`, `initiator`, `contributor`, `reviewer`, `finalizer` |
-| <a id="watchers"></a>Watchers | `visitors`, `signed-in`, `nobody` |
-| <a id="withheld"></a>Withheld | `credentials`, `ids`, `addresses`, `amounts` |
+### ActionClass {#actionclass}
+
+`read`, `write`, `send`, `buy`, `delete`, `publish`
+
+### AnswerKind {#answerkind}
+
+`words`, `table`, `chart`, `notebook`, `map`, `file`, `image`, `sources`, `choice`, `approval`
+
+### Backdrop {#backdrop}
+
+`studio`, `hero`, `plain`, `space`
+
+### Inspector {#inspector}
+
+`agent`, `tools`, `a2a`, `notebook`, `cost`
+
+### Pace {#pace}
+
+`quick`, `steady`, `slow`
+
+### SceneCardKind {#scenecardkind}
+
+`found`, `sign-in`, `approval`, `done`, `record`
+
+### SceneKind {#scenekind}
+
+`team`, `scripted`
+
+### TeamPlace {#teamplace}
+
+`browser`, `runtime`
+
+### TeamProtocol {#teamprotocol}
+
+`a2a`, `mcp`, `acp`
+
+### TeamRole {#teamrole}
+
+`coordinator`, `initiator`, `contributor`, `reviewer`, `finalizer`
+
+### Watchers {#watchers}
+
+`visitors`, `signed-in`, `nobody`
+
+### Withheld {#withheld}
+
+`credentials`, `ids`, `addresses`, `amounts`
