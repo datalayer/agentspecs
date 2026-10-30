@@ -10,6 +10,10 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
+## 0.0.139
+
+30 October 2026. A spec's `color` is a palette name — a role (`primary`, `accent`, `glow`…) or a hue (`red` … `rose`, `slate`, `gray`, `stone`) — or a `#RGB`/`#RRGGBB` hex; any other value is refused in a sentence that lists the names, which follow primer-addons' palette (`agentspecs.colors`, checked against it). Every colour of the catalogue is a name, so it follows the theme. code-explainer, asked to change a file, tries the edit and the Shield refuses it. The catalogue's verified sentences in a builder's words; the references with an anchor per choice.
+
 The documentation brought up to the specs: the Appspec page says the repository lent to a computer, the avatar and the voice, tests and what was verified, what is kept and where it goes, and lists the whole catalogue; the scenes page the scripted scenes and the real recording; a Frontend Tools page (the `cells` set, the example-output modes); the agents page the `harness` field; the models and outputs pages the current catalogue. The schema descriptions, and so the generated references, no longer cite planning ids; Gemini CLI's reason for not being offered and OpenCode's description say it in plain words. The references' choices are headings, so their links resolve (no broken anchors). The catalogue's verified sentences say where an application was tried in a builder's words (live on Datalayer, on its date), without cluster names or planning ids; so do the scenes' unverified lines, the speech register's notes and the pap protocol tools' note.
 
 ## 0.0.138
