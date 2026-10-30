@@ -511,7 +511,7 @@ class TestScenes:
 
 def test_a_team_names_harness_members_asked_over_acp_or_a2a():
     team = get_team("coding-agents")
-    assert team.referenced_harnesses() == ["claude-code", "codex"]
+    assert team.referenced_harnesses() == ["claude-code", "opencode"]
     assert all(member.is_harness for member in team.agents)
     base = {
         "id": "t", "version": "0.0.1", "name": "T", "description": "d",

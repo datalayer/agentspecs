@@ -32,7 +32,9 @@ entries:
       So only API keys are taken; a subscription login is refused. The npm package moved from
       @zed-industries (0.23.1, March 2026) to @agentclientprotocol. On a Datalayer runtime the end
       user holds no key and Anthropic is not reached: the model calls are AWS Bedrock's, on
-      Datalayer's account, metered in credits (decided 30 October 2026; not reviewed by counsel).
+      Datalayer's account, metered in credits. The user decided on 30 October 2026 to offer it to
+      customers on Datalayer that way. Counsel has not reviewed this entry's api_key_only reading
+      against that use.
   - harness: codex
     adapter: "@agentclientprotocol/codex-acp"
     version: 2.2.2

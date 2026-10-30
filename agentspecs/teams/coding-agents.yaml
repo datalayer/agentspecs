@@ -5,7 +5,7 @@
 # coding agent").
 #
 # Two harnesses, each an agent program over ACP behind the Shield: Claude
-# Code writes the change and Codex reviews it. A supervisor of the platform's
+# Code writes the change and OpenCode reviews it. A supervisor of the platform's
 # own hands each its task with a budget, a deadline and a manifest (the
 # orchestration contract), and gets back what a harness
 # answers over A2A or ACP: the plan, a `text/x-diff` artifact per file
@@ -15,16 +15,15 @@
 # application that runs the team, the organization's policy, the platform's
 # default.
 #
-# The members name no model. Locally a harness runs on the person's own key.
-# On Datalayer a harness's calls go through ai-inference, and Codex, which
-# speaks OpenAI's Responses API, is not offered: this team's reviewer seat is
-# refused there in a sentence. Its `tools` are its own, its MCP the gateway's lent.
+# The members name no model. Locally a harness runs on the person's own key;
+# on Datalayer both call through ai-inference, in credits, on no key of the
+# account's. Its `tools` are its own, its MCP the gateway's lent.
 
 id: coding-agents
 version: 0.0.1
 name: Coding Agents
 description: >-
-  Claude Code writes the change and Codex reviews it, each behind the
+  Claude Code writes the change and OpenCode reviews it, each behind the
   Shield: a supervisor delegates to them over ACP with a budget, a deadline
   and the files it may touch, and reads back their plans and their diffs.
 
@@ -65,7 +64,7 @@ agents:
       names; answer with what changed and why.
   - id: reviewer
     name: Reviewer
-    harness: codex
+    harness: opencode
     role: reviewer
     goal: >-
       Read the Coder's diff and say what is wrong with it, file by file; edit
