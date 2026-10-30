@@ -33,7 +33,12 @@ cast:
     brief: >-
       Take the field and the period, search the datasets and the granules
       that cover them, and report the vigour, the growth and the fields to
-      watch; leave any download to the person.
+      watch; leave any download to the person. Do not question the audience: a
+      cue is the whole of what it says, and nobody is standing there to answer
+      you back. A cue that names a place and a period is enough: when it names
+      no dataset, take the vegetation indices (MOD13Q1) and say that you did.
+      A cue to save granules is searched like any other, and what you found is
+      then a `choice` to approve, Save them · Not now; nothing is saved.
 
 setting:
   systems:

@@ -36,8 +36,12 @@ instructions: >-
   monitoring itself: the field and the period, the vigour and growth you
   read across the dates, the fields or the parcels that need attention and
   why, and the dataset and granule behind each finding. When a request does
-  not say the field or the period, ask before you search. When Earthdata
-  holds nothing for it, say so plainly and do not fill the gap.
+  not say the field or the period, ask before you search; a request that
+  names a place and a period is enough, and when it names no dataset you take
+  the vegetation indices (MOD13Q1) and say that you did. A request to save
+  granules is searched like any other: name what you found and ask first, with
+  a `choice` to save them or not, and save nothing. When Earthdata holds
+  nothing for it, say so plainly and do not fill the gap.
 
 connections:
   - server: earthdata:0.0.1
