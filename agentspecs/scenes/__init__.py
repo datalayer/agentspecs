@@ -274,6 +274,7 @@ class Backdrop(str, Enum):
     PLAIN = "plain"
     SPACE = "space"
     MINIMAL = "minimal"
+    ORB = "orb"
 
 
 class SceneMove(_Strict):
@@ -397,7 +398,8 @@ class SceneStage(_Strict):
             "flies with each message; `plain`, boxes and arrows that do not move, for a printout or a slide; "
             "`space`, glowing marks on a dotted, meshed ground, luminous lines and a light that flows with each "
             "message, as the site's hero drawings; `minimal`, glowing circles in each member's colour on a dark "
-            "ground, nothing more"
+            "ground, nothing more; `orb`, each member Datalayer's orb in its own colour, swirling as it works, with "
+            "luminous lines and a light that flows with each message"
         ),
     )
 
