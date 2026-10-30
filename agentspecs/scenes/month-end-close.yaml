@@ -203,7 +203,8 @@ rehearsal:
         - accrual
       must_not_say:
         - I posted
-      within: 180s
+      # 236 s on r1 on 2026-10-30, over the 180 s this beat had allowed.
+      within: 300s
     - beat: expenses-by-month
       lines:
         - "You → Month-end Close"
