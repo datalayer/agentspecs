@@ -4,7 +4,7 @@
 id: OPENAI_API_KEY
 version: 0.0.1
 name: OpenAI API Key
-description: API key for OpenAI's API. Required by the Codex harness run locally, which takes it in place of a ChatGPT login; the person's own. A Datalayer runtime takes no key: its model calls go through ai-inference.
+description: "API key for OpenAI's API. Required by the Codex harness run locally, which takes it in place of a ChatGPT login; the person's own. A Datalayer runtime takes no key: its model calls go through ai-inference."
 registrationUrl: https://platform.openai.com/api-keys
 tags:
   - authentication
