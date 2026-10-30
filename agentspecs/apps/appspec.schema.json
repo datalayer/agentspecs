@@ -1375,7 +1375,7 @@
           "type": "string"
         },
         "name": {
-          "description": "The scope, in OAuth syntax and never `poppy:`: `orders:read`",
+          "description": "The scope, in OAuth syntax: `orders:read`",
           "title": "Name",
           "type": "string"
         },

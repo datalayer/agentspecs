@@ -252,7 +252,6 @@ def test_a_company_scope_says_what_it_allows_with_its_hints() -> None:
         ("orders:read", "valid dictionary"),
         ({"name": "orders:read"}, "description"),
         ({"name": "orders:read", "description": " "}, "says what it allows"),
-        ({"name": "poppy:read", "description": "Read"}, "reserved `poppy:` prefix"),
         ({"name": "orders read", "description": "Read"}, "not an OAuth scope"),
         ({"name": "orders:read", "description": "Read", "changes": "some"}, "changes"),
     ],
@@ -262,11 +261,18 @@ def test_a_company_scope_is_checked(scope: object, says: str) -> None:
         app(company={"enabled": True, "scopes": [scope]})
 
 
-def test_a_scope_is_offered_once_and_a_connection_never_asks_for_poppy() -> None:
+def test_a_scope_is_offered_once() -> None:
     with pytest.raises(ValueError, match="named twice"):
         app(company={"enabled": True, "scopes": [READ, {**READ, "description": "Again"}]})
-    with pytest.raises(ValueError, match="reserved `poppy:` prefix"):
-        app(connections=[{**CONNECTION, "scopes": ["poppy:read"]}])
+
+
+def test_a_poppy_named_scope_is_a_scope_like_any_other() -> None:
+    spec = app(
+        company={"enabled": True, "scopes": [{"name": "poppy:orders", "description": "Read your orders"}]},
+        connections=[{**CONNECTION, "scopes": ["poppy:orders"]}],
+    )
+    assert spec.pap.company.scope_names() == ["poppy:orders"]
+    assert spec.pap.connections[0].scopes == ["poppy:orders"]
 
 
 def test_a_company_lists_the_tasks_it_does_not_offer_with_another_way() -> None:

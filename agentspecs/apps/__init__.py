@@ -311,10 +311,6 @@ class PapSignIn(str, Enum):
 def _pap_scope(value: str) -> str:
     if not _PAP_SCOPE.fullmatch(value):
         raise ValueError(f"{value!r} is not an OAuth scope")
-    if value.startswith("poppy:"):
-        # The protocol reserves the prefix and defines no scope (PAP draft 0.3 §4.4):
-        # a company names its own, `orders:read`.
-        raise ValueError(f"{value!r} uses the reserved `poppy:` prefix: name the company's own scope")
     return value
 
 
@@ -564,7 +560,7 @@ class AppPapCompanyScope(_Strict):
     classes of the tools behind the scope.
     """
 
-    name: str = Field(description="The scope, in OAuth syntax and never `poppy:`: `orders:read`")
+    name: str = Field(description="The scope, in OAuth syntax: `orders:read`")
     description: str = Field(description="What it allows, as a person reads it: `Read your orders`")
     changes: Optional[PapScopeChanges] = Field(
         default=None,

@@ -10,6 +10,8 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
+- **Personal Agent Protocol:** a `poppy:` scope name is accepted like any other, on a company and on a connection: draft 0.3 no longer reserves the prefix.
+
 ## 0.0.140
 
 30 October 2026. Two more scene backdrops. `minimal`: each member a glowing circle in its own colour, no name and no emoji, thin luminous lines between them, on a dark ground in every theme. `orb`: each member Datalayer's orb in its own colour, swirling as it works, with luminous lines and a light that flows with each message. `coding-agent-behind-the-shield` rehearsed on Datalayer and recorded: OpenCode read README.md and explained the repository; its edit was refused by the Shield under *Change a file*, README.md unchanged. exchange-desk's `app.py` and its spec say the same again.

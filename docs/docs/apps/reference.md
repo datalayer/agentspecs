@@ -937,7 +937,7 @@ A scope the company offers: its name, what it allows, and its hints (PAP draft 0
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
-| `name` (required) | text | The scope, in OAuth syntax and never `poppy:`: `orders:read` | — |
+| `name` (required) | text | The scope, in OAuth syntax: `orders:read` | — |
 | `description` (required) | text | What it allows, as a person reads it: `Read your orders` | — |
 | `changes` | [PapScopeChanges](#papscopechanges) | What its most consequential use changes: `none`, `reversible` or `irreversible` | empty |
 | `personal_data` | true or false | Whether it reads or changes the person's personal data | empty |
