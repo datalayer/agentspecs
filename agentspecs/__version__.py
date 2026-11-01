@@ -4,4 +4,4 @@
 
 """Agentspecs."""
 
-__version__ = "0.0.141"
+__version__ = "0.0.142"

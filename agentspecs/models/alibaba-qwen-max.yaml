@@ -17,6 +17,13 @@ tokens_limit: 32768
 # credentials. Nothing is required in the agent runtime environment.
 required_env_vars: []
 
+# https://www.alibabacloud.com/help/en/model-studio/model-pricing (read 2026-11-01).
+# The Singapore (International) region, which is the one called; implicit-cache
+# reads are $0.32, and the catalogue has no field for them.
+pricing:
+  input_usd_per_million: 1.6
+  output_usd_per_million: 6.4
+
 capabilities:
   - chat
   - tools
