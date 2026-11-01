@@ -169,6 +169,13 @@ frames = frames_with_organization(versions, owner="Acme")
 print(render_frames(compose_frames(["board-reporting", "org-house-style"], frames)))
 ```
 
+## In Datalayer
+
+Datalayer's Studio shows a Frame as a **Context**. Each card on its Context page
+is a Frame, and a [field-by-field map](https://datalayer.ai/docs/applications/context#contexts-are-frames)
+says where each field appears. Together with the documents an application answers
+from, this is what other products call *knowledge*.
+
 ## In Python
 
 ```python
