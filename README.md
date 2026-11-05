@@ -28,7 +28,7 @@ agentspecs/
 ├── cogs/             # Cog specs: an agent, equipped with Frames
 ├── harnesses/        # Harness specs: an agent program driven over ACP, and its register
 ├── ops/              # Op specs: Cogs, orchestrated, with a validation strategy
-├── guards/           # Guard specs: a check, extending a guardrail
+├── guards/           # Guard specs: a check, extending a Policy
 ├── gates/            # Gate specs: what happens on what the Guards found
 ├── tracks/           # Track specs: the evidence kept, and for how long
 ├── apps/             # Application specs (Appspec): a chat, a widget, a decision, a worker
@@ -41,7 +41,6 @@ agentspecs/
 ├── models/           # Model specs
 ├── model-providers/  # Model provider specs
 ├── memory/           # Memory backend specs
-├── guardrails/       # Guardrail policy specs
 ├── evals/            # Evaluator specs
 ├── benchmarks/       # Benchmark suite specs
 ├── strategies/       # Strategy specs (control-loop reasoning)
@@ -72,7 +71,6 @@ Current YAML file counts:
 - Models: 39
 - Model providers: 7
 - Memory backends: 4
-- Guardrails: 6
 - Evals: 9
 - Benchmarks: 8
 - Strategies: 4
@@ -251,8 +249,9 @@ Gates decide whether the work proceeds. Tracks make the work accountable.*
 - **Ops** (`agentspecs/ops`): `owner`, `cogs`, `frames`, `supervisor`, and a
   validation strategy — `guards` by stage (`preflight`, `in_flight`, `post_run`,
   `continuous`), `gates`, `track`. An Op without one is refused.
-- **Guards** (`agentspecs/guards`): **a Guard `extends` a guardrail** — the
-  policy it verifies — and adds `category` (the seven of the whitepaper),
+- **Guards** (`agentspecs/guards`): **a Guard `extends` a Policy** — the
+  rules it verifies, named by `policy` once resolved and read with
+  `policy_of` — and adds `category` (the seven of the whitepaper),
   `stages`, `method`, `check` and the `signals` it reports.
 - **Gates** (`agentspecs/gates`): `guards`, `when` (a condition on their
   signals, or `always`), `then` and `otherwise` (proceed, pause, retry, human
@@ -268,7 +267,7 @@ eight Gates and a seven-year Track.
 from agentspecs.ops import get_resolved_op
 
 op = get_resolved_op("op-sales-pipeline-board-report")
-op["guards"]["post_run"]     # each Guard, with the guardrail it extends
+op["guards"]["post_run"]     # each Guard, naming the Policy it extends
 op["gates"], op["track"]
 ```
 
@@ -371,7 +370,6 @@ Common fields:
 ### Other Catalogs
 
 - `memory`: memory backend options
-- `guardrails`: security and policy profiles
 - `evals`: evaluator definitions
 - `benchmarks`: benchmark suites (with evaluator dependencies)
 - `triggers`: reusable trigger templates
@@ -383,7 +381,7 @@ Common fields:
 A spec is built out of other specs rather than copied from them: `extends`
 (one parent, at most three deep, cycles refused) and `includes` (fragments).
 An agent extends an agent, a Frame extends a Frame, a Cog extends an agent,
-and a Guard extends a guardrail. Lists append and are deduplicated, a child's scalar wins, and
+and a Guard extends a Policy. Lists append and are deduplicated, a child's scalar wins, and
 `!remove` / `!replace` cover the rest. The rules are in
 [the documentation](https://agentspecs.datalayer.tech/modularity/) and applied
 by `agentspecs.compose`.

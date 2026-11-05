@@ -56,17 +56,18 @@ frames:
   - web-research:0.0.1
 ```
 
-A **[Guard](../guards)** extends a guardrail — the policy it verifies:
+A **[Guard](../guards)** extends a Policy — the rules it verifies:
 
 ```yaml
 # guards/sensitive-data-guard.yaml
 id: sensitive-data-guard
-extends: restricted-viewer:0.0.1
+extends: organization-baseline:0.0.1
 category: policy-safety
 stages: [in_flight, post_run]
-check: No output contains a field the guardrail denies.
+check: No output contains a credential or personal data.
 ```
 
 The Cog is the agent with what it says differently; the Frames are what it
-works under; the Guard is the guardrail with the check that it held. All are resolved when the catalogues are generated, so a runtime
-receives one flat spec.
+works under; the Guard names the Policy and the check that it held (the
+Policy is read through the catalogue, never merged in). All are resolved when
+the catalogues are generated, so a runtime receives one flat spec.

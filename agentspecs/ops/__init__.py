@@ -172,7 +172,7 @@ def resolve_op(op: Dict[str, Any]) -> Dict[str, Any]:
     - ``cogs``: each Cog's id, the agent it extends, its Frames and its kind;
     - ``frames`` and ``lineage``: the workflow-level Frames, and every Frame
       that orients the Op — those, and the ones its Cogs carry;
-    - ``guards``: by stage, each Guard resolved with the guardrail it extends;
+    - ``guards``: by stage, each Guard resolved, naming the Policy it extends;
     - ``frame_guards``: the checks the Frames themselves declare;
     - ``gates``: each Gate, with the signals it reads;
     - ``track``: the Track, with its retention in days.

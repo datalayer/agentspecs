@@ -24,7 +24,7 @@ judged by. Each of those is a catalogue of its own, documented under Agents:
 
 - Skills, Backend Tools, Frontend Tools, MCP Servers
 - Models, Model Providers, Memory, Env Vars
-- Hooks, Triggers, Guardrails
+- Hooks, Triggers
 - Evals, Benchmarks, Outputs, Notifications
 - Protocols, UI plugins and their renderers
 
@@ -52,8 +52,8 @@ Cogs that do the work and the validation strategy that says how it is
 verified. An Op is not complete without one.
 
 **[Guards](./guards)**, **[Gates](./gates)** and **[Tracks](./tracks)** — the
-accountability plane. Guards check, and each extends a guardrail: the policy
-it verifies. Gates decide what happens on what the Guards found. Tracks say
+accountability plane. Guards check, and each extends a [Policy](./policies):
+the rules it verifies. Gates decide what happens on what the Guards found. Tracks say
 what evidence is kept, and for how long.
 
 **[Applications](./apps)** — what a person uses and relies on: an agent with an
@@ -115,7 +115,6 @@ agentspecs/
 ├── frames/
 ├── frontend-tools/
 ├── gates/
-├── guardrails/
 ├── guards/
 ├── harnesses/
 ├── mcp-servers/

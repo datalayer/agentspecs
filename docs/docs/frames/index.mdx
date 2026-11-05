@@ -91,9 +91,8 @@ guards:
 | `outcome` | The intended result is produced. |
 
 `required` says whether the output counts before the Guard has passed. A Guard
-is not a [guardrail](../agents/guardrails): a guardrail bounds what an agent
-may *do* — its permissions, its data scope, its token limits — and a Guard
-checks what it *produced*.
+is not a [Policy](../policies): a Policy bounds what an agent may *do* — its
+rules, its limits, what it is lent — and a Guard checks what it *produced*.
 
 ## Inheritance
 
