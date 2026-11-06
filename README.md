@@ -345,6 +345,7 @@ Common fields:
 
 - `id`, `version`, `name`, `description`, `enabled`
 - `toolset` (the names of the tools of the set)
+- `streams` (the tools of the set that stream: called once, each keeps pushing events the harness tells the model as turns it did not ask for — the Pong arena's `arena_watch`)
 - `tags`, `icon`, `emoji`
 
 ### Marks: `icon` and `emoji`

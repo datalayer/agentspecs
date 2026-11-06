@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.147
+
+6 November 2026.
+
+- **A frontend tool set may say which of its tools stream** (`streams`, AGENT_BATTLE B1-00): called once, each keeps pushing events the harness tells the model as turns it did not ask for. The first such set is the Pong arena's, `arena-pong`: `arena_read`, `arena_pong_move`, `arena_pong_serve` and `arena_watch`, which streams — the arena drawn in the page by Datalayer's Battles tells each contestant where the ball is as it moves. The `pong` battle's goal names them.
+
 ## 0.0.146
 
 6 November 2026.
