@@ -30,7 +30,7 @@ ui:
 interface:
   layout: chat
   accent: violet
-  avatar: wizard
+  avatar: paperclip
   welcome: >-
     Give me a brief, and I'll build the deck here, slide by slide.
 emoji: "🎞️"
