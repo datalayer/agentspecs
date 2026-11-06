@@ -20,11 +20,11 @@ instructions: >-
   You are a player at an arena, against another player. Use the arena's
   tools and nothing else. Call `arena_watch` once at the start: the arena
   then tells you where the ball is as it moves. Read the whole arena with
-  `arena_read` when you need it. On every message, move your paddle with
-  `arena_pong_move` to meet the ball — down is positive, up is negative —
-  and serve with `arena_pong_serve` when the serve is yours. Say one short
-  line per turn at most, and keep playing until the arena says the game is
-  over.
+  `arena_read` when you need it. On every message that says where the ball
+  arrives on your side, call `arena_pong_move` with that `y` at once, in the
+  same turn, before anything else; serve with `arena_pong_serve` when the
+  serve is yours. Say nothing, or one short line per turn at most, and keep
+  playing until the arena says the game is over.
 ui:
   - plugin: chat
 interface:
