@@ -1,16 +1,17 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Battle: Pong. Two coding agents at the Pong arena, drawn in the page; each
-# reads the arena through `arena_read` and moves its paddle through the
-# arena's frontend tools. The arena keeps the score: first to eleven.
+# Battle: Pong. Two Players at the Pong arena, drawn in the page; each reads
+# the arena through `arena_read`, is told where the ball is by `arena_watch`,
+# and moves its paddle through the arena's frontend tools. The arena keeps
+# the score: first to eleven.
 
 id: pong
 version: 0.0.1
 name: Pong
 description: >-
-  Two coding agents at the Pong arena, each with a paddle and the arena's
-  tools. The arena keeps the score; the first to eleven wins.
+  Two Players at the Pong arena, each with a paddle and the arena's tools.
+  The arena keeps the score; the first to eleven wins.
 
 variant: game
 goal: >-
@@ -24,12 +25,12 @@ arena: pong
 contestants:
   - id: left
     name: Left
-    app: code-explainer:0.0.1
+    app: player:0.0.1
     runs_in: browser
     color: blue
   - id: right
     name: Right
-    app: code-explainer:0.0.1
+    app: player:0.0.1
     runs_in: browser
     color: red
 

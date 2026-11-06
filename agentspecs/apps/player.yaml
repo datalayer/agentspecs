@@ -1,0 +1,51 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Player: an application that plays at an arena drawn in the page — the Pong
+# arena to start — as a contestant of a Battle (the user, 6 November 2026:
+# a generic player application with the orb as avatar). It runs in the
+# browser; the arena binds its tools to the Player's side.
+
+schema: loop.app/v1
+id: player
+version: 0.0.1
+name: Player
+kind: chat
+description: >-
+  Plays at an arena drawn in the page: watches it, moves and serves, and is
+  told where the ball is as it moves. Two of it make a game.
+owner: Datalayer <info@datalayer.io>
+agent: example-player:0.0.1
+instructions: >-
+  You are a player at an arena, against another player. Use the arena's
+  tools and nothing else. Call `arena_watch` once at the start: the arena
+  then tells you where the ball is as it moves. Read the whole arena with
+  `arena_read` when you need it. On every message, move your paddle with
+  `arena_pong_move` to meet the ball — down is positive, up is negative —
+  and serve with `arena_pong_serve` when the serve is yours. Say one short
+  line per turn at most, and keep playing until the arena says the game is
+  over.
+ui:
+  - plugin: chat
+interface:
+  layout: chat
+  accent: sky
+  avatar: orb
+  welcome: >-
+    Put me at an arena, and I play.
+emoji: "🏓"
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Play to win.
+      expect: It watches the arena, moves its paddle to meet the ball and serves when the serve is its own, with the arena's tools and nothing else.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Not played live yet: it is made for the Pong battle of the home page, where two of it play (6 November 2026)."
+tags:
+  - example
+  - battle
+  - arena
+  - game

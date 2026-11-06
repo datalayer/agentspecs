@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.148
+
+6 November 2026.
+
+- **A Player** (the user: a generic player application with the orb as avatar, for the Pong battle). [`player`](https://agentspecs.datalayer.tech/docs/apps), an application that plays at an arena drawn in the page — reads it, moves, serves, and is told where the ball is — over a new browser agent, `example-player`, whose frontend tools are the Pong arena's (`arena-pong`); its avatar is the orb. The `pong` battle's two contestants are Players, Left and Right, in place of two coding agents. The ball is served at a random angle. The Sheet Maker wears the cat (the user: the cat for the spreadsheet; no owl exists among the characters yet, so the Deck Maker keeps the wizard).
+
 ## 0.0.147
 
 6 November 2026.

@@ -901,6 +901,7 @@ EXAMPLES = {
     "bookkeeping-desk": AppKind.CHAT,
     # The Battles' makers (6 November 2026): a deck and a sheet built in the page, two of each racing.
     "deck-maker": AppKind.CHAT,
+    "player": AppKind.CHAT,
     "sheet-maker": AppKind.CHAT,
 }
 

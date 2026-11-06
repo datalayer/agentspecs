@@ -30,7 +30,7 @@ ui:
 interface:
   layout: chat
   accent: green
-  avatar: wizard
+  avatar: cat
   welcome: >-
     Give me a brief, and I'll fill the sheet here, cell by cell.
 emoji: "📊"
