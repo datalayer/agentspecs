@@ -1,0 +1,46 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Battle: The invoice race. Two Sales & Accounting pairs, the same question
+# at the same instant, on the same Odoo books; the first pair to list the
+# open invoices and the total due wins. A race: the clock ends it otherwise,
+# a draw said as such.
+
+id: invoice-race
+version: 0.0.1
+name: The invoice race
+description: >-
+  Two Sales & Accounting pairs get the same question at the same instant,
+  on the same Odoo books. The first to list the open invoices, and what is
+  due in total, wins.
+
+variant: race
+goal: >-
+  Which customer invoices are still open, and how much is due in total?
+clock_seconds: 120
+
+contestants:
+  - id: blue
+    name: Blue
+    scene: sales-and-accounting:0.0.1
+    color: blue
+  - id: red
+    name: Red
+    scene: sales-and-accounting:0.0.1
+    color: red
+
+referee:
+  decides_by: first_done
+
+rehearsal:
+  expects:
+    - a verdict within the clock
+    - the winner's last turn lists the open invoices and a total
+
+tags:
+  - example
+  - race
+  - odoo
+  - finance
+icon: stopwatch
+emoji: "🏁"

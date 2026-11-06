@@ -1,0 +1,105 @@
+---
+sidebar_position: 1
+title: Battles
+---
+
+# Battles
+
+A Battle is two or more contestants — each a [scene](../scenes) of the
+catalogue played whole, or one [application](../apps) — given the same goal at
+the same instant, under one clock, and a referee that says who won. It
+*composes* scenes: a contestant that is a scene plays as it does on its own
+stage, side by side with the others, with its transcript, its graph and its
+rehearsal. There is no second notion beside Scenes.
+
+```yaml
+# battles/invoice-race.yaml
+id: invoice-race
+version: 0.0.1
+name: The invoice race
+
+variant: race              # race | game | challenge
+goal: Which customer invoices are still open, and how much is due in total?
+clock_seconds: 120
+
+contestants:
+  - id: blue
+    scene: sales-and-accounting:0.0.1   # a scene of the catalogue, played whole …
+    color: blue
+  - id: red
+    scene: sales-and-accounting:0.0.1   # … or an application: `app: accounting:0.0.1`
+    color: red
+
+referee:
+  decides_by: first_done   # first_done | score | measure
+```
+
+## Three variants, one referee
+
+| Variant | What happens | Decided by |
+| --- | --- | --- |
+| `race` | Every contestant starts on the goal at once; the first to report done wins. The clock ending first is a draw, said as such. | `first_done` |
+| `game` | The contestants play an `arena` drawn in the page — `pong`, `invaders` — through its frontend tools; the arena keeps the score. | `score` |
+| `challenge` | Every contestant runs to the clock; a [Guard](../guards) measures each outcome with a number signal between 0 and 1; the highest wins, equal measures tie. | `measure` |
+
+A variant is decided one way: a race by `first_done`, a game by `score`, a
+challenge by `measure`. A referee that says otherwise is refused as the Battle
+is read.
+
+## Fields
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `version`, `name`, `description` | As on every spec. |
+| `variant` | `race`, `game` or `challenge`. Required. |
+| `goal` | What every contestant is told, in the same words. Required, never empty. |
+| `clock_seconds` | How long the Battle may run; at least ten seconds. Required. |
+| `contestants` | Two or more; each has its own `id`. Required. |
+| `contestants[].scene` | A scene of the catalogue, `id` or `id:version`, played whole. One of `scene` and `app`, never both. |
+| `contestants[].app` | An application of the catalogue, `id` or `id:version`; `runs_in` says `browser` or `runtime`. A scene's cast says where it runs, so `runs_in` is refused on a scene. |
+| `contestants[].name`, `color` | What the audience sees; the colour is a palette name or a hex. |
+| `referee.decides_by` | `first_done`, `score` or `measure`. Required. |
+| `referee.measure` | For `measure`: the Guard whose number signal scores each outcome, `id` or `id:version`. Required then, refused otherwise. |
+| `arena` | For a game: `pong` or `invaders`. Required then, refused otherwise. |
+| `rehearsal.expects` | What a played Battle has to show, one sentence each. |
+| `enabled`, `tags`, `icon`, `emoji` | As on every spec. |
+
+Every scene, application and Guard a Battle names is in the catalogue, at the
+version it names when it names one; a Battle that names one the catalogue does
+not hold, or a measure Guard with no number signal, is refused.
+
+## The catalogue
+
+| Battle | Variant | Contestants | Decided by |
+| --- | --- | --- | --- |
+| `invoice-race` | race | two Sales & Accounting pairs on the same Odoo books | the first to list the open invoices and the total due |
+| `pong` | game | two coding agents at the Pong arena | the arena's score, first to eleven |
+| `report-challenge` | challenge | two Month-end Close agents on the same books, three minutes | the Report Quality Guard's `quality` signal |
+
+The Report Quality Guard (`guards/report-quality-guard.yaml`) is an `outcome`
+Guard a Cog judges after the run: completeness against what was asked and
+grounding in the calls the run made, `quality` between 0 and 1, and
+`ungrounded_figures`, how many figures no call accounts for.
+
+## The arenas
+
+A game's arena is a UI plugin of the catalogue drawn in the conversation and
+the frontend tools the contestants call through the page — the seam the
+`cells` tools use, so no new transport. Pong: `arena_pong_move`,
+`arena_pong_serve`, `arena_read`; first to eleven. Space Invaders:
+`arena_invaders_move`, `arena_invaders_fire`, `arena_read`; the wave cleared
+or a life lost ends it. The page refuses a move out of turn or more than one
+per tick, so a faster model does not win by flooding, and records every move
+with its tick.
+
+## Python
+
+```python
+from agentspecs.battles import get_battle, list_battles, BattleVariant
+
+battle = get_battle("invoice-race")
+battle.variant            # BattleVariant.RACE
+battle.decides_by         # BattleDecision.FIRST_DONE
+[c.plays for c in battle.contestants]   # ['sales-and-accounting:0.0.1', ...]
+list_battles(BattleVariant.GAME)        # [pong]
+```
