@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.146
+
+6 November 2026.
+
+- **Battles in a deck or a sheet** (the user: battles on the home page using the decks and cells visuals). A race or a challenge may name an `arena` too, the visual its contestants work in: a `deck` each builds slide by slide, a `sheet` each fills cell by cell; a game still needs an arena that keeps a score (`pong`, `invaders`), and a game in a `deck` is refused. Two applications of the catalogue play them in the browser, [`deck-maker`](https://agentspecs.datalayer.tech/docs/apps) and [`sheet-maker`](https://agentspecs.datalayer.tech/docs/apps), and two races: [`deck-race`](https://agentspecs.datalayer.tech/docs/battles), *Create a deck*, and `sheet-race`, *Create a spreadsheet*, the first to finish winning. The catalogue holds five battles.
+
 ## 0.0.145
 
 6 November 2026.

@@ -60,7 +60,7 @@ is read.
 | `contestants[].name`, `color` | What the audience sees; the colour is a palette name or a hex. |
 | `referee.decides_by` | `first_done`, `score` or `measure`. Required. |
 | `referee.measure` | For `measure`: the Guard whose number signal scores each outcome, `id` or `id:version`. Required then, refused otherwise. |
-| `arena` | For a game: `pong` or `invaders`. Required then, refused otherwise. |
+| `arena` | What is drawn in the page: a game's arena, which keeps the score (`pong`, `invaders`; required for a game); or the visual a race's or a challenge's contestants work in, a `deck` each builds slide by slide or a `sheet` each fills cell by cell. |
 | `rehearsal.expects` | What a played Battle has to show, one sentence each. |
 | `enabled`, `tags`, `icon`, `emoji` | As on every spec. |
 
@@ -75,6 +75,8 @@ not hold, or a measure Guard with no number signal, is refused.
 | `invoice-race` | race | two Sales & Accounting pairs on the same Odoo books | the first to list the open invoices and the total due |
 | `pong` | game | two coding agents at the Pong arena | the arena's score, first to eleven |
 | `report-challenge` | challenge | two Month-end Close agents on the same books, three minutes | the Report Quality Guard's `quality` signal |
+| `deck-race` | race | two Deck Makers in the browser, the same brief, each building a deck in the page | the first to finish |
+| `sheet-race` | race | two Sheet Makers in the browser, the same brief, each filling a spreadsheet in the page | the first to finish |
 
 The Report Quality Guard (`guards/report-quality-guard.yaml`) is an `outcome`
 Guard a Cog judges after the run: completeness against what was asked and
@@ -82,6 +84,15 @@ grounding in the calls the run made, `quality` between 0 and 1, and
 `ungrounded_figures`, how many figures no call accounts for.
 
 ## The arenas
+
+A game's arena keeps the score. A race or a challenge may name an arena too:
+the visual its contestants work in, drawn in the page under each — a `deck`
+built with `deck_set_title` and `deck_add_slide` (a title, a section, bullets,
+a statement, a closing), read back with `deck_read`; a `sheet` filled with
+`sheet_write_range`, read with `sheet_read_range`, charted with
+`sheet_insert_chart`. Deck Maker and Sheet Maker (`apps/deck-maker.yaml`,
+`apps/sheet-maker.yaml`) are the applications of the catalogue that play
+them, in the browser.
 
 A game's arena is a UI plugin of the catalogue drawn in the conversation and
 the frontend tools the contestants call through the page — the seam the

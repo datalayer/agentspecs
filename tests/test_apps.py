@@ -899,6 +899,9 @@ EXAMPLES = {
     "sign-in-desk": AppKind.CHAT,
     "returns-desk": AppKind.CHAT,
     "bookkeeping-desk": AppKind.CHAT,
+    # The Battles' makers (6 November 2026): a deck and a sheet built in the page, two of each racing.
+    "deck-maker": AppKind.CHAT,
+    "sheet-maker": AppKind.CHAT,
 }
 
 #: Each of the SDK's seven recorded PAP journeys (agent-runtimes' trace examples) and the example it became.

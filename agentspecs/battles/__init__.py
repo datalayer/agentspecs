@@ -19,8 +19,8 @@ decides.
 
 A Battle refuses, as it is read: fewer than two contestants, or two with one
 id; a contestant that names a scene and an app, or neither; a scene, an app or
-a Guard the catalogue does not hold; a game without an arena, and an arena on
-anything else; a referee that does not decide as its variant does — a race by
+a Guard the catalogue does not hold; a game without an arena, or in one that
+keeps no score; a referee that does not decide as its variant does — a race by
 `first_done`, a game by `score`, a challenge by `measure`; a challenge without
 a measure Guard, or one whose Guard has no number signal; a clock under ten
 seconds; an empty goal.
@@ -55,10 +55,22 @@ class BattleVariant(str, Enum):
 
 
 class BattleArena(str, Enum):
-    """The games a Battle may be played in, each a UI plugin and its frontend tools."""
+    """The arenas a Battle may be played in, each drawn in the page with its frontend tools.
+
+    A game is played in one and decided by its score (`pong`, `invaders`). A
+    race or a challenge may name one too, as the visual the contestants work
+    in: a `deck` each builds slide by slide, a `sheet` each fills cell by
+    cell (the user, 6 November 2026).
+    """
 
     PONG = "pong"
     INVADERS = "invaders"
+    DECK = "deck"
+    SHEET = "sheet"
+
+
+#: The arenas that keep a score: the only ones a game may be played in.
+SCORED_ARENAS = frozenset({BattleArena.PONG, BattleArena.INVADERS})
 
 
 class BattleDecision(str, Enum):
@@ -169,7 +181,10 @@ class BattleSpec(_Strict):
     clock_seconds: int = Field(..., description=f"How long it may run, at least {MIN_CLOCK_SECONDS}")
     contestants: List[BattleContestant] = Field(..., description="Two or more")
     referee: BattleReferee = Field(..., description="How the winner is decided")
-    arena: Optional[BattleArena] = Field(default=None, description="For a game: which arena")
+    arena: Optional[BattleArena] = Field(
+        default=None,
+        description="The arena drawn in the page: a game's, which keeps the score; a deck or a sheet the contestants work in",
+    )
     rehearsal: BattleRehearsal = Field(default_factory=BattleRehearsal, description="Its tests")
     enabled: bool = Field(default=True, description="Whether it may be played today")
     tags: List[str] = Field(default_factory=list)
@@ -209,9 +224,12 @@ class BattleSpec(_Strict):
                 f"not `{self.referee.decides_by.value}`"
             )
         if self.variant is BattleVariant.GAME and self.arena is None:
-            raise ValueError("a game names its arena: " + ", ".join(arena.value for arena in BattleArena))
-        if self.variant is not BattleVariant.GAME and self.arena is not None:
-            raise ValueError(f"only a game has an arena; a {self.variant.value} has none")
+            raise ValueError("a game names its arena: " + ", ".join(arena.value for arena in SCORED_ARENAS))
+        if self.variant is BattleVariant.GAME and self.arena not in SCORED_ARENAS:
+            raise ValueError(
+                f"a game is played in an arena that keeps a score, {', '.join(sorted(a.value for a in SCORED_ARENAS))}; "
+                f"`{self.arena.value}` keeps none"
+            )
         return self
 
     @property
@@ -283,6 +301,7 @@ __all__ = [
     "BATTLE_CATALOGUE",
     "DECISION_OF_VARIANT",
     "MIN_CLOCK_SECONDS",
+    "SCORED_ARENAS",
     "BattleArena",
     "BattleContestant",
     "BattleDecision",

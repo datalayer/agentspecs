@@ -1,0 +1,50 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Deck Maker: an application that builds a presentation in the page, slide
+# by slide, with the deck arena's tools (a Battle's `arena: deck`, the user,
+# 6 November 2026). It runs in the browser; the deck it builds is drawn
+# under it as Datalayer Decks draws one.
+
+schema: loop.app/v1
+id: deck-maker
+version: 0.0.1
+name: Deck Maker
+kind: chat
+description: >-
+  Builds a short presentation in the page from a brief, slide by slide, with
+  the deck drawn as it grows: a title, a few points, a closing word.
+owner: Datalayer <info@datalayer.io>
+agent: example-decks:0.0.1
+instructions: >-
+  You make presentations. Given a brief, build the deck with your tools and
+  nothing else: `deck_set_title` once, for the title and a subtitle; then
+  `deck_add_slide` for each slide — a `section` to open a part, `bullets`
+  with three to five short items, a `statement` for one sentence that
+  carries, a `closing` with what to do next. Keep it to five slides or
+  fewer. Read it back with `deck_read` when you need to. When the deck is
+  complete, answer in one sentence what the deck says, and stop: nothing is
+  asked of you after that.
+ui:
+  - plugin: chat
+interface:
+  layout: chat
+  accent: violet
+  avatar: wizard
+  welcome: >-
+    Give me a brief, and I'll build the deck here, slide by slide.
+emoji: "🎞️"
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Build it from the brief.
+      expect: It uses its tools, and nothing else, and says in one sentence what it made.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Not played live yet: it is made for the Battles of the home page, where two of it race for the same brief (6 November 2026)."
+tags:
+  - example
+  - decks
+  - battle

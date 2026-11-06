@@ -62,8 +62,8 @@ Current YAML file counts:
 - Guards: 13
 - Gates: 8
 - Tracks: 4
-- Battles: 3
-- Applications: 4
+- Battles: 5
+- Applications: 6
 - Fragments: 1
 - MCP servers: 14
 - Skills: 7

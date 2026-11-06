@@ -12,6 +12,7 @@ from pydantic import ValidationError
 from agentspecs.battles import (
     BATTLE_CATALOGUE,
     MIN_CLOCK_SECONDS,
+    SCORED_ARENAS,
     BattleArena,
     BattleDecision,
     BattleError,
@@ -41,9 +42,16 @@ def _battle(**changes):
 
 
 class TestCatalogue:
-    def test_three_battles_one_per_variant(self):
-        assert sorted(BATTLE_CATALOGUE) == ["invoice-race", "pong", "report-challenge"]
+    def test_five_battles_every_variant(self):
+        assert sorted(BATTLE_CATALOGUE) == ["deck-race", "invoice-race", "pong", "report-challenge", "sheet-race"]
         assert {battle.variant for battle in list_battles()} == set(BattleVariant)
+
+    def test_the_deck_and_sheet_races_are_played_in_an_arena_by_apps_in_the_browser(self):
+        for identity, arena in (("deck-race", BattleArena.DECK), ("sheet-race", BattleArena.SHEET)):
+            battle = get_battle(identity)
+            assert battle.variant is BattleVariant.RACE and battle.arena is arena
+            assert [c.app for c in battle.contestants] == [f"{arena.value}-maker:0.0.1"] * 2
+            assert all(c.runs_in == "browser" for c in battle.contestants)
 
     def test_each_is_decided_as_its_variant(self):
         assert get_battle("invoice-race").decides_by is BattleDecision.FIRST_DONE
@@ -92,9 +100,14 @@ class TestRefusals:
         with pytest.raises(ValidationError, match="names its arena"):
             BattleSpec(**_battle(variant="game", referee={"decides_by": "score"}))
 
-    def test_an_arena_on_a_race(self):
-        with pytest.raises(ValidationError, match="only a game has an arena"):
-            BattleSpec(**_battle(arena="pong"))
+    def test_a_game_in_an_arena_that_keeps_no_score(self):
+        with pytest.raises(ValidationError, match="keeps none"):
+            BattleSpec(**_battle(variant="game", referee={"decides_by": "score"}, arena="deck"))
+
+    def test_a_race_may_be_played_in_a_deck_or_a_sheet(self):
+        assert BattleSpec(**_battle(arena="deck")).arena is BattleArena.DECK
+        assert BattleSpec(**_battle(arena="sheet")).arena is BattleArena.SHEET
+        assert SCORED_ARENAS == {BattleArena.PONG, BattleArena.INVADERS}
 
     def test_a_race_decided_by_score(self):
         with pytest.raises(ValidationError, match="a race is decided by `first_done`"):

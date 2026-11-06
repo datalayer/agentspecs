@@ -1,0 +1,48 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Battle: The deck race. Two Deck Makers in the browser, the same brief at
+# the same instant, each building its deck in the page; the first to say its
+# deck is complete wins (the user, 6 November 2026: battles using the decks
+# visuals).
+
+id: deck-race
+version: 0.0.1
+name: Create a deck
+description: >-
+  Two Deck Makers get the same brief at the same instant and build a deck
+  each, drawn in the page as it grows. The first to finish wins.
+
+variant: race
+goal: >-
+  Create a five-slide deck that pitches a weekly team newsletter: why it
+  helps, what goes in it, who writes what, and a closing call to sign up.
+clock_seconds: 180
+arena: deck
+
+contestants:
+  - id: blue
+    name: Blue
+    app: deck-maker:0.0.1
+    runs_in: browser
+    color: blue
+  - id: red
+    name: Red
+    app: deck-maker:0.0.1
+    runs_in: browser
+    color: red
+
+referee:
+  decides_by: first_done
+
+rehearsal:
+  expects:
+    - each deck has a title and at least three slides
+    - a verdict within the clock
+
+tags:
+  - example
+  - race
+  - decks
+icon: project
+emoji: "🃏"
