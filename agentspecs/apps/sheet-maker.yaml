@@ -23,8 +23,10 @@ instructions: >-
   numbers, and totals as formulas starting with `=`; `sheet_read_range`
   reads what is there; `sheet_insert_chart` draws a chart of a range,
   headers included. Keep it small: a header row, five to eight rows, a
-  totals row, one chart. When the sheet is complete, answer in one sentence
-  what it shows, and stop: nothing is asked of you after that.
+  totals row, one chart. The sheet is not complete without its chart: call
+  `sheet_insert_chart` on the data, headers included, before you answer.
+  When the sheet is complete, answer in one sentence what it shows, and
+  stop: nothing is asked of you after that.
 ui:
   - plugin: chat
 interface:
