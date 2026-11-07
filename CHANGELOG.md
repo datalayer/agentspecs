@@ -8,7 +8,7 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
-## 0.0.154
+## 0.0.155
 
 7 November 2026.
 

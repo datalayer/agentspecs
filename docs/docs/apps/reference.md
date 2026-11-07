@@ -56,7 +56,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `tags` | list of text |  | — |
 | `icon` | text | Icon identifier | `"apps"` |
 | `emoji` | text | Its face: one emoji, shown wherever the application appears | `"👀"` |
-| `avatar` | text | Its avatar, as people keep theirs on their profile: `emoji:<emoji>`, or `@datalayer/icons-react:<Name>Icon` for a drawing of the set. Its emoji stands for it when unsaid, and where only text goes | empty |
+| `avatar` | text | Its avatar, as people keep theirs on their profile: `emoji:<emoji>`, or `@datalayer/icons-react:<Name>Icon` for a drawing of the set. Its emoji stands for it when unsaid, and where only text goes. Published as a company, it is served to personal agents as its logo (`organization.logo_uri`) | empty |
 | `banner` | text | Its banner, by name, from the set people choose theirs from on their profile. The one its id seeds when unsaid | empty |
 
 ## Examples
@@ -917,12 +917,13 @@ Another way to do an excluded task (PAP draft 0.3 §8.2): instructions, referenc
 
 ### AppPapCompany
 
-The application is a company personal agents work with.
+The application is a company personal agents work with. Published at PAP 0.3 as published: the application's `avatar` is served to personal agents as the company's logo (`organization.logo_uri`), and `sign_in_disabled` turns sign-in off for them (`auth.disabled`), the company then answering them signed out only.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
 | `enabled` | true or false | Whether it publishes itself as a company at Ship | `false` |
 | `signed_out` | true or false | Whether a personal agent may ask before signing in | `true` |
+| `sign_in_disabled` | true or false | Whether it offers personal agents no sign-in (`auth.disabled`): they ask only what anybody may ask, in nobody's account, whatever scopes it lists for its other clients | `false` |
 | `interfaces` | list of [PapInterface](#papinterface) | How personal agents reach it: `agent`, `openapi`, `mcp`, and `web` — its pages, a browser joining the person's Session through the one-time-code form (PAP draft 0.3 §6) | — |
 | `scopes` | list of [AppPapCompanyScope](#apppapcompanyscope) | The scopes it offers, each with what it allows and its hints | — |
 | `excluded_tasks` | list of [AppPapExcludedTask](#apppapexcludedtask) | Tasks it does not offer through the protocol, each with another way when there is one | — |

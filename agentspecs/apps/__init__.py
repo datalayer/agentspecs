@@ -569,10 +569,22 @@ class AppPapExcludedTask(_Strict):
 
 
 class AppPapCompany(_Strict):
-    """The application is a company personal agents work with."""
+    """The application is a company personal agents work with.
+
+    Published at PAP 0.3 as published: the application's `avatar` is served to personal agents
+    as the company's logo (`organization.logo_uri`), and `sign_in_disabled` turns sign-in off
+    for them (`auth.disabled`), the company then answering them signed out only.
+    """
 
     enabled: bool = Field(default=False, description="Whether it publishes itself as a company at Ship")
     signed_out: bool = Field(default=True, description="Whether a personal agent may ask before signing in")
+    sign_in_disabled: bool = Field(
+        default=False,
+        description=(
+            "Whether it offers personal agents no sign-in (`auth.disabled`): they ask only what anybody "
+            "may ask, in nobody's account, whatever scopes it lists for its other clients"
+        ),
+    )
     interfaces: List[PapInterface] = Field(
         default_factory=lambda: [PapInterface.AGENT],
         description=(
@@ -641,6 +653,11 @@ class AppPapCompany(_Strict):
     def _coherent(self) -> "AppPapCompany":
         if self.enabled and not self.scopes and not self.signed_out:
             raise ValueError("a company that admits nobody signed out offers at least one scope")
+        if self.enabled and self.sign_in_disabled and not self.signed_out:
+            raise ValueError(
+                "a company that offers personal agents no sign-in answers them signed out: "
+                "say `signed_out`, or offer sign-in"
+            )
         if not self.interfaces or len(set(self.interfaces)) != len(self.interfaces):
             raise ValueError("a company is reached in at least one way, each once")
         if self.personal_agents is PapAgents.REGISTERED and not self.registered_agents:
@@ -3503,7 +3520,8 @@ class AppSpec(_Strict):
         description=(
             "Its avatar, as people keep theirs on their profile: `emoji:<emoji>`, or "
             "`@datalayer/icons-react:<Name>Icon` for a drawing of the set. "
-            "Its emoji stands for it when unsaid, and where only text goes"
+            "Its emoji stands for it when unsaid, and where only text goes. "
+            "Published as a company, it is served to personal agents as its logo (`organization.logo_uri`)"
         ),
         json_schema_extra=_AVATAR_SCHEMA,
     )
