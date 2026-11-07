@@ -12,7 +12,7 @@ description: GitHub repository operations (issues, PRs, code search)
 documentation_url: https://github.com/github/github-mcp-server
 signup_url: https://github.com/signup
 api_key_url: https://github.com/settings/tokens
-setup: "A personal access token with the scopes of what the agent may do, in GITHUB_TOKEN; the server runs in Docker."
+setup: "A [personal access token](https://github.com/settings/tokens) with the scopes of what the agent may do, in `GITHUB_TOKEN`; the server runs in Docker, see [github-mcp-server](https://github.com/github/github-mcp-server)."
 
 command: docker
 args:

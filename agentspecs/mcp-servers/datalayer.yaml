@@ -13,7 +13,7 @@ description: Read, edit and run Jupyter notebooks on Datalayer, with sandboxes a
 documentation_url: https://github.com/datalayer/datalayer-mcp-server
 signup_url: https://datalayer.ai/signin
 api_key_url: https://datalayer.ai/settings/api-keys
-setup: "Datalayer's own gateway, reached at its url with your Datalayer API key as the bearer: create one under Settings, API keys, and put it in DATALAYER_API_KEY."
+setup: "Datalayer's own gateway, reached at its url with your Datalayer API key as the bearer: create one under [Settings, API keys](https://datalayer.ai/settings/api-keys) and put it in `DATALAYER_API_KEY`."
 
 # A hosted server, reached by the runtime itself over Streamable HTTP: no
 # command, the url and the headers sent with every request. (It went through

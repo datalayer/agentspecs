@@ -9,7 +9,7 @@ description: Access NASA Earthdata search and metadata capabilities
 documentation_url: https://github.com/datalayer/earthdata-mcp-server
 signup_url: https://urs.earthdata.nasa.gov/users/new
 api_key_url: https://datalayer.ai/settings/api-keys
-setup: "Searching NASA's catalogue is anonymous, through Datalayer's gateway with your Datalayer API key; a download runs in the code sandbox with an Earthdata Login (EARTHDATA_USERNAME, EARTHDATA_PASSWORD)."
+setup: "Searching NASA's catalogue is anonymous, through Datalayer's gateway with your [Datalayer API key](https://datalayer.ai/settings/api-keys); a download runs in the code sandbox with an [Earthdata Login](https://urs.earthdata.nasa.gov/users/new) (`EARTHDATA_USERNAME`, `EARTHDATA_PASSWORD`)."
 
 # The Datalayer MCP server (the gateway behind `datalayer`) with its
 # `earthdata` toolset, as `odoo-accounting` reaches the books: `only=` asks

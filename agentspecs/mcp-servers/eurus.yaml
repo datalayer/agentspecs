@@ -6,7 +6,7 @@ version: 0.0.1
 name: Eurus Climate MCP
 description: Climate and reanalysis analysis tools for spatial workflows
 # Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
-setup: "Runs the eurus-mcp command where it is installed; no account and no key."
+setup: "Runs the `eurus-mcp` command where it is installed; no account and no key."
 
 command: eurus-mcp
 args: []

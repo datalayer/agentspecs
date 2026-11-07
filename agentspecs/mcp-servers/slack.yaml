@@ -9,7 +9,7 @@ description: Slack messaging and channel operations
 documentation_url: https://api.slack.com/docs
 signup_url: https://slack.com/get-started
 api_key_url: https://api.slack.com/apps
-setup: "A Slack app with a bot token (SLACK_BOT_TOKEN), the workspace id (SLACK_TEAM_ID) and the channels it may read (SLACK_CHANNEL_IDS)."
+setup: "A [Slack app](https://api.slack.com/apps) with a bot token (`SLACK_BOT_TOKEN`), the workspace id (`SLACK_TEAM_ID`) and the channels it may read (`SLACK_CHANNEL_IDS`); see [Slack's docs](https://api.slack.com/docs)."
 
 command: npx
 args:

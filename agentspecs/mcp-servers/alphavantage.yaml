@@ -9,7 +9,7 @@ description: Financial market data and stock information
 documentation_url: https://www.alphavantage.co/documentation/
 signup_url: https://www.alphavantage.co/support/#api-key
 api_key_url: https://www.alphavantage.co/support/#api-key
-setup: "A free key, sent by email from Alpha Vantage's support page; put it in ALPHAVANTAGE_API_KEY."
+setup: "A free key, sent by email from [Alpha Vantage's support page](https://www.alphavantage.co/support/#api-key); put it in `ALPHAVANTAGE_API_KEY`. The API is documented [there](https://www.alphavantage.co/documentation/)."
 
 command: uvx
 args:

@@ -17,7 +17,7 @@ description: >-
 documentation_url: https://github.com/datalayer/datalayer-mcp-server
 signup_url: https://datalayer.ai/signin
 api_key_url: https://datalayer.ai/settings/api-keys
-setup: "Datalayer's gateway with its odoo-accounting toolset, on Datalayer's own books; your Datalayer API key as the bearer."
+setup: "Datalayer's gateway with its odoo-accounting toolset, on Datalayer's own books: your Datalayer API key as the bearer, made under [Settings, API keys](https://datalayer.ai/settings/api-keys) and put in `DATALAYER_API_KEY`."
 
 # The same hosted server as `datalayer`, the toolset chosen in the URL.
 # `only=` asks for exactly that toolset (and the gateway's always-on ones):

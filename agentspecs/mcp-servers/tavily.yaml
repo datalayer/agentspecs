@@ -9,7 +9,7 @@ description: Web search and research capabilities via Tavily API
 documentation_url: https://docs.tavily.com
 signup_url: https://app.tavily.com
 api_key_url: https://app.tavily.com/home
-setup: "A key from the Tavily dashboard, in TAVILY_API_KEY."
+setup: "A key from the [Tavily dashboard](https://app.tavily.com/home), in `TAVILY_API_KEY`; the docs are at [docs.tavily.com](https://docs.tavily.com)."
 
 command: npx
 args:

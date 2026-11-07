@@ -12,7 +12,7 @@ description: Kaggle datasets, models, competitions, and notebooks access
 documentation_url: https://www.kaggle.com/docs/api
 signup_url: https://www.kaggle.com/account/login
 api_key_url: https://www.kaggle.com/settings/account
-setup: "An API token from your Kaggle account settings, in KAGGLE_API_TOKEN; the server is Kaggle’s own, reached at its url."
+setup: "An API token from your [Kaggle account settings](https://www.kaggle.com/settings/account), in `KAGGLE_API_TOKEN`; the server is Kaggle's own, reached at its url ([docs](https://www.kaggle.com/docs/api))."
 
 # Kaggle's own hosted server, reached by the runtime itself over Streamable
 # HTTP: no command, the url and the headers sent with every request, the

@@ -18,7 +18,7 @@ description: A LinkedIn account's feed, profiles, companies, jobs and inbox thro
 documentation_url: https://github.com/stickerdaniel/linkedin-mcp-server
 signup_url: https://www.linkedin.com/signup
 api_key_url: https://github.com/stickerdaniel/linkedin-mcp-server#installation
-setup: "No key: the server uses a signed-in browser session. On your own machine, run `uvx mcp-server-linkedin --login` once (or `--import-from-browser`) and it keeps the session under ~/.linkedin-mcp; a runtime needs that directory mounted. LinkedIn restricts automated access — use an account you can afford to see restricted."
+setup: "No key: the server uses a signed-in browser session. On your own machine, run `uvx mcp-server-linkedin --login` once (or `--import-from-browser`) and it keeps the session under `~/.linkedin-mcp`; a runtime needs that directory mounted — see [its README](https://github.com/stickerdaniel/linkedin-mcp-server#installation). LinkedIn restricts automated access: use an account you can afford to see restricted."
 command: uvx
 args:
   - "mcp-server-linkedin"

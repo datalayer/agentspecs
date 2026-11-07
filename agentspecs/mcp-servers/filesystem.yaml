@@ -10,7 +10,7 @@ name: Filesystem
 description: Local filesystem read/write operations
 # Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
 documentation_url: https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem
-setup: "Runs with npx on the runtime's own files; no account and no key."
+setup: "Runs with `npx` on the runtime's own files; no account and no key ([the reference server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem))."
 
 command: npx
 args:

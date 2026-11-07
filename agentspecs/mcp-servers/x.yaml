@@ -18,7 +18,7 @@ description: X's own MCP server — posts, full-archive search, users, news and 
 documentation_url: https://docs.x.com/tools/mcp
 signup_url: https://developer.x.com
 api_key_url: https://developer.x.com/en/portal/dashboard
-setup: "Create an app in the X Developer Portal, copy its App-only Bearer Token from Keys and tokens into X_BEARER_TOKEN; the runtime reaches https://api.x.com/mcp with it and reads. For bookmarks and articles, run the xurl bridge on a machine with a browser instead, with the app's CLIENT_ID and CLIENT_SECRET."
+setup: "Create an app in the [X Developer Portal](https://developer.x.com/en/portal/dashboard), copy its App-only Bearer Token from **Keys and tokens** into `X_BEARER_TOKEN`; the runtime reaches [https://api.x.com/mcp](https://api.x.com/mcp) with it and reads. For bookmarks and articles, run the [xurl bridge](https://docs.x.com/tools/mcp) on a machine with a browser instead, with the app's `CLIENT_ID` and `CLIENT_SECRET`."
 transport: streamable-http
 url: "https://api.x.com/mcp"
 headers:

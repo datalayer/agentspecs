@@ -17,7 +17,7 @@ description: A Discord server through a bot — channels, members, messages, thr
 documentation_url: https://github.com/SaseQ/discord-mcp
 signup_url: https://discord.com/developers/applications
 api_key_url: https://discord.com/developers/applications
-setup: "Create an application in the Discord Developer Portal, add a bot, copy its token into DISCORD_BOT_TOKEN, invite the bot to the server with the permissions of what the agent may do (and the Message Content intent to read messages); put the server's id in DISCORD_GUILD_ID. The server runs in Docker, saseq/discord-mcp."
+setup: "Create an application in the [Discord Developer Portal](https://discord.com/developers/applications), add a bot, copy its token into `DISCORD_BOT_TOKEN`, invite the bot to the server with the permissions of what the agent may do (and the Message Content intent to read messages); put the server's id in `DISCORD_GUILD_ID`. The server runs in Docker, [saseq/discord-mcp](https://github.com/SaseQ/discord-mcp)."
 command: docker
 args:
   - "run"

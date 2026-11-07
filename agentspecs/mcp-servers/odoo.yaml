@@ -10,7 +10,7 @@ name: Odoo
 description: Odoo ERP operations (search, invoices, journals, reconciliations)
 # Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
 documentation_url: https://github.com/ivnvxd/mcp-server-odoo
-setup: "Runs with uvx against the Odoo instance its env names, with that Odoo user's API key."
+setup: "Runs with `uvx` against the Odoo instance its env names, with that Odoo user's API key ([mcp-server-odoo](https://github.com/ivnvxd/mcp-server-odoo))."
 
 command: uvx
 args:

@@ -16,7 +16,7 @@ description: A Bluesky account's timeline, feeds, profiles, follows, likes, tren
 documentation_url: https://github.com/brianellin/bsky-mcp-server
 signup_url: https://bsky.app
 api_key_url: https://bsky.app/settings/app-passwords
-setup: "Sign in to Bluesky, make an app password under Settings, Privacy and security, App passwords, and put the account's handle in BLUESKY_IDENTIFIER, the app password in BLUESKY_APP_PASSWORD and https://bsky.social in BLUESKY_SERVICE_URL; the server is built into the runtime image and runs with node."
+setup: "Sign in to [Bluesky](https://bsky.app), make an [app password](https://bsky.app/settings/app-passwords) under Settings, Privacy and security, App passwords, and put the account's handle in `BLUESKY_IDENTIFIER`, the app password in `BLUESKY_APP_PASSWORD` and `https://bsky.social` in `BLUESKY_SERVICE_URL`; the server is built into the runtime image and runs with node."
 command: node
 args:
   - "/opt/mcp-servers/bsky-mcp-server/build/src/index.js"
