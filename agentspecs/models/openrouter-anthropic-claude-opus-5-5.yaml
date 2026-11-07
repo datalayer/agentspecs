@@ -13,10 +13,10 @@ description: Claude Opus 5.5 by Anthropic, through OpenRouter - the current fron
 provider: openrouter
 provider_url: "https://openrouter.ai/anthropic/claude-opus-5.5"
 default: false
-# Switched off, as the other direct-vendor models are: a Datalayer runtime's
-# model calls go through ai-inference, which routes to Bedrock or Alibaba; a
-# harness run with the person's own OPENROUTER_API_KEY may turn it on.
-available: false
+# Called directly from the agent with the person's OPENROUTER_API_KEY (the
+# provider's `via: direct`, the user, 7 November 2026): never through
+# ai-inference, which holds no OpenRouter account. Offered wherever the key is.
+available: true
 tokens_limit: 128000
 context_window: 1000000
 

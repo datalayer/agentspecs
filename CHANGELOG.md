@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.153
+
+7 November 2026.
+
+- **How a call reaches a provider** (the user). Every [model provider](https://agentspecs.datalayer.tech/docs/agents/model-providers) says `via`: `ai-inference` — Datalayer holds the account and a runtime's call goes through its inference service, metered in credits (Bedrock, Azure OpenAI, Alibaba, Cloudflare) — or `direct` — the agent calls the provider itself with the person's own key, the models' `required_env_vars`, nothing through ai-inference (OpenRouter, Anthropic, OpenAI, Ollama). Required; a provider saying neither is refused. `openrouter:anthropic/claude-opus-5.5` is on, called directly with `OPENROUTER_API_KEY`.
+
 ## 0.0.152
 
 7 November 2026.

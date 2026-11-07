@@ -7,7 +7,8 @@
 Who serves a model: the vendor's own API (Anthropic, OpenAI), a cloud that
 hosts it (Amazon Bedrock, Azure OpenAI, Alibaba Cloud Model Studio,
 Cloudflare), a router in front of many vendors (OpenRouter), or the user's
-machine (Ollama). One YAML per provider under
+machine (Ollama); and how a runtime's call reaches it — through Datalayer's
+inference service, or directly from the agent with the person's key. One YAML per provider under
 ``agentspecs/model-providers/``, with where it lives, its documentation,
 its terms of service, its privacy policy and what it says about the data a
 request carries — what a person choosing a model, or a team signing off on
@@ -27,6 +28,15 @@ MODEL_PROVIDERS_DIR = Path(__file__).parent / "model-providers"
 #: Where a provider runs the model.
 PROVIDER_HOSTING = ("cloud", "local")
 
+#: How a runtime's call reaches the provider (the user, 7 November 2026):
+#: ``ai-inference`` — Datalayer holds the account, the call goes through its
+#: inference service with a Datalayer token and is metered in credits (Bedrock,
+#: Azure OpenAI, Alibaba, Cloudflare); ``direct`` — the agent calls the
+#: provider itself with the person's own key, the models' ``required_env_vars``,
+#: and nothing of it goes through ai-inference (OpenRouter, Anthropic, OpenAI,
+#: Ollama). Every provider says which; a spec that says neither is refused.
+PROVIDER_VIA = ("ai-inference", "direct")
+
 
 class ModelProvider(BaseModel):
     """Specification for a model provider."""
@@ -41,6 +51,7 @@ class ModelProvider(BaseModel):
     privacy_url: str = Field(default="", description="The provider's privacy policy")
     data_usage_url: Optional[str] = Field(default=None, description="What the provider says about the data a request carries (retention, training), when it has a page for it")
     hosting: str = Field(default="cloud", description="Where the model runs: 'cloud' (the provider's) or 'local' (the user's machine)")
+    via: str = Field(..., description="How a runtime's call reaches the provider: 'ai-inference' (through Datalayer's inference service, which holds the account, metered in credits) or 'direct' (the agent calls the provider itself with the person's own key, the models' required_env_vars)")
 
 
 def _load_provider_specs(providers_dir: Optional[Path] = None) -> List[ModelProvider]:
@@ -52,6 +63,8 @@ def _load_provider_specs(providers_dir: Optional[Path] = None) -> List[ModelProv
         spec = ModelProvider(**data)
         if spec.hosting not in PROVIDER_HOSTING:
             raise ValueError(f"{yaml_file.name}: unknown hosting {spec.hosting!r}; one of {list(PROVIDER_HOSTING)}")
+        if spec.via not in PROVIDER_VIA:
+            raise ValueError(f"{yaml_file.name}: unknown via {spec.via!r}; one of {list(PROVIDER_VIA)}")
         if spec.id != yaml_file.stem:
             raise ValueError(f"{yaml_file.name}: the file is named for id {yaml_file.stem!r}, the spec says {spec.id!r}")
         specs.append(spec)

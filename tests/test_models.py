@@ -188,6 +188,27 @@ def test_every_model_names_a_provider_the_catalogue_has_and_its_page():
     assert get_model_provider("ollama").hosting == "local"
 
 
+def test_every_provider_says_how_a_call_reaches_it():
+    """Through ai-inference, which holds the account, or directly from the agent with the
+    person's key (the user, 7 November 2026): OpenRouter direct, Cloudflare through."""
+    from agentspecs.model_providers import (
+        MODEL_PROVIDER_CATALOGUE,
+        PROVIDER_VIA,
+        get_model_provider,
+    )
+
+    for provider in MODEL_PROVIDER_CATALOGUE:
+        assert provider.via in PROVIDER_VIA, provider.id
+    assert get_model_provider("openrouter").via == "direct"
+    assert get_model_provider("cloudflare").via == "ai-inference"
+    assert get_model_provider("bedrock").via == "ai-inference"
+    # A direct provider's models name the key the agent calls with.
+    for model in AI_MODEL_CATALOGUE:
+        provider = get_model_provider(model.provider)
+        if provider.via == "direct" and provider.hosting != "local":
+            assert model.required_env_vars, model.id
+
+
 def test_a_model_naming_an_unknown_provider_is_refused():
     from agentspecs.models import _check_providers
 
@@ -198,13 +219,20 @@ def test_a_model_naming_an_unknown_provider_is_refused():
 def test_a_provider_file_is_named_for_its_id(tmp_path):
     from agentspecs.model_providers import _load_provider_specs
 
-    (tmp_path / "acme.yaml").write_text('id: "acme"\nname: Acme\nhosting: cloud\n')
+    (tmp_path / "acme.yaml").write_text('id: "acme"\nname: Acme\nhosting: cloud\nvia: direct\n')
     assert [p.id for p in _load_provider_specs(tmp_path)] == ["acme"]
-    (tmp_path / "other.yaml").write_text('id: "acme"\nname: Acme\n')
+    (tmp_path / "other.yaml").write_text('id: "acme"\nname: Acme\nvia: direct\n')
     with pytest.raises(ValueError, match="named for id"):
         _load_provider_specs(tmp_path)
-    (tmp_path / "other.yaml").write_text('id: "other"\nname: Other\nhosting: orbit\n')
+    (tmp_path / "other.yaml").write_text('id: "other"\nname: Other\nhosting: orbit\nvia: direct\n')
     with pytest.raises(ValueError, match="orbit"):
+        _load_provider_specs(tmp_path)
+    # A provider that does not say how a call reaches it, or says something else, is refused.
+    (tmp_path / "other.yaml").write_text('id: "other"\nname: Other\nhosting: cloud\n')
+    with pytest.raises(Exception, match="via"):
+        _load_provider_specs(tmp_path)
+    (tmp_path / "other.yaml").write_text('id: "other"\nname: Other\nhosting: cloud\nvia: carrier-pigeon\n')
+    with pytest.raises(ValueError, match="carrier-pigeon"):
         _load_provider_specs(tmp_path)
 
 
