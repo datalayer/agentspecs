@@ -8,6 +8,18 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.154
+
+7 November 2026.
+
+- **A company at PAP 0.3 as published** (D4-08). The [company role](https://agentspecs.datalayer.tech/docs/apps/reference#apppapcompany) gains `sign_in_disabled` (`auth.disabled`: the company offers personal agents no sign-in and answers them signed out only; one admitting nobody signed out is refused), and the application's `avatar` is served to personal agents as the company's logo (`organization.logo_uri`). Nothing of draft 0.4 (`web.unscoped`, `web.disabled`, `supported_versions`) and no `skill_index` yet.
+
+## 0.0.154
+
+7 November 2026.
+
+- **The Social Marketer's skills** (the user: web crawl, events, GitHub, image, video and PDF for the marketer agents). [`worker-social-marketer`](https://agentspecs.datalayer.tech/docs/agents) carries `github`, `image`, `video` and `pdf` beside `crawl`, `events` and `text-summarizer`; the Marketer application's agent, `worker-marketer`, has carried all nine since 0.0.149.
+
 ## 0.0.153
 
 7 November 2026.
