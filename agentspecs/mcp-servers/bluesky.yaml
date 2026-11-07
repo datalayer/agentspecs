@@ -21,8 +21,8 @@ command: node
 args:
   - "/opt/mcp-servers/bsky-mcp-server/build/src/index.js"
 transport: stdio
-# Off until a runtime image that carries node and the built server is deployed.
-enabled: false
+# Enabled (the user, 7 November 2026): offered in the catalogue; where it runs is the runtime image's affair.
+enabled: true
 env:
   BLUESKY_IDENTIFIER: "${BLUESKY_IDENTIFIER}"
   BLUESKY_APP_PASSWORD: "${BLUESKY_APP_PASSWORD}"

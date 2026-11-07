@@ -29,8 +29,8 @@ args:
   - "DISCORD_GUILD_ID"
   - "saseq/discord-mcp:latest"
 transport: stdio
-# Off until a runtime can run Docker or carry the Java server.
-enabled: false
+# Enabled (the user, 7 November 2026): offered in the catalogue; where it runs is the runtime image's affair.
+enabled: true
 env:
   DISCORD_TOKEN: "${DISCORD_BOT_TOKEN}"
   DISCORD_GUILD_ID: "${DISCORD_GUILD_ID}"
