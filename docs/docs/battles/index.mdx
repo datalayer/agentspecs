@@ -58,6 +58,7 @@ is read.
 | `contestants[].scene` | A scene of the catalogue, `id` or `id:version`, played whole. One of `scene` and `app`, never both. |
 | `contestants[].app` | An application of the catalogue, `id` or `id:version`; `runs_in` says `browser` or `runtime`. A scene's cast says where it runs, so `runs_in` is refused on a scene. |
 | `contestants[].name`, `color` | What the audience sees; the colour is a palette name or a hex. |
+| `contestants[].overrides` | What this contestant plays differently of its application — `model`, `instructions`, `skills`, `context`, nothing else; on a scene, of every member played in the page. See [Overriding an application on stage](../modularity/extension#overriding-an-application-on-stage). |
 | `referee.decides_by` | `first_done`, `score` or `measure`. Required. |
 | `referee.measure` | For `measure`: the Guard whose number signal scores each outcome, `id` or `id:version`. Required then, refused otherwise. |
 | `arena` | What is drawn in the page: a game's arena, which keeps the score (`pong`, `invaders`; required for a game); or the visual a race's or a challenge's contestants work in, a `deck` each builds slide by slide or a `sheet` each fills cell by cell. |
@@ -77,6 +78,10 @@ not hold, or a measure Guard with no number signal, is refused.
 | `report-challenge` | challenge | two Month-end Close agents on the same books, three minutes | the Report Quality Guard's `quality` signal |
 | `deck-race` | race | two Deck Makers in the browser, the same brief, each building a deck in the page | the first to finish |
 | `sheet-race` | race | two Sheet Makers in the browser, the same brief, each filling a spreadsheet in the page | the first to finish |
+
+In each race and challenge, Blue plays its application as it is and Red plays
+it with Alibaba Qwen-Max (`overrides: { model: "alibaba:qwen-max" }`), so the
+same goal is answered by two models side by side.
 
 The Report Quality Guard (`guards/report-quality-guard.yaml`) is an `outcome`
 Guard a Cog judges after the run: completeness against what was asked and

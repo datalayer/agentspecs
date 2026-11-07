@@ -700,3 +700,24 @@ def test_the_protocol_stages_are_scripted_from_the_test_counterparts() -> None:
     assert business.lines[-1].card.kind.value == "record"
     assert [scene.id for scene in list_scenes("ucp")] == ["ucp-a-purchase-approved"]
     assert [scene.id for scene in list_scenes("pact")] == ["pact-a-personal-agent-at-a-business"]
+
+
+def test_a_cast_member_may_override_its_application_s_model_and_the_model_is_one_of_the_catalogue() -> None:
+    """A cast member plays its application with what `overrides` says differently (the user, 7 November 2026)."""
+    from pydantic import ValidationError as _ValidationError
+
+    from agentspecs.scenes import SceneCastMember, get_scene, scene_problems
+
+    member = SceneCastMember(member="sales", overrides={"model": "alibaba:qwen-max"})
+    assert member.overrides == {"model": "alibaba:qwen-max"}
+    with pytest.raises(_ValidationError, match="nothing else"):
+        SceneCastMember(member="sales", overrides={"temperature": 0.1})
+    scene = get_scene("sales-and-accounting")
+    assert scene is not None
+    said = scene.cast[0].model_copy(update={"overrides": {"model": "nobody:x"}})
+    changed = scene.model_copy(update={"cast": [said, *scene.cast[1:]]})
+    assert any("not a model of the catalogue" in problem for problem in scene_problems(changed))
+    fine = scene.model_copy(update={"cast": [scene.cast[0].model_copy(update={"overrides": {"model": "alibaba:qwen-max"}}), *scene.cast[1:]]})
+    assert not any("model" in problem for problem in scene_problems(fine))
+    # Resolved, the cast carries what was said of it.
+    assert fine.cast_of()[0].overrides == {"model": "alibaba:qwen-max"}

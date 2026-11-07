@@ -71,3 +71,51 @@ The Cog is the agent with what it says differently; the Frames are what it
 works under; the Guard names the Policy and the check that it held (the
 Policy is read through the catalogue, never merged in). All are resolved when
 the catalogues are generated, so a runtime receives one flat spec.
+
+## Overriding an application on stage
+
+A [Battle](../battles)'s contestant and a [scene](../scenes)'s cast member
+put an application of the catalogue on stage as it is. With `overrides`,
+they say what **this appearance** plays differently — the same idea as
+`extends`, a child saying what it changes, but for one place on stage, with
+no new spec to write and nothing to version:
+
+```yaml
+# battles/deck-race.yaml
+contestants:
+  - id: blue
+    app: deck-maker:0.0.1
+  - id: red
+    app: deck-maker:0.0.1
+    overrides:
+      model: "alibaba:qwen-max"      # the same application, another model
+```
+
+```yaml
+# scenes/sales-and-accounting.yaml
+cast:
+  - member: sales
+    persona: { name: Sales }
+    overrides:
+      model: "alibaba:qwen-max"
+      instructions: Answer in one line, and name the figure's source.
+```
+
+| Key | What it overrides |
+| --- | --- |
+| `model` | The model the application answers with: a model of the [catalogue](../../models), `provider:name`. Checked as the spec is read. |
+| `instructions` | Its instructions, whole. |
+| `skills` | Its skills, whole: a list of skill ids. |
+| `context` | Its context, whole. |
+
+Nothing else of an application may be overridden on stage: what it is, its
+interface, its rules and its tests stay its own. Any other key is refused as
+the spec is read, with the four that are allowed.
+
+On a contestant that plays a **scene**, the overrides reach every member of
+the scene that is an application. The override is applied where the
+application is played: a member played in the page answers with the model
+it names; a member already at a deployment answers as it was shipped, and
+the page says what was asked rather than pretend. Datalayer's own Battles
+use it: in each race and challenge, Blue plays its application as it is and
+Red plays it with Alibaba Qwen-Max.

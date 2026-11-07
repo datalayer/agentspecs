@@ -457,6 +457,7 @@ A member of the cast. On a staged team, it names a member of the team (`member`)
 | `talks_to` | list of [TeamLink](#teamlink) | Inline: whom it asks, and over what | — |
 | `persona` | [ScenePersona](#scenepersona) | How it appears on stage | — |
 | `brief` | text | What it is for in this scene, over its application's instructions | empty |
+| `overrides` | mapping | What it plays differently of its application here: `model`, `instructions`, `skills`, `context` | — |
 
 ### SceneCue
 

@@ -28,6 +28,9 @@ contestants:
     name: Red
     scene: sales-and-accounting:0.0.1
     color: red
+    # Red plays with Alibaba Qwen-Max (the user, 7 November 2026): the application as it is, its model overridden.
+    overrides:
+      model: "alibaba:qwen-max"
 
 referee:
   decides_by: first_done

@@ -383,6 +383,12 @@
           "title": "Member",
           "type": "string"
         },
+        "overrides": {
+          "additionalProperties": true,
+          "description": "What it plays differently of its application here: `model`, `instructions`, `skills`, `context`",
+          "title": "Overrides",
+          "type": "object"
+        },
         "persona": {
           "$ref": "#/$defs/ScenePersona",
           "description": "How it appears on stage"

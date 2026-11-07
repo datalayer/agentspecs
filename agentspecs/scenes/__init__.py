@@ -76,6 +76,7 @@ from ..teams import (
     TeamSupervisor,
     get_team,
 )
+from ..overrides import check_overrides, override_model_problem
 
 #: The version of the spec itself. A reader refuses one it does not know.
 SCENE_SCHEMA = "loop.scene/v1"
@@ -155,6 +156,15 @@ class SceneCastMember(_Strict):
     talks_to: List[TeamLink] = Field(default_factory=list, description="Inline: whom it asks, and over what")
     persona: ScenePersona = Field(default_factory=ScenePersona, description="How it appears on stage")
     brief: str = Field(default="", description="What it is for in this scene, over its application's instructions")
+    overrides: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="What it plays differently of its application here: `model`, `instructions`, `skills`, `context`",
+    )
+
+    @field_validator("overrides")
+    @classmethod
+    def _overridable(cls, overrides: Dict[str, Any], info: Any) -> Dict[str, Any]:
+        return check_overrides(overrides, f"cast member {info.data.get('member', '?')!r}")
 
     @property
     def is_defined(self) -> bool:
@@ -803,6 +813,7 @@ class SceneSpec(_Strict):
                     role=member.role,
                     runs_in=member.runs_in,
                     talks_to=list(member.talks_to),
+                    overrides=dict(said.overrides) if said else {},
                     persona=ScenePersona(
                         name=persona.name or (app.name if app else member.display_name),
                         face=persona.face or (app.emoji if app else ""),
@@ -917,6 +928,10 @@ def scene_problems(scene: SceneSpec) -> List[str]:
     except SceneError as error:
         return [str(error)]
     ids = {member.id for member in team.agents}
+    for said in scene.cast:
+        unknown = override_model_problem(said.overrides, f"The cast member '{said.member}'")
+        if unknown:
+            problems.append(unknown + ".")
     if scene.team:
         for said in scene.cast:
             if said.member not in ids:

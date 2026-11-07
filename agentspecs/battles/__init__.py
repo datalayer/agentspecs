@@ -37,6 +37,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from ..colors import check_color
 from ..guards import get_guard, id_of, load_raw
+from ..overrides import check_overrides, override_model_problem
 
 
 class BattleError(ValueError):
@@ -109,6 +110,15 @@ class BattleContestant(_Strict):
         default=None, description="For an app: where it runs; a scene's cast says it"
     )
     color: str = Field(default="", description="Its colour on stage: a palette name or a hex")
+    overrides: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="What this contestant plays differently of its application: `model`, `instructions`, `skills`, `context` — for a scene, of every member played in the page",
+    )
+
+    @field_validator("overrides")
+    @classmethod
+    def _overridable(cls, overrides: Dict[str, Any], info: Any) -> Dict[str, Any]:
+        return check_overrides(overrides, f"contestant {info.data.get('id', '?')!r}")
 
     @field_validator("id")
     @classmethod
@@ -259,6 +269,9 @@ def _check_references(battle: BattleSpec) -> None:
             versioned(contestant.scene, get_scene(contestant.scene), "a scene")
         else:
             versioned(contestant.app, get_app(contestant.app), "an app")
+        said = override_model_problem(contestant.overrides, f"battle {battle.id!r}'s contestant {contestant.id!r}")
+        if said:
+            raise BattleError(said)
     if battle.referee.measure:
         guard = get_guard(battle.referee.measure)
         versioned(battle.referee.measure, guard, "a Guard")

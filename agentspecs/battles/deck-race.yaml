@@ -31,6 +31,9 @@ contestants:
     app: deck-maker:0.0.1
     runs_in: browser
     color: red
+    # Red plays with Alibaba Qwen-Max (the user, 7 November 2026): the application as it is, its model overridden.
+    overrides:
+      model: "alibaba:qwen-max"
 
 referee:
   decides_by: first_done

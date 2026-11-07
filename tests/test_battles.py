@@ -194,3 +194,49 @@ class TestReportQualityGuard:
             "quality",
             "ungrounded_figures",
         ]
+
+
+class TestOverrides:
+    """A contestant plays its application as it is, with what `overrides` says differently (the user, 7 November 2026)."""
+
+    def test_the_red_contestants_play_with_alibaba_qwen_max(self):
+        for identity in ("deck-race", "sheet-race", "invoice-race", "report-challenge"):
+            red = next(c for c in get_battle(identity).contestants if c.id == "red")
+            assert red.overrides == {"model": "alibaba:qwen-max"}, identity
+            blue = next(c for c in get_battle(identity).contestants if c.id == "blue")
+            assert blue.overrides == {}
+
+    def test_what_may_be_overridden(self):
+        battle = BattleSpec(
+            **_battle(
+                contestants=[
+                    {"id": "blue", "scene": "sales-and-accounting:0.0.1"},
+                    {
+                        "id": "red",
+                        "scene": "sales-and-accounting:0.0.1",
+                        "overrides": {"model": "alibaba:qwen-max", "instructions": "Answer  in one line.", "skills": ["pdf"], "context": ["books"]},
+                    },
+                ]
+            )
+        )
+        assert battle.contestants[1].overrides == {"model": "alibaba:qwen-max", "instructions": "Answer in one line.", "skills": ["pdf"], "context": ["books"]}
+        assert check_battle(battle) is battle
+
+    @pytest.mark.parametrize(
+        "overrides, says",
+        [
+            ({"temperature": 0.2}, "nothing else"),
+            ({"model": ""}, "never empty"),
+            ({"skills": "pdf"}, "a list of names"),
+            ({"context": [""]}, "a list of names"),
+        ],
+    )
+    def test_refused_as_it_is_read(self, overrides, says):
+        with pytest.raises(ValidationError) as caught:
+            BattleSpec(**_battle(contestants=[{"id": "blue", "scene": "sales-and-accounting:0.0.1"}, {"id": "red", "scene": "sales-and-accounting:0.0.1", "overrides": overrides}]))
+        assert says in str(caught.value)
+
+    def test_the_model_is_one_of_the_catalogue(self):
+        battle = BattleSpec(**_battle(contestants=[{"id": "blue", "scene": "sales-and-accounting:0.0.1"}, {"id": "red", "scene": "sales-and-accounting:0.0.1", "overrides": {"model": "nobody:x"}}]))
+        with pytest.raises(BattleError, match="not a model of the catalogue"):
+            check_battle(battle)
