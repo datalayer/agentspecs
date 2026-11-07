@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.151
+
+7 November 2026.
+
+- **Jokes loads from its module** (the user: every skill enabled). `jokes` was the one path-based skill, `path: jokes` relative to a skills folder the pod never configures, so it could not load there; agent-skills 1.2.1 ships `agent_skills.skills.jokes` (and `agent_skills.skills.accounting`, which `accounting` already named), and the spec names the module like the eight others.
+
 ## 0.0.150
 
 7 November 2026.
