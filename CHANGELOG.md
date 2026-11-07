@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.150
+
+7 November 2026.
+
+- **Published as 0.0.150**: 0.0.149 was tagged and never published — its docs build refused two relative links, to the evals and models catalogues, which now point where they are published, on datalayer.ai. The content is 0.0.149's, below.
+
 ## 0.0.149
 
 7 November 2026.
