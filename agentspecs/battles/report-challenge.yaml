@@ -33,6 +33,17 @@ contestants:
     overrides:
       model: "alibaba:qwen-max"
 
+# The evals that confirm each contestant's result once the referee has a verdict
+# (the user, 7 November 2026): the winner is declared only when its evals pass.
+evals:
+  - eval: llm-judge:0.0.1
+    config:
+      threshold: 0.7
+      rubric: >-
+        The summary covers what was asked and rests on figures the run read
+        from the books; it says what it could not check.
+    says: The summary is complete and grounded.
+
 referee:
   decides_by: measure
   measure: report-quality-guard:0.0.1

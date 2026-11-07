@@ -173,6 +173,25 @@ class BattleReferee(_Strict):
         return self
 
 
+class BattleEval(_Strict):
+    """An eval of the catalogue that confirms a contestant's result (the user, 7 November 2026).
+
+    Run on every contestant once the referee has a verdict, with `config` as
+    the evaluator reads it (`expected_output`, `max_duration_ms`, a `rubric`
+    and a `threshold` for the judge); the winner is declared only when its
+    evals all pass, else the result shows what failed and no winner.
+    """
+
+    eval: str = Field(..., description="An eval of the catalogue, `id` or `id:version`: `contains`, `max-duration`, `llm-judge`…")
+    config: Dict[str, Any] = Field(default_factory=dict, description="What the evaluator is given: `expected_output`, `max_duration_ms`, `rubric`, `threshold`")
+    says: str = Field(default="", description="What passing confirms, in a sentence")
+
+    @field_validator("says")
+    @classmethod
+    def _one_line(cls, says: str) -> str:
+        return " ".join(says.split())
+
+
 class BattleRehearsal(_Strict):
     """The Battle's tests: what a played Battle has to show."""
 
@@ -194,6 +213,10 @@ class BattleSpec(_Strict):
     arena: Optional[BattleArena] = Field(
         default=None,
         description="The arena drawn in the page: a game's, which keeps the score; a deck or a sheet the contestants work in",
+    )
+    evals: List[BattleEval] = Field(
+        default_factory=list,
+        description="The evals that confirm each contestant's result once the referee has a verdict; the winner is declared only when its evals pass",
     )
     rehearsal: BattleRehearsal = Field(default_factory=BattleRehearsal, description="Its tests")
     enabled: bool = Field(default=True, description="Whether it may be played today")
@@ -272,6 +295,13 @@ def _check_references(battle: BattleSpec) -> None:
         said = override_model_problem(contestant.overrides, f"battle {battle.id!r}'s contestant {contestant.id!r}")
         if said:
             raise BattleError(said)
+    for one in battle.evals:
+        found = EVALS_RAW.get(id_of(one.eval))
+        versioned(one.eval, _AsVersion(found) if found else None, "an eval")
+        if found and id_of(one.eval) not in BATTLE_EVALS:
+            raise BattleError(
+                f"battle {battle.id!r} names eval {one.eval!r}, which a Battle cannot run: one of {', '.join(sorted(BATTLE_EVALS))}"
+            )
     if battle.referee.measure:
         guard = get_guard(battle.referee.measure)
         versioned(battle.referee.measure, guard, "a Guard")
@@ -280,6 +310,22 @@ def _check_references(battle: BattleSpec) -> None:
             raise BattleError(
                 f"battle {battle.id!r} measures with Guard {guard.id!r}, which has no number signal"
             )
+
+
+#: The evals a Battle runs where it plays, on each contestant's result: the
+#: expected-output checks, the clock, and the judge with a rubric. The others
+#: of the catalogue need a trace or a report a Battle does not have.
+BATTLE_EVALS = frozenset({"contains", "equals", "equals-expected", "max-duration", "llm-judge"})
+
+#: The evals of the catalogue, as plain data by id: a Battle's `evals` name them.
+EVALS_RAW: Dict[str, Dict[str, Any]] = load_raw(Path(__file__).parent.parent / "evals")
+
+
+class _AsVersion:
+    """A raw spec, read for its version as a model is."""
+
+    def __init__(self, raw: Dict[str, Any]) -> None:
+        self.version = str(raw.get("version", "0.0.1"))
 
 
 def load_raw_battles(directory: Optional[Path] = None) -> Dict[str, Dict[str, Any]]:
@@ -312,6 +358,7 @@ def list_battles(variant: Optional[BattleVariant] = None) -> List[BattleSpec]:
 
 __all__ = [
     "BATTLE_CATALOGUE",
+    "BATTLE_EVALS",
     "DECISION_OF_VARIANT",
     "MIN_CLOCK_SECONDS",
     "SCORED_ARENAS",
@@ -319,6 +366,7 @@ __all__ = [
     "BattleContestant",
     "BattleDecision",
     "BattleError",
+    "BattleEval",
     "BattleReferee",
     "BattleRehearsal",
     "BattleSpec",

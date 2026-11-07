@@ -32,6 +32,21 @@ contestants:
     overrides:
       model: "alibaba:qwen-max"
 
+# The evals that confirm each contestant's result once the referee has a verdict
+# (the user, 7 November 2026): the winner is declared only when its evals pass.
+evals:
+  - eval: max-duration:0.0.1
+    config:
+      max_duration_ms: 120000
+    says: It answered within the clock.
+  - eval: llm-judge:0.0.1
+    config:
+      threshold: 0.7
+      rubric: >-
+        The answer lists the customer invoices still open, each named, and
+        gives the total due as one figure; it invents no invoice.
+    says: It listed the open invoices and a total, as the goal asked.
+
 referee:
   decides_by: first_done
 

@@ -11,6 +11,7 @@ from pydantic import ValidationError
 
 from agentspecs.battles import (
     BATTLE_CATALOGUE,
+    EVALS_RAW,
     MIN_CLOCK_SECONDS,
     SCORED_ARENAS,
     BattleArena,
@@ -42,8 +43,8 @@ def _battle(**changes):
 
 
 class TestCatalogue:
-    def test_five_battles_every_variant(self):
-        assert sorted(BATTLE_CATALOGUE) == ["deck-race", "invoice-race", "pong", "report-challenge", "sheet-race"]
+    def test_six_battles_every_variant(self):
+        assert sorted(BATTLE_CATALOGUE) == ["deck-race", "invaders", "invoice-race", "pong", "report-challenge", "sheet-race"]
         assert {battle.variant for battle in list_battles()} == set(BattleVariant)
 
     def test_the_deck_and_sheet_races_are_played_in_an_arena_by_apps_in_the_browser(self):
@@ -63,7 +64,7 @@ class TestCatalogue:
     def test_by_id_or_versioned_reference(self):
         assert get_battle("pong:0.0.1") is get_battle("pong")
         assert get_battle("chess") is None
-        assert list_battles(BattleVariant.GAME) == [get_battle("pong")]
+        assert list_battles(BattleVariant.GAME) == [get_battle("invaders"), get_battle("pong")]
 
     def test_contestants_play_the_catalogue(self):
         for battle in list_battles():
@@ -240,3 +241,27 @@ class TestOverrides:
         battle = BattleSpec(**_battle(contestants=[{"id": "blue", "scene": "sales-and-accounting:0.0.1"}, {"id": "red", "scene": "sales-and-accounting:0.0.1", "overrides": {"model": "nobody:x"}}]))
         with pytest.raises(BattleError, match="not a model of the catalogue"):
             check_battle(battle)
+
+
+class TestEvals:
+    """The evals that confirm a result (the user, 7 November 2026): of the catalogue, runnable, carried as written."""
+
+    def test_every_battle_names_evals_of_the_catalogue(self):
+        for battle in list_battles():
+            assert battle.evals, battle.id
+            assert all(one.eval.split(":")[0] in EVALS_RAW for one in battle.evals), battle.id
+            assert any(one.eval.startswith("llm-judge") for one in battle.evals), battle.id
+
+    def test_an_eval_is_of_the_catalogue_and_runnable(self):
+        battle = BattleSpec(**_battle(evals=[{"eval": "contains:0.0.1", "config": {"expected_output": "invoice"}, "says": "It  names\nan invoice."}]))
+        assert battle.evals[0].says == "It names an invoice."
+        assert check_battle(battle) is battle
+        with pytest.raises(BattleError, match="not in the catalogue"):
+            check_battle(BattleSpec(**_battle(evals=[{"eval": "nobody"}])))
+        with pytest.raises(BattleError, match="the catalogue has version"):
+            check_battle(BattleSpec(**_battle(evals=[{"eval": "contains:9.9.9"}])))
+        with pytest.raises(ValidationError):
+            BattleSpec(**_battle(evals=[{"eval": "contains", "extra": 1}]))
+        # An eval that needs a trace or a report is not one a Battle runs.
+        with pytest.raises(BattleError, match="which a Battle cannot run"):
+            check_battle(BattleSpec(**_battle(evals=[{"eval": "has-matching-span"}])))

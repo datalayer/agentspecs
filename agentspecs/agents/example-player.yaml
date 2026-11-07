@@ -33,6 +33,7 @@ skills: []
 backend_tools: []
 frontend_tools:
   - arena-pong:0.0.1
+  - arena-invaders:0.0.1
 
 environment_name: ai-agents-env
 icon: play

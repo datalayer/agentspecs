@@ -34,6 +34,22 @@ contestants:
     runs_in: browser
     color: red
 
+# The evals that confirm each contestant's result once the referee has a verdict
+# (the user, 7 November 2026): the winner is declared only when its evals pass.
+evals:
+  - eval: max-duration:0.0.1
+    config:
+      max_duration_ms: 180000
+    says: The game ended within the clock.
+  - eval: llm-judge:0.0.1
+    config:
+      threshold: 0.6
+      rubric: >-
+        The player watched the arena, moved its paddle where the arena said the
+        ball arrived, and served when the serve was its own; it did not idle
+        while the ball came to it.
+    says: The player played the arena, not around it.
+
 referee:
   decides_by: score
 

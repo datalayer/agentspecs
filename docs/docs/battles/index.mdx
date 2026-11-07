@@ -62,6 +62,7 @@ is read.
 | `referee.decides_by` | `first_done`, `score` or `measure`. Required. |
 | `referee.measure` | For `measure`: the Guard whose number signal scores each outcome, `id` or `id:version`. Required then, refused otherwise. |
 | `arena` | What is drawn in the page: a game's arena, which keeps the score (`pong`, `invaders`; required for a game); or the visual a race's or a challenge's contestants work in, a `deck` each builds slide by slide or a `sheet` each fills cell by cell. |
+| `evals` | The evals of the catalogue that confirm each contestant's result once the referee has a verdict — `eval`, `id` or `id:version` of one a Battle can run where it plays (`contains`, `equals`, `equals-expected`, `max-duration`, `llm-judge`; the others need a trace or a report a Battle does not have); `config`, what it is given (`expected_output`, `max_duration_ms`, a `rubric` and a `threshold` for the judge); `says`, what passing confirms. The winner is declared only when its evals all pass; otherwise the result shows what failed, and no winner. See [Evals confirm the result](#evals-confirm-the-result). |
 | `rehearsal.expects` | What a played Battle has to show, one sentence each. |
 | `enabled`, `tags`, `icon`, `emoji` | As on every spec. |
 
@@ -74,7 +75,8 @@ not hold, or a measure Guard with no number signal, is refused.
 | Battle | Variant | Contestants | Decided by |
 | --- | --- | --- | --- |
 | `invoice-race` | race | two Sales & Accounting pairs on the same Odoo books | the first to list the open invoices and the total due |
-| `pong` | game | two coding agents at the Pong arena | the arena's score, first to eleven |
+| `pong` | game | two Players at the Pong arena | the arena's score, first to eleven |
+| `invaders` | game | two Players at the Space Invaders arena, a cannon each under one wave | the arena's score when the wave is cleared, a cannon is hit or the wave lands |
 | `report-challenge` | challenge | two Month-end Close agents on the same books, three minutes | the Report Quality Guard's `quality` signal |
 | `deck-race` | race | two Deck Makers in the browser, the same brief, each building a deck in the page | the first to finish |
 | `sheet-race` | race | two Sheet Makers in the browser, the same brief, each filling a spreadsheet in the page | the first to finish |
@@ -87,6 +89,31 @@ The Report Quality Guard (`guards/report-quality-guard.yaml`) is an `outcome`
 Guard a Cog judges after the run: completeness against what was asked and
 grounding in the calls the run made, `quality` between 0 and 1, and
 `ungrounded_figures`, how many figures no call accounts for.
+
+## Evals confirm the result
+
+A verdict says who was first, who scored or who measured highest; it does not
+say the work was any good. So a Battle names `evals` of the
+[evals catalogue](../../agentspecs/evals) — the same evaluators an
+application's tests run — and once the referee has its verdict, every
+contestant's result goes through them: `max-duration` against the clock,
+`contains` or `equals` against an expected output, `llm-judge` with a `rubric`
+and a `threshold` against the goal. The winner is declared only when its
+evals all pass. When one fails, the page shows each eval's verdict and why,
+and names no winner: a fast answer that invented an invoice does not win the
+invoice race.
+
+```yaml
+evals:
+  - eval: max-duration:0.0.1
+    config: { max_duration_ms: 120000 }
+    says: It answered within the clock.
+  - eval: llm-judge:0.0.1
+    config:
+      threshold: 0.7
+      rubric: The answer lists the open invoices, each named, and gives the total due.
+    says: It listed the open invoices and a total, as the goal asked.
+```
 
 ## The arenas
 
@@ -102,9 +129,10 @@ them, in the browser.
 A game's arena is a UI plugin of the catalogue drawn in the conversation and
 the frontend tools the contestants call through the page — the seam the
 `cells` tools use, so no new transport. Pong: `arena_pong_move`,
-`arena_pong_serve`, `arena_read`; first to eleven. Space Invaders:
-`arena_invaders_move`, `arena_invaders_fire`, `arena_read`; the wave cleared
-or a life lost ends it. The page refuses a move out of turn or more than one
+`arena_pong_serve`, `arena_read`, and `arena_watch`, which streams; first to
+eleven. Space Invaders: `arena_invaders_move`, `arena_invaders_fire`,
+`arena_read` and `arena_watch`; a hit scores the invader's row, and the wave
+cleared, a cannon hit or the wave landed ends it. The page refuses a move out of turn or more than one
 per tick, so a faster model does not win by flooding, and records every move
 with its tick.
 

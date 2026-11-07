@@ -37,6 +37,21 @@ contestants:
     overrides:
       model: "alibaba:qwen-max"
 
+# The evals that confirm each contestant's result once the referee has a verdict
+# (the user, 7 November 2026): the winner is declared only when its evals pass.
+evals:
+  - eval: max-duration:0.0.1
+    config:
+      max_duration_ms: 180000
+    says: It finished within the clock.
+  - eval: llm-judge:0.0.1
+    config:
+      threshold: 0.7
+      rubric: >-
+        The contestant reports a workbook with the figures the brief asked
+        for, their totals, and a chart.
+    says: It filled the sheet the brief asked for, chart included.
+
 referee:
   decides_by: first_done
 
