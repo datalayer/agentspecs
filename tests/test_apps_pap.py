@@ -135,6 +135,18 @@ def test_a_company_may_turn_sign_in_off_for_personal_agents_and_then_answers_sig
     app(company={"enabled": False, "sign_in_disabled": True, "signed_out": False})
 
 
+def test_a_company_may_publish_its_public_skills_to_personal_agents() -> None:
+    """D4-06 (PAP 0.3 §9.4): off by default; on, the application names skills to publish; which of
+    them are public and secret-free is the platform's to say at Ship."""
+    assert app(company={"enabled": True}).pap.company.publish_skills is False
+    spec = parse_app({**BASE, "skills": ["accounting"], "pap": {"profile": "draft-01", "company": {"enabled": True, "publish_skills": True}}})
+    assert spec.pap.company.publish_skills and spec.skills == ["accounting"]
+    with pytest.raises(ValueError, match="names skills to publish"):
+        parse_app({**BASE, "skills": [], "pap": {"profile": "draft-01", "company": {"enabled": True, "publish_skills": True}}})
+    # Not enabled as a company, the flag is kept and not judged.
+    parse_app({**BASE, "skills": [], "pap": {"profile": "draft-01", "company": {"enabled": False, "publish_skills": True}}})
+
+
 def test_a_company_declares_what_it_does_once_the_person_confirms() -> None:
     spec = app(company={"enabled": True, "scopes": [WRITE], "extensions": ["operations"],
                         "operations": [OPERATION]})

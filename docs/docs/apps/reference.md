@@ -924,6 +924,7 @@ The application is a company personal agents work with. Published at PAP 0.3 as 
 | `enabled` | true or false | Whether it publishes itself as a company at Ship | `false` |
 | `signed_out` | true or false | Whether a personal agent may ask before signing in | `true` |
 | `sign_in_disabled` | true or false | Whether it offers personal agents no sign-in (`auth.disabled`): they ask only what anybody may ask, in nobody's account, whatever scopes it lists for its other clients | `false` |
+| `publish_skills` | true or false | Whether it publishes the application's skills to personal agents as a `skill_index` (PAP 0.3 §9.4, the pinned Agent Skills revision): only the skills whose SKILL.md says it is public and that need no secret are listed, Company content granting no access | `false` |
 | `interfaces` | list of [PapInterface](#papinterface) | How personal agents reach it: `agent`, `openapi`, `mcp`, and `web` — its pages, a browser joining the person's Session through the one-time-code form (PAP draft 0.3 §6) | — |
 | `scopes` | list of [AppPapCompanyScope](#apppapcompanyscope) | The scopes it offers, each with what it allows and its hints | — |
 | `excluded_tasks` | list of [AppPapExcludedTask](#apppapexcludedtask) | Tasks it does not offer through the protocol, each with another way when there is one | — |

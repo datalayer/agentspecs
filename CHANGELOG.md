@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.156
+
+7 November 2026.
+
+- **A company publishes its public skills** (D4-06, decided by the user). The [company role](https://agentspecs.datalayer.tech/docs/apps/reference#apppapcompany) gains `publish_skills`: off by default; on, the application's `skills` are published to personal agents as a `skill_index` (PAP 0.3 §9.4) — only those whose SKILL.md says it is public and that need no secret, which the platform decides at Ship; a company publishing skills names skills.
+
 ## 0.0.155
 
 7 November 2026.

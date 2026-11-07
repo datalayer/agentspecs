@@ -585,6 +585,14 @@ class AppPapCompany(_Strict):
             "may ask, in nobody's account, whatever scopes it lists for its other clients"
         ),
     )
+    publish_skills: bool = Field(
+        default=False,
+        description=(
+            "Whether it publishes the application's skills to personal agents as a `skill_index` "
+            "(PAP 0.3 §9.4, the pinned Agent Skills revision): only the skills whose SKILL.md says "
+            "it is public and that need no secret are listed, Company content granting no access"
+        ),
+    )
     interfaces: List[PapInterface] = Field(
         default_factory=lambda: [PapInterface.AGENT],
         description=(
@@ -3588,6 +3596,12 @@ class AppSpec(_Strict):
         if not re.fullmatch(r"[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", identity):
             raise ValueError(f"cannot use {identity!r} as an id: lower-case letters, digits and hyphens")
         return identity
+
+    @model_validator(mode="after")
+    def _publishes_skills_it_has(self) -> "AppSpec":
+        if self.pap is not None and self.pap.company.enabled and self.pap.company.publish_skills and not self.skills:
+            raise ValueError("a company that publishes its skills to personal agents names skills to publish")
+        return self
 
     @model_validator(mode="after")
     def _holds_together(self) -> "AppSpec":

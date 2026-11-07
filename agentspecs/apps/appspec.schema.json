@@ -1327,6 +1327,12 @@
           "default": "any",
           "description": "`any`, or `registered` only"
         },
+        "publish_skills": {
+          "default": false,
+          "description": "Whether it publishes the application's skills to personal agents as a `skill_index` (PAP 0.3 \u00a79.4, the pinned Agent Skills revision): only the skills whose SKILL.md says it is public and that need no secret are listed, Company content granting no access",
+          "title": "Publish Skills",
+          "type": "boolean"
+        },
         "registered_agents": {
           "description": "The personal agents it accepts when `registered` only: each one's `client_id` URL",
           "items": {
