@@ -8,6 +8,9 @@ id: filesystem
 version: 0.0.1
 name: Filesystem
 description: Local filesystem read/write operations
+# Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
+documentation_url: https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem
+setup: "Runs with `npx` on the runtime's own files; no account and no key ([the reference server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem))."
 
 command: npx
 args:
@@ -24,7 +27,7 @@ tags:
   - local
   - storage
 
-icon: file-directory
+icon: "@primer/octicons-react:file-directory"
 emoji: 📁
 
 # What each tool does to the world (agentspecs.actions). A tool not named here is

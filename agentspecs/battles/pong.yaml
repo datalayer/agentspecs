@@ -1,0 +1,66 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Battle: Pong. Two Players at the Pong arena, drawn in the page; each reads
+# the arena through `arena_read`, is told where the ball is by `arena_watch`,
+# and moves its paddle through the arena's frontend tools. The arena keeps
+# the score: first to eleven.
+
+id: pong
+version: 0.0.1
+name: Pong
+description: >-
+  Two Players at the Pong arena, each with a paddle and the arena's tools.
+  The arena keeps the score; the first to eleven wins.
+
+variant: game
+goal: >-
+  You are playing Pong. Call `arena_watch` once: the arena then tells you
+  where the ball is and where it arrives on your side. Each time it does,
+  call `arena_pong_move` with that `y` at once; serve with
+  `arena_pong_serve` when the serve is yours. First to eleven points wins.
+clock_seconds: 180
+arena: pong
+
+contestants:
+  - id: left
+    name: Left
+    app: player:0.0.1
+    runs_in: browser
+    color: blue
+  - id: right
+    name: Right
+    app: player:0.0.1
+    runs_in: browser
+    color: red
+
+# The evals that confirm each contestant's result once the referee has a verdict
+# (the user, 7 November 2026): the winner is declared only when its evals pass.
+evals:
+  - eval: max-duration:0.0.1
+    config:
+      max_duration_ms: 180000
+    says: The game ended within the clock.
+  - eval: llm-judge:0.0.1
+    config:
+      threshold: 0.6
+      rubric: >-
+        The player watched the arena, moved its paddle where the arena said the
+        ball arrived, and served when the serve was its own; it did not idle
+        while the ball came to it.
+    says: The player played the arena, not around it.
+
+referee:
+  decides_by: score
+
+rehearsal:
+  expects:
+    - both contestants move at least once
+    - a score when the clock ends
+
+tags:
+  - example
+  - game
+  - arena
+icon: play
+emoji: "🏓"

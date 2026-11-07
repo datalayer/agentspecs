@@ -1,0 +1,99 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Specification: Page layout — the Reactor plugin `@datalayer/loop-plugin-page-layout`.
+#
+# Read from the plugin's registration in agent-runtimes (src/apps/plugins/page-layout):
+# its Slots, Contributions, Commands and Contribution Points are what the
+# reactor registers for it, held to it by agent-runtimes' ui-specs test.
+
+id: "page-layout"
+version: 0.0.1
+name: Page layout
+description: >-
+  The work on a centred sheet like a document, the composer above it and the conversation in a panel beside it; or the conversation and the work side by side.
+emoji: "📄"
+octicon: file
+plugin: "@datalayer/loop-plugin-page-layout"
+folder: "page-layout"
+# Its Contributions: the Slots it fills, the Contribution Points it
+# contributes to, the Commands it adds (the composer's `/` commands by name).
+contributions:
+  slots:
+  - "loop.header"
+  points:
+  - "loop.chat.layout"
+  - "loop.prompt.panel"
+  commands: []
+# The Contribution Points it offers to other plugins.
+contribution_points: []
+# Its settings: the JSON Schema of its configuration, its defaults the plugin's.
+settings:
+  type: object
+  properties:
+    arrangement:
+      type: string
+      title: Arrangement
+      description: The work on a sheet with the conversation in a panel, or both side by side.
+      enum:
+      - page
+      - split
+      default: page
+    turnPanel:
+      type: string
+      title: Current turn
+      description: Where the current turn hangs on the composer.
+      enum:
+      - below
+      - above
+      - none
+      default: below
+    turnPanelFooter:
+      type: string
+      title: Under the reply
+      description: 'What is drawn under the reply: everything, its actions, or nothing.'
+      enum:
+      - full
+      - actions
+      - none
+      default: full
+    prompt:
+      type: string
+      title: Composer
+      description: Docked above the sheet, or floating over it.
+      enum:
+      - docked
+      - floating
+      default: docked
+    promptAnchor:
+      type: string
+      title: Floating composer starts
+      description: The edge a floating composer starts at.
+      enum:
+      - top
+      - bottom
+      default: top
+    pageSize:
+      type: object
+      title: Sheet
+      description: 'The sheet: free at its reading width when unsaid, or a paper (letter, a4) whose width
+        it takes, with a width or a height of its own over either.'
+      properties:
+        format:
+          type: string
+          title: Paper
+          description: The paper the sheet is.
+          enum:
+          - free
+          - letter
+          - a4
+        width:
+          type: number
+          title: Width
+          description: The sheet's width in pixels; over a paper, it replaces the paper's.
+        height:
+          type: number
+          title: Height
+          description: The sheet's least height in pixels; what is past it grows the sheet.
+# The UI renderers (agentspecs/ui-renderers) it may be exposed through.
+renderers: []

@@ -10,12 +10,15 @@ module.exports = {
   url: 'https://agentspecs.datalayer.tech',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'datalayer',
   projectName: 'datalayer',
   markdown: {
     mermaid: true,
+    // A link to a page that does not exist fails the build (G-10).
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
   },
   plugins: [
     '@docusaurus/theme-live-codeblock',
@@ -125,7 +128,7 @@ module.exports = {
             },
             {
               label: 'Bluesky',
-              href: 'https://assets.datalayer.tech/logos-social-grey/youtube.svg',
+              href: 'https://assets.datalayer.tech/logos-social-grey/bluesky.svg',
             },
             {
               label: 'LinkedIn',
@@ -139,14 +142,6 @@ module.exports = {
             {
               label: 'Datalayer AI',
               href: 'https://datalayer.ai',
-            },
-            {
-              label: 'Datalayer App',
-              href: 'https://datalayer.app',
-            },
-            {
-              label: 'Datalayer Docs',
-              href: 'https://docs.datalayer.app',
             },
             {
               label: 'Datalayer Blog',

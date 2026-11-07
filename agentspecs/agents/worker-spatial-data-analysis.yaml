@@ -20,7 +20,7 @@ tags:
   - sustainability
   - summarization
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.analyse
@@ -54,7 +54,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: globe
 emoji: 🛰️
-color: "#0EA5E9"
+color: sky
 
 # Chat suggestions to show users what this agent can do
 suggestions:

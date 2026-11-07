@@ -1,0 +1,28 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Video Skills (the user, 7 November 2026): recordings of web pages, and
+# videos read, trimmed, transcoded, optimized, framed and turned to GIF —
+# agent-skills' `video` skill, run by its scripts in the sandbox over ffmpeg.
+
+id: video
+version: 0.0.1
+name: Video Skills
+description: Recordings of web pages; videos read, trimmed, transcoded, optimized, framed and turned to GIF
+
+module: agent_skills.skills.video
+
+dependencies:
+  - imageio-ffmpeg>=0.5
+  - playwright>=1.45
+
+# Offered on the platform: the runtime image installs agent-skills[skills] with Chromium and ffmpeg.
+enabled: true
+
+tags:
+  - video
+  - recording
+  - media
+
+icon: "@primer/octicons-react:video"
+emoji: 🎬

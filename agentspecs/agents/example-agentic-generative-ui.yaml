@@ -32,7 +32,7 @@ mcp_servers: []
 skills: []
 
 # Runtime tools
-tools:
+backend_tools:
   - example-create-plan:0.0.1
   - example-update-plan-step:0.0.1
 frontend_tools: []
@@ -43,7 +43,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: list-unordered
 emoji: 📋
-color: "#6366F1"
+color: indigo
 
 # Chat suggestions
 suggestions:

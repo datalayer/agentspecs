@@ -8,6 +8,11 @@ id: salesforce
 version: 0.0.1
 name: Salesforce
 description: Salesforce CRM operations (queries, reports, objects, SOQL)
+# Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
+documentation_url: https://developer.salesforce.com/docs
+signup_url: https://developer.salesforce.com/signup
+api_key_url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart_oauth.htm
+setup: "An access token and the instance url (`SALESFORCE_ACCESS_TOKEN`, `SALESFORCE_INSTANCE_URL`) from a [connected app](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart_oauth.htm) of your org; [sign up](https://developer.salesforce.com/signup) for a developer org if you have none."
 
 command: npx
 args:
@@ -29,7 +34,7 @@ tags:
   - sales
   - analytics
 
-icon: briefcase
+icon: "@primer/octicons-react:briefcase"
 emoji: ☁️
 
 # What each tool does to the world (agentspecs.actions). A tool not named here is

@@ -8,7 +8,7 @@ Model specifications define the AI models available to agents. Each specificatio
 
 ## Overview
 
-Model IDs follow the format `provider:model-name` (e.g., `bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0`, `openai:gpt-4.1`). This convention makes it easy to identify both the provider and the specific model variant at a glance.
+Model IDs follow the format `provider:model-name` (e.g., `bedrock:us.anthropic.claude-sonnet-4-6`, `openai:gpt-4.1`). This convention makes it easy to identify both the provider and the specific model variant at a glance.
 
 ## Required Fields
 
@@ -63,10 +63,21 @@ Whether this model is the system default (default: `false`). Exactly one model s
 default: true
 ```
 
+### `available` (boolean)
+Whether the model is offered to a person choosing one (default: `false`). The catalogue is
+what the platform knows how to talk to; `available` is what it is worth offering today, so a
+model picker does not list every superseded model.
+```yaml
+available: true
+```
+
+### `tokens_limit` (integer)
+The most output tokens the model may generate in a single run.
+
 ### `capabilities` (list of strings)
 What the model can be trusted with, from a closed vocabulary: `chat`, `tools`, `codemode`,
-`vision`, `thinking`, `judgments` (a typed-judgment model: noul, choice and score questions
-answered as probabilities), `judge` (a chat model that may be asked those questions and
+`vision`, `thinking`, `decisions` (a typed-decision model: noul, choice and score questions
+answered as probabilities), `decider` (a chat model that may be asked those questions and
 made to answer in the same shape). A spec naming another word is refused when the
 catalogue loads.
 
@@ -85,6 +96,15 @@ answered; where the route keeps a log of the request (`none`, `gateway`); the pr
 list price, `{input_usd_per_million, output_usd_per_million}` — both required, never
 negative — for a service that meters by it.
 
+Each price is the provider's published one, and its spec says where it was read and when:
+for Bedrock, the on-demand price of the US cross-region inference profile its `us.` id names
+([AWS](https://aws.amazon.com/bedrock/pricing/)); for Anthropic, OpenAI and Cloudflare,
+their own price pages; for Azure OpenAI, the Global Standard deployment's price, which is
+OpenAI's list price (as [genai-prices](https://github.com/pydantic/genai-prices) prices Azure).
+A model whose price is not published for the way it is reached — Alibaba Model Studio, whose
+price depends on the region and the prompt's length; a local Ollama model — carries no `pricing`,
+and a service that meters by it records the call as not priced, never as free.
+
 ### `aliases` (list of strings)
 Older ids the spec answers to, kept when an id has to move so `get_model` and the
 `AIModels` enum still serve what a consumer named.
@@ -101,22 +121,35 @@ required_env_vars:
 ## Complete Example
 
 ```yaml
-# Copyright (c) 2025-2026 Datalayer, Inc.
-# Distributed under the terms of the Modified BSD License.
+# AI Model Specification: Bedrock Claude Sonnet 4.6
 
-# AI Model Specification: Bedrock Claude Sonnet 4.5
-
-id: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+id: "bedrock:us.anthropic.claude-sonnet-4-6"
 version: 0.0.1
-name: Bedrock Claude Sonnet 4.5
-description: Claude Sonnet 4.5 via AWS Bedrock - balanced performance
+name: Bedrock Claude Sonnet 4.6
+description: Claude Sonnet 4.6 via AWS Bedrock - balanced performance
 provider: bedrock
+provider_url: "https://aws.amazon.com/bedrock/anthropic/"
 default: true
+available: true
+tokens_limit: 64000
+context_window: 200000
+
+pricing:
+  input_usd_per_million: 3.3
+  output_usd_per_million: 16.5
 
 required_env_vars:
   - AWS_ACCESS_KEY_ID
   - AWS_SECRET_ACCESS_KEY
   - AWS_DEFAULT_REGION
+
+# Asked the typed decision questions and made to answer in the adapter's
+# shape, for comparing with Jev on the same cases; its probabilities are
+# what it says they are.
+capabilities:
+  - chat
+  - tools
+  - decider
 ```
 
 ## Model Hierarchy
@@ -146,12 +179,28 @@ Required env vars: `ANTHROPIC_API_KEY`
 
 | Model | ID | Description |
 |-------|-----|-------------|
-| **Claude Sonnet 4** | `bedrock:us.anthropic.claude-sonnet-4-20250514-v1:0` | Strong reasoning |
-| **Claude Sonnet 4.5** ⭐ | `bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0` | Balanced performance (default) |
-| **Claude Opus 4** | `bedrock:us.anthropic.claude-opus-4-20250514-v1:0` | Highest capability |
-| **Claude Opus 4.6** | `bedrock:us.anthropic.claude-opus-4-6-v1:0` | Latest flagship model |
+| **Claude Fable 5** | `bedrock:us.anthropic.claude-fable-5` | Claude Fable 5 |
+| **Claude Opus 4.6** | `bedrock:us.anthropic.claude-opus-4-6-v1` | Claude Opus 4.6 |
+| **Claude Opus 4.8** | `bedrock:us.anthropic.claude-opus-4-8` | Claude Opus 4.8 |
+| **Claude Opus 4** | `bedrock:us.anthropic.claude-opus-4-20250514-v1:0` | highest capability |
+| **Claude Opus 5** | `bedrock:us.anthropic.claude-opus-5` | the current frontier model |
+| **Claude Sonnet 4.5** | `bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0` | balanced performance |
+| **Claude Sonnet 4.6** ⭐ | `bedrock:us.anthropic.claude-sonnet-4-6` | balanced performance (default) |
+| **Claude Sonnet 4** | `bedrock:us.anthropic.claude-sonnet-4-20250514-v1:0` | strong reasoning |
 
 Required env vars: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`
+
+### Alibaba Cloud Model Studio
+
+| Model | ID | Description |
+|-------|-----|-------------|
+| **Qwen-Max** | `alibaba:qwen-max` | highest capability Qwen model |
+| **Qwen3-32B** | `alibaba:qwen3-32b` | open-weight 32B model with tool calling |
+| **Qwen3.6-Flash** | `alibaba:qwen3.6-flash` | fast and low cost |
+| **Qwen3.6-Plus** | `alibaba:qwen3.6-plus` | balanced performance and cost |
+| **Qwen3.7-Plus** | `alibaba:qwen3.7-plus` | balanced flagship Qwen3 model |
+
+Hosted through `datalayer-ai-inference`, which holds the Model Studio credentials: `required_env_vars` is empty.
 
 ### Azure OpenAI
 
@@ -191,10 +240,10 @@ Typesafe *and* logged at the gateway. A route for sensitive data is chosen on bo
 Jev is in the catalogue once per route, `cloudflare:gtw/typesafe/jev`
 and `cloudflare:wrk/typesafe/jev`: the same model, asked at
 `gateway.ai.cloudflare.com/v1/{account}/{gateway}/workers-ai/run/typesafe/jev` or at
-`api.cloudflare.com/client/v4/accounts/{account}/ai/run`. Its capability is `judgments`, not
+`api.cloudflare.com/client/v4/accounts/{account}/ai/run`. Its capability is `decisions`, not
 `chat`: it answers `noul`, `choice` and `score` questions about a state as calibrated
-probabilities, through `datalayer-ai-inference`'s `POST /api/ai-inference/v1/judgments`,
-and a picker of chat models must leave it out. A chat model with the `judge` capability
+probabilities, through `datalayer-ai-inference`'s `POST /api/ai-inference/v1/decisions`,
+and a picker of chat models must leave it out. A chat model with the `decider` capability
 (`gpt-oss-120b`, Claude Sonnet 4.6) may be asked the same questions and made to answer in
 the same shape, for comparing with Jev on the same cases; its probabilities are what it
 says they are.
@@ -214,13 +263,13 @@ million input and output tokens); `context_window` and `zero_data_retention` say
 
 | Model | ID | Route | Notes |
 |-------|----|-------|-------|
-| **gpt-oss-120b** | `cloudflare:wrk/openai/gpt-oss-120b` | workers-ai | 128k context, tool calling; a judge |
+| **gpt-oss-120b** | `cloudflare:wrk/openai/gpt-oss-120b` | workers-ai | 128k context, tool calling; a decider |
 | **Llama 3.3 70B** | `cloudflare:wrk/meta/llama-3.3-70b-instruct-fp8-fast` | workers-ai | 24k context, tool calling, fast |
 | **Qwen3.8 27B** | `cloudflare:wrk/qwen/qwen3.8-27b` | workers-ai | 262k context, tool calling |
 | **Gemma 4 26B** | `cloudflare:wrk/google/gemma-4-26b-a4b-it` | workers-ai | 256k context, tool calling |
 | **GLM-5.2** | `cloudflare:wrk/zai-org/glm-5.2` | workers-ai | 262k context, tool calling; credits |
 | **Kimi K2.6** | `cloudflare:wrk/moonshotai/kimi-k2.6` | workers-ai | 262k context, tool calling; credits |
-| **Jev (AI Gateway)** | `cloudflare:gtw/typesafe/jev` | ai-gateway | typed judgments; 32k context; ZDR at Typesafe, logged at the gateway; credits |
+| **Jev (AI Gateway)** | `cloudflare:gtw/typesafe/jev` | ai-gateway | typed decisions; 32k context; ZDR at Typesafe, logged at the gateway; credits |
 | **Jev (Workers AI)** | `cloudflare:wrk/typesafe/jev` | workers-ai | the same at Workers AI's own endpoint; ZDR, unlogged |
 
 The six chat models were `cloudflare:<vendor>/<model>` before 0.0.9; each keeps that id in
@@ -244,13 +293,23 @@ models that have tool calling and no spec yet.
 
 Required env vars: `OPENAI_API_KEY`
 
+### Ollama (on your machine)
+
+| Model | ID | Description |
+|-------|-----|-------------|
+| **Gemma 3 4B (Ollama)** | `ollama:gemma3:4b` | small and fast, no tool calling |
+| **Llama 3.1 8B (Ollama)** | `ollama:llama3.1:8b` | tool calling, no data leaves the machine |
+| **Qwen2.5 Coder 7B (Ollama)** | `ollama:qwen2.5-coder:7b` | code-focused with tool calling |
+
+Run on the person's own machine through Ollama: no API key, and selecting one moves execution to a local sandbox, so the code stays where the tokens do. None is offered in a picker today (`available: false`).
+
 ## Linking Models to Agents
 
 Agents can specify a model in their YAML spec using the model ID:
 
 ```yaml
 # In agent spec
-model: "bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
 ```
 
 If an agent does not specify a `model` field, the system default model (marked with `default: true`) is used.
@@ -270,7 +329,7 @@ Run `make specs` in the agent-runtimes repository to regenerate from the YAML fi
 2. **Single Default**: Ensure exactly one model has `default: true`
 3. **Environment Variables**: Always list all required credentials in `required_env_vars`
 4. **Descriptions**: Keep descriptions short — mention the provider, model tier, and key characteristic
-5. **Provider Consistency**: Use the canonical provider names (`anthropic`, `bedrock`, `azure-openai`, `openai`)
+5. **Provider Consistency**: Use the canonical provider names (`anthropic`, `bedrock`, `azure-openai`, `openai`, `alibaba`, `cloudflare`, `ollama`), one of the [model providers](../model-providers)
 6. **File Naming**: Use kebab-case matching the provider and model name (e.g., `bedrock-claude-sonnet-4-5.yaml`)
 
 ## Full Field Coverage

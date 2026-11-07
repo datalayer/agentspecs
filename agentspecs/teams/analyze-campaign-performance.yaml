@@ -22,7 +22,7 @@ tags:
 enabled: true
 icon: megaphone
 emoji: 📢
-color: '#8250df'
+color: purple
 agent_spec_id: analyze-campaign-performance:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential

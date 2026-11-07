@@ -32,7 +32,7 @@ mcp_servers: []
 skills: []
 
 # Runtime tools
-tools:
+backend_tools:
   - example-generate-haiku:0.0.1
 frontend_tools: []
 
@@ -49,7 +49,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: pencil
 emoji: 🖋️
-color: "#6366F1"
+color: indigo
 
 # Chat suggestions
 suggestions:

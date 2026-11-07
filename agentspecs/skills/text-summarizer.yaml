@@ -15,13 +15,13 @@ method: summarize_text
 dependencies:
   - agent-skills>=0.0.1
 
-# Not offered on the platform yet: the integrations page lists it as not available.
-enabled: false
+# Offered on the platform (the user, 7 November 2026): the runtime image installs agent-skills[skills].
+enabled: true
 
 tags:
   - nlp
   - summarization
   - text-processing
 
-icon: note
+icon: "@primer/octicons-react:note"
 emoji: 📝

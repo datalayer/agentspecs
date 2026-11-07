@@ -11,8 +11,8 @@ description: >-
   Checks each claim and each figure of the output against the sources and
   the computations the run used: a figure traces to the code that produced it.
 
-# A Guard extends a guardrail: the policy it verifies, and runs within.
-extends: default-platform-user:0.0.1
+# A Guard extends a Policy: the rules it verifies, and runs within.
+extends: default:0.0.1
 
 category: source-grounding
 stages:

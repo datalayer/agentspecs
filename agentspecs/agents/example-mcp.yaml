@@ -35,7 +35,7 @@ skills:
   - events:0.0.1
   - jokes:0.0.1
 
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 
 frontend_tools: []
@@ -44,7 +44,7 @@ environment_name: ai-agents-env
 
 icon: globe
 emoji: "🌐"
-color: "#0EA5E9"
+color: sky
 
 suggestions:
   - text: Search the web for recent news about AI agents

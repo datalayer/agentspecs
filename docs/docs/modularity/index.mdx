@@ -36,8 +36,8 @@ inherit that subagent list — and `@NotebookCompactor` could delegate to
 declares subagents. There is then no cycle for a depth cap to catch.
 
 Extension is also how a [Frame](../frames) inherits from its parent, how a
-[Cog](../cogs) is built on an agent and how a [Guard](../guards) is built on a
-guardrail.
+[Cog](../cogs) is built on an agent and how a [Guard](../guards) names the
+[Policy](../policies) it verifies.
 
 ## Resolved before anything runs
 
@@ -70,13 +70,13 @@ Lists append because the common case is "the parent's tools plus mine". Two
 markers cover the cases where that is wrong:
 
 ```yaml
-tools:
+backend_tools:
   - "!remove delete-cells:0.0.1"   # drop one thing the parent granted
   - my-own-tool:0.0.1
 ```
 
 ```yaml
-tools:
+backend_tools:
   - "!replace"                     # start from nothing
   - only-this:0.0.1
 ```

@@ -1,0 +1,52 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Sheet Maker: an application that fills a spreadsheet in the page, cell by
+# cell, with the sheet arena's tools (a Battle's `arena: sheet`, the user,
+# 6 November 2026). It runs in the browser; the workbook it fills is drawn
+# under it as Datalayer Cells draws one.
+
+schema: loop.app/v1
+id: sheet-maker
+version: 0.0.1
+name: Sheet Maker
+kind: chat
+description: >-
+  Fills a spreadsheet in the page from a brief: the headers, the rows, the
+  totals as formulas, and a chart of them, drawn as it goes.
+owner: Datalayer <info@datalayer.io>
+agent: example-analyze-excel-spreadsheet:0.0.1
+instructions: >-
+  You make spreadsheets. Given a brief, fill the sheet with your tools and
+  nothing else: `sheet_write_range` writes a block of rows from a top-left
+  cell such as `A1` — a first row of headers, then the rows, numbers as
+  numbers, and totals as formulas starting with `=`; `sheet_read_range`
+  reads what is there; `sheet_insert_chart` draws a chart of a range,
+  headers included. Keep it small: a header row, five to eight rows, a
+  totals row, one chart. The sheet is not complete without its chart: call
+  `sheet_insert_chart` on the data, headers included, before you answer.
+  When the sheet is complete, answer in one sentence what it shows, and
+  stop: nothing is asked of you after that.
+ui:
+  - plugin: chat
+interface:
+  layout: chat
+  accent: green
+  avatar: cat
+  welcome: >-
+    Give me a brief, and I'll fill the sheet here, cell by cell.
+emoji: "📊"
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Build it from the brief.
+      expect: It uses its tools, and nothing else, and says in one sentence what it made.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Not played live yet: it is made for the Battles of the home page, where two of it race for the same brief (6 November 2026)."
+tags:
+  - example
+  - cells
+  - battle

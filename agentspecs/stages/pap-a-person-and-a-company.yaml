@@ -1,0 +1,15 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Stage: a Personal Agent Protocol Stage, played in the page from its scripted
+# scene (PAP_DATALAYER §1.11): nothing is deployed, nothing signs in anywhere.
+
+id: pap-a-person-and-a-company
+version: 0.0.1
+scene: pap-a-person-and-a-company:0.0.1
+public: true
+tags:
+  - example
+  - scripted
+  - pap
+  - slice-1

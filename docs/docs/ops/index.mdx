@@ -53,7 +53,7 @@ One YAML per Op under `agentspecs/ops/`, named for its id.
 | --- | --- | --- |
 | **Frames** orient the work | 3 | `datalayer` at the workflow level; `sales-pipeline` and `board-reporting` on the Cog |
 | **A Cog** performs the work | 1 | `cog-sales-pipeline-board-report`, which extends the agent `worker-sales-pipeline-board-report` |
-| **Guards** verify the work | 12 | of all seven categories, at all four stages, each extending a guardrail |
+| **Guards** verify the work | 12 | of all seven categories, at all four stages, each extending a Policy |
 | **Gates** decide | 8 | from "stop before starting" to "a person approves the release" |
 | **A Track** makes it accountable | 1 | `financial-reporting`: the full record, seven years |
 
@@ -129,7 +129,7 @@ auditor need without a second lookup:
 | --- | --- |
 | `cogs` | Each Cog's id, the agent it extends, its Frames and its kind. |
 | `frames`, `lineage` | The workflow-level Frames, and every Frame that orients the Op: those and the ones its Cogs carry. |
-| `guards` | By stage, each Guard resolved with the guardrail it extends. |
+| `guards` | By stage, each Guard resolved, naming the Policy it extends. |
 | `frame_guards` | The checks the Frames themselves declare. |
 | `gates` | Each Gate, with the signals it reads. |
 | `track` | The Track, with its retention in days. |

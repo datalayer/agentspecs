@@ -26,60 +26,63 @@ agentspecs/
 ├── teams/            # Team orchestration specs
 ├── frames/           # Frame specs: owned, scoped context a Cog works under
 ├── cogs/             # Cog specs: an agent, equipped with Frames
+├── harnesses/        # Harness specs: an agent program driven over ACP, and its register
 ├── ops/              # Op specs: Cogs, orchestrated, with a validation strategy
-├── guards/           # Guard specs: a check, extending a guardrail
+├── guards/           # Guard specs: a check, extending a Policy
 ├── gates/            # Gate specs: what happens on what the Guards found
 ├── tracks/           # Track specs: the evidence kept, and for how long
+├── battles/          # Battle specs: scenes composed against each other, a clock, a referee
+├── stages/           # Stage specs: a scene, an app or a Battle on stage, and where it plays
 ├── apps/             # Application specs (Appspec): a chat, a widget, a decision, a worker
 ├── fragments/        # Capability fragments an agent includes
 ├── mcp-servers/      # MCP server specs
 ├── skills/           # Skill specs
 ├── tools/            # Runtime tool specs
 ├── frontend-tools/   # Frontend tool specs
-├── envvars/          # Environment variable specs
+├── env-vars/          # Environment variable specs
 ├── models/           # Model specs
 ├── model-providers/  # Model provider specs
 ├── memory/           # Memory backend specs
-├── guardrails/       # Guardrail policy specs
 ├── evals/            # Evaluator specs
 ├── benchmarks/       # Benchmark suite specs
-├── loops/            # Loop specs
+├── strategies/       # Strategy specs (control-loop reasoning)
 ├── triggers/         # Trigger specs
 ├── events/           # Event specs
 ├── outputs/          # Output format specs
 ├── notifications/    # Notification channel specs
-└── ui-plugins/       # UI plugin specs
+└── ui/       # UI specs
 ```
 
 Current YAML file counts:
 
-- Agents: 168
+- Agents: 179
 - Teams: 11
-- Frames: 5
+- Frames: 6
 - Cogs: 3
 - Ops: 1
-- Guards: 12
+- Guards: 13
 - Gates: 8
-- Tracks: 2
-- Applications: 4
+- Tracks: 4
+- Battles: 5
+- Stages: 13
+- Applications: 37
 - Fragments: 1
-- MCP servers: 14
-- Skills: 7
+- MCP servers: 19
+- Skills: 9
 - Tools: 18
 - Frontend tools: 6
-- Env vars: 10
+- Env vars: 22
 - Models: 39
 - Model providers: 7
 - Memory backends: 4
-- Guardrails: 6
 - Evals: 9
 - Benchmarks: 8
-- Loops: 4
+- Strategies: 4
 - Triggers: 3
 - Events: 6
 - Outputs: 9
 - Notifications: 5
-- UI plugins: 3
+- UI specs: 3
 
 ## Versioning
 
@@ -143,7 +146,7 @@ Common fields:
 
 - `id`, `version`, `name`, `description`, `enabled`
 - `model`, `sandbox_variant`, `memory`
-- `mcp_servers`, `skills`, `tools`
+- `mcp_servers`, `skills`, `backend_tools`, `frontend_tools`
 - `environment_name`
 - `icon`, `emoji`, `color`
 - `suggestions`, `welcome_message`, `welcome_notebook`, `welcome_document`
@@ -175,7 +178,7 @@ Common fields:
 - `scope` (`organization`, `department`, `team`, `project`, `role`, `relationship`) and `owner` — both required
 - `extends` (the parent Frame, versioned)
 - `rules`, `terminology`, `goals`, `style`, `norms`, `process`, `architecture`, `prompts`
-- `skills`, `tools`, `mcp_servers` (versioned references)
+- `skills`, `backend_tools`, `mcp_servers` (versioned references)
 - `guards` (`id`, `category`, `description`, `required`)
 
 ```python
@@ -214,6 +217,33 @@ cog = get_resolved_cog("cog-crawler")   # the agent, the Cog's changes and its F
 cog["frame_context"]["guards"]          # what its output answers to
 ```
 
+### Harnesses (`agentspecs/harnesses`)
+
+Defines an agent program driven over the Agent Client Protocol — a coding agent such as Claude Code or Codex, or any agent a framework
+exposes over ACP — and the terms it is served under. An agent spec names one
+with `harness: claude-code` where it says `harness: pydantic-ai`; what the
+harness cannot honour of the spec (`model:` it does not take, `subagents:`
+when it has its own, `skills:` in a format it cannot read) is refused at load,
+in a sentence. `register.yaml` is the register: every harness with its
+adapter, the version pinned, its licence, the agent's terms, the credential it
+takes and whether serving it to third parties is permitted, each with where it
+was read; a harness without an entry does not load.
+
+Common fields:
+
+- `id`, `version`, `name`, `description`, `enabled`, `docs`
+- `acp` (`command`, `args` with the version pinned, `protocol_version`, `load_session`, `mcp`: `lend`, `own` or `none`, `modes`, `env`) — absent only on `custom`
+- `requires` (`secrets`, ids of `env-vars/`; `binaries`)
+- `terms` (`served_to_third_parties`: `api_key_only`, `permitted`, `refused` or `organizations_own`; `licence`; `tier_restrictions`)
+- `skills` (`format`: `skill-md` or `none`; `dir`), `honours` (`model`, `subagents`), `instructions_file`
+
+```python
+from agentspecs.harnesses import HARNESS_CATALOGUE, agent_harness_problems
+
+print(HARNESS_CATALOGUE["claude-code"].acp.args)
+print(agent_harness_problems({"harness": "claude-code", "subagents": [{"id": "x"}]}))
+```
+
 ### Ops, Guards, Gates and Tracks
 
 The execution and accountability model of the whitepaper: *Frames guide the
@@ -223,14 +253,29 @@ Gates decide whether the work proceeds. Tracks make the work accountable.*
 - **Ops** (`agentspecs/ops`): `owner`, `cogs`, `frames`, `supervisor`, and a
   validation strategy — `guards` by stage (`preflight`, `in_flight`, `post_run`,
   `continuous`), `gates`, `track`. An Op without one is refused.
-- **Guards** (`agentspecs/guards`): **a Guard `extends` a guardrail** — the
-  policy it verifies — and adds `category` (the seven of the whitepaper),
+- **Guards** (`agentspecs/guards`): **a Guard `extends` a Policy** — the
+  rules it verifies, named by `policy` once resolved and read with
+  `policy_of` — and adds `category` (the seven of the whitepaper),
   `stages`, `method`, `check` and the `signals` it reports.
 - **Gates** (`agentspecs/gates`): `guards`, `when` (a condition on their
   signals, or `always`), `then` and `otherwise` (proceed, pause, retry, human
   review or approval, expert review, stop), `reviewers`.
 - **Tracks** (`agentspecs/tracks`): `retain_for`, `include`, `readers`,
   `redact`; never `exchangeable`.
+
+- **Battles** (`agentspecs/battles`): scenes composed against each other —
+  a `variant` (`race`, `game`, `challenge`), a `goal` said to every
+  contestant, a `clock_seconds`, two or more `contestants` (a `scene` of the
+  catalogue played whole, or an `app`), a `referee` (`first_done`, `score`
+  or the Guard that `measure`s), and for a game its `arena` (`pong`,
+  `invaders`). A referee that does not decide as its variant does is refused.
+
+- **Stages** (`agentspecs/stages`): something of the catalogue put on stage
+  and where it plays — exactly one of a `scene` played whole, an `app` or a
+  `battle`; `deployments`, each member on a runtime to the slug of the
+  deployment that answers for it (none for a scripted scene or a Battle);
+  `public`, whether it has a page that needs no account. Its name, face and
+  description are what it stages says unless it says otherwise.
 
 `ops/op-sales-pipeline-board-report.yaml` is the comprehensive example: one
 Cog with its Frames, twelve Guards of all seven categories at all four stages,
@@ -240,7 +285,7 @@ eight Gates and a seven-year Track.
 from agentspecs.ops import get_resolved_op
 
 op = get_resolved_op("op-sales-pipeline-board-report")
-op["guards"]["post_run"]     # each Guard, with the guardrail it extends
+op["guards"]["post_run"]     # each Guard, naming the Policy it extends
 op["gates"], op["track"]
 ```
 
@@ -273,8 +318,10 @@ Defines MCP integrations and process startup configuration.
 Common fields:
 
 - `id`, `version`, `name`, `description`
-- `command`, `args`, `transport`
-- `env`, `envvars` (usually versioned)
+- `command`, `args`, `transport`; `url` and `headers` for a remote server
+- `env`, `envvars` (usually versioned), `sandbox_envvars`
+- `documentation_url`, `signup_url`, `api_key_url`, `setup`: where to read about it, sign up and make the key it needs, and how, in a sentence of Markdown — its links render as links on the server's page (7 November 2026)
+- `actions`: what each tool does to the world (`read`, `write`, …), when it was checked, and a note
 - `tags`, `icon`, `emoji`
 
 ### Skills (`agentspecs/skills`)
@@ -287,9 +334,11 @@ Common fields:
 - `envvars`, `optional_env_vars`, `dependencies`
 - `tags`, `icon`, `emoji`
 
-### Tools (`agentspecs/tools`)
+### Backend Tools (`agentspecs/backend-tools`)
 
-Defines runtime tool metadata and implementation binding.
+Defines the tools that run on the runtime, in Python: their metadata and implementation
+binding. An agent names them under `backend_tools`, as it names the page's under
+`frontend_tools`; the old `tools` field is refused.
 
 Common fields:
 
@@ -298,7 +347,29 @@ Common fields:
 - `runtime.language`, `runtime.package`, `runtime.method`
 - `tags`, `icon`, `emoji`
 
-### Env Vars (`agentspecs/envvars`)
+### Frontend Tools (`agentspecs/frontend-tools`)
+
+Names tools that run on the page rather than on the runtime (`frontend_tools` of an agent), a set at a time: the
+notebook's, the Lexical document's, the decks'.
+
+Common fields:
+
+- `id`, `version`, `name`, `description`, `enabled`
+- `toolset` (the names of the tools of the set)
+- `streams` (the tools of the set that stream: called once, each keeps pushing events the harness tells the model as turns it did not ask for — the Pong arena's `arena_watch`)
+- `tags`, `icon`, `emoji`
+
+### Marks: `icon` and `emoji`
+
+An MCP server, a skill, a backend tool and a frontend tool set each have an icon and an emoji
+(`agentspecs.marks`, its JSON Schema `MARKS_SCHEMA`, checked by `tests/test_marks.py`).
+The icon says the package it is in: `<package>:<name>`, the package one of
+`@datalayer/icons-react` and `@primer/octicons-react`, the name in kebab case as that
+package names it — `@datalayer/icons-react:odoo`, `@primer/octicons-react:mark-github`.
+A page draws the icon, the emoji where there is no icon, and nothing where there is
+neither.
+
+### Env Vars (`agentspecs/env-vars`)
 
 Defines environment variable metadata.
 
@@ -320,7 +391,6 @@ Common fields:
 ### Other Catalogs
 
 - `memory`: memory backend options
-- `guardrails`: security and policy profiles
 - `evals`: evaluator definitions
 - `benchmarks`: benchmark suites (with evaluator dependencies)
 - `triggers`: reusable trigger templates
@@ -332,7 +402,7 @@ Common fields:
 A spec is built out of other specs rather than copied from them: `extends`
 (one parent, at most three deep, cycles refused) and `includes` (fragments).
 An agent extends an agent, a Frame extends a Frame, a Cog extends an agent,
-and a Guard extends a guardrail. Lists append and are deduplicated, a child's scalar wins, and
+and a Guard extends a Policy. Lists append and are deduplicated, a child's scalar wins, and
 `!remove` / `!replace` cover the rest. The rules are in
 [the documentation](https://agentspecs.datalayer.tech/modularity/) and applied
 by `agentspecs.compose`.

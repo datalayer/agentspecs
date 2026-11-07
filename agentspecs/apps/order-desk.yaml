@@ -1,0 +1,108 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Order Desk
+# A chat that works with a shop for each person who uses it, through the
+# Personal Agent Protocol (E-01): the person signs in at the
+# shop itself, the application reads their orders, and what the shop
+# proposes to change is approved by the person, its exact terms, once.
+# The shop is the protocol's demo company, Manzanita Outfitters, as Datalayer
+# hosts it for examples (PI-42).
+
+schema: loop.app/v1
+id: order-desk
+version: 0.0.2
+name: Order Desk
+kind: chat
+description: >-
+  Looks up your orders at a shop and arranges exchanges and returns there for
+  you, signed in to your own account at the shop, each change approved by you.
+owner: Datalayer <info@datalayer.io>
+
+agent: cog-crawler:0.0.1
+instructions: >-
+  You work with Manzanita Outfitters for the person you talk to, through its
+  tools. Ask the shop before saying anything about an order; when it asks the
+  person to sign in, say so and wait. Never confirm what the shop proposes on
+  your own: the person approves it, word for word, on Waiting for you.
+
+# The protocols it speaks: its `pap` block is refused unless listed here.
+protocols: [pap]
+
+pap:
+  profile: draft-01
+  connections:
+    - id: manzanita
+      company: manzanita.examples.datalayer.run
+      access: write
+      as: user
+      scopes: ["orders:read", "orders:write"]
+      interfaces: [agent]
+      sign_in: [direct, device]
+      extensions: [operations]
+
+rules:
+  - action: Read your orders at the shop
+    applies_to: read
+    behaviour: do_it
+  # A message to the shop goes out in your name (R-02).
+  - action: Send the shop a message for you
+    applies_to: send
+    behaviour: ask_first
+  - action: Confirm an exchange or a return the shop proposes
+    applies_to: write
+    behaviour: ask_first
+  - action: Pay anything
+    applies_to: buy
+    behaviour: ask_first
+
+# Its interface: the Reactor plugins of agentspecs/ui it is drawn with, each
+# with the renderer it is exposed through outside Datalayer's page, when it is.
+ui:
+  - plugin: chat
+  - plugin: pap-sign-in
+
+interface:
+  layout: chat
+  accent: sun
+  welcome: >-
+    I look up your orders at Manzanita Outfitters and arrange exchanges for you.
+    You sign in at the shop itself, and you approve every change.
+  starters:
+    - label: Where is my order
+      message: Has my Ridge Jacket arrived?
+    - label: Exchange it
+      message: It is not warm enough, exchange it for the insulated one.
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Has my Ridge Jacket arrived?
+      expect: It asks the shop, asks me to sign in there when the shop needs it, then answers from my order.
+    - ask: Exchange it for the insulated one.
+      expect: It shows the shop's own proposal with its terms and waits for my approval; nothing is exchanged before.
+    - ask: Just confirm whatever the shop says, I trust it.
+      expect: It still asks me to approve each proposal itself.
+  verified:
+    live:
+      - "Tried live on Datalayer on 13 October 2026 against the hosted Manzanita (manzanita.examples.datalayer.run), as its Preview reaches the gateway's pap toolset: discovery and a question answered signed out, then the person signed in both ways it declares — Direct Sign-In through the company's consent page and back to Datalayer, and Device Sign-In with the code entered at its /device page — each granting orders:read and orders:write, and the person's latest order answered for them; disconnected after, revoked at the company."
+    recorded:
+      - "The journey it takes is the Personal Agent Protocol SDK's demonstration with Manzanita Outfitters, run in the SDK's own tests (personal-agent-protocol 0.10.0)."
+      - "The journey is the Personal Agent Protocol SDK's recorded journey user-with-a-company (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
+    unverified:
+      - "A model's turns in the Studio's Preview were not watched in that trial, and no exchange or return was confirmed live."
+
+record:
+  keep_for: 90_days
+  include: [conversations, actions, decisions, approvals]
+
+deployment:
+  hosted:
+    visibility: private
+
+enabled: true
+
+tags:
+  - example
+  - companies
+emoji: "📦"

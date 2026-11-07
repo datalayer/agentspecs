@@ -8,6 +8,11 @@ id: github
 version: 0.0.1
 name: GitHub
 description: GitHub repository operations (issues, PRs, code search)
+# Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
+documentation_url: https://github.com/github/github-mcp-server
+signup_url: https://github.com/signup
+api_key_url: https://github.com/settings/tokens
+setup: "A [personal access token](https://github.com/settings/tokens) with the scopes of what the agent may do, in `GITHUB_TOKEN`; the server runs in Docker, see [github-mcp-server](https://github.com/github/github-mcp-server)."
 
 command: docker
 args:
@@ -32,7 +37,7 @@ tags:
   - repository
   - collaboration
 
-icon: mark-github
+icon: "@datalayer/icons-react:github-mark"
 emoji: 🐙
 
 # What each tool does to the world (agentspecs.actions). A tool not named here is

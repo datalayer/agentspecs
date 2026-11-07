@@ -1,0 +1,16 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: LLM_API_KEY
+version: 0.0.1
+name: OpenHands LLM API Key
+description: The model provider's key the OpenHands CLI reads, with LLM_MODEL, when started with --override-with-envs. Required by the OpenHands harness; the person's own key at their provider.
+registrationUrl: https://docs.openhands.dev/openhands/usage/cli/installation
+tags:
+  - authentication
+  - api-key
+  - openhands
+  - harness
+
+icon: key
+emoji: 🔑

@@ -1,0 +1,67 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Battle: Space Invaders (B1-02, 7 November 2026). Two Players at the Space
+# Invaders arena, drawn in the page: one wave for both, a cannon each; a hit
+# scores the invader's row, and the game ends when the wave is cleared, a
+# cannon is hit or the wave lands. The arena keeps the score, which decides.
+
+id: invaders
+version: 0.0.1
+name: Space Invaders
+description: >-
+  Two Players at the Space Invaders arena, a cannon each under one wave. A hit
+  scores the invader's row; the wave cleared, a cannon hit or the wave landed
+  ends it, and the score decides.
+
+variant: game
+goal: >-
+  You are playing Space Invaders. Call `arena_watch` once: the arena then tells
+  you where the invaders are and which one is nearest your cannon. Each time it
+  does, call `arena_invaders_move` with the `x` it names, then
+  `arena_invaders_fire`; move away when it says a bomb is falling on you. The
+  higher score when the wave is cleared, a cannon is hit or the wave lands wins.
+clock_seconds: 180
+arena: invaders
+
+contestants:
+  - id: left
+    name: Left
+    app: player:0.0.1
+    runs_in: browser
+    color: blue
+  - id: right
+    name: Right
+    app: player:0.0.1
+    runs_in: browser
+    color: red
+
+# The evals that confirm each contestant's result once the referee has a verdict
+# (the user, 7 November 2026): the winner is declared only when its evals pass.
+evals:
+  - eval: max-duration:0.0.1
+    config:
+      max_duration_ms: 180000
+    says: The game ended within the clock.
+  - eval: llm-judge:0.0.1
+    config:
+      threshold: 0.6
+      rubric: >-
+        The player watched the arena, moved its cannon under the invader the
+        arena named and fired, and moved away from a bomb it was told about.
+    says: The player played the arena, not around it.
+
+referee:
+  decides_by: score
+
+rehearsal:
+  expects:
+    - both contestants fire at least once
+    - a score when the clock ends
+
+tags:
+  - example
+  - game
+  - arena
+icon: rocket
+emoji: "👾"

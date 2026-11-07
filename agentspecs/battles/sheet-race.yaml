@@ -1,0 +1,68 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Battle: The spreadsheet race. Two Sheet Makers in the browser, the same
+# brief at the same instant, each filling its sheet in the page; the first to
+# say its sheet is complete wins (the user, 6 November 2026: battles using
+# the cells visuals).
+
+id: sheet-race
+version: 0.0.1
+name: Create a spreadsheet
+description: >-
+  Two Sheet Makers get the same brief at the same instant and fill a sheet
+  each, drawn in the page cell by cell, totals and chart included. The first
+  to finish wins.
+
+variant: race
+goal: >-
+  Create a spreadsheet of a small bakery's weekly sales: a header row, one
+  row per day from Monday to Sunday with the number of loaves and the
+  revenue, a totals row with formulas, and a chart of the revenue by day.
+clock_seconds: 180
+arena: sheet
+
+contestants:
+  - id: blue
+    name: Blue
+    app: sheet-maker:0.0.1
+    runs_in: browser
+    color: blue
+  - id: red
+    name: Red
+    app: sheet-maker:0.0.1
+    runs_in: browser
+    color: red
+    # Red plays with Alibaba Qwen-Max (the user, 7 November 2026): the application as it is, its model overridden.
+    overrides:
+      model: "alibaba:qwen-max"
+
+# The evals that confirm each contestant's result once the referee has a verdict
+# (the user, 7 November 2026): the winner is declared only when its evals pass.
+evals:
+  - eval: max-duration:0.0.1
+    config:
+      max_duration_ms: 180000
+    says: It finished within the clock.
+  - eval: llm-judge:0.0.1
+    config:
+      threshold: 0.7
+      rubric: >-
+        The contestant reports a workbook with the figures the brief asked
+        for, their totals, and a chart.
+    says: It filled the sheet the brief asked for, chart included.
+
+referee:
+  decides_by: first_done
+
+rehearsal:
+  expects:
+    - each sheet has a header row, seven rows and a totals row
+    - a verdict within the clock
+
+tags:
+  - example
+  - race
+  - cells
+icon: table
+emoji: "🧮"

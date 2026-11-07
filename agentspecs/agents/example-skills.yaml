@@ -36,7 +36,7 @@ skills:
   - jokes:0.0.1
   - datalayer-whoami:1.0.0
 
-tools: []
+backend_tools: []
 
 frontend_tools: []
 
@@ -44,7 +44,7 @@ environment_name: ai-agents-env
 
 icon: briefcase
 emoji: "🧰"
-color: "#0D9488"
+color: teal
 
 suggestions:
   - text: List all your available skills and group them by source type

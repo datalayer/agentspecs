@@ -5,6 +5,9 @@ id: chart
 version: 0.0.1
 name: Chart Generator
 description: Generate charts and visualizations
+# Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
+documentation_url: https://github.com/antvis/mcp-server-chart
+setup: "Runs with `npx`; no account and no key ([mcp-server-chart](https://github.com/antvis/mcp-server-chart))."
 
 command: npx
 args:
@@ -21,7 +24,7 @@ tags:
   - charts
   - graphics
 
-icon: graph
+icon: "@datalayer/icons-react:chart-bar"
 emoji: 📊
 
 # What each tool does to the world (agentspecs.actions). A tool not named here is

@@ -32,7 +32,7 @@ mcp_servers: []
 skills: []
 
 # No backend tools — render tools are provided by the frontend
-tools: []
+backend_tools: []
 frontend_tools: []
 
 # Runtime environment
@@ -41,7 +41,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: browser
 emoji: 🎨
-color: "#6366F1"
+color: indigo
 
 # Chat suggestions
 suggestions:

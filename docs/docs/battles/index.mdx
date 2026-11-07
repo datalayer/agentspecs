@@ -1,0 +1,149 @@
+---
+sidebar_position: 1
+title: Battles
+---
+
+# Battles
+
+A Battle is two or more contestants — each a [scene](../scenes) of the
+catalogue played whole, or one [application](../apps) — given the same goal at
+the same instant, under one clock, and a referee that says who won. It
+*composes* scenes: a contestant that is a scene plays as it does on its own
+stage, side by side with the others, with its transcript, its graph and its
+rehearsal. There is no second notion beside Scenes.
+
+```yaml
+# battles/invoice-race.yaml
+id: invoice-race
+version: 0.0.1
+name: The invoice race
+
+variant: race              # race | game | challenge
+goal: Which customer invoices are still open, and how much is due in total?
+clock_seconds: 120
+
+contestants:
+  - id: blue
+    scene: sales-and-accounting:0.0.1   # a scene of the catalogue, played whole …
+    color: blue
+  - id: red
+    scene: sales-and-accounting:0.0.1   # … or an application: `app: accounting:0.0.1`
+    color: red
+
+referee:
+  decides_by: first_done   # first_done | score | measure
+```
+
+## Three variants, one referee
+
+| Variant | What happens | Decided by |
+| --- | --- | --- |
+| `race` | Every contestant starts on the goal at once; the first to report done wins. The clock ending first is a draw, said as such. | `first_done` |
+| `game` | The contestants play an `arena` drawn in the page — `pong`, `invaders` — through its frontend tools; the arena keeps the score. | `score` |
+| `challenge` | Every contestant runs to the clock; a [Guard](../guards) measures each outcome with a number signal between 0 and 1; the highest wins, equal measures tie. | `measure` |
+
+A variant is decided one way: a race by `first_done`, a game by `score`, a
+challenge by `measure`. A referee that says otherwise is refused as the Battle
+is read.
+
+## Fields
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `version`, `name`, `description` | As on every spec. |
+| `variant` | `race`, `game` or `challenge`. Required. |
+| `goal` | What every contestant is told, in the same words. Required, never empty. |
+| `clock_seconds` | How long the Battle may run; at least ten seconds. Required. |
+| `contestants` | Two or more; each has its own `id`. Required. |
+| `contestants[].scene` | A scene of the catalogue, `id` or `id:version`, played whole. One of `scene` and `app`, never both. |
+| `contestants[].app` | An application of the catalogue, `id` or `id:version`; `runs_in` says `browser` or `runtime`. A scene's cast says where it runs, so `runs_in` is refused on a scene. |
+| `contestants[].name`, `color` | What the audience sees; the colour is a palette name or a hex. |
+| `contestants[].overrides` | What this contestant plays differently of its application — `model`, `instructions`, `skills`, `context`, nothing else; on a scene, of every member played in the page. See [Overriding an application on stage](../modularity/extension#overriding-an-application-on-stage). |
+| `referee.decides_by` | `first_done`, `score` or `measure`. Required. |
+| `referee.measure` | For `measure`: the Guard whose number signal scores each outcome, `id` or `id:version`. Required then, refused otherwise. |
+| `arena` | What is drawn in the page: a game's arena, which keeps the score (`pong`, `invaders`; required for a game); or the visual a race's or a challenge's contestants work in, a `deck` each builds slide by slide or a `sheet` each fills cell by cell. |
+| `evals` | The evals of the catalogue that confirm each contestant's result once the referee has a verdict — `eval`, `id` or `id:version` of one a Battle can run where it plays (`contains`, `equals`, `equals-expected`, `max-duration`, `llm-judge`; the others need a trace or a report a Battle does not have); `config`, what it is given (`expected_output`, `max_duration_ms`, a `rubric` and a `threshold` for the judge); `says`, what passing confirms. The winner is declared only when its evals all pass; otherwise the result shows what failed, and no winner. See [Evals confirm the result](#evals-confirm-the-result). |
+| `rehearsal.expects` | What a played Battle has to show, one sentence each. |
+| `enabled`, `tags`, `icon`, `emoji` | As on every spec. |
+
+Every scene, application and Guard a Battle names is in the catalogue, at the
+version it names when it names one; a Battle that names one the catalogue does
+not hold, or a measure Guard with no number signal, is refused.
+
+## The catalogue
+
+| Battle | Variant | Contestants | Decided by |
+| --- | --- | --- | --- |
+| `invoice-race` | race | two Sales & Accounting pairs on the same Odoo books | the first to list the open invoices and the total due |
+| `pong` | game | two Players at the Pong arena | the arena's score, first to eleven |
+| `invaders` | game | two Players at the Space Invaders arena, a cannon each under one wave | the arena's score when the wave is cleared, a cannon is hit or the wave lands |
+| `report-challenge` | challenge | two Month-end Close agents on the same books, three minutes | the Report Quality Guard's `quality` signal |
+| `deck-race` | race | two Deck Makers in the browser, the same brief, each building a deck in the page | the first to finish |
+| `sheet-race` | race | two Sheet Makers in the browser, the same brief, each filling a spreadsheet in the page | the first to finish |
+
+In each race and challenge, Blue plays its application as it is and Red plays
+it with Alibaba Qwen-Max (`overrides: { model: "alibaba:qwen-max" }`), so the
+same goal is answered by two models side by side.
+
+The Report Quality Guard (`guards/report-quality-guard.yaml`) is an `outcome`
+Guard a Cog judges after the run: completeness against what was asked and
+grounding in the calls the run made, `quality` between 0 and 1, and
+`ungrounded_figures`, how many figures no call accounts for.
+
+## Evals confirm the result
+
+A verdict says who was first, who scored or who measured highest; it does not
+say the work was any good. So a Battle names `evals` of the
+[evals catalogue](https://datalayer.ai/agentspecs/evals) — the same evaluators an
+application's tests run — and once the referee has its verdict, every
+contestant's result goes through them: `max-duration` against the clock,
+`contains` or `equals` against an expected output, `llm-judge` with a `rubric`
+and a `threshold` against the goal. The winner is declared only when its
+evals all pass. When one fails, the page shows each eval's verdict and why,
+and names no winner: a fast answer that invented an invoice does not win the
+invoice race.
+
+```yaml
+evals:
+  - eval: max-duration:0.0.1
+    config: { max_duration_ms: 120000 }
+    says: It answered within the clock.
+  - eval: llm-judge:0.0.1
+    config:
+      threshold: 0.7
+      rubric: The answer lists the open invoices, each named, and gives the total due.
+    says: It listed the open invoices and a total, as the goal asked.
+```
+
+## The arenas
+
+A game's arena keeps the score. A race or a challenge may name an arena too:
+the visual its contestants work in, drawn in the page under each — a `deck`
+built with `deck_set_title` and `deck_add_slide` (a title, a section, bullets,
+a statement, a closing), read back with `deck_read`; a `sheet` filled with
+`sheet_write_range`, read with `sheet_read_range`, charted with
+`sheet_insert_chart`. Deck Maker and Sheet Maker (`apps/deck-maker.yaml`,
+`apps/sheet-maker.yaml`) are the applications of the catalogue that play
+them, in the browser.
+
+A game's arena is a UI plugin of the catalogue drawn in the conversation and
+the frontend tools the contestants call through the page — the seam the
+`cells` tools use, so no new transport. Pong: `arena_pong_move`,
+`arena_pong_serve`, `arena_read`, and `arena_watch`, which streams; first to
+eleven. Space Invaders: `arena_invaders_move`, `arena_invaders_fire`,
+`arena_read` and `arena_watch`; a hit scores the invader's row, and the wave
+cleared, a cannon hit or the wave landed ends it. The page refuses a move out of turn or more than one
+per tick, so a faster model does not win by flooding, and records every move
+with its tick.
+
+## Python
+
+```python
+from agentspecs.battles import get_battle, list_battles, BattleVariant
+
+battle = get_battle("invoice-race")
+battle.variant            # BattleVariant.RACE
+battle.decides_by         # BattleDecision.FIRST_DONE
+[c.plays for c in battle.contestants]   # ['sales-and-accounting:0.0.1', ...]
+list_battles(BattleVariant.GAME)        # [pong]
+```

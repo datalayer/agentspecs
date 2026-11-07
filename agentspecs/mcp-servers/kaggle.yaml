@@ -8,18 +8,19 @@ id: kaggle
 version: 0.0.1
 name: Kaggle
 description: Kaggle datasets, models, competitions, and notebooks access
+# Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
+documentation_url: https://www.kaggle.com/docs/api
+signup_url: https://www.kaggle.com/account/login
+api_key_url: https://www.kaggle.com/settings/account
+setup: "An API token from your [Kaggle account settings](https://www.kaggle.com/settings/account), in `KAGGLE_API_TOKEN`; the server is Kaggle's own, reached at its url ([docs](https://www.kaggle.com/docs/api))."
 
-# Command to start the server
-command: npx
-args:
-  - "-y"
-  - "mcp-remote"
-  - "https://www.kaggle.com/mcp"
-  - "--header"
-  - "Authorization: Bearer ${KAGGLE_API_TOKEN}"
-
-# Transport type
-transport: stdio
+# Kaggle's own hosted server, reached by the runtime itself over Streamable
+# HTTP: no command, the url and the headers sent with every request, the
+# token's `${KAGGLE_API_TOKEN}` expanded as it starts.
+transport: streamable-http
+url: "https://www.kaggle.com/mcp"
+headers:
+  Authorization: "Bearer ${KAGGLE_API_TOKEN}"
 
 # Whether the server is enabled by default
 enabled: false
@@ -37,8 +38,8 @@ tags:
   - competitions
   - machine-learning
 
-icon: database
-emoji: 📊
+icon: "@datalayer/icons-react:kaggle"
+emoji: "🏆"
 
 # What each tool does to the world (agentspecs.actions). A tool not named here is
 # unknown, and unknown is the most restricted.

@@ -37,7 +37,7 @@ mcp_servers: []
 skills:
   - events:0.0.1
 
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 
 # The document toolset, and only it. This agent edits the document in front of
@@ -49,7 +49,7 @@ environment_name: ai-agents-env
 
 icon: file
 emoji: "📝"
-color: "#1F6FEB"
+color: blue
 
 suggestions:
   - text: "Can you help me write a document?"

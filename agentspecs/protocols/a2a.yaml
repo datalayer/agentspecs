@@ -1,0 +1,24 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# An agent protocol Datalayer targets. `status` says it as
+# it stands: `shipped` when agent-runtimes implements it today, `planned`
+# otherwise — an application cannot ship speaking a planned one.
+id: a2a
+version: 0.0.1
+name: Agent2Agent
+description: >-
+  How agents talk to agents: teams and scenes talk over it, an application's route serves it, and its Agent Card advertises its extensions.
+publisher: Google, now the Linux Foundation
+layer: transport
+spec_url: https://a2a-protocol.org
+spec_version: "1.0"
+status: shipped
+connects: Other agents, each at its address with its Agent Card
+packages:
+  python: ["fasta2a", "a2a-sdk"]
+  typescript: ["@a2a-js/sdk"]
+# Its tools' action classes, under protocol-tools/ (agentspecs.actions).
+protocol_tools: []
+# The Appspec block it is configured by: refused unless `protocols` lists it.
+appspec_block: a2a

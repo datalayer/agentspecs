@@ -29,7 +29,7 @@ mcp_servers: []
 skills:
   - events:0.0.1
 
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 
 frontend_tools: []
@@ -38,7 +38,7 @@ environment_name: ai-agents-env
 
 icon: database
 emoji: "🧠"
-color: "#0D9488"
+color: teal
 
 suggestions:
   # First: something concrete to remember, so the store fills on the spot.

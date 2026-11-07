@@ -1,0 +1,102 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Scene: Your Application, a Company (X-02), scripted. It plays
+# an application published as a company (slice 3),
+# as written from the Personal Agent Protocol SDK's demo companies — their
+# answers, proposals and results word for word — with nothing live behind it.
+# The audience takes the person's part where the person decides.
+
+schema: loop.scene/v1
+id: pap-your-application-a-company
+version: 0.0.1
+kind: scripted
+name: Your Application, a Company
+description: An application built in the Studio answers people’s own agents as a company does.
+tags:
+- stage
+- pap
+- slice-3
+emoji: 🏪
+actors:
+- id: maker
+  name: Maker
+  face: 🛠️
+  is: who builds the application
+- id: app
+  name: Exchange desk
+  face: 🏪
+  is: an application on Datalayer
+- id: visitor-agent
+  name: Sam’s agent
+  face: 🤖
+  is: somebody’s personal agent
+- id: sam
+  name: Sam
+  face: 🧑
+  is: a customer
+lines:
+- from: maker
+  to: app
+  says: 'Turns on Lets personal agents work with it, offers orders:read and orders:write, and names what
+    it does once a person confirms: orders.exchange.'
+  card:
+    kind: found
+    title: What becomes public at Ship
+    lines:
+    - Its own domain, exchange-desk.apps.datalayer.ai, with the page personal agents read first.
+    - 'How personal agents reach it: its agent, its API and its server for agents.'
+    - What changes something is proposed to the person and done only with their approval.
+- from: visitor-agent
+  to: app
+  says: 'Finds Exchange desk by its domain and asks, before Sam signed in: “Do you exchange jackets?”'
+  how: The application answers what anybody may ask, as its Maker allowed.
+- from: app
+  to: visitor-agent
+  says: “Yes. Sign in to see your orders.”
+- from: visitor-agent
+  to: sam
+  says: Asks Sam to sign in at Exchange desk, with his Datalayer account.
+  card:
+    kind: sign-in
+    title: Sign in at Exchange desk
+    lines:
+    - 'With your Datalayer account, on Datalayer’s page: the agent never sees your password.'
+  turn:
+    'yes': Sign in with Datalayer
+- from: app
+  to: visitor-agent
+  says: 'Proposes the exchange in the Maker’s own words: “Exchange order ord_7Hk2 for size L.”'
+  card:
+    kind: approval
+    title: Exchange desk asks you to confirm
+    rows:
+    - - Order
+      - ord_7Hk2
+    - - Size
+      - L
+    - - Version
+      - '1'
+    lines:
+    - Exchange order ord_7Hk2 for size L.
+  how: The model gives the terms; the sentence is the Maker’s, written once in the Studio.
+  turn:
+    'yes': Approve
+    'no': Decline
+    declined: 'Sam declined: Exchange desk does nothing.'
+- from: app
+  says: Does it once, with its own code, with exactly the terms Sam approved.
+  card:
+    kind: record
+    title: Activity of Exchange desk
+    rows:
+    - - Personal agent
+      - Sam’s agent
+    - - Proposed
+      - orders.exchange, version 1
+    - - Approved by
+      - Sam
+    - - Done
+      - Once
+live: The Studio’s card to make an application a company is built; its own domain and the company answering
+  on Datalayer wait for the services to be shipped.

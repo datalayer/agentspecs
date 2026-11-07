@@ -1,0 +1,70 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# MCP server: Bluesky (the user, 7 November 2026), brianellin's bsky-mcp-server:
+# the timeline, feeds, lists, profiles, follows, likes, trends, threads and
+# searches of a Bluesky account, and three writes — like, post, follow. The
+# package is not on npm and has no bin: the runtime image builds it from its
+# repository into /opt/mcp-servers and runs it with node over stdio. It signs
+# in with the account's handle and an app password made for it alone.
+
+id: bluesky
+version: 0.0.1
+name: Bluesky
+description: A Bluesky account's timeline, feeds, profiles, follows, likes, trends and searches, and posting, liking and following as it
+# Where to read about it, sign up and make the key it needs.
+documentation_url: https://github.com/brianellin/bsky-mcp-server
+signup_url: https://bsky.app
+api_key_url: https://bsky.app/settings/app-passwords
+setup: "Sign in to [Bluesky](https://bsky.app), make an [app password](https://bsky.app/settings/app-passwords) under Settings, Privacy and security, App passwords, and put the account's handle in `BLUESKY_IDENTIFIER`, the app password in `BLUESKY_APP_PASSWORD` and `https://bsky.social` in `BLUESKY_SERVICE_URL`; the server is built into the runtime image and runs with node."
+command: node
+args:
+  - "/opt/mcp-servers/bsky-mcp-server/build/src/index.js"
+transport: stdio
+# Enabled (the user, 7 November 2026): offered in the catalogue; where it runs is the runtime image's affair.
+enabled: true
+env:
+  BLUESKY_IDENTIFIER: "${BLUESKY_IDENTIFIER}"
+  BLUESKY_APP_PASSWORD: "${BLUESKY_APP_PASSWORD}"
+  BLUESKY_SERVICE_URL: "${BLUESKY_SERVICE_URL}"
+envvars:
+  - BLUESKY_IDENTIFIER:0.0.1
+  - BLUESKY_APP_PASSWORD:0.0.1
+  - BLUESKY_SERVICE_URL:0.0.1
+
+tags:
+  - social
+  - bluesky
+  - atproto
+  - publishing
+
+icon: "@datalayer/icons-react:bluesky"
+emoji: 🦋
+
+# What each tool does to the world (agentspecs.actions), read off the
+# server's README: every get and search reads; three change the account.
+actions:
+  checked: "2026-11-07"
+  note: >-
+    Read off the server's README: the gets and searches read Bluesky and change
+    nothing; like-post and follow-user write to the account; create-post
+    publishes under its name.
+  tools:
+    get-pinned-feeds: read
+    get-timeline-posts: read
+    get-feed-posts: read
+    get-list-posts: read
+    get-user-posts: read
+    get-profile: read
+    get-follows: read
+    get-followers: read
+    get-liked-posts: read
+    get-trends: read
+    get-post-thread: read
+    convert-url-to-uri: read
+    search-posts: read
+    search-people: read
+    search-feeds: read
+    like-post: write
+    create-post: publish
+    follow-user: write

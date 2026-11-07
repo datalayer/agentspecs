@@ -4,18 +4,19 @@
 id: jokes
 version: 0.0.1
 name: Jokes Skill
-description: Return random jokes from a local path-based skill.
+description: One joke on request, by topic or at random, from a small bundled list.
 
-# path-based local skill (relative to configured skills folder)
-path: jokes
+# Module-based like the others since agent-skills 1.2.1 (7 November 2026): the path form
+# needed a skills folder the pod does not configure, so the skill never loaded there.
+module: agent_skills.skills.jokes
 
-# Not offered on the platform yet: the integrations page lists it as not available.
-enabled: false
+# Offered on the platform (the user, 7 November 2026): the runtime image installs agent-skills[skills].
+enabled: true
 
 tags:
   - fun
   - humor
   - demo
 
-icon: smiley
+icon: "@primer/octicons-react:smiley"
 emoji: 😄

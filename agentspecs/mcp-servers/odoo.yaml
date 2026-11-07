@@ -8,6 +8,9 @@ id: odoo
 version: 0.0.1
 name: Odoo
 description: Odoo ERP operations (search, invoices, journals, reconciliations)
+# Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
+documentation_url: https://github.com/ivnvxd/mcp-server-odoo
+setup: "Runs with `uvx` against the Odoo instance its env names, with that Odoo user's API key ([mcp-server-odoo](https://github.com/ivnvxd/mcp-server-odoo))."
 
 command: uvx
 args:
@@ -27,8 +30,8 @@ tags:
   - finance
   - odoo
 
-icon: server
-emoji: "📚"
+icon: "@datalayer/icons-react:odoo"
+emoji: "🧾"
 
 # What each tool does to the world (agentspecs.actions). A tool not named here is
 # unknown, and unknown is the most restricted.

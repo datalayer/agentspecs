@@ -1,0 +1,22 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# An agent protocol Datalayer targets. `status` says it as
+# it stands: `shipped` when agent-runtimes implements it today, `planned`
+# otherwise — an application cannot ship speaking a planned one.
+id: acp
+version: 0.0.1
+name: Agentic Commerce Protocol
+description: >-
+  Checkout sessions at a seller, completed with a payment the model never sees. In applications at test merchants only, with no real payment token (decided 2026-10-13): each purchase asked of the person first, made at most once.
+publisher: OpenAI, Stripe
+layer: commerce
+spec_url: https://github.com/agentic-commerce-protocol/agentic-commerce-protocol
+spec_version: "2026-04-17"
+status: shipped
+connects: Sellers, to check out with a delegated payment
+packages:
+  python: ["agent-runtimes"]
+  typescript: ["@datalayer/agent-runtimes"]
+# Its tools' action classes, under protocol-tools/ (agentspecs.actions).
+protocol_tools: ["agentic-commerce"]

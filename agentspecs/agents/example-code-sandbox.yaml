@@ -33,7 +33,7 @@ mcp_servers: []
 
 skills: []
 
-tools: []
+backend_tools: []
 
 frontend_tools: []
 
@@ -41,7 +41,7 @@ environment_name: ai-agents-env
 
 icon: codespaces
 emoji: "📦"
-color: "#1F6FEB"
+color: blue
 
 suggestions:
   # First: code that runs and prints — what a sandbox is for.

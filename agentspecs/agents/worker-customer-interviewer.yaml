@@ -20,7 +20,7 @@ tags:
   - customer-support
   - analysis
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.transform
@@ -29,8 +29,12 @@ delegable:
   - id: research.gather
   - id: support.respond
 
-enabled: false
+enabled: true
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
+# Other models it may be switched to, beside its own: those
+# datalayer-ai-inference serves from the catalogue.
+model_additionals:
+  - "alibaba:qwen-max"
 harness: pydantic-ai
 
 sandbox_variant: jupyter-server
@@ -46,7 +50,7 @@ skills:
   - events:0.0.1
 
 # Runtime tools available to this agent
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 frontend_tools:
   - jupyter-notebook:0.0.1
@@ -58,7 +62,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: comment-discussion
 emoji: "🎙️"
-color: "#0EA5E9"  # Sky blue
+color: sky
 
 # Launch-time parameters that frame the interview
 parameters:
@@ -88,9 +92,11 @@ goal: >-
   asks relevant follow-up questions to uncover motivations and decision-making
   patterns, and produces a structured set of actionable insights.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Model configuration
 model_config:

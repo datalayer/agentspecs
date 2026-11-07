@@ -1,0 +1,37 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The Pong arena's tools, as a frontend toolset a Battle's contestant names
+# (AGENT_BATTLE B1-01, 6 November 2026).
+#
+# The arena is drawn in the page by Datalayer's Battles and bound to its
+# state there: `arena_read` says where the ball and the paddles are and the
+# score, `arena_pong_move` moves this contestant's paddle, `arena_pong_serve`
+# serves when the serve is this contestant's, and `arena_watch` streams —
+# called once, it keeps telling the contestant where the ball is, as turns
+# it did not ask for, until the game ends. The handlers come from the page,
+# never from the spec.
+
+id: arena-pong
+version: 0.0.1
+name: Pong arena
+description: Two paddles, one ball, first to eleven — read the arena, move your paddle, serve, and be told where the ball is as it moves.
+tags:
+  - frontend
+  - arena
+  - battle
+  - game
+enabled: true
+
+toolset:
+  - arena_read
+  - arena_pong_move
+  - arena_pong_serve
+  - arena_watch
+
+# The tools of the set that stream: called once, each keeps pushing events.
+streams:
+  - arena_watch
+
+icon: "@primer/octicons-react:play"
+emoji: "🏓"
