@@ -8,6 +8,11 @@ id: kaggle
 version: 0.0.1
 name: Kaggle
 description: Kaggle datasets, models, competitions, and notebooks access
+# Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
+documentation_url: https://www.kaggle.com/docs/api
+signup_url: https://www.kaggle.com/account/login
+api_key_url: https://www.kaggle.com/settings/account
+setup: "An API token from your Kaggle account settings, in KAGGLE_API_TOKEN; the server is Kaggle’s own, reached at its url."
 
 # Kaggle's own hosted server, reached by the runtime itself over Streamable
 # HTTP: no command, the url and the headers sent with every request, the

@@ -8,6 +8,11 @@ id: huggingface
 version: 0.0.1
 name: Hugging Face
 description: Hugging Face models, datasets, spaces, and papers access
+# Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
+documentation_url: https://huggingface.co/docs/hub/mcp
+signup_url: https://huggingface.co/join
+api_key_url: https://huggingface.co/settings/tokens
+setup: "A read token from your Hugging Face settings, in HF_TOKEN; the server is Hugging Face's own, reached at its url."
 
 # Hugging Face's own hosted server, reached by the runtime itself over
 # Streamable HTTP: no command, the url and the headers sent with every

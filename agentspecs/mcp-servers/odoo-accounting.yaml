@@ -13,6 +13,11 @@ name: Odoo Accounting
 description: >-
   An accountant's day in Odoo — invoices, bills, journal entries, reconciliations,
   bank lines and tax returns — through the Datalayer MCP server
+# Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
+documentation_url: https://github.com/datalayer/datalayer-mcp-server
+signup_url: https://datalayer.ai/signin
+api_key_url: https://datalayer.ai/settings/api-keys
+setup: "Datalayer's gateway with its odoo-accounting toolset, on Datalayer's own books; your Datalayer API key as the bearer."
 
 # The same hosted server as `datalayer`, the toolset chosen in the URL.
 # `only=` asks for exactly that toolset (and the gateway's always-on ones):

@@ -5,6 +5,11 @@ id: google-workspace
 version: 0.0.1
 name: Google Workspace
 description: Gmail of the person an application acts for, read or read and send, with a token Datalayer mints per call
+# Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
+documentation_url: https://github.com/taylorwilsdon/google_workspace_mcp
+signup_url: https://console.cloud.google.com/
+api_key_url: https://console.cloud.google.com/apis/credentials
+setup: "An OAuth client in a Google Cloud project (GOOGLE_OAUTH_CLIENT_ID and GOOGLE_OAUTH_CLIENT_SECRET); Datalayer mints the person’s token per call."
 
 # Gmail only, through Datalayer (W-02). The person connects Gmail in
 # Google's own consent screen, at one of two levels — *can read*

@@ -318,8 +318,10 @@ Defines MCP integrations and process startup configuration.
 Common fields:
 
 - `id`, `version`, `name`, `description`
-- `command`, `args`, `transport`
-- `env`, `envvars` (usually versioned)
+- `command`, `args`, `transport`; `url` and `headers` for a remote server
+- `env`, `envvars` (usually versioned), `sandbox_envvars`
+- `documentation_url`, `signup_url`, `api_key_url`, `setup`: where to read about it, sign up and make the key it needs, and how, in a sentence (7 November 2026)
+- `actions`: what each tool does to the world (`read`, `write`, …), when it was checked, and a note
 - `tags`, `icon`, `emoji`
 
 ### Skills (`agentspecs/skills`)

@@ -5,6 +5,11 @@ id: tavily
 version: 0.0.1
 name: Tavily Search
 description: Web search and research capabilities via Tavily API
+# Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
+documentation_url: https://docs.tavily.com
+signup_url: https://app.tavily.com
+api_key_url: https://app.tavily.com/home
+setup: "A key from the Tavily dashboard, in TAVILY_API_KEY."
 
 command: npx
 args:

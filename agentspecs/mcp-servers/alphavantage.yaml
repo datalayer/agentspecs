@@ -5,6 +5,11 @@ id: alphavantage
 version: 0.0.1
 name: Alpha Vantage
 description: Financial market data and stock information
+# Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
+documentation_url: https://www.alphavantage.co/documentation/
+signup_url: https://www.alphavantage.co/support/#api-key
+api_key_url: https://www.alphavantage.co/support/#api-key
+setup: "A free key, sent by email from Alpha Vantage's support page; put it in ALPHAVANTAGE_API_KEY."
 
 command: uvx
 args:
