@@ -1,0 +1,14 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Stage: a personal agent at a business over PACT, played in the page from its
+# scripted scene (AGENT_PROTOCOLS EX-15).
+
+id: pact-a-personal-agent-at-a-business
+version: 0.0.1
+scene: pact-a-personal-agent-at-a-business:0.0.1
+public: true
+tags:
+  - example
+  - scripted
+  - pact

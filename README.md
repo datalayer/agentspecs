@@ -32,6 +32,7 @@ agentspecs/
 ├── gates/            # Gate specs: what happens on what the Guards found
 ├── tracks/           # Track specs: the evidence kept, and for how long
 ├── battles/          # Battle specs: scenes composed against each other, a clock, a referee
+├── stages/           # Stage specs: a scene, an app or a Battle on stage, and where it plays
 ├── apps/             # Application specs (Appspec): a chat, a widget, a decision, a worker
 ├── fragments/        # Capability fragments an agent includes
 ├── mcp-servers/      # MCP server specs
@@ -63,6 +64,7 @@ Current YAML file counts:
 - Gates: 8
 - Tracks: 4
 - Battles: 5
+- Stages: 13
 - Applications: 6
 - Fragments: 1
 - MCP servers: 14
@@ -267,6 +269,13 @@ Gates decide whether the work proceeds. Tracks make the work accountable.*
   catalogue played whole, or an `app`), a `referee` (`first_done`, `score`
   or the Guard that `measure`s), and for a game its `arena` (`pong`,
   `invaders`). A referee that does not decide as its variant does is refused.
+
+- **Stages** (`agentspecs/stages`): something of the catalogue put on stage
+  and where it plays — exactly one of a `scene` played whole, an `app` or a
+  `battle`; `deployments`, each member on a runtime to the slug of the
+  deployment that answers for it (none for a scripted scene or a Battle);
+  `public`, whether it has a page that needs no account. Its name, face and
+  description are what it stages says unless it says otherwise.
 
 `ops/op-sales-pipeline-board-report.yaml` is the comprehensive example: one
 Cog with its Frames, twelve Guards of all seven categories at all four stages,

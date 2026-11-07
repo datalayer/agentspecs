@@ -1,0 +1,13 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Stage: the Pong Battle on stage — a Stage made from a Battle, played on the
+# visitor's own key, so it names no deployments.
+
+id: pong
+version: 0.0.1
+battle: pong:0.0.1
+public: false
+tags:
+  - example
+  - battle

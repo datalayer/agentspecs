@@ -1,0 +1,90 @@
+---
+sidebar_position: 1
+title: Stages
+---
+
+# Stages
+
+A Stage is something of the catalogue put on stage, and where it plays: a
+[scene](../scenes) played whole, one [application](../apps), or a
+[Battle](../battles). It *composes* what the catalogue already holds — there
+is no second notion beside Scenes, Applications and Battles — and adds the
+two things a running Stage needs that none of them says: where each member
+answers on Datalayer, and whether anyone may watch without an account.
+
+```yaml
+# stages/sales-and-accounting.yaml
+id: sales-and-accounting
+version: 0.0.1
+scene: sales-and-accounting:0.0.1     # one of scene | app | battle
+deployments:
+  accounting: demo-accounting         # the member on a runtime → the deployment that answers for it
+public: true                          # a page of its own, no account needed
+tags: [example, demo, scene]
+```
+
+Its name, its face and its description are what it stages says of itself,
+unless the Stage says otherwise: the Stage above is *Sales & Accounting*,
+wears 🤝 and is described as the scene is.
+
+## Three kinds, one spec
+
+| On stage | What plays | `deployments` |
+| --- | --- | --- |
+| `scene` | The scene, whole: its cast on its setting, its script. A scripted scene (`kind: scripted`) plays in the page from its lines. | Each member on a runtime, to the slug of the deployment that answers for it. None for a scripted scene. |
+| `app` | One application, alone. | The application itself, to its deployment's slug. |
+| `battle` | A Battle: its contestants on their ring, under its clock and referee. | None: a Battle plays on the visitor's own key. |
+
+A Stage names exactly one of the three; two, or none, is refused as it is
+read.
+
+## Fields
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `version` | As on every spec; the file is named for the id. |
+| `name`, `description`, `icon`, `emoji` | Its own when said; what it stages says otherwise. |
+| `scene` | A scene of the catalogue, `id` or `id:version`, played whole. One of `scene`, `app` and `battle`. |
+| `app` | An application of the catalogue, `id` or `id:version`. |
+| `battle` | A Battle of the catalogue, `id` or `id:version`. |
+| `deployments` | Each member to the slug of the deployment that answers for it on Datalayer, both slugs. A member must be on the scene's stage — its cast, or its team's members when it writes no cast; for an application, the application itself. Refused on a scripted scene and on a Battle. |
+| `public` | Whether it has a page of its own that needs no account. `false` when unsaid. |
+| `enabled`, `tags` | As on every spec. |
+
+Every scene, application and Battle a Stage names is in the catalogue, at
+the version it names when it names one; a Stage that names one the catalogue
+does not hold is refused.
+
+## The catalogue
+
+| Stage | On stage | Public | Plays |
+| --- | --- | --- | --- |
+| `sales-and-accounting` | scene | yes | Accounting at `demo-accounting`; Sales in the browser |
+| `month-end-close` | scene | yes | at `demo-month-end-close` |
+| `crop-monitoring` | scene | yes | at `demo-crop-monitoring` |
+| `disaster-assessment` | scene | yes | two members on runtimes, `demo-disaster-assessment` and `demo-change-detection` |
+| `coding-agent-behind-the-shield` | scene | yes | at `demo-code-explainer` |
+| `pap-a-person-and-a-company`, `pap-approve-once`, `pap-your-application-a-company`, `pap-two-companies` | scripted scene | yes | in the page, from the Personal Agent Protocol's demo companies |
+| `ucp-a-purchase-approved` | scripted scene | yes | in the page, at the test shop |
+| `pact-a-personal-agent-at-a-business` | scripted scene | yes | in the page, at the demo airline |
+| `accounting` | app | no | Accounting alone, at `demo-accounting` |
+| `pong` | battle | no | the Pong Battle, on the visitor's key |
+
+The five demo Stages are the ones Datalayer keeps running under its demo
+account and rehearses nightly; they are the home page's Stages and the
+public `/stages`. The six scripted Stages are the protocols' Stages, played
+in the page from their scenes' lines. The last two show the other two kinds.
+
+## Python
+
+```python
+from agentspecs.stages import get_stage, list_stages, staged_of, StageKind
+
+stage = get_stage("sales-and-accounting")
+stage.kind                 # StageKind.SCENE
+stage.stages               # 'sales-and-accounting:0.0.1'
+stage.deployments          # {'accounting': 'demo-accounting'}
+staged_of(stage).name      # 'Sales & Accounting', the scene itself
+list_stages(public=True)   # the eleven with a page of their own
+list_stages(StageKind.BATTLE)   # [pong]
+```

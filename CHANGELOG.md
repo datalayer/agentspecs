@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.149
+
+7 November 2026.
+
+- **Stages** (the user: the Stages moved out of the landing's code into the catalogue, so that a Stage is made from a scene, an application or a Battle). A new kind, [`stages`](https://agentspecs.datalayer.tech/docs/stages): something of the catalogue put on stage, and where it plays — exactly one of a `scene` played whole, an `app` or a `battle`; `deployments`, each member on a runtime to the slug of the deployment that answers for it, checked against the scene's cast or its team's members, refused on a scripted scene and on a Battle; `public`, whether it has a page that needs no account. A Stage wears what it stages — its name, face and description — unless it says otherwise. Thirteen in the catalogue: the five demo Stages Datalayer keeps running (`sales-and-accounting`, `month-end-close`, `crop-monitoring`, `disaster-assessment`, `coding-agent-behind-the-shield`, with their demo deployments), the six scripted protocol Stages (PAP's four, UCP's, PACT's), one application on its own (`accounting`) and one Battle (`pong`).
+
 ## 0.0.148
 
 6 November 2026.
