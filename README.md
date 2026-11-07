@@ -55,9 +55,9 @@ agentspecs/
 
 Current YAML file counts:
 
-- Agents: 168
+- Agents: 179
 - Teams: 11
-- Frames: 5
+- Frames: 6
 - Cogs: 3
 - Ops: 1
 - Guards: 13
@@ -65,7 +65,7 @@ Current YAML file counts:
 - Tracks: 4
 - Battles: 5
 - Stages: 13
-- Applications: 6
+- Applications: 37
 - Fragments: 1
 - MCP servers: 18
 - Skills: 7

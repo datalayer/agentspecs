@@ -45,7 +45,7 @@ actions:
   note: >-
     Read off X's documentation, not the running server: posts, search, users,
     news and trends are reads; bookmarks are read and written; articles are
-    drafted and published. Only `article_publish` is named there. Run the
-    server, list its tools, and class each one here.
-  tools:
-    article_publish: publish
+    drafted and published (`article_publish` is the one tool named there). A
+    server not read off classes nothing: run it, list its tools, and class each
+    one here.
+  tools: {}
