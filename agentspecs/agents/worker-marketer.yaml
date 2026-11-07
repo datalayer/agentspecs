@@ -32,6 +32,19 @@ mcp_servers:
   - bluesky:0.0.1
   - linkedin:0.0.1
   - discord:0.0.1
+# Every skill of the catalogue (the user, 7 November 2026): what a marketer
+# makes — snapshots, recordings, PDFs, summaries, a crawl of a page, the
+# calendar, the repository, the books, a joke.
+skills:
+  - accounting:0.0.1
+  - crawl:0.0.1
+  - events:0.0.1
+  - github:0.0.1
+  - image:0.0.1
+  - jokes:0.0.1
+  - pdf:0.0.1
+  - text-summarizer:0.0.1
+  - video:0.0.1
 environment_name: ai-agents-env
 icon: megaphone
 emoji: "📣"

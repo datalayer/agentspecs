@@ -68,7 +68,7 @@ Current YAML file counts:
 - Applications: 37
 - Fragments: 1
 - MCP servers: 19
-- Skills: 7
+- Skills: 9
 - Tools: 18
 - Frontend tools: 6
 - Env vars: 22
