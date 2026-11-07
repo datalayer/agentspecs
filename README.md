@@ -67,11 +67,11 @@ Current YAML file counts:
 - Stages: 13
 - Applications: 37
 - Fragments: 1
-- MCP servers: 18
+- MCP servers: 19
 - Skills: 7
 - Tools: 18
 - Frontend tools: 6
-- Env vars: 20
+- Env vars: 22
 - Models: 39
 - Model providers: 7
 - Memory backends: 4
