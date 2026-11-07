@@ -1,0 +1,14 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: BLUESKY_SERVICE_URL
+version: 0.0.1
+name: Bluesky Service URL
+description: The AT Protocol service the Bluesky MCP server signs in to. `https://bsky.social` for an account on Bluesky's own servers; a self-hosted PDS names its own address.
+registrationUrl: https://atproto.com/guides/self-hosting
+tags:
+  - configuration
+  - url
+  - bluesky
+icon: link
+emoji: 🔗
