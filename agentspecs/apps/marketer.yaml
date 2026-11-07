@@ -32,8 +32,10 @@ memory: mem0
 context:
   - marketing:0.0.1
 connections:
+  # X is read with an app's bearer token today — posts, search, users, trends; its
+  # tools are not classed yet, so writing through it would leave every one to the person.
   - server: x:0.0.1
-    access: write
+    access: read
     as: owner
   - server: bluesky:0.0.1
     access: write
