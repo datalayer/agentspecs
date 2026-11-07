@@ -6,7 +6,8 @@
 
 Who serves a model: the vendor's own API (Anthropic, OpenAI), a cloud that
 hosts it (Amazon Bedrock, Azure OpenAI, Alibaba Cloud Model Studio,
-Cloudflare), or the user's machine (Ollama). One YAML per provider under
+Cloudflare), a router in front of many vendors (OpenRouter), or the user's
+machine (Ollama). One YAML per provider under
 ``agentspecs/model-providers/``, with where it lives, its documentation,
 its terms of service, its privacy policy and what it says about the data a
 request carries — what a person choosing a model, or a team signing off on

@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.152
+
+7 November 2026.
+
+- **OpenRouter, and Claude Opus 5.5 through it** (the user). An eighth [model provider](https://agentspecs.datalayer.tech/docs/agents/model-providers), `openrouter`: one OpenAI-compatible API and one key in front of the models of many vendors, a model named `openrouter:<vendor>/<model>` as OpenRouter lists it; the [model](https://agentspecs.datalayer.tech/docs/agents/models) `openrouter:anthropic/claude-opus-5.5` — the current frontier Opus, 1M of context, OpenRouter's list price of $4 and $20 a million tokens — needing `OPENROUTER_API_KEY`, a new env var; switched off in the catalogue as the other direct-vendor models are, since a Datalayer runtime's model calls go through ai-inference.
+
 ## 0.0.151
 
 7 November 2026.

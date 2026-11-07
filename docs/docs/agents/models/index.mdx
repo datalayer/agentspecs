@@ -38,7 +38,7 @@ description: GPT-4.1 by OpenAI - strong general purpose model
 ```
 
 ### `provider` (string)
-The model provider: the id of one of the [model-provider specs](../model-providers/) — `anthropic`, `bedrock`, `azure-openai`, `openai`, `alibaba`, `ollama`, `cloudflare`. A model naming a provider with no spec is refused when the catalogue loads.
+The model provider: the id of one of the [model-provider specs](../model-providers/) — `anthropic`, `bedrock`, `azure-openai`, `openai`, `alibaba`, `ollama`, `cloudflare`, `openrouter`. A model naming a provider with no spec is refused when the catalogue loads.
 ```yaml
 provider: bedrock
 provider: openai
@@ -292,6 +292,16 @@ models that have tool calling and no spec yet.
 | **o3 Mini** | `openai:o3-mini` | Reasoning-focused compact model |
 
 Required env vars: `OPENAI_API_KEY`
+
+### OpenRouter
+
+One OpenAI-compatible API in front of many vendors' models, one key for all of them; the id is `openrouter:` and the model as OpenRouter lists it.
+
+| Model | ID | Description |
+|-------|-----|-------------|
+| **Claude Opus 5.5** | `openrouter:anthropic/claude-opus-5.5` | The current frontier Opus, through OpenRouter |
+
+Required env vars: `OPENROUTER_API_KEY`
 
 ### Ollama (on your machine)
 

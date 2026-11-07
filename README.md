@@ -71,9 +71,9 @@ Current YAML file counts:
 - Skills: 9
 - Tools: 18
 - Frontend tools: 6
-- Env vars: 22
-- Models: 39
-- Model providers: 7
+- Env vars: 23
+- Models: 40
+- Model providers: 8
 - Memory backends: 4
 - Evals: 9
 - Benchmarks: 8

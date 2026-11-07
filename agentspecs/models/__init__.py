@@ -60,7 +60,7 @@ class AIModel(BaseModel):
     id: str = Field(..., description="Unique model identifier (e.g., 'anthropic:claude-sonnet-4-5-20250514')")
     name: str = Field(..., description="Display name for the model")
     description: str = Field(default="", description="Model description")
-    provider: str = Field(..., description="Provider id (anthropic, openai, bedrock, azure-openai, alibaba, cloudflare, ollama): one of the model-providers specs")
+    provider: str = Field(..., description="Provider id (anthropic, openai, bedrock, azure-openai, alibaba, cloudflare, openrouter, ollama): one of the model-providers specs")
     provider_url: Optional[str] = Field(default=None, description="The page on the provider's website that describes this model")
     default: bool = Field(default=False, description="Whether this is the default model")
     available: bool = Field(

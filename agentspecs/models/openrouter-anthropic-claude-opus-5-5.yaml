@@ -1,0 +1,32 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: OpenRouter Claude Opus 5.5
+#
+# The id is `openrouter:` and the model as OpenRouter lists it,
+# `anthropic/claude-opus-5.5`: what its OpenAI-compatible API takes as `model`.
+
+id: "openrouter:anthropic/claude-opus-5.5"
+version: 0.0.1
+name: OpenRouter Claude Opus 5.5
+description: Claude Opus 5.5 by Anthropic, through OpenRouter - the current frontier Opus, one key for every vendor
+provider: openrouter
+provider_url: "https://openrouter.ai/anthropic/claude-opus-5.5"
+default: false
+# Switched off, as the other direct-vendor models are: a Datalayer runtime's
+# model calls go through ai-inference, which routes to Bedrock or Alibaba; a
+# harness run with the person's own OPENROUTER_API_KEY may turn it on.
+available: false
+tokens_limit: 128000
+context_window: 1000000
+
+# OpenRouter's list price for the model, per million tokens, from its models
+# API (https://openrouter.ai/api/v1/models, read 2026-11-07): the batch
+# variant `anthropic/claude-opus-5.5:batch` is half of it; the catalogue has
+# no field for it.
+pricing:
+  input_usd_per_million: 4.0
+  output_usd_per_million: 20.0
+
+required_env_vars:
+  - OPENROUTER_API_KEY
