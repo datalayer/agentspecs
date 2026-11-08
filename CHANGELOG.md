@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.166
+
+8 November 2026.
+
+- **The Crawler Agent remembers.** [`worker-crawler`](https://agentspecs.datalayer.tech/docs/agents) declares `memory: mem0` (it was `ephemeral`): what the person asks it to keep outlives the runtime, under their account and the agent (user, agent), as every mem0 agent of the catalogue. Its skills gain `datalayer-memory-add`, `datalayer-memory-search`, `datalayer-memory-list` and `datalayer-memory-delete`, the memory skills of [datalayer-skills](https://github.com/datalayer/skills), which the runtime finds through the `agent_skills.skills` entry points of the installed package, with no skill spec of their own in this catalogue. Its system prompt says to use them when the person asks to remember, recall, list or forget, and never to delete everything without their confirmation of how many.
+
 ## 0.0.165
 
 8 November 2026.

@@ -37,8 +37,9 @@ harness: pydantic-ai
 
 sandbox_variant: jupyter-server
 
-# Memory backend
-memory: ephemeral
+# Durable memory (mem0): what the person asks it to keep across sessions,
+# under their account and this agent (user, agent).
+memory: mem0
 
 # MCP servers used by this agent
 mcp_servers:
@@ -48,6 +49,13 @@ mcp_servers:
 skills:
   - github:0.0.1
   - events:0.0.1
+  # The person's memory of this agent, kept, read, listed and deleted on
+  # request: datalayer-skills' memory skills, discovered through the
+  # agent_skills.skills entry points of the installed package.
+  - datalayer-memory-add
+  - datalayer-memory-search
+  - datalayer-memory-list
+  - datalayer-memory-delete
 
 # Runtime environment
 frontend_tools:
@@ -81,6 +89,9 @@ system_prompt: >
   You are a web crawling and research assistant with access to Tavily search and GitHub tools.
   Use Tavily to search the web for current information and search GitHub repositories for relevant projects.
   Synthesize information from multiple sources and provide clear summaries with sources cited.
+  You keep durable memory of the person across sessions: when they ask you to remember,
+  recall, list or forget something, use the datalayer-memory skills, and never delete
+  everything they remember without their explicit confirmation of how many.
 
 # Additional system prompt for code mode
 system_prompt_codemode_addons: >
