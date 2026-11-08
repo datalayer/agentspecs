@@ -24,3 +24,12 @@ Memory specs define selectable memory backends for agents.
 
 - Use memory IDs in agent `memory` fields.
 - Keep backend selection explicit and versioned in catalogs.
+
+## Mem0 on Datalayer
+
+`memory: mem0` gives an agent memories that outlive its runtime.
+
+- **Where they are kept.** In PostgreSQL (pgvector), under the user who runs the agent and the agent's own id (its agentspec's `id`). Two users never read each other's memories, and two agents of one user each keep their own.
+- **Pausing and resuming.** Pausing an agent stops its runtime. Resuming it launches a new runtime for the same agent and user, which reads the same memories back: they never lived on the runtime.
+- **What is kept.** What the agent chose to remember, as it said it (its `remember` tool); it reads them back with `search_memory`, and the relevant ones are given to it before each answer.
+- **What it needs.** Nothing from you on Datalayer: the memories are embedded through Datalayer's inference service, metered on your account. A local run uses mem0's defaults and your own `OPENAI_API_KEY`.

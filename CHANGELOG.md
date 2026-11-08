@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.158
+
+8 November 2026.
+
+- **Mem0 says where an agent's memories are kept.** The [mem0 memory](https://agentspecs.datalayer.tech/docs/agents/memory) is kept in PostgreSQL (pgvector) on a Datalayer runtime, under the user and the agent's id, so a paused agent resumed on a new runtime reads its memories back; it embeds through ai-inference (`bedrock:amazon.titan-embed-text-v1`, 1536 dimensions) and keeps what the agent said as it said it, with no extraction LLM, and so declares no secret (`required_env_vars: []`); a local run keeps mem0's defaults and the person's own `OPENAI_API_KEY`.
+
 ## 0.0.157
 
 8 November 2026.

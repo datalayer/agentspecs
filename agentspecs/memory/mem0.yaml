@@ -57,11 +57,16 @@ sharing:
     the user_id dimension. Supports multi-agent coordination through
     shared memory pools.
 
-# Resource requirements
+# Resource requirements. On a Datalayer runtime the memories are kept in
+# PostgreSQL (pgvector), under the user and the agent's id, so they outlive
+# the runtime: a paused agent resumed on a new runtime reads them back. They
+# are embedded through ai-inference with the runtime's token and kept as the
+# agent said them (no extraction LLM). A local run uses mem0's defaults (a
+# local store, the person's own OPENAI_API_KEY).
 resources:
-  embedding_model: "text-embedding-3-small"
-  vector_store: qdrant     # Default; also supports chroma, pgvector, pinecone, milvus
-  llm_for_extraction: true
+  embedding_model: "bedrock:amazon.titan-embed-text-v1"   # 1536 dims, through ai-inference
+  vector_store: pgvector   # Locally: faiss on disk
+  llm_for_extraction: false
 
 # Multi-level memory
 memory_levels:
@@ -74,11 +79,13 @@ memory_levels:
 
 # Dependencies
 dependencies:
-  - mem0ai>=1.0.0
+  - mem0ai>=2.0.1
+  - psycopg[binary,pool]>=3.2.8
 
-# Required environment variables
-required_env_vars:
-  - OPENAI_API_KEY         # Or other LLM provider key for extraction
+# Required environment variables: none on a Datalayer runtime (ai-inference
+# and its PostgreSQL are the platform's); a local run embeds with the
+# person's OPENAI_API_KEY.
+required_env_vars: []
 
 # Configuration
 config:
