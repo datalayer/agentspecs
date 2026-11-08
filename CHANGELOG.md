@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.164
+
+8 November 2026.
+
+- **Three agents out of the picker.** [Customer Interviewer](https://agentspecs.datalayer.tech/docs/agents), Document Q&A and Mail Triage Assistant are `enabled: false`, so the new-agent page no longer offers them. The applications built on them keep running them and name the agent as setup: Support Desk (Document Q&A) and Inbox triage (Mail Triage Assistant). Customer interview runs the Customer Interviewer Cog, which stays enabled.
+
 ## 0.0.163
 
 8 November 2026.

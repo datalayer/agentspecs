@@ -29,7 +29,7 @@ delegable:
   - id: research.gather
   - id: support.respond
 
-enabled: true
+enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 # Other models it may be switched to, beside its own: those
 # datalayer-ai-inference serves from the catalogue.
