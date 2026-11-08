@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.161
+
+8 November 2026.
+
+- **The odoo-accounting quarter-close tools classed.** The `datalayer` and `odoo-accounting` MCP servers class the twelve tools datalayer-mcp-server 0.0.104 adds (services 97c856123, 7c55984cd, ba2039b47): `odoo_accounting_find_document`, `list_attachments`, `list_vendor_payments`, `vat_close_check` and `intervat_xml` read; `import_ubl_bill`, `attach_document`, `reset_to_draft`, `book_bank_line_split`, `prepare_vendor_payments` and `record_return_submission` write; `delete_draft` deletes. The gateway's image refuses to build while a tool it serves has no class here (LOOP I-12).
+
 ## 0.0.160
 
 8 November 2026.
