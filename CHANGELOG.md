@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.157
+
+8 November 2026.
+
+- **Battle rubrics judge what the judge sees** (B5). The judge now reads a contestant's tool calls, its members' answers and surfaces, and the arena after the play, so each catalogue [Battle](https://agentspecs.datalayer.tech/docs/battles)'s `llm-judge` rubric names that evidence: the sheet and the deck *in the arena* (no longer what the contestant "reports"), a player's `arena_watch` or `arena_read` and a cannon not hit by a bomb it was warned of (Space Invaders), a paddle's calls and moves (Pong), figures read from the books as the tool calls show (the invoice race, the month-end challenge), and "what it could not check" said only where a figure could not be checked.
+
 ## 0.0.156
 
 7 November 2026.

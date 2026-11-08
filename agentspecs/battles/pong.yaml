@@ -44,10 +44,11 @@ evals:
   - eval: llm-judge:0.0.1
     config:
       threshold: 0.6
+      # What the judge can see (B5): the player's tool calls, its moves, and the game's end.
       rubric: >-
-        The player watched the arena, moved its paddle where the arena said the
-        ball arrived, and served when the serve was its own; it did not idle
-        while the ball came to it.
+        The player watched the arena (arena_watch or arena_read), moved its
+        paddle as the ball came and served when the serve was its own; its
+        tool calls and moves show it played rather than idled.
     says: The player played the arena, not around it.
 
 referee:

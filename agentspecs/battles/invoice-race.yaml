@@ -42,9 +42,11 @@ evals:
   - eval: llm-judge:0.0.1
     config:
       threshold: 0.7
+      # Invented or read is seen in the members' tool calls and answers (B5).
       rubric: >-
         The answer lists the customer invoices still open, each named, and
-        gives the total due as one figure; it invents no invoice.
+        gives the total due as one figure; each invoice comes from what the
+        run read from the books, as its members' tool calls and answers show.
     says: It listed the open invoices and a total, as the goal asked.
 
 referee:

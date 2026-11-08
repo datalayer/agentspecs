@@ -46,9 +46,11 @@ evals:
   - eval: llm-judge:0.0.1
     config:
       threshold: 0.6
+      # What the judge can see (B5): the player's tool calls, its moves, and the game's end.
       rubric: >-
-        The player watched the arena, moved its cannon under the invader the
-        arena named and fired, and moved away from a bomb it was told about.
+        The player watched the arena (arena_watch or arena_read), moved its
+        cannon under the invaders and fired, and its cannon was not hit by a
+        bomb it had been warned of.
     says: The player played the arena, not around it.
 
 referee:

@@ -47,9 +47,11 @@ evals:
   - eval: llm-judge:0.0.1
     config:
       threshold: 0.7
+      # The judge reads the sheet in the arena, not only the last words (B5).
       rubric: >-
-        The contestant reports a workbook with the figures the brief asked
-        for, their totals, and a chart.
+        The sheet in the arena holds a header row, a row per day from Monday
+        to Sunday with the loaves and the revenue, a totals row computed by
+        formulas, and a chart of the revenue by day.
     says: It filled the sheet the brief asked for, chart included.
 
 referee:

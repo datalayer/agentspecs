@@ -39,9 +39,12 @@ evals:
   - eval: llm-judge:0.0.1
     config:
       threshold: 0.7
+      # Grounding is seen in the run's tool calls and answers; "what it could
+      # not check" applies only where it could not (B5).
       rubric: >-
-        The summary covers what was asked and rests on figures the run read
-        from the books; it says what it could not check.
+        The summary says where the close stands, what is to book and what is
+        still open, with figures the run read from the books, as its tool
+        calls show; where it could not check a figure, it says so.
     says: The summary is complete and grounded.
 
 referee:

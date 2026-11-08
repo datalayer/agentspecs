@@ -45,10 +45,11 @@ evals:
   - eval: llm-judge:0.0.1
     config:
       threshold: 0.7
+      # The judge reads the deck in the arena, not only the last words (B5).
       rubric: >-
-        The contestant reports a deck with a title and at least three slides
-        on the brief: why the newsletter helps, what goes in it, who writes
-        what, and a closing call to sign up.
+        The deck in the arena has a title and at least three slides on the
+        brief: why the newsletter helps, what goes in it, who writes what,
+        and a closing call to sign up.
     says: It built the deck the brief asked for.
 
 referee:
