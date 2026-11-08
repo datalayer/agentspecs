@@ -8,6 +8,13 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.165
+
+8 November 2026.
+
+- **An agent's network rule, in its spec.** An agent takes a [`policy`](https://agentspecs.datalayer.tech/docs/agents) mapping, its own ask of the Shield beside the policies catalogue, with one section, `shield`: agent-shield's firewall rules. `egress` is what the runtime may reach beyond the platform's own endpoints: `*` alone (any public address, any TCP port), or exact hosts, `host:port`, IPv4 addresses and CIDRs with an optional port. `ingress` is who may reach the agent's ports: `platform` (the default), `*`, or addresses and CIDRs with the agent's port. The section is validated against agent-shield 0.2.14's schema, carried verbatim as `policies/shield-firewall.schema.json`, and held to what the firewall takes (`agent_policy_problems`): no private or reserved address in egress, no wildcard host (a firewall sees addresses, not names), `*` alone, each entry once; `policy` takes `shield` only.
+- **Every catalogue agent declares `policy.shield.egress: ["*"]`**: the MCP servers and tools they run call out (`npx tavily-mcp`, a package registry), and the runtime's boundary refused them. A test holds every catalogue agent to it.
+
 ## 0.0.164
 
 8 November 2026.

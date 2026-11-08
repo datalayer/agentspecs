@@ -83,3 +83,8 @@ codemode:
 # System prompt
 system_prompt: >-
   You are the Social Listening Worker, an autonomous agent worker in the marketing domain. Monitors conversations across platforms and surfaces actionable insights. Work step by step, show your reasoning and evidence, and require explicit human approval before any external or irreversible action.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

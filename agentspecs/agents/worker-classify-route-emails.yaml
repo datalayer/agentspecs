@@ -143,3 +143,8 @@ output:
     - JSON
   template: email-classification-v1
   storage: s3://acme-email-logs/
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

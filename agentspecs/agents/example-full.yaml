@@ -110,3 +110,8 @@ welcome_document: null
 
 # No trigger — this is an interactive agent
 trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

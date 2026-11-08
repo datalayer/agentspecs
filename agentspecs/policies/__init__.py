@@ -30,6 +30,7 @@ reference page of the documentation.
 
 from __future__ import annotations
 
+import ipaddress
 import json
 import re
 from pathlib import Path
@@ -53,6 +54,29 @@ SHIELD_SCHEMA_SOURCE_VERSION = "0.2.0"
 
 #: The catalogue entry's schema, beside the specs.
 SCHEMA_PATH = POLICIES_DIR / "policy.schema.json"
+
+#: The Shield's firewall rules, an agent's ``policy.shield``, verbatim
+#: (``agent_shield.firewall.firewall_json_schema()``).
+SHIELD_FIREWALL_SCHEMA_PATH = POLICIES_DIR / "shield-firewall.schema.json"
+#: The agent-shield release the carried firewall schema was copied from.
+SHIELD_FIREWALL_SCHEMA_SOURCE_VERSION = "0.2.14"
+#: The keys an agent's ``policy`` takes.
+AGENT_POLICY_KEYS = ("shield",)
+#: The ranges an egress entry may not name: the platform's own, the base layer's
+#: (``agent_shield.firewall.model.NON_PUBLIC``).
+NON_PUBLIC = (
+    "0.0.0.0/8",
+    "10.0.0.0/8",
+    "100.64.0.0/10",
+    "127.0.0.0/8",
+    "169.254.0.0/16",
+    "172.16.0.0/12",
+    "192.0.0.0/24",
+    "192.168.0.0/16",
+    "198.18.0.0/15",
+    "224.0.0.0/4",
+    "240.0.0.0/4",
+)
 
 #: Where the reference page is kept in the documentation site, when the checkout has one.
 REFERENCE_PATH = _ROOT.parent / "docs" / "docs" / "policies" / "index.md"
@@ -86,6 +110,87 @@ def document_problems(document: Any) -> list[str]:
     ):
         where = ".".join(str(part) for part in error.absolute_path) or "the document"
         problems.append(f"{where}: {error.message}")
+    return problems
+
+
+def shield_firewall_schema() -> dict[str, Any]:
+    """The Shield's firewall rules' JSON Schema, as carried here."""
+    return json.loads(SHIELD_FIREWALL_SCHEMA_PATH.read_text(encoding="utf-8"))
+
+
+_FIREWALL_VALIDATOR = jsonschema.Draft202012Validator(shield_firewall_schema())
+
+
+def _entry_problem(entry: str, direction: str) -> str | None:
+    """Why one egress or ingress entry cannot hold, beyond the schema's pattern; None when it can."""
+    if entry in ("*", "platform"):
+        if entry == "platform" and direction == "egress":
+            return "'platform' is an ingress source; the platform's own egress is the base layer's"
+        return None
+    target, _, port = entry.partition(":")
+    if port and not 1 <= int(port) <= 65535:
+        return f"{entry!r}: port {port} is not between 1 and 65535"
+    if re.match(r"^[0-9./]+$", target):
+        try:
+            network = ipaddress.IPv4Network(target, strict=True)
+        except ValueError as error:
+            return f"{entry!r} is not an IPv4 address or CIDR: {error}"
+        if direction == "egress" and any(
+            network.overlaps(ipaddress.IPv4Network(item)) for item in NON_PUBLIC
+        ):
+            return (
+                f"{entry!r} is a private or reserved address: the platform's own addresses are the "
+                "base layer's, and an agent cannot ask for them"
+            )
+        return None
+    if direction == "ingress":
+        return f"{entry!r}: an ingress source is 'platform', '*', an address or a CIDR, not a host name"
+    if "." not in target:
+        return f"{entry!r} is not an exact, fully qualified host name"
+    return None
+
+
+def agent_policy_problems(policy: Any) -> list[str]:
+    """Why an agent's ``policy`` cannot hold, in sentences; empty when it can.
+
+    An agent's ``policy`` is its own ask of the Shield, beside the catalogue's
+    documents (which decide at a scope): today one section, ``shield``, the
+    firewall's rules in agent-shield's schema (carried verbatim as
+    ``policies/shield-firewall.schema.json``), held to what the firewall takes —
+    ``*`` alone, no private or reserved address in egress, no wildcard host, each
+    entry once.
+    """
+    if not isinstance(policy, dict):
+        return [f"an agent's policy is a mapping, not {type(policy).__name__}"]
+    problems = [
+        f"policy.{key}: an agent's policy takes {', '.join(AGENT_POLICY_KEYS)} only"
+        for key in policy
+        if key not in AGENT_POLICY_KEYS
+    ]
+    shield = policy.get("shield")
+    if shield is None:
+        return problems
+    for error in sorted(_FIREWALL_VALIDATOR.iter_errors(shield), key=lambda e: list(e.absolute_path)):
+        where = ".".join(str(part) for part in error.absolute_path)
+        if "pattern" == error.validator and isinstance(error.instance, str) and "*" in error.instance:
+            problems.append(
+                f"policy.shield.{where}: {error.instance!r}: a firewall sees addresses, not names, so a wildcard "
+                "host cannot hold; name each host"
+            )
+            continue
+        problems.append(f"policy.shield{'.' + where if where else ''}: {error.message}")
+    if problems or not isinstance(shield, dict):
+        return problems
+    for direction in ("egress", "ingress"):
+        entries = shield.get(direction) or []
+        if "*" in entries and len(entries) > 1:
+            problems.append(f"policy.shield.{direction}: '*' stands alone")
+        if len(set(entries)) != len(entries):
+            problems.append(f"policy.shield.{direction}: an entry is named twice")
+        for entry in entries:
+            said = _entry_problem(entry, direction)
+            if said:
+                problems.append(f"policy.shield.{direction}: {said}")
     return problems
 
 
@@ -250,10 +355,13 @@ __all__ = [
     "POLICY_CATALOGUE",
     "REFERENCE_PATH",
     "SCHEMA_PATH",
+    "AGENT_POLICY_KEYS",
     "SCOPES",
+    "SHIELD_FIREWALL_SCHEMA_PATH",
     "SHIELD_SCHEMA_PATH",
     "PolicyError",
     "PolicySpec",
+    "agent_policy_problems",
     "document_problems",
     "get_policy",
     "json_schema",
@@ -261,5 +369,6 @@ __all__ = [
     "main",
     "reference_text",
     "schema_text",
+    "shield_firewall_schema",
     "shield_schema",
 ]

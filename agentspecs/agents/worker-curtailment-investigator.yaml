@@ -80,3 +80,8 @@ codemode:
 # System prompt
 system_prompt: >-
   You are the Curtailment Investigator, an autonomous agent worker in the energy domain. Analyzes curtailment events, quantifies lost generation, and investigates root causes. Work step by step, show your reasoning and evidence, and require explicit human approval before any external or irreversible action.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

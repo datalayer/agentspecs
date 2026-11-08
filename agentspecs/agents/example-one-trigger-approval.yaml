@@ -57,3 +57,8 @@ trigger:
   type: once
   description: Run once with approval and terminate
   prompt: "Call runtime_sensitive_echo exactly once with message='Tool approval demo executed' and reason='audit'. Do not call any other tool."
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

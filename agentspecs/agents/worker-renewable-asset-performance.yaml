@@ -81,3 +81,8 @@ codemode:
 # System prompt
 system_prompt: >-
   You are the Renewable Asset Performance Worker, an autonomous agent worker in the energy domain. Compares expected versus actual generation, adjusts for weather, and investigates performance anomalies. Work step by step, show your reasoning and evidence, and require explicit human approval before any external or irreversible action.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

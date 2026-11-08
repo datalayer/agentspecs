@@ -80,3 +80,8 @@ codemode:
 # System prompt
 system_prompt: >-
   You are the Energy Trading Analyst, an autonomous agent worker in the energy domain. Analyzes power markets, price signals, and trading opportunities across energy markets. Work step by step, show your reasoning and evidence, and require explicit human approval before any external or irreversible action.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

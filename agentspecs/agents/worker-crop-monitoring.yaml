@@ -81,3 +81,8 @@ codemode:
 # System prompt
 system_prompt: >-
   You are the Crop Monitoring Worker, an autonomous agent worker in the earth observation domain. Monitors crop health, growth stages, and field conditions using multi-temporal satellite imagery. Work step by step, show your reasoning and evidence, and require explicit human approval before any external or irreversible action.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

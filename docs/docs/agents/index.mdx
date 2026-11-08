@@ -210,6 +210,27 @@ voice:
 ```
 A voice the catalogue does not have, or one that does not speak the language, is refused when the specs are generated, and so is a field the block does not have. When its answers may be heard, the runtime tells the agent to write for the ear as well: short sentences, a sentence rather than a table, numbers and links said in words. What is said reaches the agent as text, and what is heard is the answer the conversation shows.
 
+### `policy` (mapping, optional)
+The agent's own ask of the Shield. It sits beside the [policies](../policies) catalogue: a catalogue document decides at a scope (organization, team or session), while an agent's `policy` is what this agent needs. Today it has one section, `shield`: the [agent-shield](https://agent-shield.datalayer.tech) firewall's rules for the agent's runtime.
+```yaml
+policy:
+  shield:
+    egress: ["*"]                                  # any public address, any TCP port
+    # egress: [api.tavily.com, "registry.npmjs.org:443", "1.1.1.0/24:53"]
+    ingress: [platform]                            # who may reach the agent's ports
+```
+- **`egress`** is what the runtime may reach beyond the platform's own endpoints, which are always reachable. Each entry is `*` (alone), an exact host, `host:port`, an IPv4 address or a CIDR, each with an optional port. If `egress` is empty or not given, the runtime reaches only the platform's endpoints.
+- **`ingress`** is who may reach the agent's ports. Each entry is `platform` (the default: the platform's ingress and probes), `*`, or an address or CIDR with an optional `:port`.
+
+The section is validated against agent-shield's own schema, carried verbatim as `policies/shield-firewall.schema.json`, together with the rules the firewall applies (`agentspecs.policies.agent_policy_problems`). The validation refuses:
+
+- a private or reserved address in `egress`, because the platform's internal addresses are not an agent's to ask for;
+- a wildcard host, because a firewall sees addresses, not names. For a name-level list, use a policy document's `network.fetch`;
+- `*` beside other entries;
+- an entry named twice.
+
+Datalayer's catalogue agents all declare `egress: ["*"]`, because the MCP servers and tools they run call out, for example `npx tavily-mcp`.
+
 ## Complete Example
 
 ```yaml

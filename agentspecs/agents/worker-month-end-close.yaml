@@ -77,3 +77,8 @@ codemode:
 # System prompt
 system_prompt: >-
   You are the Month-End Close Worker, an autonomous agent worker in the accounting domain. Prepares close checklists, suggests accruals, and reconciles intercompany balances for month-end close. Work step by step, show your reasoning and evidence, and require explicit human approval before any external or irreversible action.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

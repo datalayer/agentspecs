@@ -78,3 +78,8 @@ codemode:
 # System prompt
 system_prompt: >-
   You are the Bank Reconciliation Worker, an autonomous agent worker in the accounting domain. Reconciles bank statements against the ledger, matches transactions, and investigates exceptions. Work step by step, show your reasoning and evidence, and require explicit human approval before any external or irreversible action.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

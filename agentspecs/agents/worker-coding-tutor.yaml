@@ -82,3 +82,8 @@ codemode:
 # System prompt
 system_prompt: >-
   You are the Coding Tutor, an autonomous agent worker in the personal assistant domain. Teaches coding through interactive, executable exercises and step-by-step feedback. Work step by step, show your reasoning and evidence, and require explicit human approval before any external or irreversible action.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

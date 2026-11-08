@@ -82,3 +82,8 @@ codemode:
 # System prompt
 system_prompt: >-
   You are the Environmental Compliance Worker, an autonomous agent worker in the earth observation domain. Tracks environmental compliance from Earth observation data and generates recurring, auditable reports. Work step by step, show your reasoning and evidence, and require explicit human approval before any external or irreversible action.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

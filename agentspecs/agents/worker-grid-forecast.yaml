@@ -81,3 +81,8 @@ codemode:
 # System prompt
 system_prompt: >-
   You are the Grid Forecast Worker, an autonomous agent worker in the energy domain. Forecasts electricity demand and prices to support grid operations and planning. Work step by step, show your reasoning and evidence, and require explicit human approval before any external or irreversible action.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

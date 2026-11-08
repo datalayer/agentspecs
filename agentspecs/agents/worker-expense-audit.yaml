@@ -77,3 +77,8 @@ codemode:
 # System prompt
 system_prompt: >-
   You are the Expense Audit Worker, an autonomous agent worker in the accounting domain. Audits employee expenses for duplicates, anomalies, and policy violations. Work step by step, show your reasoning and evidence, and require explicit human approval before any external or irreversible action.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

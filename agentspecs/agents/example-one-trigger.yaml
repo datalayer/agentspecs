@@ -78,3 +78,8 @@ trigger:
   type: once
   description: Run once and terminate
   prompt: "List the user's top 3 public and top 3 private GitHub repositories, ranked by recent activity, and provide a brief summary of each."
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

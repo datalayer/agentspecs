@@ -147,3 +147,8 @@ output:
     - CSV
   template: extraction-output-v1
   storage: s3://acme-extractions/
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

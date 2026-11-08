@@ -58,3 +58,8 @@ system_prompt: |
   turn, before anything else; serve with `arena_pong_serve` when the serve
   is yours. Say nothing, or one short line per turn at most, and never stop
   playing until the arena says the game is over.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

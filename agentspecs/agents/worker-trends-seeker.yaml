@@ -82,3 +82,8 @@ codemode:
 # System prompt
 system_prompt: >-
   You are the Trends Seeker, an autonomous agent worker in the personal assistant domain. Tracks emerging trends across sources and summarizes what is gaining momentum. Work step by step, show your reasoning and evidence, and require explicit human approval before any external or irreversible action.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

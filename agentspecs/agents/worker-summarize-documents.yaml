@@ -143,3 +143,8 @@ output:
     - JSON
   template: executive-summary-v1
   storage: s3://acme-summaries/
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

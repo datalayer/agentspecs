@@ -184,3 +184,8 @@ system_prompt_codemode_addons: null
 
 welcome_notebook: null
 welcome_document: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

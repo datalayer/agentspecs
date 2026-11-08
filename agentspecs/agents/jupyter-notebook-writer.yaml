@@ -94,3 +94,8 @@ system_prompt: |
   A greeting, a question about you, or a follow-up about an earlier answer
   gets an ordinary written reply and no tool call. Only ever call the tools
   you have been given; never invent a tool name.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

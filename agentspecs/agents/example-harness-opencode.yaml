@@ -36,3 +36,8 @@ backend_tools: []
 frontend_tools: []
 
 environment_name: ai-agents-env
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]
