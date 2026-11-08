@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.160
+
+8 November 2026.
+
+- **PAP at draft 0.4 in the protocols catalogue.** [`pap`](https://agentspecs.datalayer.tech/docs/protocols) says `spec_version` *draft 0.4*, the version the runtimes' PAP plugin speaks since `personal-agent-protocol` 0.32.0.
+
 ## 0.0.159
 
 8 November 2026.
