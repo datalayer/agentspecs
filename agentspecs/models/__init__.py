@@ -32,7 +32,9 @@ class ModelPricing(BaseModel):
 #: (noul, choice and score questions, answered as probabilities — Jev);
 #: ``decider`` is a chat model that may be asked those questions and made to
 #: answer in the same shape, whose probabilities are what it says they are.
-MODEL_CAPABILITIES = ("chat", "tools", "codemode", "vision", "thinking", "decisions", "decider")
+#: ``embeddings`` is an embedding model (texts in, vectors out — Titan, what an
+#: agent's memories are embedded with): it runs no chat and answers no decision.
+MODEL_CAPABILITIES = ("chat", "tools", "codemode", "vision", "thinking", "decisions", "decider", "embeddings")
 
 #: Which Cloudflare endpoint a model is asked at — a product, not a kind of
 #: model. ``workers-ai``: Workers AI's own endpoint
@@ -69,7 +71,7 @@ class AIModel(BaseModel):
     )
     required_env_vars: List[str] = Field(default_factory=list, description="Required environment variable names")
     tokens_limit: Optional[int] = Field(default=None, description="Maximum output tokens the model can generate in a single run")
-    capabilities: List[str] = Field(default_factory=list, description="What the model can be trusted with: chat, tools, codemode, vision, thinking, decisions, decider")
+    capabilities: List[str] = Field(default_factory=list, description="What the model can be trusted with: chat, tools, codemode, vision, thinking, decisions, decider, embeddings")
     billing: Optional[str] = Field(default=None, description="How the provider bills it, when worth telling: 'standard' or 'credits'")
     route: Optional[str] = Field(default=None, description="Which Cloudflare endpoint the model is asked at: 'workers-ai' (Workers AI's own endpoint) or 'ai-gateway' (through the account's AI Gateway). Set on every Cloudflare model, on no other")
     context_window: Optional[int] = Field(default=None, description="The tokens a request may carry, input and output together")

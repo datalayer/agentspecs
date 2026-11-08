@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.163
+
+8 November 2026.
+
+- **The Titan embedding models priced.** [`bedrock:amazon.titan-embed-text-v1`](https://agentspecs.datalayer.tech/docs/agents/models) (1536 dimensions, what an agent's memories are embedded with) and `bedrock:amazon.titan-embed-text-v2:0` (1024, 512, 256) are in the models catalogue, by the ids ai-inference's `POST /api/ai-inference/v1/embeddings` meters them under, with AWS's on-demand price in US East (N. Virginia): $0.10 and $0.02 per million input tokens, no output (AWS's price list of 2026-11-06, read 2026-11-08; the same as genai-prices). ai-inference charges an embedding call by it instead of recording it as not priced. The capability vocabulary gains `embeddings`: an embedding model runs no chat, and a chat picker leaves it out.
+
 ## 0.0.162
 
 8 November 2026.

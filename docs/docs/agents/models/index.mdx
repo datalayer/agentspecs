@@ -78,7 +78,8 @@ The most output tokens the model may generate in a single run.
 What the model can be trusted with, from a closed vocabulary: `chat`, `tools`, `codemode`,
 `vision`, `thinking`, `decisions` (a typed-decision model: noul, choice and score questions
 answered as probabilities), `decider` (a chat model that may be asked those questions and
-made to answer in the same shape). A spec naming another word is refused when the
+made to answer in the same shape), `embeddings` (an embedding model: texts in, vectors out;
+a picker of chat models leaves it out). A spec naming another word is refused when the
 catalogue loads.
 
 ### `billing` (string)
@@ -98,7 +99,8 @@ negative — for a service that meters by it.
 
 Each price is the provider's published one, and its spec says where it was read and when:
 for Bedrock, the on-demand price of the US cross-region inference profile its `us.` id names
-([AWS](https://aws.amazon.com/bedrock/pricing/)); for Anthropic, OpenAI and Cloudflare,
+([AWS](https://aws.amazon.com/bedrock/pricing/)), or for a model with no `us.` profile (the Titan
+embeddings) the price in US East (N. Virginia), the region the platform asks Bedrock in; for Anthropic, OpenAI and Cloudflare,
 their own price pages; for Azure OpenAI, the Global Standard deployment's price, which is
 OpenAI's list price (as [genai-prices](https://github.com/pydantic/genai-prices) prices Azure).
 A model whose price is not published for the way it is reached — Alibaba Model Studio, whose
@@ -187,6 +189,8 @@ Required env vars: `ANTHROPIC_API_KEY`
 | **Claude Sonnet 4.5** | `bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0` | balanced performance |
 | **Claude Sonnet 4.6** ⭐ | `bedrock:us.anthropic.claude-sonnet-4-6` | balanced performance (default) |
 | **Claude Sonnet 4** | `bedrock:us.anthropic.claude-sonnet-4-20250514-v1:0` | strong reasoning |
+| **Titan Text Embeddings** | `bedrock:amazon.titan-embed-text-v1` | embeddings, 1536 dimensions: what an agent's memories are embedded with |
+| **Titan Text Embeddings V2** | `bedrock:amazon.titan-embed-text-v2:0` | embeddings, 1024, 512 or 256 dimensions |
 
 Required env vars: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`
 

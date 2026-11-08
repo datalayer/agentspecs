@@ -244,3 +244,22 @@ def test_every_bedrock_openai_azure_anthropic_and_workers_ai_model_has_a_price()
     routed = ("bedrock:", "anthropic:", "openai:", "azure-openai:", "cloudflare:wrk/")
     unpriced = [m.id for m in AI_MODEL_CATALOGUE if m.id.startswith(routed) and m.pricing is None]
     assert unpriced == []
+
+
+def test_the_titan_embedding_models_are_priced_and_embed_only():
+    """What ai-inference's `/embeddings` serves and meters: both Titan models are in the
+    catalogue by the ids it meters them under, priced per million input tokens (an
+    embedding has no output), and named embedding models, so no chat picker offers them."""
+    prices = {
+        "bedrock:amazon.titan-embed-text-v1": 0.1,
+        "bedrock:amazon.titan-embed-text-v2:0": 0.02,
+    }
+    for model_id, input_price in prices.items():
+        model = get_model(model_id)
+        assert model is not None, model_id
+        assert model.capabilities == ["embeddings"], model_id
+        assert model.pricing is not None, model_id
+        assert model.pricing.input_usd_per_million == input_price, model_id
+        assert model.pricing.output_usd_per_million == 0.0, model_id
+        assert model.required_env_vars == [], model_id
+    assert "embeddings" in MODEL_CAPABILITIES
