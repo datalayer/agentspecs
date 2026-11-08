@@ -147,6 +147,22 @@ def test_a_company_may_publish_its_public_skills_to_personal_agents() -> None:
     parse_app({**BASE, "skills": [], "pap": {"profile": "draft-01", "company": {"enabled": False, "publish_skills": True}}})
 
 
+def test_a_companys_website_says_whether_it_gives_full_access_or_asks_agents_not_to_browse() -> None:
+    """D5-09 (PAP draft 0.4 §6): `web_unscoped` (`web.unscoped`) needs the website; `web_disabled`
+    (`web.disabled`) lists no website and offers the company's agent or API; both off by default."""
+    plain = app(company={"enabled": True}).pap.company
+    assert (plain.web_unscoped, plain.web_disabled) == (False, False)
+    unscoped = app(company={"enabled": True, "interfaces": ["agent", "web"], "web_unscoped": True})
+    assert unscoped.pap.company.web_unscoped
+    with pytest.raises(ValueError, match="add the `web` interface"):
+        app(company={"enabled": True, "web_unscoped": True})
+    assert app(company={"enabled": True, "web_disabled": True}).pap.company.web_disabled
+    with pytest.raises(ValueError, match="does not offer `web`"):
+        app(company={"enabled": True, "interfaces": ["agent", "web"], "web_disabled": True})
+    with pytest.raises(ValueError, match="offers `agent` or `openapi`"):
+        app(company={"enabled": True, "interfaces": ["mcp"], "web_disabled": True})
+
+
 def test_a_company_declares_what_it_does_once_the_person_confirms() -> None:
     spec = app(company={"enabled": True, "scopes": [WRITE], "extensions": ["operations"],
                         "operations": [OPERATION]})

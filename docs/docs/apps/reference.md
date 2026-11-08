@@ -917,13 +917,15 @@ Another way to do an excluded task (PAP draft 0.3 §8.2): instructions, referenc
 
 ### AppPapCompany
 
-The application is a company personal agents work with. Published at PAP 0.3 as published: the application's `avatar` is served to personal agents as the company's logo (`organization.logo_uri`), and `sign_in_disabled` turns sign-in off for them (`auth.disabled`), the company then answering them signed out only.
+The application is a company personal agents work with. Published at PAP 0.3 as published: the application's `avatar` is served to personal agents as the company's logo (`organization.logo_uri`), and `sign_in_disabled` turns sign-in off for them (`auth.disabled`), the company then answering them signed out only. At PAP draft 0.4 its website says two things of itself (§6): `web_unscoped`, a browser signed in for the person has everything the account can do there (`web.unscoped`), and `web_disabled`, personal agents are asked to use its agent and APIs rather than its website (`web.disabled`). The protocol versions it serves are the platform's, never an Appspec's.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
 | `enabled` | true or false | Whether it publishes itself as a company at Ship | `false` |
 | `signed_out` | true or false | Whether a personal agent may ask before signing in | `true` |
 | `sign_in_disabled` | true or false | Whether it offers personal agents no sign-in (`auth.disabled`): they ask only what anybody may ask, in nobody's account, whatever scopes it lists for its other clients | `false` |
+| `web_unscoped` | true or false | Whether a browser signed in for the person on its website has everything the account can do there, not only what the person approved (`web.unscoped`, PAP draft 0.4 §6): the person is told so when they sign in. Needs the `web` interface | `false` |
+| `web_disabled` | true or false | Whether it asks personal agents not to use its website, but its agent and APIs (`web.disabled`, PAP draft 0.4 §6): a preference, not enforced. It then lists no `web` interface, and offers `agent` or `openapi` | `false` |
 | `publish_skills` | true or false | Whether it publishes the application's skills to personal agents as a `skill_index` (PAP 0.3 §9.4, the pinned Agent Skills revision): only the skills whose SKILL.md says it is public and that need no secret are listed, Company content granting no access | `false` |
 | `interfaces` | list of [PapInterface](#papinterface) | How personal agents reach it: `agent`, `openapi`, `mcp`, and `web` — its pages, a browser joining the person's Session through the one-time-code form (PAP draft 0.3 §6) | — |
 | `scopes` | list of [AppPapCompanyScope](#apppapcompanyscope) | The scopes it offers, each with what it allows and its hints | — |

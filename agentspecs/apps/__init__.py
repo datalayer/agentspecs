@@ -573,7 +573,11 @@ class AppPapCompany(_Strict):
 
     Published at PAP 0.3 as published: the application's `avatar` is served to personal agents
     as the company's logo (`organization.logo_uri`), and `sign_in_disabled` turns sign-in off
-    for them (`auth.disabled`), the company then answering them signed out only.
+    for them (`auth.disabled`), the company then answering them signed out only. At PAP draft 0.4
+    its website says two things of itself (§6): `web_unscoped`, a browser signed in for the person
+    has everything the account can do there (`web.unscoped`), and `web_disabled`, personal agents
+    are asked to use its agent and APIs rather than its website (`web.disabled`). The protocol
+    versions it serves are the platform's, never an Appspec's.
     """
 
     enabled: bool = Field(default=False, description="Whether it publishes itself as a company at Ship")
@@ -583,6 +587,22 @@ class AppPapCompany(_Strict):
         description=(
             "Whether it offers personal agents no sign-in (`auth.disabled`): they ask only what anybody "
             "may ask, in nobody's account, whatever scopes it lists for its other clients"
+        ),
+    )
+    web_unscoped: bool = Field(
+        default=False,
+        description=(
+            "Whether a browser signed in for the person on its website has everything the account can do "
+            "there, not only what the person approved (`web.unscoped`, PAP draft 0.4 §6): the person is told so "
+            "when they sign in. Needs the `web` interface"
+        ),
+    )
+    web_disabled: bool = Field(
+        default=False,
+        description=(
+            "Whether it asks personal agents not to use its website, but its agent and APIs (`web.disabled`, "
+            "PAP draft 0.4 §6): a preference, not enforced. It then lists no `web` interface, and offers "
+            "`agent` or `openapi`"
         ),
     )
     publish_skills: bool = Field(
@@ -668,6 +688,12 @@ class AppPapCompany(_Strict):
             )
         if not self.interfaces or len(set(self.interfaces)) != len(self.interfaces):
             raise ValueError("a company is reached in at least one way, each once")
+        if self.web_unscoped and PapInterface.WEB not in self.interfaces:
+            raise ValueError("a website that gives the account's full access is offered: add the `web` interface")
+        if self.web_disabled and PapInterface.WEB in self.interfaces:
+            raise ValueError("a company asking personal agents not to use its website does not offer `web`")
+        if self.web_disabled and not {PapInterface.AGENT, PapInterface.OPENAPI} & set(self.interfaces):
+            raise ValueError("a company asking personal agents not to use its website offers `agent` or `openapi`")
         if self.personal_agents is PapAgents.REGISTERED and not self.registered_agents:
             raise ValueError("a company for registered personal agents names at least one")
         if self.registered_agents and self.personal_agents is not PapAgents.REGISTERED:

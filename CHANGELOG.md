@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.159
+
+8 November 2026.
+
+- **A company's website at PAP draft 0.4** (D5-09). The [company role](https://agentspecs.datalayer.tech/docs/apps/reference#apppapcompany) gains `web_unscoped` (a browser signed in for the person has everything the account can do on its website, `web.unscoped`; needs the `web` interface) and `web_disabled` (personal agents are asked to use its agent and APIs, not its website, `web.disabled`; it then lists no `web` interface and offers `agent` or `openapi`); both off by default. The protocol versions a company serves are the platform's, never an Appspec's.
+
 ## 0.0.158
 
 8 November 2026.
