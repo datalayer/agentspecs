@@ -391,13 +391,12 @@ def test_what_is_not_enabled_is_said_as_setup_and_not_as_a_mistake() -> None:
     triage = APP_CATALOGUE["inbox-triage"]
     assert app_problems(triage) == []
     assert app_setup(triage) == []
-    # An application naming an agent and a server that are not: that is setup, said in
-    # words, and not a problem of the spec.
+    # An application naming an agent that is not: that is setup, said in words, and not
+    # a problem of the spec (its odoo-accounting server is on since 0.0.162).
     accounting = APP_CATALOGUE["accounting"]
     assert app_problems(accounting) == []
     assert app_setup(accounting) == [
         "The agent 'worker-accountant:0.0.1' is not enabled.",
-        "The MCP server 'odoo-accounting:0.0.1' is not enabled.",
     ]
 
 
@@ -1048,7 +1047,6 @@ def test_accounting_only_reads_the_books_and_asks_before_anything_that_would_cha
     assert app_problems(found) == []
     assert app_setup(found) == [
         "The agent 'worker-accountant:0.0.1' is not enabled.",
-        "The MCP server 'odoo-accounting:0.0.1' is not enabled.",
     ]
 
 

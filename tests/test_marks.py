@@ -101,3 +101,23 @@ def test_the_odoo_accounting_server_is_the_datalayer_server_with_one_toolset():
         if name.startswith("odoo_accounting_")
     }
     assert spec["actions"]["tools"] == accounting
+    assert spec["enabled"] is True
+
+
+def test_the_odoo_server_is_the_datalayer_server_with_its_generic_toolset():
+    """`odoo` and `odoo-accounting` are the gateway's two Odoo toolsets, both on, sharing no tool."""
+    spec = yaml.safe_load((ROOT / "mcp-servers" / "odoo.yaml").read_text())
+    accounting = yaml.safe_load((ROOT / "mcp-servers" / "odoo-accounting.yaml").read_text())
+    datalayer = yaml.safe_load((ROOT / "mcp-servers" / "datalayer.yaml").read_text())
+    assert spec["url"] == "https://mcp.datalayer.run/mcp?only=odoo"
+    assert spec["transport"] == "streamable-http" and "command" not in spec and spec["env"] == {}
+    assert spec["headers"] == datalayer["headers"]
+    assert spec["envvars"] == datalayer["envvars"]
+    assert spec["enabled"] is True
+    generic = {
+        name: classes
+        for name, classes in datalayer["actions"]["tools"].items()
+        if name.startswith("odoo_") and not name.startswith(("odoo_accounting_", "odoo_winauditor_"))
+    }
+    assert spec["actions"]["tools"] == generic
+    assert not set(spec["actions"]["tools"]) & set(accounting["actions"]["tools"])

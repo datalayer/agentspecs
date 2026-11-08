@@ -474,12 +474,11 @@ class TestScenes:
 
     def test_what_each_scene_needs_is_said_as_setup(self):
         """What is not enabled is setup, said in words (E-01): the agents are off,
-        earthdata is on, odoo-accounting is off."""
+        earthdata and odoo-accounting are on."""
         from agentspecs.apps import APP_CATALOGUE, app_setup
 
         assert app_setup(APP_CATALOGUE["month-end-close"]) == [
             "The agent 'worker-month-end-close:0.0.1' is not enabled.",
-            "The MCP server 'odoo-accounting:0.0.1' is not enabled.",
         ]
         assert app_setup(APP_CATALOGUE["crop-monitoring"]) == [
             "The agent 'worker-crop-monitoring:0.0.1' is not enabled.",

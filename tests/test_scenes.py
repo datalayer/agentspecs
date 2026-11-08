@@ -251,9 +251,9 @@ def test_what_each_scene_needs_is_said_as_setup() -> None:
     assert scene_setup(SCENE_CATALOGUE["crop-monitoring"]) == [
         "The agent 'worker-crop-monitoring:0.0.1' is not enabled.",
     ]
-    assert "The MCP server 'odoo-accounting:0.0.1' is not enabled." in scene_setup(
-        SCENE_CATALOGUE["month-end-close"]
-    )
+    assert scene_setup(SCENE_CATALOGUE["month-end-close"]) == [
+        "The agent 'worker-month-end-close:0.0.1' is not enabled.",
+    ]
 
 
 # --- reading and writing ---------------------------------------------------------------

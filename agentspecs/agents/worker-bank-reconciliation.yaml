@@ -33,6 +33,7 @@ memory: mem0
 # MCP servers used by this agent
 mcp_servers:
   - odoo:0.0.1
+  - odoo-accounting:0.0.1
 
 # Skills available to this agent
 skills:

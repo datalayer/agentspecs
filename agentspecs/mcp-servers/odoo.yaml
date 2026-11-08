@@ -2,42 +2,98 @@
 # Distributed under the terms of the Modified BSD License.
 
 # MCP Server Specification: Odoo
-# Odoo ERP operations (search, invoices, journals, reconciliations)
+# The Datalayer MCP server (the gateway behind `datalayer`) with its generic
+# `odoo` toolset and nothing else: the session's context and company, model
+# and field discovery, grouped queries and record reads and writes of an Odoo
+# database, with the person's own Odoo key. The accountant's tools are
+# `odoo-accounting`, the same gateway with its other toolset.
 
 id: odoo
 version: 0.0.1
 name: Odoo
-description: Odoo ERP operations (search, invoices, journals, reconciliations)
+description: >-
+  Any record of your Odoo — models, fields, searches, grouped counts, creates,
+  updates and deletes — in one company, through the Datalayer MCP server
 # Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
-documentation_url: https://github.com/ivnvxd/mcp-server-odoo
-setup: "Runs with `uvx` against the Odoo instance its env names, with that Odoo user's API key ([mcp-server-odoo](https://github.com/ivnvxd/mcp-server-odoo))."
+documentation_url: https://datalayer.ai/docs/mcp-toolsets
+signup_url: https://datalayer.ai/signin
+api_key_url: https://datalayer.ai/settings/api-keys
+setup: "Datalayer's gateway with its generic odoo toolset: your Datalayer API key as the bearer, made under [Settings, API keys](https://datalayer.ai/settings/api-keys) and put in `DATALAYER_API_KEY`; your Odoo in your Datalayer secrets (`DATALAYER_ODOO_URL`, `DATALAYER_ODOO_API_KEY`, and `DATALAYER_ODOO_DATABASE` when the host does not name it). One company per session: your default in Odoo, or the one the url names with `&odoo-company=<name or id>`."
 
-command: uvx
-args:
-  - mcp-server-odoo
+# The same hosted server as `datalayer` and `odoo-accounting`, the toolset
+# chosen in the URL (the gateway's README, "Odoo toolsets"). `only=` asks for
+# exactly that toolset (and the gateway's always-on ones), where the compact
+# `?odoo` adds it to the notebook surface `datalayer` already serves: an agent
+# given several of these servers then never sees one tool twice, and an
+# application's connection to `odoo` is what the gateway checks the session
+# against (`only=` and `toolsets=` are the parameters it reads). The gateway
+# reaches Odoo with DATALAYER_ODOO_URL and DATALAYER_ODOO_API_KEY (and
+# DATALAYER_ODOO_DATABASE where the host does not say it), kept in the
+# person's Datalayer environment and never handed to the runtime. One company
+# per session: the person's default in Odoo, or the one a URL names with
+# `&odoo-company=<name or id>` — a name the person cannot work in stops the
+# call before it reaches the books.
+#
+# Until 8 November 2026 this ran `uvx mcp-server-odoo`, a third-party server
+# given the Odoo key itself: a runtime pod reaches the gateway and no package
+# index, and the key belongs in the person's environment, not the runtime's.
+transport: streamable-http
+url: "https://mcp.datalayer.run/mcp?only=odoo"
+headers:
+  Authorization: "Bearer ${DATALAYER_API_KEY}"
 
-transport: stdio
-enabled: false
-env:
-  ODOO_URL: "${ODOO_URL}"
-  ODOO_API_KEY: "${ODOO_API_KEY}"
-  ODOO_DB: "${ODOO_DB}"
-  ODOO_LOCALE: "${ODOO_LOCALE}"
+# On (the user, 8 November 2026): the gateway acts with the person's own Odoo
+# key, so Odoo's access rights, record rules and field permissions decide what
+# a session reaches.
+enabled: true
+
+envvars:
+  - DATALAYER_API_KEY:0.0.1
+
+env: {}
 
 tags:
   - erp
-  - accounting
-  - finance
   - odoo
+  - datalayer
 
 icon: "@datalayer/icons-react:odoo"
 emoji: "🧾"
 
-# What each tool does to the world (agentspecs.actions). A tool not named here is
-# unknown, and unknown is the most restricted.
+# What each tool does to the world (agentspecs.actions), as the `datalayer`
+# server classes the same tools: read off the gateway's own table.
 actions:
-  checked: null
+  checked: "2026-11-08"
   note: >-
-    Not read off the running server yet: its tools are unknown, and unknown is the most
-    restricted. Run the server, list its tools, and class each one here.
-  tools: {}
+    Exactly the tools the gateway's odoo toolset registers, read off its code
+    (datalayer-mcp-server's extensions/odoo, odoo.py's base_tools;
+    datalayer-mcp-server 0.0.104), each classed as the datalayer server classes it
+    (its tool_policy). The comment over each tool is the gateway's own description
+    of it. The odoo and odoo-accounting toolsets share no tool.
+  tools:
+    # Return the authenticated Odoo user's language, timezone, company and user ID.
+    odoo_get_context: read
+    # Return the Odoo account this session is connected as.
+    odoo_get_account: read
+    # Return the settings of the company the session acts on.
+    odoo_get_settings: read
+    # List the companies this Odoo user can work in, and which one is current.
+    odoo_list_companies: read
+    # Change the user's default company in Odoo itself.
+    odoo_set_company: write
+    # List Odoo models this user can access.
+    odoo_list_models: read
+    # Describe fields available on an Odoo model.
+    odoo_get_fields: read
+    # Search and read records from any Odoo model, subject to Odoo permissions.
+    odoo_search_records: read
+    # Read Odoo records by ID, subject to Odoo permissions.
+    odoo_read_records: read
+    # Group Odoo records and calculate counts, sums or other aggregates.
+    odoo_group_records: read
+    # Create one record in any Odoo model, subject to Odoo permissions.
+    odoo_create_record: write
+    # Update records in any Odoo model, subject to Odoo permissions.
+    odoo_update_records: write
+    # Permanently delete records from an Odoo model, subject to Odoo permissions.
+    odoo_delete_records: delete

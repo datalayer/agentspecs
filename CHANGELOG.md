@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.162
+
+8 November 2026.
+
+- **Two Odoo servers on the Datalayer MCP server, both on.** [`odoo`](https://agentspecs.datalayer.tech/docs/agents/mcp-servers) no longer runs `uvx mcp-server-odoo` (a third-party server given the Odoo key, off): it is the gateway's generic `odoo` toolset at `https://mcp.datalayer.run/mcp?only=odoo` — context, companies, models, fields, searches, grouped aggregates and record writes, 13 tools. `odoo-accounting` (`?only=odoo-accounting`, 61 tools) is on too. Both take the bearer `${DATALAYER_API_KEY}`; the gateway reaches Odoo with the person's `DATALAYER_ODOO_URL` and `DATALAYER_ODOO_API_KEY`, in one company per session (`&odoo-company=<name or id>`, else the person's default). Each spec lists exactly the tools the gateway's code registers for its toolset, with the gateway's description of each; the two share no tool. The seven accounting workers reach both servers. The MCP servers page names every tool.
+
 ## 0.0.161
 
 8 November 2026.

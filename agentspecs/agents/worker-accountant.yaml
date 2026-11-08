@@ -29,6 +29,7 @@ sandbox_variant: jupyter-server
 memory: ephemeral
 mcp_servers:
   - odoo:0.0.1
+  - odoo-accounting:0.0.1
 skills:
   - accounting:0.0.1
 backend_tools:
@@ -63,7 +64,8 @@ system_prompt: >-
   You are a specialized assistant for this gallery workflow: Accountant.
   Objective: Use Odoo data to perform accounting workflows including
   reconciliation, aging analysis, journal checks, and close summaries.
-  Use the Odoo MCP server for ERP operations and the notebook/runtime tools for
+  Use the Odoo Accounting MCP server for invoices, entries, ledgers, bank lines
+  and taxes, the Odoo MCP server for any other record, and the notebook/runtime tools for
   calculations and structured outputs. Keep results concise, auditable, and
   action-oriented.
 
