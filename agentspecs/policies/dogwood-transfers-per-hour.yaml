@@ -1,0 +1,29 @@
+id: dogwood-transfers-per-hour
+version: 0.0.1
+name: At most five transfers an hour
+description: 'An example of a Dogwood set for the organization: a sixth transfer within an hour
+  of the session is refused, the transfer being decided counted; the others are left to the rules.
+  The count is per session, so it shapes a cooperative agent (one stuck in a loop), not a caller
+  who starts new sessions.'
+enabled: false
+tags:
+- policy
+- organization
+- dogwood
+- example
+policy:
+  scope: organization
+  version: 1
+  dogwood:
+    mode: enforce
+    policies: |
+      permit (principal, action, resource);
+
+      @id("at most five transfers an hour")
+      forbid (principal, action == Datalayer::Action::"bank___transfer", resource)
+      when temporal {
+          exists (n: Long).
+              (count for (t: Timepoint).
+                  where (formerly within 1h (Datalayer::Action::"bank___transfer"::request{ eventResource: resource } && tp(t)))) == n
+              && n > 5
+      };

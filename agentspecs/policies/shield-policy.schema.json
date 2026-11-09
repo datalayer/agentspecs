@@ -37,6 +37,17 @@
           ],
           "default": null
         },
+        "cedar": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CedarAuthorizerConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "local": {
           "anyOf": [
             {
@@ -72,6 +83,50 @@
         }
       },
       "title": "AuthorizerConfig",
+      "type": "object"
+    },
+    "CedarAuthorizerConfig": {
+      "additionalProperties": false,
+      "description": "``cedar: {policies}``: a Cedar policy set inline, or the path of a ``.cedar`` file (AC-41).",
+      "properties": {
+        "policies": {
+          "description": "A Cedar policy set, inline, or the path of a .cedar file.",
+          "minLength": 1,
+          "title": "Policies",
+          "type": "string"
+        }
+      },
+      "required": [
+        "policies"
+      ],
+      "title": "CedarAuthorizerConfig",
+      "type": "object"
+    },
+    "Dogwood": {
+      "additionalProperties": false,
+      "description": "A Dogwood policy set (Cedar, and ``when temporal`` over the session's events), AC-42.\n\nRead as it is loaded: the temporal clauses parsed, AgentCore's quotas held\n(20 temporal policies, 3 temporal operators in one, a 24-hour window at\nmost) and, when ``cedarpy`` is installed, the Cedar parsed too.",
+      "properties": {
+        "mode": {
+          "default": "enforce",
+          "description": "enforce: what the set denies is refused; log_only: decided and recorded, then let through.",
+          "enum": [
+            "enforce",
+            "log_only"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "policies": {
+          "description": "The policy set, as AgentCore Policy takes it: permit and forbid over Datalayer::User principals, Datalayer::Action::\"<server>___<tool>\" actions and the Datalayer::Runtime resource, with when temporal { formerly within | since within | count | sum } over the session's request, response and error events. Deny by default; a forbid overrides any permit.",
+          "minLength": 1,
+          "title": "Policies",
+          "type": "string"
+        }
+      },
+      "required": [
+        "policies"
+      ],
+      "title": "Dogwood",
       "type": "object"
     },
     "FirewallCeiling": {
@@ -511,7 +566,19 @@
         }
       ],
       "default": null,
-      "description": "The decision point a standalone Shield asks: local (grants in this file), openfga {url, store, model} or authzen {url}. On Datalayer the authorizer is IAM's and a managed document names none."
+      "description": "The decision point a standalone Shield asks: local (grants in this file), openfga {url, store, model}, authzen {url}, opa {url, package} or cedar {policies}. On Datalayer the authorizer is IAM's and a managed document names none."
+    },
+    "dogwood": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Dogwood"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "A Dogwood policy set deciding every classed action over the session's history (AgentCore Policy's language): a deny wins over any Rule, as the authorizer's does; an allow only lets the Rules decide."
     },
     "expires": {
       "anyOf": [

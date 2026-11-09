@@ -1,0 +1,28 @@
+id: dogwood-distinct-payees
+version: 0.0.1
+name: At most three payees a day
+description: 'An example of a Dogwood set for the organization: a transfer to a fourth distinct
+  payee within 24 hours of the session is refused; paying the same payee again counts once. A
+  distinct count: the domain names the payee, not the timepoint.'
+enabled: false
+tags:
+- policy
+- organization
+- dogwood
+- example
+policy:
+  scope: organization
+  version: 1
+  dogwood:
+    mode: enforce
+    policies: |
+      permit (principal, action, resource);
+
+      @id("at most three payees a day")
+      forbid (principal, action == Datalayer::Action::"bank___transfer", resource)
+      when temporal {
+          exists (n: Long).
+              (count for (p: String).
+                  where (formerly within 24h Datalayer::Action::"bank___transfer"::request{ eventResource: resource, input.payee: p })) == n
+              && n > 3
+      };
