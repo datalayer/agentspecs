@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.167
+
+The Marketer lists and forgets what it remembers — worker-marketer (memory: mem0 already) gains datalayer-memory-add, -search, -list and -delete, as the Crawler; its system prompt says to use them and never to delete everything without the person's confirmation of how many
+
 ## 0.0.166
 
 8 November 2026.
