@@ -39,3 +39,19 @@ An example of the organization scope an administrator writes in IAM: running a c
 - **nothing is deleted**: deny — delete
 - **outside the workspace: leave it to me**: deny — every class outside the workspace
 
+## An organization's firewall ceiling
+
+An organization's policy document may carry `firewall`, the most any agent of the organization may be granted by its own [`policy.shield`](../agents#policy-mapping-optional):
+
+```yaml
+scope: organization
+firewall:
+  egress: [api.tavily.com, "registry.npmjs.org:443", "10.0.0.0/8"]
+  ingress: [platform]
+```
+
+- When a runtime's rule is applied, each of the agent's entries holds only if the ceiling allows it: `*` in the ceiling allows anything public; an exact host must match exactly; an address or CIDR must be covered by a ceiling CIDR; a port must match.
+- An agent's `*` becomes the ceiling's own entries. `platform` always stays in ingress.
+- A direction the ceiling leaves out bounds nothing; an organization with no ceiling keeps each agent's own rule.
+- Only an organization document carries `firewall`; a team or session document with it is refused. The schema is agent-shield's (0.2.16 and later), carried verbatim as `policies/shield-policy.schema.json`.
+

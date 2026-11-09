@@ -231,6 +231,15 @@ The section is validated against agent-shield's own schema, carried verbatim as 
 
 Datalayer's catalogue agents all declare `egress: ["*"]`, because the MCP servers and tools they run call out, for example `npx tavily-mcp`.
 
+An organization may bound every agent's firewall with a ceiling in its [policy](../policies#an-organizations-firewall-ceiling): an entry the ceiling does not cover is dropped when the rule is applied, and `*` becomes the ceiling's own entries.
+
+### `identity` (string, optional)
+Who the agent acts as: an id of the [identities](../identities) catalogue, `id` or `id:version`. Unsaid, it acts for the person it answers to, with the platform's default identity.
+```yaml
+identity: aws-agentcore-runtime   # an agent in Amazon Bedrock AgentCore, trusting Datalayer's sign-in
+```
+An identity the catalogue does not have is refused when the specs are generated.
+
 ## Complete Example
 
 ```yaml
