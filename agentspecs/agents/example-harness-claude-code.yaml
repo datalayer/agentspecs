@@ -25,6 +25,7 @@ tags:
 
 enabled: false
 harness: claude-code
+identity: datalayer-acting-agent
 
 sandbox_variant: jupyter-server
 memory: ephemeral

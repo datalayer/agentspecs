@@ -29,6 +29,7 @@ model: "bedrock:us.anthropic.claude-sonnet-4-6"
 # The loop turns in the page by default, like the Loop Shell's agent; on a
 # server target the location decides the harness, whatever is said here.
 harness: vercel-ai
+identity: datalayer-acting-agent
 sandbox_variant: browser
 memory: ephemeral
 

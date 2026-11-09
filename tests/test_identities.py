@@ -87,15 +87,20 @@ class TestCatalogue:
         assert agent.custody.keys.value == "vault-transit" and agent.custody.algorithm == "ES256"
         assert get_identity("pap-person").pap.client_id_per_application is False
 
-    def test_every_agent_naming_an_identity_names_one_of_the_catalogue(self):
-        named = {}
+    def test_every_agent_says_who_it_acts_as_and_names_an_identity_of_the_catalogue(self):
+        # Every agent has an identity (the user, 9 November 2026: "we need identity for all agents").
         for path in AGENTS.glob("*.yaml"):
             spec = yaml.safe_load(path.read_text()) or {}
-            if spec.get("identity"):
-                named[spec["id"]] = spec["identity"]
-        assert named, "some agent of the catalogue says who it acts as"
-        for agent, identity in named.items():
-            assert get_identity(identity) is not None, f"{agent} acts as {identity}, not in the catalogue"
+            identity = spec.get("identity")
+            assert identity, f"{spec.get('id')} says who it acts as: identity is required"
+            assert get_identity(identity) is not None, f"{spec['id']} acts as {identity}, not in the catalogue"
+
+    def test_an_agent_on_a_trigger_acts_as_a_service_agent(self):
+        for path in AGENTS.glob("*.yaml"):
+            spec = yaml.safe_load(path.read_text()) or {}
+            trigger = spec.get("trigger") or {}
+            if isinstance(trigger, dict) and trigger.get("type") in ("schedule", "event", "once"):
+                assert spec["identity"] == "datalayer-service-agent", spec["id"]
 
 
 class TestRefusals:

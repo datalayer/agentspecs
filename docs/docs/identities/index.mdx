@@ -38,8 +38,9 @@ consent:
   binding: true
 ```
 
-An agent says who it acts as with `identity:` (an id of this catalogue);
-unsaid, the platform's default applies.
+Every agent says who it acts as with `identity:`, an id of this catalogue:
+`datalayer-acting-agent` for one acting for the person it answers to,
+`datalayer-service-agent` for one that runs unattended on a trigger.
 
 ```yaml
 # agents/worker-github-agent.yaml

@@ -8,9 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
-## Unreleased
+## 0.0.169
+
+9 November 2026.
 
 - **The organization's ceiling on the firewall** (Agent Firewall N3-01): `policies/shield-policy.schema.json` is agent-shield 0.2.16's, verbatim — an organization document may carry `firewall: {egress, ingress}`, the most any of its agents' `policy.shield` is granted (a team or session document may not). `SHIELD_SCHEMA_SOURCE_VERSION` is 0.2.16, so the test holding the copy skips an older agent-shield.
+- **Every agent says who it acts as.** `identity` is required on every agent of the catalogue: the 156 that act for the person they answer to are `datalayer-acting-agent`, the 19 that run unattended on a schedule, an event or once are `datalayer-service-agent`; the Marketer, the Crawler, the nightly data checks and the GitHub agent keep theirs. See [Agents](https://agentspecs.datalayer.tech/agents) and [Identities](https://agentspecs.datalayer.tech/identities).
 
 ## 0.0.168
 

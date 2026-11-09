@@ -336,6 +336,18 @@ def reference_text() -> str:
             )
             lines.append(f"- **{rule['name']}**: {rule['decision']} — {what}{where}")
         lines.append("")
+    lines += [
+        "## An organization's firewall ceiling",
+        "",
+        "An organization's document may carry `firewall: {egress, ingress}`, the most any agent of",
+        "the organization may be granted by its own `policy.shield` (agent-shield 0.2.16 and later).",
+        "When a runtime's rule is applied, an agent's entry holds only if the ceiling allows it: `*`",
+        "in the ceiling allows anything public; an exact host must match exactly; an address or CIDR",
+        "must be covered by a ceiling CIDR; a port must match. An agent's `*` becomes the ceiling's",
+        "own entries, and `platform` always stays in ingress. A direction the ceiling leaves out",
+        "bounds nothing. Only an organization document carries `firewall`.",
+        "",
+    ]
     return "\n".join(lines) + "\n"
 
 

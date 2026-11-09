@@ -18,6 +18,7 @@ tags:
 enabled: false
 model: "cloudflare:wrk/openai/gpt-oss-120b"
 harness: pydantic-ai
+identity: datalayer-acting-agent
 inference_provider: datalayer
 
 sandbox_variant: jupyter-server

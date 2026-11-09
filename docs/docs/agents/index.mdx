@@ -233,8 +233,8 @@ Datalayer's catalogue agents all declare `egress: ["*"]`, because the MCP server
 
 An organization may bound every agent's firewall with a ceiling in its [policy](../policies#an-organizations-firewall-ceiling): an entry the ceiling does not cover is dropped when the rule is applied, and `*` becomes the ceiling's own entries.
 
-### `identity` (string, optional)
-Who the agent acts as: an id of the [identities](../identities) catalogue, `id` or `id:version`. Unsaid, it acts for the person it answers to, with the platform's default identity.
+### `identity` (string, required)
+Who the agent acts as: an id of the [identities](../identities) catalogue, `id` or `id:version`. Every agent says it: an agent that acts for the person it answers to is `datalayer-acting-agent`, one that runs unattended on a trigger `datalayer-service-agent`.
 ```yaml
 identity: aws-agentcore-runtime   # an agent in Amazon Bedrock AgentCore, trusting Datalayer's sign-in
 ```

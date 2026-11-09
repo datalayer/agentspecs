@@ -24,6 +24,7 @@ tags:
 
 enabled: false
 harness: openhands
+identity: datalayer-acting-agent
 
 sandbox_variant: jupyter-server
 memory: ephemeral
