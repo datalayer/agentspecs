@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.168
+
+9 November 2026.
+
+- **Identities, a new kind.** [`agentspecs/identities`](https://agentspecs.datalayer.tech/docs/identities): who is acting when an agent acts — a person, an agent, an application, an organization, a visitor or a service — issued by Datalayer IAM, the Personal Agent Protocol, Amazon Bedrock AgentCore Identity or an organization's OIDC provider; how a caller proves it (`inbound`), the token the agent holds (`workload`), where third-party credentials are kept and for which providers (`credentials`), key `custody` and `consent`, and for PAP what the protocol binds. Twelve in the catalogue; refusals for a PAP identity without its block, an AgentCore authorizer without a discovery URL of its form or any claim to check, a shared secret verified outside Datalayer, a workload token by user id, a vault for a visitor. An agent says who it acts as with `identity:` — the Marketer, the Crawler, the nightly data checks and the GitHub agent do.
+
 ## 0.0.167
 
 The Marketer lists and forgets what it remembers — worker-marketer (memory: mem0 already) gains datalayer-memory-add, -search, -list and -delete, as the Crawler; its system prompt says to use them and never to delete everything without the person's confirmation of how many

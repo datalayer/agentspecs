@@ -1,0 +1,79 @@
+---
+sidebar_position: 1
+title: Identities
+---
+
+# Identities
+
+An Identity says **who is acting** when an agent acts, and how each party
+proves it. Three identities meet at every tool call: the **person** an agent
+works for, the **agent** itself (a workload), and the **third party** it
+reaches. An Identity spec describes one of them as a provider holds it.
+
+```yaml
+# identities/aws-agentcore-runtime.yaml
+id: aws-agentcore-runtime
+version: 0.0.1
+name: AgentCore Runtime agent
+subject: agent                  # person | agent | application | organization | visitor | service
+provider: aws-agentcore         # datalayer | pap | aws-agentcore | oidc
+protocols: [ag-ui, a2a, mcp]    # protocols of the catalogue it speaks
+inbound:                        # how a caller proves it on the way in
+  kind: jwt
+  discovery_url: https://prod1.datalayer.run/api/iam/v1/oauth/.well-known/openid-configuration
+  algorithms: [RS256]
+  clients: [datalayer-platform]
+workload:
+  token: agentcore-runtime      # injected by AgentCore Runtime with each invocation
+credentials:
+  vault: agentcore              # third-party tokens in AgentCore's token vault
+  providers:
+    - name: github
+      kind: oauth2
+      flow: user-federation     # the person consents (3LO); m2m for two-legged
+      scopes: [read:user]
+consent:
+  by: person
+  hosted_by: datalayer          # Datalayer binds the consent to the session that asked
+  binding: true
+```
+
+An agent says who it acts as with `identity:` (an id of this catalogue);
+unsaid, the platform's default applies.
+
+```yaml
+# agents/worker-github-agent.yaml
+identity: aws-agentcore-runtime
+```
+
+## Providers
+
+| Provider | Who issues and verifies | Examples |
+| --- | --- | --- |
+| `datalayer` | Datalayer IAM: sessions, acting tokens of 15 minutes, service principals, visitors | `datalayer-person`, `datalayer-acting-agent`, `datalayer-service-agent`, `datalayer-visitor`, `web-bot-auth-agent` |
+| `pap` | The Personal Agent Protocol: a client id per application, pairwise user ids, DPoP, keys in Vault transit | `pap-personal-agent`, `pap-company`, `pap-person` |
+| `aws-agentcore` | Amazon Bedrock AgentCore Identity: workload identities, workload access tokens, the token vault, the JWT authorizer | `aws-agentcore-runtime`, `aws-agentcore-gateway`, `aws-agentcore-vault` |
+| `oidc` | An organization's own OpenID Connect provider | `organization-oidc` |
+
+## The fields
+
+| Field | What it says |
+| --- | --- |
+| `subject` | Whose identity it is. |
+| `inbound` | How a caller proves it: `kind` (`session`, `jwt`, `sigv4`, `api-key`, `dpop`, `http-signature`), the `issuer`, the `discovery_url`, the `algorithms`, and what a JWT must carry: `audiences`, `clients`, `scopes`, `claims`. |
+| `workload` | The token the agent holds while it acts: `acting`, `client-credentials`, `agentcore-runtime` or `agentcore-jwt`. |
+| `credentials` | Where third-party credentials are kept (`datalayer`, `agentcore`, `none`) and the providers it may use: OAuth 2.0 with its flow, or an API key. |
+| `custody` | Who keeps the signing keys (`vault-transit`, `aws-managed`, `provider`, `shared-secret`) and the algorithm. |
+| `consent` | Who consents, who hosts the consent, and whether it is bound to the session that asked. |
+| `pap` | For a PAP identity: its `roles` (`personal-agent`, `company`), `client_id_per_application`, `pairwise`, `dpop`. |
+
+## Refused as it is read
+
+- A PAP identity without its `pap` block or without the `pap` protocol; a `pap` block on another provider.
+- An AgentCore JWT authorizer whose discovery URL does not end in `/.well-known/openid-configuration` (or `oauth-authorization-server`), or that checks none of audiences, clients, scopes and claims.
+- A shared-secret algorithm (HS256) or shared-secret custody for anything verified outside Datalayer: sign asymmetrically.
+- A workload token by user id on AgentCore: the person's verified JWT is used, always.
+- A vault kept for a visitor: nothing is kept of a visitor.
+- AgentCore's vault without an AgentCore workload token.
+- An OAuth 2.0 provider without its flow; an API key with a flow or scopes; a provider named twice; providers with no vault.
+- A bound consent with nobody hosting it; a protocol the catalogue does not hold; an agent naming an identity the catalogue does not hold.

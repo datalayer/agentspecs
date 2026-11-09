@@ -32,6 +32,7 @@ agentspecs/
 ├── gates/            # Gate specs: what happens on what the Guards found
 ├── tracks/           # Track specs: the evidence kept, and for how long
 ├── battles/          # Battle specs: scenes composed against each other, a clock, a referee
+├── identities/       # Identity specs: who acts, issued by whom, proven how
 ├── stages/           # Stage specs: a scene, an app or a Battle on stage, and where it plays
 ├── apps/             # Application specs (Appspec): a chat, a widget, a decision, a worker
 ├── fragments/        # Capability fragments an agent includes
@@ -65,6 +66,7 @@ Current YAML file counts:
 - Tracks: 4
 - Battles: 5
 - Stages: 13
+- Identities: 12
 - Applications: 37
 - Fragments: 1
 - MCP servers: 19

@@ -34,6 +34,7 @@ model: "bedrock:us.anthropic.claude-sonnet-4-6"
 model_additionals:
   - "alibaba:qwen-max"
 harness: pydantic-ai
+identity: web-bot-auth-agent
 
 sandbox_variant: jupyter-server
 

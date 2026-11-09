@@ -1,0 +1,31 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A business answering personal agents under PAP.
+id: pap-company
+version: 0.0.1
+name: PAP company
+description: >-
+  A business answering the personal agents its customers bring: it verifies their
+  client assertions and DPoP proofs against the published keys, signs the person
+  in by itself or mediated, and holds one Account Token per person and application.
+subject: organization
+provider: pap
+protocols: [pap, pact]
+inbound:
+  kind: dpop
+  algorithms: [ES256]
+credentials:
+  vault: datalayer
+custody:
+  keys: vault-transit
+  algorithm: ES256
+consent:
+  by: person
+  hosted_by: provider
+  binding: true
+pap:
+  roles: [company]
+tags: [pap, company]
+icon: briefcase
+emoji: "🏪"
