@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## Unreleased
+
+- **The organization's ceiling on the firewall** (Agent Firewall N3-01): `policies/shield-policy.schema.json` is agent-shield 0.2.16's, verbatim — an organization document may carry `firewall: {egress, ingress}`, the most any of its agents' `policy.shield` is granted (a team or session document may not). `SHIELD_SCHEMA_SOURCE_VERSION` is 0.2.16, so the test holding the copy skips an older agent-shield.
+
 ## 0.0.168
 
 9 November 2026.

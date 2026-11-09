@@ -74,6 +74,54 @@
       "title": "AuthorizerConfig",
       "type": "object"
     },
+    "FirewallCeiling": {
+      "additionalProperties": false,
+      "description": "An organization's ``firewall``: the most any of its agents may be granted.\n\nThe same grammar as :class:`FirewallRules`. A direction left out (``None``)\nbounds nothing; an empty egress list grants nothing beyond the base layer,\nan empty ingress list nothing beyond ``platform``. ``*`` allows ``*``.\n:func:`agent_shield.firewall.bounds.bounded` holds an agent's rules to it.",
+      "properties": {
+        "egress": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The most an agent's egress may be: '*' (any public address) alone, or exact hosts, host:port, IPv4 addresses, CIDRs, each with an optional :port. Left out bounds nothing; empty grants nothing beyond the platform's endpoints.",
+          "items": {
+            "pattern": "^(\\*|platform|[A-Za-z0-9.\\-]+(/\\d{1,2})?(:\\d{1,5})?)$",
+            "type": "string"
+          },
+          "title": "Egress"
+        },
+        "ingress": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The most an agent's ingress may be: '*', or addresses and CIDRs with an optional :port. 'platform' is always kept. Left out bounds nothing; empty keeps 'platform' only.",
+          "items": {
+            "pattern": "^(\\*|platform|[A-Za-z0-9.\\-]+(/\\d{1,2})?(:\\d{1,5})?)$",
+            "type": "string"
+          },
+          "title": "Ingress"
+        }
+      },
+      "title": "FirewallCeiling",
+      "type": "object"
+    },
     "Grant": {
       "additionalProperties": false,
       "description": "One line of the ``local`` authorizer: who may do what to what, as patterns (fnmatch).",
@@ -478,6 +526,18 @@
       "default": null,
       "description": "When a pulled copy stops being honoured.",
       "title": "Expires"
+    },
+    "firewall": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/FirewallCeiling"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "The organization's ceiling on its agents' firewall rules (policy.shield): the most any agent may be granted, egress and ingress, '*' allowing '*'. An organization document's alone."
     },
     "harnesses": {
       "$ref": "#/$defs/Harnesses"
