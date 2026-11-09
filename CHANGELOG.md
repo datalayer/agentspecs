@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.170
+
+9 November 2026.
+
+- **An AgentCore Gateway as an MCP server** (AC-20). A remote MCP server may say how its bearer is minted for the run with `auth`: `kind: agentcore-gateway` and the `identity` its inbound authorizer trusts, an Identity of the catalogue issued by `aws-agentcore` that speaks `mcp` (`aws-agentcore-gateway`). The runtime sends the inbound token its identity provider obtains as the bearer; the spec writes no `Authorization` header. `agentspecs.mcp_servers` refuses, in sentences, an `auth` on a local server, on one not reached over Streamable HTTP at an https URL, beside an `Authorization` header, or naming an identity that is not in the catalogue or not AgentCore's. One example, `agentcore-gateway-example`, off by default. See [MCP Servers](https://agentspecs.datalayer.tech/agents/mcp-servers).
+
 ## 0.0.169
 
 9 November 2026.

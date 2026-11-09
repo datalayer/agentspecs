@@ -57,6 +57,24 @@ headers:
 
 A remote server names no `command` and no `args`.
 
+### `auth` (object)
+A bearer minted for the run instead of one written in `headers`. `kind` says who mints it and
+`identity` names the [Identity](../../identities) the server trusts. Today one kind:
+`agentcore-gateway`, an Amazon Bedrock AgentCore Gateway whose inbound authorizer trusts an
+Identity issued by `aws-agentcore` that speaks `mcp` (`aws-agentcore-gateway`). The runtime asks
+its identity provider for the run's inbound token and sends it as `Authorization: Bearer …`; the
+spec sets no `Authorization` header of its own.
+```yaml
+transport: streamable-http
+url: "https://<gateway-id>.gateway.bedrock-agentcore.<region>.amazonaws.com/mcp"
+auth:
+  kind: agentcore-gateway
+  identity: aws-agentcore-gateway
+```
+
+`agentcore-gateway-example` is one, off by default: copy it with your gateway's URL. A server
+with `auth` is remote (no `command`, an https `url`), and its identity is in the catalogue.
+
 ## A local server
 
 ### `command` (string)
