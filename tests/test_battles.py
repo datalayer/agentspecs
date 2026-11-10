@@ -243,6 +243,56 @@ class TestOverrides:
             check_battle(battle)
 
 
+class TestDecisionModel:
+    """A game's contestant played by a decision model (the user, 10 November 2026): Jev chooses red's moves in Pong and Space Invaders."""
+
+    JEV = "cloudflare:wrk/typesafe/jev"
+
+    def _game(self, red):
+        return _battle(
+            id="a-game",
+            variant="game",
+            arena="pong",
+            referee={"decides_by": "score"},
+            contestants=[{"id": "blue", "app": "player:0.0.1", "runs_in": "browser"}, {"id": "red", **red}],
+        )
+
+    def test_red_is_jev_in_pong_and_invaders(self):
+        for identity in ("pong", "invaders"):
+            left, right = get_battle(identity).contestants
+            assert right.color == "red" and right.decision_model == self.JEV, identity
+            assert right.app == "player:0.0.1" and right.runs_in == "browser" and right.overrides == {}
+            assert left.decision_model == "", identity
+
+    def test_an_application_in_the_browser_of_a_game(self):
+        battle = BattleSpec(**self._game({"app": "player:0.0.1", "runs_in": "browser", "decision_model": self.JEV}))
+        assert check_battle(battle) is battle
+
+    @pytest.mark.parametrize(
+        "red, says",
+        [
+            ({"scene": "sales-and-accounting:0.0.1", "decision_model": JEV}, "an application that runs in the browser"),
+            ({"app": "player:0.0.1", "runs_in": "runtime", "decision_model": JEV}, "an application that runs in the browser"),
+            ({"app": "player:0.0.1", "decision_model": JEV}, "an application that runs in the browser"),
+            ({"app": "player:0.0.1", "runs_in": "browser", "decision_model": JEV, "overrides": {"model": "alibaba:qwen-max"}}, "nothing of it is overridden"),
+        ],
+    )
+    def test_refused_as_it_is_read(self, red, says):
+        with pytest.raises(ValidationError) as caught:
+            BattleSpec(**self._game(red))
+        assert says in str(caught.value)
+
+    def test_a_game_alone(self):
+        with pytest.raises(ValidationError, match="plays a game's arena alone"):
+            BattleSpec(**_battle(contestants=[{"id": "blue", "scene": "sales-and-accounting:0.0.1"}, {"id": "red", "app": "player:0.0.1", "runs_in": "browser", "decision_model": self.JEV}]))
+
+    def test_a_model_of_the_catalogue_that_answers_typed_decisions(self):
+        with pytest.raises(BattleError, match="not a model of the catalogue"):
+            check_battle(BattleSpec(**self._game({"app": "player:0.0.1", "runs_in": "browser", "decision_model": "nobody:x"})))
+        with pytest.raises(BattleError, match="answers no typed decisions"):
+            check_battle(BattleSpec(**self._game({"app": "player:0.0.1", "runs_in": "browser", "decision_model": "alibaba:qwen-max"})))
+
+
 class TestEvals:
     """The evals that confirm a result (the user, 7 November 2026): of the catalogue, runnable, carried as written."""
 

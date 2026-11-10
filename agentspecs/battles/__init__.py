@@ -20,7 +20,9 @@ decides.
 A Battle refuses, as it is read: fewer than two contestants, or two with one
 id; a contestant that names a scene and an app, or neither; a scene, an app or
 a Guard the catalogue does not hold; a game without an arena, or in one that
-keeps no score; a referee that does not decide as its variant does — a race by
+keeps no score; a contestant played by a decision model that is not an
+application in the browser of a game, that overrides its application, or
+whose model is not of the catalogue or answers no typed decisions; a referee that does not decide as its variant does — a race by
 `first_done`, a game by `score`, a challenge by `measure`; a challenge without
 a measure Guard, or one whose Guard has no number signal; a clock under ten
 seconds; an empty goal.
@@ -114,6 +116,14 @@ class BattleContestant(_Strict):
         default_factory=dict,
         description="What this contestant plays differently of its application: `model`, `instructions`, `skills`, `context` — for a scene, of every member played in the page",
     )
+    decision_model: str = Field(
+        default="",
+        description=(
+            "A game's contestant played by a decision model, `provider:name` of one answering typed decisions "
+            "(the user, 10 November 2026): the page asks it a choice on what the arena shows its side and makes "
+            "the move it chooses; its application gives the face, its agent does not play"
+        ),
+    )
 
     @field_validator("overrides")
     @classmethod
@@ -142,6 +152,15 @@ class BattleContestant(_Strict):
             raise ValueError(
                 f"contestant {self.id!r} plays a scene: its cast says where it runs, `runs_in` does not"
             )
+        if self.decision_model:
+            if not self.app or self.runs_in != "browser":
+                raise ValueError(
+                    f"contestant {self.id!r} is played by a decision model: it is an application that runs in the browser, where the arena is"
+                )
+            if self.overrides:
+                raise ValueError(
+                    f"contestant {self.id!r} is played by a decision model: its application's agent does not play, so nothing of it is overridden"
+                )
         return self
 
     @property
@@ -263,6 +282,12 @@ class BattleSpec(_Strict):
                 f"a game is played in an arena that keeps a score, {', '.join(sorted(a.value for a in SCORED_ARENAS))}; "
                 f"`{self.arena.value}` keeps none"
             )
+        decided = [contestant.id for contestant in self.contestants if contestant.decision_model]
+        if decided and self.variant is not BattleVariant.GAME:
+            raise ValueError(
+                f"contestant {decided[0]!r} is played by a decision model, which plays a game's arena alone; "
+                f"a {self.variant.value} has none to play"
+            )
         return self
 
     @property
@@ -276,6 +301,7 @@ def _check_references(battle: BattleSpec) -> None:
     # Imported here: the scenes and apps catalogues are heavy, and a Battle
     # read on its own stays light.
     from ..apps import get_app  # noqa: PLC0415
+    from ..models import get_model  # noqa: PLC0415
     from ..scenes import get_scene  # noqa: PLC0415
 
     def versioned(ref: str, found: Any, what: str) -> None:
@@ -295,6 +321,16 @@ def _check_references(battle: BattleSpec) -> None:
         said = override_model_problem(contestant.overrides, f"battle {battle.id!r}'s contestant {contestant.id!r}")
         if said:
             raise BattleError(said)
+        if contestant.decision_model:
+            decider = get_model(contestant.decision_model)
+            if decider is None:
+                raise BattleError(
+                    f"battle {battle.id!r}'s contestant {contestant.id!r} is played by {contestant.decision_model!r}, which is not a model of the catalogue"
+                )
+            if "decisions" not in decider.capabilities:
+                raise BattleError(
+                    f"battle {battle.id!r}'s contestant {contestant.id!r} is played by {contestant.decision_model!r}, which answers no typed decisions"
+                )
     for one in battle.evals:
         found = EVALS_RAW.get(id_of(one.eval))
         versioned(one.eval, _AsVersion(found) if found else None, "an eval")

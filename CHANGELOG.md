@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.172
+
+10 November 2026.
+
+- **A game's contestant played by a decision model.** A Battle's contestant may say `decision_model`, a model of the catalogue that answers typed decisions: the page asks it a choice on what the arena shows its side and makes the move it chooses. Only on an application in the browser of a game, never with `overrides`; a model that is not of the catalogue, or answers no typed decisions, is refused. In `pong` and `invaders`, Red is played by Jev (`cloudflare:wrk/typesafe/jev`); Blue stays a Player. See [Battles](https://agentspecs.datalayer.tech/battles).
+
 ## 0.0.171
 
 10 November 2026.

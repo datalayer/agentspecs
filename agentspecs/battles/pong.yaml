@@ -10,8 +10,9 @@ id: pong
 version: 0.0.1
 name: Pong
 description: >-
-  Two Players at the Pong arena, each with a paddle and the arena's tools.
-  The arena keeps the score; the first to eleven wins.
+  Two players at the Pong arena, each with a paddle: Blue, a Player with the
+  arena's tools; Red, played by Jev, a decision model choosing its moves. The
+  arena keeps the score; the first to eleven wins.
 
 variant: game
 goal: >-
@@ -28,11 +29,16 @@ contestants:
     app: player:0.0.1
     runs_in: browser
     color: blue
+  # Red is played by Jev, the typed-decision model (the user, 10 November
+  # 2026): it calls no tools, so the page asks it a choice on what the arena
+  # shows its side and moves its paddle as it chooses. The Player gives it
+  # its face.
   - id: right
     name: Right
     app: player:0.0.1
     runs_in: browser
     color: red
+    decision_model: "cloudflare:wrk/typesafe/jev"
 
 # The evals that confirm each contestant's result once the referee has a verdict
 # (the user, 7 November 2026): the winner is declared only when its evals pass.
@@ -46,7 +52,8 @@ evals:
       threshold: 0.6
       # What the judge can see (B5): the player's tool calls, its moves, and the game's end.
       rubric: >-
-        The player watched the arena (arena_watch or arena_read), moved its
+        The player watched the arena (arena_watch or arena_read, or, played
+        by a decision model, its decisions on what the arena showed), moved its
         paddle as the ball came and served when the serve was its own; its
         tool calls and moves show it played rather than idled.
     says: The player played the arena, not around it.

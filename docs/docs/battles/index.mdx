@@ -59,6 +59,7 @@ is read.
 | `contestants[].app` | An application of the catalogue, `id` or `id:version`; `runs_in` says `browser` or `runtime`. A scene's cast says where it runs, so `runs_in` is refused on a scene. |
 | `contestants[].name`, `color` | What the audience sees; the colour is a palette name or a hex. |
 | `contestants[].overrides` | What this contestant plays differently of its application — `model`, `instructions`, `skills`, `context`, nothing else; on a scene, of every member played in the page. See [Overriding an application on stage](../modularity/extension#overriding-an-application-on-stage). |
+| `contestants[].decision_model` | A game's contestant played by a decision model, `provider:name` of one that answers typed decisions (`cloudflare:wrk/typesafe/jev`, Jev): the page asks it a choice on what the arena shows its side and makes the move it chooses. An application in the browser (`runs_in: browser`), whose application gives only the face; no `overrides`, its agent does not play; a game alone. See [A decision model at the arena](#a-decision-model-at-the-arena). |
 | `referee.decides_by` | `first_done`, `score` or `measure`. Required. |
 | `referee.measure` | For `measure`: the Guard whose number signal scores each outcome, `id` or `id:version`. Required then, refused otherwise. |
 | `arena` | What is drawn in the page: a game's arena, which keeps the score (`pong`, `invaders`; required for a game); or the visual a race's or a challenge's contestants work in, a `deck` each builds slide by slide or a `sheet` each fills cell by cell. |
@@ -75,8 +76,8 @@ not hold, or a measure Guard with no number signal, is refused.
 | Battle | Variant | Contestants | Decided by |
 | --- | --- | --- | --- |
 | `invoice-race` | race | two Sales & Accounting pairs on the same Odoo books | the first to list the open invoices and the total due |
-| `pong` | game | two Players at the Pong arena | the arena's score, first to eleven |
-| `invaders` | game | two Players at the Space Invaders arena, a cannon each under one wave | the arena's score when the wave is cleared, a cannon is hit or the wave lands |
+| `pong` | game | a Player against Jev at the Pong arena | the arena's score, first to eleven |
+| `invaders` | game | a Player against Jev at the Space Invaders arena, a cannon each under one wave | the arena's score when the wave is cleared, a cannon is hit or the wave lands |
 | `report-challenge` | challenge | two Month-end Close agents on the same books, three minutes | the Report Quality Guard's `quality` signal |
 | `deck-race` | race | two Deck Makers in the browser, the same brief, each building a deck in the page | the first to finish |
 | `sheet-race` | race | two Sheet Makers in the browser, the same brief, each filling a spreadsheet in the page | the first to finish |
@@ -135,6 +136,31 @@ eleven. Space Invaders: `arena_invaders_move`, `arena_invaders_fire`,
 cleared, a cannon hit or the wave landed ends it. The page refuses a move out of turn or more than one
 per tick, so a faster model does not win by flooding, and records every move
 with its tick.
+
+## A decision model at the arena
+
+In `pong` and `invaders`, Blue is a Player calling the arena's tools and Red
+is played by Jev, the typed-decision model: it calls no tools, so the
+contestant says `decision_model` and the page plays it.
+
+```yaml
+  - id: right
+    app: player:0.0.1        # the face: its name, its avatar
+    runs_in: browser
+    color: red
+    decision_model: "cloudflare:wrk/typesafe/jev"
+```
+
+On each observation `arena_watch` would give a player, the page asks Jev a
+`choice` through ai-inference's `POST /decisions`, with what the arena says
+of Red's side as the state, and makes the chosen move through the arena's
+own moves. Pong: which of seven zones of the court to put the paddle in,
+the ball's arrival named; whether to serve now when the serve is Red's.
+Space Invaders: which of seven column zones to put the cannon under, and
+whether to fire, stay or dodge the falling bomb. One question at a time, at
+most every few ticks; each decision is shown with its probability in the
+moves, beside the move it made, and a decision that failed is said there
+and the side stays where it is.
 
 ## Python
 
