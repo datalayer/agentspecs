@@ -22,11 +22,20 @@ agent spec is mostly references: to the skills it has, the tools and MCP
 servers it can reach, the model it runs on, where its memory lives, what it is
 judged by. Each of those is a catalogue of its own, documented under Agents:
 
-- Skills, Backend Tools, Frontend Tools, MCP Servers
-- Models, Model Providers, Memory, Env Vars
-- Hooks, Triggers
-- Evals, Benchmarks, Outputs, Notifications
-- Protocols, UI plugins and their renderers
+- [Skills](./agents/skills), [Backend Tools](./agents/backend-tools),
+  [Frontend Tools](./agents/frontend-tools), [MCP Servers](./agents/mcp-servers)
+- [Models](./agents/models), [Model Providers](./agents/model-providers),
+  [Memory](./agents/memory), [Env Vars](./agents/env-vars)
+- [Hooks](./agents/hooks), [Triggers](./agents/triggers), [Events](./agents/events),
+  [Strategies](./agents/strategies)
+- [Evals](./agents/evals), [Benchmarks](./agents/benchmarks),
+  [Outputs](./agents/outputs), [Notifications](./agents/notifications)
+- [Protocols](./agents/protocols) and their [tools' action classes](./agents/protocols/tools),
+  [UI plugins](./agents/ui) and their [renderers](./agents/ui/renderers)
+- [Voices](./agents/voices) and the [speech models](./agents/speech-models) behind them
+
+Fragments, the bundles of capability a spec includes, are documented under
+[Composition](./modularity/composition#fragments).
 
 **[Agent Teams](./agent-teams)** — several agents working on one job, plus a
 supervisor deciding what happens next. A team composes agents from the
