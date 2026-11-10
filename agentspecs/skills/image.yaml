@@ -19,6 +19,11 @@ dependencies:
 # Offered on the platform: the runtime image installs agent-skills[skills] with Chromium and ffmpeg.
 enabled: true
 
+install:
+  type: python
+  command: "pip install \"agent-skills[skills]\" && python -m playwright install chromium"
+  note: "Chromium for its page snapshots; the runtime image carries it."
+
 tags:
   - image
   - snapshot

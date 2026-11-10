@@ -32,6 +32,11 @@ envvars:
 env: {}
 
 # Server capabilities/tags
+install:
+  type: remote
+  command: ""
+  note: "Nothing to install: Hugging Face's hosted MCP server, reached at its URL."
+
 tags:
   - models
   - datasets

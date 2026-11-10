@@ -27,6 +27,11 @@ env:
 # Not offered on the platform yet: the integrations page lists it as not available.
 enabled: false
 
+install:
+  type: python
+  command: "uv tool install av-mcp==0.2.1"
+  note: "Needs uv (`pip install uv`); the runtime image installs it the same way. It starts as `uvx av-mcp==0.2.1`."
+
 tags:
   - finance
   - stocks

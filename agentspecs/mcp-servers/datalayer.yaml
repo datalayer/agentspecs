@@ -43,6 +43,11 @@ envvars:
 
 env: {}
 
+install:
+  type: remote
+  command: ""
+  note: "Nothing to install: Datalayer's MCP gateway, reached at its URL with your DATALAYER_API_KEY."
+
 tags:
   - notebooks
   - jupyter

@@ -29,6 +29,11 @@ envvars:
   - SALESFORCE_ACCESS_TOKEN:0.0.1
   - SALESFORCE_INSTANCE_URL:0.0.1
 
+install:
+  type: npm
+  command: "npm install -g @anthropic/salesforce-mcp-server"
+  note: "Needs Node.js; `npx -y` also fetches it at start."
+
 tags:
   - crm
   - sales

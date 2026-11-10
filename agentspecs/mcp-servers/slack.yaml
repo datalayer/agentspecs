@@ -31,6 +31,11 @@ env:
 # Not offered on the platform yet: the integrations page lists it as not available.
 enabled: false
 
+install:
+  type: npm
+  command: "npm install -g @datalayer/slack-mcp-server"
+  note: "Needs Node.js; `npx -y` also fetches it at start."
+
 tags:
   - communication
   - messaging

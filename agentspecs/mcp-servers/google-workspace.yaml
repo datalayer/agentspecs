@@ -51,6 +51,11 @@ env:
 # Offered on the platform: the person connects Gmail through IAM (W-02).
 enabled: true
 
+install:
+  type: python
+  command: "uv tool install workspace-mcp"
+  note: "Needs uv (`pip install uv`); the runtime image installs it the same way."
+
 tags:
   - google
   - productivity

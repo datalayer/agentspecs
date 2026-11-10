@@ -38,6 +38,11 @@ envvars:
   - DISCORD_BOT_TOKEN:0.0.1
   - DISCORD_GUILD_ID:0.0.1
 
+install:
+  type: docker
+  command: "docker pull saseq/discord-mcp:latest"
+  note: "Needs Docker where the agent runs; the runtime image has none, so it stays off on the platform."
+
 tags:
   - social
   - discord

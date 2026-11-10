@@ -22,6 +22,11 @@ transport: stdio
 enabled: false
 env: {}
 
+install:
+  type: npm
+  command: "npm install -g @modelcontextprotocol/server-filesystem"
+  note: "Needs Node.js; `npx -y` also fetches it at start."
+
 tags:
   - files
   - local

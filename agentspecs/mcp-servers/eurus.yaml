@@ -15,6 +15,11 @@ transport: stdio
 enabled: false
 env: {}
 
+install:
+  type: other
+  command: ""
+  note: "Runs the `eurus-mcp` command, from a package that is not published: install it where the agent runs from its source."
+
 tags:
   - geospatial
   - climate

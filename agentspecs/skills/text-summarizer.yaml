@@ -18,6 +18,11 @@ dependencies:
 # Offered on the platform (the user, 7 November 2026): the runtime image installs agent-skills[skills].
 enabled: true
 
+install:
+  type: python
+  command: "pip install agent-skills"
+  note: "No dependencies of its own."
+
 tags:
   - nlp
   - summarization

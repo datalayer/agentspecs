@@ -52,6 +52,11 @@ envvars:
 
 env: {}
 
+install:
+  type: remote
+  command: ""
+  note: "Nothing to install: Datalayer's MCP gateway with its odoo toolset, reached at its URL."
+
 tags:
   - erp
   - odoo

@@ -19,6 +19,11 @@ transport: stdio
 # Not offered on the platform yet: the integrations page lists it as not available.
 enabled: false
 
+install:
+  type: npm
+  command: "npm install -g @antv/mcp-server-chart"
+  note: "Needs Node.js; `npx -y` also fetches it at start."
+
 tags:
   - visualization
   - charts

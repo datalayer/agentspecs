@@ -19,7 +19,7 @@ api_key_url: https://bsky.app/settings/app-passwords
 setup: "Sign in to [Bluesky](https://bsky.app), make an [app password](https://bsky.app/settings/app-passwords) under Settings, Privacy and security, App passwords, and put the account's handle in `BLUESKY_IDENTIFIER`, the app password in `BLUESKY_APP_PASSWORD` and `https://bsky.social` in `BLUESKY_SERVICE_URL`; the server is built into the runtime image and runs with node."
 command: node
 args:
-  - "/opt/mcp-servers/bsky-mcp-server/build/src/index.js"
+  - "${BLUESKY_MCP_SERVER_DIR:-/opt/mcp-servers/bsky-mcp-server}/build/src/index.js"
 transport: stdio
 # Enabled (the user, 7 November 2026): offered in the catalogue; where it runs is the runtime image's affair.
 enabled: true
@@ -31,6 +31,11 @@ envvars:
   - BLUESKY_IDENTIFIER:0.0.1
   - BLUESKY_APP_PASSWORD:0.0.1
   - BLUESKY_SERVICE_URL:0.0.1
+
+install:
+  type: git
+  command: "git clone --depth 1 https://github.com/brianellin/bsky-mcp-server ~/.local/share/mcp-servers/bsky-mcp-server && cd ~/.local/share/mcp-servers/bsky-mcp-server && npm install && npm run build"
+  note: "Not on npm: built from its repository with Node.js. Then `export BLUESKY_MCP_SERVER_DIR=~/.local/share/mcp-servers/bsky-mcp-server`; without it the server is looked for where the runtime image builds it, /opt/mcp-servers/bsky-mcp-server."
 
 tags:
   - social

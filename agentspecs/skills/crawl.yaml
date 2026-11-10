@@ -18,6 +18,11 @@ dependencies:
 # Not offered on the platform yet: the integrations page lists it as not available.
 enabled: true
 
+install:
+  type: python
+  command: "pip install \"agent-skills[skills]\""
+  note: "agent-skills with every skill's dependencies; the runtime image installs it the same way."
+
 tags:
   - web
   - crawl

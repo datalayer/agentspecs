@@ -32,6 +32,11 @@ envvars:
 env: {}
 
 # Server capabilities/tags
+install:
+  type: remote
+  command: ""
+  note: "Nothing to install: Kaggle's hosted MCP server, reached at its URL."
+
 tags:
   - data
   - datasets

@@ -25,6 +25,11 @@ enabled: false
 envvars: []
 env: {}
 
+install:
+  type: remote
+  command: ""
+  note: "Nothing to install: an AgentCore Gateway in your AWS account, reached at its URL with a token Datalayer IAM signs."
+
 tags:
   - aws
   - agentcore

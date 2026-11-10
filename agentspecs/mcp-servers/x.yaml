@@ -28,6 +28,11 @@ env: {}
 envvars:
   - X_BEARER_TOKEN:0.0.1
 
+install:
+  type: remote
+  command: ""
+  note: "Nothing to install: X's hosted MCP server, reached at https://api.x.com/mcp with your X_BEARER_TOKEN."
+
 tags:
   - social
   - x

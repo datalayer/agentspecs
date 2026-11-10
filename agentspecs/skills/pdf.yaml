@@ -9,11 +9,17 @@ description: PDF document reading, parsing, and extraction
 module: agent_skills.skills.pdf
 
 dependencies:
-  - PyPDF2>=3.0.0
-  - pdfplumber>=0.10.0
+  - pypdf>=4.0
+  - pdf2image>=1.17
+  - Pillow>=10.0
 
 # Offered on the platform (the user, 7 November 2026): the runtime image installs agent-skills[skills].
 enabled: true
+
+install:
+  type: python
+  command: "pip install \"agent-skills[skills]\""
+  note: "agent-skills with every skill's dependencies; the runtime image installs it the same way."
 
 tags:
   - pdf
