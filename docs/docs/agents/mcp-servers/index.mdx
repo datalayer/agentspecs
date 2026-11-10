@@ -127,6 +127,28 @@ env:
 Environment variables the code a server's tools write reads in the code sandbox (a download's
 script): given to the sandbox when the account has them, never to the server, never required.
 
+### `install` (object)
+How the server is installed where an agent runs it: `type` says what is installed, `command`
+the shell command that installs it on your own machine, `note` what else to know. Every
+server of the catalogue says it; a page of the server shows it, with the command to copy.
+
+| `type` | What is installed | `command` |
+| --- | --- | --- |
+| `npm` | An npm package | `npm install -g <package>` |
+| `python` | A Python package, often a uv tool | `uv tool install <package>`, `pip install <package>` |
+| `docker` | A Docker image | `docker pull <image>` |
+| `git` | A repository built from source | `git clone … && npm install && npm run build` |
+| `remote` | Nothing: a hosted server reached at its `url` | `""` |
+| `built-in` | Nothing: the runtime image carries it | `""` |
+| `other` | What the note says | `""` or a command |
+
+```yaml
+install:
+  type: git
+  command: "git clone --depth 1 https://github.com/brianellin/bsky-mcp-server ~/.local/share/mcp-servers/bsky-mcp-server && cd ~/.local/share/mcp-servers/bsky-mcp-server && npm install && npm run build"
+  note: "Then `export BLUESKY_MCP_SERVER_DIR=~/.local/share/mcp-servers/bsky-mcp-server`."
+```
+
 ### `tags` (list of strings)
 Categorization tags
 ```yaml
@@ -158,6 +180,10 @@ headers:
 envvars:
   - KAGGLE_API_TOKEN
 ```
+
+`${VAR_NAME:-default}` takes the default when the variable is unset or empty, as in a shell:
+Bluesky's server is run from `${BLUESKY_MCP_SERVER_DIR:-/opt/mcp-servers/bsky-mcp-server}`,
+where the runtime image builds it unless your machine has it elsewhere.
 
 The `${KAGGLE_API_TOKEN}` will be expanded at runtime by consuming systems. A bearer that would
 expand to nothing is refused before anything is sent: the server is not started, and the
@@ -236,9 +262,12 @@ specification file each, and launched from `MCP_SERVER_CATALOG`. A test holds
 the two together with this list, so that every server of the catalogue is
 named here.
 
+- **`agentcore-gateway-example`** - An Amazon Bedrock AgentCore Gateway's targets as MCP tools (an example to copy)
 - **`alphavantage`** - Financial market data
+- **`bluesky`** - A Bluesky account: timeline, feeds, searches, posting, liking and following
 - **`chart`** - Chart generation
 - **`datalayer`** - Notebooks, sandboxes and data on Datalayer itself
+- **`discord`** - A Discord server through its bot: channels, messages, members
 - **`earthdata`** - NASA Earthdata search and access
 - **`eurus`** - Climate and reanalysis analysis
 - **`filesystem`** - Local filesystem operations
@@ -246,11 +275,13 @@ named here.
 - **`google-workspace`** - Google Workspace integration
 - **`huggingface`** - Models, datasets, spaces and papers
 - **`kaggle`** - Kaggle datasets and competitions
+- **`linkedin`** - LinkedIn through a signed-in browser session: profiles, posts, messages
 - **`odoo`** - Odoo records, models and fields through the Datalayer MCP server
 - **`odoo-accounting`** - Odoo accounting through the Datalayer MCP server
 - **`salesforce`** - Salesforce records
 - **`slack`** - Slack messaging
 - **`tavily`** - Web search via Tavily API
+- **`x`** - X's hosted server: posts, users, searches and posting
 
 ### Odoo, through the Datalayer server
 
