@@ -410,6 +410,78 @@
       "title": "OpenFgaAuthorizerConfig",
       "type": "object"
     },
+    "Rate": {
+      "additionalProperties": false,
+      "description": "A rate: at most ``rate`` per ``per``.",
+      "properties": {
+        "per": {
+          "description": "second or minute.",
+          "enum": [
+            "second",
+            "minute"
+          ],
+          "title": "Per",
+          "type": "string"
+        },
+        "rate": {
+          "description": "How many, at most, in each period.",
+          "exclusiveMinimum": 0,
+          "maximum": 10000000,
+          "title": "Rate",
+          "type": "number"
+        }
+      },
+      "required": [
+        "rate",
+        "per"
+      ],
+      "title": "Rate",
+      "type": "object"
+    },
+    "RateLimits": {
+      "additionalProperties": false,
+      "description": "What each person may spend through the organization's AgentCore Gateways (AC-45).\n\nPer user \u2014 the Gateway's OAuth subject, or its IAM principal \u2014 across its\ntools, models and agents, as AgentCore's Gateway rate limits count them. The\nShield does not count these in process: they are pushed to the Gateways of an\norganization that runs on AgentCore.",
+      "properties": {
+        "connections": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Rate"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Connections a person holds open to a Gateway."
+        },
+        "requests": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Rate"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Requests a person makes through a Gateway."
+        },
+        "tokens": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Rate"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Tokens a person's requests process."
+        }
+      },
+      "title": "RateLimits",
+      "type": "object"
+    },
     "Rule": {
       "additionalProperties": false,
       "description": "One line of a policy: what it matches and what it decides.",
@@ -617,6 +689,18 @@
     },
     "network": {
       "$ref": "#/$defs/Network"
+    },
+    "rate_limits": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RateLimits"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Per user, across tools, models and agents: the requests, tokens and connections each person may spend per second or per minute through the organization's AgentCore Gateways, pushed to them as Gateway rate limits. An organization document's alone."
     },
     "rules": {
       "items": {

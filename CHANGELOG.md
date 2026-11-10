@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.171
+
+10 November 2026.
+
+- **Gateway rate limits in the policies spec** (AC-45). `policies/shield-policy.schema.json` is agent-shield 0.2.19's, verbatim (`SHIELD_SCHEMA_SOURCE_VERSION` 0.2.19). An organization document may carry `rate_limits: {requests, tokens, connections}`, each `{rate, per: second | minute}`. These are what each person may use, across tools, models and agents, through the organization's AgentCore Gateways, and they are pushed to the Gateways as Gateway rate limits when the organization runs on AgentCore. A team or session document that carries them is refused, and so is an empty section. See [Policies](https://agentspecs.datalayer.tech/policies).
+
 ## 0.0.170
 
 9 November 2026.
