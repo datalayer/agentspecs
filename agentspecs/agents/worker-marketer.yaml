@@ -53,6 +53,10 @@ skills:
   - datalayer-memory-search
   - datalayer-memory-list
   - datalayer-memory-delete
+# The person's GitHub repositories with their own grant: on AWS AgentCore, from
+# AgentCore Identity's token vault, asked in the chat the first time.
+backend_tools:
+  - github-repositories:0.0.1
 environment_name: ai-agents-env
 icon: megaphone
 emoji: "📣"
