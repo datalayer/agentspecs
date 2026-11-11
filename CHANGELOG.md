@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.178
+
+11 November 2026.
+
+- **The AWS Account Agent's week and its urgent findings.** The backend tool `recommendations-report` reads a deployment's recommendations of the last days from its record and sends their report through the application's channels; `aws-account-agent` runs it every Monday at 8:00 and names `email` as its channel, which also carries a recommendation recorded with `severity: high`. See [Applications](https://agentspecs.datalayer.tech/apps/reference).
+
 ## 0.0.177
 
 11 November 2026.
