@@ -14,6 +14,10 @@ small syntax tree. The Cedar part is never interpreted here: a set is
 boolean ``context.dogwood.p<i>c<j>`` — and the lowered text is standard
 Cedar, which ``cedarpy`` (Cedar 4) parses and decides
 (``agent_shield.policy.temporal`` computes the slots from the history).
+A ``temporal { … }`` block may also stand inside a plain ``when`` or
+``unless`` clause, beside Cedar's own operators: each such block is lowered
+to its own slot (``p<i>c<j>s<k>``) in the clause's text, and counts toward
+the quotas as a temporal clause does.
 
 The temporal grammar read (Dogwood's guide, *Temporal expressions*)::
 
@@ -234,6 +238,13 @@ class Clause:
     temporal: Cond | None
     text: str
     slot: str | None = None
+    #: The ``temporal { … }`` blocks inside a plain ``when``/``unless`` clause, each
+    #: lowered to its own slot in the clause's text: (slot, condition), in order.
+    nested: tuple[tuple[str, Cond], ...] = ()
+
+    def conditions(self) -> list[Cond]:
+        """Every temporal condition the clause holds: its own, or those nested in it."""
+        return ([self.temporal] if self.temporal is not None else []) + [cond for _, cond in self.nested]
 
 
 @dataclass(frozen=True)
@@ -255,19 +266,19 @@ class DogwoodPolicy:
     @property
     def temporal(self) -> bool:
         """Whether a clause is temporal."""
-        return any(clause.temporal is not None for clause in self.clauses)
+        return any(clause.conditions() for clause in self.clauses)
 
     @property
     def operators(self) -> int:
         """The temporal operators the policy's clauses hold."""
-        return sum(count_operators(c.temporal) for c in self.clauses if c.temporal is not None)
+        return sum(count_operators(cond) for c in self.clauses for cond in c.conditions())
 
     def windows(self) -> list[Window]:
         """Every window the policy's temporal clauses name."""
         found: list[Window] = []
         for clause in self.clauses:
-            if clause.temporal is not None:
-                found.extend(windows_of(clause.temporal))
+            for cond in clause.conditions():
+                found.extend(windows_of(cond))
         return found
 
 
@@ -286,12 +297,13 @@ class DogwoodSet:
 
     def slots(self) -> list[tuple[str, Cond]]:
         """Each temporal clause's slot and its condition, in order."""
-        return [
-            (clause.slot, clause.temporal)
-            for policy in self.policies
-            for clause in policy.clauses
-            if clause.temporal is not None and clause.slot is not None
-        ]
+        found: list[tuple[str, Cond]] = []
+        for policy in self.policies:
+            for clause in policy.clauses:
+                if clause.temporal is not None and clause.slot is not None:
+                    found.append((clause.slot, clause.temporal))
+                found.extend(clause.nested)
+        return found
 
 
 def count_operators(cond: Any) -> int:
@@ -795,14 +807,52 @@ class _SetReader:
             self.at += 1
         if self.tok() is None or self.tok().value != "{":
             raise DogwoodRefused(f"{where}: '{keyword}' opens a block with '{{'")
+        open_at = self.at
         close = _matching(self.tokens, self.at, "{", "}")
         body = self.text[self.tokens[self.at].end : self.tokens[close].start]
         self.at = close + 1
         if tag != "temporal":
-            return Clause(keyword, None, f"{keyword} {{{body}}}")
+            body, nested = self._lower_nested(open_at, close, policy, index, f"{where}, {keyword}")
+            return Clause(keyword, None, f"{keyword} {{{body}}}", None, nested)
         slot = f"p{policy}c{index}"
         cond = parse_temporal(body, f"{where}, {keyword} temporal")
         return Clause(keyword, cond, f"{keyword} {{ context.{SLOT_RECORD}.{slot} }}", slot)
+
+    def _lower_nested(
+        self, open_at: int, close: int, policy: int, index: int, where: str
+    ) -> tuple[str, tuple[tuple[str, Cond], ...]]:
+        """A plain clause's body with each ``temporal { … }`` inside it lowered to a slot, as Dogwood does."""
+        blocks = _nested_blocks(self.tokens, open_at, close)
+        start = self.tokens[open_at].end
+        if not blocks:
+            return self.text[start : self.tokens[close].start], ()
+        parts: list[str] = []
+        nested: list[tuple[str, Cond]] = []
+        at = start
+        for k, (keyword_at, opening, closing) in enumerate(blocks):
+            slot = f"p{policy}c{index}s{k}"
+            inner = self.text[self.tokens[opening].end : self.tokens[closing].start]
+            nested.append((slot, parse_temporal(inner, f"{where}, its temporal block {k}")))
+            parts.append(self.text[at : self.tokens[keyword_at].start])
+            parts.append(f"context.{SLOT_RECORD}.{slot}")
+            at = self.tokens[closing].end
+        parts.append(self.text[at : self.tokens[close].start])
+        return "".join(parts), tuple(nested)
+
+
+def _nested_blocks(tokens: list[_Tok], open_at: int, close: int) -> list[tuple[int, int, int]]:
+    """The ``temporal { … }`` blocks between ``open_at`` and ``close``: (keyword, opening, closing) token indexes."""
+    found: list[tuple[int, int, int]] = []
+    j = open_at + 1
+    while j < close:
+        tok = tokens[j]
+        if tok.kind == "name" and tok.value == "temporal" and j + 1 < close and tokens[j + 1].value == "{":
+            inner_close = _matching(tokens, j + 1, "{", "}")
+            found.append((j, j + 1, inner_close))
+            j = inner_close + 1
+            continue
+        j += 1
+    return found
 
 
 def lower(policies: list[DogwoodPolicy]) -> str:
