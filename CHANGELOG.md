@@ -8,6 +8,13 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.176
+
+11 November 2026. Carries 0.0.175, which was bumped and never tagged.
+
+- **The AWS Account Agent.** The agentspec `worker-aws-account` reads an AWS account's cost recommendations, right-sizing findings and spend with a read-only role, and records each saving with its evidence, its estimate and a fix to review. Its backend tools are `aws-cost-optimization-hub`, `aws-compute-optimizer`, `aws-cost-explorer`, `record-recommendation` and `list-recommendations`. The application `aws-account-agent` runs it as a worker every day at 7:00: it reads and records on its own, asks before any change, and leaves deleting and buying to the person. Its tests plant findings and check the safety cases. A Dogwood example allows an account change only after the same recommendation was approved within the hour. Its egress names each host it reaches instead of `*`: Cost Explorer and Cost Optimization Hub in us-east-1, STS and Compute Optimizer in each commercial region enabled by default, and Datalayer's inference and IAM, all on 443. A test fails on a wildcard in its egress. See [Applications](https://agentspecs.datalayer.tech/apps/reference) and [Policies](https://agentspecs.datalayer.tech/policies).
+- **AgentCore Memory.** The memory spec `agentcore` is Amazon Bedrock AgentCore Memory in the person's own AWS account. Its turns are kept as events of the person in the agent's session, and its long-term records are searched in namespaces that name `{actorId}`. An agentspec names the memory with `memory_config.memory_id` and `region`. See [Memory](https://agentspecs.datalayer.tech/agents/memory).
+
 ## 0.0.175
 
 11 November 2026.
