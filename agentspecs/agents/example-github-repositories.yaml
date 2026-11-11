@@ -1,0 +1,71 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: GitHub Repositories
+# A conversational agent with one tool: the GitHub repositories of the person
+# it works for, read with the person's own grant from the runtime's identity
+# provider. The first time, the person is asked to connect GitHub in the chat.
+# It needs no secret: no GITHUB_TOKEN is configured for it.
+
+id: example-github-repositories
+version: 0.0.1
+name: GitHub Repositories
+description: >
+  A conversational agent that lists your GitHub repositories with your own
+  GitHub grant; the first time, it asks you to connect GitHub in the chat.
+
+tags:
+  - github
+  - identity
+
+enabled: false
+protocol: ag-ui
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
+identity: datalayer-acting-agent
+
+# Memory backend
+memory: ephemeral
+
+# No MCP servers
+mcp_servers: []
+
+# No skills
+skills: []
+
+# Runtime tools
+backend_tools:
+  - github-repositories:0.0.1
+frontend_tools: []
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: mark-github
+emoji: 🐙
+color: gray
+
+# Chat suggestions
+suggestions:
+  - text: List my GitHub repositories.
+    summary: "My repositories"
+
+welcome_message: >
+  Hi! Ask me for your GitHub repositories. The first time, I will ask you to
+  connect GitHub.
+
+system_prompt: >
+  You are a helpful assistant that lists the GitHub repositories of the person
+  you work for. Use the github_repositories tool when asked about their
+  repositories. The first time, the chat asks the person to connect GitHub
+  before the tool answers; when the tool says access was not granted, say so
+  in one sentence and offer to try again. Keep your responses concise.
+
+system_prompt_codemode_addons: null
+trigger: null
+
+policy:
+  shield:
+    # Any public address: the tool calls GitHub's API (agent-shield's firewall).
+    egress: ["*"]
