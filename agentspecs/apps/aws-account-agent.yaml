@@ -133,7 +133,7 @@ tests:
 
 record:
   keep_for: 1_years
-  include: [conversations, outputs]
+  include: [conversations, outputs, approvals]
 
 deployment:
   hosted:
