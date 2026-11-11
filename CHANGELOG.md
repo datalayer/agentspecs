@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.177
+
+11 November 2026.
+
+- **The AWS Account Agent's recommendation card.** `worker-aws-account` binds `record_recommendation` to the `a2ui-surface` renderer: each recommendation recorded is drawn as a card with its evidence, estimate, change and rollback, and *Approve* and *Dismiss*. Approve means the person accepts it and is handed the change to apply; the agent applies nothing. The application `aws-account-agent` keeps `approvals` in its record. See [Applications](https://agentspecs.datalayer.tech/apps/reference).
+
 ## 0.0.176
 
 11 November 2026. Carries 0.0.175, which was bumped and never tagged.
