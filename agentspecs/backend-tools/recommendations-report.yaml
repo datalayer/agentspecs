@@ -1,0 +1,30 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The report of a deployment's recommendations over a period — the week by
+# default — read from its record (every session's, each recommendation as last
+# kept: open, approved or dismissed), counted by state with the estimated
+# savings approved and still open, and sent through the application's own
+# notification channels. It reads the record and tells the application's
+# owner; it changes nothing in the account.
+
+id: recommendations-report
+version: 0.0.1
+name: Recommendations Report
+description: >-
+  Report the deployment's recommendations of the last days — how many were
+  approved, dismissed and are still open, the estimated monthly savings of
+  each and the largest open ones — read from its record, and send it through
+  the application's notification channels.
+tags:
+  - recommendations
+  - account-agent
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.recommendations
+  method: recommendations_report
+icon: "@primer/octicons-react:graph"
+emoji: "📈"

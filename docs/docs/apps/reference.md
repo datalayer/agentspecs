@@ -271,6 +271,19 @@ triggers:
     by service and the Savings Plans coverage. Record each saving with its evidence,
     then list the recommendations and summarize: how many, the estimated monthly saving,
     the three largest.'
+- type: schedule
+  cron: 0 8 * * 1
+  description: Every Monday at 8:00
+  prompt: 'Write the week''s report: call recommendations_report for the last 7 days,
+    which sends it, and say in a few lines how many recommendations were approved,
+    dismissed and are still open, and their estimated monthly savings.'
+```
+
+### `notifications`
+
+```yaml
+notifications:
+- email
 ```
 
 ### `enabled`
@@ -473,13 +486,6 @@ pact:
 
 ```yaml
 memory: mem0
-```
-
-### `notifications`
-
-```yaml
-notifications:
-- email
 ```
 
 ### `checks`
