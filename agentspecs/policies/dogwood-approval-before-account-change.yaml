@@ -1,0 +1,33 @@
+id: dogwood-approval-before-account-change
+version: 0.0.1
+name: Approval before an AWS account change
+description: 'An example of a Dogwood set an administrator writes for an AWS account agent: a change
+  to the account (a fix applied with the change role) is permitted only when a person approved the
+  same recommendation in the session within the hour before it; every other action is left to the
+  rules. Deny by default: without the approval, the change is refused, by the Shield in the runtime
+  and, when the change tool is reached through an AgentCore Gateway, by AgentCore Policy there.'
+enabled: false
+tags:
+- policy
+- organization
+- dogwood
+- example
+- aws
+policy:
+  scope: organization
+  version: 1
+  dogwood:
+    mode: enforce
+    policies: |
+      @id("everything but an account change")
+      permit (principal, action, resource)
+      unless { action == Datalayer::Action::"aws_account___apply_fix" };
+
+      @id("an account change needs its recommendation approved within the hour")
+      permit (principal, action == Datalayer::Action::"aws_account___apply_fix", resource)
+      when temporal {
+          formerly within 1h Datalayer::Action::"aws_account___approve_recommendation"::response{
+              eventResource: resource,
+              input.recommendation: context.input.recommendation
+          }
+      };

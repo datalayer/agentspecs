@@ -18,6 +18,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent / "agentspecs"
 
 DOGWOOD_EXAMPLES = {
     "dogwood-approval-before-payment",
+    "dogwood-approval-before-account-change",
     "dogwood-transfers-per-hour",
     "dogwood-distinct-payees",
     "dogwood-running-total",
@@ -255,3 +256,46 @@ def test_the_dogwood_examples_decide_as_they_say():
         True,
         False,
     ]
+
+
+def test_an_account_change_needs_the_same_recommendation_approved_within_the_hour():
+    """The AWS account agent's rule: approved, not approved, another approved, approved two hours ago."""
+    shield = _installed_shield("0.2.18")
+    pytest.importorskip("cedarpy")
+    from datetime import datetime, timedelta, timezone
+
+    parsed = shield.parse_set(
+        policies.get_policy("dogwood-approval-before-account-change").policy["dogwood"]["policies"]
+    )
+    t0 = datetime(2026, 11, 11, 7, tzinfo=timezone.utc)
+
+    def run(steps: list[tuple[int, str, str]]) -> list[bool]:
+        log = shield.EventLog()
+        verdicts = []
+        for n, (minutes, tool, recommendation) in enumerate(steps):
+            call = shield.CedarCall(
+                principal='Datalayer::User::"alice"',
+                action=f'Datalayer::Action::"aws_account___{tool}"',
+                resource='Datalayer::Runtime::"r1"',
+                context={"input": {"recommendation": recommendation}},
+            )
+            moment = t0 + timedelta(minutes=minutes)
+            answer = shield.evaluate(parsed, call, log.events, moment)
+            log.decided(f"k{n}", call, allowed=answer.allowed, at=moment)
+            if answer.allowed:
+                log.ended(f"k{n}", moment + timedelta(seconds=1), ok=True)
+            verdicts.append(answer.allowed)
+        return verdicts
+
+    # Not approved: refused. Approved, then applied: permitted.
+    assert run([(0, "apply_fix", "rec-1"), (1, "approve_recommendation", "rec-1"), (2, "apply_fix", "rec-1")]) == [
+        False,
+        True,
+        True,
+    ]
+    # Another recommendation approved: refused.
+    assert run([(0, "approve_recommendation", "rec-2"), (1, "apply_fix", "rec-1")]) == [True, False]
+    # Approved two hours before: refused.
+    assert run([(0, "approve_recommendation", "rec-1"), (120, "apply_fix", "rec-1")]) == [True, False]
+    # Reading and recording are left to the rules.
+    assert run([(0, "list_recommendations", "")]) == [True]

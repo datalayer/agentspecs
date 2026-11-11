@@ -12,6 +12,7 @@ the platform ships or shows, each wrapped under the catalogue's fields.
 | Policy | Id | Scope | Enabled | Rules | Tool calls | Model tokens | Spend (credits) | Harnesses | Dogwood |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | The default policy | `default` | session | yes | 10 | 100 then 200 | — | — | every registered one (account) | — |
+| Approval before an AWS account change | `dogwood-approval-before-account-change` | organization | no | 0 | — | — | — | every registered one (account) | 2 policies, 1 temporal (enforce) |
 | Approval before a payment | `dogwood-approval-before-payment` | organization | no | 0 | — | — | — | every registered one (account) | 2 policies, 1 temporal (enforce) |
 | At most three payees a day | `dogwood-distinct-payees` | organization | no | 0 | — | — | — | every registered one (account) | 2 policies, 1 temporal (enforce) |
 | A running total of payments | `dogwood-running-total` | organization | no | 0 | — | — | — | every registered one (account) | 2 policies, 1 temporal (enforce) |
@@ -35,6 +36,28 @@ The platform's default, the session document every Shield decides with under the
 - **run a command**: ask — execute
 - **outside the workspace**: ask — every class outside the workspace
 - **send or buy**: ask — send, buy
+
+### Approval before an AWS account change (`dogwood-approval-before-account-change`)
+
+An example of a Dogwood set an administrator writes for an AWS account agent: a change to the account (a fix applied with the change role) is permitted only when a person approved the same recommendation in the session within the hour before it; every other action is left to the rules. Deny by default: without the approval, the change is refused, by the Shield in the runtime and, when the change tool is reached through an AgentCore Gateway, by AgentCore Policy there.
+
+
+Its Dogwood set, in enforce mode:
+
+```cedar
+@id("everything but an account change")
+permit (principal, action, resource)
+unless { action == Datalayer::Action::"aws_account___apply_fix" };
+
+@id("an account change needs its recommendation approved within the hour")
+permit (principal, action == Datalayer::Action::"aws_account___apply_fix", resource)
+when temporal {
+    formerly within 1h Datalayer::Action::"aws_account___approve_recommendation"::response{
+        eventResource: resource,
+        input.recommendation: context.input.recommendation
+    }
+};
+```
 
 ### Approval before a payment (`dogwood-approval-before-payment`)
 

@@ -1,0 +1,29 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A recommendation kept in the session's outputs: the session's list and,
+# when the application's record.include names outputs, its record. A
+# recommendation without evidence, without its estimate's method or without
+# a reviewable fix and its rollback is refused, never kept. It changes
+# nothing outside the session: a reader for the rules.
+
+id: record-recommendation
+version: 0.0.1
+name: Record Recommendation
+description: >-
+  Record one recommendation — a cost saving or a technical fix — with the
+  evidence it rests on (each read's source, call, time and values), its
+  estimate and how it was computed, its confidence and its fix as a
+  reviewable change with its rollback; refused when any of them is missing.
+tags:
+  - recommendations
+  - account-agent
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.recommendations
+  method: record_recommendation
+icon: "@primer/octicons-react:light-bulb"
+emoji: "💡"
