@@ -126,7 +126,50 @@ trigger: null
 
 policy:
   shield:
-    # Any public address: AWS's regional API endpoints (STS, Cost Explorer,
-    # Cost Optimization Hub, Compute Optimizer) and the model's inference; a
-    # firewall sees addresses, so no wildcard host can name them.
-    egress: ["*"]
+    # Exact hosts, no wildcard (a firewall sees addresses, not names).
+    # The AWS endpoints its tools call, as agent_runtimes.tools.aws_account's
+    # egress_hosts() derives them: Cost Explorer and Cost Optimization Hub in
+    # us-east-1; STS (the read role assumed) and Compute Optimizer in each
+    # region the tools read — AWS's commercial regions enabled by default.
+    # Then Datalayer's own: r1.datalayer.run for the model's inference and the
+    # session's record, prod1.datalayer.run for IAM (the invocation's token
+    # exchanged for the inference token).
+    egress:
+      - ce.us-east-1.amazonaws.com:443
+      - cost-optimization-hub.us-east-1.amazonaws.com:443
+      - sts.us-east-1.amazonaws.com:443
+      - compute-optimizer.us-east-1.amazonaws.com:443
+      - sts.us-east-2.amazonaws.com:443
+      - compute-optimizer.us-east-2.amazonaws.com:443
+      - sts.us-west-1.amazonaws.com:443
+      - compute-optimizer.us-west-1.amazonaws.com:443
+      - sts.us-west-2.amazonaws.com:443
+      - compute-optimizer.us-west-2.amazonaws.com:443
+      - sts.ca-central-1.amazonaws.com:443
+      - compute-optimizer.ca-central-1.amazonaws.com:443
+      - sts.sa-east-1.amazonaws.com:443
+      - compute-optimizer.sa-east-1.amazonaws.com:443
+      - sts.eu-central-1.amazonaws.com:443
+      - compute-optimizer.eu-central-1.amazonaws.com:443
+      - sts.eu-west-1.amazonaws.com:443
+      - compute-optimizer.eu-west-1.amazonaws.com:443
+      - sts.eu-west-2.amazonaws.com:443
+      - compute-optimizer.eu-west-2.amazonaws.com:443
+      - sts.eu-west-3.amazonaws.com:443
+      - compute-optimizer.eu-west-3.amazonaws.com:443
+      - sts.eu-north-1.amazonaws.com:443
+      - compute-optimizer.eu-north-1.amazonaws.com:443
+      - sts.ap-south-1.amazonaws.com:443
+      - compute-optimizer.ap-south-1.amazonaws.com:443
+      - sts.ap-northeast-1.amazonaws.com:443
+      - compute-optimizer.ap-northeast-1.amazonaws.com:443
+      - sts.ap-northeast-2.amazonaws.com:443
+      - compute-optimizer.ap-northeast-2.amazonaws.com:443
+      - sts.ap-northeast-3.amazonaws.com:443
+      - compute-optimizer.ap-northeast-3.amazonaws.com:443
+      - sts.ap-southeast-1.amazonaws.com:443
+      - compute-optimizer.ap-southeast-1.amazonaws.com:443
+      - sts.ap-southeast-2.amazonaws.com:443
+      - compute-optimizer.ap-southeast-2.amazonaws.com:443
+      - r1.datalayer.run:443
+      - prod1.datalayer.run:443

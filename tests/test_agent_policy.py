@@ -28,13 +28,36 @@ def test_every_agents_policy_holds():
             assert policies.agent_policy_problems(agent["policy"]) == [], name
 
 
+#: Agents that name the exact hosts they reach instead of ``*``.
+EXACT_EGRESS = {"worker-aws-account.yaml"}
+
+
 def test_datalayers_catalogue_agents_reach_any_public_address():
-    """Decided by the user, 8 November 2026: our agents allow * for egress."""
+    """Decided by the user, 8 November 2026: our agents allow * for egress.
+
+    Except those of ``EXACT_EGRESS``, which name every host they reach.
+    """
     names = []
     for name, agent in _agents():
+        if name in EXACT_EGRESS:
+            continue
         assert agent.get("policy", {}).get("shield", {}).get("egress") == ["*"], name
         names.append(name)
     assert len(names) > 100
+
+
+def test_the_aws_account_agent_names_each_host_it_reaches():
+    """No ``*``: AWS's endpoints its tools call, by region, and Datalayer's own."""
+    agent = yaml.safe_load((AGENTS_DIR / "worker-aws-account.yaml").read_text())
+    egress = agent["policy"]["shield"]["egress"]
+    assert egress and not any("*" in entry for entry in egress), egress
+    assert policies.agent_policy_problems(agent["policy"]) == []
+    hosts = {entry.rsplit(":", 1)[0] for entry in egress}
+    assert {"ce.us-east-1.amazonaws.com", "cost-optimization-hub.us-east-1.amazonaws.com"} <= hosts
+    for region in ("us-east-1", "eu-west-1", "ap-southeast-2"):
+        assert {f"sts.{region}.amazonaws.com", f"compute-optimizer.{region}.amazonaws.com"} <= hosts
+    assert {"r1.datalayer.run", "prod1.datalayer.run"} <= hosts
+    assert all(entry.endswith(":443") for entry in egress)
 
 
 @pytest.mark.parametrize(
