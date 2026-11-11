@@ -53,6 +53,14 @@ Every tool here runs on the runtime, in Python (`runtime.package`, `runtime.meth
 draws. A tool that runs on the page is a [frontend tool](../frontend-tools): `agentspecs/frontend-tools` names
 those, a set at a time (`toolset`), with the same marks.
 
+## `decide` comes with `decisions`
+
+`decide` asks typed questions about a text (yes or no, a choice, a score) of a decision
+model. It is not listed under `backend_tools`: an agent gets it by naming a
+[decisions spec](../decisions) (`decisions: jev:0.0.1`), and it is asked of that spec's
+model within its limits. An agent that lists `decide` without naming `decisions` is
+refused.
+
 ## Notes
 
 - Use stable IDs and bump `version` for breaking changes.

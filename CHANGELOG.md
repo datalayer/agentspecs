@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.175
+
+11 November 2026.
+
+- **Decisions, a kind of the catalogue and a capability an agent names.** `agentspecs/decisions` says how an agent decides: the `model` asked typed decisions (a model of the catalogue whose capabilities say `decisions`), the `questions` it answers (`noul`, `choice`, `score`), and the limits of one call (`max_questions`, `max_text_length`). One spec, `jev` (Jev at Cloudflare Workers AI). An agent decides only when its spec says `decisions: jev:0.0.1`, written as `memory` is; the capability brings the `decide` backend tool, asked of that spec's model. `agentspecs.decisions` refuses, in sentences: a decisions spec whose model is not of the catalogue or answers no typed decisions; an agent naming a spec that is unknown, of another version or not enabled; an agent listing `decide` under `backend_tools` without naming `decisions`. `example-simple` names `decisions: jev:0.0.1` and no longer lists `decide`. See [Decisions](https://agentspecs.datalayer.tech/agents/decisions).
+
 ## 0.0.172
 
 10 November 2026.

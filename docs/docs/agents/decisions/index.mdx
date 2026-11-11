@@ -1,0 +1,124 @@
+---
+sidebar_position: 1
+title: Decisions
+---
+
+# Decisions Specifications
+
+A *decision* is a typed question about a text — a ticket, a message, a review:
+
+- **noul**: does a statement hold? Answered yes or no, with its probability.
+- **choice**: which of the named options fits? Answered with the option and a confidence.
+- **score**: where does it sit on a scale? Answered with a step of the rubric and a confidence.
+
+A decisions spec (`agentspecs/decisions`) says how an agent decides: the model the
+questions are asked of, which question types it answers, and the limits of one call.
+
+Not every agent decides. An agent has the capability only when its spec names a
+decisions spec.
+
+## In an agent spec
+
+```yaml
+# agents/example-simple.yaml
+id: example-simple
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+memory: ephemeral
+decisions: jev:0.0.1
+backend_tools:
+  - runtime-echo:0.0.1
+```
+
+`decisions` is one reference, `id:version`, written as `memory` is.
+
+**The capability brings the tool.** An agent that names `decisions` gets the
+[`decide` backend tool](../backend-tools), asked of that spec's model within its
+limits: it is not listed under `backend_tools`. An agent that lists `decide` without
+naming `decisions` is refused, in a sentence naming the agent. An
+[application](../../apps) that lists `decide` runs an agent that names `decisions`.
+
+What an agent with the capability gets:
+
+- the `decide` tool, which the agent calls on its own while it answers;
+- `/decisions` (and `/decide`) in the `loop` terminal, and *Ask a decision* in the chat's
+  floating assistant, where a person asks a decision directly;
+- its decisions spec and model said wherever the agent is described (the terminal's
+  header, the agent's page).
+
+For an agent without it, none of these is offered, and the runtime refuses a decision
+asked for it in a sentence.
+
+## Required Fields
+
+- `id`
+- `version`
+- `name`
+- `description`
+- `model`: the model the questions are asked of, by its id in the
+  [models catalogue](../models). It must be a typed-decision model: its `capabilities`
+  say `decisions`.
+
+## Common Fields
+
+- `enabled`: whether an agent spec is offered these decisions. An agent that names a
+  spec that is not enabled is refused.
+- `questions`: the question types it answers, among `noul`, `choice` and `score`
+  (all three when unsaid). A question of another type is refused when it is asked.
+- `max_questions`: the most questions one call may ask (10 when unsaid).
+- `max_text_length`: the longest text one call may be about, in characters (20000 when
+  unsaid).
+- `tags`
+- `icon`, `emoji` (`icon` is `<package>:<name>`)
+
+## Example
+
+```yaml
+# decisions/jev.yaml
+id: jev
+version: 0.0.1
+name: Jev
+description: >-
+  Typed decisions about a text, asked of Jev at Cloudflare Workers AI.
+enabled: true
+model: "cloudflare:wrk/typesafe/jev"
+questions:
+  - noul
+  - choice
+  - score
+max_questions: 10
+max_text_length: 20000
+tags:
+  - decisions
+  - jev
+icon: "@primer/octicons-react:law"
+emoji: "⚖️"
+```
+
+`jev` is the one decisions spec of the catalogue today: Jev, Typesafe's typed-decision
+model, at Cloudflare Workers AI, asked through Datalayer's inference service and paid
+from the account's credits.
+
+## What is refused
+
+Each in a sentence, when the catalogue is read (`agentspecs.decisions`) and when the
+runtime catalogues are generated:
+
+- a decisions spec whose `model` is not in the models catalogue, or is a model that
+  answers no typed decisions;
+- a decisions spec that answers no question type, or names one twice;
+- an agent whose `decisions` names a spec the catalogue does not have, a version it does
+  not have, or a spec that is not enabled;
+- an agent that lists `decide` under `backend_tools` and names no `decisions`.
+
+## Python
+
+```python
+from agentspecs.decisions import agent_decisions, get_decisions, list_decisions
+
+jev = get_decisions("jev:0.0.1")
+jev.model          # "cloudflare:wrk/typesafe/jev"
+jev.questions      # ["noul", "choice", "score"]
+
+agent_decisions({"id": "example-simple", "decisions": "jev:0.0.1"})  # the spec
+agent_decisions({"id": "plain"})                                      # None
+```

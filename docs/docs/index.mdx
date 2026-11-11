@@ -19,13 +19,13 @@ The documentation has these parts, and they answer different questions.
 
 **[Agents](./agents)** — what one agent is, and everything it is made of. An
 agent spec is mostly references: to the skills it has, the tools and MCP
-servers it can reach, the model it runs on, where its memory lives, what it is
+servers it can reach, the model it runs on, where its memory lives, how it decides, what it is
 judged by. Each of those is a catalogue of its own, documented under Agents:
 
 - [Skills](./agents/skills), [Backend Tools](./agents/backend-tools),
   [Frontend Tools](./agents/frontend-tools), [MCP Servers](./agents/mcp-servers)
 - [Models](./agents/models), [Model Providers](./agents/model-providers),
-  [Memory](./agents/memory), [Env Vars](./agents/env-vars)
+  [Memory](./agents/memory), [Decisions](./agents/decisions), [Env Vars](./agents/env-vars)
 - [Hooks](./agents/hooks), [Triggers](./agents/triggers), [Events](./agents/events),
   [Strategies](./agents/strategies)
 - [Evals](./agents/evals), [Benchmarks](./agents/benchmarks),
@@ -132,6 +132,7 @@ agentspecs/
 ├── backend-tools/
 ├── benchmarks/
 ├── cogs/
+├── decisions/
 ├── env-vars/
 ├── evals/
 ├── events/

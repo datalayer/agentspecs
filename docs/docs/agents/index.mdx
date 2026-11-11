@@ -276,6 +276,7 @@ Commonly used fields:
 - `model_additionals`
 - `sandbox_variant`
 - `memory`
+- `decisions` (one `id:version` ref): how it decides, a spec of [Decisions](./decisions). Only an agent that names one decides; it brings the `decide` backend tool
 - `mcp_servers` (use `id:version` refs)
 - `skills` (use `id:version` refs)
 - `backend_tools` (use `id:version` refs): tools that run on the runtime; `frontend_tools`, the page's ([Frontend Tools](./frontend-tools))

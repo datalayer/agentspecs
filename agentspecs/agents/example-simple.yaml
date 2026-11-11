@@ -2,8 +2,9 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Agent Specification: A Simple Agent
-# A minimal agent with no MCP servers or skills, and one tool that decides:
-# typed questions asked of Jev through datalayer-ai-inference.
+# A minimal agent with no MCP servers or skills, and the decisions capability
+# (`decisions: jev:0.0.1`): typed questions asked of Jev through
+# datalayer-ai-inference, with the `decide` tool the capability brings.
 
 id: example-simple
 version: 0.0.1
@@ -32,6 +33,10 @@ sandbox_variant: jupyter-server
 # Memory backend
 memory: ephemeral
 
+# How it decides: the capability brings the `decide` backend tool, asked of
+# this spec's model.
+decisions: jev:0.0.1
+
 # No MCP servers
 mcp_servers: []
 
@@ -42,7 +47,6 @@ skills:
 # Runtime tools
 backend_tools:
   - runtime-echo:0.0.1
-  - decide:0.0.1
 frontend_tools:
   - jupyter-notebook:0.0.1
   - lexical-document:0.0.1

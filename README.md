@@ -44,6 +44,7 @@ agentspecs/
 ├── models/           # Model specs
 ├── model-providers/  # Model provider specs
 ├── memory/           # Memory backend specs
+├── decisions/        # Decisions specs: the model an agent asks typed decisions of
 ├── evals/            # Evaluator specs
 ├── benchmarks/       # Benchmark suite specs
 ├── strategies/       # Strategy specs (control-loop reasoning)
@@ -77,6 +78,7 @@ Current YAML file counts:
 - Models: 40
 - Model providers: 8
 - Memory backends: 4
+- Decisions: 1
 - Evals: 9
 - Benchmarks: 8
 - Strategies: 4
@@ -147,7 +149,7 @@ Defines agent behavior and runtime defaults.
 Common fields:
 
 - `id`, `version`, `name`, `description`, `enabled`
-- `model`, `sandbox_variant`, `memory`
+- `model`, `sandbox_variant`, `memory`, `decisions`
 - `mcp_servers`, `skills`, `backend_tools`, `frontend_tools`
 - `environment_name`
 - `icon`, `emoji`, `color`
@@ -393,6 +395,7 @@ Common fields:
 ### Other Catalogs
 
 - `memory`: memory backend options
+- `decisions`: how an agent decides (the model asked typed decisions, the question types, the limits); an agent decides only when its spec names one, which brings the `decide` backend tool
 - `evals`: evaluator definitions
 - `benchmarks`: benchmark suites (with evaluator dependencies)
 - `triggers`: reusable trigger templates
