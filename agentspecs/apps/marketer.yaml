@@ -83,7 +83,7 @@ interface:
   settings:
     type: object
     properties:
-      voice: {type: string, title: The brand's voice, in a sentence, default: Plain, warm and specific; never hype.}
+      voice: {type: string, title: "The brand's voice, in a sentence", default: "Plain, warm and specific; never hype."}
       networks: {type: string, title: Where to post, enum: [All four, X and Bluesky, LinkedIn only, Discord only], default: All four}
 tests:
   ready_at: 0.8
