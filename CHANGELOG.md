@@ -8,7 +8,11 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
-## Unreleased
+## 0.0.180
+
+12 November 2026.
+
+- **The odoo-accounting quarter-close tools, second round.** The `datalayer` and `odoo-accounting` servers class the twelve tools the Datalayer MCP server adds: `odoo_accounting_find_duplicate_bank_lines`, `odoo_accounting_check_vendor_payments`, `odoo_accounting_get_attachment` and `odoo_accounting_list_documents` read; `odoo_accounting_recode_bill`, `odoo_accounting_defer_expense`, `odoo_accounting_unlink_bank_feed`, `odoo_accounting_update_vendor_payment`, `odoo_accounting_cancel_vendor_payment` and `odoo_accounting_attach_existing_document` write; `odoo_accounting_remove_bank_line_twins` and `odoo_accounting_delete_bank_connection` delete. `odoo-accounting` now lists 73 tools. The gateway image refuses to build while a tool it serves has no class.
 
 - **The Steward's week is a document.** The backend tool `recommendations-report` now writes the report as a document of the Datalayer editor, a page of the Space its application is granted to write (`permissions.spaces`, `write`), and sends the page's link through the application's channels; it says that it writes (`action: [read, write]`), so an application does it alone only when a rule of its own names the tool, as `steward-aws` does, and is asked first otherwise. A Space grant names one Space of its owner's, which a catalogue cannot know: `steward-aws` says where its owner adds it, and without it the report stays text and says so. `worker-steward-aws` says where the document is.
 

@@ -179,6 +179,30 @@ actions:
     odoo_accounting_prepare_vendor_payments: write
     # List outbound payments — by default those still to execute — with amount, memo, bank account and the bills they pay.
     odoo_accounting_list_vendor_payments: read
+    # Find bank lines imported twice — same journal, day, amount and label — as a reconnected bank feed brings them, with what each is matched to.
+    odoo_accounting_find_duplicate_bank_lines: read
+    # Remove bank lines that are copies of lines staying in the journal, unmatching first those Odoo matched by itself.
+    odoo_accounting_remove_bank_line_twins: delete
+    # Detach a bank journal from its online account: no more lines arrive there; the lines already imported stay.
+    odoo_accounting_unlink_bank_feed: write
+    # Delete a bank connection — one replaced by a reconnection — after detaching every journal it feeds.
+    odoo_accounting_delete_bank_connection: delete
+    # Recode a vendor bill's lines — account and purchase taxes — keeping its total and its bank matching.
+    odoo_accounting_recode_bill: write
+    # Spread a prepaid cost over the period it covers — a road tax or an insurance running into the next fiscal year.
+    odoo_accounting_defer_expense: write
+    # Check the vendor payments before a payment run: drafts for bills already paid, and payments marked paid that never left the bank.
+    odoo_accounting_check_vendor_payments: read
+    # Correct a draft vendor payment before it is executed — net a credit note against a bill, fix its amount or memo.
+    odoo_accounting_update_vendor_payment: write
+    # Cancel a draft vendor payment that must not be executed — the bill was paid otherwise (by card, by direct debit).
+    odoo_accounting_cancel_vendor_payment: write
+    # Read one attached document's content, base64, to check what a bill or receipt says.
+    odoo_accounting_get_attachment: read
+    # List files of the Documents application — the bills and receipts waiting in a folder — newest first, without their content.
+    odoo_accounting_list_documents: read
+    # Attach a file already in the Documents application to a bill or entry, instead of uploading it again.
+    odoo_accounting_attach_existing_document: write
     # Read how the company files its tax returns: how often, the VAT number, the return journal, the tax lock date, and the return types of its country.
     odoo_accounting_get_tax_settings: read
     # Set how often the company files its tax return — monthly or quarterly, as the tax office registered it.
