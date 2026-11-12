@@ -8,7 +8,9 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
-## Unreleased
+## 0.0.181
+
+12 November 2026.
 
 - **The Steward's application is `aws-steward-agent`.** The application spec `steward-aws` (0.0.179) takes the id `aws-steward-agent`, with no alias, so its example is addressed `/studio/examples/aws-steward-agent`. Nothing else of the 12 November rename changes: its agent is `worker-steward-aws`, the tag `steward`, the name Datalayer Steward for AWS. A deployment of `steward-aws` is launched again under the new id.
 - **The catalogue's skills load from datalayer-skills.** `accounting`, `crawl`, `events`, `github`, `image`, `pdf`, `text-summarizer` and `video` name `datalayer_skills.skills.<name>` (datalayer-skills 0.3.0), where their code moved from agent-skills, which is the framework alone from 1.4.0; their `install.command` is `pip install "datalayer-skills[skills]"`. The skill ids do not change, so no agentspec changes. `jokes` stays in agent-skills. The `video` skill says it zooms in and out on a point (`zoom_video`).
