@@ -2,26 +2,27 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Video Skills (the user, 7 November 2026): recordings of web pages, and
-# videos read, trimmed, transcoded, optimized, framed and turned to GIF —
-# agent-skills' `video` skill, run by its scripts in the sandbox over ffmpeg.
+# videos read, trimmed, zoomed in and out, transcoded, optimized, framed and
+# turned to GIF —
+# datalayer-skills' `video` skill, run by its scripts in the sandbox over ffmpeg.
 
 id: video
 version: 0.0.1
 name: Video Skills
-description: Recordings of web pages; videos read, trimmed, transcoded, optimized, framed and turned to GIF
+description: Recordings of web pages; videos read, trimmed, zoomed in and out on a point, transcoded, optimized, framed and turned to GIF
 
-module: agent_skills.skills.video
+module: datalayer_skills.skills.video
 
 dependencies:
   - imageio-ffmpeg>=0.5
   - playwright>=1.45
 
-# Offered on the platform: the runtime image installs agent-skills[skills] with Chromium and ffmpeg.
+# Offered on the platform: the runtime image installs datalayer-skills[skills] with Chromium and ffmpeg.
 enabled: true
 
 install:
   type: python
-  command: "pip install \"agent-skills[skills]\" && python -m playwright install chromium"
+  command: "pip install \"datalayer-skills[skills]\" && python -m playwright install chromium"
   note: "Chromium for its recordings, and ffmpeg (imageio-ffmpeg brings one); the runtime image carries both."
 
 tags:

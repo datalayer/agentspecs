@@ -63,13 +63,13 @@ dependencies:
 
 ### `install` (object)
 How the skill is installed where an agent runs it: `type` (`python` for the skills of
-agent-skills), `command` the shell command that installs it on your own machine, `note`
+datalayer-skills and agent-skills), `command` the shell command that installs it on your own machine, `note`
 what else to know — Chromium for the image and video skills.
 
 ```yaml
 install:
   type: python
-  command: "pip install \"agent-skills[skills]\" && python -m playwright install chromium"
+  command: "pip install \"datalayer-skills[skills]\" && python -m playwright install chromium"
   note: "Chromium for its page snapshots; the runtime image carries it."
 ```
 
