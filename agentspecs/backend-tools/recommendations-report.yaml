@@ -4,9 +4,15 @@
 # The report of a deployment's recommendations over a period — the week by
 # default — read from its record (every session's, each recommendation as last
 # kept: open, approved or dismissed), counted by state with the estimated
-# savings approved and still open, and sent through the application's own
-# notification channels. It reads the record and tells the application's
+# savings approved and still open, written as a document — a page of the
+# Space the application is granted to write, in the Datalayer editor — and
+# sent through the application's own notification channels with the page's
+# link. It reads the record, writes that one page and tells the application's
 # owner; it changes nothing in the account.
+#
+# It writes, so it says so (`action`): an application does it alone only when
+# a rule of its own names this tool, and is asked first otherwise. With no
+# Space granted to write, the report is text only and its answer says so.
 
 id: recommendations-report
 version: 0.0.1
@@ -14,13 +20,16 @@ name: Recommendations Report
 description: >-
   Report the deployment's recommendations of the last days — how many were
   approved, dismissed and are still open, the estimated monthly savings of
-  each and the largest open ones — read from its record, and send it through
-  the application's notification channels.
+  each and the largest open ones — read from its record, write it as a
+  document in the Space the application may write, and send it through the
+  application's notification channels with the document's link.
 tags:
   - recommendations
   - steward
 enabled: true
-action: read
+action:
+  - read
+  - write
 approval: auto
 runtime:
   language: python

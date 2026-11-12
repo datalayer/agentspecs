@@ -6,8 +6,9 @@
 # right-sizing findings and spend with a read-only role, and records each
 # saving it finds with the evidence it read, the estimated monthly saving and
 # the fix for a person to review. It changes nothing in the account: it has
-# no tool that writes, and a rule leaves any change, and any deletion, to the
-# person.
+# no tool that writes there, and a rule leaves any change, and any deletion,
+# to the person. The one thing it writes is its own week's report, a document
+# in the Space its owner grants it (see `permissions` below).
 #
 # Its agent runs in the organization's Amazon Bedrock AgentCore, deployed
 # from Datalayer; the read role is the account's
@@ -51,9 +52,10 @@ triggers:
     description: Every Monday at 8:00
     prompt: >-
       Write the week's report: call recommendations_report for the last 7
-      days, which sends it, and say in a few lines how many recommendations
-      were approved, dismissed and are still open, and their estimated
-      monthly savings.
+      days, which writes it as a document and sends it, and say in a few
+      lines how many recommendations were approved, dismissed and are still
+      open, their estimated monthly savings, and where the document is — or
+      that none was written, and why.
 
 # A high-severity recommendation and the week's report reach the owner here.
 notifications:
@@ -66,7 +68,7 @@ rules:
       - aws-compute-optimizer
       - aws-cost-explorer
     behaviour: do_it
-  - action: Record and list recommendations
+  - action: Record and list recommendations, and write the week's report
     applies_to:
       - record-recommendation
       - list-recommendations
@@ -86,6 +88,19 @@ rules:
   - action: Buy anything, a Savings Plan or a Reserved Instance included
     applies_to: buy
     behaviour: leave_to_me
+
+# The week's report is written as a document in the first Space granted here
+# to write — a page its readers edit, the same page when the same week is
+# reported again. A grant names one Space of its owner's (its handle or uid),
+# which no catalogue can know: the owner adds it before deploying,
+#
+#   permissions:
+#     spaces:
+#       - space: <your space>
+#         access: write
+#
+# and the Space is shared with the application as it is deployed. Without it
+# the report is sent as text only, and says so.
 
 # Its interface: the Reactor plugins of agentspecs/ui it is drawn with, each
 # with the renderer it is exposed through outside Datalayer's page, when it is.

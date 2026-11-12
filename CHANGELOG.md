@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## Unreleased
+
+- **The Steward's week is a document.** The backend tool `recommendations-report` now writes the report as a document of the Datalayer editor, a page of the Space its application is granted to write (`permissions.spaces`, `write`), and sends the page's link through the application's channels; it says that it writes (`action: [read, write]`), so an application does it alone only when a rule of its own names the tool, as `steward-aws` does, and is asked first otherwise. A Space grant names one Space of its owner's, which a catalogue cannot know: `steward-aws` says where its owner adds it, and without it the report stays text and says so. `worker-steward-aws` says where the document is.
+
 ## 0.0.179
 
 12 November 2026.
