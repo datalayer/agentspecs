@@ -252,46 +252,6 @@ icon: book
 emoji: 🧾
 ```
 
-### `goal`
-
-```yaml
-goal: Find where my AWS account spends more than it needs to, and recommend each saving
-  with its evidence and its fix, changing nothing myself.
-```
-
-### `triggers`
-
-```yaml
-triggers:
-- type: schedule
-  cron: 0 7 * * *
-  description: Every day at 7:00
-  prompt: 'Scan the account: read Cost Optimization Hub''s recommendations, Compute
-    Optimizer''s findings for EC2, EBS, RDS and idle resources, last month''s spend
-    by service and the Savings Plans coverage. Record each saving with its evidence,
-    then list the recommendations and summarize: how many, the estimated monthly saving,
-    the three largest.'
-- type: schedule
-  cron: 0 8 * * 1
-  description: Every Monday at 8:00
-  prompt: 'Write the week''s report: call recommendations_report for the last 7 days,
-    which sends it, and say in a few lines how many recommendations were approved,
-    dismissed and are still open, and their estimated monthly savings.'
-```
-
-### `notifications`
-
-```yaml
-notifications:
-- email
-```
-
-### `enabled`
-
-```yaml
-enabled: true
-```
-
 ### `tools`
 
 ```yaml
@@ -346,6 +306,12 @@ pap:
     - device
     extensions:
     - operations
+```
+
+### `enabled`
+
+```yaml
+enabled: false
 ```
 
 ### `unavailable_because`
@@ -482,10 +448,39 @@ pact:
       profile:read: See who you are here
 ```
 
+### `goal`
+
+```yaml
+goal: Keep my inbox sorted, draft the replies, and never send without my approval.
+```
+
+### `triggers`
+
+```yaml
+triggers:
+- type: event
+  event: email_received
+  description: When a message arrives
+  prompt: A message arrived. Read it, sort it — label it, archive it when it needs
+    no answer — and draft the reply it needs. Send nothing yourself.
+- type: schedule
+  cron: 0 8 * * *
+  description: Every morning at 8
+  prompt: Give me the digest of what arrived, what you sorted, and what waits for
+    me.
+```
+
 ### `memory`
 
 ```yaml
 memory: mem0
+```
+
+### `notifications`
+
+```yaml
+notifications:
+- email
 ```
 
 ### `checks`

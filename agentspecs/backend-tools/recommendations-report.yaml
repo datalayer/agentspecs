@@ -18,7 +18,7 @@ description: >-
   the application's notification channels.
 tags:
   - recommendations
-  - account-agent
+  - steward
 enabled: true
 action: read
 approval: auto

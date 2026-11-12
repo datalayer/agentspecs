@@ -29,7 +29,7 @@ def test_every_agents_policy_holds():
 
 
 #: Agents that name the exact hosts they reach instead of ``*``.
-EXACT_EGRESS = {"worker-aws-account.yaml"}
+EXACT_EGRESS = {"worker-steward-aws.yaml"}
 
 
 def test_datalayers_catalogue_agents_reach_any_public_address():
@@ -46,9 +46,9 @@ def test_datalayers_catalogue_agents_reach_any_public_address():
     assert len(names) > 100
 
 
-def test_the_aws_account_agent_names_each_host_it_reaches():
+def test_the_steward_names_each_host_it_reaches():
     """No ``*``: AWS's endpoints its tools call, by region, and Datalayer's own."""
-    agent = yaml.safe_load((AGENTS_DIR / "worker-aws-account.yaml").read_text())
+    agent = yaml.safe_load((AGENTS_DIR / "worker-steward-aws.yaml").read_text())
     egress = agent["policy"]["shield"]["egress"]
     assert egress and not any("*" in entry for entry in egress), egress
     assert policies.agent_policy_problems(agent["policy"]) == []

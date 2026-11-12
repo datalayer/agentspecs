@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## Unreleased
+
+- **The AWS Account Agent is now Datalayer Steward for AWS** ("the Steward" in running text), as AWS's trademark guidelines put a third party's name before "for AWS". The ids change with it, with no alias: the application `aws-account-agent` is `steward-aws`, the agentspec `worker-aws-account` is `worker-steward-aws`, and the tag `account-agent` on its agent and its backend tools is `steward`. The read role the specs name is agent-runtimes' `aws/steward-read-role.yaml`. A deployment of the old application or agent is launched again under the new ids. The backend tools and the Dogwood example keep their names: they say what they read or enforce. See [Applications](https://agentspecs.datalayer.tech/apps/reference).
+
 ## 0.0.178
 
 11 November 2026.

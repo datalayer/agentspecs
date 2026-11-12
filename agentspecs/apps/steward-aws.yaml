@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Application Specification: AWS Account Agent
+# Application Specification: Datalayer Steward for AWS
 # A worker: every morning it reads the AWS account's cost recommendations,
 # right-sizing findings and spend with a read-only role, and records each
 # saving it finds with the evidence it read, the estimated monthly saving and
@@ -11,13 +11,13 @@
 #
 # Its agent runs in the organization's Amazon Bedrock AgentCore, deployed
 # from Datalayer; the read role is the account's
-# (aws/account-agent-read-role.yaml in agent-runtimes), named by the
+# (aws/steward-read-role.yaml in agent-runtimes), named by the
 # organization's AWS connection.
 
 schema: loop.app/v1
-id: aws-account-agent
+id: steward-aws
 version: 0.0.1
-name: AWS Account Agent
+name: Datalayer Steward for AWS
 kind: worker
 description: >-
   Every morning, reads your AWS account's cost recommendations, right-sizing
@@ -26,7 +26,7 @@ description: >-
   to review. It changes nothing in the account.
 owner: Datalayer <info@datalayer.io>
 
-agent: worker-aws-account:0.0.1
+agent: worker-steward-aws:0.0.1
 goal: >-
   Find where my AWS account spends more than it needs to, and recommend each
   saving with its evidence and its fix, changing nothing myself.

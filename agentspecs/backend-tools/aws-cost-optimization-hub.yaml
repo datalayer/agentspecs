@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # AWS Cost Optimization Hub's cost recommendations, read with the account's
-# read role (aws/account-agent-read-role.yaml in agent-runtimes), assumed
+# read role (aws/steward-read-role.yaml in agent-runtimes), assumed
 # from the runtime's own credentials with the organization's external id:
 # DATALAYER_AWS_ACCOUNT_READ_ROLE_ARN and DATALAYER_AWS_ACCOUNT_EXTERNAL_ID.
 # It calls ListRecommendations and nothing else: a reader.
@@ -18,7 +18,7 @@ description: >-
 tags:
   - aws
   - cost
-  - account-agent
+  - steward
 enabled: true
 action: read
 approval: auto

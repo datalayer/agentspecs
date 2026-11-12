@@ -17,7 +17,7 @@ description: >-
   reviewable change with its rollback; refused when any of them is missing.
 tags:
   - recommendations
-  - account-agent
+  - steward
 enabled: true
 action: read
 approval: auto

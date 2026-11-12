@@ -17,7 +17,7 @@ description: >-
 tags:
   - aws
   - cost
-  - account-agent
+  - steward
 enabled: true
 action: read
 approval: auto

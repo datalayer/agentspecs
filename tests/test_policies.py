@@ -259,7 +259,7 @@ def test_the_dogwood_examples_decide_as_they_say():
 
 
 def test_an_account_change_needs_the_same_recommendation_approved_within_the_hour():
-    """The AWS account agent's rule: approved, not approved, another approved, approved two hours ago."""
+    """The Steward's rule: approved, not approved, another approved, approved two hours ago."""
     shield = _installed_shield("0.2.18")
     pytest.importorskip("cedarpy")
     from datetime import datetime, timedelta, timezone

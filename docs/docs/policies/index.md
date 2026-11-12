@@ -39,7 +39,7 @@ The platform's default, the session document every Shield decides with under the
 
 ### Approval before an AWS account change (`dogwood-approval-before-account-change`)
 
-An example of a Dogwood set an administrator writes for an AWS account agent: a change to the account (a fix applied with the change role) is permitted only when a person approved the same recommendation in the session within the hour before it; every other action is left to the rules. Deny by default: without the approval, the change is refused, by the Shield in the runtime and, when the change tool is reached through an AgentCore Gateway, by AgentCore Policy there.
+An example of a Dogwood set an administrator writes for Datalayer Steward for AWS: a change to the account (a fix applied with the change role) is permitted only when a person approved the same recommendation in the session within the hour before it; every other action is left to the rules. Deny by default: without the approval, the change is refused, by the Shield in the runtime and, when the change tool is reached through an AgentCore Gateway, by AgentCore Policy there.
 
 
 Its Dogwood set, in enforce mode:

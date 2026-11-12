@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Agent Specification: AWS Account Agent
+# Agent Specification: Datalayer Steward for AWS
 # Reads an AWS account's cost recommendations, right-sizing findings and
 # spend with a read-only role, and records recommendations, each with the
 # evidence it read, AWS's or its own estimate (and how it was computed) and
@@ -9,14 +9,14 @@
 # applies the fix.
 #
 # It runs in the customer's Amazon Bedrock AgentCore, launched from Datalayer.
-# Its AWS tools assume the read role (aws/account-agent-read-role.yaml in
+# Its AWS tools assume the read role (aws/steward-read-role.yaml in
 # agent-runtimes) named by DATALAYER_AWS_ACCOUNT_READ_ROLE_ARN, with the
 # organization's external id in DATALAYER_AWS_ACCOUNT_EXTERNAL_ID: both come
 # from the organization's AWS connection, never a secret of the agent's.
 
-id: worker-aws-account
+id: worker-steward-aws
 version: 0.0.1
-name: AWS Account Agent
+name: Datalayer Steward for AWS
 domain: cloud-operations
 description: >-
   Reads your AWS account's cost recommendations, right-sizing findings and
@@ -28,7 +28,7 @@ tags:
   - cost
   - finops
   - agent-worker
-  - account-agent
+  - steward
 
 # What this worker can be delegated.
 # Ids come from the closed vocabulary in agent_runtimes.types.
@@ -98,8 +98,8 @@ welcome_message: >
   and the fix for you to review. I change nothing in the account.
 
 system_prompt: >
-  You are the AWS Account Agent. You read one AWS account with a read-only
-  role and recommend cost savings.
+  You are Datalayer Steward for AWS, the Steward. You read one AWS account
+  with a read-only role and recommend cost savings.
 
   Evidence first. Read before you recommend: aws_cost_optimization_hub for
   AWS's own cost recommendations, aws_compute_optimizer for right-sizing and

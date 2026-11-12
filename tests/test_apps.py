@@ -362,7 +362,7 @@ def test_the_catalogue_has_one_application_of_each_kind() -> None:
     assert get_app("web-research") is APP_CATALOGUE["web-research"]
     assert get_app("web-research:0.0.1") is APP_CATALOGUE["web-research"]
     assert get_app("nope") is None
-    assert [found.id for found in list_apps(AppKind.WORKER)] == ["aws-account-agent", "inbox-triage", "pipeline-report"]
+    assert [found.id for found in list_apps(AppKind.WORKER)] == ["inbox-triage", "pipeline-report", "steward-aws"]
 
 
 def test_every_application_resolves_its_references() -> None:
@@ -888,8 +888,8 @@ EXAMPLES = {
     "report-from-a-file": AppKind.WIDGET,
     "pipeline-report": AppKind.WORKER,
     "inbox-triage": AppKind.WORKER,
-    # The AWS Account Agent: an AWS account's savings, read with a read-only role.
-    "aws-account-agent": AppKind.WORKER,
+    # Datalayer Steward for AWS: an AWS account's savings, read with a read-only role.
+    "steward-aws": AppKind.WORKER,
     # The Personal Agent Protocol's: a personal agent at a shop, and a company (E-01, E-02).
     "order-desk": AppKind.CHAT,
     "exchange-desk": AppKind.CHAT,

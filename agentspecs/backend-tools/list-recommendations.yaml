@@ -13,7 +13,7 @@ description: >-
   estimated monthly savings.
 tags:
   - recommendations
-  - account-agent
+  - steward
 enabled: true
 action: read
 approval: auto
