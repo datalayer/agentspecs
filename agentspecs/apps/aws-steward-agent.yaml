@@ -16,7 +16,7 @@
 # organization's AWS connection.
 
 schema: loop.app/v1
-id: steward-aws
+id: aws-steward-agent
 version: 0.0.1
 name: Datalayer Steward for AWS
 kind: worker
