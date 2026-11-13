@@ -115,7 +115,7 @@ catalogue says it; a spec without one, or naming another, is refused in a senten
 
 - `datalayer`: a Datalayer agent runtime, launched from the platform's pools (or
   on your own machine), metered in credits and known by its uid. All the
-  catalogue's agents but one.
+  catalogue's agents but two.
 - `kagent`: [kagent](https://kagent.dev), a Kubernetes control plane for agents.
   The agent is a kagent `Agent` — an `AgentTemplate` (the model, remote MCP
   tools) and a `Harness` whose image runs `agent-runtimes serve --target kagent`
@@ -124,6 +124,18 @@ catalogue says it; a spec without one, or naming another, is refused in a senten
   Substrate, suspended when idle and resumed on the next message. kagent serves
   the agent through the agent-runtimes server, so it takes the `pydantic-ai`
   harness only.
+- `agentcore`: [Amazon Bedrock AgentCore](https://aws.amazon.com/bedrock/agentcore/)
+  Runtime, in the AWS account of the organization that launches it. The
+  agent-runtimes image serves the spec (`agent-runtimes serve --target agentcore`)
+  as an AgentCore agent runtime, which AgentCore starts on each invocation and
+  bills to that account; the organization needs its AWS connection. It takes the
+  `pydantic-ai` harness only. The catalogue's AgentCore agent is
+  `worker-steward-aws`, the Datalayer Steward for AWS.
+
+The spec's engine is a default: a launch may name another, on Datalayer's
+"Where it runs" when an agent is launched or an application deployed, and the
+platform checks it as it checks the spec's (`kagent` and `agentcore` take
+`pydantic-ai` only, and `agentcore` an organization with its AWS connection).
 
 `harness` says which agent program turns the loop; `runtime_engine` says what
 runs that program. The catalogue's kagent example is `example-kagent`:

@@ -20,8 +20,9 @@ runs that program and keeps it alive:
 
 Every agent spec of the catalogue says its engine; a spec without one, or
 naming another, is refused at load in a sentence
-(:func:`agent_runtime_engine_problems`). ``kagent`` serves an agent through
-the agent-runtimes server, so it takes the ``pydantic-ai`` harness only.
+(:func:`agent_runtime_engine_problems`). ``kagent`` and ``agentcore`` serve an
+agent through the agent-runtimes server, so they take the ``pydantic-ai``
+harness only.
 """
 
 from __future__ import annotations
@@ -30,13 +31,16 @@ from collections.abc import Mapping
 from typing import Any
 
 #: The engines an agent may name, the default first.
-RUNTIME_ENGINES: tuple[str, ...] = ("datalayer", "kagent")
+RUNTIME_ENGINES: tuple[str, ...] = ("datalayer", "kagent", "agentcore")
 
 #: The engine of an agent built in code that names none.
 DEFAULT_RUNTIME_ENGINE = RUNTIME_ENGINES[0]
 
 #: The harnesses each engine can run; an engine absent here runs any.
-ENGINE_HARNESSES: dict[str, tuple[str, ...]] = {"kagent": ("pydantic-ai",)}
+ENGINE_HARNESSES: dict[str, tuple[str, ...]] = {
+    "kagent": ("pydantic-ai",),
+    "agentcore": ("pydantic-ai",),
+}
 
 
 def agent_runtime_engine_problems(spec: Mapping[str, Any]) -> list[str]:
