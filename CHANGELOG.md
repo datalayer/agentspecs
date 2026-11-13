@@ -8,7 +8,9 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
-## Unreleased
+## 0.0.183
+
+13 November 2026.
 
 - **`runtime_engine: agentcore`**, the third engine: Amazon Bedrock AgentCore Runtime in the AWS account of the organization that launches the agent, the agent-runtimes image serving the spec as an AgentCore agent runtime. Like `kagent`, it takes the `pydantic-ai` harness only (`agentspecs.runtime_engines`). The spec's engine is the default a launch may override. `worker-steward-aws`, the Datalayer Steward for AWS, says `agentcore`. See [Agents](https://agentspecs.datalayer.tech/agents#runtime_engine-string-required).
 
