@@ -43,6 +43,7 @@ model: "bedrock:us.anthropic.claude-sonnet-4-6"
 model_additionals:
   - "alibaba:qwen-max"
 harness: pydantic-ai
+runtime_engine: datalayer
 identity: datalayer-acting-agent
 
 # Each scan reads the account afresh: nothing it read is trusted a day later.

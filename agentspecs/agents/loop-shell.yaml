@@ -21,6 +21,7 @@ model: "bedrock:us.anthropic.claude-sonnet-4-6"
 # hold a pydantic-ai agent, so the harness is the Vercel AI SDK — saying so
 # here keeps the spec honest about where it actually runs.
 harness: vercel-ai
+runtime_engine: datalayer
 identity: datalayer-acting-agent
 sandbox_variant: browser
 memory: ephemeral

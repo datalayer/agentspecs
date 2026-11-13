@@ -26,6 +26,7 @@ tags:
 
 enabled: false
 harness: opencode
+runtime_engine: datalayer
 identity: datalayer-acting-agent
 
 sandbox_variant: jupyter-server

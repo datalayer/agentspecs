@@ -95,6 +95,7 @@ version: 0.0.1
 name: An OpenCode Agent
 enabled: false
 harness: opencode
+runtime_engine: datalayer
 sandbox_variant: jupyter-server
 memory: ephemeral
 mcp_servers: []
@@ -107,6 +108,39 @@ elsewhere it takes the `ANTHROPIC_API_KEY` its harness declares. Claude Code, pi
 Codex do the same, answered from AWS Bedrock; Codex takes `OPENAI_API_KEY` elsewhere. The
 catalogue has one such agent per harness (`example-harness-<harness>`), each off in
 the shared catalogue.
+
+### `runtime_engine` (string, required)
+What runs and hosts the agent, on the line after `harness`. Every agent of the
+catalogue says it; a spec without one, or naming another, is refused in a sentence.
+
+- `datalayer`: a Datalayer agent runtime, launched from the platform's pools (or
+  on your own machine), metered in credits and known by its uid. All the
+  catalogue's agents but one.
+- `kagent`: [kagent](https://kagent.dev), a Kubernetes control plane for agents.
+  The agent is a kagent `Agent` — an `AgentTemplate` (the model, remote MCP
+  tools) and a `Harness` whose image runs `agent-runtimes serve --target kagent`
+  behind the kagent bridge — reached through kagent's A2A gateway at
+  `/agents/{namespace}/{name}`. Each conversation is a session actor of Agent
+  Substrate, suspended when idle and resumed on the next message. kagent serves
+  the agent through the agent-runtimes server, so it takes the `pydantic-ai`
+  harness only.
+
+`harness` says which agent program turns the loop; `runtime_engine` says what
+runs that program. The catalogue's kagent example is `example-kagent`:
+```yaml
+# agents/example-kagent.yaml
+id: example-kagent
+version: 0.0.1
+name: A kagent Agent
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
+runtime_engine: kagent
+sandbox_variant: eval
+mcp_servers: []
+skills: []
+```
+On a Datalayer plane, a runtime launched for a `kagent` agent goes through the
+operator's kagent part, and is refused in a sentence where that part is off.
 
 ### `model` (string)
 AI model ID to use for this agent. References a model spec in `models/` directory by its `id` field. If omitted, the system default model is used.
@@ -250,6 +284,8 @@ description: Acquire and manage data from external and local sources.
 
 enabled: true
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: pydantic-ai
+runtime_engine: datalayer
 
 mcp_servers:
   - kaggle:0.0.1
@@ -272,6 +308,7 @@ Commonly used fields:
 
 - `enabled`
 - `harness`
+- `runtime_engine` (`datalayer` or `kagent`, on the line after `harness`)
 - `model`
 - `model_additionals`
 - `sandbox_variant`

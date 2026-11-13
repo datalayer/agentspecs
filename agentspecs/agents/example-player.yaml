@@ -24,6 +24,7 @@ enabled: false
 protocol: vercel-ai
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: vercel-ai
+runtime_engine: datalayer
 identity: datalayer-acting-agent
 sandbox_variant: browser
 memory: ephemeral

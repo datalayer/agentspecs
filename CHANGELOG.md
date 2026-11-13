@@ -8,6 +8,13 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## Unreleased
+
+13 November 2026.
+
+- **`runtime_engine`: what runs and hosts an agent.** Every agent spec says it on the line after `harness`: `datalayer` (a Datalayer agent runtime, from the platform's pools or on your own machine) or `kagent` (a kagent Agent whose Harness is agent-runtimes, reached through kagent's A2A gateway at `/agents/{namespace}/{name}`, each conversation a session actor of Agent Substrate, suspended when idle and resumed on the next message). A spec without one, or naming another, is refused in a sentence, and `kagent` takes the `pydantic-ai` harness only (`agentspecs.runtime_engines`). Every agent of the catalogue says `datalayer`, the sandbox variant scaffolds included. See [Agents](https://agentspecs.datalayer.tech/agents#runtime_engine-string-required).
+- **`example-kagent`**, a simple conversational agent with `runtime_engine: kagent`: the agent that kagent's `Harness`, `AgentTemplate` and `Agent` serve, with no MCP servers of its own (the template's remote MCP servers are added at start), the `eval` sandbox and no frontend tools.
+
 ## 0.0.181
 
 12 November 2026.

@@ -39,6 +39,7 @@ goal: >-
 
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
+runtime_engine: datalayer
 identity: datalayer-service-agent
 
 sandbox_variant: jupyter-server
