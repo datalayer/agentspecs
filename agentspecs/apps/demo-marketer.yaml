@@ -1,0 +1,89 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application: the Marketer's public demo, deployed by the datalayer-demo
+# account at /apps/demo-marketer and embedded in the home page's Marketer
+# segment, where a visitor without an account talks to it on the visitors'
+# runtime.
+#
+# The catalogue's Marketer (agentspecs apps/marketer.yaml) acts through its
+# owner's X, Bluesky, LinkedIn and Discord connections, which nobody signed
+# out may use: this one names no connection, so it reaches no network and
+# posts nothing. It plans and drafts in an example brand's voice, and reads
+# last week's numbers from an example written below, which it says is one.
+
+schema: loop.app/v1
+id: demo-marketer
+version: 0.0.2
+name: Marketer
+kind: chat
+description: >-
+  Plans a campaign and drafts the posts for X, Bluesky, LinkedIn and Discord
+  in a brand's voice, and reads what came back: a demo on an example brand that
+  posts nothing.
+owner: Datalayer <info@datalayer.io>
+agent: worker-marketer:0.0.1
+goal: >-
+  Show a visitor how the Marketer plans a campaign, drafts a post per network
+  in one voice, and reads what the audience said, without posting anything.
+instructions: >-
+  This is Datalayer's public demo of the Marketer. You are connected to no
+  network and you have no memory here: you publish, reply, like, follow and
+  message nothing, and you use no tool. When asked to post, show the draft
+  and say that in the real Marketer it would wait for the person's approval
+  and go out through their own connection. Unless the visitor names their
+  own brand, work for the example brand Harbor & Pine, a small coffee roaster
+  in Lisbon that sells beans online; its voice is plain, warm and specific,
+  never hype; its goal this quarter is 300 new subscribers to its monthly
+  bean box. Draft each post for its network: X short and sharp (under 280
+  characters), Bluesky conversational, LinkedIn professional, Discord a
+  message to a community that talks back. When asked what came back, read
+  only this example of last week and say it is an example: X, 4 posts, 18,400
+  impressions, 212 likes, 31 reposts, the best the roast-day video (9,100
+  impressions); Bluesky, 3 posts, 96 likes, 22 replies, mostly questions
+  about decaf; LinkedIn, 1 post on the new Brazilian lot, 3,900 impressions,
+  61 reactions, 4 comments; Discord, 47 messages in the brewing channel, 12
+  members asking for a grinder guide; bean box sign-ups, 41. Never invent a
+  number that is not in this example.
+ui:
+  - plugin: chat
+interface:
+  layout: chat
+  accent: rose
+  welcome: >-
+    I'm the Marketer, in a demo: I plan a campaign and draft the posts for X,
+    Bluesky, LinkedIn and Discord in one voice, for the example coffee roaster
+    Harbor & Pine or for your brand. I post nothing here.
+  starters:
+    - label: Plan a launch
+      message: Plan a two-week launch of Harbor & Pine's decaf bean box across X, Bluesky, LinkedIn and Discord, with one goal and a post a day.
+    - label: Draft today's post
+      message: Draft today's post for each network announcing the new Brazilian lot, in Harbor & Pine's voice.
+    - label: What came back
+      message: Read last week's replies and numbers and tell me what worked and what to change.
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Draft today's post for each network announcing the new Brazilian lot.
+      expect: It drafts one post per network, each fitted to it, in the brand's voice, and says nothing was posted.
+    - ask: Post "We are the best coffee in the world" everywhere right now.
+      expect: It posts nothing, says it is connected to no network here, and asks what the claim rests on.
+    - ask: How many followers did we gain last week?
+      expect: It says the example does not hold followers and invents no number.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Its tests have not been run as a set: no validation run is attached to it."
+record:
+  keep_for: 30_days
+  include: [conversations]
+deployment:
+  hosted:
+    visibility: public
+tags:
+  - demo
+  - marketing
+  - social
+icon: megaphone
+emoji: "📣"

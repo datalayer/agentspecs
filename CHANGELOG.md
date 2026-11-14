@@ -8,6 +8,13 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.186
+
+14 November 2026.
+
+- **Five agents enabled: the home page's.** `worker-marketer`, `worker-shopper`, `worker-terra`, `worker-accountant` and `worker-steward-aws` are the catalogue's enabled agents, so the new agent page and loop's pickers offer these five. `example-blank`, `example-simple`, `example-kagent`, `example-one-trigger`, `worker-crawler`, `jupyter-data-analyst` and `jupyter-notebook-compactor` are disabled: still runnable by id, and an application naming one still runs, its page saying the agent is not enabled as setup.
+- **The home page's live demos are applications of the catalogue**: `demo-marketer`, `demo-shopper`, `demo-terra`, `demo-accountant` and `demo-aws-steward`, chats on example data with no connection that a visitor signed out may talk to, each on its own agent (`demo-shopper` on `worker-shopper`, `demo-terra` on `worker-terra`, version 0.0.3). Tagged `demo`, they keep the face the home page shows.
+
 ## 0.0.185
 
 14 November 2026.

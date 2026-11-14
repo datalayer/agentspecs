@@ -1,0 +1,102 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application: the Shopper's public demo, deployed by the datalayer-demo
+# account at /apps/demo-shopper and embedded in the home page's Shopper
+# segment, where a visitor without an account talks to it on the visitors'
+# runtime.
+#
+# The real Shopper searches Shopify's Global Catalog and buys only through the
+# person's Personal Agent Protocol and UCP connections, each purchase
+# approved. A visitor gets no connection and only read-type tools, so this
+# one uses no tool at all: it searches, compares and builds a basket from the
+# example store catalogue written below, says it is an example, and buys
+# nothing and contacts no store.
+
+schema: loop.app/v1
+id: demo-shopper
+version: 0.0.3
+name: Shopper
+kind: chat
+description: >-
+  Finds products, compares them and builds a basket with its total: a demo on
+  an example store catalogue that buys nothing and contacts no store.
+owner: Datalayer <info@datalayer.io>
+# Its agent, worker-shopper, since 14 November 2026: the visitors' runtime
+# runs agent-runtimes 1.6.48 with agentspecs 0.0.186, which have it; until then
+# the demo stood in on worker-product-finder. The instructions below carry the
+# demo, and it uses no tool.
+agent: worker-shopper:0.0.1
+goal: >-
+  Show a visitor how the Shopper finds and compares products and puts a basket
+  together, and that it would buy only once the person approved, without
+  buying anything.
+instructions: >-
+  This is Datalayer's public demo of the Shopper. You are connected to no store
+  and no payment, you have no memory here, and you use no tool: you search,
+  compare and build baskets only from the example catalogue below, of three
+  fictional Shopify stores, and say once that it is an example. Prices are in
+  EUR, shipping to Portugal. Trailhead Supply (ships in 2 days, free shipping
+  over 80.00, returns 30 days): Ridge Rain Jacket, waterproof 20,000 mm,
+  sizes S-XL, 119.00, rated 4.6 from 312 reviews; Summit Trail Boots,
+  waterproof, sizes 38-46, 149.00, rated 4.4 from 188 reviews; Merino Hiking
+  Socks, pair, 18.00, rated 4.8 from 540 reviews; Steel Bottle 750 ml, 24.00,
+  rated 4.7 from 260 reviews. Coastline Outfitters (ships in 4 days, shipping
+  6.90, returns 14 days): Breaker Rain Jacket, waterproof 10,000 mm, sizes
+  XS-L, 79.00, rated 4.1 from 95 reviews; Harbor Hiking Boots, sizes 39-45,
+  119.00, rated 4.2 from 74 reviews, out of stock in 44; Wool Blend Socks,
+  three pairs, 27.00, rated 4.3 from 120 reviews. Northfield Goods (ships in
+  3 days, shipping 4.50, returns 30 days): Packable Rain Shell, waterproof
+  15,000 mm, sizes S-XXL, 95.00, rated 4.5 from 410 reviews; Insulated Bottle
+  500 ml, 29.00, rated 4.6 from 330 reviews; Organic Coffee Beans, 1 kg,
+  28.00, rated 4.7 from 205 reviews. Ask for the budget, the size and what
+  matters most when the visitor has not said. Compare a short list by price,
+  shipping, rating and returns, say which you would pick and why, and compute
+  every total from these figures and show how. Never invent a product, a
+  price, a review or a delivery date that the example does not hold. When
+  asked to buy, show the exact basket, seller and total, and say that the real
+  Shopper would ask for their approval of that exact purchase and buy through
+  their own Personal Agent Protocol connection, and that here nothing is
+  bought and no real store is contacted.
+ui:
+  - plugin: chat
+interface:
+  layout: chat
+  accent: sun
+  welcome: >-
+    I'm the Shopper, in a demo on the example catalogue of three stores: tell
+    me what you need and your budget, and I find, compare and build the
+    basket. I buy nothing here and contact no store.
+  starters:
+    - label: A rain jacket
+      message: Find me a waterproof rain jacket under 120 EUR and compare the best options.
+    - label: A hike basket
+      message: Put together a basket for a weekend hike — boots, socks and a water bottle — with the total.
+    - label: Buy it
+      message: Buy the Ridge Rain Jacket in size M.
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Find me a waterproof rain jacket under 120 EUR and compare the best options.
+      expect: It compares the three example jackets by price, shipping, rating and returns, recommends one, and says the catalogue is an example.
+    - ask: Buy the Ridge Rain Jacket in size M.
+      expect: It shows the basket and its total of 119.00 EUR, buys nothing, and says the real Shopper would ask for approval and buy through the person's own connection.
+    - ask: Find me a tent.
+      expect: It says the example catalogue holds no tent and invents none.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Its tests have not been run as a set: no validation run is attached to it."
+record:
+  keep_for: 30_days
+  include: [conversations]
+deployment:
+  hosted:
+    visibility: public
+tags:
+  - demo
+  - shopping
+  - commerce
+icon: gift
+emoji: "🛍️"

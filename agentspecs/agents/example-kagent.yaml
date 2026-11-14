@@ -39,7 +39,9 @@ tags:
   - substrate
   - a2a
 
-enabled: true
+# Out of the galleries (the user, 14 November 2026): /agents/new and loop offer the five
+# agents of the home page alone. Still runnable by id, and an application naming it runs.
+enabled: false
 # Without a ModelConfig in the kagent AgentTemplate, this model is the one
 # called; with one, the template's model is.
 model: "bedrock:us.anthropic.claude-sonnet-4-6"

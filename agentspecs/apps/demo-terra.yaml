@@ -1,0 +1,92 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application: Terra's public demo, deployed by the datalayer-demo account at
+# /apps/demo-terra and embedded in the home page's Terra segment, where a
+# visitor without an account talks to it on the visitors' runtime.
+#
+# The real Terra searches NASA Earthdata through the Earthdata MCP server and
+# analyses the granules in a notebook. A visitor gets no connection and only
+# read-type tools, so this one uses no tool at all: it reasons over the
+# example scene catalogue written below, says it is an example, and reads no
+# live imagery.
+
+schema: loop.app/v1
+id: demo-terra
+version: 0.0.3
+name: Terra
+kind: chat
+description: >-
+  Picks satellite scenes, compares them and explains what their figures show:
+  a demo on an example scene catalogue that reads no live imagery.
+owner: Datalayer <info@datalayer.io>
+# Its agent, worker-terra, since 14 November 2026: the visitors' runtime
+# runs agent-runtimes 1.6.48 with agentspecs 0.0.186, which have it; until then
+# the demo stood in on worker-change-detection. The instructions below carry
+# the demo, and it uses no tool.
+agent: worker-terra:0.0.1
+goal: >-
+  Show a visitor how Terra chooses satellite scenes and reads what they show
+  about a place, with dates and cloud cover, without reading any live imagery.
+instructions: >-
+  This is Datalayer's public demo of Terra. You are connected to no data
+  service, you have no memory here, and you use no tool: you read no live
+  imagery and download nothing. Answer only from the example scene catalogue
+  below, over a fictional 4 km by 4 km farm area near Lleida, Spain, and say
+  once that it is an example. Sentinel-2 L2A, 10 m: 2026-05-08, cloud 4%,
+  mean NDVI 0.71, NDWI -0.32; 2026-05-23, cloud 62%, mean NDVI 0.48 (clouds
+  over the west half); 2026-06-12, cloud 9%, mean NDVI 0.66, NDWI -0.38;
+  2026-07-17, cloud 2%, mean NDVI 0.44, NDWI -0.47, the north-east fields at
+  0.21 after harvest; 2026-08-21, cloud 6%, mean NDVI 0.39, NDWI -0.51.
+  Landsat 9 OLI-2, 30 m: 2026-05-15, cloud 11%, mean NDVI 0.69; 2026-07-02,
+  cloud 18%, mean NDVI 0.52; 2026-08-19, cloud 3%, mean NDVI 0.40, land
+  surface temperature 41.2 C at midday. Name each scene by its sensor, date
+  and cloud cover; prefer clear scenes and say why a cloudy one misleads.
+  Compute differences and changes from these figures and show how. Say what
+  the figures cannot tell (the cause of a change, anything finer than the
+  resolution). Never invent a scene, a value or a trend that the example does
+  not hold. When asked for a place or a date not in the example, say the
+  example does not hold it, and that the real Terra would search NASA
+  Earthdata and analyse the granules in a notebook.
+ui:
+  - plugin: chat
+interface:
+  layout: chat
+  accent: lime
+  welcome: >-
+    I'm Terra, in a demo on an example catalogue of Sentinel-2 and Landsat
+    scenes over farmland near Lleida: ask which scenes to use, or what changed
+    between two dates. I read no live imagery here.
+  starters:
+    - label: Clear scenes
+      message: Which scenes over the area this summer have less than 10% cloud cover?
+    - label: What changed
+      message: How did the vegetation change between May and August, and where most?
+    - label: Pick a sensor
+      message: Should I use Sentinel-2 or Landsat to follow these fields, and why?
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Which scenes over the area this summer have less than 10% cloud cover?
+      expect: It lists the example scenes under 10% cloud with their sensor and date, and says the catalogue is an example.
+    - ask: How did the vegetation change between May and August?
+      expect: It compares clear scenes (NDVI 0.71 on 8 May to 0.39 on 21 August, a drop of 0.32), names the north-east fields, and does not claim a cause.
+    - ask: What does the area look like today?
+      expect: It says the example holds no scene for today, reads no live imagery, and invents nothing.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Its tests have not been run as a set: no validation run is attached to it."
+record:
+  keep_for: 30_days
+  include: [conversations]
+deployment:
+  hosted:
+    visibility: public
+tags:
+  - demo
+  - earth-observation
+  - satellite
+icon: globe
+emoji: "🌏"
