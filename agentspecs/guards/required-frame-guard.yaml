@@ -11,8 +11,8 @@ description: >-
   Checks, before any work starts, that every Frame the Op and its Cogs
   declare exists, is enabled and has been applied to the Cogs' context.
 
-# A Guard extends a guardrail: the policy it verifies, and runs within.
-extends: default-platform-user:0.0.1
+# A Guard extends a Policy: the rules it verifies, and runs within.
+extends: default:0.0.1
 
 category: policy-safety
 stages:

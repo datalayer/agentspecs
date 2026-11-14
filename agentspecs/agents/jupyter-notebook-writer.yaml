@@ -23,7 +23,7 @@ tags:
   - jupyter
   - collaboration
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: notebook.run
@@ -34,18 +34,20 @@ enabled: false
 protocol: vercel-ai
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: vercel-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
 sandbox_variant: browser
 memory: ephemeral
 
 mcp_servers: []
 skills: []
-tools: []
+backend_tools: []
 frontend_tools: []
 
 environment_name: ai-agents-env
 icon: pencil
 emoji: ✍️
-color: "#1A7F37"
+color: green
 
 suggestions:
   - text: Verify the conclusion
@@ -94,3 +96,8 @@ system_prompt: |
   A greeting, a question about you, or a follow-up about an earlier answer
   gets an ordinary written reply and no tool call. Only ever call the tools
   you have been given; never invent a tool name.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

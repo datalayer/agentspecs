@@ -1,0 +1,76 @@
+id: organization-baseline
+version: 0.0.1
+name: An organization's baseline
+description: 'An example of the organization scope an administrator writes in IAM: running
+  a command asks, nothing is deleted, nothing outside the workspace; the limits with a model budget
+  of 200 000 then 400 000 tokens and a spend limit of 5 then 10 USD (500 then 1 000 credits); fetches
+  to *.datalayer.io alone; Claude Code and Codex admitted, each on the account''s own key; reading, writing, running a command,
+  sending and buying need a permission beside the Rules.'
+enabled: true
+tags:
+- policy
+- organization
+- example
+policy:
+  scope: organization
+  version: 1
+  # The classes that need a permission beside the Rules: Datalayer's
+  # relationships decide them — a deny wins over any Rule, not knowing is refusing.
+  authorize:
+  - read
+  - write
+  - execute
+  - send
+  - buy
+  rules:
+  - name: running a command asks
+    decision: ask
+    classes:
+    - execute
+    kinds: []
+    where: any
+    paths: []
+    commands: []
+    reason: 'the organization''s rule: every command is shown to a person first'
+  - name: nothing is deleted
+    decision: deny
+    classes:
+    - delete
+    kinds: []
+    where: any
+    paths: []
+    commands: []
+    reason: the organization's rule
+  - name: 'outside the workspace: leave it to me'
+    decision: deny
+    classes: []
+    kinds: []
+    where: outside
+    paths: []
+    commands: []
+  limits:
+    tool_calls:
+      soft: 100
+      hard: 200
+    terminals_open:
+      soft: 2
+      hard: 4
+    bytes_written:
+      soft: 5242880
+      hard: 20971520
+    model_tokens:
+      soft: 200000
+      hard: 400000
+    spend:
+      soft: 500
+      hard: 1000
+  network:
+    fetch:
+    - '*.datalayer.io'
+  mcp:
+    allow: []
+  harnesses:
+    admit:
+    - claude-code
+    - codex
+    credentials: account

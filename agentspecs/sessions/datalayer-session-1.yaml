@@ -1,0 +1,84 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The session file (MH-12): `datalayer-session/1`, JSONL. The first line is the
+# session (or, for a team session, the team line followed by each seat's
+# session line); every other line is one entry of its record, in order,
+# redacted. The file carries no credential, no signed user, no runtime address
+# and no file's bytes — a file given or produced is its entry (name, size,
+# digest, place in the sandbox). What refuses a file says it in the sentences
+# below, the same on every surface that reads one.
+
+id: datalayer-session-1
+version: 0.0.1
+format: datalayer-session/1
+name: Datalayer session file
+description: One session of an application as a portable, redacted JSONL file — the session line first, its record's entries after — imported as a new session whose author is the importer.
+media_type: application/x-ndjson
+extension: .session.jsonl
+
+# A file over either cap is refused with its counts.
+caps:
+  max_bytes: 67108864
+  max_entries: 20000
+
+# A session's state, as the record says it: open (held by a runtime, a turn
+# may run), paused (nothing runs; held or not), ended (its code's end ran).
+states: [open, paused, ended]
+
+# The kinds an entry line may carry: the record's own, and the session's
+# audit rows. A kind not here is refused, never kept.
+entry_kinds:
+  - session
+  - run
+  - tool_call
+  - decision
+  - check
+  - approval
+  - output
+  - feedback
+  - turn
+  - notification
+  - step
+  - thread
+  - asked
+  - audio
+  - diff
+  - terminal
+  - file
+  - rule
+  - paused
+  - ended
+  - swapped
+  - cloned
+  - imported
+  - exported
+  - titled
+
+# The rules redaction applies at export, each counted in the session line's
+# `redactions`: a value matching the shape is replaced by `[redacted]`, a
+# field named is dropped.
+redaction_rules:
+  - id: authorization_header
+    description: "A header or key named Authorization, Proxy-Authorization or Cookie, whatever its value."
+  - id: bearer_token
+    description: "A value that reads `Bearer …`, `Basic …` or `token …`, or a key, secret or password field."
+  - id: declared_secret
+    description: "The value of a secret the application or its harness declares (`requires.secrets`, the Appspec's env), by name."
+  - id: url_userinfo
+    description: "A URL with userinfo (`https://user:pass@host`): the userinfo is dropped."
+  - id: signed_user
+    description: "The user an embed's host signed for the session (`signed`): dropped, with the entry's `user`."
+  - id: runtime_address
+    description: "The runtime's uid and addresses (`runs_on`, the sandbox's host): dropped from every entry."
+
+# Said, word for word, by whoever refuses a file. `{…}` are filled in.
+refusals:
+  unversioned: "A session file's first line is a session line that says its format, datalayer-session/1; this file's first line does not."
+  other_version: "The file is {format}; this runtime reads datalayer-session/1."
+  not_a_line: "Line {line} of the file is not a session, team_session or entry line: it says record_type {record_type!r}."
+  unknown_kind: "Line {line} is an entry of kind {kind!r}, which the record does not have: one of {kinds}."
+  entry_without_at: "Line {line} is an entry that does not say when it was recorded (`at`)."
+  team_without_seats: "A team session line names its seats, in order, each with its session uid; this one names none."
+  too_large: "The file has {entries} entries over {megabytes} MB; a session file holds at most 20 000 entries in 64 MB."
+  not_json: "Line {line} of the file is not JSON."

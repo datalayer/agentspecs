@@ -14,7 +14,9 @@ tags:
   - audit
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
-tools:
+runtime_engine: datalayer
+identity: datalayer-acting-agent
+backend_tools:
   - runtime-sensitive-echo:0.0.1
   - runtime-echo:0.0.1
 suggestions:
@@ -83,3 +85,8 @@ tool_hooks:
   deferred_tool_calls:
     - python: |
         print("[example-tool-approvals] deferred_tool_calls invoked")
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

@@ -53,19 +53,40 @@ def test_the_rules_are_enforced_when_the_catalogue_loads(tmp_path):
 
     # A non-Cloudflare model carries no route.
     with pytest.raises(ValueError, match="carries none"):
-        spec("openai-x.yaml", 'id: "openai:x"\nversion: 0.0.1\nname: x\nprovider: openai\nroute: workers-ai\n')
+        spec(
+            "openai-x.yaml",
+            'id: "openai:x"\nversion: 0.0.1\nname: x\nprovider: openai\nroute: workers-ai\n',
+        )
     # A Cloudflare id names its flavour…
     with pytest.raises(ValueError, match="cloudflare:<wrk|gtw>"):
-        spec("cloudflare-wrk-x.yaml", 'id: "cloudflare:openai/x"\nversion: 0.0.1\nname: x\nprovider: cloudflare\nroute: workers-ai\n')
+        spec(
+            "cloudflare-wrk-x.yaml",
+            'id: "cloudflare:openai/x"\nversion: 0.0.1\nname: x\nprovider: cloudflare\nroute: workers-ai\n',
+        )
     # …which agrees with its route…
     with pytest.raises(ValueError, match="means route"):
-        spec("cloudflare-wrk-x.yaml", 'id: "cloudflare:wrk/openai/x"\nversion: 0.0.1\nname: x\nprovider: cloudflare\nroute: ai-gateway\n')
+        spec(
+            "cloudflare-wrk-x.yaml",
+            'id: "cloudflare:wrk/openai/x"\nversion: 0.0.1\nname: x\nprovider: cloudflare\nroute: ai-gateway\n',
+        )
     # …and with its file's name.
     with pytest.raises(ValueError, match="named cloudflare-gtw"):
-        spec("cloudflare-wrk-x.yaml", 'id: "cloudflare:gtw/openai/x"\nversion: 0.0.1\nname: x\nprovider: cloudflare\nroute: ai-gateway\n')
-    assert spec("cloudflare-gtw-x.yaml", 'id: "cloudflare:gtw/openai/x"\nversion: 0.0.1\nname: x\nprovider: cloudflare\nroute: ai-gateway\n')[0].route == "ai-gateway"
+        spec(
+            "cloudflare-wrk-x.yaml",
+            'id: "cloudflare:gtw/openai/x"\nversion: 0.0.1\nname: x\nprovider: cloudflare\nroute: ai-gateway\n',
+        )
+    assert (
+        spec(
+            "cloudflare-gtw-x.yaml",
+            'id: "cloudflare:gtw/openai/x"\nversion: 0.0.1\nname: x\nprovider: cloudflare\nroute: ai-gateway\n',
+        )[0].route
+        == "ai-gateway"
+    )
     with pytest.raises(ValueError, match="request_logging"):
-        spec("cloudflare-gtw-x.yaml", 'id: "cloudflare:gtw/openai/x"\nversion: 0.0.1\nname: x\nprovider: cloudflare\nroute: ai-gateway\nrequest_logging: diary\n')
+        spec(
+            "cloudflare-gtw-x.yaml",
+            'id: "cloudflare:gtw/openai/x"\nversion: 0.0.1\nname: x\nprovider: cloudflare\nroute: ai-gateway\nrequest_logging: diary\n',
+        )
 
 
 def test_a_price_names_both_sides_and_is_never_negative():
@@ -73,7 +94,10 @@ def test_a_price_names_both_sides_and_is_never_negative():
 
     from agentspecs.models import ModelPricing
 
-    assert ModelPricing(input_usd_per_million=0.042, output_usd_per_million=0.0).output_usd_per_million == 0.0
+    assert (
+        ModelPricing(input_usd_per_million=0.042, output_usd_per_million=0.0).output_usd_per_million
+        == 0.0
+    )
     with pytest.raises(ValidationError):
         ModelPricing(input_usd_per_million=0.042)
     with pytest.raises(ValidationError):
@@ -91,7 +115,11 @@ def test_an_older_id_still_resolves():
     assert spec is not None and spec.id == "cloudflare:wrk/openai/gpt-oss-120b"
     assert AIModels.CLOUDFLARE_OPENAI_GPT_OSS_120B.value == "cloudflare:openai/gpt-oss-120b"
     assert AIModels.CLOUDFLARE_WRK_OPENAI_GPT_OSS_120B.value == "cloudflare:wrk/openai/gpt-oss-120b"
-    assert all(len(m.aliases) == 1 for m in AI_MODEL_CATALOGUE if m.provider == "cloudflare" and "typesafe" not in m.id)
+    assert all(
+        len(m.aliases) == 1
+        for m in AI_MODEL_CATALOGUE
+        if m.provider == "cloudflare" and "typesafe" not in m.id
+    )
 
 
 def test_retention_and_route_logging_are_told_apart():
@@ -103,12 +131,12 @@ def test_retention_and_route_logging_are_told_apart():
     assert workers.zero_data_retention is True and workers.request_logging == "none"
 
 
-def test_jev_is_a_judgment_model_once_per_route():
+def test_jev_is_a_decision_model_once_per_route():
     gateway = get_model("cloudflare:gtw/typesafe/jev")
     workers = get_model("cloudflare:wrk/typesafe/jev")
     for jev in (gateway, workers):
         assert jev is not None
-        assert jev.capabilities == ["judgments"]
+        assert jev.capabilities == ["decisions"]
         assert jev.billing == "credits"
         assert jev.context_window == 32000
         assert jev.zero_data_retention is True
@@ -116,15 +144,18 @@ def test_jev_is_a_judgment_model_once_per_route():
     assert gateway.route == "ai-gateway" and workers.route == "workers-ai"
 
 
-def test_the_judges_are_chat_models():
-    judges = [m for m in AI_MODEL_CATALOGUE if "judge" in m.capabilities]
-    assert {m.id for m in judges} == {"cloudflare:wrk/openai/gpt-oss-120b", "bedrock:us.anthropic.claude-sonnet-4-6"}
-    assert all("chat" in m.capabilities for m in judges)
+def test_the_deciders_are_chat_models():
+    deciders = [m for m in AI_MODEL_CATALOGUE if "decider" in m.capabilities]
+    assert {m.id for m in deciders} == {
+        "cloudflare:wrk/openai/gpt-oss-120b",
+        "bedrock:us.anthropic.claude-sonnet-4-6",
+    }
+    assert all("chat" in m.capabilities for m in deciders)
 
 
-def test_a_chat_picker_leaves_the_judgment_models_out():
+def test_a_chat_picker_leaves_the_decision_models_out():
     chat = [m for m in AI_MODEL_CATALOGUE if "chat" in m.capabilities]
-    assert not any("judgments" in m.capabilities for m in chat)
+    assert not any("decisions" in m.capabilities for m in chat)
 
 
 def test_an_unknown_capability_or_route_is_refused_when_the_catalogue_loads(tmp_path):
@@ -135,7 +166,9 @@ def test_an_unknown_capability_or_route_is_refused_when_the_catalogue_loads(tmp_
     )
     with pytest.raises(ValueError, match="telepathy"):
         _load_model_specs(tmp_path)
-    (tmp_path / "x.yaml").write_text('id: "x:y"\nversion: 0.0.1\nname: y\nprovider: x\nroute: tunnel\n')
+    (tmp_path / "x.yaml").write_text(
+        'id: "x:y"\nversion: 0.0.1\nname: y\nprovider: x\nroute: tunnel\n'
+    )
     with pytest.raises(ValueError, match="tunnel"):
         _load_model_specs(tmp_path)
 
@@ -149,8 +182,31 @@ def test_every_model_names_a_provider_the_catalogue_has_and_its_page():
         assert model.provider_url and model.provider_url.startswith("https://"), model.id
     cloudflare = get_model_provider("cloudflare")
     assert cloudflare is not None and cloudflare.hosting == "cloud"
-    assert cloudflare.terms_url.startswith("https://") and cloudflare.privacy_url.startswith("https://")
+    assert cloudflare.terms_url.startswith("https://") and cloudflare.privacy_url.startswith(
+        "https://"
+    )
     assert get_model_provider("ollama").hosting == "local"
+
+
+def test_every_provider_says_how_a_call_reaches_it():
+    """Through ai-inference, which holds the account, or directly from the agent with the
+    person's key (the user, 7 November 2026): OpenRouter direct, Cloudflare through."""
+    from agentspecs.model_providers import (
+        MODEL_PROVIDER_CATALOGUE,
+        PROVIDER_VIA,
+        get_model_provider,
+    )
+
+    for provider in MODEL_PROVIDER_CATALOGUE:
+        assert provider.via in PROVIDER_VIA, provider.id
+    assert get_model_provider("openrouter").via == "direct"
+    assert get_model_provider("cloudflare").via == "ai-inference"
+    assert get_model_provider("bedrock").via == "ai-inference"
+    # A direct provider's models name the key the agent calls with.
+    for model in AI_MODEL_CATALOGUE:
+        provider = get_model_provider(model.provider)
+        if provider.via == "direct" and provider.hosting != "local":
+            assert model.required_env_vars, model.id
 
 
 def test_a_model_naming_an_unknown_provider_is_refused():
@@ -163,11 +219,47 @@ def test_a_model_naming_an_unknown_provider_is_refused():
 def test_a_provider_file_is_named_for_its_id(tmp_path):
     from agentspecs.model_providers import _load_provider_specs
 
-    (tmp_path / "acme.yaml").write_text('id: "acme"\nname: Acme\nhosting: cloud\n')
+    (tmp_path / "acme.yaml").write_text('id: "acme"\nname: Acme\nhosting: cloud\nvia: direct\n')
     assert [p.id for p in _load_provider_specs(tmp_path)] == ["acme"]
-    (tmp_path / "other.yaml").write_text('id: "acme"\nname: Acme\n')
+    (tmp_path / "other.yaml").write_text('id: "acme"\nname: Acme\nvia: direct\n')
     with pytest.raises(ValueError, match="named for id"):
         _load_provider_specs(tmp_path)
-    (tmp_path / "other.yaml").write_text('id: "other"\nname: Other\nhosting: orbit\n')
+    (tmp_path / "other.yaml").write_text('id: "other"\nname: Other\nhosting: orbit\nvia: direct\n')
     with pytest.raises(ValueError, match="orbit"):
         _load_provider_specs(tmp_path)
+    # A provider that does not say how a call reaches it, or says something else, is refused.
+    (tmp_path / "other.yaml").write_text('id: "other"\nname: Other\nhosting: cloud\n')
+    with pytest.raises(Exception, match="via"):
+        _load_provider_specs(tmp_path)
+    (tmp_path / "other.yaml").write_text('id: "other"\nname: Other\nhosting: cloud\nvia: carrier-pigeon\n')
+    with pytest.raises(ValueError, match="carrier-pigeon"):
+        _load_provider_specs(tmp_path)
+
+
+def test_every_bedrock_openai_azure_anthropic_and_workers_ai_model_has_a_price():
+    """ai-inference meters a call by its model's price: a model it routes with
+    no price would be recorded as not priced, and the account not charged."""
+    from agentspecs.models import AI_MODEL_CATALOGUE
+
+    routed = ("bedrock:", "anthropic:", "openai:", "azure-openai:", "cloudflare:wrk/")
+    unpriced = [m.id for m in AI_MODEL_CATALOGUE if m.id.startswith(routed) and m.pricing is None]
+    assert unpriced == []
+
+
+def test_the_titan_embedding_models_are_priced_and_embed_only():
+    """What ai-inference's `/embeddings` serves and meters: both Titan models are in the
+    catalogue by the ids it meters them under, priced per million input tokens (an
+    embedding has no output), and named embedding models, so no chat picker offers them."""
+    prices = {
+        "bedrock:amazon.titan-embed-text-v1": 0.1,
+        "bedrock:amazon.titan-embed-text-v2:0": 0.02,
+    }
+    for model_id, input_price in prices.items():
+        model = get_model(model_id)
+        assert model is not None, model_id
+        assert model.capabilities == ["embeddings"], model_id
+        assert model.pricing is not None, model_id
+        assert model.pricing.input_usd_per_million == input_price, model_id
+        assert model.pricing.output_usd_per_million == 0.0, model_id
+        assert model.required_env_vars == [], model_id
+    assert "embeddings" in MODEL_CAPABILITIES

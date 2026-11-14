@@ -1,0 +1,29 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AWS Compute Optimizer's right-sizing and idle findings, read with the
+# account's read role (see aws-cost-optimization-hub). It calls the Get…
+# recommendation operations of Compute Optimizer and nothing else: a reader.
+
+id: aws-compute-optimizer
+version: 0.0.1
+name: AWS Compute Optimizer
+description: >-
+  Read AWS Compute Optimizer's findings for EC2 instances, Auto Scaling
+  groups, EBS volumes, Lambda functions, ECS services on Fargate, RDS
+  databases or idle resources in a region — over- and under-provisioned,
+  with the utilization they were judged on and the savings of each option —
+  with the read role; answered as evidence.
+tags:
+  - aws
+  - cost
+  - steward
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.aws_account
+  method: aws_compute_optimizer
+icon: "@primer/octicons-react:cpu"
+emoji: "📏"

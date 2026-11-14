@@ -30,7 +30,7 @@ tags:
   - analytics
   - kpi
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.acquire
@@ -41,6 +41,8 @@ delegable:
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
 
 sandbox_variant: jupyter-server
 
@@ -67,7 +69,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: graph
 emoji: 📈
-color: "#1a7f37"  # Dark green
+color: green
 
 # Goal / Prompt
 goal: >-
@@ -76,9 +78,11 @@ goal: >-
   30-day forecasts, then compile everything into an executive dashboard sent
   via Slack and email. Flag critical deviations for immediate human review.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Evals
 evals:
@@ -129,3 +133,8 @@ output:
 
 # No trigger — this is an interactive agent
 trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

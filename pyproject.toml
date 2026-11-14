@@ -26,14 +26,19 @@ dependencies = [
     "mcp[cli]>=2.0",
     "pydantic>=2.0",
     "httpx>=0.24",
+    # The policies catalogue validates each document against the Shield's JSON Schema (SH-50).
+    "jsonschema>=4.18",
 ]
 
 [project.optional-dependencies]
 pydantic-ai = [
-    "pydantic-graph",
-    "pydantic-ai-slim",
+  "pydantic-graph>=1.94.0",
+  "pydantic-ai-slim>=1.94.0",
 ]
-test = ["ipykernel", "jupyter_server>=1.6,<3", "pytest>=7.0", "pytest-asyncio>=0.21"]
+# A policy document's Dogwood set has its Cedar parsed as it is read (AC-40); without it, the
+# temporal clauses and AgentCore's quotas alone, and the spec says so.
+cedar = ["cedarpy>=4.12,<5"]
+test = ["datalayer-agent-shield>=0.2.7", "cedarpy>=4.12,<5", "ipykernel", "jsonschema>=4.18", "jupyter_server>=1.6,<3", "pytest>=7.0", "pytest-asyncio>=0.21"]
 lint = ["mdformat>0.7", "mdformat-gfm>=0.3.5", "ruff"]
 typing = ["mypy>=0.990"]
 
@@ -51,6 +56,8 @@ allow-direct-references = true
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+# pytest-asyncio 1.4.1 (28 October 2026) warns when this is unset, and `filterwarnings = error` made the warning an INTERNALERROR.
+asyncio_default_fixture_loop_scope = "function"
 filterwarnings = [
   "error",
   "ignore:There is no current event loop:DeprecationWarning",
@@ -74,6 +81,9 @@ warn_redundant_casts = true
 [tool.ruff]
 target-version = "py39"
 line-length = 100
+# agent-shield's Dogwood parser, carried verbatim (a test holds it to the package's own): formatted
+# by agent-shield's rules, not these.
+extend-exclude = ["agentspecs/policies/dogwood.py"]
 
 [tool.ruff.lint]
 select = [

@@ -15,23 +15,29 @@ tags:
   - finance
   - reconciliation
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.analyse
   - id: document.summarise
   - id: document.extract
 
-enabled: false
+# In the galleries (the user, 14 November 2026): the Accountant segment's agent.
+enabled: true
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model_additionals:
+  - "alibaba:qwen-max"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
 sandbox_variant: jupyter-server
 memory: ephemeral
 mcp_servers:
   - odoo:0.0.1
+  - odoo-accounting:0.0.1
 skills:
   - accounting:0.0.1
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 frontend_tools:
   - jupyter-notebook:0.0.1
@@ -39,7 +45,7 @@ frontend_tools:
 environment_name: ai-agents-env
 icon: book
 emoji: "🧮"
-color: "#1F883D"
+color: green
 
 suggestions:
   - text: >-
@@ -63,7 +69,8 @@ system_prompt: >-
   You are a specialized assistant for this gallery workflow: Accountant.
   Objective: Use Odoo data to perform accounting workflows including
   reconciliation, aging analysis, journal checks, and close summaries.
-  Use the Odoo MCP server for ERP operations and the notebook/runtime tools for
+  Use the Odoo Accounting MCP server for invoices, entries, ledgers, bank lines
+  and taxes, the Odoo MCP server for any other record, and the notebook/runtime tools for
   calculations and structured outputs. Keep results concise, auditable, and
   action-oriented.
 
@@ -79,3 +86,8 @@ codemode:
 welcome_notebook: null
 welcome_document: null
 trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

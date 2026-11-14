@@ -1,0 +1,24 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agentic Commerce Protocol 2026-04-17 checkout, as Datalayer's gateway serves
+# it (its `acp` toolset, PI-10) over agent-runtimes'
+# `agentic_commerce` client (PR-42), which names its operations without the
+# prefix. A seller connection is `acp:<domain>`.
+id: agentic-commerce
+name: Agentic Commerce Protocol
+description: Checking out at a seller over ACP.
+connection: acp
+
+actions:
+  checked: "2026-10-13"
+  note: >-
+    Completing a session pays: the exact purchase is always asked of the
+    person first, and made at most once (decided 2026-10-13: test merchants
+    only, no real payment).
+  tools:
+    acp_get_checkout: read
+    acp_create_checkout: write
+    acp_update_checkout: write
+    acp_cancel_checkout: write
+    acp_complete: buy

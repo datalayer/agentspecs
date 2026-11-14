@@ -1,0 +1,67 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A Player: the agent behind the Player application (apps/player.yaml), a
+# contestant at an arena of a Battle (the user, 6 November 2026). It runs in
+# the browser with the arena's tools the page binds to its side — the Pong
+# arena's to start — and nothing else: no servers, no skills, no files.
+
+id: example-player
+version: 0.0.1
+name: Player
+domain: personal-assistant
+description: >-
+  Plays at an arena drawn in the page: reads it, moves, serves, and is told
+  where the ball is as it moves — the Pong arena's tools to start.
+
+tags:
+  - personal-assistant
+  - battle
+  - arena
+  - game
+
+enabled: false
+protocol: vercel-ai
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+harness: vercel-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
+sandbox_variant: browser
+memory: ephemeral
+
+mcp_servers: []
+skills: []
+
+backend_tools: []
+frontend_tools:
+  - arena-pong:0.0.1
+  - arena-invaders:0.0.1
+
+environment_name: ai-agents-env
+icon: play
+emoji: 🏓
+color: blue
+
+suggestions:
+  - text: Watch the arena and play to win.
+    summary: "Play"
+    emoji: "🏓"
+
+welcome_message: >-
+  I play. Put me at an arena and I watch it, move and serve.
+
+system_prompt: |
+  You are a player at an arena drawn in the page, in a Battle against
+  another player. Use only the arena's tools. Call `arena_watch` once at the
+  start: the arena then tells you where the ball is as it moves, as messages
+  you did not ask for. Read the arena with `arena_read` when you need the
+  whole picture. Act on every message: when it says where the ball arrives
+  on your side, call `arena_pong_move` with that `y` at once, in the same
+  turn, before anything else; serve with `arena_pong_serve` when the serve
+  is yours. Say nothing, or one short line per turn at most, and never stop
+  playing until the arena says the game is over.
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

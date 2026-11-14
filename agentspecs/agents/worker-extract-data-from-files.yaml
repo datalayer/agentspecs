@@ -23,7 +23,7 @@ tags:
   - automation
   - document-processing
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.acquire
@@ -34,6 +34,8 @@ delegable:
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-service-agent
 
 sandbox_variant: jupyter-server
 
@@ -59,7 +61,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: database
 emoji: 🗃️
-color: "#bf8700"  # Amber
+color: amber
 
 # Goal / Prompt
 goal: >-
@@ -68,9 +70,11 @@ goal: >-
   spreadsheets, and scanned documents. Output clean JSON and CSV with
   confidence scores for each extracted field.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Trigger configuration
 trigger:
@@ -145,3 +149,8 @@ output:
     - CSV
   template: extraction-output-v1
   storage: s3://acme-extractions/
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

@@ -41,5 +41,5 @@ toolset:
   - decks_present
   - decks_print
 
-icon: project
+icon: "@primer/octicons-react:project"
 emoji: "🃏"

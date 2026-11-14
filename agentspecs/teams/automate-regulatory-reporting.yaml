@@ -23,7 +23,7 @@ tags:
 enabled: true
 icon: shield-check
 emoji: 🏦
-color: '#0969da'
+color: blue
 agent_spec_id: automate-regulatory-reporting:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential

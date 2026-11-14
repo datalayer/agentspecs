@@ -14,3 +14,7 @@ terms_url: "https://www.cloudflare.com/terms/"
 privacy_url: "https://www.cloudflare.com/privacypolicy/"
 data_usage_url: "https://developers.cloudflare.com/workers-ai/platform/data-usage/"
 hosting: cloud
+# Datalayer holds the account: a runtime's calls go through ai-inference, with
+# a Datalayer token, metered in credits; the provider's key never leaves the
+# service.
+via: ai-inference

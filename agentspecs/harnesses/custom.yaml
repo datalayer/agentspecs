@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# An organization's own harness: its spec, in the organization's catalogue,
+# names the command. The shared catalogue lists it to say so, and refuses
+# it to any agent.
+
+id: custom
+version: 0.0.1
+name: Custom harness
+description: An organization's own ACP agent, its command named by the organization's own harness spec and never typed into a form.
+enabled: false
+
+terms:
+  served_to_third_parties: organizations_own
+  licence: The organization's own
+
+skills:
+  format: none
+
+honours:
+  model: false
+  subagents: false
+
+# As declared by the organization's own spec; the shared catalogue's `custom`
+# claims the least (MH-20).
+capabilities:
+  resume: none
+  fork_history: none
+  interrupt: true
+  steering: false
+  images: false
+  compaction: own
+  modes: []
+
+tags: [harness]

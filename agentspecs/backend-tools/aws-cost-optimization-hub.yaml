@@ -1,0 +1,30 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AWS Cost Optimization Hub's cost recommendations, read with the account's
+# read role (aws/steward-read-role.yaml in agent-runtimes), assumed
+# from the runtime's own credentials with the organization's external id:
+# DATALAYER_AWS_ACCOUNT_READ_ROLE_ARN and DATALAYER_AWS_ACCOUNT_EXTERNAL_ID.
+# It calls ListRecommendations and nothing else: a reader.
+
+id: aws-cost-optimization-hub
+version: 0.0.1
+name: AWS Cost Optimization Hub
+description: >-
+  Read AWS Cost Optimization Hub's cost recommendations for the account —
+  rightsize, stop, delete, Savings Plans and Reserved Instances, Graviton —
+  each with AWS's estimated monthly saving, highest first, with the read
+  role; answered as evidence (source, call, read time, items).
+tags:
+  - aws
+  - cost
+  - steward
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.aws_account
+  method: aws_cost_optimization_hub
+icon: "@primer/octicons-react:graph"
+emoji: "💰"

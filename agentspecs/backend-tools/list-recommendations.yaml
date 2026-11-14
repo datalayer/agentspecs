@@ -1,0 +1,25 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The session's recommendations, as record-recommendation kept them, for a
+# report or a page. A reader.
+
+id: list-recommendations
+version: 0.0.1
+name: List Recommendations
+description: >-
+  List the recommendations recorded in this session, highest estimated
+  saving first, by kind (cost or fix) and state, with the sum of their
+  estimated monthly savings.
+tags:
+  - recommendations
+  - steward
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.recommendations
+  method: list_recommendations
+icon: "@primer/octicons-react:list-ordered"
+emoji: "📋"

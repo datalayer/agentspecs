@@ -6,7 +6,7 @@
 id: "cloudflare:gtw/typesafe/jev"
 version: 0.0.1
 name: Jev (Cloudflare AI Gateway)
-description: Typesafe's typed-judgment model through the account's AI Gateway - noul, choice and score questions answered as calibrated probabilities; 32k context; zero data retention; the gateway keeps the logs and bills from its credits
+description: Typesafe's typed-decision model through the account's AI Gateway - noul, choice and score questions answered as calibrated probabilities; 32k context; zero data retention; the gateway keeps the logs and bills from its credits
 provider: cloudflare
 provider_url: "https://docs.typesafe.ai/models"
 default: false
@@ -16,7 +16,7 @@ billing: credits
 # A third-party model Cloudflare fronts, not one it hosts: there is no `@cf/`
 # namespace for it. Through the gateway it is asked at
 # `POST https://gateway.ai.cloudflare.com/v1/{account}/{gateway}/workers-ai/run/typesafe/jev`
-# with the judgment input as the body (checked 2026-10-01); the gateway logs
+# with the decision input as the body (checked 2026-10-01); the gateway logs
 # the call and bills it from the account's credits. The same model at
 # Workers AI's own endpoint is `cloudflare:wrk/typesafe/jev`.
 route: ai-gateway
@@ -30,10 +30,10 @@ pricing:
   input_usd_per_million: 0.042
   output_usd_per_million: 0.0
 
-# Asked through datalayer-ai-inference's typed-judgment endpoint
-# (`POST /api/ai-inference/v1/judgments`), which holds the account and token.
+# Asked through datalayer-ai-inference's typed-decision endpoint
+# (`POST /api/ai-inference/v1/decisions`), which holds the account and token.
 required_env_vars: []
 
 # Not a chat model: it answers typed questions about a state, nothing else.
 capabilities:
-  - judgments
+  - decisions

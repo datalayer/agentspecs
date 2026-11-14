@@ -1,0 +1,39 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A Datalayer runtime that keeps an organization's third-party tokens in its AgentCore vault.
+id: aws-agentcore-vault
+version: 0.0.1
+name: AgentCore vault from Datalayer
+description: >-
+  An agent running on Datalayer, or as an Agent Node on ECS, whose organization keeps
+  third-party tokens in its own AgentCore token vault: the platform obtains the
+  workload access token with the person's verified JWT, never by user id.
+subject: agent
+provider: aws-agentcore
+inbound:
+  kind: jwt
+  issuer: https://prod1.datalayer.run/api/iam/v1/oauth
+  discovery_url: https://prod1.datalayer.run/api/iam/v1/oauth/.well-known/openid-configuration
+  algorithms: [RS256]
+  clients: [datalayer-platform]
+workload:
+  token: agentcore-jwt
+  lifetime_seconds: 900
+credentials:
+  vault: agentcore
+  providers:
+    - name: github
+      kind: oauth2
+      flow: user-federation
+      scopes: [read:user]
+custody:
+  keys: vault-transit
+  algorithm: RS256
+consent:
+  by: person
+  hosted_by: datalayer
+  binding: true
+tags: [aws, agentcore, vault]
+icon: lock
+emoji: "🔐"

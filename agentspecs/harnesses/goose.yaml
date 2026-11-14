@@ -1,0 +1,58 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# goose speaks ACP itself: `goose acp` (its GDK's ACP guide). The provider
+# and the model are its GOOSE_PROVIDER and GOOSE_MODEL variables; the
+# provider's key is the secret.
+
+id: goose
+version: 0.0.1
+enabled: false
+unavailable_because: >-
+  the catalogue offers four harnesses today — Claude Code, Codex, OpenCode and pi (28 October 2026); goose is a binary of its own release, not an npm adapter, the runtime image does not carry it, and it has not been drilled on Datalayer.
+name: goose
+description: Block's open agent (now the Agentic AI Foundation's), which speaks ACP itself with goose acp; any model provider it is configured with.
+docs: https://block.github.io/goose/docs/gdk/acp/
+
+acp:
+  command: goose
+  args: ["acp"]
+  protocol_version: 1
+  load_session: false
+  mcp: lend
+  modes: []
+  native_session: none
+  env:
+    GOOSE_PROVIDER: anthropic
+
+requires:
+  secrets: [ANTHROPIC_API_KEY]
+  binaries: ["goose@1.54.0", git]
+
+terms:
+  served_to_third_parties: permitted
+  licence: Apache-2.0
+
+skills:
+  format: skill-md
+  dir: .agents/skills
+
+honours:
+  model: true
+  subagents: false
+
+# What a session may rely on of it (MH-20): read by swap, clone and resume,
+# never guessed per harness in code. `images` is the claim `initialize`'s
+# promptCapabilities must confirm; `native_session` is the drill's to answer.
+capabilities:
+  resume: none
+  fork_history: replay
+  interrupt: true
+  steering: false
+  images: false
+  compaction: own
+  modes: []
+
+instructions_file: .goosehints
+
+tags: [harness]

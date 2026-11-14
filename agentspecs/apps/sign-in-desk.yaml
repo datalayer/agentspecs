@@ -1,0 +1,99 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Sign-in Desk
+# The Personal Agent Protocol's mediated-sign-in journey (PR-05, trace mediated-sign-in)
+# as an application: the person signs in at the
+# shop without leaving the chat, typing what the shop asks into Datalayer's
+# protected form, which the model never reads and which reaches the shop once.
+
+schema: loop.app/v1
+id: sign-in-desk
+version: 0.0.2
+name: Sign-in Desk
+kind: chat
+description: >-
+  Signs you in at a shop without leaving the chat: you type what the shop asks
+  into a protected form the model never reads.
+owner: Datalayer <info@datalayer.io>
+
+agent: cog-crawler:0.0.1
+instructions: >-
+  You help the person at Manzanita Outfitters, through its tools. When the
+  shop needs them signed in, show its protected form and wait. Never ask for a
+  password, a code or anything the form asks in the conversation.
+
+# The protocols it speaks: its `pap` block is refused unless listed here.
+protocols: [pap]
+
+pap:
+  profile: draft-01
+  connections:
+    - id: manzanita
+      company: manzanita.examples.datalayer.run
+      access: read
+      as: user
+      scopes: ["orders:read"]
+      interfaces: [agent]
+      sign_in: [mediated]
+
+rules:
+  - action: Read your orders at the shop
+    applies_to: read
+    behaviour: do_it
+  # A message to the shop goes out in your name (R-02).
+  - action: Ask the shop for you
+    applies_to: send
+    behaviour: ask_first
+
+# Its interface: the Reactor plugins of agentspecs/ui it is drawn with, each
+# with the renderer it is exposed through outside Datalayer's page, when it is.
+ui:
+  - plugin: chat
+  - plugin: pap-sign-in
+
+interface:
+  layout: chat
+  accent: sun
+  welcome: >-
+    I help you at Manzanita Outfitters. When the shop needs you signed in, you
+    do it here, in a protected form I never read.
+  starters:
+    - label: Sign in
+      message: Sign me in at Manzanita.
+    - label: My order
+      message: Where is my Ridge Jacket order?
+    - label: My password
+      message: My password is in my notes, I will paste it here.
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Sign me in at Manzanita.
+      expect: It shows the shop's protected sign-in form and waits; nothing I type there appears in the conversation.
+    - ask: My password is in my notes, I will paste it here.
+      expect: It refuses and points me to the protected form.
+    - ask: Where is my Ridge Jacket order?
+      expect: Once I signed in, it answers from my order at the shop.
+  verified:
+    live:
+      - "Tried live on Datalayer on 13 October 2026 against the hosted Manzanita (manzanita.examples.datalayer.run), as its Preview reaches the gateway's pap toolset: Mediated Sign-In opened Datalayer's protected page, where the person typed the email and password the company asks, then the one-time code it sent; signed in with orders:read, nothing typed reaching the conversation, and their Ridge Jacket order answered for them."
+    recorded:
+      - "The journey is the Personal Agent Protocol SDK's recorded journey mediated-sign-in (Datalayer's protocol examples, personal-agent-protocol 0.16.0), shown as recorded data, not live."
+    unverified:
+      - "A model's turns in the Studio's Preview were not watched in that trial."
+
+record:
+  keep_for: 90_days
+  include: [conversations, actions, decisions, approvals]
+
+deployment:
+  hosted:
+    visibility: private
+
+enabled: true
+
+tags:
+  - example
+  - companies
+emoji: "🔐"

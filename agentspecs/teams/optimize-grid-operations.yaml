@@ -22,7 +22,7 @@ tags:
 enabled: true
 icon: zap
 emoji: ⚡
-color: '#1a7f37'
+color: green
 agent_spec_id: optimize-grid-operations:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential

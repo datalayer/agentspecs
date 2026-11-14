@@ -6,7 +6,7 @@ version: 0.0.1
 name: Web Crawl Skill
 description: Web crawling and content extraction capabilities
 
-module: agent_skills.skills.crawl
+module: datalayer_skills.skills.crawl
 
 envvars:
   - TAVILY_API_KEY:0.0.1
@@ -18,10 +18,15 @@ dependencies:
 # Not offered on the platform yet: the integrations page lists it as not available.
 enabled: true
 
+install:
+  type: python
+  command: "pip install \"datalayer-skills[skills]\""
+  note: "datalayer-skills with every skill's dependencies; the runtime image installs it the same way."
+
 tags:
   - web
   - crawl
   - scraping
 
-icon: globe
+icon: "@primer/octicons-react:globe"
 emoji: 🌐

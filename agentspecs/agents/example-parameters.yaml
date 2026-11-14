@@ -15,13 +15,15 @@ tags:
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
 
 sandbox_variant: jupyter-server
 memory: ephemeral
 
 mcp_servers: []
 skills: []
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 frontend_tools: []
 
@@ -29,7 +31,7 @@ environment_name: ai-agents-env
 
 icon: sliders
 emoji: "🎛️"
-color: "#0F766E"
+color: teal
 
 parameters:
   type: object
@@ -84,3 +86,8 @@ system_prompt_codemode_addons: null
 welcome_notebook: null
 welcome_document: null
 trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

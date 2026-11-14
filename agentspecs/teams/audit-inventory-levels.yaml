@@ -19,7 +19,7 @@ tags:
 enabled: true
 icon: package
 emoji: 📦
-color: '#0969da'
+color: blue
 agent_spec_id: audit-inventory-levels:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential

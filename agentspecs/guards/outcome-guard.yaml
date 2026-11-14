@@ -11,8 +11,8 @@ description: >-
   Measures, over time, whether the Op's outputs are used as intended:
   accepted without rework, on time, with the decision they were made for taken.
 
-# A Guard extends a guardrail: the policy it verifies, and runs within.
-extends: default-platform-user:0.0.1
+# A Guard extends a Policy: the rules it verifies, and runs within.
+extends: default:0.0.1
 
 category: outcome
 stages:

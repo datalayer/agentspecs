@@ -1,0 +1,26 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Voice: Siwis, Kokoro, French (VO-40)
+
+id: kokoro-ff-siwis
+version: 0.0.1
+name: Siwis
+description: >-
+  A French voice, Kokoro's only one, trained on the SIWIS French Speech
+  Synthesis Database, whose licence asks for its attribution.
+engine: kokoro
+model: kokoro-82m
+voice: ff_siwis
+languages: [fr-FR]
+where: [server, machine]
+licence:
+  weights: Apache-2.0
+  dataset: CC-BY-4.0
+attribution: >-
+  Trained on the SIWIS French Speech Synthesis Database, by Pierre-Edouard
+  Honnet, Alexandros Lazaridis and Philip N. Garner (Idiap Research Institute)
+  and Junichi Yamagishi (National Institute of Informatics, Japan, and the
+  University of Edinburgh), under CC BY 4.0.
+watermark: false
+sample: Bonjour. Je lis les réponses à voix haute, phrase par phrase, à mesure qu'elles s'écrivent.

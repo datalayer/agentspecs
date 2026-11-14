@@ -19,7 +19,7 @@ tags:
   - github
   - analysis
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.acquire
@@ -27,14 +27,25 @@ delegable:
   - id: document.extract
   - id: research.gather
 
+# Enabled, out of the pickers (the user, 14 November 2026): /agents/new, the chats, the
+# assign menu and loop offer the five agents of the home page alone (`listed: false` here).
+# Runnable by id, and an application naming it runs with nothing to set up.
 enabled: true
+listed: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
+# Other models it may be switched to, beside its own: those
+# datalayer-ai-inference serves from the catalogue.
+model_additionals:
+  - "alibaba:qwen-max"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: web-bot-auth-agent
 
 sandbox_variant: jupyter-server
 
-# Memory backend
-memory: ephemeral
+# Durable memory (mem0): what the person asks it to keep across sessions,
+# under their account and this agent (user, agent).
+memory: mem0
 
 # MCP servers used by this agent
 mcp_servers:
@@ -44,6 +55,13 @@ mcp_servers:
 skills:
   - github:0.0.1
   - events:0.0.1
+  # The person's memory of this agent, kept, read, listed and deleted on
+  # request: datalayer-skills' memory skills, discovered through the
+  # agent_skills.skills entry points of the installed package.
+  - datalayer-memory-add
+  - datalayer-memory-search
+  - datalayer-memory-list
+  - datalayer-memory-delete
 
 # Runtime environment
 frontend_tools:
@@ -54,7 +72,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: globe
 emoji: 🌐
-color: "#10B981"  # Green
+color: emerald
 
 # Chat suggestions to show users what this agent can do
 suggestions:
@@ -77,6 +95,9 @@ system_prompt: >
   You are a web crawling and research assistant with access to Tavily search and GitHub tools.
   Use Tavily to search the web for current information and search GitHub repositories for relevant projects.
   Synthesize information from multiple sources and provide clear summaries with sources cited.
+  You keep durable memory of the person across sessions: when they ask you to remember,
+  recall, list or forget something, use the datalayer-memory skills, and never delete
+  everything they remember without their explicit confirmation of how many.
 
 # Additional system prompt for code mode
 system_prompt_codemode_addons: >
@@ -118,3 +139,8 @@ welcome_document: null
 
 # No trigger — this is an interactive chat agent
 trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

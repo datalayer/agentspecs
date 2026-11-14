@@ -1,0 +1,24 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# An agent protocol Datalayer targets. `status` says it as
+# it stands: `shipped` when agent-runtimes implements it today, `planned`
+# otherwise — an application cannot ship speaking a planned one.
+id: pact
+version: 0.0.1
+name: Personal Agent Consent & Trust
+description: >-
+  A personal agent asking a business's agent over A2A, first as itself, then for a person who delegated some of their permissions.
+publisher: Decagon, Instinct
+layer: consent
+spec_url: https://openpactprotocol.org
+spec_version: "1.0"
+status: shipped
+connects: Businesses' agents, asked for a person with their delegation
+packages:
+  python: ["agent-runtimes"]
+  typescript: ["@datalayer/agent-runtimes"]
+# Its tools' action classes, under protocol-tools/ (agentspecs.actions).
+protocol_tools: ["pact"]
+# The Appspec block it is configured by: refused unless `protocols` lists it.
+appspec_block: pact

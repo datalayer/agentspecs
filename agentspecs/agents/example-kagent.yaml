@@ -1,0 +1,114 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: A kagent Agent
+#
+# The same agent as example-simple, run by kagent (`runtime_engine: kagent`)
+# rather than on a Datalayer runtime. How it runs:
+#
+# - In kagent (https://kagent.dev, 1.0) it is an `Agent` that pairs an
+#   `AgentTemplate` (the model, as a kagent ModelConfig, and remote MCP tools)
+#   with a `Harness`: the agent-runtimes kagent image, whose bridge serves
+#   kagent's A2A v1 over gRPC and starts `agent-runtimes serve --target kagent`
+#   with `AGENT_SPEC_ID=example-kagent`. agent-runtimes' `deploy/kagent`
+#   holds the three objects.
+# - Each conversation (a kagent Session, the A2A contextId) is a session actor
+#   of Agent Substrate, in a gVisor sandbox. The actor is suspended to a
+#   snapshot when it falls idle after a task, and resumed from that snapshot
+#   on the next message of the same conversation.
+# - It is reached through kagent's A2A gateway, on the kagent controller:
+#   the card at `GET /agents/{namespace}/{name}/.well-known/agent-card.json`
+#   and JSON-RPC (`SendMessage`, A2A 1.0) at `POST /agents/{namespace}/{name}`.
+#
+# Nothing in the spec needs a Jupyter server or a browser: no MCP servers of
+# its own (the AgentTemplate's remote MCP servers are added at start), no
+# skills, no frontend tools. Run with `AGENT_RUNTIMES_MODEL=test` in the
+# Harness env, it answers with pydantic-ai's test model and calls no model.
+
+id: example-kagent
+version: 0.0.1
+name: A kagent Agent
+description: >
+  A simple conversational agent run by kagent: a kagent Agent whose Harness
+  is agent-runtimes, each conversation a session actor of Agent Substrate,
+  suspended when idle and resumed on the next message. Reached through
+  kagent's A2A gateway at /agents/{namespace}/{name}.
+
+tags:
+  - kagent
+  - substrate
+  - a2a
+
+# Enabled, out of the pickers (the user, 14 November 2026): /agents/new, the chats, the
+# assign menu and loop offer the five agents of the home page alone (`listed: false` here).
+# Runnable by id, and an application naming it runs with nothing to set up.
+enabled: true
+listed: false
+# Without a ModelConfig in the kagent AgentTemplate, this model is the one
+# called; with one, the template's model is.
+model: "bedrock:us.anthropic.claude-sonnet-4-6"
+# Other models it may be switched to, beside its own: those
+# datalayer-ai-inference serves from the catalogue.
+model_additionals:
+  - "alibaba:qwen-max"
+harness: pydantic-ai
+runtime_engine: kagent
+identity: datalayer-acting-agent
+
+# Code runs in the agent-runtimes process of the actor: there is no Jupyter
+# server beside it.
+sandbox_variant: eval
+
+# The actor's snapshot keeps the process across a suspend and a resume;
+# the conversation itself is kagent's Session.
+memory: ephemeral
+
+# No MCP servers of its own: the kagent AgentTemplate's remote MCP servers
+# (Streamable HTTP) are given to it at start.
+mcp_servers: []
+
+skills: []
+
+backend_tools:
+  - runtime-echo:0.0.1
+
+frontend_tools: []
+
+environment_name: ai-agents-env
+
+icon: agent
+emoji: ☸️
+color: blue
+
+suggestions:
+  - text: Tell me a joke
+    summary: "Tell a joke"
+  - text: Explain Kubernetes operators in simple terms
+    summary: "Kubernetes operators, simply"
+  - text: Summarize the key points of a topic I describe
+    summary: "Summarize a topic"
+
+welcome_message: >
+  Hi! I'm a simple assistant served by kagent. Each conversation with me is
+  kept in its own sandbox, put to sleep when we pause and woken by your next
+  message.
+
+system_prompt: >
+  You are a helpful, friendly AI assistant. You have no MCP servers of your
+  own beyond those your deployment gives you. Answer from your training
+  knowledge, be concise, and let the user know if a question is outside your
+  knowledge.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+
+welcome_document: null
+
+# No trigger — this is an interactive chat agent, asked over A2A
+trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

@@ -20,7 +20,7 @@ tags:
   - sustainability
   - summarization
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.analyse
@@ -29,6 +29,8 @@ delegable:
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
 
 sandbox_variant: jupyter-server
 
@@ -54,7 +56,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: globe
 emoji: 🛰️
-color: "#0EA5E9"
+color: sky
 
 # Chat suggestions to show users what this agent can do
 suggestions:
@@ -107,3 +109,8 @@ welcome_notebook: null
 
 # Optional: Lexical document to show on agent creation
 welcome_document: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

@@ -9,10 +9,10 @@ version: 0.0.1
 name: Tool Use Policy Guard
 description: >-
   Watches each tool call a Cog makes: the tool is one the Cog declares,
-  and the calls stay within the guardrail's tool limits.
+  and the calls stay within the Policy's limits.
 
-# A Guard extends a guardrail: the policy it verifies, and runs within.
-extends: default-platform-user:0.0.1
+# A Guard extends a Policy: the rules it verifies, and runs within.
+extends: default:0.0.1
 
 category: policy-safety
 stages:
@@ -20,8 +20,8 @@ stages:
 method: algorithmic
 
 check: >-
-  Every tool called is declared by the calling Cog; the number of calls,
-  the rows queried and the query runtime stay within the guardrail's limits.
+  Every tool called is declared by the calling Cog; the number of calls
+  stays within the Policy's `tool_calls` limit.
 
 signals:
   - name: tool_violation

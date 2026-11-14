@@ -1,0 +1,28 @@
+{
+  "additionalProperties": false,
+  "description": "An agent's ``policy.shield``: its pod's egress and ingress.",
+  "properties": {
+    "egress": {
+      "description": "What the agent's pod may reach beyond the platform's own endpoints: '*' (any public address, any TCP port) alone, or exact hosts, host:port, IPv4 addresses, CIDRs, each with an optional :port. Private and reserved addresses are refused; empty keeps the platform's endpoints only.",
+      "items": {
+        "pattern": "^(\\*|platform|[A-Za-z0-9.\\-]+(/\\d{1,2})?(:\\d{1,5})?)$",
+        "type": "string"
+      },
+      "title": "Egress",
+      "type": "array"
+    },
+    "ingress": {
+      "description": "Who may reach the agent's ports: 'platform' (the platform's ingress and probes), '*', or an address or CIDR with an optional :port (the agent's port). Empty means 'platform'.",
+      "items": {
+        "pattern": "^(\\*|platform|[A-Za-z0-9.\\-]+(/\\d{1,2})?(:\\d{1,5})?)$",
+        "type": "string"
+      },
+      "title": "Ingress",
+      "type": "array"
+    }
+  },
+  "title": "Agent Shield firewall rules",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-shield.datalayer.tech/schema/firewall.schema.json"
+}

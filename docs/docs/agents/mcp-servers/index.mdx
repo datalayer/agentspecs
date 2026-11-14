@@ -8,7 +8,19 @@ MCP (Model Context Protocol) server specifications define how agents connect to 
 
 ## Overview
 
-MCP servers provide tools and resources to agents through a standardized protocol. Each specification defines the command to run, arguments, environment variables, and transport method.
+MCP servers provide tools and resources to agents through a standardized protocol. A specification
+is one of two shapes:
+
+- a **remote server** names the `url` it is reached at and the `headers` sent with every request
+  (the bearer among them): the runtime connects to it over Streamable HTTP itself, no process is
+  started and nothing is fetched. The Datalayer MCP server and its toolsets (`datalayer`,
+  `odoo`, `odoo-accounting`, `earthdata`), Hugging Face's and Kaggle's hosted servers are remote;
+- a **local server** names the `command` that runs it and its `args`: over stdio, or, with
+  `transport: streamable-http` and a `url`, as a local HTTP process the runtime reaches at that
+  url (`google-workspace`).
+
+A specification names a `command` or a `url`, never neither. One that names both is a local HTTP
+process.
 
 ## Required Fields
 
@@ -24,35 +36,79 @@ Display name shown in the UI
 ### `description` (string)
 Server capabilities description
 
+## A remote server
+
+### `url` (string)
+Where the server is reached, over Streamable HTTP. A query may choose what it serves: the
+Datalayer gateway's `only=` asks for one toolset.
+```yaml
+transport: streamable-http
+url: "https://mcp.datalayer.run/mcp?only=odoo-accounting"
+```
+
+### `headers` (object)
+The headers sent with every request. A credential belongs in a `${VAR}` reference, expanded by
+the runtime as the server starts and never written down: the runtime holds what it expanded and
+withholds it from everything the model reads.
+```yaml
+headers:
+  Authorization: "Bearer ${DATALAYER_API_KEY}"
+```
+
+A remote server names no `command` and no `args`.
+
+### `auth` (object)
+A bearer minted for the run instead of one written in `headers`. `kind` says who mints it and
+`identity` names the [Identity](../../identities) the server trusts. Today one kind:
+`agentcore-gateway`, an Amazon Bedrock AgentCore Gateway whose inbound authorizer trusts an
+Identity issued by `aws-agentcore` that speaks `mcp` (`aws-agentcore-gateway`). The runtime asks
+its identity provider for the run's inbound token and sends it as `Authorization: Bearer …`; the
+spec sets no `Authorization` header of its own.
+```yaml
+transport: streamable-http
+url: "https://<gateway-id>.gateway.bedrock-agentcore.<region>.amazonaws.com/mcp"
+auth:
+  kind: agentcore-gateway
+  identity: aws-agentcore-gateway
+```
+
+`agentcore-gateway-example` is one, off by default: copy it with your gateway's URL. A server
+with `auth` is remote (no `command`, an https `url`), and its identity is in the catalogue.
+
+## A local server
+
 ### `command` (string)
 Executable command to start the server
 ```yaml
 command: python
 command: npx
-command: node
+command: uvx
 ```
 
 ### `args` (list of strings)
 Command arguments including environment variable references
 ```yaml
 args:
-  - "-m"
-  - "mcp_remote"
-  - "--Authorization"
-  - "Bearer ${KAGGLE_API_TOKEN}"
+  - "workspace-mcp"
+  - "--transport"
+  - "streamable-http"
 ```
+
+A local server that listens over HTTP names `transport: streamable-http` and the `url` its
+command listens at; the runtime starts the command and reaches it there.
 
 ## Optional Fields
 
 ### `transport` (string)
-Transport protocol (`"stdio"` or `"remote"`)
+Transport protocol: `stdio` (a local process spoken to over its standard streams, the default)
+or `streamable-http` (a remote server at its `url`, or a local command listening at its `url`).
 ```yaml
-transport: stdio   # Standard input/output
-transport: remote  # Remote HTTP connection
+transport: stdio             # A local process, over its standard streams
+transport: streamable-http   # Reached at its url: remote without a command, local with one
 ```
 
 ### `envvars` (list of strings)
-Required environment variable IDs. References specs in `envvars/` directory.
+Required environment variable IDs. References specs in `env-vars/` directory.
 ```yaml
 envvars:
   - KAGGLE_API_TOKEN:0.0.1
@@ -60,11 +116,37 @@ envvars:
 ```
 
 ### `env` (object)
-Environment variables to set for the server process
+Environment variables to set for a local server's process
 ```yaml
 env:
   NODE_ENV: production
   LOG_LEVEL: info
+```
+
+### `sandbox_envvars` (list of strings)
+Environment variables the code a server's tools write reads in the code sandbox (a download's
+script): given to the sandbox when the account has them, never to the server, never required.
+
+### `install` (object)
+How the server is installed where an agent runs it: `type` says what is installed, `command`
+the shell command that installs it on your own machine, `note` what else to know. Every
+server of the catalogue says it; a page of the server shows it, with the command to copy.
+
+| `type` | What is installed | `command` |
+| --- | --- | --- |
+| `npm` | An npm package | `npm install -g <package>` |
+| `python` | A Python package, often a uv tool | `uv tool install <package>`, `pip install <package>` |
+| `docker` | A Docker image | `docker pull <image>` |
+| `git` | A repository built from source | `git clone … && npm install && npm run build` |
+| `remote` | Nothing: a hosted server reached at its `url` | `""` |
+| `built-in` | Nothing: the runtime image carries it | `""` |
+| `other` | What the note says | `""` or a command |
+
+```yaml
+install:
+  type: git
+  command: "git clone --depth 1 https://github.com/brianellin/bsky-mcp-server ~/.local/share/mcp-servers/bsky-mcp-server && cd ~/.local/share/mcp-servers/bsky-mcp-server && npm install && npm run build"
+  note: "Then `export BLUESKY_MCP_SERVER_DIR=~/.local/share/mcp-servers/bsky-mcp-server`."
 ```
 
 ### `tags` (list of strings)
@@ -77,33 +159,39 @@ tags:
 ```
 
 ### `icon` (string)
-UI icon identifier
+Where the icon is: `<package>:<name>`, the package one of `@datalayer/icons-react` and
+`@primer/octicons-react`, the name the icon's own in kebab case as that package names it —
+`@datalayer/icons-react:odoo` (the Datalayer icons' `odoo.svg`, `OdooIcon`),
+`@primer/octicons-react:mark-github` (`MarkGithubIcon`). A bare name is refused
+(`agentspecs.marks`, `MARKS_SCHEMA`). A page draws it where it shows this entry — a list
+of the catalogue, a call in the chat — and loads only that package.
 
 ### `emoji` (string)
-UI emoji identifier
+Drawn where there is no icon; where there is neither, nothing is.
 
 ## Environment Variable Expansion
 
-Use `${VAR_NAME}` syntax in args for environment variable expansion:
+Use `${VAR_NAME}` syntax in `args`, `env` and `headers` for environment variable expansion:
 
 ```yaml
-args:
-  - "-m"
-  - "mcp_remote"
-  - "--Authorization"
-  - "Bearer ${KAGGLE_API_TOKEN}"
-  - "--accept"
-  - "application/json"
-  - "--"
-  - "https://mcp.kaggle.com"
+headers:
+  Authorization: "Bearer ${KAGGLE_API_TOKEN}"
 
 envvars:
   - KAGGLE_API_TOKEN
 ```
 
-The `${KAGGLE_API_TOKEN}` will be expanded at runtime by consuming systems.
+`${VAR_NAME:-default}` takes the default when the variable is unset or empty, as in a shell:
+Bluesky's server is run from `${BLUESKY_MCP_SERVER_DIR:-/opt/mcp-servers/bsky-mcp-server}`,
+where the runtime image builds it unless your machine has it elsewhere.
+
+The `${KAGGLE_API_TOKEN}` will be expanded at runtime by consuming systems. A bearer that would
+expand to nothing is refused before anything is sent: the server is not started, and the
+reason names the variable.
 
 ## Complete Example
+
+A remote server:
 
 ```yaml
 # Copyright (c) 2025-2026 Datalayer, Inc.
@@ -111,21 +199,15 @@ The `${KAGGLE_API_TOKEN}` will be expanded at runtime by consuming systems.
 
 id: kaggle
 version: 0.0.1
-name: Kaggle MCP Server
-description: Access Kaggle datasets, competitions, and kernels
+name: Kaggle
+description: Kaggle datasets, models, competitions, and notebooks access
 
-command: python
-args:
-  - "-m"
-  - "mcp_remote"
-  - "--Authorization"
-  - "Bearer ${KAGGLE_API_TOKEN}"
-  - "--accept"
-  - "application/json"
-  - "--"
-  - "https://mcp.kaggle.com"
+transport: streamable-http
+url: "https://www.kaggle.com/mcp"
+headers:
+  Authorization: "Bearer ${KAGGLE_API_TOKEN}"
 
-transport: remote
+enabled: false
 
 envvars:
   - KAGGLE_API_TOKEN:0.0.1
@@ -134,6 +216,28 @@ tags:
   - data
   - kaggle
   - datasets
+
+icon: "@datalayer/icons-react:kaggle"
+emoji: "🏆"
+```
+
+A local server:
+
+```yaml
+id: tavily
+version: 0.0.1
+name: Tavily
+description: Web search
+
+command: npx
+args:
+  - "-y"
+  - "tavily-mcp"
+
+transport: stdio
+
+envvars:
+  - TAVILY_API_KEY:0.0.1
 ```
 
 ## MCP Server Hierarchy
@@ -141,10 +245,13 @@ tags:
 ```
 MCP Server Specification
 ├── Basic Info (id, name, description, tags)
-├── Execution (command, args, transport)
+├── Where it is
+│   ├── remote: url, headers (transport streamable-http)
+│   └── local: command, args (transport stdio; or streamable-http with the url it listens at)
 ├── Environment
 │   ├── envvars (required environment variables)
-│   └── env (variables to set for the process)
+│   ├── env (variables to set for a local process)
+│   └── sandbox_envvars (read by the code its tools write, in the sandbox)
 └── UI (icon, emoji)
 ```
 
@@ -152,13 +259,15 @@ MCP Server Specification
 
 The following MCP servers are defined in `agentspecs/mcp-servers/`, one
 specification file each, and launched from `MCP_SERVER_CATALOG`. A test holds
-the two together with this list, because it named eight while thirteen
-existed — five servers invisible to anybody reading this page to find out
-what was available.
+the two together with this list, so that every server of the catalogue is
+named here.
 
+- **`agentcore-gateway-example`** - An Amazon Bedrock AgentCore Gateway's targets as MCP tools (an example to copy)
 - **`alphavantage`** - Financial market data
+- **`bluesky`** - A Bluesky account: timeline, feeds, searches, posting, liking and following
 - **`chart`** - Chart generation
 - **`datalayer`** - Notebooks, sandboxes and data on Datalayer itself
+- **`discord`** - A Discord server through its bot: channels, messages, members
 - **`earthdata`** - NASA Earthdata search and access
 - **`eurus`** - Climate and reanalysis analysis
 - **`filesystem`** - Local filesystem operations
@@ -166,10 +275,139 @@ what was available.
 - **`google-workspace`** - Google Workspace integration
 - **`huggingface`** - Models, datasets, spaces and papers
 - **`kaggle`** - Kaggle datasets and competitions
-- **`odoo`** - Odoo ERP records
+- **`linkedin`** - LinkedIn through a signed-in browser session: profiles, posts, messages
+- **`odoo`** - Odoo records, models and fields through the Datalayer MCP server
+- **`odoo-accounting`** - Odoo accounting through the Datalayer MCP server
 - **`salesforce`** - Salesforce records
 - **`slack`** - Slack messaging
+- **`shopify`** - Products from every Shopify store through its Global Catalog: search, compare, checkout links
 - **`tavily`** - Web search via Tavily API
+- **`x`** - X's hosted server: posts, users, searches and posting
+
+### Odoo, through the Datalayer server
+
+The gateway serves Odoo in toolsets, and two of them are catalogue servers:
+the `datalayer` server with one toolset each, the same hosted gateway and the
+same bearer.
+
+| Server | URL | Tools |
+| --- | --- | --- |
+| `odoo` | `https://mcp.datalayer.run/mcp?only=odoo` | 13: the session's context, account, settings and companies, the default company, models and fields, searches, reads, grouped aggregates, and creating, updating and deleting records of any model |
+| `odoo-accounting` | `https://mcp.datalayer.run/mcp?only=odoo-accounting` | 73: invoices and vendor bills, journal entries, accounts and journals, trial balance and general ledger, partners and their ledgers, aged balances, taxes, assets, reconciliations, bank lines and feeds, exchange rates, lock dates, documents (UBL import, attachments, the Documents application), recoding and deferring a bill, vendor payments, tax returns and the Belgian VAT close |
+
+The two share no tool. Each spec lists exactly the tools the gateway registers
+for its toolset, each classed as `datalayer` classes it, with the gateway's own
+description of the tool above it.
+
+`only=` asks for that toolset alone (and the gateway's always-on tools), where
+the compact `?odoo` adds the toolset to the notebook surface `datalayer`
+serves: an agent given several of these servers never sees one tool twice, and
+an application's connection to the server is what the gateway checks the
+session against. The gateway reaches Odoo with the `DATALAYER_ODOO_URL` and
+`DATALAYER_ODOO_API_KEY` (and `DATALAYER_ODOO_DATABASE` where the host does
+not name one) kept in the person's Datalayer environment; the runtime holds
+only `DATALAYER_API_KEY`. Odoo's own access rights apply to that key.
+
+#### The `odoo` tools
+
+| Tool | Class | What it does |
+| --- | --- | --- |
+| `odoo_get_context` | read | Return the authenticated Odoo user's language, timezone, company and user ID. |
+| `odoo_get_account` | read | Return the Odoo account this session is connected as. |
+| `odoo_get_settings` | read | Return the settings of the company the session acts on. |
+| `odoo_list_companies` | read | List the companies this Odoo user can work in, and which one is current. |
+| `odoo_set_company` | write | Change the user's default company in Odoo itself. |
+| `odoo_list_models` | read | List Odoo models this user can access. |
+| `odoo_get_fields` | read | Describe fields available on an Odoo model. |
+| `odoo_search_records` | read | Search and read records from any Odoo model, subject to Odoo permissions. |
+| `odoo_read_records` | read | Read Odoo records by ID, subject to Odoo permissions. |
+| `odoo_group_records` | read | Group Odoo records and calculate counts, sums or other aggregates. |
+| `odoo_create_record` | write | Create one record in any Odoo model, subject to Odoo permissions. |
+| `odoo_update_records` | write | Update records in any Odoo model, subject to Odoo permissions. |
+| `odoo_delete_records` | delete | Permanently delete records from an Odoo model, subject to Odoo permissions. |
+
+#### The `odoo-accounting` tools
+
+| Tool | Class | What it does |
+| --- | --- | --- |
+| `odoo_accounting_list_invoices` | read | List customer invoices and vendor bills with accounting-focused fields. |
+| `odoo_accounting_get_invoice` | read | Read one invoice or vendor bill and its invoice lines. |
+| `odoo_accounting_create_draft_invoice` | write | Create a draft customer invoice or vendor bill; it is not posted. |
+| `odoo_accounting_post_invoice` | write | Post one draft invoice or vendor bill after the user approves this write. |
+| `odoo_accounting_list_journal_entries` | read | List journal entries with totals, journal, company and posting state. |
+| `odoo_accounting_list_open_balances` | read | List unreconciled receivable or payable journal lines. |
+| `odoo_accounting_list_accounts` | read | List chart-of-account records for migration mapping and reporting. |
+| `odoo_accounting_list_journals` | read | List accounting journals and their codes for WinAuditor mapping. |
+| `odoo_accounting_get_journal_entry` | read | Read one journal entry and all of its debit and credit lines. |
+| `odoo_accounting_trial_balance` | read | Return debit, credit and balance totals grouped by account. |
+| `odoo_accounting_general_ledger` | read | Read paginated general-ledger journal items. |
+| `odoo_accounting_create_draft_journal_entry` | write | Create one balanced draft journal entry; never post it automatically. |
+| `odoo_accounting_post_journal_entry` | write | Post one reviewed draft journal entry. |
+| `odoo_accounting_list_partners` | read | List partners with their reference, VAT number and country — the contacts a migration created, or any. |
+| `odoo_accounting_partner_ledger` | read | Balance per partner and account on the receivable and payable accounts: debit, credit, balance and what is still open. |
+| `odoo_accounting_aged_balance` | read | The open receivable or payable items per partner, by how many days past their maturity they are. |
+| `odoo_accounting_list_taxes` | read | List the taxes of the company: kind (sale, purchase), computation, rate and group. |
+| `odoo_accounting_list_assets` | read | List the fixed assets with their values, method and state; refuses clearly when the Assets application is not installed. |
+| `odoo_accounting_get_asset` | read | Read one fixed asset and its depreciation board: every planned or posted depreciation entry with its date and amount. |
+| `odoo_accounting_reconcile_lines` | write | Reconcile posted journal items of one receivable or payable account by hand. |
+| `odoo_accounting_unreconcile_lines` | write | Undo the reconciliations, partial or full, that journal items take part in, leaving the entries themselves in place. |
+| `odoo_accounting_bank_status` | read | One row per bank journal: its account, its feed, how many lines wait to be matched, and whether the books agree with the bank. |
+| `odoo_accounting_list_bank_lines` | read | List the bank lines of one journal, oldest first, with the bank's running balance after each. |
+| `odoo_accounting_get_bank_line` | read | Read one bank line with what it is booked on and, for each counterpart, the items it is reconciled with. |
+| `odoo_accounting_suggest_bank_matches` | read | For each unmatched bank line, what the books say it pays — evidence, not a decision. |
+| `odoo_accounting_suggest_reconciliations` | read | Open customer or vendor items that cancel each other and were never reconciled — evidence, not a decision. |
+| `odoo_accounting_explain_account_balance` | read | What the balance of a transit, suspense or transfer account is made of: its lines paired off by amount, and those left. |
+| `odoo_accounting_book_bank_line` | write | Book an unmatched bank line on one account: bank charges, an internal transfer, a payment already recorded in transit. |
+| `odoo_accounting_book_bank_line_split` | write | Book an unmatched bank line over several accounts at once — a loan installment in capital and interest, a payment covering two costs. |
+| `odoo_accounting_match_bank_line` | write | Book an unmatched bank line on a customer or vendor and reconcile it with the items it pays. |
+| `odoo_accounting_reset_bank_line` | write | Undo the matching of a bank line booked on one counterpart: its reconciliation is removed and it waits in suspense again. |
+| `odoo_accounting_remove_duplicate_bank_lines` | delete | Remove the oldest lines of a bank feed that repeat entries already in the books, keeping every later balance. |
+| `odoo_accounting_list_bank_feeds` | read | List the bank connections with the accounts each one sees, their balance at the bank, and the journal each feeds — or none yet. |
+| `odoo_accounting_link_bank_feed` | write | Attach an account of an existing bank connection to the journal that holds its history, so the feed arrives there. |
+| `odoo_accounting_create_vendor_bill` | write | Enter a vendor bill as a draft, in the invoice's own currency, with accounts by code and taxes by name. |
+| `odoo_accounting_create_customer_invoice` | write | Enter a customer invoice as a draft, in its own currency, with accounts by code and taxes by name. |
+| `odoo_accounting_list_currency_rates` | read | List the stored exchange rates of a currency, newest first, as units of it per unit of the company's currency. |
+| `odoo_accounting_set_currency_rates` | write | Store exchange rates for given days, creating or correcting each — for the days an automatic feed never fetched. |
+| `odoo_accounting_get_lock_dates` | read | Read the company's lock dates: up to when entries, tax returns, sales and purchases can no longer change. |
+| `odoo_accounting_set_lock_date` | write | Set or lift one of the company's lock dates — close the years whose accounts are filed. |
+| `odoo_accounting_create_matching_model` | write | Create a bank matching model that splits a recurring line over several accounts — a loan payment in interest and capital. |
+| `odoo_accounting_find_document` | read | Look for a document number everywhere the books may already hold it — run it before entering a bill. |
+| `odoo_accounting_import_ubl_bill` | write | Enter a vendor bill or credit note from its UBL 2.1 / Peppol BIS file, with the file attached to it. |
+| `odoo_accounting_attach_document` | write | Attach a document (the UBL, a PDF, a receipt) to a bill, invoice or entry; it shows in the entry's chatter. |
+| `odoo_accounting_list_attachments` | read | List the documents attached to an entry — id, name, size and type, never their content. |
+| `odoo_accounting_reset_to_draft` | write | Reset a posted or cancelled bill, invoice or entry to draft so it can be corrected. |
+| `odoo_accounting_delete_draft` | delete | Delete a draft bill, invoice or entry — a duplicate, a mistaken import. |
+| `odoo_accounting_prepare_vendor_payments` | write | Prepare draft payments for the posted vendor bills left to pay — the payment run, for review. |
+| `odoo_accounting_list_vendor_payments` | read | List outbound payments — by default those still to execute — with amount, memo, bank account and the bills they pay. |
+| `odoo_accounting_find_duplicate_bank_lines` | read | Find bank lines imported twice — same journal, day, amount and label — as a reconnected bank feed brings them, with what each is matched to. |
+| `odoo_accounting_remove_bank_line_twins` | delete | Remove bank lines that are copies of lines staying in the journal, unmatching first those Odoo matched by itself. |
+| `odoo_accounting_unlink_bank_feed` | write | Detach a bank journal from its online account: no more lines arrive there; the lines already imported stay. |
+| `odoo_accounting_delete_bank_connection` | delete | Delete a bank connection — one replaced by a reconnection — after detaching every journal it feeds. |
+| `odoo_accounting_recode_bill` | write | Recode a vendor bill's lines — account and purchase taxes — keeping its total and its bank matching. |
+| `odoo_accounting_defer_expense` | write | Spread a prepaid cost over the period it covers — a road tax or an insurance running into the next fiscal year. |
+| `odoo_accounting_check_vendor_payments` | read | Check the vendor payments before a payment run: drafts for bills already paid, and payments marked paid that never left the bank. |
+| `odoo_accounting_update_vendor_payment` | write | Correct a draft vendor payment before it is executed — net a credit note against a bill, fix its amount or memo. |
+| `odoo_accounting_cancel_vendor_payment` | write | Cancel a draft vendor payment that must not be executed — the bill was paid otherwise (by card, by direct debit). |
+| `odoo_accounting_get_attachment` | read | Read one attached document's content, base64, to check what a bill or receipt says. |
+| `odoo_accounting_list_documents` | read | List files of the Documents application — the bills and receipts waiting in a folder — newest first, without their content. |
+| `odoo_accounting_attach_existing_document` | write | Attach a file already in the Documents application to a bill or entry, instead of uploading it again. |
+| `odoo_accounting_get_tax_settings` | read | Read how the company files its tax returns: how often, the VAT number, the return journal, the tax lock date, and the return types of its country. |
+| `odoo_accounting_set_tax_periodicity` | write | Set how often the company files its tax return — monthly or quarterly, as the tax office registered it. |
+| `odoo_accounting_list_tax_returns` | read | List the company's returns by deadline — VAT periods, listings, advance payments, the annual closing — with their state and what is left to check. |
+| `odoo_accounting_get_tax_return` | read | Read one return with its checklist — each check, its result and how many records it flags — and its closing entries once it has them. |
+| `odoo_accounting_tax_grids` | read | What each grid of the tax return adds up to over a period, from the journal items that carry it. |
+| `odoo_accounting_list_tax_grid_lines` | read | The journal items behind one grid of the tax return over a period: the entry, the partner, the account and the amount each contributes. |
+| `odoo_accounting_list_untagged_tax_lines` | read | The posted lines of a period the tax return does not see: on a tax account, or naming a grid in their label, without carrying a grid. |
+| `odoo_accounting_set_tax_grids` | write | Put tax grids on posted journal items that carry none, so the tax return counts them — entries imported from another ledger. |
+| `odoo_accounting_check_tax_period` | read | Before a tax return is filed: what in the period would distort it. |
+| `odoo_accounting_vat_close_check` | read | Before closing a Belgian VAT period: do the grids agree with the VAT accounts, and what would Odoo's closing miss. |
+| `odoo_accounting_intervat_xml` | read | Produce the Belgian periodic VAT declaration for Intervat from the period's grids — the file to upload, not a filing. |
+| `odoo_accounting_record_return_submission` | write | Record that a reviewed return was filed on Intervat: its receipt attached, its state submitted, a note in its chatter. |
+
+A session works in one company: the person's default in Odoo, or the one its
+URL names — `https://mcp.datalayer.run/mcp?only=odoo-accounting&odoo-company=E-Charles`,
+by name or by id. Both servers are on: drafting and posting are separate
+tools, so a client can ask before the financial transition.
 
 ### The Datalayer server is off by default
 
@@ -179,22 +417,34 @@ has the notebook it was given — enabling it says "this agent should also act
 on my other notebooks", which is a choice somebody makes rather than a
 default they discover.
 
-It is reached through `mcp-remote` with a bearer token from
-`DATALAYER_API_KEY`, not through the OAuth flow. `mcp-remote` can do OAuth
-2.1 with PKCE, which is right for a person at a desktop client and wrong
-here: it opens a browser and waits for a consent screen to be approved. An
-agent runtime has nobody at the keyboard.
+### Remote servers are reached by the runtime itself
+
+`datalayer`, `odoo`, `odoo-accounting` and `earthdata` (the Datalayer gateway),
+`huggingface` and `kaggle` name a `url` and `headers`, no command: the
+runtime connects to the url over Streamable HTTP and sends the bearer with
+every request. No local bridge (such as `npx -y mcp-remote`) is needed: a
+runtime that cannot install packages reaches a remote server all the same.
+
+The bearer rather than an OAuth flow, and deliberately: OAuth 2.1 with PKCE
+is right for a person at a desktop client and wrong here, since it opens a
+browser and waits for a consent screen to be approved. An agent runtime has
+nobody at the keyboard, so it presents a credential it already holds — the
+same token the Datalayer CLI and SDK use. A gateway that refuses the key
+answers in a sentence, and the runtime says that sentence as the reason the
+server did not start.
 
 ## Best Practices
 
 1. **ID Format**: Use kebab-case (`kaggle`, not `Kaggle` or `kaggle_mcp`)
-2. **Command**: Use full command names (`python`, not `py`)
-3. **Args**: Break arguments into separate list items for clarity
-4. **Environment Variables**: Always define required envvars in the `envvars` field
-5. **Variable Expansion**: Use `${VAR_NAME}` syntax consistently
-6. **Transport**: Specify `stdio` for local processes, `remote` for HTTP connections
-7. **Tags**: Use consistent tags for better categorization
-8. **Description**: Be specific about what tools and resources the server provides
+2. **Remote or local**: A hosted server names its `url` and `headers`; a server that runs on the
+   runtime's computer names its `command`. Never a bridge from one to the other.
+3. **Command**: Use full command names (`python`, not `py`)
+4. **Args**: Break arguments into separate list items for clarity
+5. **Environment Variables**: Always define required envvars in the `envvars` field
+6. **Variable Expansion**: Use `${VAR_NAME}` syntax consistently
+7. **Transport**: `stdio` for a local process; `streamable-http` for a server reached at a url
+8. **Tags**: Use consistent tags for better categorization
+9. **Description**: Be specific about what tools and resources the server provides
 
 ## Full Field Coverage
 
@@ -204,13 +454,13 @@ Required fields:
 - `version`
 - `name`
 - `description`
-- `command`
-- `args`
+- one of: `url` with `headers` (a remote server), or `command` with `args` (a local one)
 
 Common optional fields:
 
-- `transport` (`stdio` or `remote`)
+- `transport` (`stdio` or `streamable-http`)
 - `envvars` (prefer versioned refs)
-- `env` (process env injection)
+- `env` (a local process's env injection)
+- `sandbox_envvars`
 - `tags`
 - `icon`, `emoji`

@@ -22,7 +22,7 @@ tags:
   - analytics
   - sales
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.analyse
@@ -39,6 +39,8 @@ goal: >-
 
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-service-agent
 
 sandbox_variant: jupyter-server
 
@@ -63,11 +65,13 @@ environment_name: ai-agents-env
 # UI customization
 icon: graph
 emoji: 📊
-color: "#1f883d"  # Green — performance & growth
+color: green  # performance & growth
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Trigger configuration
 trigger:
@@ -290,3 +294,8 @@ system_prompt_codemode_addons: null
 
 welcome_notebook: null
 welcome_document: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

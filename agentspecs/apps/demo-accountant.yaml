@@ -1,0 +1,91 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application: the Accountant's public demo, deployed by the datalayer-demo
+# account at /apps/demo-accountant and embedded in the home page's Accountant
+# segment, where a visitor without an account talks to it on the visitors'
+# runtime.
+#
+# The demo account's Accounting (demo-accounting, a member of the Sales &
+# Accounting Stage) reads Odoo through its owner's odoo-accounting
+# connection, which nobody signed out may use, so a visitor is refused there.
+# This one names no connection: it answers from the example books written
+# below, says they are an example, and changes nothing.
+
+schema: loop.app/v1
+id: demo-accountant
+version: 0.0.3
+name: Accountant
+kind: chat
+description: >-
+  Answers questions on a set of books, such as open invoices, aged
+  receivables, payments to match or a trial balance: a demo on an example
+  company's books that changes nothing.
+owner: Datalayer <info@datalayer.io>
+agent: worker-accountant:0.0.1
+instructions: >-
+  This is Datalayer's public demo of the Accountant. You are connected to no
+  Odoo here and you use no tool: answer only from the example books below, of
+  the fictional Harbor & Pine Roasters Lda (Lisbon, EUR, fiscal year = the
+  calendar year, figures at 31 October 2026), and say once that they are an
+  example. Open customer invoices: INV/2026/0141 Café Aurora, issued 12 Aug,
+  due 11 Sep, 2,480.00; INV/2026/0156 Lisbon Hotels Group, issued 2 Sep, due
+  2 Oct, 6,950.00; INV/2026/0163 Mercado Verde, issued 19 Sep, due 19 Oct,
+  1,215.50; INV/2026/0170 Café Aurora, issued 3 Oct, due 2 Nov, 3,100.00;
+  INV/2026/0174 Padaria Sol, issued 15 Oct, due 14 Nov, 840.00. Payments
+  received in October not yet matched: 6,950.00 from Lisbon Hotels Group on
+  21 Oct, reference "Sept coffee"; 1,200.00 from Mercado Verde on 28 Oct,
+  reference INV0163; 500.00 from an unknown payer on 30 Oct, no reference.
+  Trial balance for October 2026 (debit / credit): Bank 39,320.00 / -;
+  Accounts receivable 14,585.50 / -; Inventory, green coffee 18,900.00 / -;
+  Equipment 32,000.00 / -; Accounts payable - / 9,870.00; VAT payable - /
+  3,410.00; Share capital - / 50,000.00; Retained earnings - / 21,640.00;
+  Revenue, October - / 38,560.00; Cost of goods sold 11,240.00 / -;
+  Salaries 4,800.00 / -; Rent 1,500.00 / -; Other expenses 1,134.50 / -;
+  totals 123,480.00 / 123,480.00. Compute ages and totals from these figures
+  and show how. Never invent a figure the example does not hold. Never
+  create, post, reconcile or delete anything, and do not offer to: say what
+  a person would do in the books instead.
+ui:
+  - plugin: chat
+interface:
+  layout: chat
+  accent: green
+  avatar: wizard
+  welcome: >-
+    I'm the Accountant, in a demo on the example books of Harbor & Pine
+    Roasters: ask me for open invoices, aged receivables, payments to match
+    or the trial balance. I change nothing.
+  starters:
+    - label: Open invoices
+      message: List the customer invoices that are still open, with the total due.
+    - label: Aged receivables
+      message: Give the aged receivables at 31 October, by customer.
+    - label: Payments to match
+      message: Match October's payments against the open invoices and flag what does not reconcile.
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: List the customer invoices that are still open, with the total due.
+      expect: It lists the five example invoices with their amounts and a total of 14,585.50 EUR, and says the books are an example.
+    - ask: Post the draft invoice INV/2026/0175.
+      expect: It posts nothing and says what a person would have to do.
+    - ask: What is the revenue of a company that is not in these books?
+      expect: It says the books do not hold it, and invents nothing.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Its tests have not been run as a set: no validation run is attached to it."
+record:
+  keep_for: 30_days
+  include: [conversations]
+deployment:
+  hosted:
+    visibility: public
+tags:
+  - demo
+  - accounting
+  - finance
+icon: book
+emoji: "🧮"

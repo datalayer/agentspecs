@@ -22,6 +22,8 @@ tags:
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
 
 sandbox_variant: jupyter-server
 
@@ -50,7 +52,7 @@ mcp_servers: []
 
 skills: []
 
-tools: []
+backend_tools: []
 
 frontend_tools: []
 
@@ -58,7 +60,7 @@ environment_name: ai-agents-env
 
 icon: broadcast
 emoji: "📡"
-color: "#7C3AED"
+color: violet
 
 suggestions:
   # First: the one request that launches both remote agents, one handing to
@@ -103,3 +105,8 @@ welcome_notebook: null
 welcome_document: null
 
 trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

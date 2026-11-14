@@ -21,6 +21,8 @@ enabled: false
 protocol: ag-ui
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
 
 # Memory backend
 memory: ephemeral
@@ -32,7 +34,7 @@ mcp_servers: []
 skills: []
 
 # Runtime tools
-tools:
+backend_tools:
   - example-generate-task-steps:0.0.1
 frontend_tools: []
 
@@ -42,7 +44,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: tasklist
 emoji: 🧑‍⚖️
-color: "#6366F1"
+color: indigo
 
 # Chat suggestions
 suggestions:
@@ -74,3 +76,8 @@ system_prompt: |
 
 system_prompt_codemode_addons: null
 trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

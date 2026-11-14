@@ -1,0 +1,101 @@
+---
+sidebar_position: 1
+title: Strategies
+---
+
+# Strategy Specifications
+
+A strategy spec is the control loop an agent reasons with: how it goes from
+one decision to the next (observe → think → act → evaluate, plan → execute →
+critic, observe → orient → decide → act), the objective it works toward, the
+constraints and success criteria that bound it, where its state lives between
+iterations, how the human takes part, and when the iterations stop. The
+catalogue is `agentspecs/strategies/`, one YAML per strategy, loaded into
+`StrategySpec` (`agentspecs.strategies`: `STRATEGY_CATALOGUE`, `get_strategy()`).
+
+A strategy is framework-agnostic: it says the execution model, not how a
+particular runtime implements it, so planners, runtimes, interfaces and
+observability tools can share one notion of an agent's strategy.
+
+## Fields
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `version`, `name`, `description` | As on every spec. |
+| `objective` | The default goal the loop works toward: a goal, not step-by-step orders. |
+| `strategy` | The strategy family: `observe-think-act-evaluate` (the default), `plan-execute-critic`, `ooda`, `react`… |
+| `phases` | The ordered phases of one iteration (default `observe`, `think`, `act`, `evaluate`). |
+| `constraints` | Boundaries the agent must respect, in sentences. |
+| `termination` | When the loop stops, described below. |
+| `human` | How the human takes part, described below. |
+| `state_backends` | Where state lives between iterations: `notebook`, `runtime`, `filesystem`, `sql`, `vector`, `mcp`. |
+| `tags` | Categorization tags. |
+| `icon`, `emoji` | How lists show it. |
+
+`termination`:
+
+| Field | Meaning |
+| --- | --- |
+| `max_iterations` | The most iterations before the loop is forced to stop (default 10, at least 1). |
+| `success_criteria` | Conditions that mark the goal as reached. |
+| `failure_criteria` | Conditions that mark the loop as failed and stop it. |
+| `on_blocked` | What to do when blocked: `ask-human` (the default), `retry` or `abort`. |
+
+`human`:
+
+| Field | Meaning |
+| --- | --- |
+| `mode` | `none`, `initiate` (the default), `approve`, `feedback` or `tool`. |
+| `approval_required` | Whether the loop pauses for approval before sensitive actions. |
+| `approval_for` | The actions that need explicit approval (`delete-data`, `send-email`…). |
+| `description` | The human's part, in prose. |
+
+```yaml
+# strategies/ooda.yaml
+id: ooda
+version: 0.0.1
+name: OODA Loop
+description: >
+  A generic Observe → Orient → Decide → Act control loop.
+objective: >
+  Continuously assess the environment and take the best next action toward the
+  goal until it is reached or a stop condition is met.
+strategy: ooda
+phases: [observe, orient, decide, act]
+constraints:
+  - Re-observe fresh state at the start of every iteration
+  - Keep each decision small and reversible when possible
+termination:
+  max_iterations: 20
+  success_criteria:
+    - The goal condition is satisfied
+  failure_criteria:
+    - A hard stop condition or budget limit is reached
+  on_blocked: retry
+human:
+  mode: none
+  approval_required: false
+  approval_for: []
+state_backends: [runtime, filesystem, sql]
+tags: [ooda, decision-loop, generic, monitoring]
+icon: sync
+emoji: 🔄
+```
+
+## How it is used
+
+No field of an agent spec names a strategy today. The catalogue is generated
+into `agent-runtimes` — Python `agent_runtimes.specs.strategies` and the
+TypeScript `listStrategies()`, `getStrategy()` and `getDefaultStrategy()`; the
+default is `data-analysis` — and the *Loop Strategy* example of agent-runtimes
+lists the catalogue, composes an agent's system prompt from the strategy picked
+and runs it against a live notebook, where the loop's state lives.
+
+## The catalogue
+
+| Strategy | Name | Family | Phases | Human | What it is |
+| --- | --- | --- | --- | --- | --- |
+| `data-analysis` | Data Analysis Loop | observe-think-act-evaluate | observe, think, act, evaluate | initiate | A generic iterative loop for data analysis: each iteration observes the runtime's state, decides the next step, runs code in the notebook and evaluates the result against the objective. Intermediate state stays outside the model, so each call stays small. |
+| `human-in-the-loop` | Human-in-the-Loop | observe-think-act-evaluate | observe, think, act, evaluate | approve | A control loop that runs on its own but stops for explicit human approval before any sensitive or irreversible action (deleting data, sending email, spending money, deploying to production). |
+| `ooda` | OODA Loop | ooda | observe, orient, decide, act | none | A generic Observe → Orient → Decide → Act control loop, suited to decision-oriented and monitoring tasks over a changing environment. |
+| `plan-execute-critic` | Plan / Execute / Critic Loop | plan-execute-critic | plan, execute, critic | feedback | A loop with three roles: the planner decomposes the goal into the next step, the executor performs it, and the critic evaluates the outcome; it repeats until the critic is satisfied or the iteration budget is spent. |

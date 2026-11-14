@@ -18,9 +18,19 @@ tags:
   - automation
   - analysis
 
+# Enabled, out of the pickers (the user, 14 November 2026): /agents/new, the chats, the
+# assign menu and loop offer the five agents of the home page alone (`listed: false` here).
+# Runnable by id, and an application naming it runs with nothing to set up.
 enabled: true
+listed: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
+# Other models it may be switched to, beside its own: those
+# datalayer-ai-inference serves from the catalogue.
+model_additionals:
+  - "alibaba:qwen-max"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-service-agent
 
 sandbox_variant: jupyter-server
 
@@ -33,7 +43,7 @@ skills:
   - events:0.0.1
 
 # Runtime tools
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 frontend_tools: []
 
@@ -47,7 +57,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: zap
 emoji: ⚡
-color: "#f59e0b"  # Amber
+color: amber
 
 # Goal / Prompt
 goal: >-
@@ -74,3 +84,8 @@ trigger:
   type: once
   description: Run once and terminate
   prompt: "List the user's top 3 public and top 3 private GitHub repositories, ranked by recent activity, and provide a brief summary of each."
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

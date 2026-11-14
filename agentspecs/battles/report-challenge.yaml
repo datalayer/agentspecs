@@ -1,0 +1,65 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Battle: The month-end report challenge. Two Month-end Close agents draft
+# the month-end summary from the same Odoo books within three minutes; when
+# the clock ends, the Report Quality Guard scores each draft for completeness
+# and grounding, and the higher measure wins.
+
+id: report-challenge
+version: 0.0.1
+name: The month-end report challenge
+description: >-
+  Two Month-end Close agents draft last month's summary from the same Odoo
+  books, three minutes each. A Guard scores each draft for completeness and
+  grounding; the higher measure wins.
+
+variant: challenge
+goal: >-
+  Write last month's month-end summary: where the close stands, what is to
+  book, what is still open, every figure read from the books.
+clock_seconds: 180
+
+contestants:
+  - id: blue
+    name: Blue
+    scene: month-end-close:0.0.1
+    color: blue
+  - id: red
+    name: Red
+    scene: month-end-close:0.0.1
+    color: red
+    # Red plays with Alibaba Qwen-Max (the user, 7 November 2026): the application as it is, its model overridden.
+    overrides:
+      model: "alibaba:qwen-max"
+
+# The evals that confirm each contestant's result once the referee has a verdict
+# (the user, 7 November 2026): the winner is declared only when its evals pass.
+evals:
+  - eval: llm-judge:0.0.1
+    config:
+      threshold: 0.7
+      # Grounding is seen in the run's tool calls and answers; "what it could
+      # not check" applies only where it could not (B5).
+      rubric: >-
+        The summary says where the close stands, what is to book and what is
+        still open, with figures the run read from the books, as its tool
+        calls show; where it could not check a figure, it says so.
+    says: The summary is complete and grounded.
+
+referee:
+  decides_by: measure
+  measure: report-quality-guard:0.0.1
+
+rehearsal:
+  expects:
+    - each contestant's draft measured
+    - a verdict, or a tie on equal measures
+
+tags:
+  - example
+  - challenge
+  - odoo
+  - finance
+icon: graph
+emoji: "📝"

@@ -22,7 +22,7 @@ tags:
   - automation
   - inventory
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated (O2-07).
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.analyse
@@ -30,6 +30,8 @@ delegable:
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-service-agent
 
 sandbox_variant: jupyter-server
 
@@ -55,7 +57,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: package
 emoji: 📦
-color: "#0969da"  # Blue
+color: blue
 
 # Goal / Prompt (Step 4 in the UI — the user-facing objective)
 goal: >-
@@ -63,9 +65,11 @@ goal: >-
   discrepancies between system and physical counts, forecast demand by SKU,
   generate reorder recommendations, and compile audit reports with findings.
 
-# Protocols & UI Plugins
+# Protocols & UI
 protocol: vercel-ai
-ui_plugin: a2ui
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
 
 # Evals
 evals:
@@ -164,3 +168,8 @@ system_prompt_codemode_addons: null
 
 welcome_notebook: null
 welcome_document: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

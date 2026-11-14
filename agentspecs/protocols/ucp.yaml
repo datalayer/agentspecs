@@ -1,0 +1,22 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# An agent protocol Datalayer targets. `status` says it as
+# it stands: `shipped` when agent-runtimes implements it today, `planned`
+# otherwise — an application cannot ship speaking a planned one.
+id: ucp
+version: 0.0.1
+name: Universal Commerce Protocol
+description: >-
+  Shopping at a merchant: catalogue, checkout and orders, every purchase an exact proposal the person approves. In applications at test merchants only, with no real payment (decided 2026-10-13): each purchase asked of the person first, made at most once.
+publisher: Google, with Shopify and retailers
+layer: commerce
+spec_url: https://github.com/Universal-Commerce-Protocol/ucp
+spec_version: "2026-08-25"
+status: shipped
+connects: Merchants, to search, check out and follow orders
+packages:
+  python: ["ucp-sdk", "agent-runtimes"]
+  typescript: ["@ucp-js/sdk", "@datalayer/agent-runtimes"]
+# Its tools' action classes, under protocol-tools/ (agentspecs.actions).
+protocol_tools: ["ucp"]

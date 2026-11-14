@@ -1,0 +1,29 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The datalayer-social toolset (decided 14 November 2026), its read: which of X,
+# Bluesky and LinkedIn the person linked in Settings, and as whom (LinkedIn says
+# reconnect when its posting grant lapsed, after LinkedIn's 60 days). The runtime asks IAM
+# with its social token — the person's own, narrowed to the social routes and
+# to this runtime while it runs — and never holds an account's token: IAM keeps
+# them. No secret is pasted for it.
+
+id: social-accounts
+version: 0.0.1
+name: Social Accounts
+description: >-
+  Read which of X, Bluesky and LinkedIn the person linked in Settings, and the
+  handle or name of each, through Datalayer's IAM; no account's token ever
+  reaches the agent.
+tags:
+  - social
+  - datalayer-social
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.social
+  method: social_accounts
+icon: "@primer/octicons-react:person"
+emoji: "🪪"

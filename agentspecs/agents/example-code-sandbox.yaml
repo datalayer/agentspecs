@@ -22,6 +22,8 @@ tags:
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
 
 # The Local target starts a Jupyter sandbox; the example can switch it to
 # eval and back while the agent runs.
@@ -33,7 +35,7 @@ mcp_servers: []
 
 skills: []
 
-tools: []
+backend_tools: []
 
 frontend_tools: []
 
@@ -41,7 +43,7 @@ environment_name: ai-agents-env
 
 icon: codespaces
 emoji: "📦"
-color: "#1F6FEB"
+color: blue
 
 suggestions:
   # First: code that runs and prints — what a sandbox is for.
@@ -78,3 +80,8 @@ welcome_notebook: null
 welcome_document: null
 
 trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

@@ -5,6 +5,11 @@ id: alphavantage
 version: 0.0.1
 name: Alpha Vantage
 description: Financial market data and stock information
+# Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
+documentation_url: https://www.alphavantage.co/documentation/
+signup_url: https://www.alphavantage.co/support/#api-key
+api_key_url: https://www.alphavantage.co/support/#api-key
+setup: "A free key, sent by email from [Alpha Vantage's support page](https://www.alphavantage.co/support/#api-key); put it in `ALPHAVANTAGE_API_KEY`. The API is documented [there](https://www.alphavantage.co/documentation/)."
 
 command: uvx
 args:
@@ -22,12 +27,17 @@ env:
 # Not offered on the platform yet: the integrations page lists it as not available.
 enabled: false
 
+install:
+  type: python
+  command: "uv tool install av-mcp==0.2.1"
+  note: "Needs uv (`pip install uv`); the runtime image installs it the same way. It starts as `uvx av-mcp==0.2.1`."
+
 tags:
   - finance
   - stocks
   - market-data
 
-icon: graph
+icon: "@primer/octicons-react:graph"
 emoji: 💹
 
 # What each tool does to the world (agentspecs.actions). A tool not named here is

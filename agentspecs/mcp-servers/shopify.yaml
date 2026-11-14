@@ -1,0 +1,96 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# MCP Server Specification: Shopify
+# Shopify's Global Catalog (the user, 14 November 2026): products from every
+# Shopify store, searched, looked up and read from one hosted endpoint over
+# the Universal Commerce Protocol (UCP 2026-08-25), served as MCP.
+#
+# What Shopify offers agents today (read off shopify.dev/docs/agents on
+# 14 November 2026):
+# - Global Catalog, `https://catalog.shopify.com/api/ucp/mcp`: search_catalog,
+#   lookup_catalog and get_product across all Shopify merchants. Each variant
+#   it returns names its seller and a `checkout_url` at the merchant.
+# - Each store's UCP endpoint, `https://{shop}/api/ucp/mcp`: its Storefront
+#   Catalog, Cart MCP (create, get, update, cancel a cart), Checkout MCP
+#   (create, get, update, complete, cancel a checkout), Ask MCP and Order MCP.
+#   The older Storefront MCP at `https://{shop}/api/mcp` lost its catalog and
+#   cart tools to it.
+# - Three tiers: anonymous (catalogue and carts), signed with RFC 9421 HTTP
+#   signatures against the agent's published UCP profile (checkouts), and a
+#   Dev Dashboard token (client credentials, a 60-minute JWT, plus the buyer's
+#   IP on every call; completing a checkout only once Shopify grants purchase
+#   permission). Without that permission a checkout ends at the merchant's
+#   own page, its `continue_url`, where the person pays.
+#
+# Why the Global Catalog, anonymous, here: a runtime reaches one url fixed in
+# this spec (a store's endpoint differs per shop), and an agent can find,
+# compare and hand over a merchant's checkout link with no credential. A
+# token expires within the hour and this catalogue holds no way to mint it,
+# so no header is sent. Anonymous traffic is limited per address, and Shopify
+# asks for identified traffic in production: the token tier comes when
+# Datalayer registers with Shopify.
+#
+# Every call carries `meta["ucp-agent"].profile`, the url of the agent's UCP
+# profile, which Shopify fetches (a missing or malformed one is refused with
+# "UCP discovery failed"). The model fills it, per the tools' own schemas:
+# the Shopper names Datalayer's UCP agent profile,
+# https://datalayer.ai/ucp/profile.json (UCP 2026-08-25, shopping over MCP,
+# catalogue search and lookup with the Global Catalog extension; no cart or
+# checkout), which the landing publishes. Buying is not
+# here: the Shopper pays only through the Personal Agent Protocol and UCP
+# connections of an application (`pap`, `ucp`), each purchase approved by the
+# person, or the person pays at the merchant's checkout link.
+
+id: shopify
+version: 0.0.1
+name: Shopify
+description: >-
+  Products from every Shopify store — search, compare variants and prices, read a
+  product and its seller's checkout link — through Shopify's Global Catalog
+documentation_url: https://shopify.dev/docs/agents/catalog/global-catalog
+signup_url: https://shopify.dev/docs/agents
+api_key_url: https://shopify.dev/docs/agents/profiles/auth-and-rate-limiting
+setup: "Nothing to set: the runtime reaches Shopify's [Global Catalog](https://shopify.dev/docs/agents/catalog/global-catalog) at https://catalog.shopify.com/api/ucp/mcp anonymously, limited per address. It finds and compares products and returns each seller's checkout link; it buys nothing."
+
+transport: streamable-http
+url: "https://catalog.shopify.com/api/ucp/mcp"
+# None: the anonymous tier sends no credential.
+headers: {}
+
+# On: no credential, read-only tools; answered on 14 November 2026
+# (initialize, tools/list and search_catalog, anonymously).
+enabled: true
+
+envvars: []
+
+env: {}
+
+install:
+  type: remote
+  command: ""
+  note: "Nothing to install: Shopify's hosted Global Catalog, reached at its URL over Streamable HTTP."
+
+tags:
+  - commerce
+  - shopping
+  - shopify
+  - ucp
+
+icon: "@primer/octicons-react:package"
+emoji: "🛒"
+
+# What each tool does to the world (agentspecs.actions).
+actions:
+  checked: "2026-11-14"
+  note: >-
+    Read off the running server's tools/list (universal-ucp-mcp 0.1.0, UCP
+    2026-08-25): three catalogue reads. Nothing here creates a cart, a checkout
+    or an order.
+  tools:
+    # Search for products across multiple Shopify stores in the global catalog.
+    search_catalog: read
+    # Look up products by their catalog ids, up to ten at once.
+    lookup_catalog: read
+    # Read one product, with the options the buyer selected.
+    get_product: read

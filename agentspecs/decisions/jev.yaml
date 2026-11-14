@@ -1,0 +1,45 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Decisions Specification: Jev
+# How an agent decides: typed questions about a text — yes or no, a choice
+# among options, a score on a scale — asked of Jev, the typed-decision model
+# at Cloudflare Workers AI, through datalayer-ai-inference's `/decisions`.
+# An agent has the capability when its spec says `decisions: jev:0.0.1`; it
+# then gets the `decide` backend tool, asked of this spec's model.
+
+id: jev
+version: 0.0.1
+name: Jev
+description: >-
+  Typed decisions about a text, asked of Jev at Cloudflare Workers AI: does a
+  statement hold (yes or no, with its probability), which of named options
+  fits, or where something sits on a scale — each answered with calibrated
+  probabilities and paid from the account's credits.
+
+# Whether an agent spec is offered these decisions today.
+enabled: true
+
+# The model the questions are asked of: a model of the catalogue that answers
+# typed decisions (its `capabilities` say `decisions`).
+model: "cloudflare:wrk/typesafe/jev"
+
+# The question types it answers: noul (does a statement hold), choice (one of
+# named options), score (a step of a rubric, lowest first).
+questions:
+  - noul
+  - choice
+  - score
+
+# The limits of one call: how many questions, and how long the text they are
+# about may be, in characters.
+max_questions: 10
+max_text_length: 20000
+
+tags:
+  - decisions
+  - jev
+  - cloudflare
+
+icon: "@primer/octicons-react:law"
+emoji: "⚖️"

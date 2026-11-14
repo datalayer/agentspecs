@@ -1,0 +1,640 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The register of harnesses (SH-04), checked on 2026-10-15.
+#
+# Every harness of the catalogue, with its adapter and the version pinned,
+# its licence and where that was read, the agent's terms and where they were
+# read, the credential it takes, and whether serving it to third parties is
+# permitted. The catalogue's loader reads it: a harness without an entry, or
+# whose spec disagrees with its entry, does not load (tests/test_harnesses.py).
+#
+# Reviewed by counsel: not yet.
+
+reviewed_by_counsel: false
+checked_on: "2026-10-15"
+
+entries:
+  - harness: claude-code
+    adapter: "@agentclientprotocol/claude-agent-acp"
+    version: 0.91.0
+    licence: Apache-2.0 (adapter); Anthropic Commercial Terms of Service (the agent)
+    licence_source: https://www.npmjs.com/package/@agentclientprotocol/claude-agent-acp
+    terms_source: https://code.claude.com/docs/en/legal-and-compliance
+    credential: Locally, an Anthropic API key (ANTHROPIC_API_KEY), the person's own; on Datalayer none, its calls answered from AWS Bedrock through ai-inference in credits
+    served_to_third_parties: api_key_only
+    binaries: Node 22 (engines.node >=22 on npm), git
+    note: >-
+      Anthropic's legal page (read 2026-10-15): running Claude Code in hosted sandboxes or agent
+      infrastructure requires the Commercial Terms; each end user authenticates with their own
+      API key or subscription; developers may not route requests through Free, Pro or Max plan
+      credentials on behalf of their users, nor collect or intermediate Claude.ai credentials.
+      So only API keys are taken; a subscription login is refused. The npm package moved from
+      @zed-industries (0.23.1, March 2026) to @agentclientprotocol. On a Datalayer runtime the end
+      user holds no key and Anthropic is not reached: the model calls are AWS Bedrock's, on
+      Datalayer's account, metered in credits. The user decided on 30 October 2026 to offer it to
+      customers on Datalayer that way. Counsel has not reviewed this entry's api_key_only reading
+      against that use.
+  - harness: codex
+    adapter: "@agentclientprotocol/codex-acp"
+    version: 2.2.2
+    licence: Apache-2.0 (adapter); OpenAI Terms of Use (the agent)
+    licence_source: https://www.npmjs.com/package/@agentclientprotocol/codex-acp
+    terms_source: https://learn.chatgpt.com/docs/auth
+    credential: Locally, an OpenAI API key (OPENAI_API_KEY or CODEX_API_KEY), the person's own; on Datalayer none, its calls answered from AWS Bedrock through ai-inference in credits
+    served_to_third_parties: api_key_only
+    binaries: Node 22 (as the Agent Client Protocol project's adapters; unstated on npm), git
+    note: >-
+      Codex's authentication page (read 2026-10-15) recommends API keys for automation and
+      device-code login for headless machines; a ChatGPT login needs a browser and is hidden with
+      NO_BROWSER=1 in the adapter. Only API keys are taken; a ChatGPT login is refused. The
+      Zed-scoped package was archived on 22 July 2026 and names this one. On a Datalayer runtime the
+      end user holds no key and OpenAI is not reached: the model calls are AWS Bedrock's, on
+      Datalayer's account, metered in credits. The user decided on 30 October 2026 to offer it that
+      way. Counsel has not reviewed this entry's api_key_only reading against that use, nor whether
+      running Codex on another vendor's model fits OpenAI's terms.
+  - harness: gemini-cli
+    adapter: "@google/gemini-cli"
+    version: 0.64.0
+    licence: Apache-2.0 (the agent); Gemini API or Gemini Code Assist terms (the model)
+    licence_source: https://www.npmjs.com/package/@google/gemini-cli
+    terms_source: https://developers.google.com/gemini-code-assist/resources/privacy-notice-gemini-code-assist-individuals
+    credential: A Gemini API key (GEMINI_API_KEY), the person's own; or a Google login on a Code Assist Standard or Enterprise subscription
+    served_to_third_parties: api_key_only
+    tier_restrictions: Gemini Code Assist Standard or Enterprise for a Google login (the individuals tier stopped being served on 18 June 2026); a Gemini API key otherwise
+    binaries: Node 20 or later (engines.node >=20 on npm), git
+    note: >-
+      Google's notice (read 2026-10-15): "Starting June 18, 2026, Gemini Code Assist IDE
+      extensions stopped serving requests for the Gemini Code Assist for individuals"; Standard
+      and Enterprise follow a separate schedule. The ACP flag is --experimental-acp in the CLI
+      reference (docs/cli/cli-reference.md).
+  - harness: goose
+    adapter: goose
+    version: 1.54.0
+    licence: Apache-2.0
+    licence_source: https://github.com/aaif-goose/goose
+    terms_source: https://github.com/aaif-goose/goose/blob/main/LICENSE
+    credential: The provider's key goose is configured with (GOOSE_PROVIDER); ANTHROPIC_API_KEY declared
+    served_to_third_parties: permitted
+    binaries: The goose CLI (release v1.54.0 of 8 October 2026), git
+    note: >-
+      Open source under Apache-2.0, no vendor terms of its own; the model provider's terms apply
+      to the key. Launched as goose acp (documentation/docs/gdk/acp/index.md).
+  - harness: opencode
+    adapter: opencode-ai
+    version: 1.19.0
+    licence: MIT
+    licence_source: https://www.npmjs.com/package/opencode-ai
+    terms_source: https://github.com/anomalyco/opencode/blob/dev/LICENSE
+    credential: Locally, the provider's key OpenCode is configured with, ANTHROPIC_API_KEY declared; on Datalayer none, its calls go through ai-inference in credits
+    served_to_third_parties: permitted
+    binaries: Node (the opencode-ai package), git
+    note: >-
+      Open source under MIT, no vendor terms of its own; the model provider's terms apply to the
+      key. Launched as opencode acp (opencode.ai/docs/acp); reads skills from .opencode/skills,
+      .claude/skills and .agents/skills.
+  - harness: pi
+    adapter: pi-acp
+    version: 0.0.34
+    licence: MIT (adapter); MIT (the agent, @earendil-works/pi-coding-agent 1.4.0)
+    licence_source: https://www.npmjs.com/package/pi-acp
+    terms_source: https://github.com/earendil-works/pi/blob/main/LICENSE
+    credential: Locally, the provider's key pi is configured with, ANTHROPIC_API_KEY declared, the person's own; on Datalayer none, its calls answered from AWS Bedrock through ai-inference in credits
+    served_to_third_parties: permitted
+    binaries: Node 22 (pi-coding-agent engines.node >=22.19.0; pi-acp >=20), the pi executable 1.4.0 on the PATH (@earendil-works/pi-coding-agent), git
+    note: >-
+      Read 2026-10-28. pi speaks no ACP itself; pi-acp 0.0.34 (MIT, an individual's, github.com/svkozak/pi-acp)
+      speaks ACP JSON-RPC over stdio and spawns the published `pi` executable with `pi --mode rpc`, so pi 1.4.0 runs
+      as published — chosen over @automatalabs/pi-acp 0.9.4 (Apache-2.0, in-process, which embeds pi 0.87.1 through
+      its SDK on a fork's package). Open source under MIT on both sides, no vendor terms of their own; the model
+      provider's terms apply to the key. Session persistence through pi's own session files (session/load).
+  - harness: openhands
+    adapter: openhands
+    version: 1.16.0
+    licence: MIT
+    licence_source: https://pypi.org/project/openhands/
+    terms_source: https://github.com/OpenHands/OpenHands-CLI/blob/main/LICENSE
+    credential: The provider's key OpenHands reads as LLM_API_KEY, with LLM_MODEL, under --override-with-envs
+    served_to_third_parties: permitted
+    binaries: uv (uvx), Python 3.12 or later, git
+    note: >-
+      Open source under MIT, no vendor terms of its own; the model provider's terms apply to the
+      key. Launched as openhands acp (OpenHands-CLI README; docs.openhands.dev's ACP page);
+      resumes with --resume; reads skills from .agents/skills (.openhands/skills is legacy).
+  - harness: fast-agent
+    adapter: fast-agent-acp
+    version: 0.10.45
+    licence: Apache-2.0
+    licence_source: https://pypi.org/project/fast-agent-acp/
+    terms_source: https://github.com/evalstate/fast-agent/blob/main/LICENSE
+    credential: The provider's key fast-agent is given (ANTHROPIC_API_KEY, OPENAI_API_KEY or HF_TOKEN); ANTHROPIC_API_KEY declared
+    served_to_third_parties: permitted
+    binaries: uv (uvx), Python 3.12 to 3.15 (requires_python on PyPI)
+    note: >-
+      A framework, not a coding agent: each agent it defines is an ACP mode; the
+      client's MCP servers are attached; sessions are listed. Launched with uvx fast-agent-acp
+      (docs/docs/acp/index.md); reads skills from .fast-agent/skills, .agents/skills and
+      .claude/skills; its default prompt reads AGENTS.md.
+  - harness: custom
+    adapter: The organization's own
+    version: "0"
+    licence: The organization's own
+    licence_source: https://agentspecs.datalayer.tech/harnesses
+    terms_source: https://agentspecs.datalayer.tech/harnesses
+    credential: The organization's own
+    served_to_third_parties: organizations_own
+    note: Not launchable from the shared catalogue; an organization's own harness spec names the command and answers for its terms.
+
+  # --- The listed tier (SH-57), read 2026-10-16 -------------------------------------------
+  #
+  # Every other agent of agentclientprotocol.com/get-started/agents (43 on the page,
+  # modified 2026-10-13; the seven above are the catalogue's), each read at its project's
+  # own page, its command cross-checked against the ACP registry
+  # (cdn.agentclientprotocol.com/registry/v1/latest/registry.json), the project's own
+  # documentation winning where they differ. Listed, not drilled yet: none is offered,
+  # and naming one is refused in that sentence until SH-55's method drills it and a spec
+  # moves it to the catalogue. `refused` cites the clause; `unknown` says what was not read.
+
+  - harness: agentpool
+    tier: listed
+    name: AgentPool
+    docs: https://phil65.github.io/agentpool/advanced/acp-integration/
+    adapter: agentpool
+    version: "2.9.18"
+    command: "agentpool serve-acp agents.yml"
+    licence: MIT
+    licence_source: https://github.com/phil65/agentpool/blob/main/LICENSE
+    terms_source: https://github.com/phil65/agentpool/blob/main/LICENSE
+    credential: The configured provider's key (e.g. OPENAI_API_KEY in the agents YAML or the environment)
+    served_to_third_parties: permitted
+    note: >-
+      The ACP integration page documents agentpool serve-acp agents.yml (and uvx agentpool serve-acp for
+      Zed). A multi-agent bridge that can wrap other ACP agents, which keep their own vendors' terms.
+  - harness: augment-code
+    tier: listed
+    name: Auggie CLI (Augment Code)
+    docs: https://docs.augmentcode.com/cli/acp
+    adapter: "@augmentcode/auggie"
+    version: "0.36.0"
+    command: "auggie --acp"
+    licence: Proprietary (Augment CLI licence)
+    licence_source: https://github.com/augmentcode/auggie/blob/main/LICENSE.md
+    terms_source: https://www.augmentcode.com/terms-of-service
+    credential: An Augment Code account with an active subscription (auggie login)
+    served_to_third_parties: refused
+    note: >-
+      LICENSE.md grants use only subject to an active subscription and says the CLI may not be embedded
+      or integrated into commercially sold or distributed services without explicit permission.
+  - harness: autodev
+    tier: listed
+    name: AutoDev (Xiuper)
+    docs: https://github.com/phodal/auto-dev
+    adapter: "@xiuper/cli"
+    version: "1.0.2"
+    command: "xiuper acp"
+    licence: MPL-2.0
+    licence_source: https://github.com/phodal/auto-dev/blob/master/LICENSE
+    terms_source: https://github.com/phodal/auto-dev/blob/master/LICENSE
+    credential: The configured LLM provider's key (AutoDev's configuration)
+    served_to_third_parties: permitted
+    note: >-
+      The README never mentions ACP; the command is the usage line of AcpAgentServer.ts, documented only
+      in source. Whether npm 1.0.2 ships the ACP server was not confirmed.
+  - harness: blackbox-ai
+    tier: listed
+    name: BLACKBOX AI CLI
+    docs: https://docs.blackbox.ai/features/blackbox-cli/acp-integration
+    adapter: blackbox (installed by blackbox.ai/install.sh)
+    version: ""
+    command: "blackbox --experimental-acp"
+    licence: Proprietary (Blackbox terms of service)
+    licence_source: https://www.blackbox.ai/terms-of-service
+    terms_source: https://www.blackbox.ai/terms-of-service
+    credential: A Blackbox AI API key (BLACKBOX_API_KEY)
+    served_to_third_parties: refused
+    note: >-
+      The terms forbid making the Services available to any third party or commercially exploiting them.
+      No official package version confirmed.
+  - harness: bub
+    tier: listed
+    name: Bub
+    docs: https://github.com/bubbuild/bub-contrib/tree/main/packages/bub-acp-server
+    adapter: bub-acp-server
+    version: "0.1.1"
+    command: "bub acp"
+    licence: Apache-2.0
+    licence_source: https://github.com/bubbuild/bub-contrib/blob/main/LICENSE
+    terms_source: https://github.com/bubbuild/bub/blob/main/LICENSE
+    credential: A provider key (BUB_API_KEY); its OpenAI Codex login is a subscription credential, refused for third parties
+    served_to_third_parties: permitted
+    note: The bub-acp-server README documents bub acp (bub acp serve is deprecated); bub itself is 0.5.1 on PyPI.
+  - harness: claw-orchestrator
+    tier: listed
+    name: Claw Orchestrator
+    docs: https://github.com/Enderfga/claw-orchestrator/blob/main/skills/references/acp.md
+    adapter: "@enderfga/claw-orchestrator"
+    version: "7.11.0"
+    command: "clawo acp"
+    licence: MIT
+    licence_source: https://github.com/Enderfga/claw-orchestrator/blob/main/LICENSE
+    terms_source: https://github.com/Enderfga/claw-orchestrator/blob/main/LICENSE
+    credential: The logins or keys of the engines it drives (Claude Code, Codex, OpenCode, …)
+    served_to_third_parties: permitted
+    note: It orchestrates other vendors' CLIs, whose own terms still apply (Claude Code and Codex take an API key only).
+  - harness: cline
+    tier: listed
+    name: Cline
+    docs: https://docs.cline.bot/usage/acp
+    adapter: cline
+    version: "3.0.71"
+    command: "cline --acp"
+    licence: Apache-2.0
+    licence_source: https://github.com/cline/cline/blob/main/LICENSE
+    terms_source: https://cline.bot/tos
+    credential: The person's own provider API key (a Cline account's keys may not be transferred or resold)
+    served_to_third_parties: permitted
+    note: >-
+      Cline's terms cover its hosted account and Cline-provided keys, forbidding their transfer or resale;
+      served to third parties with each person's own provider key.
+  - harness: code-assistant
+    tier: listed
+    name: Code Assistant
+    docs: https://github.com/stippi/code-assistant?tab=readme-ov-file#configuration
+    adapter: code-assistant (GitHub release binary)
+    version: "0.2.16"
+    command: "code-assistant acp"
+    licence: MIT
+    licence_source: https://github.com/stippi/code-assistant/blob/main/LICENSE
+    terms_source: https://github.com/stippi/code-assistant/blob/main/LICENSE
+    credential: The configured provider's key (e.g. ANTHROPIC_API_KEY)
+    served_to_third_parties: permitted
+    note: The README documents code-assistant acp; prebuilt downloads or cargo build, not on crates.io.
+  - harness: construct
+    tier: listed
+    name: construct
+    docs: https://github.com/construct-worlds/construct#acp-agent-client-protocol-server
+    adapter: construct (install.sh or GitHub release)
+    version: "0.17.13"
+    command: "construct acp"
+    licence: MIT
+    licence_source: https://github.com/construct-worlds/construct/blob/main/LICENSE
+    terms_source: https://github.com/construct-worlds/construct/blob/main/LICENSE
+    credential: Provider API keys, or the logins of the harnesses it drives (whose vendors' terms apply)
+    served_to_third_parties: permitted
+    note: An ACP stdio server over its daemon, driving other CLIs; their vendors' terms govern those logins.
+  - harness: crow-cli
+    tier: listed
+    name: crow-cli
+    docs: https://github.com/crow-cli/crow-cli
+    adapter: crow-cli
+    version: "0.1.48"
+    command: "crow-cli acp"
+    licence: MIT
+    licence_source: https://github.com/crow-cli/crow-cli/blob/main/LICENSE.md
+    terms_source: https://github.com/crow-cli/crow-cli/blob/main/LICENSE.md
+    credential: An API key for an OpenAI-compatible provider
+    served_to_third_parties: permitted
+    note: GitHub and PyPI say MIT, the ACP registry Apache-2.0; the LICENSE file is read here.
+  - harness: cuga
+    tier: listed
+    name: CUGA
+    docs: https://github.com/cuga-project/cuga-agent/tree/main/docs/examples/acp_stdio
+    adapter: "cuga[acp]"
+    version: "0.4.1"
+    command: "cuga-acp"
+    licence: Apache-2.0
+    licence_source: https://github.com/cuga-project/cuga-agent/blob/main/LICENSE
+    terms_source: https://github.com/cuga-project/cuga-agent/blob/main/LICENSE
+    credential: The configured provider's key (e.g. OPENAI_API_KEY)
+    served_to_third_parties: permitted
+    note: IBM's Configurable Generalist Agent; the acp_stdio example documents pip install cuga[acp] and cuga-acp.
+  - harness: cursor
+    tier: listed
+    name: Cursor CLI
+    docs: https://cursor.com/docs/cli/acp
+    adapter: agent (Cursor CLI, installed from cursor.com)
+    version: "2026.10.14"
+    command: "agent acp"
+    licence: Proprietary (Cursor terms of service)
+    licence_source: https://cursor.com/terms-of-service
+    terms_source: https://cursor.com/terms-of-service
+    credential: A Cursor login or a Cursor API key (CURSOR_API_KEY)
+    served_to_third_parties: unknown
+    note: >-
+      The terms forbid renting, leasing, lending or selling the Service and say nothing of a platform
+      running the CLI on each person's own credential.
+  - harness: docker-agent
+    tier: listed
+    name: Docker Agent (formerly cagent)
+    docs: https://docker.github.io/docker-agent/features/acp/
+    adapter: docker-agent (Docker CLI plugin)
+    version: "1.150.0"
+    command: "docker agent serve acp ./agent.yaml"
+    licence: Apache-2.0
+    licence_source: https://github.com/docker/docker-agent/blob/main/LICENSE
+    terms_source: https://github.com/docker/docker-agent/blob/main/LICENSE
+    credential: The configured provider's key (OPENAI_API_KEY, ANTHROPIC_API_KEY, …) or Docker Model Runner
+    served_to_third_parties: permitted
+    note: github.com/docker/cagent redirects to docker/docker-agent.
+  - harness: factory-droid
+    tier: listed
+    name: Factory Droid
+    docs: https://docs.factory.com/ide-integrations.md
+    adapter: droid
+    version: "0.242.1"
+    command: "droid exec --output-format acp"
+    licence: Proprietary (Factory terms of service)
+    licence_source: https://www.npmjs.com/package/droid
+    terms_source: https://factory.ai/legal/terms-of-service
+    credential: A Factory login or a Factory API key (FACTORY_API_KEY)
+    served_to_third_parties: refused
+    note: >-
+      The terms forbid using the Services for timesharing or service bureau purposes or otherwise for
+      the benefit of a third party. The ACP registry launches acp-daemon instead.
+  - harness: fount
+    tier: listed
+    name: fount
+    docs: https://github.com/steve02081504/fount
+    adapter: fount (ideIntegration shell, a deno bridge)
+    version: ""
+    command: null
+    licence: unknown
+    licence_source: https://github.com/steve02081504/fount/blob/master/LICENSE
+    terms_source: https://github.com/steve02081504/fount
+    credential: A fount API key plus the model sources configured in fount
+    served_to_third_parties: unknown
+    note: >-
+      Launch command undocumented: a deno bridge to fount's ACP WebSocket is named only in a source
+      comment, with the key in its URL. The LICENSE file is an image; no licence is declared.
+  - harness: github-copilot
+    tier: listed
+    name: GitHub Copilot CLI
+    docs: https://docs.github.com/en/copilot/reference/copilot-cli-reference/acp-server
+    adapter: "@github/copilot"
+    version: "1.0.98"
+    command: "copilot --acp --stdio"
+    licence: Proprietary (GitHub Copilot CLI License)
+    licence_source: https://github.com/github/copilot-cli/blob/main/LICENSE.md
+    terms_source: https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features
+    credential: A GitHub Copilot subscription login, or a provider of one's own (COPILOT_PROVIDER_*)
+    served_to_third_parties: unknown
+    note: >-
+      ACP in public preview. The CLI licence allows redistributing it inside a service adding material
+      functionality; nothing read says whether a platform may run it on each person's Copilot login.
+  - harness: hermes-agent
+    tier: listed
+    name: Hermes Agent
+    docs: https://hermes-agent.nousresearch.com/docs/user-guide/features/acp
+    adapter: hermes-agent (with the acp extra)
+    version: "0.22.2"
+    command: "hermes acp"
+    licence: MIT
+    licence_source: https://github.com/NousResearch/hermes-agent/blob/main/LICENSE
+    terms_source: https://github.com/NousResearch/hermes-agent/blob/main/LICENSE
+    credential: The configured provider's key, or a Nous Portal login
+    served_to_third_parties: permitted
+    note: Version from the GitHub release; PyPI lags at 0.19.0.
+  - harness: junie
+    tier: listed
+    name: Junie by JetBrains
+    docs: https://junie.jetbrains.com/docs/junie-cli-acp.html
+    adapter: junie (JetBrains/junie-acp-release)
+    version: "3659.4"
+    command: "junie --acp true"
+    licence: Proprietary (JetBrains AI Service terms)
+    licence_source: https://github.com/JetBrains/junie-acp-release
+    terms_source: https://www.jetbrains.com/legal/docs/terms/jetbrains-ai-service/
+    credential: A JetBrains account entitled to JetBrains AI (models of one's own also taken)
+    served_to_third_parties: refused
+    note: >-
+      The terms forbid reselling or otherwise providing JetBrains AI or access to it to any third party
+      without JetBrains' express permission.
+  - harness: kaagum
+    tier: listed
+    name: kaagum
+    docs: https://git.systemreboot.net/kaagum/about/
+    adapter: kaagum (Guix package)
+    version: "0.1.0"
+    command: null
+    licence: GPL-3.0-or-later
+    licence_source: https://git.systemreboot.net/kaagum/plain/COPYING
+    terms_source: https://git.systemreboot.net/kaagum/plain/COPYING
+    credential: An API key for an OpenAI-compatible provider (fetched through --api-key-command)
+    served_to_third_parties: permitted
+    note: >-
+      Launch command undocumented as a command line: the page shows kaagum launched by Emacs agent-shell
+      with --api-key-command and --model parameters.
+  - harness: kimi-cli
+    tier: listed
+    name: Kimi Code CLI
+    docs: https://github.com/MoonshotAI/kimi-code#use-it-in-your-editor-acp
+    adapter: "@moonshot-ai/kimi-code"
+    version: "2.2.0"
+    command: "kimi acp"
+    licence: MIT
+    licence_source: https://github.com/MoonshotAI/kimi-code/blob/main/LICENSE
+    terms_source: https://github.com/MoonshotAI/kimi-code/blob/main/LICENSE
+    credential: A Kimi Code login or a Moonshot AI Open Platform API key
+    served_to_third_parties: unknown
+    note: >-
+      The ACP page links MoonshotAI/kimi-cli, archived; its successor Kimi Code keeps kimi acp. Moonshot's
+      terms for the Kimi Code login were not read.
+  - harness: kiro-cli
+    tier: listed
+    name: Kiro CLI
+    docs: https://kiro.dev/docs/cli/acp/
+    adapter: kiro-cli (installed from kiro.dev)
+    version: ""
+    command: "kiro-cli acp"
+    licence: Proprietary (AWS Customer Agreement and AWS IP License)
+    licence_source: https://kiro.dev/license/
+    terms_source: https://kiro.dev/license/
+    credential: A Kiro login (GitHub, Google, AWS Builder ID, IAM Identity Center) or an API key
+    served_to_third_parties: unknown
+    note: No published version found; the AWS Customer Agreement was not read for serving to third parties.
+  - harness: localharness
+    tier: listed
+    name: localharness
+    docs: https://github.com/compusophy/localharness#quickstart
+    adapter: localharness (crates.io)
+    version: "0.82.0"
+    command: "localharness acp --as <name>"
+    licence: Apache-2.0
+    licence_source: https://github.com/compusophy/localharness/blob/main/LICENSE
+    terms_source: https://github.com/compusophy/localharness/blob/main/LICENSE
+    credential: An on-chain agent identity (turns metered in its token) and a model provider's key
+    served_to_third_parties: permitted
+    note: Each prompt is a metered turn under the named on-chain persona.
+  - harness: minion-code
+    tier: listed
+    name: Minion Code
+    docs: https://github.com/femto/minion-code
+    adapter: minion-code
+    version: "0.1.45"
+    command: "mcode acp"
+    licence: AGPL-3.0
+    licence_source: https://github.com/femto/minion-code/blob/main/LICENSE
+    terms_source: https://github.com/femto/minion-code/blob/main/LICENSE
+    credential: The configured provider's key
+    served_to_third_parties: permitted
+    note: The LICENSE file says AGPL-3.0 while the README says MIT; the file is read here. AGPL's network clause applies if modified.
+  - harness: mistral-vibe
+    tier: listed
+    name: Mistral Vibe
+    docs: https://github.com/mistralai/mistral-vibe/blob/main/docs/acp-setup.md
+    adapter: mistral-vibe
+    version: "2.26.1"
+    command: "vibe-acp"
+    licence: Apache-2.0
+    licence_source: https://github.com/mistralai/mistral-vibe/blob/main/LICENSE
+    terms_source: https://github.com/mistralai/mistral-vibe/blob/main/LICENSE
+    credential: A Mistral API key (MISTRAL_API_KEY)
+    served_to_third_parties: permitted
+    note: Mistral's API terms govern the key itself.
+  - harness: muse-spark-code
+    tier: listed
+    name: Muse Spark Code
+    docs: https://github.com/RandyNorthrup/muse-spark-code/blob/main/docs/acp.md
+    adapter: muse-spark-code-acp
+    version: "0.18.2"
+    command: "muse-spark-code-acp"
+    licence: MIT
+    licence_source: https://github.com/RandyNorthrup/muse-spark-code/blob/main/LICENSE
+    terms_source: https://github.com/RandyNorthrup/muse-spark-code/blob/main/LICENSE
+    credential: A Muse Code subscription, or a Meta Model API key (--backend modelApi)
+    served_to_third_parties: unknown
+    note: Unofficial, not endorsed by Meta; Meta's Muse terms were not read.
+  - harness: openclaw
+    tier: listed
+    name: OpenClaw
+    docs: https://docs.openclaw.ai/cli/acp
+    adapter: openclaw
+    version: "2026.10.3"
+    command: "openclaw acp"
+    licence: MIT
+    licence_source: https://github.com/openclaw/openclaw/blob/main/LICENSE
+    terms_source: https://github.com/openclaw/openclaw/blob/main/LICENSE
+    credential: An OpenClaw Gateway token, with the Gateway's configured model providers
+    served_to_third_parties: permitted
+    note: Bridges ACP to an OpenClaw Gateway, whose providers keep their own terms.
+  - harness: poolside
+    tier: listed
+    name: Poolside (pool)
+    docs: https://github.com/poolsideai/pool
+    adapter: pool (binary from downloads.poolside.ai)
+    version: "1.0.16"
+    command: "pool acp"
+    licence: Proprietary (Poolside End User License Agreement)
+    licence_source: https://github.com/poolsideai/pool/blob/main/LICENSE.md
+    terms_source: https://poolside.ai/eula
+    credential: A Poolside login or POOLSIDE_API_KEY
+    served_to_third_parties: refused
+    note: >-
+      The EULA forbids making a Product available to third parties as a standalone offering, commercial
+      time-sharing or service bureau use, and sharing account credentials.
+  - harness: qoder-cli
+    tier: listed
+    name: Qoder CLI
+    docs: https://docs.qoder.com/cli/acp
+    adapter: "@qoder-ai/qodercli"
+    version: "1.1.72"
+    command: "qoder --acp"
+    licence: Proprietary (Qoder terms of service)
+    licence_source: https://qoder.com/product-service
+    terms_source: https://qoder.com/product-service
+    credential: A Qoder account login
+    served_to_third_parties: refused
+    note: The terms say an account is solely for one's own individual use and forbid any third party's access to it.
+  - harness: qwen-code
+    tier: listed
+    name: Qwen Code
+    docs: https://qwenlm.github.io/qwen-code-docs/en/users/integration-zed/
+    adapter: "@qwen-code/qwen-code"
+    version: "0.25.2"
+    command: "qwen --acp"
+    licence: Apache-2.0
+    licence_source: https://github.com/QwenLM/qwen-code/blob/main/LICENSE
+    terms_source: https://github.com/QwenLM/qwen-code/blob/main/LICENSE
+    credential: The configured provider's key (set with /auth)
+    served_to_third_parties: permitted
+    note: The flag is now --acp, not --experimental-acp; the ACP registry adds --experimental-skills.
+  - harness: raven
+    tier: listed
+    name: Raven
+    docs: https://evermind-ai.github.io/Raven/agent-protocols/
+    adapter: raven (a release wheel installed as a uv tool)
+    version: "0.2.4"
+    command: "raven acp"
+    licence: Apache-2.0
+    licence_source: https://github.com/EverMind-AI/Raven/blob/main/LICENSE
+    terms_source: https://github.com/EverMind-AI/Raven/blob/main/LICENSE
+    credential: The configured model provider's key
+    served_to_third_parties: permitted
+    note: Not on PyPI under its own name (raven-agent there is another project).
+  - harness: raxol
+    tier: listed
+    name: Raxol
+    docs: https://github.com/DROOdotFOO/raxol/blob/master/docs/features/CODING_AGENT.md
+    adapter: raxol (raxol-cli release)
+    version: "2.7.0"
+    command: "bin/raxol-acp"
+    licence: MIT
+    licence_source: https://github.com/DROOdotFOO/raxol/blob/master/LICENSE.md
+    terms_source: https://github.com/DROOdotFOO/raxol/blob/master/LICENSE.md
+    credential: The configured provider's API key
+    served_to_third_parties: permitted
+    note: >-
+      The docs call ACP a repository-checkout feature (bin/raxol-acp or mix raxol.acp); the ACP page's raxol
+      acp comes from the raxol-cli release, not the Hex package.
+  - harness: sigit
+    tier: listed
+    name: siGit Code
+    docs: https://github.com/getsigit/sigit#acp-support
+    adapter: "@getsigit/sigit"
+    version: "1.7.0"
+    command: "sigit --acp"
+    licence: Apache-2.0
+    licence_source: https://github.com/getsigit/sigit/blob/main/LICENSE
+    terms_source: https://github.com/getsigit/sigit/blob/main/LICENSE
+    credential: None (an on-device model); cloud inference credentials optional
+    served_to_third_parties: permitted
+    note: Also on PyPI as sigit-code and crates.io as sigit; the ACP registry lists @smbcloud/sigit.
+  - harness: stakpak
+    tier: listed
+    name: Stakpak
+    docs: https://github.com/stakpak/agent?tab=readme-ov-file#agent-client-protocol-acp
+    adapter: stakpak (crates.io or GitHub release)
+    version: "0.3.88"
+    command: "stakpak acp"
+    licence: Apache-2.0
+    licence_source: https://github.com/stakpak/agent/blob/main/LICENSE
+    terms_source: https://github.com/stakpak/agent/blob/main/LICENSE
+    credential: The person's own Anthropic or OpenAI key, or a Stakpak API key (STAKPAK_API_KEY)
+    served_to_third_parties: permitted
+    note: Stakpak's hosted-key service terms were not read; the open-source client with one's own key is what is permitted.
+  - harness: stdio-bus
+    tier: listed
+    name: stdio Bus
+    docs: https://github.com/stdiobus/stdiobus
+    adapter: stdio_bus kernel and @stdiobus/workers-registry
+    version: "2.0.3"
+    command: null
+    licence: Apache-2.0
+    licence_source: https://github.com/stdiobus/stdiobus/blob/main/LICENSE
+    terms_source: https://github.com/stdiobus/stdiobus/blob/main/LICENSE
+    credential: The routed worker's (an OpenAI-compatible key, or the ACP registry worker's keys)
+    served_to_third_parties: permitted
+    note: "Launch command undocumented: a routing kernel, not one agent; only its workers' launches are documented."
+  - harness: vtcode
+    tier: listed
+    name: VT Code
+    docs: https://github.com/vinhnx/VTCode/blob/main/docs/guides/zed-acp.md
+    adapter: vtcode (crates.io)
+    version: "0.177.0"
+    command: "vtcode acp"
+    licence: MIT OR Apache-2.0
+    licence_source: https://github.com/vinhnx/VTCode/blob/main/LICENSE
+    terms_source: https://github.com/vinhnx/VTCode/blob/main/LICENSE
+    credential: The configured provider's key (an unofficial ChatGPT login path exists; refused here)
+    served_to_third_parties: permitted
+    note: Its README warns its ChatGPT OAuth reuses the Codex CLI's identity unofficially and recommends one's own OpenAI key.

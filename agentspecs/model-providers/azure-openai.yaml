@@ -14,3 +14,7 @@ terms_url: "https://www.microsoft.com/licensing/terms/productoffering/MicrosoftA
 privacy_url: "https://www.microsoft.com/en-us/privacy/privacystatement"
 data_usage_url: "https://learn.microsoft.com/en-us/legal/cognitive-services/openai/data-privacy"
 hosting: cloud
+# Datalayer holds the account: a runtime's calls go through ai-inference, with
+# a Datalayer token, metered in credits; the provider's key never leaves the
+# service.
+via: ai-inference

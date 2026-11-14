@@ -11,8 +11,8 @@ description: >-
   Routes the output — every one of a high-risk Op, a sample of the
   others — to a named expert, and records what they decided.
 
-# A Guard extends a guardrail: the policy it verifies, and runs within.
-extends: default-platform-user:0.0.1
+# A Guard extends a Policy: the rules it verifies, and runs within.
+extends: default:0.0.1
 
 category: expert
 stages:

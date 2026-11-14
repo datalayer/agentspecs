@@ -1,0 +1,16 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Stage: Sales & Accounting, the scene kept running under the demo account
+# (A-08): Accounting answers from its deployment; Sales plays in the browser.
+
+id: sales-and-accounting
+version: 0.0.1
+scene: sales-and-accounting:0.0.1
+deployments:
+  accounting: demo-accounting
+public: true
+tags:
+  - example
+  - demo
+  - scene

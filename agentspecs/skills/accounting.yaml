@@ -6,13 +6,18 @@ version: 0.0.1
 name: Accounting Skill
 description: Accounting analysis workflows for reconciliation, close, variance, and audit-ready summaries
 
-module: agent_skills.skills.accounting
+module: datalayer_skills.skills.accounting
 
 dependencies:
   - pandas>=2.0.0
 
-# Not offered on the platform yet: the integrations page lists it as not available.
-enabled: false
+# Offered on the platform (the user, 7 November 2026): the runtime image installs datalayer-skills[skills].
+enabled: true
+
+install:
+  type: python
+  command: "pip install \"datalayer-skills[skills]\""
+  note: "datalayer-skills with every skill's dependencies; the runtime image installs it the same way."
 
 tags:
   - accounting
@@ -20,5 +25,5 @@ tags:
   - reconciliation
   - close
 
-icon: book
+icon: "@primer/octicons-react:book"
 emoji: "🧮"

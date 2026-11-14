@@ -1,0 +1,27 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Frontend tool set: the Space Invaders arena (AGENT_BATTLE B1-02, 7 November
+# 2026), drawn in the page by Datalayer's Battles: one wave for both
+# contestants, a cannon each. `arena_watch` streams: called once, it tells the
+# model where the invaders are every few ticks and at every hit, as Pong's.
+
+id: arena-invaders
+version: 0.0.1
+name: Space Invaders arena
+description: Two cannons, one wave — read the arena, move your cannon under an invader, fire, and be told where the wave is as it marches; a hit scores its row, the wave cleared or a cannon hit ends it.
+tags:
+  - frontend
+  - arena
+  - battle
+  - game
+enabled: true
+toolset:
+  - arena_read
+  - arena_invaders_move
+  - arena_invaders_fire
+  - arena_watch
+streams:
+  - arena_watch
+icon: "@primer/octicons-react:rocket"
+emoji: "👾"

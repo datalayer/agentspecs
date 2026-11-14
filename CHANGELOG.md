@@ -6,9 +6,937 @@
 
 # Changelog
 
+Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
+
+## 0.0.190
+
+14 November 2026.
+
+- **LinkedIn comes back to the Marketer, through IAM** (the user: "post through IAM for linkedin - try to have the full feature, reading also"). Two `datalayer-social` backend tools post as the person on the LinkedIn account they linked in Settings, through Datalayer's IAM with the runtime's social token: `social-post-linkedin` (one post, one image and its alt text) and `social-comment-linkedin` (a comment under a post the person names by its address). Both `action: publish`, `approval: manual`, `linked_accounts: [linkedin]`. `worker-marketer` carries them, both optional, and counts `social-post-linkedin` in its one-network group; its description, goal and instructions name LinkedIn again. The catalogue's `linkedin` MCP server, which needs a signed-in browser session, stays out.
+- **What LinkedIn lets it read: nothing back.** Datalayer's LinkedIn application holds Sign In with OpenID Connect and Share on LinkedIn alone; reading posts, comments, reactions or a company page needs LinkedIn's Community Management API, not granted. No tool pretends to read LinkedIn, and the Marketer says so when asked how a LinkedIn post did. `social-accounts` says whether LinkedIn's posting grant holds.
+- **The `marketer` application** names LinkedIn (no connection: the linked account alone) and follows its agent's group; `demo-marketer` drafts for LinkedIn too and has no LinkedIn numbers.
+
+## 0.0.189
+
+14 November 2026.
+
+- **`datalayer-social`: the Marketer posts on the person's linked accounts, through IAM.** Three backend tools post to X and Bluesky as the person through Datalayer's IAM with the runtime's social token — the person's own token, narrowed to IAM's social routes and to that runtime while it runs — so the accounts' tokens never leave IAM and nothing is pasted: `social-accounts` (read) says which of X and Bluesky are linked in Settings; `social-post-x` and `social-post-bluesky` (publish, `approval: manual`) publish one post with up to four images, each waiting for the person's word. `worker-marketer` carries them.
+- **A backend tool set up by a linked account** (`linked_accounts`), optional in an agent's `optional.backend_tools` and counted in its groups: the Marketer's one network at least is now one of X, Bluesky and Discord with their secrets, or an X or Bluesky account linked in Settings. The X and Bluesky MCP servers stay, optional, for reading.
+- **An application's connection may be optional** (`optional: true`), when its agent says that server optional; an application follows its agent's groups through its own connections. The `marketer` application's three connections are optional — one network at least, as its agent — and its Bluesky connection reads (posting goes through the linked account). `demo-marketer`, which connects to none, needs none.
+
+## 0.0.188
+
+14 November 2026.
+
+- **`optional`: what an agent starts without.** An agent's spec names the MCP servers and skills of its own it can do without (`optional.mcp_servers`, `optional.skills`), and groups of which at least one must be set up (`optional.at_least_one`). One without its secrets is left out, and the agent is told which, instead of holding the start back. The Marketer starts with one network at least of X, Bluesky and Discord, and without web search (`crawl`, `TAVILY_API_KEY`) or the repositories (`github`, `GITHUB_TOKEN`); the Shopper without web search. Terra's Earthdata login was never required (`sandbox_envvars`).
+- **The Marketer drops LinkedIn.** `worker-marketer` no longer names the `linkedin` MCP server, nor do its description and instructions, the `marketer` application's connections and words, or the `demo-marketer` demo. The `linkedin` server stays in the catalogue.
+
+## 0.0.187
+
+14 November 2026.
+
+- **`listed`: an enabled agent kept out of the pickers.** `listed: false` on an agent's spec (true unless said) keeps it off the new agent page, the chats, the assign menu and loop's pickers, which offer the agents that are enabled and listed: the home page's five. `example-simple`, the neutral default of blank applications and quick launches, `example-blank`, `example-kagent`, `example-one-trigger`, `worker-crawler`, `jupyter-data-analyst` and `jupyter-notebook-compactor` are enabled again and not listed, so the applications that name one (Decide, Quote calculator, Report from a file, Data quality, Model choice, Ship or fix, Supplier comparison) have nothing left to set up.
+
+## 0.0.186
+
+14 November 2026.
+
+- **Five agents enabled: the home page's.** `worker-marketer`, `worker-shopper`, `worker-terra`, `worker-accountant` and `worker-steward-aws` are the catalogue's enabled agents, so the new agent page and loop's pickers offer these five. `example-blank`, `example-simple`, `example-kagent`, `example-one-trigger`, `worker-crawler`, `jupyter-data-analyst` and `jupyter-notebook-compactor` are disabled: still runnable by id, and an application naming one still runs, its page saying the agent is not enabled as setup.
+- **The home page's live demos are applications of the catalogue**: `demo-marketer`, `demo-shopper`, `demo-terra`, `demo-accountant` and `demo-aws-steward`, chats on example data with no connection that a visitor signed out may talk to, each on its own agent (`demo-shopper` on `worker-shopper`, `demo-terra` on `worker-terra`, version 0.0.3). Tagged `demo`, they keep the face the home page shows.
+
+## 0.0.185
+
+14 November 2026.
+
+- **0.0.185 is 0.0.184, released.** 0.0.184 was tagged but never published: its tests failed on four expectations the day's commits had left behind. `worker-accountant`, enabled, may switch to what ai-inference serves (`model_additionals: alibaba:qwen-max`), as every enabled agent; the `accounting` application has nothing left to set up; the protocols reference says PAP draft 1.0.
+
+## 0.0.184
+
+14 November 2026, tagged, not published.
+
+- **`shopify`, the Shopify Global Catalog MCP server**: anonymous UCP catalogue reads (search and lookup with the Global Catalog extension, no cart, checkout or payment). Every catalogue call names Datalayer's UCP agent profile, <https://datalayer.ai/ucp/profile.json>.
+- **`worker-shopper`**, the Shopper: finds and compares products on Shopify, and buys only through PAP and UCP with the person's approval.
+- **`worker-terra`**, Terra: satellite imagery through the Earthdata MCP server.
+- **`worker-accountant`** is enabled, in the galleries; **Datalayer's own MCP server** is enabled in the catalogue for everyone signed in.
+- **PAP**: the catalogue entry says the version spoken, draft 1.0 (personal-agent-protocol 0.35); the PAP Stages put the domain beside a company's name on the sign-in and approval cards.
+
+## 0.0.183
+
+13 November 2026.
+
+- **`runtime_engine: agentcore`**, the third engine: Amazon Bedrock AgentCore Runtime in the AWS account of the organization that launches the agent, the agent-runtimes image serving the spec as an AgentCore agent runtime. Like `kagent`, it takes the `pydantic-ai` harness only (`agentspecs.runtime_engines`). The spec's engine is the default a launch may override. `worker-steward-aws`, the Datalayer Steward for AWS, says `agentcore`. See [Agents](https://agentspecs.datalayer.tech/agents#runtime_engine-string-required).
+
+## 0.0.182
+
+13 November 2026.
+
+- **`runtime_engine`: what runs and hosts an agent.** Every agent spec says it on the line after `harness`: `datalayer` (a Datalayer agent runtime, from the platform's pools or on your own machine) or `kagent` (a kagent Agent whose Harness is agent-runtimes, reached through kagent's A2A gateway at `/agents/{namespace}/{name}`, each conversation a session actor of Agent Substrate, suspended when idle and resumed on the next message). A spec without one, or naming another, is refused in a sentence, and `kagent` takes the `pydantic-ai` harness only (`agentspecs.runtime_engines`). Every agent of the catalogue says `datalayer`, the sandbox variant scaffolds included. See [Agents](https://agentspecs.datalayer.tech/agents#runtime_engine-string-required).
+- **`example-kagent`**, a simple conversational agent with `runtime_engine: kagent`: the agent that kagent's `Harness`, `AgentTemplate` and `Agent` serve, with no MCP servers of its own (the template's remote MCP servers are added at start), the `eval` sandbox and no frontend tools.
+
+## 0.0.181
+
+12 November 2026.
+
+- **The Steward's application is `aws-steward-agent`.** The application spec `steward-aws` (0.0.179) takes the id `aws-steward-agent`, with no alias, so its example is addressed `/studio/examples/aws-steward-agent`. Nothing else of the 12 November rename changes: its agent is `worker-steward-aws`, the tag `steward`, the name Datalayer Steward for AWS. A deployment of `steward-aws` is launched again under the new id.
+- **The catalogue's skills load from datalayer-skills.** `accounting`, `crawl`, `events`, `github`, `image`, `pdf`, `text-summarizer` and `video` name `datalayer_skills.skills.<name>` (datalayer-skills 0.3.0), where their code moved from agent-skills, which is the framework alone from 1.4.0; their `install.command` is `pip install "datalayer-skills[skills]"`. The skill ids do not change, so no agentspec changes. `jokes` stays in agent-skills. The `video` skill says it zooms in and out on a point (`zoom_video`).
+
+## 0.0.180
+
+12 November 2026.
+
+- **The odoo-accounting quarter-close tools, second round.** The `datalayer` and `odoo-accounting` servers class the twelve tools the Datalayer MCP server adds: `odoo_accounting_find_duplicate_bank_lines`, `odoo_accounting_check_vendor_payments`, `odoo_accounting_get_attachment` and `odoo_accounting_list_documents` read; `odoo_accounting_recode_bill`, `odoo_accounting_defer_expense`, `odoo_accounting_unlink_bank_feed`, `odoo_accounting_update_vendor_payment`, `odoo_accounting_cancel_vendor_payment` and `odoo_accounting_attach_existing_document` write; `odoo_accounting_remove_bank_line_twins` and `odoo_accounting_delete_bank_connection` delete. `odoo-accounting` now lists 73 tools. The gateway image refuses to build while a tool it serves has no class.
+
+- **The Steward's week is a document.** The backend tool `recommendations-report` now writes the report as a document of the Datalayer editor, a page of the Space its application is granted to write (`permissions.spaces`, `write`), and sends the page's link through the application's channels; it says that it writes (`action: [read, write]`), so an application does it alone only when a rule of its own names the tool, as `steward-aws` does, and is asked first otherwise. A Space grant names one Space of its owner's, which a catalogue cannot know: `steward-aws` says where its owner adds it, and without it the report stays text and says so. `worker-steward-aws` says where the document is.
+
+## 0.0.179
+
+12 November 2026.
+
+- **The AWS Account Agent is now Datalayer Steward for AWS** ("the Steward" in running text), as AWS's trademark guidelines put a third party's name before "for AWS". The ids change with it, with no alias: the application `aws-account-agent` is `steward-aws`, the agentspec `worker-aws-account` is `worker-steward-aws`, and the tag `account-agent` on its agent and its backend tools is `steward`. The read role the specs name is agent-runtimes' `aws/steward-read-role.yaml`. A deployment of the old application or agent is launched again under the new ids. The backend tools and the Dogwood example keep their names: they say what they read or enforce. See [Applications](https://agentspecs.datalayer.tech/apps/reference).
+
+## 0.0.178
+
+11 November 2026.
+
+- **The AWS Account Agent's week and its urgent findings.** The backend tool `recommendations-report` reads a deployment's recommendations of the last days from its record and sends their report through the application's channels; `aws-account-agent` runs it every Monday at 8:00 and names `email` as its channel, which also carries a recommendation recorded with `severity: high`. See [Applications](https://agentspecs.datalayer.tech/apps/reference).
+
+## 0.0.177
+
+11 November 2026.
+
+- **The AWS Account Agent's recommendation card.** `worker-aws-account` binds `record_recommendation` to the `a2ui-surface` renderer: each recommendation recorded is drawn as a card with its evidence, estimate, change and rollback, and *Approve* and *Dismiss*. Approve means the person accepts it and is handed the change to apply; the agent applies nothing. The application `aws-account-agent` keeps `approvals` in its record. See [Applications](https://agentspecs.datalayer.tech/apps/reference).
+
+## 0.0.176
+
+11 November 2026. Carries 0.0.175, which was bumped and never tagged.
+
+- **The AWS Account Agent.** The agentspec `worker-aws-account` reads an AWS account's cost recommendations, right-sizing findings and spend with a read-only role, and records each saving with its evidence, its estimate and a fix to review. Its backend tools are `aws-cost-optimization-hub`, `aws-compute-optimizer`, `aws-cost-explorer`, `record-recommendation` and `list-recommendations`. The application `aws-account-agent` runs it as a worker every day at 7:00: it reads and records on its own, asks before any change, and leaves deleting and buying to the person. Its tests plant findings and check the safety cases. A Dogwood example allows an account change only after the same recommendation was approved within the hour. Its egress names each host it reaches instead of `*`: Cost Explorer and Cost Optimization Hub in us-east-1, STS and Compute Optimizer in each commercial region enabled by default, and Datalayer's inference and IAM, all on 443. A test fails on a wildcard in its egress. See [Applications](https://agentspecs.datalayer.tech/apps/reference) and [Policies](https://agentspecs.datalayer.tech/policies).
+- **AgentCore Memory.** The memory spec `agentcore` is Amazon Bedrock AgentCore Memory in the person's own AWS account. Its turns are kept as events of the person in the agent's session, and its long-term records are searched in namespaces that name `{actorId}`. An agentspec names the memory with `memory_config.memory_id` and `region`. See [Memory](https://agentspecs.datalayer.tech/agents/memory).
+
+## 0.0.175
+
+11 November 2026.
+
+- **Decisions, a kind of the catalogue and a capability an agent names.** `agentspecs/decisions` says how an agent decides: the `model` asked typed decisions (a model of the catalogue whose capabilities say `decisions`), the `questions` it answers (`noul`, `choice`, `score`), and the limits of one call (`max_questions`, `max_text_length`). One spec, `jev` (Jev at Cloudflare Workers AI). An agent decides only when its spec says `decisions: jev:0.0.1`, written as `memory` is; the capability brings the `decide` backend tool, asked of that spec's model. `agentspecs.decisions` refuses, in sentences: a decisions spec whose model is not of the catalogue or answers no typed decisions; an agent naming a spec that is unknown, of another version or not enabled; an agent listing `decide` under `backend_tools` without naming `decisions`. `example-simple` names `decisions: jev:0.0.1` and no longer lists `decide`. See [Decisions](https://agentspecs.datalayer.tech/agents/decisions).
+
+## 0.0.172
+
+10 November 2026.
+
+- **A game's contestant played by a decision model.** A Battle's contestant may say `decision_model`, a model of the catalogue that answers typed decisions: the page asks it a choice on what the arena shows its side and makes the move it chooses. Only on an application in the browser of a game, never with `overrides`; a model that is not of the catalogue, or answers no typed decisions, is refused. In `pong` and `invaders`, Red is played by Jev (`cloudflare:wrk/typesafe/jev`); Blue stays a Player. See [Battles](https://agentspecs.datalayer.tech/battles).
+
+## 0.0.171
+
+10 November 2026.
+
+- **Gateway rate limits in the policies spec** (AC-45). `policies/shield-policy.schema.json` is agent-shield 0.2.19's, verbatim (`SHIELD_SCHEMA_SOURCE_VERSION` 0.2.19). An organization document may carry `rate_limits: {requests, tokens, connections}`, each `{rate, per: second | minute}`. These are what each person may use, across tools, models and agents, through the organization's AgentCore Gateways, and they are pushed to the Gateways as Gateway rate limits when the organization runs on AgentCore. A team or session document that carries them is refused, and so is an empty section. See [Policies](https://agentspecs.datalayer.tech/policies).
+
+## 0.0.170
+
+9 November 2026.
+
+- **An AgentCore Gateway as an MCP server** (AC-20). A remote MCP server may say how its bearer is minted for the run with `auth`: `kind: agentcore-gateway` and the `identity` its inbound authorizer trusts, an Identity of the catalogue issued by `aws-agentcore` that speaks `mcp` (`aws-agentcore-gateway`). The runtime sends the inbound token its identity provider obtains as the bearer; the spec writes no `Authorization` header. `agentspecs.mcp_servers` refuses, in sentences, an `auth` on a local server, on one not reached over Streamable HTTP at an https URL, beside an `Authorization` header, or naming an identity that is not in the catalogue or not AgentCore's. One example, `agentcore-gateway-example`, off by default. See [MCP Servers](https://agentspecs.datalayer.tech/agents/mcp-servers).
+- **Dogwood temporal policies in the policies spec** (AC-40). `policies/shield-policy.schema.json` is agent-shield 0.2.18's, verbatim (`SHIELD_SCHEMA_SOURCE_VERSION` 0.2.18): a document may carry `dogwood: {policies, mode}`, a Dogwood policy set — Cedar, and `when temporal { … }` over the session's request, response and error events, AgentCore Policy's language — in `enforce` or `log_only` mode. It is validated as it is read: the temporal clauses by agent-shield's parser, carried verbatim as `policies/dogwood.py` (a test holds it to the package's own), AgentCore's quotas (20 temporal policies, 3 temporal operators in one, a 24-hour window at most), and the Cedar by `cedarpy` when it is installed (the new `cedar` extra); without it, `PolicySpec.dogwood_notes` says the Cedar was not checked. Five catalogue examples, organization documents off by default: an approval before a payment, at most five transfers an hour, at most three payees a day, a running total of payments, and spend per session in `log_only`. The policies page gains an Enabled and a Dogwood column, each example's set, and a section on Dogwood. See [Policies](https://agentspecs.datalayer.tech/policies).
+
+## 0.0.169
+
+9 November 2026.
+
+- **The organization's ceiling on the firewall** (Agent Firewall N3-01): `policies/shield-policy.schema.json` is agent-shield 0.2.16's, verbatim — an organization document may carry `firewall: {egress, ingress}`, the most any of its agents' `policy.shield` is granted (a team or session document may not). `SHIELD_SCHEMA_SOURCE_VERSION` is 0.2.16, so the test holding the copy skips an older agent-shield.
+- **Every agent says who it acts as.** `identity` is required on every agent of the catalogue: the 156 that act for the person they answer to are `datalayer-acting-agent`, the 19 that run unattended on a schedule, an event or once are `datalayer-service-agent`; the Marketer, the Crawler, the nightly data checks and the GitHub agent keep theirs. See [Agents](https://agentspecs.datalayer.tech/agents) and [Identities](https://agentspecs.datalayer.tech/identities).
+
+## 0.0.168
+
+9 November 2026.
+
+- **Identities, a new kind.** [`agentspecs/identities`](https://agentspecs.datalayer.tech/identities): who is acting when an agent acts — a person, an agent, an application, an organization, a visitor or a service — issued by Datalayer IAM, the Personal Agent Protocol, Amazon Bedrock AgentCore Identity or an organization's OIDC provider; how a caller proves it (`inbound`), the token the agent holds (`workload`), where third-party credentials are kept and for which providers (`credentials`), key `custody` and `consent`, and for PAP what the protocol binds. Twelve in the catalogue; refusals for a PAP identity without its block, an AgentCore authorizer without a discovery URL of its form or any claim to check, a shared secret verified outside Datalayer, a workload token by user id, a vault for a visitor. An agent says who it acts as with `identity:` — the Marketer, the Crawler, the nightly data checks and the GitHub agent do.
+
+## 0.0.167
+
+The Marketer lists and forgets what it remembers — worker-marketer (memory: mem0 already) gains datalayer-memory-add, -search, -list and -delete, as the Crawler; its system prompt says to use them and never to delete everything without the person's confirmation of how many
+
+## 0.0.166
+
+8 November 2026.
+
+- **The Crawler Agent remembers.** [`worker-crawler`](https://agentspecs.datalayer.tech/agents) declares `memory: mem0` (it was `ephemeral`): what the person asks it to keep outlives the runtime, under their account and the agent (user, agent), as every mem0 agent of the catalogue. Its skills gain `datalayer-memory-add`, `datalayer-memory-search`, `datalayer-memory-list` and `datalayer-memory-delete`, the memory skills of [datalayer-skills](https://github.com/datalayer/skills), which the runtime finds through the `agent_skills.skills` entry points of the installed package, with no skill spec of their own in this catalogue. Its system prompt says to use them when the person asks to remember, recall, list or forget, and never to delete everything without their confirmation of how many.
+
+## 0.0.165
+
+8 November 2026.
+
+- **An agent's network rule, in its spec.** An agent takes a [`policy`](https://agentspecs.datalayer.tech/agents) mapping, its own ask of the Shield beside the policies catalogue, with one section, `shield`: agent-shield's firewall rules. `egress` is what the runtime may reach beyond the platform's own endpoints: `*` alone (any public address, any TCP port), or exact hosts, `host:port`, IPv4 addresses and CIDRs with an optional port. `ingress` is who may reach the agent's ports: `platform` (the default), `*`, or addresses and CIDRs with the agent's port. The section is validated against agent-shield 0.2.14's schema, carried verbatim as `policies/shield-firewall.schema.json`, and held to what the firewall takes (`agent_policy_problems`): no private or reserved address in egress, no wildcard host (a firewall sees addresses, not names), `*` alone, each entry once; `policy` takes `shield` only.
+- **Every catalogue agent declares `policy.shield.egress: ["*"]`**: the MCP servers and tools they run call out (`npx tavily-mcp`, a package registry), and the runtime's boundary refused them. A test holds every catalogue agent to it.
+
+## 0.0.164
+
+8 November 2026.
+
+- **Three agents out of the picker.** [Customer Interviewer](https://agentspecs.datalayer.tech/agents), Document Q&A and Mail Triage Assistant are `enabled: false`, so the new-agent page no longer offers them. The applications built on them keep running them and name the agent as setup: Support Desk (Document Q&A) and Inbox triage (Mail Triage Assistant). Customer interview runs the Customer Interviewer Cog, which stays enabled.
+
+## 0.0.163
+
+8 November 2026.
+
+- **The Titan embedding models priced.** [`bedrock:amazon.titan-embed-text-v1`](https://agentspecs.datalayer.tech/agents/models) (1536 dimensions, what an agent's memories are embedded with) and `bedrock:amazon.titan-embed-text-v2:0` (1024, 512, 256) are in the models catalogue, by the ids ai-inference's `POST /api/ai-inference/v1/embeddings` meters them under, with AWS's on-demand price in US East (N. Virginia): $0.10 and $0.02 per million input tokens, no output (AWS's price list of 2026-11-06, read 2026-11-08; the same as genai-prices). ai-inference charges an embedding call by it instead of recording it as not priced. The capability vocabulary gains `embeddings`: an embedding model runs no chat, and a chat picker leaves it out.
+
+## 0.0.162
+
+8 November 2026.
+
+- **Two Odoo servers on the Datalayer MCP server, both on.** [`odoo`](https://agentspecs.datalayer.tech/agents/mcp-servers) no longer runs `uvx mcp-server-odoo` (a third-party server given the Odoo key, off): it is the gateway's generic `odoo` toolset at `https://mcp.datalayer.run/mcp?only=odoo` — context, companies, models, fields, searches, grouped aggregates and record writes, 13 tools. `odoo-accounting` (`?only=odoo-accounting`, 61 tools) is on too. Both take the bearer `${DATALAYER_API_KEY}`; the gateway reaches Odoo with the person's `DATALAYER_ODOO_URL` and `DATALAYER_ODOO_API_KEY`, in one company per session (`&odoo-company=<name or id>`, else the person's default). Each spec lists exactly the tools the gateway's code registers for its toolset, with the gateway's description of each; the two share no tool. The seven accounting workers reach both servers. The MCP servers page names every tool.
+
+## 0.0.161
+
+8 November 2026.
+
+- **The odoo-accounting quarter-close tools classed.** The `datalayer` and `odoo-accounting` MCP servers class the twelve tools datalayer-mcp-server 0.0.104 adds (services 97c856123, 7c55984cd, ba2039b47): `odoo_accounting_find_document`, `list_attachments`, `list_vendor_payments`, `vat_close_check` and `intervat_xml` read; `import_ubl_bill`, `attach_document`, `reset_to_draft`, `book_bank_line_split`, `prepare_vendor_payments` and `record_return_submission` write; `delete_draft` deletes. The gateway's image refuses to build while a tool it serves has no class here (LOOP I-12).
+
+## 0.0.160
+
+8 November 2026.
+
+- **PAP at draft 0.4 in the protocols catalogue.** [`pap`](https://agentspecs.datalayer.tech/agents/protocols) says `spec_version` *draft 0.4*, the version the runtimes' PAP plugin speaks since `personal-agent-protocol` 0.32.0.
+
+## 0.0.159
+
+8 November 2026.
+
+- **A company's website at PAP draft 0.4** (D5-09). The [company role](https://agentspecs.datalayer.tech/apps/reference#apppapcompany) gains `web_unscoped` (a browser signed in for the person has everything the account can do on its website, `web.unscoped`; needs the `web` interface) and `web_disabled` (personal agents are asked to use its agent and APIs, not its website, `web.disabled`; it then lists no `web` interface and offers `agent` or `openapi`); both off by default. The protocol versions a company serves are the platform's, never an Appspec's.
+
+## 0.0.158
+
+8 November 2026.
+
+- **Mem0 says where an agent's memories are kept.** The [mem0 memory](https://agentspecs.datalayer.tech/agents/memory) is kept in PostgreSQL (pgvector) on a Datalayer runtime, under the user and the agent's id, so a paused agent resumed on a new runtime reads its memories back; it embeds through ai-inference (`bedrock:amazon.titan-embed-text-v1`, 1536 dimensions) and keeps what the agent said as it said it, with no extraction LLM, and so declares no secret (`required_env_vars: []`); a local run keeps mem0's defaults and the person's own `OPENAI_API_KEY`.
+
+## 0.0.157
+
+8 November 2026.
+
+- **Battle rubrics judge what the judge sees** (B5). The judge now reads a contestant's tool calls, its members' answers and surfaces, and the arena after the play, so each catalogue [Battle](https://agentspecs.datalayer.tech/battles)'s `llm-judge` rubric names that evidence: the sheet and the deck *in the arena* (no longer what the contestant "reports"), a player's `arena_watch` or `arena_read` and a cannon not hit by a bomb it was warned of (Space Invaders), a paddle's calls and moves (Pong), figures read from the books as the tool calls show (the invoice race, the month-end challenge), and "what it could not check" said only where a figure could not be checked.
+
+## 0.0.156
+
+7 November 2026.
+
+- **A company publishes its public skills** (D4-06, decided by the user). The [company role](https://agentspecs.datalayer.tech/apps/reference#apppapcompany) gains `publish_skills`: off by default; on, the application's `skills` are published to personal agents as a `skill_index` (PAP 0.3 §9.4) — only those whose SKILL.md says it is public and that need no secret, which the platform decides at Ship; a company publishing skills names skills.
+
+## 0.0.155
+
+7 November 2026.
+
+- **A company at PAP 0.3 as published** (D4-08). The [company role](https://agentspecs.datalayer.tech/apps/reference#apppapcompany) gains `sign_in_disabled` (`auth.disabled`: the company offers personal agents no sign-in and answers them signed out only; one admitting nobody signed out is refused), and the application's `avatar` is served to personal agents as the company's logo (`organization.logo_uri`). Nothing of draft 0.4 (`web.unscoped`, `web.disabled`, `supported_versions`) and no `skill_index` yet.
+
+## 0.0.154
+
+7 November 2026.
+
+- **The Social Marketer's skills** (the user: web crawl, events, GitHub, image, video and PDF for the marketer agents). [`worker-social-marketer`](https://agentspecs.datalayer.tech/agents) carries `github`, `image`, `video` and `pdf` beside `crawl`, `events` and `text-summarizer`; the Marketer application's agent, `worker-marketer`, has carried all nine since 0.0.149.
+
+## 0.0.153
+
+7 November 2026.
+
+- **How a call reaches a provider** (the user). Every [model provider](https://agentspecs.datalayer.tech/agents/model-providers) says `via`: `ai-inference` — Datalayer holds the account and a runtime's call goes through its inference service, metered in credits (Bedrock, Azure OpenAI, Alibaba, Cloudflare) — or `direct` — the agent calls the provider itself with the person's own key, the models' `required_env_vars`, nothing through ai-inference (OpenRouter, Anthropic, OpenAI, Ollama). Required; a provider saying neither is refused. `openrouter:anthropic/claude-opus-5.5` is on, called directly with `OPENROUTER_API_KEY`.
+
+## 0.0.152
+
+7 November 2026.
+
+- **OpenRouter, and Claude Opus 5.5 through it** (the user). An eighth [model provider](https://agentspecs.datalayer.tech/agents/model-providers), `openrouter`: one OpenAI-compatible API and one key in front of the models of many vendors, a model named `openrouter:<vendor>/<model>` as OpenRouter lists it; the [model](https://agentspecs.datalayer.tech/agents/models) `openrouter:anthropic/claude-opus-5.5` — the current frontier Opus, 1M of context, OpenRouter's list price of $4 and $20 a million tokens — needing `OPENROUTER_API_KEY`, a new env var; switched off in the catalogue as the other direct-vendor models are, since a Datalayer runtime's model calls go through ai-inference.
+
+## 0.0.151
+
+7 November 2026.
+
+- **Jokes loads from its module** (the user: every skill enabled). `jokes` was the one path-based skill, `path: jokes` relative to a skills folder the pod never configures, so it could not load there; agent-skills 1.2.1 ships `agent_skills.skills.jokes` (and `agent_skills.skills.accounting`, which `accounting` already named), and the spec names the module like the eight others.
+
+## 0.0.150
+
+7 November 2026.
+
+- **Published as 0.0.150**: 0.0.149 was tagged and never published — its docs build refused two relative links, to the evals and models catalogues, which now point where they are published, on datalayer.ai. The content is 0.0.149's, below.
+
+## 0.0.149
+
+7 November 2026.
+
+- **Image and Video Skills, every skill enabled** (the user): two skills of agent-skills 1.2.0, [`image`](https://agentspecs.datalayer.tech/agents/skills) — snapshots of pages and video frames; images resized, cropped, converted, optimized, thumbnailed — and [`video`](https://agentspecs.datalayer.tech/agents/skills) — recordings of pages; videos trimmed, transcoded, optimized, framed, turned to GIF; the seven others turned on, now that the runtime image installs `agent-skills[skills]` with Chromium and ffmpeg; the Marketer's agent carries all nine.
+- **Stages** (the user: the Stages moved out of the landing's code into the catalogue, so that a Stage is made from a scene, an application or a Battle). A new kind, [`stages`](https://agentspecs.datalayer.tech/stages): something of the catalogue put on stage, and where it plays — exactly one of a `scene` played whole, an `app` or a `battle`; `deployments`, each member on a runtime to the slug of the deployment that answers for it, checked against the scene's cast or its team's members, refused on a scripted scene and on a Battle; `public`, whether it has a page that needs no account. A Stage wears what it stages — its name, face and description — unless it says otherwise. Thirteen in the catalogue: the five demo Stages Datalayer keeps running (`sales-and-accounting`, `month-end-close`, `crop-monitoring`, `disaster-assessment`, `coding-agent-behind-the-shield`, with their demo deployments), the six scripted protocol Stages (PAP's four, UCP's, PACT's), one application on its own (`accounting`) and one Battle (`pong`).
+- **Evals confirm a Battle's result** (the user): a Battle names `evals` of the catalogue — `eval`, `config`, `says` — run on every contestant once the referee has a verdict; the winner is declared only when its evals all pass, else the result shows what failed and no winner. Every catalogue Battle carries a `max-duration` against its clock and an `llm-judge` with a rubric on its goal. An eval not in the catalogue, or one the platform cannot run, is refused.
+- **Space Invaders** (AGENT_BATTLE B1-02): the second arena, `frontend-tools/arena-invaders.yaml` (`arena_read`, `arena_invaders_move`, `arena_invaders_fire`, `arena_watch` streaming) and the `invaders` Battle, two Players at one wave, a cannon each; the Player's agent carries both arenas' tools.
+- **Bluesky, LinkedIn and Discord enabled** (the user): the three servers are offered in the catalogue; what each needs to run — the runtime image's node and the built Bluesky server, a signed-in LinkedIn session, Docker for Discord — is said on each server's page.
+- **Discord MCP server** (the user): `discord`, SaseQ's discord-mcp — a Discord server through a bot, 81 tools classed off its README (reads; sends; writes; deletes), run in Docker over stdio with `DISCORD_BOT_TOKEN` and `DISCORD_GUILD_ID`; off on the platform until a runtime can run it. The Marketer speaks on Discord too: its application, its agent and its Frame name the server, and the Frame says it never moderates on the brand's behalf.
+- **The Marketer** (the user): an application, [`marketer`](https://agentspecs.datalayer.tech/apps), that plans a campaign and drafts the posts for X, Bluesky and LinkedIn in the brand's voice over the three new MCP servers, remembers the voice and what worked through `mem0`, and publishes, messages or connects only once the person has approved that exact text (its rules: reads done, publishing and sending asked first, deleting and buying left to the person); its agent, `worker-marketer`, and its Frame, `marketing` — honest claims, one voice fitted to each network, approval before anything goes out, what the audience said read back.
+- **X, Bluesky and LinkedIn MCP servers** (the user): `x`, X's own remote server at https://api.x.com/mcp read with an app's bearer token (`X_BEARER_TOKEN`, enabled); `bluesky`, brianellin's bsky-mcp-server run with node from the runtime image, signed in with a handle and an app password (`BLUESKY_IDENTIFIER`, `BLUESKY_APP_PASSWORD`, `BLUESKY_SERVICE_URL`); `linkedin`, stickerdaniel's mcp-server-linkedin run with uvx through a signed-in browser session (no key). Each with its documentation, sign-up and key links, its setup sentence and its tools classed; the two that need a local process or a browser session stay off until the runtime image carries them.
+- **An MCP server says where to read about it and get its key** (the user: a detail page for each MCP server): `documentation_url`, `signup_url`, `api_key_url` and `setup`, a sentence on how it is set up, on every server of the catalogue; the generated catalogues carry them with the tags, the env, the sandbox env vars and the tools' action classes.
+- **Overriding an application on stage** (the user: as agent specs override through [extension](https://agentspecs.datalayer.tech/modularity/extension), a Battle's contestant and a scene's cast member override some of their application with `overrides`): `model`, `instructions`, `skills`, `context`, nothing else; a model that is not in the catalogue is refused; on a contestant that plays a scene, every member played in the page. In the four races and challenges, Red now plays with Alibaba Qwen-Max (`alibaba:qwen-max`), Blue with its application's own model. Documented on the [extension page](https://agentspecs.datalayer.tech/modularity/extension#overriding-an-application-on-stage), the Battles and the Scenes pages, and the scene reference.
+
+## 0.0.148
+
+6 November 2026.
+
+- **A Player** (the user: a generic player application with the orb as avatar, for the Pong battle). [`player`](https://agentspecs.datalayer.tech/apps), an application that plays at an arena drawn in the page — reads it, moves, serves, and is told where the ball is — over a new browser agent, `example-player`, whose frontend tools are the Pong arena's (`arena-pong`); its avatar is the orb. The `pong` battle's two contestants are Players, Left and Right, in place of two coding agents. The ball is served at a random angle; the arena says where it arrives on each side, and the Player moves to that height at once. The Sheet Maker wears the cat (the user: the cat for the spreadsheet; no owl exists among the characters, so the Deck Maker wears the paper clip, as the user then asked).
+
+## 0.0.147
+
+6 November 2026.
+
+- **A frontend tool set may say which of its tools stream** (`streams`, AGENT_BATTLE B1-00): called once, each keeps pushing events the harness tells the model as turns it did not ask for. The first such set is the Pong arena's, `arena-pong`: `arena_read`, `arena_pong_move`, `arena_pong_serve` and `arena_watch`, which streams — the arena drawn in the page by Datalayer's Battles tells each contestant where the ball is as it moves. The `pong` battle's goal names them.
+
+## 0.0.146
+
+6 November 2026.
+
+- **Battles in a deck or a sheet** (the user: battles on the home page using the decks and cells visuals). A race or a challenge may name an `arena` too, the visual its contestants work in: a `deck` each builds slide by slide, a `sheet` each fills cell by cell; a game still needs an arena that keeps a score (`pong`, `invaders`), and a game in a `deck` is refused. Two applications of the catalogue play them in the browser, [`deck-maker`](https://agentspecs.datalayer.tech/apps) and [`sheet-maker`](https://agentspecs.datalayer.tech/apps), and two races: [`deck-race`](https://agentspecs.datalayer.tech/battles), *Create a deck*, and `sheet-race`, *Create a spreadsheet*, the first to finish winning. The catalogue holds five battles.
+
+## 0.0.145
+
+6 November 2026.
+
+- **Battles: a new spec, under `agentspecs/battles/`** — scenes composed against each other. A Battle is two or more `contestants`, each a scene of the catalogue played whole or one application, given the same `goal` at the same instant under one clock (`clock_seconds`, ten at least), and a `referee`: three variants, one referee contract — a `race` is decided by `first_done`, a `game` by the `score` of its `arena` (`pong`, `invaders`, drawn in the page as UI plugins with frontend tools), a `challenge` by the `measure` of a Guard with a number signal. Refused as it is read: fewer than two contestants or two with one id, a contestant naming a scene and an app or neither, a game without an arena or an arena elsewhere, a referee deciding otherwise than its variant, a challenge without its Guard, a clock under ten seconds, an empty goal; and, checked against the catalogue, a scene, an app or a Guard it does not hold, at the version named. Three to start: [`invoice-race`](https://agentspecs.datalayer.tech/battles), two Sales & Accounting pairs on the same Odoo books; `pong`, two coding agents at the arena; `report-challenge`, two Month-end Close agents scored by the new [`report-quality-guard`](https://agentspecs.datalayer.tech/guards), an `outcome` Guard a Cog judges for completeness and grounding (`quality` between 0 and 1, `ungrounded_figures`). The catalogue holds thirteen Guards.
+- **Two more Tracks, for the ends of the whitepaper's risk range** (section 5.4): [`drafting`](https://agentspecs.datalayer.tech/tracks), ninety days of what ran, what was found and decided and what was produced, for the Op's owner only, nothing fed to Organizational Memory — a low-risk drafting Op; and [`regulated`](https://agentspecs.datalayer.tech/tracks), ten years of everything, readable by Compliance and Legal and produced to an external auditor on request, personal data kept out — a clinical, legal or public-sector Op. The catalogue holds four: `drafting`, `standard`, `financial-reporting`, `regulated`.
+- **Guards extend a Policy; the Guardrails kind is gone.** A Guard's `extends` names a [Policy](https://agentspecs.datalayer.tech/policies) of the catalogue (`default:0.0.1`; `organization-baseline:0.0.1`, the strictest, for the Sensitive Data Guard), and a Guard naming a Policy the catalogue does not hold is refused as it is read. The resolved Guard carries `policy`, the Policy's `id:version`, and nothing of its document; `policy_of(guard)` gives the `PolicySpec`, `policy_ref` the catalogue's `id:version` of a reference, `guards_extending` takes a Policy. The six guardrail profiles under `agentspecs/guardrails/` (permissions, token limits, data scope and handling, approval policy, tool limits, audit, content safety) and their page are removed: what may be done is the Policy's rules. The [Guards page](https://agentspecs.datalayer.tech/guards) says the new contract; the Permission Guard checks the launching identity against the Policy's rules.
+- **Personal Agent Protocol:** a `poppy:` scope name is accepted like any other, on a company and on a connection: draft 0.3 no longer reserves the prefix.
+- **Personal Agent Protocol:** a company's operations are version 2 of the extension: the personal agent asks the person about every one, so `pap.company.operations[].allows` and `user_approval_required` are gone with the standing permissions they gave, refused as unknown fields, and each operation names its `tool`. `pap_propose` is a `write`: a company may do a POST at once. Bookkeeping Desk 0.0.3 and the two-companies scene say each payment is approved every time.
+
+## 0.0.140
+
+30 October 2026. Two more scene backdrops. `minimal`: each member a glowing circle in its own colour, no name and no emoji, thin luminous lines between them, on a dark ground in every theme. `orb`: each member Datalayer's orb in its own colour, swirling as it works, with luminous lines and a light that flows with each message. `coding-agent-behind-the-shield` rehearsed on Datalayer and recorded: OpenCode read README.md and explained the repository; its edit was refused by the Shield under *Change a file*, README.md unchanged. exchange-desk's `app.py` and its spec say the same again.
+
+## 0.0.139
+
+30 October 2026. A spec's `color` is a palette name — a role (`primary`, `accent`, `glow`…) or a hue (`red` … `rose`, `slate`, `gray`, `stone`) — or a `#RGB`/`#RRGGBB` hex; any other value is refused in a sentence that lists the names, which follow primer-addons' palette (`agentspecs.colors`, checked against it). Every colour of the catalogue is a name, so it follows the theme. code-explainer, asked to change a file, tries the edit and the Shield refuses it. The catalogue's verified sentences in a builder's words; the references with an anchor per choice.
+
+The documentation brought up to the specs: the Appspec page says the repository lent to a computer, the avatar and the voice, tests and what was verified, what is kept and where it goes, and lists the whole catalogue; the scenes page the scripted scenes and the real recording; a Frontend Tools page (the `cells` set, the example-output modes); the agents page the `harness` field; the models and outputs pages the current catalogue. The schema descriptions, and so the generated references, no longer cite planning ids; Gemini CLI's reason for not being offered and OpenCode's description say it in plain words. The references' choices are headings, so their links resolve (no broken anchors). The catalogue's verified sentences say where an application was tried in a builder's words (live on Datalayer, on its date), without cluster names or planning ids; so do the scenes' unverified lines, the speech register's notes and the pap protocol tools' note.
+
+## 0.0.138
+
+29 October 2026. An Appspec may lend its computer one repository, `permissions.computer.repository` (an `https://` URL at a full commit sha, never a branch), checked out as a harness's workspace when it starts; `code-explainer` is lent Jupyter Kernel Client at `69a6f13`, its commands decided by its Rules. A fourth scene backdrop, `space`: glowing round marks with a halo, on a ground of dots, grid, triangle mesh and rings, luminous lines and a light that flows with each message. `example-harness-opencode`: on Datalayer its model calls go through ai-inference, on the platform's models and paid in credits, with no `ANTHROPIC_API_KEY` of the account's.
+
+## 0.0.137
+
+29 October 2026. A sixth demo stage, `coding-agent-behind-the-shield`: a coding agent lent one repository to read, asked to explain a file, on the `hero` backdrop, with its script and its rehearsal. Its one member, written inline, is a new application, `code-explainer`, whose agent is OpenCode (`example-harness-opencode`) behind the Shield: *Read the repository* is done, *Change a file* (write, delete) is left to a person, so the edit it is asked for is refused under that rule. A member whose agent runs a coding harness acts in **its workspace**: `WORKSPACE` (*its workspace*) is a name a rehearsal line may use for such a member's steps — `Code Explainer → its workspace: *README*` — and `harness_of` says which harness a member runs; a step in the workspace of a member that runs none is refused in a sentence. A scene's recording has its place and its reader: `recording_path` (`<id>/recording.json`, beside the specs) and `scene_recording`, which reads the transcript a stage exports (version 1) and refuses anything else in a sentence. The demo scenes are held whole by a test — a cue said and a narration per beat, every member placed, every beat rehearsed with words it must say and its time — and every one says `backdrop: hero`. The [scenes page](https://agentspecs.datalayer.tech/scenes) says the backdrops, the workspace lines and the recording.
+
+## 0.0.136
+
+29 October 2026. A scene's stage says its `backdrop`: how the stage is drawn, here and wherever the scene plays — `studio` (characters with speech balloons, each message flowing along its line: the drawing every scene had), `hero` (round faces on a deep tint, thin lines, a dot that flies with each message) or `plain` (boxes and arrows that do not move, for a printout or a slide); `studio` when unsaid, so every scene written before draws as before. `Backdrop` is an enum of the spec and `SceneStage.backdrop` its field, with its default; the [scene spec reference](https://agentspecs.datalayer.tech/scenes/reference) and the [scenes page](https://agentspecs.datalayer.tech/scenes) say it.
+
+## 0.0.135
+
+28 October 2026. The five hosted MCP servers are remote servers, reached by the runtime itself: `datalayer`, `odoo-accounting` and `earthdata` (the Datalayer gateway, `https://mcp.datalayer.run/mcp`, the toolset chosen with `only=`), `huggingface` and `kaggle` (their own hosts) name `transport: streamable-http`, a `url` and `headers: {Authorization: "Bearer ${…}"}`, no `command` and no `args`; the `npx -y mcp-remote` bridge they went through stops existing (a Datalayer runtime's pod reaches the gateway and no package registry, and its image carries no `mcp-remote`: the home page's demo scenes on r1 answered that their tools could not be reached). Their envvars, actions tables and everything else kept. The [MCP servers reference](https://agentspecs.datalayer.tech/agents/mcp-servers) says the two shapes: a remote server names a url and headers, a local one a command (and, listening over HTTP, the url its command listens at). agent-runtimes 1.5.89 connects to a remote server with these fields.
+
+## 0.0.134
+
+28 October 2026. A `cells` frontend toolset (`frontend-tools/cells.yaml`, 0.0.1): the Cells plugin's `AgentTools` bundle — `cells_read_range`, `cells_write_range`, `cells_insert_chart`, `cells_list_charts`, `cells_select_range` — run on the page, on the grid the person sees. `example-output` names it (`frontend_tools: - cells:0.0.1`) and gains a SHEET CHART mode: asked to chart the spreadsheet already shown, it reads the grid's used range and inserts the chart over it, below the data, instead of writing a block; the *Chart the spreadsheet* suggestion asks for a column chart of the three regions by month.
+
+## 0.0.133
+
+28 October 2026. `example-output` gains a SPREADSHEET mode: one fenced \`\`\`csv block named by its first line (`# filename: <name>.csv`), drawn with Datalayer Cells in the agent-runtimes outputs example's Sheet tab; the *Sales spreadsheet* suggestion asks for twelve months of sales by region; the FILE mode now takes any extension but csv and tsv, and its suggestion asks for a YAML file.
+
+## 0.0.132
+
+28 October 2026. The fourth harness is pi, not Gemini CLI (the user's decision): `pi` is offered — Earendil's pi coding agent 1.4.0 as published, driven through the pi-acp 0.0.34 adapter (MIT), which speaks ACP over stdio and spawns the `pi` executable; `session/load` through pi's own session files (`resume: load`); `AGENTS.md`, `.pi/skills`; the register says why pi-acp over @automatalabs/pi-acp (in-process, an older pi). Gemini CLI is described and not offered (`enabled: false`, `unavailable_because`: its API host is outside a Datalayer runtime's boundary, unrouted and unfunded); the three other sentences name the four as Claude Code, Codex, OpenCode and pi. `example-harness-pi` beside the other harness agents. Reference page regenerated.
+
+## 0.0.131
+
+28 October 2026. The catalogue's three applications written in Python — `customer-interview`, `exchange-desk`, `report-from-a-file` — import the application API from `agent_runtimes.apps`, where agent-runtimes 1.5.88 moved it from `agent_runtimes.loop.apps` (REVIEWS P-11: no compatibility alias, so an older runtime does not load them and a newer one loads nothing from the old path).
+
+## 0.0.130
+
+28 October 2026 (0.0.129 was tagged with the same content and never published: its release tests failed on pytest-asyncio 1.4.1's new warning under `filterwarnings = error`; the loop scope is now set). The catalogue offers four harnesses — Claude Code, Codex, OpenCode and Gemini CLI — and says why the others are not offered.
+
+- **`unavailable_because` on a harness** (META_HARNESS, the restriction to four): a harness with `enabled: false` says why in a sentence, and an offered one says nothing — refused at load otherwise, as an application's is. `offered_refusal(id)` is the sentence the runtime, `loop --harness` and the Studio say when a harness that is not offered is named; `custom` keeps its own sentence.
+
+- **fast-agent, goose and OpenHands are not offered today**: described as before (their specs, register entries and capabilities tables stay), each with its reason — not drilled on Datalayer, and the runtime image carries no adapter for them. The reference page lists them under *Not offered today*, apart from the offered four and the listed tier.
+
+- 0.0.128 (27 October 2026). **Inbox triage is offered** (W-01, W-02): the `google-workspace` MCP server, the `worker-mail-triage` agent and the `inbox-triage` example are enabled — Gmail of the person the application acts for, connected in Google's own consent screen through Datalayer's IAM, the server in its external OAuth provider mode reached with an access token minted per call. The worker may be switched to the models ai-inference serves (`model_additionals`), as every enabled agent. `inbox-triage` no longer says `unavailable_because`; what it was tried on says no real mail has been read yet. Tests: 666 passed.
+
+- 0.0.127 (27 October 2026). A company application may offer the `web` interface (PAP draft 0.3): its pages, a person's browser joining their Session through the one-time-code form; `pap.company.interfaces` lists at least one way, each once. The `pap` protocol-tools table classes `pap_feedback` — reporting a task the company does not offer (§8.3: its domain, the task, a description without personal data) — as `send`. Schema and reference regenerated. Tests: 666 passed.
+
+- 0.0.126 (27 October 2026). **Personal Agent Protocol draft 0.3** in the `pap` block. A company's `scopes` are objects: `name` (an OAuth scope, never under the reserved `poppy:` prefix), `description` (what it allows, published as the company's `auth.scopes`), and, when the Maker says so, the hints `changes` (`none`, `reversible`, `irreversible`) and `personal_data`, published as `auth.scope_hints` — left out, they are derived from the Rules classes of the tools behind the scope. New: `company.excluded_tasks`, the tasks it does not offer through the protocol, each `task` (at most 200 characters) with an optional `alternative` — `instructions` (at most 2000 characters), `references` (`web` with its `url`, `openapi` with its `url` and `operation_id`, `mcp` with its `url` and `tool`), or both. A connection's scopes are never `poppy:` either, and its `sign_in` stays the order of preference, what the company offers now read from its issuer's `grant_types_supported`. The list-of-strings form of a company's scopes is refused. The Exchange Desk and Bookkeeping Desk examples say their scopes so. Schema and reference regenerated. Docs: apps (`pap`), protocols (draft 0.3). Tests: 666 passed (19 new).
+
+- 0.0.125 (25 October 2026). `interface.avatar`'s words name the avatars agent-runtimes now contributes beside Datalayer's drawings: the orb of `@datalayer/design`, `orb` (iridescent) and `orb-theme` (the theme's colours), thinking while a turn runs, and the ten characters clippy.js publishes, `clippy-js-clippy` to `clippy-js-bonzi` — Microsoft's, fetched from jsDelivr when shown, never kept. Ids, so the shape is unchanged. Schema and reference regenerated.
+
+- 0.0.124 (22 October 2026). An application may run in the `vscode` theme (T-30): `ThemeVariant` gains `vscode`, as Appearance lists it since primer-addons 1.0.41 added the VS Code theme.
+
+- 0.0.123 (21 October 2026). The harness capabilities table gains `auto_run`: the commands a harness runs without asking its client, as data — one anchored regular expression per family, read from the harness's own source for the version the register pins, never guessed; a pattern that does not compile or is not anchored is refused. Claude Code's is its read-only command allowlist (Claude Code 2.1.300, the Claude Agent SDK 0.3.300 that `@agentclientprotocol/claude-agent-acp@0.91.0` pins): `cat`, `wc`, `echo`, `ls`, `git status`, `gh pr view`… in eight families; every other catalogue harness lists nothing. The reference page says how many families each harness runs unasked. The platform reads it so that its *ask me first* on a command knowingly excludes them and a run of one is never an action against an application's rules.
+
+- 0.0.122 (21 October 2026). The session file's entry kinds gain `rule`: a rule the person added to or took back from a session (`{rule: {...}}` or `{removed: name}`), kept in the record so a session resumed from it has its Rules again (MH-03).
+
+- 0.0.121 (21 October 2026). The session file's `lineage.imported_from.exported_by` is the exporter's uid, a string, as the record's `imported` entry and the platform's session listing say it; the line's own `owner` and `exported_by` stay `{uid}`.
+
+- 0.0.120 (21 October 2026). The session file's JSON Schema says the entry kinds as an enum (an entry's `kind`, the session line's `kinds`), so a reader validating against the schema alone refuses `kind: shell` as `parse_line` does.
+
+- 0.0.119 (21 October 2026). **The session file and the harness capabilities table** (MH-12, MH-20). A new kind, `sessions/`: `datalayer-session-1.yaml` says the `datalayer-session/1` JSONL format — the session line first (or the team line, then each seat's session line), one entry line per record entry after it, redacted — its caps (20 000 entries, 64 MB), the three states (`open`, `paused`, `ended`), the entry kinds a file may carry (the record's, and the session's audit rows `paused`, `ended`, `swapped`, `cloned`, `imported`, `exported`, `titled`), the redaction rules by name and the refusal sentences every reader says word for word; `agentspecs.sessions.parse_line` validates a line (an unversioned first line, another version, an unknown kind, an entry without `at`, a team line without its seats, each refused in the spec's sentence), `session-file.schema.json` and the reference page are written by `python -m agentspecs.sessions`. Every harness spec now declares `capabilities:` (`resume` none|load|native, `fork_history` none|replay|rebuild, `interrupt`, `steering`, `images`, `compaction` own|none, `modes`) — required, refused when it contradicts the `acp` block (`resume` without `load_session`, `modes` that disagree) — and `acp.native_session` (meta|none) says whether the adapter exposes the vendor's own session id (none declared for all seven until the adapter drill answers it). Tests: 10 new (sessions), 5 new (harnesses).
+
+- 0.0.118 (20 October 2026). The speech licence register reviewed by the owner (VO-01, VO-64): `reviewed_by: owner` and `reviewed_on: 2026-10-20` replace `reviewed_by_counsel`, which is refused; a new list, `accepted_on_the_machine`, names by licence the server-only libraries pip installs on the person's machine with agent-runtimes' `voice` extra (phonemizer and eSpeak NG, GPL-3.0; FFmpeg, LGPL-2.1), each now with a `machine` entry, and any other server-only licence there is refused; libsndfile is said not to reach the machine. transformers.js 4.3.1; checked 2026-10-20. The SIWIS attribution names Junichi Yamagishi's institutions, the National Institute of Informatics and the University of Edinburgh. 6 tests.
+
+- 0.0.117 (20 October 2026). The `app.py` of the Customer Interview and Report from a file examples say `avatar`, as their YAML does since 0.0.116 (they still said `assistant`, which is refused).
+
+- 0.0.116 (20 October 2026). **The character is now the avatar**, its appearance: `interface.assistant` becomes `interface.avatar` and `deployment.hosted.character_alone` becomes `deployment.hosted.avatar_alone`; the old keys (and `interface.character`) are refused in one sentence naming the new one, with no alias. `ASSISTANT_CHARACTER_ID` is `ASSISTANT_AVATAR_ID`. A third kind of avatar beside Datalayer's drawings and the Microsoft Agent characters a plugin brings: a 3D model, `{kind: model3d, url}` (`Model3DAvatar`, `AvatarKind`), a `.glb` or `.gltf` at an https address, or `DEFAULT_AVATAR_MODEL_URL` when unsaid — RobotExpressive by Tomás Laulhé (CC0 1.0), from the three.js repository at r170. The twelve examples say `avatar`. JSON Schema and reference regenerated. Docs: apps (`interface`, `deployment`). Tests: 623 passed (3 new)
+
+- 0.0.115 (16 October 2026). The Shield policy schema copied from agent-shield 0.2.7: its descriptions say what each setting is, with no decision numbers or design-note sections. A catalogue agent on each harness (SH-43).
+
+- 0.0.114 (16 October 2026). The UI plugins' descriptions cite their box id alone.
+
+- 0.0.113 (16 October 2026). The default policy's description, and the tests' docstrings, say what was decided rather than citing a decision number.
+
+- 0.0.112 (16 October 2026). The spec text, schemas and references no longer cite the private plans: what was decided is said in plain words, box ids alone stay.
+
+- 0.0.111 (VO-63, 16 October 2026). What was said aloud is kept 30 days at most: an Appspec whose `record.include` names `audio` and whose record is kept longer — its `keep_for`, or its Track's retention when `checks.track` names one (`standard` keeps a year) — is refused in a sentence naming both lengths (`AUDIO_KEPT_DAYS_AT_MOST`); with the refusals already there (a public deployment, an application that does not listen). Docs: apps (`record`). Tests: 620 passed (1 new)
+
+- 0.0.110 (VO-16, 16 October 2026). The catalogue's `where` takes `machine` — the person's own machine, through agent-runtimes' `voice` extra (`loop --voice --speak`) — and says it of what the extra hears and says with: `whisper-small`, `kokoro-82m` and the three Kokoro voices (`[server, machine]`); nothing a browser runs, nor the server's large models. `Voice.spoken_as(language)`: a voice's own tag for a language it speaks (`fr` → `fr-FR`), which the engine is given — eSpeak NG knows `fr-fr` and refuses `fr`. The register lists what faster-whisper brings to the machine (faster-whisper, ctranslate2, tokenizers, av; whisper-small and the voices there); FFmpeg's note says its LGPL reaches the machine through av, not admitted there, with eSpeak NG's decision (VO-01). Tests: 619 passed
+
+- 0.0.109 (VO-16, VO-47, 16 October 2026). The licence register takes `where: machine` — the person's own machine, where agent-runtimes' `voice` extra installs from PyPI — and lists what the extra brings there: sounddevice and PortAudio, kokoro-onnx, onnxruntime, espeakng-loader (MIT) and the kokoro-82m store; phonemizer's and eSpeak NG's notes say that through the extra they reach the person's machine too, where the register does not admit GPL (the user's or counsel's decision, VO-01); a GPL library used on the machine is refused. `moonshine-base-en-server` hears English spoken turns on the server (revised by the user). 2 tests.
+
+- 0.0.108 (VO-47, 16 October 2026). `moonshine-base-en-server`: Moonshine Base (English, MIT) on the server — the browser's own pinned 8-bit export, run by onnxruntime with the speech service's greedy decoder (`engine: onnxruntime`, `where: [server]`), measured beside Whisper small for short spoken turns; its register line says no new library is used. `transcriber_for(language, "server")` names large-v3-turbo, the model that hears a language at any length; the speech service picks a turn's model itself. 1 test.
+
+- 0.0.107 (SH-57, SH-46, SH-45, 16 October 2026). **The long tail, listed:** the register takes a `tier` — `catalogue` (a spec launches it, drilled, offered) or `listed` — and every other agent of agentclientprotocol.com/get-started/agents (36 of the page's 43, read on 16 October 2026 at each project's own page and cross-checked against the ACP registry) is registered `listed` with its documented launch command (`command`, null where undocumented: fount, kaagum, stdio Bus), its licence, its terms, the credential it takes and whether serving it to third parties is permitted (`refused` citing the clause for Augment, Blackbox, Factory Droid, Junie, Poolside and Qoder; `unknown`, said, for Cursor, GitHub Copilot, Kiro, Kimi Code, Muse Spark Code and fount — allowed in the listed tier only); a listed harness has no spec, is offered by nothing, and naming one is refused *listed, not drilled yet* (`listed_refusal`, `harness_problems`); a spec beside a listed entry does not load. The reference page lists them. **An organization's own harness:** an `org-…` spec with its register entry, validated together by `organization_harness` (the terms, the licence, the credential and the pinned version required as for any harness), refused in the shared catalogue; `command_digest` and `admission_id` (`<id>@<digest, 12>`) name the command an administrator reviewed and admits on the organization's policy (`harnesses.admit`). **Harnesses in teams:** a team member may be a `harness` (a catalogue id, never with `ref`, `app`, `server`, `tools` or `mcpServer`; what the harness cannot honour refused at load), a link may go `over: acp` to a harness only; `referenced_harnesses`; the `coding-agents` team (Claude Code writes, Codex reviews, a supervisor delegating). JSON Schemas and references regenerated; 6 tests.
+
+- A `standards/` spec kind (SH-60, SH-66, 15 October 2026): what a conformance report answers — a standard's version, domains and controls, each with its id and title as the standard publishes them, mandatory or optional, retired or not, its cadence in months, its evidence items by kind (documentation, config, logs, evals, report, demonstration), its control activities and its crosswalk references. `aiuc-1` written from standard.aiuc-1.com's six domain pages at the October 15, 2026 release: 55 controls (42 mandatory, 5 retired in this release), 145 evidence items, crosswalks to 14 frameworks (the EU AI Act, NIST AI RMF, ISO/IEC 42001, MITRE ATLAS, the OWASP Top 10 for LLM and for Agentic Applications, OWASP AIVSS, CSA AICM, SOC 2, IBM's Risk Atlas, Cisco's framework, the Colorado AI Act, California SB 53, NYC Local Law 144). `iso-42001` as the second standard, read through AIUC-1's crosswalk: 70 clauses, each naming the AIUC-1 controls that cover it and the published gap analysis (`covered_by`, `coverage`). The version tracked, never applied silently: `released_on`, `next_release_on`, `read_on`, `version_notice` offering a newer release; `aiuc-1.index.txt` the published control index, and a test holding the spec to it (the live `llms.txt` when the network allows). The organization's controls (SH-64) start from `standards/templates/` — the failure plans E001 to E003, acceptable use E010, processing locations E011 (pre-filled with where Datalayer runs), regulatory compliance E012, the data policies A001 and A002, the risk taxonomy C001, vendor due diligence E006 (pre-filled with the model providers of the catalogue) — rendered by `template_text`, signable only once `unfilled_fields` is empty. JSON Schema at `standards/standard.schema.json`; the reference page generated by `python -m agentspecs.standards`; 10 tests.
+
+- A `policies/` spec kind (SH-50, 15 October 2026): the Shield's policy document — the rules deciding an agent's actions by class, kind, path and command, the limits with soft and hard thresholds (tool calls, terminals open, bytes written, the model budget in tokens, the spend limit in credits), the hosts a fetch may reach, the MCP servers lent, the harnesses admitted and whose credentials run them. One schema everywhere, the `agent-shield` package's, carried verbatim as `policies/shield-policy.schema.json` and held to the package's own by a test; each catalogue entry wraps a document as `policy` under `id`, `version`, `name`, `description`, `enabled`, `tags` (`policies/policy.schema.json`). The catalogue: `default` (decision 5's session document) and `organization-baseline` (an example of what an administrator writes in IAM). `jsonschema` is a dependency; the reference page is generated by `python -m agentspecs.policies`.
+
+- `record.include` takes `diffs` and `terminals` (SH-34, 15 October 2026): a harness's edits are kept whole — the file's old and new text — only when `diffs` is named, else each diff's hash and size; a terminal's output only when `terminals` is named, else its command and exit. JSON Schema and reference regenerated; 0.0.102.
+
+- *A Claude Code Agent* (`example-harness-claude-code`, SH-10, 15 October 2026): the first agent of the catalogue on a harness — `harness: claude-code`, off in the shared catalogue because it needs the account's own `ANTHROPIC_API_KEY`, which the harness declares and the runtime is given by name. The Datalayer runtime serves a catalogue harness through its ACP adapter (agent-runtimes 1.5.31): the sentence saying no runtime does is gone.
+
+- A `harnesses/` spec kind (SH-01, the register of SH-04, decided on the defaults, 15 October 2026): an agent program driven over the Agent Client Protocol — `claude-code` (`@agentclientprotocol/claude-agent-acp` 0.91.0, API keys only: Anthropic's terms refuse subscription credentials routed for others), `codex` (`@agentclientprotocol/codex-acp` 2.2.2, API keys only), `gemini-cli` (0.64.0, `--experimental-acp`; a Google login needs Code Assist Standard or Enterprise since 18 June 2026), `goose` (1.54.0, `goose acp`), `opencode` (1.19.0, `opencode acp`), `openhands` (1.16.0, `openhands acp`), one framework over ACP, `fast-agent` (`uvx fast-agent-acp` 0.10.45), and `custom`, whose command an organization's own spec names and which the shared catalogue refuses. Each says how it is launched (`acp`), what it needs (`requires`, secrets as ids of `env-vars/`: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GEMINI_API_KEY`, `LLM_API_KEY` added), what it honours of an agent spec (`honours`, `skills`, `instructions_file`) and its `terms`; `harnesses/register.yaml` registers every one with its licence, terms, credential, third-party serving and tier restrictions, each with where it was read on 15 October 2026 — a harness without an entry, or whose entry disagrees with its spec, does not load. An agent spec's `harness:` takes a harness id beside `pydantic-ai` and `vercel-ai`; `agent_harness_problems` says in a sentence what the harness cannot honour (`model:`, `subagents:`, `skills:`), and `custom`. JSON Schema at `harnesses/harness.schema.json`, the reference page generated. Served by the Datalayer runtime's ACP adapter from agent-runtimes 1.5.31 (SH-10).
+
+- Appspec `interface.voice.input: hands_free` is built (VO-12, VO-13, 15 October 2026): a conversation by voice — the composer offers *Talk with it*, a turn ends after a short silence and is sent, the answer is said as it is written, listening goes on, and speaking over the agent stops its voice and its run. No longer refused; `HANDS_FREE_NOT_BUILT` is gone. JSON Schema and reference regenerated.
+
+- A smaller speech model for spoken turns on the server (VO-47, decided by the user 15 October 2026): `whisper-small`, OpenAI's Whisper small in its CTranslate2 conversion (`Systran/faster-whisper-small`, MIT), pinned file by file, kept at `openai/whisper-small`; measured on the fixtures at 3.3% WER in English and 16.1% in French, about four times faster than large-v3-turbo, which keeps long recordings. In the licence register.
+
+- A speech model for the server (VO-34): `whisper-large-v3-turbo`, OpenAI's Whisper large-v3-turbo in its CTranslate2 conversion, run by faster-whisper on Datalayer's servers only, every file pinned by SHA-256 and kept at `openai/whisper-large-v3-turbo` in Datalayer's storage; `transcriber_for(language, "server")` answers it. The licence register names faster-whisper, CTranslate2, tokenizers, av and the FFmpeg its wheel ships as used, on the server.
+
+- Appspec `interface.voice.input`: `hands_free` is refused in a sentence until it is built (VO-12, decided 14 October 2026), no longer taken for click-to-talk; `VoiceInput` is `off` or `push_to_talk`. JSON Schema and reference regenerated.
+
+- *Exchange Desk* is on (PI-42): drilled live on r1 on 14 October 2026 on runtime image 0.0.34 — asked by a person's own agent signed in through Datalayer to exchange order `ord_7Hk2` for size L, it proposed the exchange and went on to tell the person it waits for their approval.
+
+- *Returns Desk* and *Shop Concierge* are on (PI-42): drilled live on r1 on 13 October 2026 at the hosted Manzanita — a return and a repair asked through its API with `pap_propose`, the return approved by the person and done once; a conversation handed to Marta, of the shop's staff, who answered in it. *Exchange Desk* stays off until the runtime offers a company's turn the tools of its code.
+
+- *Order Desk* is on (PI-42): drilled live on r1 on 13 October 2026 at the hosted Manzanita, the person signed in both by Direct Sign-In and by Device Sign-In, and their order answered for them.
+
+- *Signed Reader* is on (EX-11): drilled live on r1 on 13 October 2026 at the hosted Example Verifier, which said the signature holds and named the application; a site its signed fetch does not name refused.
+
+- A pair of examples (PR-13, E-02; decided 2026-10-13): `pair` (`AppPair`: an `id` and a `role`, `business` or `personal_agent`) links a PACT business to the personal agent that asks it; one of a pair speaks PACT, a business says its scopes, a personal agent answers as no business. *Guest Desk* (a business: `profile:read`, off and registering nobody) and *Errand Runner* (its personal agent, naming no business) are the catalogue's pair, both off until run live: when a person has copied both, the Studio registers the personal agent's copy with the business's copy and points it there.
+
+- A `signed_fetch` block (EX-11, decided 2026-10-13): an application reads pages at the exact sites it names (`AppSignedFetch`, `AppSignedFetchSite`: an id and a domain each), with `GET` only, through the gateway's `signed-fetch` toolset on its safe egress path, every request signed with its own Web Bot Auth key and recorded, a `read` under its Rules; listed under `protocols` as `web-bot-auth`, which now configures it. *Signed Reader* reads Example Verifier (`verify.examples.datalayer.run`) and says whom it saw; off until the gateway's signed fetch is deployed — [the Appspec page](https://agentspecs.datalayer.tech/apps#companies-and-businesses-over-agent-protocols).
+
+- *Travel Desk* and *Shopping Desk* are on (PI-42): drilled live on r1 on 13 October 2026 at the hosted Example Air, Example Store and Example Outfitters, as a Preview's runtime reaches the gateway, each saying what was verified live and what not; *Order Desk* stays off until the hosted Manzanita finishes Direct Sign-In (counterparts 0.0.5).
+
+- A company's operation may give a standing permission (R-07, decided 2026-10-13: the Ledgerly pattern): `pap.company.operations[].allows` in place of `tool` — at one of the application's own company connections (in each person's account, able to change things), what confirming there does (`write` or `buy`), every bound a term of the operation (a maximum or the value allowed), how many uses and for how many days. Only the person confirms it, and its summary says every bound; once they do, it is recorded as the approval in advance they would give in Datalayer — [the Appspec page](https://agentspecs.datalayer.tech/apps#companies-and-businesses-over-agent-protocols).
+
+- *Trusted Agent Protocol* (`tap`) says the draft built from Visa's public Merchant Specifications (PR-24, decided 2026-10-13): the tags `agent-browser-auth` and `agent-payer-auth`, its specification's page, the packages implementing it; still `planned` for applications until Visa confirms it.
+
+- A `pact.business` block (PR-13, PI-32; decided 2026-10-13): an application answers as a PACT 1.0 business — its Brand's name (the application's `owner` when unsaid), the scopes a person may delegate with what each lets a personal agent do, and the personal agents its Maker registered, each its issuer and where its keys are (`AppPactBusiness`, `AppPactRegisteredAgent`); enabled, it names at least one; listed under `protocols` as `pact` — [the Appspec page](https://agentspecs.datalayer.tech/apps#companies-and-businesses-over-agent-protocols).
+
+- The protocol examples reach the counterparts Datalayer hosts (PI-42): *Order Desk* at `manzanita.examples.datalayer.run`, *Travel Desk* at `air.examples.datalayer.run` (audience `https://air.examples.datalayer.run/a2a`), *Shopping Desk* at `store.examples.datalayer.run` and `outfitters.examples.datalayer.run`; *Bookkeeping Desk*'s Northwind has no hosted counterpart and stays off.
+
+- A `pap` block names the Personal Agent Protocol profile it is written for, `profile: draft-01` (S-03): one Datalayer speaks, or it is refused in a sentence (*This application asks for Personal Agent Protocol profile “x”; Datalayer speaks draft-01.*); a block without one is refused too, an application without the block has none. Every catalogue application with a `pap` block names it — [the Appspec reference](https://agentspecs.datalayer.tech/apps/reference#apppap).
+
+## 0.0.76
+
+- *Report from a File* reports a cell's text as data — quoted as written, never hidden or acted on — and *Support Desk*'s sample documentation speaks to its customers (E-01: the four examples *Ready* on Datalayer).
+
+## 0.0.75
+
+- A test can be a short conversation (E-01): `tests.cases[].turns` in place of `ask`, each turn what the person says (`say`), the option of a choice they pick (`choose`) or an action of its code they press (`press`, with its `payload`), judged on the whole conversation — *Customer Interview*'s four tests answer its consent and its goal, and press its `save` and `finish` — [a test that is a conversation](https://agentspecs.datalayer.tech/apps#a-test-that-is-a-conversation).
+
+- *Quote Calculator* and *Support Desk* search their documents before their first words; *Report from a File* takes a CSV only and refuses any other file in a sentence (E-01).
+
+## 0.0.74
+
+- `signs` — the argument of an MCP server's tool that carries what it sends (I-10): an application's runtime closes it with its byline, *Written by 📬 Inbox Triage, for Ana Lopez.*, so a mail or a message sent through a connection says which application wrote it and for whom. Gmail's send and draft (`body`), Google Chat's message (`message_text`), Slack's post and reply (`text`) say it; only a tool that acts may — [action classes](https://agentspecs.datalayer.tech/apps#action-classes).
+
+- *Quote Calculator* and *Support Desk* told what their tests ask (E-01).
+
+## 0.0.73
+
+- A test can give its application text files with what it asks (E-01): `tests.cases[].files`, each a name and its text (at most 120,000 characters) — *Report from a File*'s cases carry their CSVs.
+- *Support Desk* ships its *Product documentation* and *Returns policy* as `samples`, given to the application made from it (E-01).
+
+## 0.0.72
+
+0.0.71 was tagged but not published: its tests failed in CI on the decision model and the generated reference.
+
+- `samples` — what an example is tried on before it is anybody's, published with it by Datalayer and read only (E-06, E-11): documents of its contents (*Quote Calculator*'s *Price list*, a sample CSV a visitor's browser sandbox is given) and a decision's alternatives with their evidence and metrics (each of the four decisions); validated, in the schema and the reference — [apps reference](https://agentspecs.datalayer.tech/apps/reference).
+- The four decisions decide with `cloudflare:wrk/typesafe/jev`, the route Datalayer's ai-inference offers (E-06).
+
+## 0.0.70
+
+- A custom component's `source` may be a file of the application's folder, by its path in it — `components/dial.js` (P-29): a `.js` or `.mjs` file inside the folder, no absolute path and no `..`; packaged with the application and served by the server it is installed beside — [apps reference](https://agentspecs.datalayer.tech/apps/reference).
+
+## 0.0.69
+
+- `example-blank` (P-32): a model — Claude Sonnet 4.6 — and nothing else: no prompt of its own, no MCP servers, no skills, no tools. The agent an `app.py` runs in its own process, with the application's instructions as its whole prompt; `loop apps init --python` starts from it — [agents](https://agentspecs.datalayer.tech/agents).
+
+## 0.0.68
+
+The four scenes of the catalogue rehearsed on Datalayer (A-14) — [scenes](https://agentspecs.datalayer.tech/scenes).
+
+- Event response asks one specialist at a time, never asks the audience back, and says in its request what is to be sent and to whom; Disaster Assessment never sends: it shows a sending as a choice to approve (*Send it*, *Not now*). Its flood beat is allowed 360 s, and the storm is routed by what it asks for.
+- Month-end Close works the accruals out when the conversation holds none, charts at zero, and its post-accruals beat is allowed 180 s; its rehearsal on r1 passed four beats of four (`month-end-close/rehearsal.json`), Disaster Assessment's full run three of four (`disaster-assessment/rehearsal.json`).
+
+## 0.0.67
+
+- The rehearsal that was played (A-14): a scene's last rehearsal is kept beside the specs in `<id>/rehearsal.json` — `ScenePlayed`: when, where, whether every beat `passed`, the verdict's sentence, each beat's verdict and the agent-runtimes that played it — written by `loop scenes rehearse --cloud`, read by `scene_played`, kept by `write_played`, refused in a sentence when it is not a rehearsal's result. A scene whose last rehearsal passed is *Live*; one that did not says so. The hand-written `verified` stays a person's word beside it — [scenes](https://agentspecs.datalayer.tech/scenes#the-rehearsal-that-was-played).
+
+## 0.0.66
+
+- Model prices (R-09): 29 models of the catalogue carry `pricing`, each read from its provider's published page on 2026-10-08 and cited in its spec — every Bedrock Claude model at the US cross-region (geo) price its `us.` id is billed at (Sonnet 4.6 and 4.5 $3.30/$16.50, Sonnet 4 $3/$15, Opus 5, 4.8 and 4.6 $5.50/$27.50, Opus 4 $15/$75, Fable 5 $11/$55 per million input/output tokens), the Anthropic API models, the OpenAI models at the Standard tier, the five Azure OpenAI models at their Global Standard deployment's price — OpenAI's list price, as pydantic/genai-prices prices Azure (decided 2026-10-08) — and the Workers AI models at Cloudflare's per-token price. Until now only Jev had one, so ai-inference recorded Bedrock calls, the default, at no cost. Alibaba Model Studio (priced by region and prompt length) and Ollama carry none — [models](https://agentspecs.datalayer.tech/agents/models).
+- `interface.accent` is optional, with no default: an application that names none wears the theme's own colours, and one that names an accent wears it over whichever theme it runs in, not over `loop` alone (decided 2026-10-07). An accent not among the six is refused. The schema says `null` by default. T-05, T-30 — [reference](https://agentspecs.datalayer.tech/apps/reference).
+
+## 0.0.65
+
+- A file to download is a component of the catalog (P-04): `Download` (*File to download*), its `name` and its `url` — an http(s) link, or the file itself as a `data:` URL — with its `media_type`, `size` and `description` said beside it; pressing it saves the file and sends its `download` event. An application's answer shows it (`session.ui.download(...)`), as the Canvas places it ([components](https://agentspecs.datalayer.tech/agents/ui-plugins/components#download)).
+- The `earthdata` MCP server declares what its download's script reads in the code sandbox (R-19): `sandbox_envvars`, `EARTHDATA_USERNAME` and `EARTHDATA_PASSWORD` (new env-var specs). A runtime is given only the secrets its specs declare, so these reach the sandbox again when the account has them — never the server, and never required: searching is anonymous.
+
+## 0.0.64
+
+Components in the answers of the home page's scenes (H-02, H-03).
+
+- The outputs catalogue gives `components` (`application/json+a2ui`, A2UI's media type): an answer's components of the catalog, one A2UI surface per artifact. Accounting, Month-end close, Crop monitoring, Disaster assessment and Change detection name it in `interface.outputs`, after Markdown and the notebook.
+- A scene's kinds of answer (`AnswerKind`) gain `sources` (cards that open), `choice` (buttons that answer the application) and `approval` (a choice whose option does more than read); a rehearsal line names them with or without an article (*Accounting: sources*, *an approval*).
+- The four scenes have four beats each, each answered with a different kind — the sources, a table, a chart, an approval — the approval asked of a member that only reads (*Send a payment reminder…*, *Post the accruals…*, *Save the June 2026 granules…*, *Send the Valencia flood assessment…*); the entries' starters and the teams' suggestions are the new cues. Sales and Event response say how the person wants it shown in their request, and never that a thing was done unless the member says so.
+
+## 0.0.63
+
+- The environment variable specs live in `agentspecs/env-vars/` (was `envvars/`), hyphenated like `mcp-servers/`, `backend-tools/` and the other directories; the `envvars` field of an agent's or server's spec is unchanged.
+
+## 0.0.62
+
+- The `earthdata` MCP server reaches NASA's catalogue through the Datalayer MCP server's `earthdata` toolset (`mcp-remote`, `only=earthdata`, the person's `DATALAYER_API_KEY`), as `odoo-accounting` reaches the books: `earthdata-mcp-server` is a Python package, so `npx` never started it on a runtime (every Earthdata scene member failed with "Connection closed"). Searching is anonymous; a download on the sandbox still reads `EARTHDATA_USERNAME` and `EARTHDATA_PASSWORD` there.
+
+## 0.0.61
+
+A scene has a spec of its own (A-11, A-13, decided 2026-10-07): `scenes/`, `schema: loop.scene/v1`. The team says who is on stage; the scene says what happens there. The four scenes of the home page written as scene specs.
+
+Pages: [Scenes](https://agentspecs.datalayer.tech/scenes), [Scene spec reference](https://agentspecs.datalayer.tech/scenes/reference).
+
+- `agentspecs.scenes`: `SceneSpec` — `name`, `description`, `icon` and `emoji` as an application has them (one face, checked the same way, the scene's own and never a member's); `team` (the team it stages) or an inline `cast` that makes one (`team_of()`), each cast member's `persona` (`name`, `face`, `line`) and `brief`; `setting` (`systems`, each an MCP server with the name it is shown `as` and what it `holds`; `frames`, `contents`, `period`, `language`, `assumes`); `script` (beats: `cue` — `say`, `schedule` or `event` — `narration`, `moves` — `who` asks whom `over` `a2a` or `mcp`, `what`, `tool`, `does`, `answers` a kind — `expect`, `shows`, `pace`, `branch` on a `decision`); `stage` (`positions`, `opens_first`, `transcript` — tools, narration, `withhold` — `inspectors`, `rests_after`, `pace`); `audience` (`who`: visitors, signed-in, nobody; `ceiling_per_ask`, `asks_a_day`); `rehearsal` (per beat the transcript's `lines`, `must_say`, `must_not_say`, `within`; a `recording` for when it cannot play live; `verified` as an application's tests); `deployment` (`account`, `page`, `addresses`: a member on a runtime to the variable its address is read from). `cast_of()` resolves every member with its persona filled from its application; `cues()` is what the audience may say; `parse_line` reads the transcript's grammar (`A → B`, `A → System: tool`, `A: a table`).
+- `scene_problems`, in sentences: a cast member not in the team, or saying what it is when the team does; a beat's mover not in the cast; a system that moves; a move over `mcp` to one that is not a system, over `a2a` to a system, to a member the team does not have it talk to, to a system reached through no connection; a cue nobody answers; a tool no connection offers or the server does not have, a tool asked to `read` that writes; a system nobody reaches; a Frame or a server the catalogue does not have; visitors on a scene whose runtime member has no address; an address for a member in the browser; a rehearsal naming a beat not in the script or a name not on stage; a missing recording; a scene wearing a member's face. `scene_setup`: its members' applications' setup. `SCENE_CATALOGUE`, `get_scene`, `list_scenes`, `scenes_staging`, `dump_scene`, `load_scenes`.
+- The four scenes: `sales-and-accounting` (🤝), `month-end-close` (📒), `crop-monitoring` (🛰️), `disaster-assessment` (🚨), each with its cast's personas and briefs, its setting (Odoo or Earthdata, `assumes` as the line under the title), three beats whose cues are the entry's starters, with their moves, what they show and their branches, stage directions, a visitor audience, a rehearsal of every beat, and the variables the page reads its addresses from (`DATALAYER_DEMO_SCENE_<TEAM>_<MEMBER>_A2A_URL`; Accounting keeps its own).
+- JSON Schema (`scenes/loop.scene.schema.json`) and reference written by `python -m agentspecs.scenes`; the wheel carries both. Tests: `test_scenes.py`.
+
+## 0.0.60
+
+A scene is a team (A-04, decided 2026-10-07): one member allowed, none refused; each member its role, the team its shared context, each interaction its protocol. The three scenes the home page needs beside Sales and Accounting (A-08).
+
+Pages: [Teams of applications](https://agentspecs.datalayer.tech/agent-teams/applications) (Scenes), [Members](https://agentspecs.datalayer.tech/agent-teams/members), [Execution](https://agentspecs.datalayer.tech/agent-teams/execution) (`context`).
+
+- `TeamSpec.agents` holds one member at least: a team with none is refused (`has no member`). A single member is a scene of one agent and its data.
+- `TeamSpec.context` (`TeamContext`): `sharing` (`TeamSharing`: `shared` unless said, `isolated`, `own-turns` — what `jupyter.yaml` wrote and the generators read) and `frames`, the Frames every member works under, in order, as a Cog names its own; a Frame named twice refused. `referenced_frames()`.
+- `TeamMember.server`: a member that is an MCP server of the catalogue, a system of the scene the others reach over MCP, in place of `ref` and `app` (`is_server`, `display_name`); it has no `talks_to` and no `subagents`, and the team does not enter at it. `referenced_servers()`.
+- `TeamProtocol.MCP`: `talks_to … over: mcp`, to a server member only; `a2a` to an agent or an application only. Refused in sentences: a link to one not in the team (both names said), to itself, over the protocol that does not fit who is asked, a server that asks, a scene entering at a server. `links()`: every interaction, (who asks, who is asked, over what).
+- Scenes: `teams/month-end-close.yaml` (Month-end close alone, on a runtime, reading Odoo through `odoo-accounting`), `teams/crop-monitoring.yaml` (Crop monitoring alone, on a runtime, on `earthdata`), `teams/disaster-assessment.yaml` (Event response, in the browser, asks Disaster assessment and Change detection, each on a runtime over A2A, each on `earthdata`), each with its page words — a name, one line, the entry's starters as its suggestions.
+- Applications: `apps/month-end-close.yaml` (`worker-month-end-close`, `odoo-accounting` at read), `apps/crop-monitoring.yaml` (`worker-crop-monitoring`), `apps/disaster-assessment.yaml` (`worker-disaster-assessment`), `apps/change-detection.yaml` (`worker-change-detection`), each on `earthdata` at read, and `apps/event-response.yaml` (`worker-event-response`, no connection: it asks and reports). What each needs is said as setup: the five workers are not enabled, `odoo-accounting` is not, `earthdata` is.
+- `mcp-servers/earthdata.yaml` classes its three tools, read off its code: the two searches read, `download_earth_data_granules` writes (its `download` mode); at *Can read* the searches are done and the download is left to the person.
+- Tests: `test_teams.py` (`TestScenes`), `test_apps.py`.
+
+## 0.0.59
+
+Components a developer writes (P-17): a component of one application only, declared in its spec and reviewed as the catalog's own.
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (Components of its own), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `interface.custom_components` (`AppCustomComponent`): `name` (none of the catalog's), `description`, `props` (the JSON Schema of an object, its properties typed `string`, `integer`, `number`, `boolean`, `array`, `object` or an `enum` of words), `shows` and `sends` (bindings), `source` (a built ES module over `https://`, or `http://localhost`), `integrity` (a Subresource Integrity hash), `height`, `example`; `catalog_entry(version)` lists it as the catalog lists a component. Refused in sentences: a catalog component's name or one given twice, a module of the application's folder (P-29) or not over `https://`, a property of another type or one every component has, a binding that is also a property, a default or an example its schema refuses.
+- `app_problems` reads an application's own components with the catalog's: in `interface.components`, on its surface (their properties checked: `custom_props_refused`) and as a widget's page's output (its value what it shows first).
+- JSON Schema and reference regenerated. Tests: `test_apps.py`.
+
+## 0.0.58
+
+Widget applications (P-05): a widget's page written in its code — its inputs a form, its outputs values — run again as an input changes, its outputs shown in place.
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (A widget's page), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `interface.page` (`AppPage`): `function`, the function of its code that runs it; `inputs`, the JSON Schema of a form (checked as the form `'page inputs'`), and `inputs_ui`; `outputs` (`AppPageOutput`), one at least, each a `name`, a `title`, a `component` among `PAGE_OUTPUT_COMPONENTS` — `Text` (unless said), `Image`, `Table`, `Chart` — and its other properties in `props`; `live` (`true` unless said). Refused in sentences: a page that is not a widget's, inputs that are not a form, two outputs of one name, an output's `props` saying its id or its value's property or lacking one its component needs, an input named as a setting.
+- JSON Schema and reference regenerated. Tests: `test_apps.py`.
+
+## 0.0.57
+
+Who the user is, when it matters (D-21): an embedded application that acts in each user's name takes only a user the host's server signed.
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (Who the user is, when it matters), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `deployment.embedded.host.user` (`HostUser`): `claimed` (unless said), what the page says; `signed`, only a token the host's server signed with the deployment's secret — HS256 (`HOST_USER_TOKEN_ALGORITHM`), `sub`, `name` and `exp` at most an hour away (`HOST_USER_TOKEN_MAX_SECONDS`) — the unsigned one refused. `HostBridge.signed_user`.
+- JSON Schema and reference regenerated. Tests: `test_apps.py`.
+
+## 0.0.56
+
+Profiles and settings in full (P-20), and translation (P-26): several assistants in one application, starters per profile and by category, the nine setting inputs, and what a person reads of an application in their own language.
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (The nine inputs, Profiles and starters, Translations), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference), [Components](https://agentspecs.datalayer.tech/agents/ui-plugins/components) (Form 1.1.0).
+
+- `interface.starters[].category`: the heading a starter is offered under.
+- `interface.profiles`: two at least, each an `id`, a `label`, a `description`, `instructions` told to the agent in every run, a `model` (a mode's wins over it) and `starters` in place of the application's. `AppInterface.profile`, `profile_choice`, `starters_for`; a profile's model is one of the catalogue's (`app_problems`).
+- `interface.settings_ui`: how the settings' fields are drawn, a uiSchema by field name — `ui:widget` one of `FORM_WIDGETS`, each held to the fields it draws (`form_ui_problems`); `SETTING_INPUTS` names the nine inputs and the field and widget of each. A Form block takes the same `ui` (Form 1.1.0).
+- `interface.language` (`en` unless said) and `interface.translations` by BCP 47 tag (`LANGUAGE_TAG`): name, description, welcome, starters by label, categories, settings' fields (title, description, enum values' names), commands' descriptions, modes and profiles. `pick_language(available, preferred)`, `AppInterface.translated(preferred)` and `AppSpec.translated(preferred)`. Refused: a tag that is not one, a translation into its own language or the same language twice, and a translation of what the application does not say.
+- Support Desk: its starters by category, its product as radio buttons, and in French.
+- JSON Schema, reference and components page regenerated. Tests: `test_apps.py`.
+
+## 0.0.55
+
+What a person sends (P-21): the kinds of file an application takes in its composer without asking, each with its largest size, and how many at once.
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (What a person sends), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `interface.uploads`: `kinds` — each a `type`, a media type (`application/pdf`), a family (`image/*`, `audio/*`) or an extension (`.csv`), and its `max_mb` (10 unless said, 25 at most, `MAX_UPLOAD_MB`) — and `max_files` (5 unless said). None when unsaid: the composer offers no attachment, and a file sent with a message is refused.
+- `AppUploads.kind_of`, `refusal` and `too_many` say which kind takes a file and why one is refused, in a sentence; `upload_kind_takes(kind, name, media_type)`.
+- Refused: no kind, a kind said twice, a type that is none of the three, a size of 0 or over 25 MB, `max_files` under 1 or over 20.
+- JSON Schema and reference regenerated. Tests: `test_apps.py`.
+
+## 0.0.54
+
+What an application's code declares (P-06): its own tools, its code's checks, and tests its code decides — in the spec, so that the Canvas shows them and validation runs them.
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (Written in its code), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `tools`: tools of its own, written in its code (`@app.tool`) — a `name`, a `description` for the agent, `parameters` as the JSON Schema of an object, and what it `does` by class of action. `behaviour_for` decides a call by what it does, or by a rule that names it by its name alone; `app_problems` accepts such a rule. `AppSpec.tool(name)`.
+- `checks.code`: checks written in its code (`@app.check`), each a `name`, where it runs (`on`: `answer` or `tool_call`, `CheckStage`) and a `description` in words.
+- `tests.cases[].code`: the function of its code that decides a case; `expect` still says it in words.
+- Refused: names that are not Python names, a name said twice, a tool named as a backend tool the application names, a tool that does not say what it does.
+- JSON Schema and reference regenerated. Tests: `test_apps.py`.
+
+## 0.0.53
+
+Settings are a form (C-16, decided 2026-10-06: one form kind).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (Settings), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `interface.settings` is the JSON Schema of a form, an object of named fields, each with its `title` and its `default` — checked as a Form block's schema is (`form_problems`, as the form `'settings'`). Drawn with `@datalayer/primer-rjsf` beside the conversation and on a deployment's Ship card; the runtime checks what a run is given against it.
+- **Breaking:** the list of settings (`id`, `type`, `label`, `options`, `default`, `min`, `max`) is refused, not read; `AppSetting` and `SettingType` are gone. The catalogue's applications with settings migrated: *Quote Calculator*, *Support Desk*, *Web Research*, *Customer Interview*, *Report from a File* (the last two built from their `app.py`, whose `app.setting(name, field)` takes a field's JSON Schema).
+- JSON Schema and reference regenerated. Tests: `test_apps.py`, `test_app_surfaces.py`.
+
+## 0.0.52
+
+*Inbox Triage*'s recorded run said in a Maker's words (E-01): its sentence names Datalayer's own tests, not the package and test file they are in, since the gallery and the example's pages show it.
+
+## 0.0.51
+
+The examples' agents, enabled where they work (E-01, decided 2026-10-06).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `unavailable_because`: why an application is not offered today, in a sentence its page shows. An application with `enabled: false` says it, one that is offered does not; either way round is refused. JSON Schema and reference regenerated.
+- Agents enabled, each with the models ai-inference serves beside its own (`model_additionals`): `jupyter-data-analyst`, `worker-document-qa`, `worker-customer-interviewer` and the Cog `cog-customer-interviewer`. What they need is enabled or built: no MCP server, the notebook and document tools, the documents tool on Contents, a Frame.
+- Examples switched on: *Quote Calculator*, *Report from a File*, *Customer Interview*, *Support Desk* — and *Ship or Fix*, *Supplier Comparison*, *Data Quality*, *Model Choice*, whose agent is now enabled. Their `tests.verified` no longer say the agent is off; none has run live yet.
+- Examples kept off, each saying why: *Inbox Triage* (the mailbox connection, W-02, is not built) and *Weekly Pipeline Report* (ten of its twelve Guards are not run yet, so the Gates before the board cannot pass).
+- Tests: `test_apps.py`.
+
+## 0.0.50
+
+Commands and modes in the composer (P-19).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `interface.commands` (`AppCommand`): `name` (what follows the slash: lower-case letters, digits and hyphens, a letter first), `description`, and `prompt`, what picking it sends — `{input}` the words typed after it, the only placeholder; `command_prompt(command, words)` says it, and `AppInterface.command(name)` finds one. A name said twice is refused.
+- `interface.modes` (`AppMode`, `AppModeOption`): a switch, `id`, `label`, `default`, and two options at least, each with `instructions` told to the agent in every run in that mode and optionally a `model` run in place of the application's. Ids said twice, a default not among the options, or two modes choosing the model are refused; a model the catalogue does not have is a problem (`app_problems`). `AppInterface.mode_choice(chosen)` is the option of every mode a run is in (an unknown mode or option refused), `mode_effect(chosen)` its instructions and model.
+- A key a command, a mode or an option does not know is refused. JSON Schema and reference regenerated.
+- Tests: `test_apps.py`.
+
+## 0.0.49
+
+The theme an application runs in by default (T-30).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `interface.theme` (`AppTheme`): `variant`, one of Appearance's themes (`ThemeVariant`: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop`), and `mode` (`ThemeMode`: `light`, `dark`, `auto`), the person's own when unsaid. Unsaid, the application follows the person's theme. Its `accent` colours the `loop` theme only. A variant or a mode not listed is refused, as is a key it does not know.
+- Tests: `test_apps.py`.
+
+## 0.0.48
+
+The host page and an embedded application talk to each other (D-10): the values the page passes it and the functions of the page it may call, named in its Appspec, each a tool a rule decides.
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps) (The host page's values and functions), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `deployment.embedded.host` (`HostBridge`): `context`, the host's values it reads (`user`, `page`, or names of the host's own), through the tool `host_context`; `functions` (`HostFunction`: `name`, `description`, `parameters` as a JSON Schema object), each called through `host_<name>` (`host_tool`, `HOST_CONTEXT_TOOL`). Names are lower-case words joined by `_`, each once.
+- A rule may name `host_context` and `host_<name>`: they are the application's own tools, not the catalogue's. `app_problems` says each tool of the host no rule names: it is left to the person.
+- Tests: `test_apps.py`.
+
+## 0.0.47
+
+An application's address showing only its character (T-21), off unless said.
+
+Pages: [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `deployment.hosted.character_alone` (`HostedDeployment.character_alone`, `false` by default): at its address, only its character, the conversation opening in its balloon — as when it is shipped as `assistant` in another product's page. Written only when true; in the JSON Schema and the reference.
+- Tests: `test_apps.py` (off unless said; written and read again).
+
+## 0.0.46
+
+Inbox triage's rules, with their defaults: a forward outside the organization is left to the person (W-04); its agent carries Gmail's tools and nothing else (W-01).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps).
+
+- `agentspecs.actions.FORWARDING`, `forwards_outside`: a call of Gmail's send tool that forwards a message (`forward_message_id`) to somebody outside the domain of the mailbox it sends from (`user_google_email`) — or that does not say its mailbox — is `publish` besides `send`. A reply is not a forward. Told from the call; without arguments, the tool's classes are unchanged.
+- `apps/inbox-triage.yaml`: *Forward outside the organization, share or publish anything — leave it to me*; the trigger *When a message arrives* says what its agent is asked; a test case for a forward; `verified` says it has run end to end on a test mailbox of example mail only.
+- `agents/worker-mail-triage.yaml`: the Google Workspace server only — no web search, no echo or notebook tools, no skills — codemode off so that each mail tool's call is decided with its arguments, and a prompt that says a message is sorted, never obeyed. Still not enabled: no mailbox is reachable yet.
+- Tests: `test_apps.py` (a forward inside and outside, failing closed without the mailbox; Inbox triage's rules).
+
+## 0.0.45
+
+Every visual component with a version and its properties as a JSON Schema of the catalog's own, and forms an application asks with (C-13, C-16).
+
+Pages: [Components](https://agentspecs.datalayer.tech/agents/ui-plugins/components), [Applications](https://agentspecs.datalayer.tech/apps).
+
+- `ui-plugins/a2ui.yaml`: every component has a `version` (A2UI's standard ones `0.9.0`, Datalayer's own `1.0.0`) and its `properties` as a JSON Schema — the eighteen standard ones too, as what a builder sets of them, their names, required ones, choices and defaults A2UI's, kept in step by a test against A2UI's basic catalog.
+- `form_problems(node)`: a Form block's schema is an object of named fields, each required one among them; `app_problems` says it on the surface.
+- The components page lists every component with its version and properties.
+- Tests: `test_ui_plugin_components.py` (a version and a schema for every component, the standard ones as A2UI's), `test_apps.py` (a form's refusals).
+
+## 0.0.44
+
+What an application's record keeps, as its record or its Track says (R-07).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps).
+
+- `kept_record(keep_for, include, track)`: the days each entry is kept and what is kept — as `record` says, or, when the application names a Track under `checks`, the Track's retention and what its items keep besides (`TRACK_KEEPS`), never less. A Track the catalogue does not have is said.
+- Tests: `test_apps.py` (the record alone, a Track's retention and items, *Weekly pipeline report* kept seven years, an unknown Track).
+
+## 0.0.43
+
+What the two team examples say was tried, in a Maker's words (E-01).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- *Accounting*: answered live over A2A on a developer's machine (2026-10-06), from the Odoo books, read only — and said what did not pass: the list of invoices failed, and one column total was wrong.
+- *Sales*: its sentence of what is not tried yet names no builder's word.
+- The reference written again from *Accounting*.
+
+## 0.0.42
+
+The floating assistant's balloon: the whole conversation, or only what it says or does now (T-23).
+
+Pages: [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- Appspec: `interface.balloon` — `history` (every message, scrolled, the composer last) or `current` (only what it says or does now: the answer being written, or the tool it calls). The page's own when unsaid: `history` for the floating chat, `current` for a team's members. `BalloonDisplay` in the JSON Schema.
+- Refused: any other word (`interface.balloon`).
+- Tests: `test_apps.py` (both displays round-tripped, the schema's enum, the refusals).
+
+## 0.0.41
+
+Output formats: what an application's answers come in, by media type (H-29).
+
+Pages: [Applications, Outputs](https://agentspecs.datalayer.tech/apps#outputs), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- Appspec: `interface.outputs` — the media types its answers come in, words first (`text/plain` or `text/markdown`), then any other format, such as `application/x-ipynb+json` for a Jupyter notebook. Plain text alone when unsaid. Served over A2A, they are its agent card's output modes, and a caller accepts some of them with each request (`acceptedOutputModes`).
+- Refused: an output that is not a media type (`type/subtype`, lowercase, no parameters), one named twice, outputs that do not start with words; and, among `app_problems`, an output the outputs catalogue does not give (`output_media_types()`, the catalogue's `mime_types`). The JSON Schema carries the pattern.
+- Accounting answers in Markdown and in a Jupyter notebook (`text/markdown`, `application/x-ipynb+json`).
+- Tests: `test_apps.py` (Accounting's outputs round-tripped, every refusal).
+
+## 0.0.40
+
+- The speech service is named `datalayer-speech` (on r1) in the voice catalogue and the licence register; nothing else changes.
+
+## 0.0.39
+
+- `agentspecs.speech.transcriber_for` prefers `moonshine-tiny-en` to `moonshine-base-en` for English: on the recorded fixtures it heard better (WER 3.3% against 4.9%, agent-runtimes `tests/voice`, 2026-10-05) at half the download (VO-05).
+
+## 0.0.38
+
+Voice, its foundations (Phase V0): the voice catalogue, the licence register, and an application's voice.
+
+Pages: [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `agentspecs/voices` (VO-40): three Kokoro voices for the first languages, English and French — `kokoro-af-heart` (en-US), `kokoro-bf-emma` (en-GB), `kokoro-ff-siwis` (fr-FR, with the SIWIS database's CC BY 4.0 attribution). Each names its engine, its model, the engine's own name for it, its languages (BCP 47), where it may run, the licence of its weights and of its data, and a sample.
+- `agentspecs/speech-models` (VO-40, VO-03): `moonshine-tiny-en`, `moonshine-base-en` (MIT, the browser's English), `whisper-base` (MIT, the browser's French), `silero-vad` (MIT, as `@ricky0123/vad-web` 0.0.31 ships it) and `kokoro-82m` (Apache-2.0, on ai-agents). Every file pinned by its SHA-256 and its size, with the revision it was copied from, so that nothing is fetched from a third party's hub at run time.
+- `agentspecs/speech-licences.yaml` (VO-01): the register — every library, model, voice and dataset weighed, the browser packages' dependencies among them, with its licence and source; `allowed` (MIT, Apache-2.0, BSD, 0BSD, ISC, CC0, CC BY 4.0) and `server_only` (GPL and LGPL, run on Datalayer's servers and never sent to a browser). Not yet reviewed by counsel.
+- `agentspecs.speech`: the catalogue, typed and checked when it loads — a voice or a model whose weights, data or code carry a licence on neither list is refused with a sentence (VO-04); `list_voices`, `get_voice`, `list_speech_models`, `transcriber_for` (Moonshine where it hears the language, Whisper otherwise), `voice_problems`. Imports only pydantic and yaml, so the speech service reads it alone.
+- Appspec: `interface.voice` (VO-41) — `enabled` (off unless said), `input` (`off`, `push_to_talk`, `hands_free`), `output` (`off`, `on_request`, `always`), `voice`, `language` (BCP 47) and `where` (`auto`, `device`, `server`); a voice not in the catalogue, or not speaking the language, is one of `app_problems`. `audio` as a record item (VO-42), kept only by an application that listens and refused for a public one.
+- Tests: `test_speech.py` (non-commercial voices and models refused, GPL kept off the browser, every file pinned, English and French heard and spoken, the register naming everything used, the Appspec's voice round-tripped and checked).
+
+## 0.0.37
+
+A team of two applications working over A2A: *Sales*, in the person's browser, asks *Accounting*, on a runtime, for financial reports read from Odoo.
+
+Pages: [Teams of applications](https://agentspecs.datalayer.tech/agent-teams/applications), [Members](https://agentspecs.datalayer.tech/agent-teams/members), [Execution](https://agentspecs.datalayer.tech/agent-teams/execution), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- Apps: `sales` (chat) takes a request for a financial report, asks Accounting with its `ask_accounting` tool (the team's A2A link) and hands over what Accounting answered. Its instructions say it never invents, estimates or completes a figure. It has no connection and no rule, and its assistant is the paper clip. `accounting` (chat) answers report requests from the Odoo books through `odoo-accounting` at *Can read*, in its owner's name, so no tool that writes is reached. Its rules read the books without asking (*Read the books*) and ask first before anything that would change them (*Change the books*: write, delete). Its instructions say it never writes to Odoo, and its assistant is the wizard.
+- Teams: a member may be an application (`app`, in place of `ref`; not both), say where its loop turns (`runs_in`: `browser` or `runtime`) and whom it asks while it works (`talks_to`: `{member, over: a2a}`). A team says the member a person talks to (`entry`), and a supervisor may be an application (`app`). Links and the entry name members, and a member does not talk to itself; all of this is checked at load. `TeamSpec.referenced_apps()` lists the applications a team names. New enums and models: `TeamPlace`, `TeamProtocol`, `TeamLink`.
+- Teams: `sales-and-accounting`, with Sales as its entry and supervisor (in the browser) and Accounting on a runtime, linked over A2A.
+- The Appspec reference is written again; its examples now come from `accounting`, the first application in alphabetical order.
+
+## 0.0.36
+
+The `tools` catalogue is `backend-tools`, beside `frontend-tools`: the tools that run on the runtime, named as such.
+
+Pages: [Backend Tools](https://agentspecs.datalayer.tech/agents/backend-tools), [Agents](https://agentspecs.datalayer.tech/agents), [Frames](https://agentspecs.datalayer.tech/frames), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `agentspecs/tools` is `agentspecs/backend-tools`. Every one of its nineteen tools runs on the runtime, in Python (`runtime.package`, `runtime.method`) — `display-recipe`, `generate-haiku` and the other `example-*` tools too, whose results the page draws but which the runtime runs — so none moved to `frontend-tools`.
+- The field that names them is `backend_tools`, as `frontend_tools` names the page's: on an agent (146 agents), an application (`AppSpec.backend_tools`; *Decide*), a Frame (`FrameSpec.backend_tools`, `FrameContext.backend_tools`) and in composition (`LIST_FIELDS`, a Cog's Frames). No alias: `tools` is refused — by `resolve_spec` for an agent, a Cog or a fragment, by `FrameSpec`, and by the Appspec, which forbids an unknown field. A rule naming a tool by id looks it up in `backend-tools`; `agentspecs.actions` reads its classes there; the marks cover `backend-tools`. A team member's `tools` (the names of the tools a member is drawn with) is unchanged.
+- The Appspec JSON Schema and reference written again; the README and the docs say `backend_tools`.
+
+## 0.0.35
+
+*Decide*, an example application that answers by asking Jev typed decisions.
+
+Boxes: E-01 — [Applications](https://agentspecs.datalayer.tech/apps).
+
+- Apps: `decide` (chat): `example-simple` with the `decide` tool — yes or no (`noul`) with its probability, one of named options (`choice`) or a step on a scale (`score`), each with its confidence, asked of `cloudflare:wrk/typesafe/jev` through datalayer-ai-inference. Its instructions say it answers by asking a typed decision; its starters are decision questions; its one rule says deciding is a read, done without asking. The reference's `tools` example is now its own.
+
+## 0.0.34
+
+The `loops` catalogue is now `strategies`: its control-loop reasoning strategies (human-in-the-loop, OODA, plan → execute → critic, data analysis) no longer share a name with Loop and its applications.
+
+- `agentspecs.loops` → `agentspecs.strategies`: `StrategySpec`, `StrategyHuman`, `StrategyTermination`, `STRATEGY_CATALOGUE`, `Strategies`, `get_strategy`, `list_strategies`. The ids stay. No alias: `agentspecs.loops` is gone.
+
+## 0.0.33
+
+The examples' `tests.verified` sentences without a builder's word (E-14): *the past orders*, *a run already recorded*, *nothing has stopped for an approval*, *measured for it*.
+
+Boxes: E-14 — [Applications](https://agentspecs.datalayer.tech/apps).
+
+## 0.0.32
+
+What the examples say they verified, in a Maker's words (E-14).
+
+Boxes: E-14 — [Applications](https://agentspecs.datalayer.tech/apps).
+
+- Apps: the `tests.verified` sentences of *Web Research*, *Customer Interview*, *Report from a File* and *Weekly Pipeline Report* say what a person reads on the Studio's examples — an agent, not a Cog; what it suggests you ask, not its starters; Datalayer's own tests.
+
+## 0.0.31
+
+Marks: every MCP server, skill, tool and frontend tool set has an icon that names its package, and an emoji; an Odoo accounting server through the Datalayer MCP server.
+
+Pages: [MCP servers](https://agentspecs.datalayer.tech/agents/mcp-servers), [Skills](https://agentspecs.datalayer.tech/agents/skills), [Tools](https://agentspecs.datalayer.tech/agents/tools).
+
+- Marks (`agentspecs.marks`): an `icon` is `<package>:<name>` — the package one of `@datalayer/icons-react` and `@primer/octicons-react`, the name in kebab case as that package names it (`@datalayer/icons-react:odoo`, `@primer/octicons-react:mark-github`) — so a page loads the icon from the right package. `MARKS_SCHEMA` (JSON Schema), `icon_problem`, `emoji_problem`, `marks_problems` and `parse_icon` say it; a bare name is refused. The 47 entries of `mcp-servers`, `skills`, `tools` and `frontend-tools` say theirs: the brands from the Datalayer icons (Datalayer, GitHub, Google, Kaggle, Slack, Odoo, Jupyter for the notebook tool sets), the rest octicons. `notebook` and `brain` were never octicons and are gone. A page draws the icon, the emoji where there is no icon, and nothing where there is neither.
+- MCP servers: `odoo-accounting` is the Datalayer MCP server with its `odoo-accounting` toolset alone (`https://mcp.datalayer.run/mcp?only=odoo-accounting`, through `mcp-remote`, with `DATALAYER_API_KEY`): invoices, bills, journal entries, reconciliations, bank lines and tax returns. Its 49 tools classed as `datalayer` classes them; off by default; icon `@datalayer/icons-react:odoo`.
+- Tools: every entry of `tools` runs on the runtime, in Python; the ones that run on the page are `frontend-tools`. The README and the Tools page say so.
+
+## 0.0.30
+
+Each example says what was verified, and how (E-14); *Report from a File* takes its file on its page (E-01).
+
+Boxes: E-14, E-01 — [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- Apps: `tests.verified` (`AppVerified`) says what was tried live, what runs on recorded data, and what is not verified yet, each in a sentence (`live`, `recorded`, `unverified`); empty unless said. The eleven examples say it — what their header comments said, now in the spec where the Studio's cards and pages read it. The Appspec JSON Schema and the reference are written again.
+- Apps: *Report from a File*'s page has a File upload (`file`, a CSV, at `/files`): the file chosen goes to its session with the run and answers what its code asks.
+
+## 0.0.29
+
+The Datalayer MCP server's tools, classed: what an application's connection to Datalayer reaches through the gateway (I-12).
+
+Boxes: I-12, F-10 — [Applications](https://agentspecs.datalayer.tech/apps).
+
+- MCP servers: `datalayer` classes each of the 144 tools the Datalayer MCP gateway serves (`checked: 2026-10-05`), read off the gateway's own table of what it serves, every toolset included: reading notebooks, Spaces, the library, Contents, Earthdata and Odoo is `read`; editing a notebook, running code, Odoo's records and the books are `write`; removing a cell, a record or a sandbox `delete`; launching a sandbox `buy`, a snapshot of one `write` and `buy`; sharing one `publish`. The gateway grants an application's connection to Datalayer the tools these classes allow at its level — a connection that reads, only the tools that only read — as the runtime gives them (`gives`).
+
+## 0.0.28
+
+An organization's Frames: its version of a catalogue Frame, and Frames of its own (U-31, U-32).
+
+Boxes: U-31, U-32 — [Frames](https://agentspecs.datalayer.tech/frames), [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- Frames: `frames_with_organization(versions, owner=...)` gives the catalogue as an organization reads it — the versions it keeps (Datalayer IAM's `frames`) — for `compose_frames`: its rules, terminology and style in place of a Frame's three as resolved, the Frame then standing alone (one that builds on it keeps the catalogue's version of what it inherits); and its own Frames, with an id starting with `org-` (`ORGANIZATION_FRAME_PREFIX`, `is_organization_frame`), a name and a description, for the whole organization. A version of the wrong shape, or an own Frame with no name, is refused; a version of a Frame the catalogue no longer has is left out.
+- Frames: a catalogue Frame whose id starts with `org-` is refused when the catalogue loads.
+- Apps: `app_problems(app, organization_frames=[...])` checks an `org-…` context against the Frames of the organization the application belongs to: one it does not have is refused (*Its organization has no context named …*), and so is any when no organization is said. The `context` field says so; the Appspec JSON Schema and the reference are written again.
+
+## 0.0.27
+
+An application's floating assistant may show a character a plugin contributes (T-24).
+
+Boxes: T-24 — [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- `interface.assistant` takes any character id of the right shape — lowercase letters and digits, words joined by a hyphen, at most 64 characters — not only Datalayer's four: which characters exist is what the enabled plugins contribute to `loop.assistant.character`, known by the runtime and the page, which refuse an id no enabled plugin gives with a sentence. The `AssistantCharacter` enum is gone; `ASSISTANT_CHARACTER_ID` is the shape. The Appspec JSON Schema and the reference are written again.
+- Said in the spec, the character wins over the one a person chose in their settings.
+
+## 0.0.26
+
+"Decision", never "judgment": the typed questions Jev answers are decisions, in the catalogue's words and on the wire; and *A Simple Agent* decides with Jev.
+
+- Models: the capability `judgments` is `decisions` (Jev, `cloudflare:gtw/typesafe/jev` and `cloudflare:wrk/typesafe/jev`), and `judge` is `decider` (a chat model that may be asked the same typed questions: `gpt-oss-120b`, Claude Sonnet 4.6). A spec naming `judgments` or `judge` is refused when the catalogue loads: no alias is kept.
+- Apps: a decision's `judgment_model` is `decision_model`; the four decision applications say it so. `app_problems` says "… to decide with" and "… does not answer typed decisions". The Appspec JSON Schema is written again.
+- Apps: `record.suggest_tests` (V-16), off unless said: whether an application's conversations may be used to suggest tests to its builder — only those kept while it is on are sampled. Documented under Applications and in the reference.
+- datalayer-ai-inference's typed-decision endpoint is `POST /api/ai-inference/v1/decisions`, as the Jev specs say.
+- Tools: `decide` (`action: read`), which asks Jev typed questions — `noul`, `choice`, `score` — through datalayer-ai-inference's `POST /decisions` with the runtime's ai-inference token, bound to `agent_runtimes.tools.decisions.decide`. Documented under Tools.
+- Agents: *A Simple Agent* (`example-simple`) lists `decide`, says so in its description, welcome message and system prompt, and suggests three decisions: is a ticket urgent, which team handles a request, how positive a review is.
+
+## 0.0.25
+
+An agent may be switched to other models than its own.
+
+- `model_additionals`, optional on an agent: the other models of the catalogue it may be switched to, beside its `model`, each a catalogue `id` (not an alias) and a chat model, never a typed-judgment one. agent-runtimes offers those its inference serves, as datalayer-ai-inference lists them at startup.
+- The four enabled agents (*A Simple Agent*, *Example Once Trigger Agent*, *Jupyter Notebook Compactor*, *Crawler Agent*) list `alibaba:qwen-max`: with their own `bedrock:us.anthropic.claude-sonnet-4-6`, the chat models datalayer-ai-inference serves from the catalogue.
+- Tests: an additional model is a chat model of the catalogue, not the agent's own, listed once; every enabled agent lists what datalayer-ai-inference serves. Documented with the agent fields.
+
+## 0.0.24
+
+A composed page is shown, and a rule is written one way (R-01, E-01).
+
+Boxes: R-01, E-01 — [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- *Support desk*'s layout is `page`, the page with the composer over it: agent-runtimes draws a `chat` layout as the conversation alone, so its page composed on the Canvas was no longer shown.
+- `app_problems` says when a chat, a widget or a worker composes a page its layout does not show: "Its page is composed but its layout is chat, the conversation alone: choose page or split to show it." — agent-runtimes' `surfaceUnshown` sentence. No catalogue application does.
+- `dump_app` writes a rule on one class of action alone (`applies_to: send`), as a person writes it and as agent-runtimes' TypeScript writer does; *Customer interview* and *Report from a file* are rebuilt from their `app.py` so.
+- Tests: the problem is said for a chat layout and not for `page` or `split`; a lone class is written alone, named tools and several classes as a list.
+
+## 0.0.23
+
+How an example was built is in the catalogue (E-05).
+
+Boxes: E-05 — [Applications](https://agentspecs.datalayer.tech/apps).
+
+- A surface's `composed_by` takes `canvas`: its page was composed by a person on the Canvas. *Support desk*, the Canvas example, says it; it said `developer`, as the two examples written in Python do.
+- An example written in Python is the one with an `app.py` in the folder named for it; one composed on the Canvas says `composed_by: canvas`; any other was written as a spec.
+- Tests: *Support desk* is the one example composed on the Canvas, and it has no `app.py`.
+
+## 0.0.22
+
+The eleven examples are in the catalogue: four more applications (E-01, E-02, E-14).
+
+Boxes: E-01, E-02, E-14 — [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- *Support desk* (`support-desk`), a chat on the document Q&A agent: starters, a product setting, answers from the documents it was given with the passage cited, and a page composed on the Canvas bound to what a chat publishes (`/question`, `/answer`, `/status`, `/inputs/product`) with a button that sends a question and one that starts over.
+- *Customer interview* (`customer-interview`), a chat written in Python: `apps/customer-interview/app.py` asks for consent first, then what to learn, answers each message in a step, saves an insight from a button and records a structured result. Its spec is the one `loop apps build` writes from it.
+- *Report from a file* (`report-from-a-file`), a widget written in Python: `apps/report-from-a-file/app.py` asks for a CSV, has the Jupyter data analyst report on it in the sandbox and keeps the report as an output; its page binds the report's kind and question at `/inputs/<id>`, the report at `/output`.
+- *Weekly pipeline report* (`pipeline-report`), the rigorous worker: every Monday, the Sales Pipeline Board Report Cog under the twelve Guards, eight Gates and the Financial Reporting Track of `op-sales-pipeline-board-report`, with a rule that asks before anything is sent; its page binds a worker's `/goal`, `/activity`, `/report`, `/status` and `/draft`.
+- Each of the four says at its top what was verified and what was not: all pass the instant checks and their pages are valid A2UI v0.9; none has run live, since each names an agent that is not enabled.
+- Tests: the catalogue holds the eleven, each of its kind, with faces of their own; the Python examples sit beside a built spec; the weekly report runs the Op's checks and asks before sending. The reference's examples now come from *Customer interview*, the first application by id.
+
+## 0.0.21
+
+The *Quote Calculator* is valid A2UI v0.9 and bound to what a widget's page publishes (R-01, C-04).
+
+Boxes: R-01, C-04; the documentation of UI plugins and the catalog of visual components, G-05 — [UI Plugins](https://agentspecs.datalayer.tech/agents/ui-plugins), [Components](https://agentspecs.datalayer.tech/agents/ui-plugins/components).
+
+- Its `ChoicePicker` options are `{label, value}`, as A2UI v0.9 requires, not plain strings.
+- Its seats, plan and term are its settings (`interface.settings`), written at `/inputs/<id>`; its answer is read at `/output` and where it stands at `/status`, the paths the runtime publishes a widget's page at. It bound `/outputs/total` and `/outputs/lines`, which nothing publishes.
+- A test validates every block of every catalogue application's surface that is an A2UI basic component against A2UI v0.9's basic catalog and common types (kept beside it, as `@a2ui/web_core` ships them), and that a block writing under `/inputs` writes one of the application's settings.
+
+## 0.0.20
+
+The landing's four decision templates, each an application of the catalogue, and the floating assistant in the Appspec (E-01, D-07, T-24).
+
+Boxes: E-01, D-07, T-24 — [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- Three decision applications beside *Ship or fix*: *Supplier comparison* (`supplier-comparison`), *Data quality investigation* (`data-quality`) and *Model choice* (`model-choice`), each on the Jupyter data analyst with the decision's ten components, typed judgments by `cloudflare:gtw/typesafe/jev`, and the question, contents, criteria, confidence and scenarios of its template.
+- `deployment.embedded.mode` takes a fourth mode, `assistant`: a character on the page that speaks in a balloon.
+- `interface.assistant` names the character the application's floating assistant shows: `paperclip`, `wizard`, `cat` or `eyes`, the characters Datalayer's plugin contributes. Another name is refused; when unsaid, the paper clip.
+
+## 0.0.19
+
+The catalog of visual components (C-13).
+
+Boxes: C-13 — [UI Plugins](https://agentspecs.datalayer.tech/agents/ui-plugins), [Components](https://agentspecs.datalayer.tech/agents/ui-plugins/components).
+
+- Every component a UI plugin renders, with its properties as a JSON Schema, its bindings and its events: A2UI's basic catalog by its names, Datalayer's own as its custom catalog, hosted by the UI plugins rather than in a place of its own.
+- An Appspec's components and its surface are checked against the catalog: `app_problems` refuses a component the catalog does not have.
+- UI plugins by that name only: nothing mentions or checks what they were called before.
+
+## 0.0.18
+
+Boxes: S-07 — [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
+
+- The Appspec reference, generated from its JSON Schema (`agentspecs.apps.reference`): every field, what it means, its default, the parts and the choices, and an example of each field taken from an application of the catalogue. `python -m agentspecs.apps` writes it to the documentation beside the schema, and a test keeps the two the same.
+
 ## 0.0.17
 
 An application's face, chosen as a person's is on their profile.
+
+Boxes: I-07 (in part), I-11 — [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
 
 - `avatar` and `banner` on the Appspec: each the name of a drawing (`AstronautIcon`, `SvgTutorialsHero`) from the sets people choose theirs from. Neither is required: the `emoji` stands for the avatar, and where only text goes; the id seeds the banner. A name must be written as a drawing's name is — a capital letter, then letters and digits (`AstronautIcon`) — or it is refused; the JSON Schema carries the same pattern.
 
@@ -16,12 +944,14 @@ An application's face, chosen as a person's is on their profile.
 
 What three implementations of the same decision need in order to agree.
 
+Boxes: F-07, and R-05's rule decision, in part — [Applications](https://agentspecs.datalayer.tech/apps).
+
 - A pattern (`*gmail*`, `generate_*`) means the same thing wherever it is read: `*` is any
   run of characters, `?` any one, and nothing else is special — no bracket expressions,
   which Python and JavaScript read differently. `agentspecs.actions.matches`, `is_pattern`.
 - A condition compares an argument with a word, a number, true or false; a list or a
   mapping is refused, since equality of those is not the same in every language.
-  A whole number beyond 2**53 - 1, and a number that is not finite, are refused too, and
+  A whole number beyond 2\*\*53 - 1, and a number that is not finite, are refused too, and
   an argument beyond that range equals nothing: JavaScript holds no such integer exactly.
 - `dump_app` writes an application the same way every time: `schema` first, then the keys
   in the order the spec declares them, and not the layout when it is its kind's own. A
@@ -31,6 +961,8 @@ What three implementations of the same decision need in order to agree.
 ## 0.0.15
 
 Applications, and what a tool does to the world.
+
+Boxes: F-01, F-02, F-06, F-10, F-11, I-01 — [Applications](https://agentspecs.datalayer.tech/apps), [Appspec reference](https://agentspecs.datalayer.tech/apps/reference).
 
 - Applications: a new spec, the **Appspec**, under `agentspecs/apps/` (`schema: loop.app/v1`).
   An application is an agent with an interface, rules, tests and a place to run; four

@@ -1,0 +1,19 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Stage: one application on stage, Accounting, at the demo account's
+# deployment — a Stage made from an application rather than a scene.
+
+id: accounting
+version: 0.0.1
+name: Accounting, on its own
+description: >-
+  Accounting alone on stage, answering from the demo books at its address:
+  a Stage made from one application.
+app: accounting:0.0.2
+deployments:
+  accounting: demo-accounting
+public: false
+tags:
+  - example
+  - app

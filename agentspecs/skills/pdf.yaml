@@ -6,19 +6,25 @@ version: 0.0.1
 name: PDF Processing Skill
 description: PDF document reading, parsing, and extraction
 
-module: agent_skills.skills.pdf
+module: datalayer_skills.skills.pdf
 
 dependencies:
-  - PyPDF2>=3.0.0
-  - pdfplumber>=0.10.0
+  - pypdf>=4.0
+  - pdf2image>=1.17
+  - Pillow>=10.0
 
-# Not offered on the platform yet: the integrations page lists it as not available.
-enabled: false
+# Offered on the platform (the user, 7 November 2026): the runtime image installs datalayer-skills[skills].
+enabled: true
+
+install:
+  type: python
+  command: "pip install \"datalayer-skills[skills]\""
+  note: "datalayer-skills with every skill's dependencies; the runtime image installs it the same way."
 
 tags:
   - pdf
   - documents
   - extraction
 
-icon: file
+icon: "@primer/octicons-react:file"
 emoji: 📄

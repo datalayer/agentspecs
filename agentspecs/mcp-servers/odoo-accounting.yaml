@@ -1,0 +1,229 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# MCP Server Specification: Odoo Accounting
+# The Datalayer MCP server (the gateway behind `datalayer`) with its
+# `odoo-accounting` toolset and nothing else: invoices, vendor bills, journal
+# entries, ledgers, reconciliations, bank lines, exchange rates, lock dates,
+# payments and tax returns of an Odoo database, read and written with the
+# person's own Odoo key. Model and record tools are `odoo`, the same gateway
+# with its generic toolset; the two share no tool.
+
+id: odoo-accounting
+version: 0.0.1
+name: Odoo Accounting
+description: >-
+  An accountant's day in Odoo — invoices, bills, journal entries, reconciliations,
+  bank lines, payments and tax returns — in one company, through the Datalayer MCP server
+# Where to read about it, sign up and make the key it needs (the user, 7 November 2026).
+documentation_url: https://datalayer.ai/docs/accountant
+signup_url: https://datalayer.ai/signin
+api_key_url: https://datalayer.ai/settings/api-keys
+setup: "Datalayer's gateway with its odoo-accounting toolset: your Datalayer API key as the bearer, made under [Settings, API keys](https://datalayer.ai/settings/api-keys) and put in `DATALAYER_API_KEY`; your Odoo in your Datalayer secrets (`DATALAYER_ODOO_URL`, `DATALAYER_ODOO_API_KEY`, and `DATALAYER_ODOO_DATABASE` when the host does not name it). One company per session: your default in Odoo, or the one the url names with `&odoo-company=<name or id>`."
+
+# The same hosted server as `datalayer` and `odoo`, the toolset chosen in the
+# URL (the gateway's README, "Odoo toolsets"). `only=` asks for exactly that
+# toolset (and the gateway's always-on ones), where the compact
+# `?odoo-accounting` adds it to the notebook surface `datalayer` already
+# serves: an agent given several of these servers then never sees one tool
+# twice, and an application's connection to `odoo-accounting` is what the
+# gateway checks the session against (`only=` and `toolsets=` are the
+# parameters it reads). The gateway reaches Odoo with DATALAYER_ODOO_URL and
+# DATALAYER_ODOO_API_KEY (and DATALAYER_ODOO_DATABASE where the host does not
+# say it), kept in the person's Datalayer environment and never handed to the
+# runtime. One company per session: the person's default in Odoo, or the one
+# a URL names with `&odoo-company=<name or id>`.
+#
+# A remote server: no command, the runtime connects to the url itself over
+# Streamable HTTP and sends the headers with every request, the bearer's
+# `${DATALAYER_API_KEY}` expanded as it starts (the `npx -y mcp-remote` shim
+# this went through could never start on a runtime: its pod reaches the
+# gateway and no package registry — 28 October 2026).
+transport: streamable-http
+url: "https://mcp.datalayer.run/mcp?only=odoo-accounting"
+headers:
+  Authorization: "Bearer ${DATALAYER_API_KEY}"
+
+# On (the user, 8 November 2026). It writes to somebody's books: the gateway
+# acts with the person's own Odoo key, drafting and posting are separate
+# tools so a client can ask before the financial transition.
+enabled: true
+
+envvars:
+  - DATALAYER_API_KEY:0.0.1
+
+env: {}
+
+install:
+  type: remote
+  command: ""
+  note: "Nothing to install: Datalayer's MCP gateway with its odoo-accounting toolset, reached at its URL."
+
+tags:
+  - erp
+  - accounting
+  - finance
+  - odoo
+  - datalayer
+
+icon: "@datalayer/icons-react:odoo"
+emoji: "🧮"
+
+# What each tool does to the world (agentspecs.actions), as the `datalayer`
+# server classes the same tools: read off the gateway's own table.
+actions:
+  checked: "2026-11-08"
+  note: >-
+    Exactly the tools the gateway's odoo-accounting toolset registers, read off its
+    code (datalayer-mcp-server's extensions/odoo, odoo.py's accounting_tools, then
+    reports, banking, bills, payments and taxes; datalayer-mcp-server 0.0.104), each
+    classed as the datalayer server classes it (its tool_policy). The comment over
+    each tool is the gateway's own description of it. The odoo and odoo-accounting
+    toolsets share no tool.
+  tools:
+    # List customer invoices and vendor bills with accounting-focused fields.
+    odoo_accounting_list_invoices: read
+    # Read one invoice or vendor bill and its invoice lines.
+    odoo_accounting_get_invoice: read
+    # Create a draft customer invoice or vendor bill; it is not posted.
+    odoo_accounting_create_draft_invoice: write
+    # Post one draft invoice or vendor bill after the user approves this write.
+    odoo_accounting_post_invoice: write
+    # List journal entries with totals, journal, company and posting state.
+    odoo_accounting_list_journal_entries: read
+    # List unreconciled receivable or payable journal lines.
+    odoo_accounting_list_open_balances: read
+    # List chart-of-account records for migration mapping and reporting.
+    odoo_accounting_list_accounts: read
+    # List accounting journals and their codes for WinAuditor mapping.
+    odoo_accounting_list_journals: read
+    # Read one journal entry and all of its debit and credit lines.
+    odoo_accounting_get_journal_entry: read
+    # Return debit, credit and balance totals grouped by account.
+    odoo_accounting_trial_balance: read
+    # Read paginated general-ledger journal items.
+    odoo_accounting_general_ledger: read
+    # Create one balanced draft journal entry; never post it automatically.
+    odoo_accounting_create_draft_journal_entry: write
+    # Post one reviewed draft journal entry.
+    odoo_accounting_post_journal_entry: write
+    # List partners with their reference, VAT number and country — the contacts a migration created, or any.
+    odoo_accounting_list_partners: read
+    # Balance per partner and account on the receivable and payable accounts: debit, credit, balance and what is still open.
+    odoo_accounting_partner_ledger: read
+    # The open receivable or payable items per partner, by how many days past their maturity they are.
+    odoo_accounting_aged_balance: read
+    # List the taxes of the company: kind (sale, purchase), computation, rate and group.
+    odoo_accounting_list_taxes: read
+    # List the fixed assets with their values, method and state; refuses clearly when the Assets application is not installed.
+    odoo_accounting_list_assets: read
+    # Read one fixed asset and its depreciation board: every planned or posted depreciation entry with its date and amount.
+    odoo_accounting_get_asset: read
+    # Reconcile posted journal items of one receivable or payable account by hand.
+    odoo_accounting_reconcile_lines: write
+    # Undo the reconciliations, partial or full, that journal items take part in, leaving the entries themselves in place.
+    odoo_accounting_unreconcile_lines: write
+    # One row per bank journal: its account, its feed, how many lines wait to be matched, and whether the books agree with the bank.
+    odoo_accounting_bank_status: read
+    # List the bank lines of one journal, oldest first, with the bank's running balance after each.
+    odoo_accounting_list_bank_lines: read
+    # Read one bank line with what it is booked on and, for each counterpart, the items it is reconciled with.
+    odoo_accounting_get_bank_line: read
+    # For each unmatched bank line, what the books say it pays — evidence, not a decision.
+    odoo_accounting_suggest_bank_matches: read
+    # Open customer or vendor items that cancel each other and were never reconciled — evidence, not a decision.
+    odoo_accounting_suggest_reconciliations: read
+    # What the balance of a transit, suspense or transfer account is made of: its lines paired off by amount, and those left.
+    odoo_accounting_explain_account_balance: read
+    # Book an unmatched bank line on one account: bank charges, an internal transfer, a payment already recorded in transit.
+    odoo_accounting_book_bank_line: write
+    # Book an unmatched bank line over several accounts at once — a loan installment in capital and interest, a payment covering two costs.
+    odoo_accounting_book_bank_line_split: write
+    # Book an unmatched bank line on a customer or vendor and reconcile it with the items it pays.
+    odoo_accounting_match_bank_line: write
+    # Undo the matching of a bank line booked on one counterpart: its reconciliation is removed and it waits in suspense again.
+    odoo_accounting_reset_bank_line: write
+    # Remove the oldest lines of a bank feed that repeat entries already in the books, keeping every later balance.
+    odoo_accounting_remove_duplicate_bank_lines: delete
+    # List the bank connections with the accounts each one sees, their balance at the bank, and the journal each feeds — or none yet.
+    odoo_accounting_list_bank_feeds: read
+    # Attach an account of an existing bank connection to the journal that holds its history, so the feed arrives there.
+    odoo_accounting_link_bank_feed: write
+    # Enter a vendor bill as a draft, in the invoice's own currency, with accounts by code and taxes by name.
+    odoo_accounting_create_vendor_bill: write
+    # Enter a customer invoice as a draft, in its own currency, with accounts by code and taxes by name.
+    odoo_accounting_create_customer_invoice: write
+    # List the stored exchange rates of a currency, newest first, as units of it per unit of the company's currency.
+    odoo_accounting_list_currency_rates: read
+    # Store exchange rates for given days, creating or correcting each — for the days an automatic feed never fetched.
+    odoo_accounting_set_currency_rates: write
+    # Read the company's lock dates: up to when entries, tax returns, sales and purchases can no longer change.
+    odoo_accounting_get_lock_dates: read
+    # Set or lift one of the company's lock dates — close the years whose accounts are filed.
+    odoo_accounting_set_lock_date: write
+    # Create a bank matching model that splits a recurring line over several accounts — a loan payment in interest and capital.
+    odoo_accounting_create_matching_model: write
+    # Look for a document number everywhere the books may already hold it — run it before entering a bill.
+    odoo_accounting_find_document: read
+    # Enter a vendor bill or credit note from its UBL 2.1 / Peppol BIS file, with the file attached to it.
+    odoo_accounting_import_ubl_bill: write
+    # Attach a document (the UBL, a PDF, a receipt) to a bill, invoice or entry; it shows in the entry's chatter.
+    odoo_accounting_attach_document: write
+    # List the documents attached to an entry — id, name, size and type, never their content.
+    odoo_accounting_list_attachments: read
+    # Reset a posted or cancelled bill, invoice or entry to draft so it can be corrected.
+    odoo_accounting_reset_to_draft: write
+    # Delete a draft bill, invoice or entry — a duplicate, a mistaken import.
+    odoo_accounting_delete_draft: delete
+    # Prepare draft payments for the posted vendor bills left to pay — the payment run, for review.
+    odoo_accounting_prepare_vendor_payments: write
+    # List outbound payments — by default those still to execute — with amount, memo, bank account and the bills they pay.
+    odoo_accounting_list_vendor_payments: read
+    # Find bank lines imported twice — same journal, day, amount and label — as a reconnected bank feed brings them, with what each is matched to.
+    odoo_accounting_find_duplicate_bank_lines: read
+    # Remove bank lines that are copies of lines staying in the journal, unmatching first those Odoo matched by itself.
+    odoo_accounting_remove_bank_line_twins: delete
+    # Detach a bank journal from its online account: no more lines arrive there; the lines already imported stay.
+    odoo_accounting_unlink_bank_feed: write
+    # Delete a bank connection — one replaced by a reconnection — after detaching every journal it feeds.
+    odoo_accounting_delete_bank_connection: delete
+    # Recode a vendor bill's lines — account and purchase taxes — keeping its total and its bank matching.
+    odoo_accounting_recode_bill: write
+    # Spread a prepaid cost over the period it covers — a road tax or an insurance running into the next fiscal year.
+    odoo_accounting_defer_expense: write
+    # Check the vendor payments before a payment run: drafts for bills already paid, and payments marked paid that never left the bank.
+    odoo_accounting_check_vendor_payments: read
+    # Correct a draft vendor payment before it is executed — net a credit note against a bill, fix its amount or memo.
+    odoo_accounting_update_vendor_payment: write
+    # Cancel a draft vendor payment that must not be executed — the bill was paid otherwise (by card, by direct debit).
+    odoo_accounting_cancel_vendor_payment: write
+    # Read one attached document's content, base64, to check what a bill or receipt says.
+    odoo_accounting_get_attachment: read
+    # List files of the Documents application — the bills and receipts waiting in a folder — newest first, without their content.
+    odoo_accounting_list_documents: read
+    # Attach a file already in the Documents application to a bill or entry, instead of uploading it again.
+    odoo_accounting_attach_existing_document: write
+    # Read how the company files its tax returns: how often, the VAT number, the return journal, the tax lock date, and the return types of its country.
+    odoo_accounting_get_tax_settings: read
+    # Set how often the company files its tax return — monthly or quarterly, as the tax office registered it.
+    odoo_accounting_set_tax_periodicity: write
+    # List the company's returns by deadline — VAT periods, listings, advance payments, the annual closing — with their state and what is left to check.
+    odoo_accounting_list_tax_returns: read
+    # Read one return with its checklist — each check, its result and how many records it flags — and its closing entries once it has them.
+    odoo_accounting_get_tax_return: read
+    # What each grid of the tax return adds up to over a period, from the journal items that carry it.
+    odoo_accounting_tax_grids: read
+    # The journal items behind one grid of the tax return over a period: the entry, the partner, the account and the amount each contributes.
+    odoo_accounting_list_tax_grid_lines: read
+    # The posted lines of a period the tax return does not see: on a tax account, or naming a grid in their label, without carrying a grid.
+    odoo_accounting_list_untagged_tax_lines: read
+    # Put tax grids on posted journal items that carry none, so the tax return counts them — entries imported from another ledger.
+    odoo_accounting_set_tax_grids: write
+    # Before a tax return is filed: what in the period would distort it.
+    odoo_accounting_check_tax_period: read
+    # Before closing a Belgian VAT period: do the grids agree with the VAT accounts, and what would Odoo's closing miss.
+    odoo_accounting_vat_close_check: read
+    # Produce the Belgian periodic VAT declaration for Intervat from the period's grids — the file to upload, not a filing.
+    odoo_accounting_intervat_xml: read
+    # Record that a reviewed return was filed on Intervat: its receipt attached, its state submitted, a note in its chatter.
+    odoo_accounting_record_return_submission: write

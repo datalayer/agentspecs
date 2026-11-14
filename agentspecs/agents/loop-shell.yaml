@@ -21,18 +21,20 @@ model: "bedrock:us.anthropic.claude-sonnet-4-6"
 # hold a pydantic-ai agent, so the harness is the Vercel AI SDK — saying so
 # here keeps the spec honest about where it actually runs.
 harness: vercel-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
 sandbox_variant: browser
 memory: ephemeral
 
 mcp_servers: []
 skills: []
-tools: []
+backend_tools: []
 frontend_tools: []
 
 environment_name: ai-agents-env
 icon: browser
 emoji: 🪟
-color: "#0969DA"
+color: blue
 
 # What to ask for, in the words somebody would actually use — the same
 # demonstrations the A2UI Jupyter Output example offers, because they are the
@@ -128,3 +130,8 @@ system_prompt: |
 
 system_prompt_codemode_addons: null
 trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]
