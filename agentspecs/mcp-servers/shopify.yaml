@@ -28,15 +28,16 @@
 # compare and hand over a merchant's checkout link with no credential. A
 # token expires within the hour and this catalogue holds no way to mint it,
 # so no header is sent. Anonymous traffic is limited per address, and Shopify
-# asks for identified traffic in production: the token tier, and Datalayer's
-# own UCP agent profile, come when Datalayer registers with Shopify.
+# asks for identified traffic in production: the token tier comes when
+# Datalayer registers with Shopify.
 #
 # Every call carries `meta["ucp-agent"].profile`, the url of the agent's UCP
 # profile, which Shopify fetches (a missing or malformed one is refused with
-# "UCP discovery failed"). The model fills it, per the tools' own schemas.
-# Datalayer publishes no UCP agent profile of its own yet, so the Shopper
-# names Shopify's published example profile for these anonymous reads; its
-# own profile replaces it with the token tier. Buying is not
+# "UCP discovery failed"). The model fills it, per the tools' own schemas:
+# the Shopper names Datalayer's UCP agent profile,
+# https://datalayer.ai/ucp/profile.json (UCP 2026-08-25, shopping over MCP,
+# catalogue search and lookup with the Global Catalog extension; no cart or
+# checkout), which the landing publishes. Buying is not
 # here: the Shopper pays only through the Personal Agent Protocol and UCP
 # connections of an application (`pap`, `ucp`), each purchase approved by the
 # person, or the person pays at the merchant's checkout link.
