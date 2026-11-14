@@ -263,6 +263,14 @@ class AppConnection(_Strict):
             "A tool left out is not reached at all"
         ),
     )
+    optional: bool = Field(
+        default=False,
+        description=(
+            "Whether it runs without this connection when its secrets are not set up, as its agent "
+            "does (the agent's `optional`, whose `at_least_one` groups it follows): only a server its "
+            "agent says optional"
+        ),
+    )
 
     def reaches(self, tool_name: str) -> bool:
         """Whether the connection lets the application use a tool of its server."""
@@ -4050,6 +4058,15 @@ def app_problems(app: AppSpec, organization_frames: Optional[Sequence[str]] = No
     problems: List[str] = []
     if app.agent and _agent_of(app) is None:
         problems.append(f"There is no agent or Cog named {app.agent!r}.")
+    # An optional connection follows its agent's rule (0.0.189): the agent starts
+    # without that server, and its groups say which one at least it needs.
+    agent_optional = {_id_of(ref) for ref in ((_agent_of(app) or {}).get("optional") or {}).get("mcp_servers") or []}
+    for connection in app.connections:
+        if connection.optional and _id_of(connection.server) not in agent_optional:
+            problems.append(
+                f"The connection {connection.server!r} is optional, and its agent does not start without it: "
+                "only a server the agent says optional may be."
+            )
     for what, catalogue, ref in _refs(app):
         if catalogue == "frames" and is_organization_frame(ref):
             if organization_frames is None:

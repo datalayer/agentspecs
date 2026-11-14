@@ -32,14 +32,23 @@ def test_optional_names_the_agents_own_servers_and_skills():
         optional = agent.get("optional")
         if optional is None:
             continue
-        assert set(optional) <= {"mcp_servers", "skills", "at_least_one"}, name
+        assert set(optional) <= {"mcp_servers", "skills", "backend_tools", "at_least_one"}, name
         servers = {str(ref) for ref in agent.get("mcp_servers") or []}
         skills = {str(ref) for ref in agent.get("skills") or []}
+        tools = {str(ref) for ref in agent.get("backend_tools") or []}
         for ref in optional.get("mcp_servers") or []:
             assert ref in servers, f"{name}: optional MCP server {ref} is not among its mcp_servers"
         for ref in optional.get("skills") or []:
             assert ref in skills, f"{name}: optional skill {ref} is not among its skills"
-        entries = list(optional.get("mcp_servers") or []) + list(optional.get("skills") or [])
+        for ref in optional.get("backend_tools") or []:
+            assert ref in tools, f"{name}: optional backend tool {ref} is not among its backend_tools"
+            spec = yaml.safe_load((ROOT / "backend-tools" / f"{_base(ref)}.yaml").read_text())
+            assert spec.get("linked_accounts"), f"{name}: an optional backend tool is set up by a linked account"
+        entries = (
+            list(optional.get("mcp_servers") or [])
+            + list(optional.get("skills") or [])
+            + list(optional.get("backend_tools") or [])
+        )
         for group in optional.get("at_least_one") or []:
             assert isinstance(group, list) and len(group) >= 2, f"{name}: a group names two entries or more"
             for ref in group:
@@ -51,7 +60,10 @@ def test_the_marketer_needs_one_network_and_neither_search_nor_the_repositories(
     marketer = agents["worker-marketer"]["optional"]
     assert marketer["mcp_servers"] == ["x:0.0.1", "bluesky:0.0.1", "discord:0.0.1"]
     assert marketer["skills"] == ["crawl:0.0.1", "github:0.0.1"]
-    assert marketer["at_least_one"] == [["x:0.0.1", "bluesky:0.0.1", "discord:0.0.1"]]
+    assert marketer["backend_tools"] == ["social-post-x:0.0.1", "social-post-bluesky:0.0.1"]
+    assert marketer["at_least_one"] == [
+        ["x:0.0.1", "bluesky:0.0.1", "discord:0.0.1", "social-post-x:0.0.1", "social-post-bluesky:0.0.1"]
+    ]
     assert agents["worker-shopper"]["optional"] == {"skills": ["crawl:0.0.1"]}
 
 
@@ -80,3 +92,32 @@ def test_the_marketer_has_no_linkedin_and_the_server_stays():
         for field in ("description", "goal", "instructions", "interface"):
             assert "LinkedIn" not in str(spec.get(field) or ""), (app, field)
     assert (ROOT / "mcp-servers" / "linkedin.yaml").exists()
+
+
+def test_the_marketer_posts_through_the_linked_accounts_and_asks_first():
+    """datalayer-social (0.0.189): no pasted secret, a linked account, every post approved."""
+    marketer = dict(_agents())["worker-marketer"]
+    for ref in ("social-accounts:0.0.1", "social-post-x:0.0.1", "social-post-bluesky:0.0.1"):
+        assert ref in marketer["backend_tools"]
+    for tool, account in (("social-post-x", "x"), ("social-post-bluesky", "bluesky")):
+        spec = yaml.safe_load((ROOT / "backend-tools" / f"{tool}.yaml").read_text())
+        assert spec["action"] == "publish" and spec["approval"] == "manual"
+        assert spec["linked_accounts"] == [account]
+        assert "envvars" not in spec
+    accounts = yaml.safe_load((ROOT / "backend-tools" / "social-accounts.yaml").read_text())
+    assert accounts["action"] == "read" and "linked_accounts" not in accounts
+
+
+def test_the_marketer_application_needs_one_network_as_its_agent_does():
+    from agentspecs.apps import app_problems, parse_app
+
+    spec = yaml.safe_load((ROOT / "apps" / "marketer.yaml").read_text())
+    assert [(c["server"], c.get("optional")) for c in spec["connections"]] == [
+        ("x:0.0.1", True),
+        ("bluesky:0.0.1", True),
+        ("discord:0.0.1", True),
+    ]
+    assert app_problems(parse_app(spec)) == []
+    # Only a server its agent says optional may be.
+    spec["agent"] = "worker-shopper:0.0.1"
+    assert any("is optional, and its agent does not start without it" in p for p in app_problems(parse_app(spec)))

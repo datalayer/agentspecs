@@ -8,7 +8,11 @@
 # the person has approved that exact text; it never buys reach and never deletes
 # on its own. Its three connections are the catalogue's X, Bluesky and Discord MCP
 # servers; each needs its own key (see the servers' pages). LinkedIn was dropped
-# (the user, 14 November 2026).
+# (the user, 14 November 2026). It needs one network at least, as its agent does
+# (the user, 14 November 2026): each connection is optional, and an X or
+# Bluesky account the person linked in Settings counts too — the agent posts
+# there with its posting tools, through Datalayer's IAM, never with a pasted
+# token.
 
 schema: loop.app/v1
 id: marketer
@@ -33,17 +37,22 @@ memory: mem0
 context:
   - marketing:0.0.1
 connections:
-  # X is read with an app's bearer token today — posts, search, users, trends; its
-  # tools are not classed yet, so writing through it would leave every one to the person.
+  # One network at least (its agent's optional.at_least_one): each runs only when
+  # its secrets are set up. X and Bluesky are read with them — posts, search,
+  # users, trends, feeds; posting goes through the person's linked accounts
+  # (the agent's social-post-x and social-post-bluesky, publish, asked first).
   - server: x:0.0.1
     access: read
     as: owner
+    optional: true
   - server: bluesky:0.0.1
-    access: write
+    access: read
     as: owner
+    optional: true
   - server: discord:0.0.1
     access: write
     as: owner
+    optional: true
 rules:
   - action: Read posts, profiles, feeds, trends and replies
     applies_to: read
@@ -96,7 +105,7 @@ tests:
     live: []
     recorded: []
     unverified:
-      - "Not played live yet: X reads with a bearer token today; Bluesky waits for the runtime image that carries its server; Discord's runs in Docker."
+      - "Not played live yet: X reads with a bearer token; posting to X and Bluesky on the linked accounts waits for the runtime image that carries the posting tools; Discord's runs in Docker."
 record:
   keep_for: 90_days
   include: [conversations, sources, feedback]

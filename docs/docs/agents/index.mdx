@@ -90,10 +90,15 @@ What the agent starts without (0.0.188): MCP servers and skills of its own lists
 optional:
   mcp_servers: [x:0.0.1, bluesky:0.0.1, discord:0.0.1]
   skills: [crawl:0.0.1, github:0.0.1]
+  backend_tools: [social-post-x:0.0.1, social-post-bluesky:0.0.1]
   at_least_one:
-    - [x:0.0.1, bluesky:0.0.1, discord:0.0.1]
+    - [x:0.0.1, bluesky:0.0.1, discord:0.0.1, social-post-x:0.0.1, social-post-bluesky:0.0.1]
 ```
-An entry names one of the agent's `mcp_servers` or `skills`, with the same reference; a group names entries of `optional.mcp_servers` or `optional.skills`. A secret an MCP server reads only in the sandbox (`sandbox_envvars`, as Earthdata's login) is never required anyway.
+An entry names one of the agent's `mcp_servers`, `skills` or `backend_tools`, with the same reference; a group names entries of `optional`. A secret an MCP server reads only in the sandbox (`sandbox_envvars`, as Earthdata's login) is never required anyway.
+
+An optional backend tool (0.0.189) is one set up by an account the person links in Datalayer's Settings rather than by a secret: its spec says which (`linked_accounts`, one of them enough). The posting tools of `datalayer-social` are such tools: `social-post-x` is set up when the person linked X, `social-post-bluesky` when they linked Bluesky. They post through Datalayer's IAM with the runtime's social token — the person's own token, narrowed to IAM's social routes and to that runtime while it runs — so no account's token reaches the agent, and no secret is pasted for them. The pages count a linked account toward its group; the runtime reads the linked accounts with its social token, and leaves a posting tool out, saying so, when its account is not linked. Both are `action: publish` with `approval: manual`: every post waits for the person's word. `social-accounts` reads which accounts are linked.
+
+An application follows its agent's groups through its own connections: a connection may say `optional: true` when its agent says that server optional, and a group of the agent's applies to the application only when the application connects to one of its servers — with the group's linked accounts beside them. The `marketer` application needs one network at least, as its agent does; `demo-marketer`, which connects to none, needs none.
 
 ### `environment_name` (string)
 Runtime environment name (default: `"ai-agents"`)

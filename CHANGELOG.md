@@ -8,6 +8,14 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.189
+
+14 November 2026.
+
+- **`datalayer-social`: the Marketer posts on the person's linked accounts, through IAM.** Three backend tools post to X and Bluesky as the person through Datalayer's IAM with the runtime's social token — the person's own token, narrowed to IAM's social routes and to that runtime while it runs — so the accounts' tokens never leave IAM and nothing is pasted: `social-accounts` (read) says which of X and Bluesky are linked in Settings; `social-post-x` and `social-post-bluesky` (publish, `approval: manual`) publish one post with up to four images, each waiting for the person's word. `worker-marketer` carries them.
+- **A backend tool set up by a linked account** (`linked_accounts`), optional in an agent's `optional.backend_tools` and counted in its groups: the Marketer's one network at least is now one of X, Bluesky and Discord with their secrets, or an X or Bluesky account linked in Settings. The X and Bluesky MCP servers stay, optional, for reading.
+- **An application's connection may be optional** (`optional: true`), when its agent says that server optional; an application follows its agent's groups through its own connections. The `marketer` application's three connections are optional — one network at least, as its agent — and its Bluesky connection reads (posting goes through the linked account). `demo-marketer`, which connects to none, needs none.
+
 ## 0.0.188
 
 14 November 2026.

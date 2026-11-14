@@ -696,6 +696,7 @@ Something the application reaches.
 | `access` | [Access](#access) | How far: `read`, or `write` | `"read"` |
 | `as` | [ActsAs](#actsas) | In whose name: `owner` (the builder's account) or `user` (each user's own) | `"owner"` |
 | `only` | list of text | The tools of the server the application may use, by name or pattern (`*gmail*`: `*` is any run of characters, `?` any one); all of them when empty. A tool left out is not reached at all | — |
+| `optional` | true or false | Whether it runs without this connection when its secrets are not set up, as its agent does (the agent's `optional`, whose `at_least_one` groups it follows): only a server its agent says optional | `false` |
 
 ### AppCriterion
 

@@ -1,0 +1,33 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The datalayer-social toolset (decided 14 November 2026): a post on the
+# person's own X account, linked in Settings, with up to four images. The
+# runtime asks IAM with its social token; IAM refreshes the account's grant
+# (tweet.write, media.write) and posts, and the account's token never leaves
+# IAM. It publishes, so it waits for the person's word every time
+# (approval: manual), as every post does. Set up when the person linked X
+# (linked_accounts): no secret is pasted for it.
+
+id: social-post-x
+version: 0.0.1
+name: Post to X
+description: >-
+  Publish one post on the person's own X account, linked in Settings, with up to
+  four PNG or JPEG images, through Datalayer's IAM; it waits for the person's
+  approval every time.
+tags:
+  - social
+  - x
+  - datalayer-social
+enabled: true
+action: publish
+approval: manual
+linked_accounts:
+  - x
+runtime:
+  language: python
+  package: agent_runtimes.tools.social
+  method: post_to_x
+icon: "@datalayer/icons-react:x"
+emoji: "✖️"

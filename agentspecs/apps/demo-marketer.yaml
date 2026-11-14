@@ -11,6 +11,10 @@
 # out may use: this one names no connection, so it reaches no network and
 # posts nothing. It plans and drafts in an example brand's voice, and reads
 # last week's numbers from an example written below, which it says is one.
+# Its agent needs one network at least (optional.at_least_one); an application
+# follows that rule through its own connections (0.0.189), and this one, which
+# connects to none, needs none — nor a linked X or Bluesky account, whose
+# posting tools have no social token on the visitors' runtime.
 
 schema: loop.app/v1
 id: demo-marketer
