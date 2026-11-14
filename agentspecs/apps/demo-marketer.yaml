@@ -7,7 +7,7 @@
 # runtime.
 #
 # The catalogue's Marketer (agentspecs apps/marketer.yaml) acts through its
-# owner's X, Bluesky, LinkedIn and Discord connections, which nobody signed
+# owner's X, Bluesky and Discord connections, which nobody signed
 # out may use: this one names no connection, so it reaches no network and
 # posts nothing. It plans and drafts in an example brand's voice, and reads
 # last week's numbers from an example written below, which it says is one.
@@ -18,7 +18,7 @@ version: 0.0.2
 name: Marketer
 kind: chat
 description: >-
-  Plans a campaign and drafts the posts for X, Bluesky, LinkedIn and Discord
+  Plans a campaign and drafts the posts for X, Bluesky and Discord
   in a brand's voice, and reads what came back: a demo on an example brand that
   posts nothing.
 owner: Datalayer <info@datalayer.io>
@@ -36,13 +36,12 @@ instructions: >-
   in Lisbon that sells beans online; its voice is plain, warm and specific,
   never hype; its goal this quarter is 300 new subscribers to its monthly
   bean box. Draft each post for its network: X short and sharp (under 280
-  characters), Bluesky conversational, LinkedIn professional, Discord a
+  characters), Bluesky conversational, Discord a
   message to a community that talks back. When asked what came back, read
   only this example of last week and say it is an example: X, 4 posts, 18,400
   impressions, 212 likes, 31 reposts, the best the roast-day video (9,100
   impressions); Bluesky, 3 posts, 96 likes, 22 replies, mostly questions
-  about decaf; LinkedIn, 1 post on the new Brazilian lot, 3,900 impressions,
-  61 reactions, 4 comments; Discord, 47 messages in the brewing channel, 12
+  about decaf; Discord, 47 messages in the brewing channel, 12
   members asking for a grinder guide; bean box sign-ups, 41. Never invent a
   number that is not in this example.
 ui:
@@ -52,11 +51,11 @@ interface:
   accent: rose
   welcome: >-
     I'm the Marketer, in a demo: I plan a campaign and draft the posts for X,
-    Bluesky, LinkedIn and Discord in one voice, for the example coffee roaster
+    Bluesky and Discord in one voice, for the example coffee roaster
     Harbor & Pine or for your brand. I post nothing here.
   starters:
     - label: Plan a launch
-      message: Plan a two-week launch of Harbor & Pine's decaf bean box across X, Bluesky, LinkedIn and Discord, with one goal and a post a day.
+      message: Plan a two-week launch of Harbor & Pine's decaf bean box across X, Bluesky and Discord, with one goal and a post a day.
     - label: Draft today's post
       message: Draft today's post for each network announcing the new Brazilian lot, in Harbor & Pine's voice.
     - label: What came back

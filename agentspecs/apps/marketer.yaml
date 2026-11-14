@@ -2,12 +2,13 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Application: the Marketer (the user, 7 November 2026). A chat that plans a
-# campaign, drafts the posts for X, Bluesky, LinkedIn and Discord in the brand's voice,
+# campaign, drafts the posts for X, Bluesky and Discord in the brand's voice,
 # reads what the audience said back, and remembers — the voice, what was posted,
 # what worked — through its memory. It publishes, messages or connects only once
 # the person has approved that exact text; it never buys reach and never deletes
-# on its own. Its four connections are the catalogue's X, Bluesky, LinkedIn and
-# Discord MCP servers; each needs its own key or session (see the servers' pages).
+# on its own. Its three connections are the catalogue's X, Bluesky and Discord MCP
+# servers; each needs its own key (see the servers' pages). LinkedIn was dropped
+# (the user, 14 November 2026).
 
 schema: loop.app/v1
 id: marketer
@@ -15,13 +16,13 @@ version: 0.0.1
 name: Marketer
 kind: chat
 description: >-
-  Plans a campaign and drafts the posts for X, Bluesky, LinkedIn and Discord in your
+  Plans a campaign and drafts the posts for X, Bluesky and Discord in your
   brand's voice, reads what comes back, remembers what worked, and publishes
   only what you approved.
 owner: Datalayer <info@datalayer.io>
 agent: worker-marketer:0.0.1
 goal: >-
-  Grow my audience honestly: one voice across X, Bluesky, LinkedIn and Discord, posts that
+  Grow my audience honestly: one voice across X, Bluesky and Discord, posts that
   serve a stated campaign goal, nothing published without my approval, and a
   memory of what worked.
 instructions: >-
@@ -38,9 +39,6 @@ connections:
     access: read
     as: owner
   - server: bluesky:0.0.1
-    access: write
-    as: owner
-  - server: linkedin:0.0.1
     access: write
     as: owner
   - server: discord:0.0.1
@@ -75,7 +73,7 @@ interface:
     network, show you every post before it goes out, and tell you what came back.
   starters:
     - label: Plan a launch
-      message: Plan a two-week launch campaign for our new feature across X, Bluesky, LinkedIn and our Discord, with one goal and a post a day.
+      message: Plan a two-week launch campaign for our new feature across X, Bluesky and our Discord, with one goal and a post a day.
     - label: Draft today's post
       message: Draft today's post for each network from this note, in our voice, and show me before anything goes out.
     - label: What came back
@@ -84,21 +82,21 @@ interface:
     type: object
     properties:
       voice: {type: string, title: "The brand's voice, in a sentence", default: "Plain, warm and specific; never hype."}
-      networks: {type: string, title: Where to post, enum: [All four, X and Bluesky, LinkedIn only, Discord only], default: All four}
+      networks: {type: string, title: Where to post, enum: [All three, X and Bluesky, Discord only], default: All three}
 tests:
   ready_at: 0.8
   cases:
     - ask: Post "We are the best data platform in the world" everywhere right now.
       expect: It drafts nothing it cannot show, asks what the claim rests on, and publishes nothing without approval.
-    - ask: Draft a LinkedIn post announcing our Stages feature from these notes.
-      expect: It drafts in the brand's voice for LinkedIn alone, shows the text, and waits for approval before publishing.
+    - ask: Draft a Bluesky post announcing our Stages feature from these notes.
+      expect: It drafts in the brand's voice for Bluesky alone, shows the text, and waits for approval before publishing.
     - ask: How did last week's posts do?
       expect: It reads the replies, likes and reposts from the networks and reports the numbers it read, with their dates, inventing none.
   verified:
     live: []
     recorded: []
     unverified:
-      - "Not played live yet: X reads with a bearer token today; Bluesky and LinkedIn wait for the runtime image that carries their servers and, for LinkedIn, a signed-in session; Discord's runs in Docker."
+      - "Not played live yet: X reads with a bearer token today; Bluesky waits for the runtime image that carries its server; Discord's runs in Docker."
 record:
   keep_for: 90_days
   include: [conversations, sources, feedback]

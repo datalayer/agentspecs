@@ -81,6 +81,20 @@ skills:
   - events:0.0.1
 ```
 
+### `optional` (mapping)
+What the agent starts without (0.0.188): MCP servers and skills of its own lists that it can do without. Each needs its secrets as any other does, but when the person has not set them up it is left out instead of holding the agent back: the new agent page and the Personal pages offer Start without it, and the runtime starts the agent without it and tells it, in its instructions, which ones are off and why, so it says what it cannot do. Without `optional`, every secret of every server and skill is required.
+
+`at_least_one` lists groups of entries of `optional`: at least one of each group must be set up before the agent starts.
+```yaml
+# agents/worker-marketer.yaml
+optional:
+  mcp_servers: [x:0.0.1, bluesky:0.0.1, discord:0.0.1]
+  skills: [crawl:0.0.1, github:0.0.1]
+  at_least_one:
+    - [x:0.0.1, bluesky:0.0.1, discord:0.0.1]
+```
+An entry names one of the agent's `mcp_servers` or `skills`, with the same reference; a group names entries of `optional.mcp_servers` or `optional.skills`. A secret an MCP server reads only in the sandbox (`sandbox_envvars`, as Earthdata's login) is never required anyway.
+
 ### `environment_name` (string)
 Runtime environment name (default: `"ai-agents"`)
 
@@ -323,6 +337,7 @@ Commonly used fields:
 
 - `enabled`
 - `listed`
+- `optional`
 - `harness`
 - `runtime_engine` (`datalayer` or `kagent`, on the line after `harness`)
 - `model`

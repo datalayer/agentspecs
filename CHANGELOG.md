@@ -8,6 +8,13 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.188
+
+14 November 2026.
+
+- **`optional`: what an agent starts without.** An agent's spec names the MCP servers and skills of its own it can do without (`optional.mcp_servers`, `optional.skills`), and groups of which at least one must be set up (`optional.at_least_one`). One without its secrets is left out, and the agent is told which, instead of holding the start back. The Marketer starts with one network at least of X, Bluesky and Discord, and without web search (`crawl`, `TAVILY_API_KEY`) or the repositories (`github`, `GITHUB_TOKEN`); the Shopper without web search. Terra's Earthdata login was never required (`sandbox_envvars`).
+- **The Marketer drops LinkedIn.** `worker-marketer` no longer names the `linkedin` MCP server, nor do its description and instructions, the `marketer` application's connections and words, or the `demo-marketer` demo. The `linkedin` server stays in the catalogue.
+
 ## 0.0.187
 
 14 November 2026.
