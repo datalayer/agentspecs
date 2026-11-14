@@ -63,7 +63,7 @@ lines:
   says: Passes the bank’s proposal on, quoting it as written.
   card:
     kind: approval
-    title: Ledgerly asks you to confirm
+    title: Ledgerly (ledgerly.example) asks you to confirm
     rows:
     - - Amount
       - EUR 1250.00

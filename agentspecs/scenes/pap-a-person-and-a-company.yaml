@@ -65,7 +65,7 @@ lines:
   says: Asks Ada to sign in at Manzanita, on Manzanita’s own page.
   card:
     kind: sign-in
-    title: Sign in at Manzanita Outfitters
+    title: Sign in at Manzanita Outfitters (manzanita.example)
     lines:
     - Your agent asks to see your orders.
     - 'You sign in on manzanita.example: your agent never sees your password.'

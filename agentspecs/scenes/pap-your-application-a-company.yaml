@@ -59,7 +59,7 @@ lines:
   says: Asks Sam to sign in at Exchange desk, with his Datalayer account.
   card:
     kind: sign-in
-    title: Sign in at Exchange desk
+    title: Sign in at Exchange desk (exchange-desk.apps.datalayer.ai)
     lines:
     - 'With your Datalayer account, on Datalayer’s page: the agent never sees your password.'
   turn:
@@ -69,7 +69,7 @@ lines:
   says: 'Proposes the exchange in the Maker’s own words: “Exchange order ord_7Hk2 for size L.”'
   card:
     kind: approval
-    title: Exchange desk asks you to confirm
+    title: Exchange desk (exchange-desk.apps.datalayer.ai) asks you to confirm
     rows:
     - - Order
       - ord_7Hk2

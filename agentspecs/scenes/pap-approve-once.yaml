@@ -47,7 +47,7 @@ lines:
   says: 'Every operation is Ada’s to approve: it waits for her.'
   card:
     kind: approval
-    title: Manzanita Outfitters asks you to confirm
+    title: Manzanita Outfitters (manzanita.example) asks you to confirm
     rows:
     - - Order
       - ord_7Hk2
