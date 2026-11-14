@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.187
+
+14 November 2026.
+
+- **`listed`: an enabled agent kept out of the pickers.** `listed: false` on an agent's spec (true unless said) keeps it off the new agent page, the chats, the assign menu and loop's pickers, which offer the agents that are enabled and listed: the home page's five. `example-simple`, the neutral default of blank applications and quick launches, `example-blank`, `example-kagent`, `example-one-trigger`, `worker-crawler`, `jupyter-data-analyst` and `jupyter-notebook-compactor` are enabled again and not listed, so the applications that name one (Decide, Quote calculator, Report from a file, Data quality, Model choice, Ship or fix, Supplier comparison) have nothing left to set up.
+
 ## 0.0.186
 
 14 November 2026.

@@ -18,9 +18,11 @@ description: >
 tags:
   - workflow
 
-# Out of the galleries (the user, 14 November 2026): /agents/new and loop offer the five
-# agents of the home page alone. Still runnable by id, and an application naming it runs.
-enabled: false
+# Enabled, out of the pickers (the user, 14 November 2026): /agents/new, the chats, the
+# assign menu and loop offer the five agents of the home page alone (`listed: false` here).
+# Runnable by id, and an application naming it runs with nothing to set up.
+enabled: true
+listed: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 # Other models it may be switched to, beside its own: those
 # datalayer-ai-inference serves from the catalogue.

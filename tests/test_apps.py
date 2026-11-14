@@ -421,13 +421,11 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
     for identity in ("quote-calculator", "report-from-a-file", "customer-interview"):
         spec = APP_CATALOGUE[identity]
         assert spec.enabled and spec.unavailable_because == "", identity
-    assert app_setup(APP_CATALOGUE["customer-interview"]) == []
-    # Their agent, jupyter-data-analyst, is out of the galleries since 0.0.186 (14 November
-    # 2026): the applications are still offered, and say so as setup.
-    for identity in ("quote-calculator", "report-from-a-file"):
-        assert app_setup(APP_CATALOGUE[identity]) == [
-            "The agent 'jupyter-data-analyst:0.0.1' is not enabled."
-        ], identity
+        # Their agent, jupyter-data-analyst, is enabled and out of the pickers since 0.0.187
+        # (`listed: false`, 14 November 2026): nothing to set up.
+        assert app_setup(spec) == [], identity
+    # Decide's agent, example-simple, the neutral default, likewise.
+    assert app_setup(APP_CATALOGUE["decide"]) == []
     # Support Desk's agent, Document Q&A, is out of the agents' catalogue since 0.0.164
     # (8 November 2026): the application is still offered, and says so as setup.
     support = APP_CATALOGUE["support-desk"]

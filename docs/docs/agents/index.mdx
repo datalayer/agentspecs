@@ -59,7 +59,10 @@ tags:
 ```
 
 ### `enabled` (boolean)
-Whether agent is active (default: `true`)
+Whether agent is active (default: `true`). An application naming an agent that is not enabled has it to set up.
+
+### `listed` (boolean)
+Whether the pickers offer an enabled agent (default: `true`): the new agent page, the chats, the assign menu and loop's local and cloud pickers. Say it only as `listed: false`, on an enabled agent that runs by id, as the default of blank applications and quick launches, and for the applications that name it, without being offered: `example-simple`, the neutral default, is one. The pickers offer the agents that are enabled and listed, the home page's five.
 
 ### `mcp_servers` (list of strings)
 MCP server references. Prefer `id:version` format.
@@ -319,6 +322,7 @@ color: blue
 Commonly used fields:
 
 - `enabled`
+- `listed`
 - `harness`
 - `runtime_engine` (`datalayer` or `kagent`, on the line after `harness`)
 - `model`
