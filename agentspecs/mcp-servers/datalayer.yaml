@@ -31,12 +31,11 @@ url: "https://mcp.datalayer.run/mcp"
 headers:
   Authorization: "Bearer ${DATALAYER_API_KEY}"
 
-# Not on by default. Every other server here reaches something outside
-# Datalayer; this one reaches *this* platform, and an agent running inside a
-# Datalayer sandbox already has the notebook it was given. Enabling it is
-# saying "this agent should also act on my other notebooks", which is a
-# choice somebody makes rather than a default they discover.
-enabled: false
+# In the catalogue for everyone signed in (the user, 14 November 2026): an
+# agent may act on its owner's other notebooks through Datalayer's own
+# gateway, with the owner's DATALAYER_API_KEY. Each agent still adds it
+# itself; nothing reaches the gateway until the key is set.
+enabled: true
 
 envvars:
   - DATALAYER_API_KEY:0.0.1
