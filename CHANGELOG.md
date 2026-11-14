@@ -8,6 +8,14 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.190
+
+14 November 2026.
+
+- **LinkedIn comes back to the Marketer, through IAM** (the user: "post through IAM for linkedin - try to have the full feature, reading also"). Two `datalayer-social` backend tools post as the person on the LinkedIn account they linked in Settings, through Datalayer's IAM with the runtime's social token: `social-post-linkedin` (one post, one image and its alt text) and `social-comment-linkedin` (a comment under a post the person names by its address). Both `action: publish`, `approval: manual`, `linked_accounts: [linkedin]`. `worker-marketer` carries them, both optional, and counts `social-post-linkedin` in its one-network group; its description, goal and instructions name LinkedIn again. The catalogue's `linkedin` MCP server, which needs a signed-in browser session, stays out.
+- **What LinkedIn lets it read: nothing back.** Datalayer's LinkedIn application holds Sign In with OpenID Connect and Share on LinkedIn alone; reading posts, comments, reactions or a company page needs LinkedIn's Community Management API, not granted. No tool pretends to read LinkedIn, and the Marketer says so when asked how a LinkedIn post did. `social-accounts` says whether LinkedIn's posting grant holds.
+- **The `marketer` application** names LinkedIn (no connection: the linked account alone) and follows its agent's group; `demo-marketer` drafts for LinkedIn too and has no LinkedIn numbers.
+
 ## 0.0.189
 
 14 November 2026.

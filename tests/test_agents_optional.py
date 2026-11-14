@@ -60,9 +60,21 @@ def test_the_marketer_needs_one_network_and_neither_search_nor_the_repositories(
     marketer = agents["worker-marketer"]["optional"]
     assert marketer["mcp_servers"] == ["x:0.0.1", "bluesky:0.0.1", "discord:0.0.1"]
     assert marketer["skills"] == ["crawl:0.0.1", "github:0.0.1"]
-    assert marketer["backend_tools"] == ["social-post-x:0.0.1", "social-post-bluesky:0.0.1"]
+    assert marketer["backend_tools"] == [
+        "social-post-x:0.0.1",
+        "social-post-bluesky:0.0.1",
+        "social-post-linkedin:0.0.1",
+        "social-comment-linkedin:0.0.1",
+    ]
     assert marketer["at_least_one"] == [
-        ["x:0.0.1", "bluesky:0.0.1", "discord:0.0.1", "social-post-x:0.0.1", "social-post-bluesky:0.0.1"]
+        [
+            "x:0.0.1",
+            "bluesky:0.0.1",
+            "discord:0.0.1",
+            "social-post-x:0.0.1",
+            "social-post-bluesky:0.0.1",
+            "social-post-linkedin:0.0.1",
+        ]
     ]
     assert agents["worker-shopper"]["optional"] == {"skills": ["crawl:0.0.1"]}
 
@@ -79,27 +91,45 @@ def test_terras_earthdata_login_is_never_required():
     assert not any(_base(ref).startswith("EARTHDATA_") for ref in earthdata["envvars"])
 
 
-def test_the_marketer_has_no_linkedin_and_the_server_stays():
+def test_linkedin_comes_back_through_iam_not_its_browser_server():
+    """LinkedIn is back (14 November 2026) through datalayer-social, never the linkedin server.
+
+    The catalogue's linkedin server needs a signed-in browser session; the
+    Marketer reaches LinkedIn through IAM with the person's linked account, and
+    says what LinkedIn lets it do: post and comment, read nothing back.
+    """
     agents = dict(_agents())
     marketer = agents["worker-marketer"]
     assert "linkedin:0.0.1" not in marketer["mcp_servers"]
-    for field in ("description", "system_prompt", "goal"):
-        assert "LinkedIn" not in str(marketer.get(field) or ""), field
+    assert "LinkedIn" in marketer["description"] and "LinkedIn" in marketer["system_prompt"]
+    assert "read nothing back" in " ".join(marketer["system_prompt"].split())
+    for ref in ("social-post-linkedin:0.0.1", "social-comment-linkedin:0.0.1"):
+        assert ref in marketer["backend_tools"] and ref in marketer["optional"]["backend_tools"]
+    assert "social-post-linkedin:0.0.1" in marketer["optional"]["at_least_one"][0]
     for app in ("marketer", "demo-marketer"):
-        text = (ROOT / "apps" / f"{app}.yaml").read_text()
-        spec = yaml.safe_load(text)
+        spec = yaml.safe_load((ROOT / "apps" / f"{app}.yaml").read_text())
         assert "linkedin:0.0.1" not in [c.get("server") for c in spec.get("connections") or []]
-        for field in ("description", "goal", "instructions", "interface"):
-            assert "LinkedIn" not in str(spec.get(field) or ""), (app, field)
+        assert "LinkedIn" in spec["description"], app
     assert (ROOT / "mcp-servers" / "linkedin.yaml").exists()
 
 
 def test_the_marketer_posts_through_the_linked_accounts_and_asks_first():
     """datalayer-social (0.0.189): no pasted secret, a linked account, every post approved."""
     marketer = dict(_agents())["worker-marketer"]
-    for ref in ("social-accounts:0.0.1", "social-post-x:0.0.1", "social-post-bluesky:0.0.1"):
+    for ref in (
+        "social-accounts:0.0.1",
+        "social-post-x:0.0.1",
+        "social-post-bluesky:0.0.1",
+        "social-post-linkedin:0.0.1",
+        "social-comment-linkedin:0.0.1",
+    ):
         assert ref in marketer["backend_tools"]
-    for tool, account in (("social-post-x", "x"), ("social-post-bluesky", "bluesky")):
+    for tool, account in (
+        ("social-post-x", "x"),
+        ("social-post-bluesky", "bluesky"),
+        ("social-post-linkedin", "linkedin"),
+        ("social-comment-linkedin", "linkedin"),
+    ):
         spec = yaml.safe_load((ROOT / "backend-tools" / f"{tool}.yaml").read_text())
         assert spec["action"] == "publish" and spec["approval"] == "manual"
         assert spec["linked_accounts"] == [account]

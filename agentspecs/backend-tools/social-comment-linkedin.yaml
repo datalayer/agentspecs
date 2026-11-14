@@ -1,0 +1,32 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The datalayer-social toolset (decided 14 November 2026): a comment as the
+# person under a LinkedIn post they point at, by its address or its URN. LinkedIn
+# lets Datalayer write comments as the member (w_member_social) but not read a
+# post's comments, so the agent comments under the post the person names, never
+# in reply to a comment it read. A comment is public: it publishes and waits for
+# the person's word every time (approval: manual). Set up when the person linked
+# LinkedIn for posting (linked_accounts).
+
+id: social-comment-linkedin
+version: 0.0.1
+name: Comment on LinkedIn
+description: >-
+  Comment as the person under one LinkedIn post they name by its address,
+  through Datalayer's IAM; it waits for the person's approval every time.
+tags:
+  - social
+  - linkedin
+  - datalayer-social
+enabled: true
+action: publish
+approval: manual
+linked_accounts:
+  - linkedin
+runtime:
+  language: python
+  package: agent_runtimes.tools.social
+  method: comment_on_linkedin
+icon: "@datalayer/icons-react:linked-in"
+emoji: "💬"
