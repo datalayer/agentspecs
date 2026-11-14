@@ -393,13 +393,11 @@ def test_what_is_not_enabled_is_said_as_setup_and_not_as_a_mistake() -> None:
     triage = APP_CATALOGUE["inbox-triage"]
     assert app_problems(triage) == []
     assert app_setup(triage) == ["The agent 'worker-mail-triage:0.0.1' is not enabled."]
-    # An application naming an agent that is not: that is setup, said in words, and not
-    # a problem of the spec (its odoo-accounting server is on since 0.0.162).
+    # Its agent, worker-accountant, is enabled since 0.0.184 (14 November 2026), and its
+    # odoo-accounting server since 0.0.162: nothing left to set up.
     accounting = APP_CATALOGUE["accounting"]
     assert app_problems(accounting) == []
-    assert app_setup(accounting) == [
-        "The agent 'worker-accountant:0.0.1' is not enabled.",
-    ]
+    assert app_setup(accounting) == []
 
 
 def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() -> None:
@@ -1054,9 +1052,7 @@ def test_accounting_only_reads_the_books_and_asks_before_anything_that_would_cha
     assert found.interface.avatar == "wizard"
     assert found.interface.avatar != APP_CATALOGUE["sales"].interface.avatar
     assert app_problems(found) == []
-    assert app_setup(found) == [
-        "The agent 'worker-accountant:0.0.1' is not enabled.",
-    ]
+    assert app_setup(found) == []
 
 
 def test_the_python_examples_sit_beside_their_spec() -> None:

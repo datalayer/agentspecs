@@ -8,9 +8,15 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
-## 0.0.184
+## 0.0.185
 
 14 November 2026.
+
+- **0.0.185 is 0.0.184, released.** 0.0.184 was tagged but never published: its tests failed on four expectations the day's commits had left behind. `worker-accountant`, enabled, may switch to what ai-inference serves (`model_additionals: alibaba:qwen-max`), as every enabled agent; the `accounting` application has nothing left to set up; the protocols reference says PAP draft 1.0.
+
+## 0.0.184
+
+14 November 2026, tagged, not published.
 
 - **`shopify`, the Shopify Global Catalog MCP server**: anonymous UCP catalogue reads (search and lookup with the Global Catalog extension, no cart, checkout or payment). Every catalogue call names Datalayer's UCP agent profile, <https://datalayer.ai/ucp/profile.json>.
 - **`worker-shopper`**, the Shopper: finds and compares products on Shopify, and buys only through PAP and UCP with the person's approval.
