@@ -8,6 +8,16 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.184
+
+14 November 2026.
+
+- **`shopify`, the Shopify Global Catalog MCP server**: anonymous UCP catalogue reads (search and lookup with the Global Catalog extension, no cart, checkout or payment). Every catalogue call names Datalayer's UCP agent profile, <https://datalayer.ai/ucp/profile.json>.
+- **`worker-shopper`**, the Shopper: finds and compares products on Shopify, and buys only through PAP and UCP with the person's approval.
+- **`worker-terra`**, Terra: satellite imagery through the Earthdata MCP server.
+- **`worker-accountant`** is enabled, in the galleries; **Datalayer's own MCP server** is enabled in the catalogue for everyone signed in.
+- **PAP**: the catalogue entry says the version spoken, draft 1.0 (personal-agent-protocol 0.35); the PAP Stages put the domain beside a company's name on the sign-in and approval cards.
+
 ## 0.0.183
 
 13 November 2026.
