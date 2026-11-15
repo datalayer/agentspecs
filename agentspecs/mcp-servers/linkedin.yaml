@@ -8,7 +8,14 @@
 # chat, in the runtime's own browser (agent-runtimes' browser-session plugin);
 # the runtime writes that session where the server reads one made elsewhere
 # (cookies.json and source-state.json under ~/.linkedin-mcp, mode 0600) and
-# starts it again. The session is that runtime's alone and gone with it. LinkedIn's
+# starts it again. The session is that runtime's alone and gone with it.
+# LinkedIn's reCAPTCHA loops forever on that sign-in from an AWS address, so
+# (the user, 15 November 2026) the person may also paste their own browser's
+# session once, in Settings › LinkedIn: LINKEDIN_LI_AT, kept in their Vault
+# secrets, given to each new runtime of theirs (`optional_envvars`: given when
+# the account has it, never required, never to a deployment) and written there
+# as the server's session before it starts. The interactive sign-in stays,
+# beside it. LinkedIn's
 # User Agreement restricts automated access; the README says an account may be
 # restricted for it, and so does this spec.
 
@@ -20,7 +27,7 @@ description: A LinkedIn account's feed, profiles, companies, jobs and inbox thro
 documentation_url: https://github.com/stickerdaniel/linkedin-mcp-server
 signup_url: https://www.linkedin.com/signup
 api_key_url: https://github.com/stickerdaniel/linkedin-mcp-server#installation
-setup: "No key: the server uses your signed-in LinkedIn session. In the chat, press Sign in to LinkedIn: LinkedIn's login opens in your runtime's own browser, you sign in there, and the server reads and acts through that session, kept on that runtime alone and gone when it ends. On your own machine, `uvx mcp-server-linkedin --login` does the same. LinkedIn restricts automated access: use an account you can afford to see restricted."
+setup: "No key: the server uses your signed-in LinkedIn session. Paste it once in Settings › LinkedIn (the `li_at` cookie of a browser where you are signed in to LinkedIn, kept in your Vault secrets as LINKEDIN_LI_AT): each new runtime of yours starts the server signed in with it. Or, in the chat, press Sign in to LinkedIn: LinkedIn's login opens in your runtime's own browser, you sign in there, and the server reads and acts through that session, kept on that runtime alone and gone when it ends. On your own machine, `uvx mcp-server-linkedin --login` does the same. LinkedIn restricts automated access: use an account you can afford to see restricted."
 command: uvx
 args:
   - "mcp-server-linkedin"
@@ -32,6 +39,12 @@ env:
   # A runtime has no screen: the server's browser runs headless.
   HEADLESS: "true"
 envvars: []
+# The person's own LinkedIn session, pasted in Settings › LinkedIn (the user,
+# 15 November 2026): given to the runtime when the account has it, never
+# required; the runtime writes it as the server's session (the `li_at` cookie
+# on .linkedin.com) in the Jupyter container, never in the server's env.
+optional_envvars:
+  - LINKEDIN_LI_AT:0.0.1
 
 install:
   type: python

@@ -323,7 +323,7 @@ Common fields:
 
 - `id`, `version`, `name`, `description`
 - `command`, `args`, `transport`; `url` and `headers` for a remote server
-- `env`, `envvars` (usually versioned), `sandbox_envvars`
+- `env`, `envvars` (usually versioned), `sandbox_envvars`; `optional_envvars`: given to the runtime when the account has them, never required (LinkedIn's `LINKEDIN_LI_AT`, the person's session pasted in Settings › LinkedIn, 15 November 2026)
 - `documentation_url`, `signup_url`, `api_key_url`, `setup`: where to read about it, sign up and make the key it needs, and how, in a sentence of Markdown — its links render as links on the server's page (7 November 2026)
 - `actions`: what each tool does to the world (`read`, `write`, …), when it was checked, and a note
 - `tags`, `icon`, `emoji`

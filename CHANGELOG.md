@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.201
+
+- **LinkedIn's session from Settings** (the user, 15 November 2026: LinkedIn's reCAPTCHA loops forever on the sign-in made from a runtime's browser on an AWS address; "Keep it in Vault per person — paste once in Settings › LinkedIn"): a new env var, `LINKEDIN_LI_AT` — "LinkedIn session cookie (li_at)", the value of the cookie named `li_at` on `www.linkedin.com` (not `JSESSIONID`, `bcookie`, `bscookie`, `liap` or `lidc`), with the steps for Chrome or Edge, Firefox and Safari, how long it lives (until a LinkedIn sign-out, about a year) and that it is a password. MCP servers take `optional_envvars`: given to the runtime when the account has them, never required. The `linkedin` server declares `LINKEDIN_LI_AT` there (the runtime writes it as the server's session, never in its env), its `setup` says Settings › LinkedIn first, and the Marketer's instructions name it beside Sign in to LinkedIn, which stays. Tests: test_agents_optional
+
 ## 0.0.200
 
 - **The seed agents' egress** (the user, 15 November 2026): the Marketer, the Shopper and the Voyager reach the web only, `policy.shield.egress: ["*:80", "*:443"]` — any public address on ports 80 and 443, never another port nor a private, link-local, metadata, loopback, CGNAT or cluster address. The Accountant and Terra name each host, as the AWS Steward does: the Accountant Datalayer's gateway (its Odoo is the gateway's odoo and odoo-accounting toolsets; the gateway, not the pod, calls the person's Odoo), r1 and prod1; Terra the gateway, Earthdata Login, the CMR, LP DAAC's distribution and its CloudFront host (measured on an HLS granule), PyPI for earthaccess, r1 and prod1. `*:port` is agent-shield 0.2.21's; the carried schemas (`policies/shield-firewall.schema.json`, `policies/shield-policy.schema.json`) are 0.2.21's and `agent_policy_problems` takes it. [Agents](https://agentspecs.datalayer.tech/agents). Tests: test_agent_policy

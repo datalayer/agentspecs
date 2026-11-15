@@ -127,6 +127,26 @@ def test_linkedin_through_iam_and_its_browser_server():
     linkedin = yaml.safe_load((ROOT / "mcp-servers" / "linkedin.yaml").read_text())
     assert linkedin["envvars"] == []
     assert "Sign in to LinkedIn" in linkedin["setup"]
+    # The person's own session, pasted in Settings › LinkedIn (15 November 2026):
+    # given when the account has it, never required.
+    assert linkedin["optional_envvars"] == ["LINKEDIN_LI_AT:0.0.1"]
+    assert "Settings › LinkedIn" in linkedin["setup"]
+    assert "Settings › LinkedIn" in prompt
+
+
+def test_the_linkedin_session_cookie_says_which_cookie_to_copy():
+    """LINKEDIN_LI_AT (the user, 15 November 2026): the cookie named, the others not, the steps."""
+    spec = yaml.safe_load((ROOT / "env-vars" / "LINKEDIN_LI_AT.yaml").read_text())
+    assert spec["id"] == "LINKEDIN_LI_AT"
+    assert spec["name"] == "LinkedIn session cookie (li_at)"
+    said = " ".join(spec["description"].split())
+    assert "`li_at`" in said and "AQED" in said
+    for other in ("JSESSIONID", "bcookie", "bscookie", "liap", "lidc"):
+        assert other in said
+    for step in ("Chrome or Edge", "Application › Storage › Cookies", "Firefox", "Storage › Cookies", "Value"):
+        assert step in said
+    assert "sign out" in said and "about a year" in said and "password" in said
+    assert spec["registrationUrl"] == "https://www.linkedin.com"
 
 
 def test_the_marketer_posts_through_the_linked_accounts_and_asks_first():
