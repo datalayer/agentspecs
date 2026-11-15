@@ -1,0 +1,27 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The datalayer-social toolset (15 November 2026): the person follows one
+# Bluesky account. It waits for the person's word every time (approval: manual).
+
+id: social-follow-bluesky
+version: 0.0.1
+name: Follow on Bluesky
+description: >-
+  Follow one Bluesky account as the person, through Datalayer's IAM; it waits
+  for the person's approval every time.
+tags:
+  - social
+  - bluesky
+  - datalayer-social
+enabled: true
+action: write
+approval: manual
+linked_accounts:
+  - bluesky
+runtime:
+  language: python
+  package: agent_runtimes.tools.social
+  method: follow_on_bluesky
+icon: "@primer/octicons-react:person-add"
+emoji: "➕"

@@ -31,9 +31,11 @@ runtime_engine: datalayer
 identity: datalayer-acting-agent
 sandbox_variant: jupyter-server
 memory: mem0
+# Bluesky is not a server here since 15 November 2026: the Marketer reads and
+# acts on it with the person's linked account through IAM (datalayer-social),
+# no app password pasted. The catalogue's bluesky server stays for other agents.
 mcp_servers:
   - x:0.0.1
-  - bluesky:0.0.1
   - discord:0.0.1
   # LinkedIn with full access (the user, 15 November 2026: "for linkedin, we
   # need to use the embedded browser with the mcp server to allow full
@@ -62,17 +64,18 @@ skills:
   - datalayer-memory-delete
 # What it starts without (the user, 14 November 2026): a network, web search or
 # the repositories the person has not set up is left out, and the agent is told
-# which, so it says what it cannot do. It needs one network at least: the X,
-# Bluesky or Discord server with its pasted secrets (X and Bluesky read with
-# them), or an X, Bluesky or LinkedIn account the person linked in Settings,
-# which the posting tools post to (linked_accounts). LinkedIn came back on 14
+# which, so it says what it cannot do. It needs one network at least: the X
+# or Discord server with its pasted secrets (X reads with them), or an X,
+# Bluesky or LinkedIn account the person linked in Settings, which the posting
+# tools post to (linked_accounts); Bluesky's is also read, replied, liked,
+# reposted and followed with (15 November 2026: "for Bluesky, make it clear we
+# can do everything"). LinkedIn came back on 14
 # November 2026 through IAM (the user: "post through IAM for linkedin"); on 15
 # November the catalogue's linkedin server joined it, on a browser session the
 # person signs in from the chat, which reads LinkedIn too.
 optional:
   mcp_servers:
     - x:0.0.1
-    - bluesky:0.0.1
     - discord:0.0.1
     - linkedin:0.0.1
   skills:
@@ -83,10 +86,15 @@ optional:
     # Set up when the person linked that account in Settings.
     - social-post-x:0.0.1
     - social-post-bluesky:0.0.1
+    - social-read-bluesky:0.0.1
+    - social-reply-bluesky:0.0.1
+    - social-like-bluesky:0.0.1
+    - social-repost-bluesky:0.0.1
+    - social-follow-bluesky:0.0.1
     - social-post-linkedin:0.0.1
     - social-comment-linkedin:0.0.1
   at_least_one:
-    - [x:0.0.1, bluesky:0.0.1, discord:0.0.1, linkedin:0.0.1, social-post-x:0.0.1, social-post-bluesky:0.0.1, social-post-linkedin:0.0.1]
+    - [x:0.0.1, discord:0.0.1, linkedin:0.0.1, social-post-x:0.0.1, social-post-bluesky:0.0.1, social-post-linkedin:0.0.1]
 backend_tools:
   # The person's GitHub repositories with their own grant: on AWS AgentCore, from
   # AgentCore Identity's token vault, asked in the chat the first time.
@@ -95,10 +103,18 @@ backend_tools:
   # LinkedIn on the person's linked accounts through Datalayer's IAM, with the
   # runtime's social token; no account's token reaches it, and every post waits
   # for approval. On LinkedIn it also comments under a post the person names;
-  # LinkedIn lets it read no post, comment or reaction.
+  # LinkedIn lets it read no post, comment or reaction. On Bluesky it does
+  # everything (15 November 2026): reads the timeline, posts, threads, likes,
+  # reposts, profiles, search, notifications and follows, and replies, likes,
+  # reposts and follows, each of these four asked first.
   - social-accounts:0.0.1
   - social-post-x:0.0.1
   - social-post-bluesky:0.0.1
+  - social-read-bluesky:0.0.1
+  - social-reply-bluesky:0.0.1
+  - social-like-bluesky:0.0.1
+  - social-repost-bluesky:0.0.1
+  - social-follow-bluesky:0.0.1
   - social-post-linkedin:0.0.1
   - social-comment-linkedin:0.0.1
 environment_name: ai-agents-env
@@ -128,8 +144,13 @@ system_prompt: >-
   connect only once the person has approved that exact text. Post to X,
   Bluesky and LinkedIn with your posting tools, on the accounts the person
   linked in Settings (read which with social_accounts); each post asks the
-  person first. On LinkedIn you can also comment under a post the person points
-  you at. With the linkedin tools — there when the person signed in to LinkedIn
+  person first. On Bluesky you do everything with the linked account: read the
+  person's timeline, their posts and the replies under them, who liked and
+  reposted them, profiles, search, notifications, follows and followers with
+  read_bluesky, and reply, like, repost or follow, each asked first. If
+  read_bluesky says Bluesky was connected for posting only, tell the person to
+  connect it again in Settings › Bluesky. On LinkedIn you can also comment
+  under a post the person points you at. With the linkedin tools — there when the person signed in to LinkedIn
   in their runtime's browser (Sign in to LinkedIn, in the chat) — you read
   LinkedIn too: their feed, posts and the comments under them, profiles,
   companies and their inbox; you send a message or a connection request only

@@ -60,7 +60,6 @@ def test_the_marketer_needs_one_network_and_neither_search_nor_the_repositories(
     marketer = agents["worker-marketer"]["optional"]
     assert marketer["mcp_servers"] == [
         "x:0.0.1",
-        "bluesky:0.0.1",
         "discord:0.0.1",
         "linkedin:0.0.1",
     ]
@@ -68,13 +67,17 @@ def test_the_marketer_needs_one_network_and_neither_search_nor_the_repositories(
     assert marketer["backend_tools"] == [
         "social-post-x:0.0.1",
         "social-post-bluesky:0.0.1",
+        "social-read-bluesky:0.0.1",
+        "social-reply-bluesky:0.0.1",
+        "social-like-bluesky:0.0.1",
+        "social-repost-bluesky:0.0.1",
+        "social-follow-bluesky:0.0.1",
         "social-post-linkedin:0.0.1",
         "social-comment-linkedin:0.0.1",
     ]
     assert marketer["at_least_one"] == [
         [
             "x:0.0.1",
-            "bluesky:0.0.1",
             "discord:0.0.1",
             "linkedin:0.0.1",
             "social-post-x:0.0.1",
@@ -155,10 +158,32 @@ def test_the_marketer_application_needs_one_network_as_its_agent_does():
     spec = yaml.safe_load((ROOT / "apps" / "marketer.yaml").read_text())
     assert [(c["server"], c.get("optional")) for c in spec["connections"]] == [
         ("x:0.0.1", True),
-        ("bluesky:0.0.1", True),
         ("discord:0.0.1", True),
     ]
     assert app_problems(parse_app(spec)) == []
     # Only a server its agent says optional may be.
     spec["agent"] = "worker-shopper:0.0.1"
     assert any("is optional, and its agent does not start without it" in p for p in app_problems(parse_app(spec)))
+
+
+def test_the_marketer_does_everything_on_bluesky_with_the_linked_account():
+    """15 November 2026: Bluesky read and acted on through IAM, no app password; the server stays in the catalogue."""
+    marketer = dict(_agents())["worker-marketer"]
+    servers = [_base(ref) for ref in marketer["mcp_servers"]]
+    assert "bluesky" not in servers
+    assert "bluesky:0.0.1" not in [c.get("server") for c in yaml.safe_load((ROOT / "apps" / "marketer.yaml").read_text())["connections"]]
+    assert (ROOT / "mcp-servers" / "bluesky.yaml").exists()
+    for tool, action, approval in (
+        ("social-read-bluesky", "read", "auto"),
+        ("social-reply-bluesky", "publish", "manual"),
+        ("social-like-bluesky", "write", "manual"),
+        ("social-repost-bluesky", "publish", "manual"),
+        ("social-follow-bluesky", "write", "manual"),
+    ):
+        assert f"{tool}:0.0.1" in marketer["backend_tools"]
+        assert f"{tool}:0.0.1" in marketer["optional"]["backend_tools"]
+        spec = yaml.safe_load((ROOT / "backend-tools" / f"{tool}.yaml").read_text())
+        assert (spec["action"], spec["approval"]) == (action, approval), tool
+        assert spec["linked_accounts"] == ["bluesky"] and "envvars" not in spec
+        assert spec["runtime"]["package"] == "agent_runtimes.tools.social"
+    assert "read_bluesky" in marketer["system_prompt"]

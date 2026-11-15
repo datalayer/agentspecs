@@ -20,6 +20,7 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `app-elements` (Side panel and pages) | `@datalayer/loop-plugin-app-elements` | `a2ui` | — | none of its own |
 | `app-page` (Application page) | `@datalayer/loop-plugin-app-page` (one per application) | `a2ui`, `mcp-apps` | — | none of its own |
 | `app-rules` (Rules and approvals) | `@datalayer/loop-plugin-app-rules` (one per application) | — | — | none of its own |
+| `browser-session` (Browser sessions) | `@datalayer/loop-plugin-browser-session` | — | — | none of its own |
 | `canvas-blocks` (Blocks) | `@datalayer/loop-plugin-ui` (one per ui) | — | — | none of its own |
 | `canvas-parts` (Parts) | `@datalayer/loop-plugin-parts` (one per source) | — | — | none of its own |
 | `chat` (Chat) | `@datalayer/loop-plugin-chat` | — | — | none of its own |

@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.193
+
+- **Bluesky, everything through the linked account** (the user, 15 November 2026: "for Bluesky, make it clear we can do everything"): datalayer-social's `social-read-bluesky` (the timeline, someone's posts, a thread and its replies, who liked or reposted a post, a profile, search of posts and people, the notifications, follows and followers; read, approval auto), `social-reply-bluesky`, `social-like-bluesky`, `social-repost-bluesky` and `social-follow-bluesky` (approval manual), each `linked_accounts: [bluesky]`, through Datalayer's IAM with the runtime's social token. `worker-marketer` carries the five, optional, and drops the `bluesky` MCP server (its app password) from its servers, its optional servers and its one-network group; the `marketer` application drops its Bluesky connection. The `bluesky` server spec stays in the catalogue. Docs: [Agents](https://agentspecs.datalayer.tech/agents).
+
 ## 0.0.192
 
 - **ui/browser-session**: the UI spec of agent-runtimes' browser-session plugin (`@datalayer/loop-plugin-browser-session`): *Sign in to LinkedIn* in the chat's title bar (`loop.chatHeader`), opening the runtime's own browser at LinkedIn's login, so that the linkedin server reads and acts through the person's session.
