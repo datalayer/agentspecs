@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.192
+
+- **ui/browser-session**: the UI spec of agent-runtimes' browser-session plugin (`@datalayer/loop-plugin-browser-session`): *Sign in to LinkedIn* in the chat's title bar (`loop.chatHeader`), opening the runtime's own browser at LinkedIn's login, so that the linkedin server reads and acts through the person's session.
+
 ## 0.0.191
 
 - **LinkedIn with full access, on a browser session** (the user, 15 November 2026: "for linkedin, we need to use the embedded browser with the mcp server to allow full access"). worker-marketer carries the catalogue's `linkedin` server again, optional and counted in its one-network group beside the `datalayer-social` LinkedIn posting: the person signs in to LinkedIn from the chat, in their runtime's own browser (agent-runtimes' browser-session plugin), and the server reads and acts through that session — feed, posts and comments, profiles, companies, the inbox — sending a message or a connection request only once approved. Its instructions say so, and that without it LinkedIn lets it read nothing back. `linkedin.yaml` runs headless and says how its session is made and kept (that runtime's alone, gone with it). Tests: test_agents_optional
