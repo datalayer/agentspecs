@@ -58,7 +58,12 @@ def test_optional_names_the_agents_own_servers_and_skills():
 def test_the_marketer_needs_one_network_and_neither_search_nor_the_repositories():
     agents = dict(_agents())
     marketer = agents["worker-marketer"]["optional"]
-    assert marketer["mcp_servers"] == ["x:0.0.1", "bluesky:0.0.1", "discord:0.0.1"]
+    assert marketer["mcp_servers"] == [
+        "x:0.0.1",
+        "bluesky:0.0.1",
+        "discord:0.0.1",
+        "linkedin:0.0.1",
+    ]
     assert marketer["skills"] == ["crawl:0.0.1", "github:0.0.1"]
     assert marketer["backend_tools"] == [
         "social-post-x:0.0.1",
@@ -71,6 +76,7 @@ def test_the_marketer_needs_one_network_and_neither_search_nor_the_repositories(
             "x:0.0.1",
             "bluesky:0.0.1",
             "discord:0.0.1",
+            "linkedin:0.0.1",
             "social-post-x:0.0.1",
             "social-post-bluesky:0.0.1",
             "social-post-linkedin:0.0.1",
@@ -91,18 +97,21 @@ def test_terras_earthdata_login_is_never_required():
     assert not any(_base(ref).startswith("EARTHDATA_") for ref in earthdata["envvars"])
 
 
-def test_linkedin_comes_back_through_iam_not_its_browser_server():
-    """LinkedIn is back (14 November 2026) through datalayer-social, never the linkedin server.
+def test_linkedin_through_iam_and_its_browser_server():
+    """LinkedIn through datalayer-social (14 November 2026) and the linkedin server (15 November).
 
-    The catalogue's linkedin server needs a signed-in browser session; the
-    Marketer reaches LinkedIn through IAM with the person's linked account, and
-    says what LinkedIn lets it do: post and comment, read nothing back.
+    The Marketer posts and comments through IAM with the person's linked
+    account; with the linkedin server, on a browser session the person signs in
+    from the chat, it reads LinkedIn too. Both optional, in its one-network group.
     """
     agents = dict(_agents())
     marketer = agents["worker-marketer"]
-    assert "linkedin:0.0.1" not in marketer["mcp_servers"]
-    assert "LinkedIn" in marketer["description"] and "LinkedIn" in marketer["system_prompt"]
-    assert "read nothing back" in " ".join(marketer["system_prompt"].split())
+    assert "linkedin:0.0.1" in marketer["mcp_servers"]
+    assert "linkedin:0.0.1" in marketer["optional"]["mcp_servers"]
+    assert "linkedin:0.0.1" in marketer["optional"]["at_least_one"][0]
+    prompt = " ".join(marketer["system_prompt"].split())
+    assert "LinkedIn" in marketer["description"]
+    assert "Sign in to LinkedIn" in prompt and "read nothing back" in prompt
     for ref in ("social-post-linkedin:0.0.1", "social-comment-linkedin:0.0.1"):
         assert ref in marketer["backend_tools"] and ref in marketer["optional"]["backend_tools"]
     assert "social-post-linkedin:0.0.1" in marketer["optional"]["at_least_one"][0]
@@ -110,7 +119,9 @@ def test_linkedin_comes_back_through_iam_not_its_browser_server():
         spec = yaml.safe_load((ROOT / "apps" / f"{app}.yaml").read_text())
         assert "linkedin:0.0.1" not in [c.get("server") for c in spec.get("connections") or []]
         assert "LinkedIn" in spec["description"], app
-    assert (ROOT / "mcp-servers" / "linkedin.yaml").exists()
+    linkedin = yaml.safe_load((ROOT / "mcp-servers" / "linkedin.yaml").read_text())
+    assert linkedin["envvars"] == []
+    assert "Sign in to LinkedIn" in linkedin["setup"]
 
 
 def test_the_marketer_posts_through_the_linked_accounts_and_asks_first():

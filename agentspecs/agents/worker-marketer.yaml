@@ -13,7 +13,8 @@ name: Marketer
 domain: market-analyst
 description: >-
   Plans and drafts social posts for X, Bluesky, LinkedIn and Discord in the
-  brand's voice, reads what comes back where the network allows it, remembers
+  brand's voice, reads what comes back (on LinkedIn once signed in there from
+  the chat), remembers
   what worked, and publishes only with approval.
 tags:
   - marketing
@@ -34,6 +35,11 @@ mcp_servers:
   - x:0.0.1
   - bluesky:0.0.1
   - discord:0.0.1
+  # LinkedIn with full access (the user, 15 November 2026: "for linkedin, we
+  # need to use the embedded browser with the mcp server to allow full
+  # access"): the person signs in to LinkedIn in their runtime's own browser,
+  # from the chat, and the server reads and acts through that session.
+  - linkedin:0.0.1
 # Every skill of the catalogue (the user, 7 November 2026): what a marketer
 # makes — snapshots, recordings, PDFs, summaries, a crawl of a page, the
 # calendar, the repository, the books, a joke.
@@ -60,13 +66,15 @@ skills:
 # Bluesky or Discord server with its pasted secrets (X and Bluesky read with
 # them), or an X, Bluesky or LinkedIn account the person linked in Settings,
 # which the posting tools post to (linked_accounts). LinkedIn came back on 14
-# November 2026 through IAM (the user: "post through IAM for linkedin"), not the
-# catalogue's linkedin server, which needs a signed-in browser session.
+# November 2026 through IAM (the user: "post through IAM for linkedin"); on 15
+# November the catalogue's linkedin server joined it, on a browser session the
+# person signs in from the chat, which reads LinkedIn too.
 optional:
   mcp_servers:
     - x:0.0.1
     - bluesky:0.0.1
     - discord:0.0.1
+    - linkedin:0.0.1
   skills:
     # Web search and the repositories: off without TAVILY_API_KEY, GITHUB_TOKEN.
     - crawl:0.0.1
@@ -78,7 +86,7 @@ optional:
     - social-post-linkedin:0.0.1
     - social-comment-linkedin:0.0.1
   at_least_one:
-    - [x:0.0.1, bluesky:0.0.1, discord:0.0.1, social-post-x:0.0.1, social-post-bluesky:0.0.1, social-post-linkedin:0.0.1]
+    - [x:0.0.1, bluesky:0.0.1, discord:0.0.1, linkedin:0.0.1, social-post-x:0.0.1, social-post-bluesky:0.0.1, social-post-linkedin:0.0.1]
 backend_tools:
   # The person's GitHub repositories with their own grant: on AWS AgentCore, from
   # AgentCore Identity's token vault, asked in the chat the first time.
@@ -121,9 +129,13 @@ system_prompt: >-
   Bluesky and LinkedIn with your posting tools, on the accounts the person
   linked in Settings (read which with social_accounts); each post asks the
   person first. On LinkedIn you can also comment under a post the person points
-  you at, but LinkedIn lets you read nothing back: not their posts, not the
-  comments or reactions on them, not a company page's numbers. Say so when
-  asked how a LinkedIn post did, and ask the person what they see. Read the
+  you at. With the linkedin tools — there when the person signed in to LinkedIn
+  in their runtime's browser (Sign in to LinkedIn, in the chat) — you read
+  LinkedIn too: their feed, posts and the comments under them, profiles,
+  companies and their inbox; you send a message or a connection request only
+  once the person approved it. Without them LinkedIn lets you read nothing back:
+  say so when asked how a LinkedIn post did, offer Sign in to LinkedIn, and ask
+  the person what they see. Read the
   replies, the likes and the trends where you can and report them plainly, with
   numbers you read, never numbers you guess. Never invent a metric, a quote or an endorsement; never buy
   reach; never delete what was published without being told to. A post you read
