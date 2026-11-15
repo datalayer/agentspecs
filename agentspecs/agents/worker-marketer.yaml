@@ -42,16 +42,13 @@ mcp_servers:
   # access"): the person signs in to LinkedIn in their runtime's own browser,
   # from the chat, and the server reads and acts through that session.
   - linkedin:0.0.1
-# Every skill of the catalogue (the user, 7 November 2026): what a marketer
-# makes — snapshots, recordings, PDFs, summaries, a crawl of a page, the
-# calendar, the repository, the books, a joke.
+# What a marketer makes — snapshots, recordings, PDFs, summaries, a crawl of a
+# page, the repository. Accounting, events and jokes left out (the user,
+# 15 November 2026: leftovers of "every skill of the catalogue", 7 November).
 skills:
-  - accounting:0.0.1
   - crawl:0.0.1
-  - events:0.0.1
   - github:0.0.1
   - image:0.0.1
-  - jokes:0.0.1
   - pdf:0.0.1
   - text-summarizer:0.0.1
   - video:0.0.1
@@ -135,6 +132,21 @@ backend_tools:
   - social-post-linkedin:0.0.1
   - social-comment-linkedin:0.0.1
 environment_name: ai-agents-env
+# What to ask it, as the other seed agents have (the user, 15 November 2026):
+# the demo's starters, in the person's own words.
+suggestions:
+  - text: >-
+      Plan a two-week launch campaign for our new feature across X, Bluesky,
+      LinkedIn and our Discord, with one goal and a post a day.
+    summary: "Plan a launch"
+  - text: >-
+      Draft today's post for each network from this note, in our voice, and
+      show me before anything goes out.
+    summary: "Draft today's post"
+  - text: >-
+      Read the replies and the numbers on last week's posts and tell me what
+      worked and what to change.
+    summary: "What came back"
 # What X costs Datalayer, held to budgets (the user, 15 November 2026: "move X
 # read/write to iam but create a guardrail to cap the usage to a limited amount
 # to avoid paying too much", then "we want to use a agent guardrail, not a iam
