@@ -23,13 +23,7 @@ description: >-
   budget: a demo on example flights, stays and restaurants that books nothing
   and contacts no real service.
 owner: Datalayer <info@datalayer.io>
-# On a stand-in agent, example-blank (a model and nothing else: no servers,
-# no skills, no tools), until the visitors' runtime runs an image with
-# worker-voyager (agentspecs 0.0.195, agent-runtimes 1.6.59): image 0.0.105
-# answers "There is no agent or Cog named 'worker-voyager:0.0.1'". The
-# instructions below carry the demo. Back to worker-voyager:0.0.1 once the
-# runtime image is rolled.
-agent: example-blank:0.0.1
+agent: worker-voyager:0.0.1
 goal: >-
   Show a visitor how the Voyager turns a trip into three options with a budget
   and booking links, without booking anything or contacting any real service.
