@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.198
+
+- worker-marketer: a Bluesky linked before its reads now fails hard (IAM 1.1.123: every Bluesky tool refuses with "Connect it again in Settings › Bluesky"), so its instructions say: if a Bluesky tool says to connect Bluesky again, tell the person to reconnect it in Settings › Bluesky; nothing on Bluesky works until then.
+
 ## 0.0.197
 
 - **Where a UI goes in the chat** (the user, 15 November 2026: "make sure ui can be used to be injected in the chat itself (toolbar, header...) or as chat message (a2ui)"): a UI spec says its `placements`, its default first — `header`, `toolbar`, `footer`, `banner`, `panel` (the chat's own chrome) or `message` (a card in the conversation) — and a `ui` entry picks one with `placement`; `ui_choices_problems` refuses a placement the spec does not list. `browser-session`, `social-accounts`, `x-budget` in the header, `linkedin-link` in the banner (`loop.chatBanner`), the cards in messages.
