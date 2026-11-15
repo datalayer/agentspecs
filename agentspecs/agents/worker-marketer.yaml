@@ -31,11 +31,11 @@ runtime_engine: datalayer
 identity: datalayer-acting-agent
 sandbox_variant: jupyter-server
 memory: mem0
-# Bluesky is not a server here since 15 November 2026: the Marketer reads and
-# acts on it with the person's linked account through IAM (datalayer-social),
-# no app password pasted. The catalogue's bluesky server stays for other agents.
+# Neither Bluesky nor X is a server here since 15 November 2026: the Marketer
+# reads and acts on both with the person's linked accounts through IAM
+# (datalayer-social), no app password or X_BEARER_TOKEN pasted. The catalogue's
+# bluesky and x servers stay for other agents.
 mcp_servers:
-  - x:0.0.1
   - discord:0.0.1
   # LinkedIn with full access (the user, 15 November 2026: "for linkedin, we
   # need to use the embedded browser with the mcp server to allow full
@@ -64,18 +64,18 @@ skills:
   - datalayer-memory-delete
 # What it starts without (the user, 14 November 2026): a network, web search or
 # the repositories the person has not set up is left out, and the agent is told
-# which, so it says what it cannot do. It needs one network at least: the X
-# or Discord server with its pasted secrets (X reads with them), or an X,
-# Bluesky or LinkedIn account the person linked in Settings, which the posting
-# tools post to (linked_accounts); Bluesky's is also read, replied, liked,
-# reposted and followed with (15 November 2026: "for Bluesky, make it clear we
-# can do everything"). LinkedIn came back on 14
+# which, so it says what it cannot do. It needs one network at least: the
+# Discord server with its pasted secrets, or an X, Bluesky or LinkedIn account
+# the person linked in Settings, which the posting tools post to
+# (linked_accounts); Bluesky's is also read, replied, liked, reposted and
+# followed with (15 November 2026: "for Bluesky, make it clear we can do
+# everything"), and X's read, replied, liked and reposted with (15 November
+# 2026: "move X read/write to iam"). LinkedIn came back on 14
 # November 2026 through IAM (the user: "post through IAM for linkedin"); on 15
 # November the catalogue's linkedin server joined it, on a browser session the
 # person signs in from the chat, which reads LinkedIn too.
 optional:
   mcp_servers:
-    - x:0.0.1
     - discord:0.0.1
     - linkedin:0.0.1
   skills:
@@ -85,6 +85,10 @@ optional:
   backend_tools:
     # Set up when the person linked that account in Settings.
     - social-post-x:0.0.1
+    - social-read-x:0.0.1
+    - social-reply-x:0.0.1
+    - social-like-x:0.0.1
+    - social-repost-x:0.0.1
     - social-post-bluesky:0.0.1
     - social-read-bluesky:0.0.1
     - social-reply-bluesky:0.0.1
@@ -94,7 +98,7 @@ optional:
     - social-post-linkedin:0.0.1
     - social-comment-linkedin:0.0.1
   at_least_one:
-    - [x:0.0.1, discord:0.0.1, linkedin:0.0.1, social-post-x:0.0.1, social-post-bluesky:0.0.1, social-post-linkedin:0.0.1]
+    - [discord:0.0.1, linkedin:0.0.1, social-post-x:0.0.1, social-post-bluesky:0.0.1, social-post-linkedin:0.0.1]
 backend_tools:
   # The person's GitHub repositories with their own grant: on AWS AgentCore, from
   # AgentCore Identity's token vault, asked in the chat the first time.
@@ -106,9 +110,16 @@ backend_tools:
   # LinkedIn lets it read no post, comment or reaction. On Bluesky it does
   # everything (15 November 2026): reads the timeline, posts, threads, likes,
   # reposts, profiles, search, notifications and follows, and replies, likes,
-  # reposts and follows, each of these four asked first.
+  # reposts and follows, each of these four asked first. On X it reads the
+  # person's profile, timeline, posts, mentions, replies and a search, and
+  # replies, likes and reposts, each asked first (15 November 2026), every call
+  # held to the person's X budget (the x-api-budget guardrail below).
   - social-accounts:0.0.1
   - social-post-x:0.0.1
+  - social-read-x:0.0.1
+  - social-reply-x:0.0.1
+  - social-like-x:0.0.1
+  - social-repost-x:0.0.1
   - social-post-bluesky:0.0.1
   - social-read-bluesky:0.0.1
   - social-reply-bluesky:0.0.1
@@ -118,6 +129,55 @@ backend_tools:
   - social-post-linkedin:0.0.1
   - social-comment-linkedin:0.0.1
 environment_name: ai-agents-env
+# What X costs Datalayer, held to budgets (the user, 15 November 2026: "move X
+# read/write to iam but create a guardrail to cap the usage to a limited amount
+# to avoid paying too much", then "we want to use a agent guardrail, not a iam
+# cap"). X bills every call made with a person's grant to Datalayer's developer
+# app, pay per use (docs.x.com/x-api/getting-started/pricing, November 2026):
+# the prices below, in USD. Each X tool call is priced before it runs and
+# refused past the person's budget for the day or the month, or the platform's
+# for the month; a read asks for 20 posts at most, and what X returned is
+# counted after. The counters live in the agent-memories PostgreSQL every
+# runtime shares (the protocol-state store, kind guardrail.api_budget), so they
+# outlive the runtime. A like and a repost have no price of their own in X's
+# table: they are counted as a post created.
+guardrails:
+  - name: X API budget
+    api_budget:
+      id: x-api-budget
+      provider: X
+      currency: USD
+      prices:
+        post_read: 0.005
+        user_read: 0.010
+        owned_read: 0.001
+        create_post: 0.015
+        create_post_with_url: 0.200
+      budgets:
+        per_person_daily: 0.50
+        per_person_monthly: 5.00
+        platform_monthly: 100.00
+      results:
+        argument: limit
+        default: 10
+        most: 20
+      counted_by: resources
+      tools:
+        read_x:
+          by: what
+          reads:
+            me: {unit: owned_read}
+            user: {unit: user_read}
+            post: {unit: post_read}
+            timeline: {unit: post_read, per_result: true, fewest: 1}
+            posts: {unit: post_read, per_result: true, fewest: 5}
+            mentions: {unit: post_read, per_result: true, fewest: 5}
+            replies: {unit: post_read, per_result: true, fewest: 10}
+            search: {unit: post_read, per_result: true, fewest: 10}
+        post_to_x: {unit: create_post, with_url: create_post_with_url}
+        reply_on_x: {unit: create_post, with_url: create_post_with_url}
+        like_on_x: {unit: create_post}
+        repost_on_x: {unit: create_post}
 icon: megaphone
 emoji: "📣"
 color: pink
@@ -144,7 +204,15 @@ system_prompt: >-
   connect only once the person has approved that exact text. Post to X,
   Bluesky and LinkedIn with your posting tools, on the accounts the person
   linked in Settings (read which with social_accounts); each post asks the
-  person first. On Bluesky you do everything with the linked account: read the
+  person first. On X you read and act with the linked account too: the
+  person's profile, timeline, posts, mentions, the replies to a post and a
+  search of recent posts with read_x, and reply, like or repost, each asked
+  first. Every X call costs Datalayer money at X and is held to the person's X
+  budget: a post or a reply costs USD 0.015 and USD 0.20 when it carries a link,
+  so say which before asking to publish; read few posts at a time. When a tool
+  says the X budget is used up, tell the person in its words, with when it
+  resets, and stop calling X. If read_x says X was linked for posting only, tell
+  the person to link it again in Settings › X. On Bluesky you do everything with the linked account: read the
   person's timeline, their posts and the replies under them, who liked and
   reposted them, profiles, search, notifications, follows and followers with
   read_bluesky, and reply, like, repost or follow, each asked first. If

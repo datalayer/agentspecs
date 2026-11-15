@@ -6,10 +6,12 @@
 # reads what the audience said back, and remembers — the voice, what was posted,
 # what worked — through its memory. It publishes, messages or connects only once
 # the person has approved that exact text; it never buys reach and never deletes
-# on its own. Its two connections are the catalogue's X and Discord MCP
-# servers; each needs its own key (see the servers' pages). Bluesky has no
-# connection since 15 November 2026: the linked account alone, read and acted
-# on through Datalayer's IAM, no app password. LinkedIn came back
+# on its own. Its one connection is the catalogue's Discord MCP server, which
+# needs its own key (see the server's page). Neither Bluesky nor X has a
+# connection since 15 November 2026: the linked accounts alone, read and acted
+# on through Datalayer's IAM, no app password and no X_BEARER_TOKEN; what X
+# costs Datalayer is held to the person's X budget by its agent's x-api-budget
+# guardrail. LinkedIn came back
 # the same day through Datalayer's IAM (the user, 14 November 2026: "post
 # through IAM for linkedin"), not as a connection: the catalogue's linkedin
 # server needs a signed-in browser session. It needs one network at least, as
@@ -41,16 +43,12 @@ memory: mem0
 context:
   - marketing:0.0.1
 connections:
-  # One network at least (its agent's optional.at_least_one): each runs only when
-  # its secrets are set up. X is read with them — posts, search, users,
-  # trends; posting goes through the person's linked accounts (the agent's
-  # social-post-x, social-post-bluesky and social-post-linkedin, publish, asked
-  # first). Bluesky and LinkedIn have no connection: they are reached through
-  # the linked account alone, and Bluesky is read through it too.
-  - server: x:0.0.1
-    access: read
-    as: owner
-    optional: true
+  # One network at least (its agent's optional.at_least_one): Discord runs only
+  # when its secrets are set up; posting goes through the person's linked
+  # accounts (the agent's social-post-x, social-post-bluesky and
+  # social-post-linkedin, publish, asked first). X, Bluesky and LinkedIn have no
+  # connection: they are reached through the linked account alone, and X and
+  # Bluesky are read through it too.
   - server: discord:0.0.1
     access: write
     as: owner
@@ -107,7 +105,7 @@ tests:
     live: []
     recorded: []
     unverified:
-      - "Not played live yet: X reads with a bearer token; posting to X, Bluesky and LinkedIn on the linked accounts waits for the runtime image that carries the posting tools; Discord's runs in Docker."
+      - "Not played live yet: posting to X, Bluesky and LinkedIn on the linked accounts waits for the runtime image that carries the posting tools; Discord's runs in Docker."
 record:
   keep_for: 90_days
   include: [conversations, sources, feedback]

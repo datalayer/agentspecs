@@ -59,13 +59,16 @@ def test_the_marketer_needs_one_network_and_neither_search_nor_the_repositories(
     agents = dict(_agents())
     marketer = agents["worker-marketer"]["optional"]
     assert marketer["mcp_servers"] == [
-        "x:0.0.1",
         "discord:0.0.1",
         "linkedin:0.0.1",
     ]
     assert marketer["skills"] == ["crawl:0.0.1", "github:0.0.1"]
     assert marketer["backend_tools"] == [
         "social-post-x:0.0.1",
+        "social-read-x:0.0.1",
+        "social-reply-x:0.0.1",
+        "social-like-x:0.0.1",
+        "social-repost-x:0.0.1",
         "social-post-bluesky:0.0.1",
         "social-read-bluesky:0.0.1",
         "social-reply-bluesky:0.0.1",
@@ -77,7 +80,6 @@ def test_the_marketer_needs_one_network_and_neither_search_nor_the_repositories(
     ]
     assert marketer["at_least_one"] == [
         [
-            "x:0.0.1",
             "discord:0.0.1",
             "linkedin:0.0.1",
             "social-post-x:0.0.1",
@@ -157,7 +159,6 @@ def test_the_marketer_application_needs_one_network_as_its_agent_does():
 
     spec = yaml.safe_load((ROOT / "apps" / "marketer.yaml").read_text())
     assert [(c["server"], c.get("optional")) for c in spec["connections"]] == [
-        ("x:0.0.1", True),
         ("discord:0.0.1", True),
     ]
     assert app_problems(parse_app(spec)) == []
@@ -187,3 +188,43 @@ def test_the_marketer_does_everything_on_bluesky_with_the_linked_account():
         assert spec["linked_accounts"] == ["bluesky"] and "envvars" not in spec
         assert spec["runtime"]["package"] == "agent_runtimes.tools.social"
     assert "read_bluesky" in marketer["system_prompt"]
+
+
+def test_the_marketer_reads_and_acts_on_x_with_the_linked_account_within_a_budget():
+    """15 November 2026: X read and acted on through IAM, no X_BEARER_TOKEN; what X costs held by the x-api-budget guardrail."""
+    marketer = dict(_agents())["worker-marketer"]
+    assert "x" not in [_base(ref) for ref in marketer["mcp_servers"]]
+    assert "x:0.0.1" not in [c.get("server") for c in yaml.safe_load((ROOT / "apps" / "marketer.yaml").read_text())["connections"]]
+    assert (ROOT / "mcp-servers" / "x.yaml").exists()
+    for tool, action, approval in (
+        ("social-read-x", "read", "auto"),
+        ("social-reply-x", "publish", "manual"),
+        ("social-like-x", "write", "manual"),
+        ("social-repost-x", "publish", "manual"),
+    ):
+        assert f"{tool}:0.0.1" in marketer["backend_tools"]
+        assert f"{tool}:0.0.1" in marketer["optional"]["backend_tools"]
+        spec = yaml.safe_load((ROOT / "backend-tools" / f"{tool}.yaml").read_text())
+        assert (spec["action"], spec["approval"]) == (action, approval), tool
+        assert spec["linked_accounts"] == ["x"] and "envvars" not in spec
+        assert spec["runtime"]["package"] == "agent_runtimes.tools.social"
+    (budget,) = [entry["api_budget"] for entry in marketer["guardrails"] if "api_budget" in entry]
+    assert budget["id"] == "x-api-budget" and budget["provider"] == "X" and budget["currency"] == "USD"
+    # X's pay-per-use prices (docs.x.com/x-api/getting-started/pricing, November 2026).
+    assert budget["prices"] == {
+        "post_read": 0.005,
+        "user_read": 0.010,
+        "owned_read": 0.001,
+        "create_post": 0.015,
+        "create_post_with_url": 0.200,
+    }
+    assert budget["budgets"] == {"per_person_daily": 0.5, "per_person_monthly": 5.0, "platform_monthly": 100.0}
+    assert budget["results"]["most"] == 20
+    # Every X tool the Marketer carries is priced, each in a unit of the table.
+    x_tools = {"read_x", "post_to_x", "reply_on_x", "like_on_x", "repost_on_x"}
+    assert set(budget["tools"]) == x_tools
+    units = {rule.get("unit") for rule in budget["tools"].values()} | {
+        read["unit"] for read in budget["tools"]["read_x"]["reads"].values()
+    }
+    assert units - {None} <= set(budget["prices"])
+    assert "X_BEARER_TOKEN" not in yaml.safe_dump(marketer["optional"]) and "read_x" in marketer["system_prompt"]
