@@ -193,10 +193,10 @@ def test_the_seed_agents_capabilities_bring_their_ui():
 
     assert brought("mcp-servers", "shopify") == ["product-comparison", "shopping-basket"]
     assert "bank-reconciliation" in brought("mcp-servers", "odoo-accounting")
-    assert brought("mcp-servers", "earthdata") == ["earth-scenes", "earth-index"]
+    assert brought("mcp-servers", "earthdata") == ["earth-scenes", "earth-index", "earth-area"]
     assert brought("mcp-servers", "linkedin") == ["browser-session"]
     assert "trip-options" in brought("skills", "fare-and-stay-comparison")
-    assert brought("backend-tools", "list-recommendations") == ["aws-savings"]
+    assert brought("backend-tools", "list-recommendations") == ["aws-savings", "aws-savings-badge"]
     assert brought("backend-tools", "social-post-x") == ["x-post-preview"]
     assert _yaml("mcp-servers", "stripe")["ui"] == [{"plugin": "stripe-checkout", "renderer": "a2ui"}]
 
@@ -207,7 +207,7 @@ def test_the_seed_agents_capabilities_bring_their_ui():
         ([{"plugin": "nope"}], "There is no UI plugin named 'nope'"),
         (["stripe-checkout"], "each as `{plugin, renderer}`"),
         ([{"plugin": "trip-options"}, {"plugin": "trip-options"}], "twice"),
-        ([{"plugin": "trip-options", "renderer": "a2ui"}], "not exposed through A2UI"),
+        ([{"plugin": "trial-balance", "renderer": "a2ui"}], "not exposed through A2UI"),
         ({"plugin": "trip-options"}, "is a list"),
     ],
 )
@@ -226,3 +226,48 @@ def test_a_brought_ui_is_refused_when_wrong(choices, why):
             for leftover in tmp.glob("*"):
                 leftover.unlink()
             tmp.rmdir()
+
+
+def test_a_ui_says_where_it_goes_in_the_chat():
+    """A placement (0.0.197): the chat's chrome or a message; a choice picks one its spec allows."""
+    assert ui.UI_CATALOGUE["x-budget"].placements[0].value == "header"
+    assert ui.UI_CATALOGUE["linkedin-link"].placements[0].value == "banner"
+    assert ui.UI_CATALOGUE["browser-session"].placements[0].value == "header"
+    assert ui.UI_CATALOGUE["shopping-basket"].placements[0].value == "message"
+    assert ui.ui_choices_problems([{"plugin": "x-budget", "placement": "footer"}], to_ship=False) == []
+    assert "in its header, footer only" in ui.ui_choices_problems(
+        [{"plugin": "x-budget", "placement": "message"}], to_ship=False
+    )[0]
+    assert "takes no `placement`" in ui.ui_choices_problems([{"plugin": "chat", "placement": "header"}], to_ship=False)[0]
+    with pytest.raises(ValidationError):
+        ui.UiChoice.model_validate({"plugin": "x-budget", "placement": "sidebar"})
+
+
+SEED_AGENTS = ["worker-marketer", "worker-shopper", "worker-accountant", "worker-voyager", "worker-terra", "worker-steward-aws"]
+
+
+def _brought(agent_id):
+    """The UI an agent's chat collects: its own, its servers', its skills', its tools' (as agent-runtimes does)."""
+    agent = _yaml("agents", agent_id)
+    choices = list(agent.get("ui") or [])
+    for folder, key in (("mcp-servers", "mcp_servers"), ("skills", "skills"), ("backend-tools", "backend_tools")):
+        for ref in agent.get(key) or []:
+            path = ROOT / folder / f"{str(ref).split(':')[0]}.yaml"
+            if path.is_file():
+                choices += yaml.safe_load(path.read_text()).get("ui") or []
+    return choices
+
+
+@pytest.mark.parametrize("agent_id", SEED_AGENTS)
+def test_each_seed_agent_has_ui_in_the_chat_and_an_a2ui_message(agent_id):
+    """UP-12 (the user, 15 November 2026: "for the 6 agents, have such ui: for the chat itself, for the chat message (a2ui)")."""
+    chrome, a2ui_messages = [], []
+    for choice in _brought(agent_id):
+        spec = ui.UI_CATALOGUE[choice["plugin"]]
+        placement = choice.get("placement") or (spec.placements[0].value if spec.placements else None)
+        if placement in ui.CHROME_PLACEMENTS:
+            chrome.append(choice["plugin"])
+        if placement == "message" and choice.get("renderer") == "a2ui":
+            a2ui_messages.append(choice["plugin"])
+    assert chrome, agent_id
+    assert a2ui_messages, agent_id

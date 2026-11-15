@@ -33,3 +33,4 @@ emoji: "💡"
 ui:
   - plugin: a2ui-surface
     renderer: a2ui
+  - plugin: aws-savings-badge

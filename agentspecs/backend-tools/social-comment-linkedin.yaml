@@ -35,4 +35,5 @@ emoji: "💬"
 # injected after the agent's own while it is in use.
 ui:
   - plugin: linkedin-post-preview
+    renderer: a2ui
   - plugin: linkedin-link

@@ -1351,6 +1351,7 @@ A UI plugin an agent or an application names, and the renderer it is exposed thr
 | --- | --- | --- | --- |
 | `plugin` (required) | text | A UI plugin of `agentspecs/ui`, by id | — |
 | `renderer` | text | The UI renderer of `agentspecs/ui-renderers` it is exposed through, by id | empty |
+| `placement` | [UiPlacement](#uiplacement) | Where in the chat it goes, one of its spec's `placements`; its default unsaid | empty |
 
 ## Choices
 
@@ -1445,6 +1446,10 @@ A UI plugin an agent or an application names, and the renderer it is exposed thr
 ### TriggerType {#triggertype}
 
 `schedule`, `event`, `once`
+
+### UiPlacement {#uiplacement}
+
+`header`, `toolbar`, `footer`, `banner`, `panel`, `message`
 
 ### Visibility {#visibility}
 

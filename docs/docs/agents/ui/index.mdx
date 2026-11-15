@@ -136,6 +136,35 @@ ui_choices_problems(["a2ui"], to_ship=True)
 # ["`ui` lists UI plugins, each as `{plugin, renderer}`: 'a2ui' is not one ('a2ui' is a UI renderer: …)."]
 ```
 
+## Where it goes: `placements`
+
+A UI spec says where in the chat it may go, its default first (0.0.197): in the chat's own
+chrome — `header` (beside its title), `toolbar` (the input toolbar's controls), `footer` (under
+the prompt), `banner` (above the messages), `panel` (beside the chat, where it has one) — or
+`message`, a card in the conversation drawn by a tool renderer or the A2UI renderer. A spec with
+no `placements` is a part of the workspace itself (the chat, the notebook).
+
+```yaml
+# agentspecs/ui/x-budget.yaml (abridged)
+id: x-budget
+placements:
+  - header
+  - footer
+```
+
+Where it is declared, a `ui` entry picks one of them with `placement`; unsaid, the spec's first:
+
+```yaml
+ui:
+  - plugin: x-budget
+    placement: footer
+  - plugin: shopping-basket
+    renderer: a2ui        # a message, drawn by the A2UI renderer
+```
+
+`ui_choices_problems` refuses a placement the spec does not list. Each of the six seed agents
+collects at least one UI in the chat's chrome and one A2UI message (`tests/test_ui.py`).
+
 ## In an MCP server, a skill and a backend tool
 
 An MCP server, a skill and a backend tool bring their own UI (0.0.196): they say `ui`

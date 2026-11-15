@@ -36,3 +36,4 @@ emoji: "🧭"
 ui:
   - plugin: trip-itinerary
   - plugin: trip-budget
+  - plugin: trip-summary

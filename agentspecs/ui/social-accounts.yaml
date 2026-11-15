@@ -21,12 +21,15 @@ folder: "social-accounts"
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
-  slots: []
-  points:
-  - "reactor.ui.renderer"
-  - "reactor.ui.toolBinding"
+  slots:
+  - "loop.chatHeader"
+  points: []
   commands: []
 # The Contribution Points it offers to other plugins.
 contribution_points: []
 # The UI renderers (agentspecs/ui-renderers) it may be exposed through.
 renderers: []
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- header
+- message

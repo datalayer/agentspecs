@@ -28,3 +28,6 @@ contributions:
 contribution_points: []
 # The UI renderers (agentspecs/ui-renderers) it may be exposed through.
 renderers: []
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- header

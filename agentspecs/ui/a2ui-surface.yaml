@@ -954,3 +954,6 @@ components:
     media_type: text/csv
     size: 21
     description: The month's totals.
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- message

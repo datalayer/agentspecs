@@ -232,5 +232,7 @@ actions:
 # injected after the agent's own while it is in use.
 ui:
   - plugin: bank-reconciliation
+    renderer: a2ui
   - plugin: trial-balance
   - plugin: vat-summary
+  - plugin: odoo-context

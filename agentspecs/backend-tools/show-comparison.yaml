@@ -27,3 +27,4 @@ emoji: "📊"
 # injected after the agent's own while it is in use.
 ui:
   - plugin: product-comparison
+    renderer: a2ui

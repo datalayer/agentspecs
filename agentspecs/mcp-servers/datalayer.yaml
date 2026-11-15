@@ -244,7 +244,10 @@ actions:
 ui:
   - plugin: pap-sign-in
   - plugin: earth-scenes
+    renderer: a2ui
   - plugin: earth-index
+    renderer: a2ui
   - plugin: bank-reconciliation
+    renderer: a2ui
   - plugin: trial-balance
   - plugin: vat-summary

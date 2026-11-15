@@ -24,10 +24,14 @@ folder: "linkedin-link"
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.chatHeader"
+  - "loop.chatBanner"
   points: []
   commands: []
 # The Contribution Points it offers to other plugins.
 contribution_points: []
 # The UI renderers (agentspecs/ui-renderers) it may be exposed through.
 renderers: []
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- banner
+- header

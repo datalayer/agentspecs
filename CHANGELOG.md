@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.197
+
+- **Where a UI goes in the chat** (the user, 15 November 2026: "make sure ui can be used to be injected in the chat itself (toolbar, header...) or as chat message (a2ui)"): a UI spec says its `placements`, its default first — `header`, `toolbar`, `footer`, `banner`, `panel` (the chat's own chrome) or `message` (a card in the conversation) — and a `ui` entry picks one with `placement`; `ui_choices_problems` refuses a placement the spec does not list. `browser-session`, `social-accounts`, `x-budget` in the header, `linkedin-link` in the banner (`loop.chatBanner`), the cards in messages.
+- **Each of the six seed agents has UI in the chat and an A2UI message** (the user: "for the 6 agents, have such ui: for the chat itself, for the chat message (a2ui)"): five new header chips read from the conversation — `basket-total` (show-basket), `odoo-context` (odoo, odoo-accounting), `trip-summary` (travel-planning), `earth-area` (earthdata), `aws-savings-badge` (the recommendation tools) — and the post previews, the comparison, the basket, the reconciliation, the trip options, the scenes, the index and the savings drawn with the A2UI renderer (`renderer: a2ui`). Tests: test_ui (each seed agent collects a chrome UI and an A2UI message).
+- Docs: agents/ui (`placements`), the components, renderers and Appspec pages regenerated.
+
 ## 0.0.196
 
 - **An MCP server, a skill and a backend tool bring their own UI** (the user, 15 November 2026: "Add the ability for the mcp and skills to define a list of ui that will also be injected by the agent-runtime chat component so mcp and skill bring their own ui"): each takes `ui`, the same `{plugin, renderer}` list an agent says; `agentspecs.ui.brought_ui_problems` says what is wrong and `check_mcp_servers` refuses a server naming a plugin `ui/` does not have. The chat's UI is the agent's, then its running servers', its skills', its tools', each once.

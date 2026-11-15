@@ -27,3 +27,4 @@ emoji: "🌿"
 # injected after the agent's own while it is in use.
 ui:
   - plugin: earth-index
+    renderer: a2ui
