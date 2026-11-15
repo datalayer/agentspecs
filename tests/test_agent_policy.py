@@ -28,8 +28,11 @@ def test_every_agents_policy_holds():
             assert policies.agent_policy_problems(agent["policy"]) == [], name
 
 
-#: Agents that name the exact hosts they reach instead of ``*``.
-EXACT_EGRESS = {"worker-steward-aws.yaml"}
+#: Agents that name the exact hosts they reach instead of ``*`` (the user, 15 November 2026: the
+#: Accountant and Terra join the Steward).
+EXACT_EGRESS = {"worker-steward-aws.yaml", "worker-accountant.yaml", "worker-terra.yaml"}
+#: Agents that reach the web only: any public address on 80 and 443 (the user, 15 November 2026).
+WEB_EGRESS = {"worker-marketer.yaml", "worker-shopper.yaml", "worker-voyager.yaml"}
 
 
 def test_datalayers_catalogue_agents_reach_any_public_address():
@@ -39,11 +42,38 @@ def test_datalayers_catalogue_agents_reach_any_public_address():
     """
     names = []
     for name, agent in _agents():
-        if name in EXACT_EGRESS:
+        if name in EXACT_EGRESS or name in WEB_EGRESS:
             continue
         assert agent.get("policy", {}).get("shield", {}).get("egress") == ["*"], name
         names.append(name)
     assert len(names) > 100
+
+
+def test_the_marketer_shopper_and_voyager_reach_the_web_only():
+    for name in sorted(WEB_EGRESS):
+        agent = yaml.safe_load((AGENTS_DIR / name).read_text())
+        assert agent["policy"]["shield"]["egress"] == ["*:80", "*:443"], name
+
+
+@pytest.mark.parametrize("name", sorted(EXACT_EGRESS))
+def test_an_exact_egress_agent_names_hosts_on_443_and_no_wildcard(name):
+    egress = yaml.safe_load((AGENTS_DIR / name).read_text())["policy"]["shield"]["egress"]
+    assert egress and not any("*" in entry for entry in egress), egress
+    assert all(entry.endswith(":443") for entry in egress), egress
+    assert {"r1.datalayer.run:443", "prod1.datalayer.run:443"} <= set(egress)
+
+
+def test_the_accountant_reaches_its_odoo_through_the_gateway_and_terra_nasa():
+    accountant = yaml.safe_load((AGENTS_DIR / "worker-accountant.yaml").read_text())["policy"]["shield"]["egress"]
+    assert "mcp.datalayer.run:443" in accountant
+    assert not any("odoo" in entry for entry in accountant)
+    terra = yaml.safe_load((AGENTS_DIR / "worker-terra.yaml").read_text())["policy"]["shield"]["egress"]
+    assert {
+        "mcp.datalayer.run:443",
+        "urs.earthdata.nasa.gov:443",
+        "cmr.earthdata.nasa.gov:443",
+        "data.lpdaac.earthdatacloud.nasa.gov:443",
+    } <= set(terra)
 
 
 def test_the_steward_names_each_host_it_reaches():
@@ -64,6 +94,9 @@ def test_the_steward_names_each_host_it_reaches():
     "shield",
     [
         {"egress": ["*"]},
+        {"egress": ["*:80", "*:443"]},
+        {"egress": ["*:443", "smtp.example.com:587"]},
+        {"ingress": ["platform", "*:8765"]},
         {"egress": ["api.tavily.com", "registry.npmjs.org:443", "8.8.8.8", "1.1.1.0/24:53"]},
         {"ingress": ["platform", "10.42.0.0/16:8765"]},
         {},
@@ -80,6 +113,9 @@ def test_a_firewall_rule_the_shield_takes(shield):
         ({"shield": {"egress": ["10.0.0.0/8"]}}, "private or reserved"),
         ({"shield": {"egress": ["169.254.169.254"]}}, "private or reserved"),
         ({"shield": {"egress": ["*", "example.com"]}}, "stands alone"),
+        ({"shield": {"egress": ["*", "*:443"]}}, "stands alone"),
+        ({"shield": {"egress": ["*:70000"]}}, "between 1 and 65535"),
+        ({"shield": {"egress": ["*:443", "*:443"]}}, "named twice"),
         ({"shield": {"egress": ["example.com", "example.com"]}}, "named twice"),
         ({"shield": {"egress": ["platform"]}}, "ingress source"),
         ({"shield": {"egress": ["localhost"]}}, "fully qualified"),

@@ -115,5 +115,27 @@ system_prompt: >-
 
 policy:
   shield:
-    # Any public address: Datalayer's gateway and NASA's data servers, from the sandbox (agent-shield's firewall).
-    egress: ["*"]
+    # Exact hosts, no wildcard (the user, 15 November 2026; a firewall sees
+    # addresses, not names). Searching NASA's catalogue goes through
+    # Datalayer's gateway (mcp.datalayer.run, its earthdata toolset). A
+    # download runs earthaccess in the notebook: Earthdata Login
+    # (urs.earthdata.nasa.gov: the token, the OAuth redirect), the catalogue
+    # (cmr.earthdata.nasa.gov), then LP DAAC's distribution
+    # (data.lpdaac.earthdatacloud.nasa.gov), which redirects to its signed
+    # CloudFront host (d1nklfio7vscoe.cloudfront.net), measured on an HLS
+    # Sentinel-2 granule on 15 November 2026 — HLSS30 and HLSL30, the
+    # Sentinel-2 and Landsat scenes it is asked for. earthaccess is not in the
+    # Jupyter image, so PyPI (pypi.org, files.pythonhosted.org) installs it.
+    # Another DAAC's collection (PO.DAAC, NSIDC, ASF…) needs its hosts added
+    # here. Then Datalayer's own: r1.datalayer.run for the model's inference
+    # and the session's record, prod1.datalayer.run for IAM and the Space.
+    egress:
+      - mcp.datalayer.run:443
+      - urs.earthdata.nasa.gov:443
+      - cmr.earthdata.nasa.gov:443
+      - data.lpdaac.earthdatacloud.nasa.gov:443
+      - d1nklfio7vscoe.cloudfront.net:443
+      - pypi.org:443
+      - files.pythonhosted.org:443
+      - r1.datalayer.run:443
+      - prod1.datalayer.run:443

@@ -61,7 +61,7 @@ SHIELD_SCHEMA_PATH = POLICIES_DIR / "shield-policy.schema.json"
 #: The agent-shield release the carried schema was copied from: the test holding the copy
 #: verbatim compares against an installed agent-shield at least this new, and skips an
 #: older one (the two packages release in turn, each pinning the other's last).
-SHIELD_SCHEMA_SOURCE_VERSION = "0.2.19"
+SHIELD_SCHEMA_SOURCE_VERSION = "0.2.21"
 
 #: agent-shield's Dogwood parser (``agent_shield.policy.dogwood``), verbatim.
 DOGWOOD_PARSER_PATH = POLICIES_DIR / "dogwood.py"
@@ -73,7 +73,7 @@ SCHEMA_PATH = POLICIES_DIR / "policy.schema.json"
 #: (``agent_shield.firewall.firewall_json_schema()``).
 SHIELD_FIREWALL_SCHEMA_PATH = POLICIES_DIR / "shield-firewall.schema.json"
 #: The agent-shield release the carried firewall schema was copied from.
-SHIELD_FIREWALL_SCHEMA_SOURCE_VERSION = "0.2.14"
+SHIELD_FIREWALL_SCHEMA_SOURCE_VERSION = "0.2.21"
 #: The keys an agent's ``policy`` takes.
 AGENT_POLICY_KEYS = ("shield",)
 #: The ranges an egress entry may not name: the platform's own, the base layer's
@@ -160,6 +160,9 @@ def _entry_problem(entry: str, direction: str) -> str | None:
     target, _, port = entry.partition(":")
     if port and not 1 <= int(port) <= 65535:
         return f"{entry!r}: port {port} is not between 1 and 65535"
+    if target == "*":
+        # ``*:port``: any public address on that port (agent-shield 0.2.21).
+        return None
     if re.match(r"^[0-9./]+$", target):
         try:
             network = ipaddress.IPv4Network(target, strict=True)
@@ -187,7 +190,7 @@ def agent_policy_problems(policy: Any) -> list[str]:
     documents (which decide at a scope): today one section, ``shield``, the
     firewall's rules in agent-shield's schema (carried verbatim as
     ``policies/shield-firewall.schema.json``), held to what the firewall takes —
-    ``*`` alone, no private or reserved address in egress, no wildcard host, each
+    ``*`` alone (``*:port`` beside other entries), no private or reserved address in egress, no wildcard host, each
     entry once.
     """
     if not isinstance(policy, dict):

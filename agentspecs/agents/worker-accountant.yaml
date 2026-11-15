@@ -100,5 +100,15 @@ trigger: null
 
 policy:
   shield:
-    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
-    egress: ["*"]
+    # Exact hosts, no wildcard (the user, 15 November 2026; a firewall sees
+    # addresses, not names). Its Odoo is reached through Datalayer's gateway:
+    # the odoo and odoo-accounting servers are mcp.datalayer.run's toolsets,
+    # and the gateway, not the pod, calls the person's Odoo (DATALAYER_ODOO_URL
+    # is read there, from their secrets), so no Odoo host is the pod's to
+    # reach. Its accounting skill runs locally. Then Datalayer's own:
+    # r1.datalayer.run for the model's inference and the session's record,
+    # prod1.datalayer.run for IAM and the Space its documents are written in.
+    egress:
+      - mcp.datalayer.run:443
+      - r1.datalayer.run:443
+      - prod1.datalayer.run:443

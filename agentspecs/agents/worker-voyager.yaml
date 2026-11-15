@@ -148,5 +148,9 @@ system_prompt: >-
 
 policy:
   shield:
-    # Kiwi.com, Booking.com, Google Maps and the pages web search opens (agent-shield's firewall).
-    egress: ["*"]
+    # The web, and nothing else (the user, 15 November 2026): any public
+    # address on ports 80 and 443 (agent-shield 0.2.21's '*:port'), never
+    # another port, never a private, link-local, metadata, loopback, CGNAT or
+    # cluster address. Kiwi.com, Booking.com, Google Maps and the pages
+    # web search opens are on 443.
+    egress: ["*:80", "*:443"]

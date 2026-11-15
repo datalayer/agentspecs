@@ -146,9 +146,9 @@
             }
           ],
           "default": null,
-          "description": "The most an agent's egress may be: '*' (any public address) alone, or exact hosts, host:port, IPv4 addresses, CIDRs, each with an optional :port. Left out bounds nothing; empty grants nothing beyond the platform's endpoints.",
+          "description": "The most an agent's egress may be: '*' (any public address) alone, or '*:port' (any public address on that port), exact hosts, host:port, IPv4 addresses, CIDRs, each with an optional :port. Left out bounds nothing; empty grants nothing beyond the platform's endpoints.",
           "items": {
-            "pattern": "^(\\*|platform|[A-Za-z0-9.\\-]+(/\\d{1,2})?(:\\d{1,5})?)$",
+            "pattern": "^(\\*(:\\d{1,5})?|platform|[A-Za-z0-9.\\-]+(/\\d{1,2})?(:\\d{1,5})?)$",
             "type": "string"
           },
           "title": "Egress"
@@ -168,7 +168,7 @@
           "default": null,
           "description": "The most an agent's ingress may be: '*', or addresses and CIDRs with an optional :port. 'platform' is always kept. Left out bounds nothing; empty keeps 'platform' only.",
           "items": {
-            "pattern": "^(\\*|platform|[A-Za-z0-9.\\-]+(/\\d{1,2})?(:\\d{1,5})?)$",
+            "pattern": "^(\\*(:\\d{1,5})?|platform|[A-Za-z0-9.\\-]+(/\\d{1,2})?(:\\d{1,5})?)$",
             "type": "string"
           },
           "title": "Ingress"

@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.200
+
+- **The seed agents' egress** (the user, 15 November 2026): the Marketer, the Shopper and the Voyager reach the web only, `policy.shield.egress: ["*:80", "*:443"]` — any public address on ports 80 and 443, never another port nor a private, link-local, metadata, loopback, CGNAT or cluster address. The Accountant and Terra name each host, as the AWS Steward does: the Accountant Datalayer's gateway (its Odoo is the gateway's odoo and odoo-accounting toolsets; the gateway, not the pod, calls the person's Odoo), r1 and prod1; Terra the gateway, Earthdata Login, the CMR, LP DAAC's distribution and its CloudFront host (measured on an HLS granule), PyPI for earthaccess, r1 and prod1. `*:port` is agent-shield 0.2.21's; the carried schemas (`policies/shield-firewall.schema.json`, `policies/shield-policy.schema.json`) are 0.2.21's and `agent_policy_problems` takes it. [Agents](https://agentspecs.datalayer.tech/agents). Tests: test_agent_policy
+
 ## 0.0.199
 
 - **datalayer-email**: a skill spec for datalayer-skills' email skill (0.6.0, `datalayer_skills.skills.email`): one email to the person whose agent this is, through Datalayer's mailer (the runtime's social token, IAM's `/social/mail`), never an address the agent names, a few a day, no mail credential (the user, 15 November 2026: "for email, you can create a skill in the datalayer-skill repo and use it"). `worker-marketer` carries it, optional, and its instructions say to send the person what they ask to get by email, to them alone. Its `x-api-budget` guardrail says when support is mailed: `alerts.at: [0.8, 1.0]`, once a month at 80% of the platform's month and once at its cap.
