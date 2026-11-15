@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.199
+
+- **datalayer-email**: a skill spec for datalayer-skills' email skill (0.6.0, `datalayer_skills.skills.email`): one email to the person whose agent this is, through Datalayer's mailer (the runtime's social token, IAM's `/social/mail`), never an address the agent names, a few a day, no mail credential (the user, 15 November 2026: "for email, you can create a skill in the datalayer-skill repo and use it"). `worker-marketer` carries it, optional, and its instructions say to send the person what they ask to get by email, to them alone. Its `x-api-budget` guardrail says when support is mailed: `alerts.at: [0.8, 1.0]`, once a month at 80% of the platform's month and once at its cap.
+
 ## 0.0.198
 
 - worker-marketer: a Bluesky linked before its reads now fails hard (IAM 1.1.123: every Bluesky tool refuses with "Connect it again in Settings › Bluesky"), so its instructions say: if a Bluesky tool says to connect Bluesky again, tell the person to reconnect it in Settings › Bluesky; nothing on Bluesky works until then.

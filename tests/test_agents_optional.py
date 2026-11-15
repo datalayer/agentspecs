@@ -62,7 +62,7 @@ def test_the_marketer_needs_one_network_and_neither_search_nor_the_repositories(
         "discord:0.0.1",
         "linkedin:0.0.1",
     ]
-    assert marketer["skills"] == ["crawl:0.0.1", "github:0.0.1"]
+    assert marketer["skills"] == ["crawl:0.0.1", "github:0.0.1", "datalayer-email:0.0.1"]
     assert marketer["backend_tools"] == [
         "social-post-x:0.0.1",
         "social-read-x:0.0.1",
@@ -254,3 +254,15 @@ def test_the_voyager_plans_with_kiwi_and_starts_without_booking_and_maps():
         assert (ROOT / "env-vars" / f"{name}.yaml").exists(), name
     prompt = " ".join(voyager["system_prompt"].split())
     assert "You book nothing and pay nothing" in prompt and "can change" in prompt
+
+
+def test_the_marketer_mails_the_person_alone_through_datalayer():
+    """15 November 2026: datalayer-skills' email skill, optional for the Marketer; no address, no mail credential."""
+    marketer = dict(_agents())["worker-marketer"]
+    assert "datalayer-email:0.0.1" in marketer["skills"]
+    assert "datalayer-email:0.0.1" in marketer["optional"]["skills"]
+    spec = yaml.safe_load((ROOT / "skills" / "datalayer-email.yaml").read_text())
+    assert spec["module"] == "datalayer_skills.skills.email"
+    assert spec["dependencies"] == ["datalayer-skills>=0.6.0"]
+    assert "envvars" not in spec
+    assert "datalayer-email" in marketer["system_prompt"] and "to\n  them alone" not in marketer["system_prompt"]
