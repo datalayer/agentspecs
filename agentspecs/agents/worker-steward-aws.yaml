@@ -196,3 +196,6 @@ policy:
       - compute-optimizer.ap-southeast-2.amazonaws.com:443
       - r1.datalayer.run:443
       - prod1.datalayer.run:443
+      # The tokenizer file every runtime fetches (tiktoken's encodings; the
+      # user, 15 November 2026).
+      - openaipublic.blob.core.windows.net:443

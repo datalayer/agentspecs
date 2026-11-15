@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.202
+
+- **The tokenizer host for the exact-egress agents** (the user, 15 November 2026): every runtime downloads a tokenizer file from `openaipublic.blob.core.windows.net` (tiktoken's encodings); the Marketer reached it under `*:443`, the Accountant, Terra and the Steward for AWS were refused. Their `policy.shield.egress` names `openaipublic.blob.core.windows.net:443`. Tests: test_agent_policy
+
 ## 0.0.201
 
 - **LinkedIn's session from Settings** (the user, 15 November 2026: LinkedIn's reCAPTCHA loops forever on the sign-in made from a runtime's browser on an AWS address; "Keep it in Vault per person — paste once in Settings › LinkedIn"): a new env var, `LINKEDIN_LI_AT` — "LinkedIn session cookie (li_at)", the value of the cookie named `li_at` on `www.linkedin.com` (not `JSESSIONID`, `bcookie`, `bscookie`, `liap` or `lidc`), with the steps for Chrome or Edge, Firefox and Safari, how long it lives (until a LinkedIn sign-out, about a year) and that it is a password. MCP servers take `optional_envvars`: given to the runtime when the account has them, never required. The `linkedin` server declares `LINKEDIN_LI_AT` there (the runtime writes it as the server's session, never in its env), its `setup` says Settings › LinkedIn first, and the Marketer's instructions name it beside Sign in to LinkedIn, which stays. Tests: test_agents_optional

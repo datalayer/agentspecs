@@ -61,6 +61,8 @@ def test_an_exact_egress_agent_names_hosts_on_443_and_no_wildcard(name):
     assert egress and not any("*" in entry for entry in egress), egress
     assert all(entry.endswith(":443") for entry in egress), egress
     assert {"r1.datalayer.run:443", "prod1.datalayer.run:443"} <= set(egress)
+    # The tokenizer file every runtime fetches (the user, 15 November 2026).
+    assert "openaipublic.blob.core.windows.net:443" in egress
 
 
 def test_the_accountant_reaches_its_odoo_through_the_gateway_and_terra_nasa():
