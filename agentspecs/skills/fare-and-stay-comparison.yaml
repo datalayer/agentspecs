@@ -1,0 +1,32 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# One of the Voyager's skills (the user, 15 November 2026), implemented in
+# datalayer-skills (0.5.0) as `fare-and-stay-comparison`: its SKILL.md holds the instructions.
+
+id: fare-and-stay-comparison
+version: 0.0.1
+name: Fare and Stay Comparison Skill
+description: Compare flights by route, fare, baggage, connections and travel time, and stays by location, price, amenities and cancellation terms, with one recommendation and the booking links
+
+module: datalayer_skills.skills.fare_and_stay_comparison
+
+dependencies:
+  - datalayer-skills>=0.5.0
+
+# Offered on the platform: the runtime image installs datalayer-skills (0.5.0 and later).
+enabled: true
+
+install:
+  type: python
+  command: "pip install \"datalayer-skills>=0.5.0\""
+  note: "Instructions alone: no dependencies of its own."
+
+tags:
+  - travel
+  - flights
+  - accommodation
+  - comparison
+
+icon: "@primer/octicons-react:arrow-switch"
+emoji: "⚖️"

@@ -1,0 +1,17 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: BOOKING_DEMAND_API_KEY
+version: 0.0.1
+name: Booking.com Demand API Key
+description: The Demand API key Booking.com issues to a partner at onboarding. Sent unchanged, with no Bearer prefix, as x-booking-authorization to Booking.com's MCP server at https://demandapi-mcp.booking.com/v1/sp/mcp/, with the affiliate id; the tools it answers are those enabled for the partner's account.
+registrationUrl: https://developers.booking.com/mcp-server/docs/get-started
+tags:
+  - authentication
+  - api-key
+  - booking
+  - travel
+  - partner
+
+icon: key
+emoji: 🔑

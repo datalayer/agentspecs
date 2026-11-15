@@ -1,0 +1,17 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: GOOGLE_MAPS_API_KEY
+version: 0.0.1
+name: Google Maps Platform API Key
+description: A Google Maps Platform API key from a Google Cloud project with billing on and the Maps Experience agent tools API (mapstools.googleapis.com) enabled, restricted to that API. Sent as X-Goog-Api-Key to Google's Maps MCP server at https://mapstools.googleapis.com/mcp for places, routes and weather; Google bills the key's project.
+registrationUrl: https://console.cloud.google.com/google/maps-apis/credentials
+tags:
+  - authentication
+  - api-key
+  - google
+  - maps
+  - travel
+
+icon: key
+emoji: 🔑

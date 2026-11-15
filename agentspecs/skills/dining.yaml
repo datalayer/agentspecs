@@ -1,0 +1,32 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# One of the Voyager's skills (the user, 15 November 2026), implemented in
+# datalayer-skills (0.5.0) as `dining`: its SKILL.md holds the instructions.
+
+id: dining
+version: 0.0.1
+name: Dining Skill
+description: Restaurants, sights, activities and stops along a route that fit the travellers' tastes, diet and budget, placed in the trip's days with their travel times and map links
+
+module: datalayer_skills.skills.dining
+
+dependencies:
+  - datalayer-skills>=0.5.0
+
+# Offered on the platform: the runtime image installs datalayer-skills (0.5.0 and later).
+enabled: true
+
+install:
+  type: python
+  command: "pip install \"datalayer-skills>=0.5.0\""
+  note: "Instructions alone: no dependencies of its own."
+
+tags:
+  - travel
+  - dining
+  - restaurants
+  - activities
+
+icon: "@primer/octicons-react:flame"
+emoji: "🍽️"
