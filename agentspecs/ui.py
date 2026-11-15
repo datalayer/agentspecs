@@ -257,6 +257,23 @@ def ui_choices_problems(choices: Sequence[Any], *, to_ship: bool) -> List[str]:
     return problems
 
 
+def brought_ui_problems(spec: Mapping[str, Any], what: str) -> List[str]:
+    """What is wrong with the UI plugins an MCP server, a skill or a backend tool brings, in sentences.
+
+    Such a spec says ``ui`` as an agent does (agentspecs 0.0.196): a list of
+    ``{plugin, renderer}``, each a UI plugin of ``ui/``, each once, the renderer
+    one it may be exposed through. The chat that uses it injects them after the
+    agent's own. No ``ui``, nothing wrong.
+    """
+    choices = spec.get("ui")
+    if choices is None:
+        return []
+    name = f"{what} {spec.get('id', '?')!r}"
+    if not isinstance(choices, list):
+        return [f"{name}: `ui` is a list of UI plugins, each as `{{plugin, renderer}}`."]
+    return [f"{name}: {problem}" for problem in ui_choices_problems(choices, to_ship=False)]
+
+
 def plugins() -> List[Dict[str, Any]]:
     """The UI specs, as their files say, by id."""
     found = [yaml.safe_load(path.read_text()) or {} for path in sorted(PLUGINS_DIR.glob("*.yaml"))]

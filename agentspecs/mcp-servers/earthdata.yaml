@@ -65,3 +65,9 @@ actions:
     search_earth_datasets: read
     search_earth_datagranules: read
     download_earth_data_granules: write
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: earth-scenes
+  - plugin: earth-index

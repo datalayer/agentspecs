@@ -74,3 +74,9 @@ actions:
     search-flight: read
     # Send feedback about the search tools to Kiwi.com's developers.
     feedback-to-devs: send
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: trip-options
+  - plugin: trip-budget

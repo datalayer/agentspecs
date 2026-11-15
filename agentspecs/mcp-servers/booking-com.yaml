@@ -79,3 +79,9 @@ actions:
     unknown is the most restricted: run it with partner credentials, list its
     tools, and class each one here.
   tools: {}
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: trip-options
+  - plugin: trip-budget

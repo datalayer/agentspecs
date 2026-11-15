@@ -110,15 +110,21 @@ def load_raw_mcp_servers(directory: Path | None = None) -> dict[str, dict[str, A
 
 
 def check_mcp_servers(directory: Path | None = None) -> dict[str, dict[str, Any]]:
-    """Return every MCP server of a directory, refused when one's authentication is wrong.
+    """Return every MCP server of a directory, refused when one's authentication or `ui` is wrong.
 
     Raises
     ------
     ValueError
         Naming every problem found.
     """
+    from .ui import brought_ui_problems
+
     servers = load_raw_mcp_servers(directory)
-    problems = [problem for spec in servers.values() for problem in mcp_server_problems(spec)]
+    problems = [
+        problem
+        for spec in servers.values()
+        for problem in [*mcp_server_problems(spec), *brought_ui_problems(spec, "MCP server")]
+    ]
     if problems:
         raise ValueError("; ".join(problems))
     return servers

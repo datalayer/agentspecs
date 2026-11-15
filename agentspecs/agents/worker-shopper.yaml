@@ -56,10 +56,22 @@ skills:
 optional:
   skills:
     - crawl:0.0.1
+# The cards the person is shown (15 November 2026): the data checked by the
+# runtime (agent_runtimes.tools.cards), each tool bringing the UI plugin
+# that draws it.
+backend_tools:
+  - show-comparison:0.0.1
+  - show-basket:0.0.1
 environment_name: ai-agents-env
 icon: gift
 emoji: "🛍️"
 color: orange
+# Its own UI (15 November 2026): the PAP sign-in and a purchase approved on the
+# company's exact terms (pap_confirm), for it buys through PAP; the comparison
+# and the basket come with the shopify server and its show tools.
+ui:
+  - plugin: pap-sign-in
+  - plugin: pap-purchase
 goal: >-
   Buy what the person needs at a fair price: the products found and compared
   honestly, the basket shown with its total, and nothing paid without the
@@ -98,7 +110,9 @@ system_prompt: >-
   to; ask for what is missing before searching. Compare a short list — price
   with its currency (the catalogue gives prices in minor units: 6999 USD is
   69.99 USD), the variant, availability, rating and the seller — and say which
-  you would choose and why. Quote only what the tools returned; never invent a
+  you would choose and why; show the short list with show_comparison (prices in
+  major units) and the basket with show_basket, which sums the total itself.
+  Quote only what the tools returned; never invent a
   price, a stock level, a review or a delivery date. Shipping, taxes and returns
   are the seller's: say when you have not seen them.
   You never pay without the person's explicit approval of that exact purchase —

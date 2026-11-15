@@ -136,6 +136,35 @@ ui_choices_problems(["a2ui"], to_ship=True)
 # ["`ui` lists UI plugins, each as `{plugin, renderer}`: 'a2ui' is not one ('a2ui' is a UI renderer: …)."]
 ```
 
+## In an MCP server, a skill and a backend tool
+
+An MCP server, a skill and a backend tool bring their own UI (0.0.196): they say `ui`
+in the same format, and the chat that uses them injects it. Shopify brings the
+basket and the comparison, Odoo the reconciliation, the trial balance and the VAT,
+Stripe its checkout card:
+
+```yaml
+# agentspecs/mcp-servers/stripe.yaml (abridged)
+id: stripe
+ui:
+  - plugin: stripe-checkout
+    renderer: a2ui
+```
+
+The chat's UI is the agent's `ui`, then the `ui` of each MCP server it runs, then that
+of each skill it has enabled, then that of each backend tool it carries, in that order,
+each plugin once. An optional server or skill left out (its secret missing) brings
+none, and an anonymous visitor gets only the UI that needs no connection of theirs.
+`agentspecs.ui.brought_ui_problems` says what is wrong with one, and
+`check_mcp_servers` refuses a server whose `ui` names a plugin `ui/` does not have:
+
+```python
+from agentspecs.ui import brought_ui_problems
+
+brought_ui_problems({"id": "shop", "ui": [{"plugin": "nope"}]}, "MCP server")
+# ["MCP server 'shop': There is no UI plugin named 'nope': one of …"]
+```
+
 ## In an Appspec: how a surface names a component
 
 An application's `interface` lists the components its surface may use, and its

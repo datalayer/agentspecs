@@ -39,6 +39,11 @@ skills:
   - accounting:0.0.1
 backend_tools:
   - runtime-echo:0.0.1
+  # The cards the person is shown (15 November 2026), each bringing the UI
+  # plugin that draws it (agent_runtimes.tools.cards).
+  - show-reconciliation:0.0.1
+  - show-trial-balance:0.0.1
+  - show-vat-summary:0.0.1
 frontend_tools:
   - jupyter-notebook:0.0.1
   - lexical-document:0.0.1
@@ -73,6 +78,12 @@ system_prompt: >-
   and taxes, the Odoo MCP server for any other record, and the notebook/runtime tools for
   calculations and structured outputs. Keep results concise, auditable, and
   action-oriented.
+  Show your proposed matches with show_reconciliation (each bank line beside
+  the invoice it would settle, with your confidence), and reconcile in Odoo
+  only the matches the person sends back approved. Show a trial balance with
+  show_trial_balance and the VAT for a period with show_vat_summary; they sum
+  the totals themselves. Every figure in them comes from Odoo; nothing is
+  filed from them.
 
 system_prompt_codemode_addons: >-
   Prefer deterministic steps, preserve traceability of calculations, and present

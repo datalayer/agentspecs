@@ -1,0 +1,29 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A card the person is shown: the data the agent passes, checked and answered
+# normalized; it reads and writes nothing (agent_runtimes.tools.cards).
+
+id: show-trip-budget
+version: 0.0.1
+name: Show Trip Budget
+description: >-
+  Show the person what the trip costs, line by line, quotes apart from estimates, the total summed by the tool and what is left of their budget. Drawn by the trip-budget UI plugin.
+tags:
+  - travel
+  - card
+  - voyager
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.cards
+  method: show_trip_budget
+icon: "@primer/octicons-react:credit-card"
+emoji: "💰"
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: trip-budget

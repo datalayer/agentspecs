@@ -186,9 +186,13 @@ goal: >-
   voice fitted to each network (X, Bluesky, LinkedIn, Discord), what the audience said read back, and nothing
   published without approval.
 protocol: vercel-ai
+# Its own UI (15 November 2026): what is left of today's X budget, read from
+# its x-api-budget guardrail. The linked accounts and the post previews come
+# with its social tools, Sign in to LinkedIn with the linkedin server.
 ui:
   - plugin: a2ui-surface
     renderer: a2ui
+  - plugin: x-budget
 model_config:
   temperature: 0.7
   max_tokens: 4096

@@ -15,7 +15,7 @@ cannot use it yet.
 
 | Renderer | Id | Enabled | The UI plugins it can carry |
 | --- | --- | --- | --- |
-| [A2UI](https://a2ui.org/) | `a2ui` | yes | `a2ui-surface`, `a2ui-view`, `app-components`, `app-elements`, `app-page` |
+| [A2UI](https://a2ui.org/) | `a2ui` | yes | `a2ui-surface`, `a2ui-view`, `app-components`, `app-elements`, `app-page`, `stripe-checkout` |
 | [MCP Apps](https://modelcontextprotocol.io/docs/extensions/apps) | `mcp-apps` | no | `app-page` |
 | [MCP UI](https://mcpui.dev/) | `mcp-ui` | no | `pap-sign-in` |
 

@@ -1,0 +1,30 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A card the person is shown: the data the agent passes, checked and answered
+# normalized; it reads and writes nothing (agent_runtimes.tools.cards).
+
+id: show-vat-summary
+version: 0.0.1
+name: Show VAT Summary
+description: >-
+  Show the person the VAT for a period — the return's boxes with base and tax, what is due and deductible, and the net to pay or to be refunded. Nothing is filed. Drawn by the vat-summary UI plugin.
+tags:
+  - accounting
+  - card
+  - accountant
+  - vat
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.cards
+  method: show_vat_summary
+icon: "@primer/octicons-react:checklist"
+emoji: "💶"
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: vat-summary

@@ -102,3 +102,10 @@ actions:
     odoo_update_records: write
     # Permanently delete records from an Odoo model, subject to Odoo permissions.
     odoo_delete_records: delete
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: bank-reconciliation
+  - plugin: trial-balance
+  - plugin: vat-summary

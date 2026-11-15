@@ -1,0 +1,29 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A card the person is shown: the data the agent passes, checked and answered
+# normalized; it reads and writes nothing (agent_runtimes.tools.cards).
+
+id: show-comparison
+version: 0.0.1
+name: Show Comparison
+description: >-
+  Show the person the products compared, side by side — price, variant, availability, rating and seller — and the one you would pick with why. Drawn as a table by the product-comparison UI plugin.
+tags:
+  - shopping
+  - card
+  - shopper
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.cards
+  method: show_comparison
+icon: "@primer/octicons-react:table"
+emoji: "📊"
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: product-comparison

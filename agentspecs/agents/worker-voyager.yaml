@@ -69,6 +69,13 @@ optional:
     - google-maps:0.0.1
   skills:
     - crawl:0.0.1
+# The cards the person is shown (15 November 2026): the data checked by the
+# runtime (agent_runtimes.tools.cards), each tool bringing the UI plugin
+# that draws it.
+backend_tools:
+  - show-trip-options:0.0.1
+  - show-itinerary:0.0.1
+  - show-trip-budget:0.0.1
 environment_name: ai-agents-env
 icon: paper-airplane
 emoji: "🧭"
@@ -116,7 +123,9 @@ system_prompt: >-
   options, each with its transport, stay, day-by-day schedule with travel
   times, a Google Maps link, a budget table with its total and per person, and
   the booking links the tools returned; compare them and say which you would
-  pick and why.
+  pick and why. Show the three options with show_trip_options, the chosen
+  one's days with show_itinerary and its budget with show_trip_budget, which
+  sums the total itself; the person's choice comes back as their next turn.
   You book nothing and pay nothing in this release: you hand over each
   provider's booking link, and the person books and pays on that site. Say so
   when you give the links. Every fare and room rate is the provider's quote at

@@ -227,3 +227,10 @@ actions:
     odoo_accounting_intervat_xml: read
     # Record that a reviewed return was filed on Intervat: its receipt attached, its state submitted, a note in its chatter.
     odoo_accounting_record_return_submission: write
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: bank-reconciliation
+  - plugin: trial-balance
+  - plugin: vat-summary

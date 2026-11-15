@@ -175,3 +175,54 @@ def test_an_application_of_the_catalogue_lists_the_ui_plugins_it_is_drawn_with()
     assert apps
     for identity, app in apps.items():
         assert [c.model_dump(exclude_none=True) for c in app.ui] == ui_of(app), identity
+
+
+@pytest.mark.parametrize("folder,what", [("mcp-servers", "MCP server"), ("skills", "Skill"), ("backend-tools", "Backend tool")])
+def test_a_server_a_skill_and_a_tool_bring_ui_plugins_of_the_catalogue(folder, what):
+    """An MCP server, a skill and a backend tool say `ui` as an agent does (0.0.196): each a UI plugin of `ui/`, once."""
+    for path in sorted((ROOT / folder).glob("*.yaml")):
+        spec = yaml.safe_load(path.read_text()) or {}
+        assert ui.brought_ui_problems(spec, what) == [], path.name
+
+
+def test_the_seed_agents_capabilities_bring_their_ui():
+    """The UI belongs to the capability (UP-05): Shopify brings the basket, Odoo the reconciliation, Stripe its checkout."""
+    def brought(folder, spec_id):
+        spec = _yaml(folder, spec_id)
+        return [choice["plugin"] for choice in spec.get("ui", [])]
+
+    assert brought("mcp-servers", "shopify") == ["product-comparison", "shopping-basket"]
+    assert "bank-reconciliation" in brought("mcp-servers", "odoo-accounting")
+    assert brought("mcp-servers", "earthdata") == ["earth-scenes", "earth-index"]
+    assert brought("mcp-servers", "linkedin") == ["browser-session"]
+    assert "trip-options" in brought("skills", "fare-and-stay-comparison")
+    assert brought("backend-tools", "list-recommendations") == ["aws-savings"]
+    assert brought("backend-tools", "social-post-x") == ["x-post-preview"]
+    assert _yaml("mcp-servers", "stripe")["ui"] == [{"plugin": "stripe-checkout", "renderer": "a2ui"}]
+
+
+@pytest.mark.parametrize(
+    "choices,why",
+    [
+        ([{"plugin": "nope"}], "There is no UI plugin named 'nope'"),
+        (["stripe-checkout"], "each as `{plugin, renderer}`"),
+        ([{"plugin": "trip-options"}, {"plugin": "trip-options"}], "twice"),
+        ([{"plugin": "trip-options", "renderer": "a2ui"}], "not exposed through A2UI"),
+        ({"plugin": "trip-options"}, "is a list"),
+    ],
+)
+def test_a_brought_ui_is_refused_when_wrong(choices, why):
+    problems = ui.brought_ui_problems({"id": "x", "ui": choices}, "MCP server")
+    assert problems and why in problems[0], problems
+    with pytest.raises(ValueError, match="MCP server 'x'"):
+        from agentspecs.mcp_servers import check_mcp_servers
+
+        tmp = ROOT.parent / ".pytest-brought-ui"
+        tmp.mkdir(exist_ok=True)
+        try:
+            (tmp / "x.yaml").write_text(yaml.safe_dump({"id": "x", "version": "0.0.1", "ui": choices}))
+            check_mcp_servers(tmp)
+        finally:
+            for leftover in tmp.glob("*"):
+                leftover.unlink()
+            tmp.rmdir()

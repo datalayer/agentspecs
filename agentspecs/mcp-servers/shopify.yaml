@@ -94,3 +94,9 @@ actions:
     lookup_catalog: read
     # Read one product, with the options the buyer selected.
     get_product: read
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: product-comparison
+  - plugin: shopping-basket

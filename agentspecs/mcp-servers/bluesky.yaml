@@ -73,3 +73,8 @@ actions:
     like-post: write
     create-post: publish
     follow-user: write
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: bluesky-post-preview

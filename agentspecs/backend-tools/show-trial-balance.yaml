@@ -1,0 +1,29 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A card the person is shown: the data the agent passes, checked and answered
+# normalized; it reads and writes nothing (agent_runtimes.tools.cards).
+
+id: show-trial-balance
+version: 0.0.1
+name: Show Trial Balance
+description: >-
+  Show the person a trial balance for a period — each account's debit, credit and balance, the totals summed by the tool and whether they agree. Drawn by the trial-balance UI plugin.
+tags:
+  - accounting
+  - card
+  - accountant
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.cards
+  method: show_trial_balance
+icon: "@primer/octicons-react:law"
+emoji: "⚖️"
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: trial-balance
