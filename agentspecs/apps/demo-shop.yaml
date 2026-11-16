@@ -71,7 +71,9 @@ pap:
         personal_data: false
       - name: orders:write
         description: Place a test order you approved — nothing is charged and nothing ships
-        changes: none
+        # reversible, not none: placing an order is the company's one operation, and a company's
+        # operations need a scope that changes something (the PAP SDK's write_scopes).
+        changes: reversible
         personal_data: false
     excluded_tasks:
       - task: Pay for an order
