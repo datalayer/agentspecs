@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.206
+
+- **Buy from a shop**: the shop's member is `demo-shop`, its application's id, as the demo account's kept deployment names it and the nightly rehearsals reach it; the Shopper's link is `ask_demo_shop` (`shopper` 0.0.2). Docs: the scenes reference. Tests: all
+
 ## 0.0.205
 
 - **Buy from a shop** (the user, 16 November 2026): a demo Stage — the team `buy-from-a-shop`, a person's Shopper in the browser (`shopper` 0.0.1, its one tool `ask_shop`) and the Demo Shop on a runtime, over A2A; its scene in three rehearsed beats (find the tennis gear, quote the basket, place the test order: nothing charged, nothing ships); the Stage kept running under the demo account (`shop`: `demo-shop`). Docs: the scenes reference. Tests: test_scenes, test_stages, test_apps
