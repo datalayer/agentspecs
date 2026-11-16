@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.205
+
+- **Buy from a shop** (the user, 16 November 2026): a demo Stage — the team `buy-from-a-shop`, a person's Shopper in the browser (`shopper` 0.0.1, its one tool `ask_shop`) and the Demo Shop on a runtime, over A2A; its scene in three rehearsed beats (find the tennis gear, quote the basket, place the test order: nothing charged, nothing ships); the Stage kept running under the demo account (`shop`: `demo-shop`). Docs: the scenes reference. Tests: test_scenes, test_stages, test_apps
+
 ## 0.0.204
 
 - **The Demo Shop** (the user, 16 November 2026): `demo-shop`, a company application for people's own agents and at its four addresses (`pap.company`: agent, openapi, mcp, web; `catalog:read`, `orders:write`), public at `demo-shop`, selling nothing. Its catalogue is a snapshot bundled beside it (`apps/demo-shop/catalog.json`): 24 products in five categories, their texts from DummyJSON, their photos from Shopify's Burst (Burst Some Rights Reserved) served from `images.datalayer.io`, each photo's source and licence recorded. Its `openapi`: `listProducts`, `findProducts`, `getProduct`, `quote` and `placeOrder` — a test order, nothing charged and nothing shipped — the one `x-pap` operation (`orders.place`). Its agent answers from five backend tools reading the snapshot (`demo-shop-list-products`, `-find-products`, `-get-product`, `-quote-basket`, `-place-test-order`), each bringing the new `product-cards` UI plugin. `demo-shopper` 0.0.4 shops there with the same tools. `show-comparison` and `show-basket` carry each product's photo. Docs: the Appspec reference, the UI components page. Tests: test_apps, test_ui
