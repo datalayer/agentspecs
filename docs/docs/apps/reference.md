@@ -483,18 +483,10 @@ openapi:
     title: Exchange Desk
     version: 0.0.3
   paths:
-    /orders/exchange:
+    /exchange_order:
       post:
         operationId: exchange_order
-        summary: Exchange an order for another size.
-        description: Propose exchanging the person's order for another size; it is
-          done once they approve the exact terms. Answer whether it was proposed,
-          and what the person is asked.
-        x-pap:
-          action: orders.exchange
-          tool: exchange_order
-          summary: Exchange order {order_id} for size {size}.
-          scope: orders:write
+        summary: Exchanges an order for another size, once the person approved it.
         requestBody:
           required: true
           content:
@@ -504,16 +496,14 @@ openapi:
                 properties:
                   order_id:
                     type: string
-                    description: The order, as the shop writes it
                   size:
                     type: string
-                    description: The size to exchange it for
                 required:
                 - order_id
                 - size
         responses:
           '200':
-            description: What was proposed
+            description: Its answer
             content:
               application/json:
                 schema:
@@ -526,6 +516,11 @@ openapi:
                   required:
                   - proposed
                   - message
+        x-pap:
+          action: orders.exchange
+          tool: exchange_order
+          summary: Exchange order {order_id} for size {size}.
+          scope: orders:write
 ```
 
 ### `pact`

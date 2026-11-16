@@ -157,7 +157,9 @@ app.as_company(
 )
 
 
-@app.company_operation("orders.exchange", summary="Exchange order {order_id} for size {size}.")
+@app.company_operation(
+    "orders.exchange", summary="Exchange order {order_id} for size {size}.", scope="orders:write"
+)
 @app.tool(does="write")
 async def exchange_order(order_id: str, size: str) -> dict[str, Any]:
     """Exchanges an order for another size, once the person approved it."""
