@@ -466,27 +466,44 @@ backend_tools:
 - decide:0.0.1
 ```
 
-### `pair`
-
-```yaml
-pair:
-  id: guest-desk
-  role: personal_agent
-```
-
 ### `openapi`
 
 ```yaml
 openapi:
   openapi: 3.1.0
   info:
-    title: Exchange Desk
-    version: 0.0.3
+    title: Demo Shop
+    version: 0.0.1
+    description: 'Datalayer''s demo shop: 24 products, their texts from DummyJSON
+      and their photos from Shopify''s Burst. Orders are test orders: nothing is charged
+      and nothing ships.'
   paths:
-    /exchange_order:
+    /products:
+      get:
+        operationId: listProducts
+        summary: List the shop's products, all of them or one category's.
+        description: Call list_products with the category when one is given, and answer
+          its products exactly as the tool answered them, with their image.
+        parameters:
+        - name: category
+          in: query
+          required: false
+          description: groceries, kitchen, home, sports or sunglasses
+          schema:
+            type: string
+        responses:
+          '200':
+            description: The products
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Products'
+    /products/find:
       post:
-        operationId: exchange_order
-        summary: Exchanges an order for another size, once the person approved it.
+        operationId: findProducts
+        summary: Find the shop's products by words, category and price range.
+        description: Call find_products with the inputs given, and answer its products
+          exactly as the tool answered them, the cheapest first, with their image.
         requestBody:
           required: true
           content:
@@ -494,33 +511,241 @@ openapi:
               schema:
                 type: object
                 properties:
-                  order_id:
+                  query:
                     type: string
-                  size:
+                    description: Words to look for in a product's title or description
+                  category:
                     type: string
-                required:
-                - order_id
-                - size
+                    description: groceries, kitchen, home, sports or sunglasses
+                  min_price:
+                    type: number
+                    minimum: 0
+                  max_price:
+                    type: number
+                    minimum: 0
         responses:
           '200':
-            description: Its answer
+            description: The products found
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Products'
+    /products/{id}:
+      get:
+        operationId: getProduct
+        summary: One product of the shop, with its description.
+        description: Call get_product with the id, and answer the product exactly
+          as the tool answered it, with its image and description; when the shop has
+          no such product, answer found false and say so in the message.
+        parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        responses:
+          '200':
+            description: The product
             content:
               application/json:
                 schema:
                   type: object
                   properties:
-                    proposed:
+                    found:
                       type: boolean
+                    product:
+                      $ref: '#/components/schemas/Product'
                     message:
                       type: string
                   required:
-                  - proposed
+                  - found
+                  - message
+    /quote:
+      post:
+        operationId: quote
+        summary: Price a basket of the shop's products, each line and the total.
+        description: 'Call quote_basket with the items, and answer its lines, currency
+          and total exactly as the tool answered them. A quote, not an order: nothing
+          is reserved. When the tool refuses, answer no lines, a total of 0 and its
+          reason in the message.'
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Basket'
+        responses:
+          '200':
+            description: The quote
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Quote'
+    /orders:
+      post:
+        operationId: placeOrder
+        summary: Place a test order of a basket — nothing is charged and nothing ships.
+        description: 'A test order: call place_test_order with the items once the
+          person approved it, and answer its order number, lines and total exactly
+          as the tool answered them, with test true, charged false and ships false.
+          Say in the message that nothing is charged, nothing ships and nothing is
+          kept.'
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Basket'
+        responses:
+          '200':
+            description: The test order — nothing is charged and nothing ships
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    order_id:
+                      type: string
+                      description: The test order's number, TEST-…
+                    test:
+                      const: true
+                    charged:
+                      const: false
+                    ships:
+                      const: false
+                    lines:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Line'
+                    currency:
+                      type: string
+                    total:
+                      type: number
+                    message:
+                      type: string
+                  required:
+                  - order_id
+                  - test
+                  - charged
+                  - ships
+                  - lines
+                  - total
                   - message
         x-pap:
-          action: orders.exchange
-          tool: exchange_order
-          summary: Exchange order {order_id} for size {size}.
+          action: orders.place
+          tool: place_test_order
+          summary: Place a test order at the Demo Shop — nothing is charged and nothing
+            ships.
           scope: orders:write
+  components:
+    schemas:
+      Product:
+        type: object
+        properties:
+          id:
+            type: string
+          title:
+            type: string
+          category:
+            type: string
+          brand:
+            type: string
+          price:
+            type: number
+          currency:
+            type: string
+          rating:
+            type: number
+          stock:
+            type: integer
+          image:
+            type: string
+            format: uri
+            description: The product's photo
+          description:
+            type: string
+        required:
+        - id
+        - title
+        - price
+        - image
+      Products:
+        type: object
+        properties:
+          products:
+            type: array
+            items:
+              $ref: '#/components/schemas/Product'
+          count:
+            type: integer
+        required:
+        - products
+      Basket:
+        type: object
+        properties:
+          items:
+            type: array
+            minItems: 1
+            items:
+              type: object
+              properties:
+                product_id:
+                  type: string
+                quantity:
+                  type: integer
+                  minimum: 1
+              required:
+              - product_id
+        required:
+        - items
+      Line:
+        type: object
+        properties:
+          product_id:
+            type: string
+          title:
+            type: string
+          image:
+            type: string
+            format: uri
+            description: The product's photo
+          price:
+            type: number
+          quantity:
+            type: integer
+          line_total:
+            type: number
+        required:
+        - product_id
+        - title
+        - image
+        - price
+        - quantity
+        - line_total
+      Quote:
+        type: object
+        properties:
+          lines:
+            type: array
+            items:
+              $ref: '#/components/schemas/Line'
+          currency:
+            type: string
+          total:
+            type: number
+          message:
+            type: string
+        required:
+        - lines
+        - total
+```
+
+### `pair`
+
+```yaml
+pair:
+  id: guest-desk
+  role: personal_agent
 ```
 
 ### `pact`

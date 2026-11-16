@@ -8,7 +8,7 @@ id: show-basket
 version: 0.0.1
 name: Show Basket
 description: >-
-  Show the person the basket — each item with its seller, quantity and price, the shipping, and the total summed by the tool. Nothing is bought by showing it. Drawn by the shopping-basket UI plugin.
+  Show the person the basket — each item with its seller, quantity, price and photo, the shipping, and the total summed by the tool. Nothing is bought by showing it. Drawn by the shopping-basket UI plugin.
 tags:
   - shopping
   - card

@@ -13,7 +13,7 @@ id: "product-comparison"
 version: 0.0.1
 name: Product comparison
 description: >-
-  The products the agent compared, side by side — price, variant, availability, rating and seller — and the one it would pick with why (show_comparison).
+  The products the agent compared, side by side — price, variant, availability, rating, seller and photo — and the one it would pick with why (show_comparison).
 emoji: "📊"
 octicon: table
 plugin: "@datalayer/loop-plugin-product-comparison"

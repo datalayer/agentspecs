@@ -1,0 +1,30 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The demo shop's catalogue, a snapshot bundled with the demo-shop application
+# (apps/demo-shop/catalog.json): read in process, never from the network; it
+# changes nothing anywhere (agent_runtimes.tools.demo_shop).
+
+id: demo-shop-quote-basket
+version: 0.0.1
+name: Quote a Demo Shop Basket
+description: >-
+  Price a basket of the demo shop's products from its catalogue: each line and the total, summed by the tool. A quote, not an order: nothing is reserved. Drawn with each product's photo.
+tags:
+  - shopping
+  - demo
+  - demo-shop
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.demo_shop
+  method: quote_basket
+icon: "@primer/octicons-react:list-ordered"
+emoji: "🧾"
+
+# The UI plugin it brings to the chat that uses it: its answer drawn as
+# product cards, each with its photo.
+ui:
+  - plugin: product-cards

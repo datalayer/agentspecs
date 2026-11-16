@@ -8,7 +8,7 @@ id: show-comparison
 version: 0.0.1
 name: Show Comparison
 description: >-
-  Show the person the products compared, side by side — price, variant, availability, rating and seller — and the one you would pick with why. Drawn as a table by the product-comparison UI plugin.
+  Show the person the products compared, side by side — price, variant, availability, rating, seller and photo — and the one you would pick with why. Drawn as a table by the product-comparison UI plugin.
 tags:
   - shopping
   - card

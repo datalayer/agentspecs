@@ -1,0 +1,410 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application: Datalayer's demo shop, a company to people's own agents (the
+# Personal Agent Protocol) and to anybody at its four addresses — its agent,
+# its MCP server, its REST API and its web page. It sells nothing: its
+# catalogue is a snapshot bundled beside this file (demo-shop/catalog.json) —
+# 24 products, their texts from DummyJSON, their photos from Shopify's Burst
+# (Burst Some Rights Reserved) served from images.datalayer.io — read by its
+# tools (the demo-shop-* backend tools), never from the network. Its one PAP
+# operation, placing an order, is a test order: nothing is charged, nothing
+# ships, nothing is kept.
+
+schema: loop.app/v1
+id: demo-shop
+version: 0.0.1
+name: Demo Shop
+kind: chat
+description: >-
+  A demo shop for people's own agents: it lists and finds its products with
+  their photos, quotes a basket and places test orders — nothing is charged
+  and nothing ships. Product texts from DummyJSON, photos from Shopify's
+  Burst.
+owner: Datalayer <info@datalayer.io>
+# A model and nothing else: the instructions below say who it is, and its
+# tools are the shop's.
+agent: example-blank:0.0.1
+backend_tools:
+  - demo-shop-list-products:0.0.1
+  - demo-shop-find-products:0.0.1
+  - demo-shop-get-product:0.0.1
+  - demo-shop-quote-basket:0.0.1
+  - demo-shop-place-test-order:0.0.1
+goal: >-
+  Show how a company answers people's own agents: its products found and
+  shown with their photos, a basket quoted, and an order placed once the
+  person approves it — a test order, charging and shipping nothing.
+instructions: >-
+  You are the Demo Shop, Datalayer's demo shop, answering people and their own
+  agents. Everything you say about a product comes from your tools, which read
+  the shop's catalogue: list_products (all or one category: groceries,
+  kitchen, home, sports, sunglasses), find_products (words, category, a price
+  range), get_product (one, with its description), quote_basket (a basket
+  priced, its total summed by the tool) and place_test_order. Never invent a
+  product, a price, a rating, a stock level or a photo, and never compute a
+  total yourself. Prices are in USD. When asked what you sell or for a kind of
+  product, call find_products or list_products: the products are shown with
+  their photos, so say briefly which fit and why rather than repeating every
+  figure. Before a basket is ordered, quote it with quote_basket. Place an
+  order only once the person said to, with place_test_order, and say each time
+  that it is a test order: nothing is charged, nothing ships and nothing is
+  kept — there is no payment, no delivery and no account here. A product out
+  of stock cannot be ordered; say so and offer another. When asked something
+  the catalogue does not hold (a delivery date, a discount, a product you do
+  not have), say the shop does not have it.
+protocols:
+  - pap
+pap:
+  profile: draft-01
+  company:
+    enabled: true
+    interfaces:
+      - agent
+      - openapi
+      - mcp
+      - web
+    scopes:
+      - name: catalog:read
+        description: See the shop's products, their prices, ratings and stock
+        changes: none
+        personal_data: false
+      - name: orders:write
+        description: Place a test order you approved — nothing is charged and nothing ships
+        changes: none
+        personal_data: false
+    excluded_tasks:
+      - task: Pay for an order
+        alternative:
+          instructions: >-
+            This is a demo shop: its orders are test orders, nothing is
+            charged and nothing ships.
+    extensions:
+      - operations
+# Its product cards come with its tools (the demo-shop-* backend tools bring
+# product-cards).
+ui:
+  - plugin: chat
+interface:
+  layout: chat
+  accent: sun
+  welcome: >-
+    The Demo Shop: ask for products and see them with their photos, get a
+    basket quoted and place a test order — nothing is charged and nothing
+    ships.
+  starters:
+    - label: Sports
+      message: What do you have for tennis?
+    - label: Under 10 USD
+      message: Show me your products under 10 USD.
+    - label: A test order
+      message: Quote two tennis balls and a tennis racket, then place a test order.
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: What do you have for tennis?
+      expect: It finds the tennis racket and the tennis ball with find_products and shows them with their photos and prices from the catalogue.
+    - ask: Quote two tennis balls and a tennis racket.
+      expect: It quotes them with quote_basket, a total of 63.97 USD, and orders nothing.
+    - ask: Place a test order of one volleyball.
+      expect: It says the volleyball is out of stock, places no order and offers another product.
+    - ask: Do you sell tents?
+      expect: It says the shop has no tent and invents none.
+  verified:
+    live: []
+    recorded:
+      - "Its tools are tested in process in agent-runtimes against the bundled catalogue: the products, a quote summed by the tool, a test order charging nothing."
+    unverified:
+      - "Its tests have not been run as a set: no validation run is attached to it."
+record:
+  keep_for: 30_days
+  include: [conversations]
+deployment:
+  hosted:
+    visibility: public
+    slug: demo-shop
+enabled: true
+tags:
+  - demo
+  - shopping
+  - commerce
+  - companies
+icon: package
+emoji: "🛍️"
+# What it answers when called: an MCP tool, a REST endpoint and, for placing
+# an order, a PAP operation — each answered by the agent from its tools.
+openapi:
+  openapi: 3.1.0
+  info:
+    title: Demo Shop
+    version: 0.0.1
+    description: >-
+      Datalayer's demo shop: 24 products, their texts from DummyJSON and their
+      photos from Shopify's Burst. Orders are test orders: nothing is charged
+      and nothing ships.
+  paths:
+    /products:
+      get:
+        operationId: listProducts
+        summary: List the shop's products, all of them or one category's.
+        description: >-
+          Call list_products with the category when one is given, and answer
+          its products exactly as the tool answered them, with their image.
+        parameters:
+          - name: category
+            in: query
+            required: false
+            description: groceries, kitchen, home, sports or sunglasses
+            schema:
+              type: string
+        responses:
+          '200':
+            description: The products
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Products'
+    /products/find:
+      post:
+        operationId: findProducts
+        summary: Find the shop's products by words, category and price range.
+        description: >-
+          Call find_products with the inputs given, and answer its products
+          exactly as the tool answered them, the cheapest first, with their
+          image.
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query:
+                    type: string
+                    description: Words to look for in a product's title or description
+                  category:
+                    type: string
+                    description: groceries, kitchen, home, sports or sunglasses
+                  min_price:
+                    type: number
+                    minimum: 0
+                  max_price:
+                    type: number
+                    minimum: 0
+        responses:
+          '200':
+            description: The products found
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Products'
+    /products/{id}:
+      get:
+        operationId: getProduct
+        summary: One product of the shop, with its description.
+        description: >-
+          Call get_product with the id, and answer the product exactly as the
+          tool answered it, with its image and description; when the shop has
+          no such product, answer found false and say so in the message.
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: The product
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    found:
+                      type: boolean
+                    product:
+                      $ref: '#/components/schemas/Product'
+                    message:
+                      type: string
+                  required:
+                    - found
+                    - message
+    /quote:
+      post:
+        operationId: quote
+        summary: Price a basket of the shop's products, each line and the total.
+        description: >-
+          Call quote_basket with the items, and answer its lines, currency and
+          total exactly as the tool answered them. A quote, not an order:
+          nothing is reserved. When the tool refuses, answer no lines, a total
+          of 0 and its reason in the message.
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Basket'
+        responses:
+          '200':
+            description: The quote
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Quote'
+    /orders:
+      post:
+        operationId: placeOrder
+        summary: Place a test order of a basket — nothing is charged and nothing ships.
+        description: >-
+          A test order: call place_test_order with the items once the person
+          approved it, and answer its order number, lines and total exactly as
+          the tool answered them, with test true, charged false and ships
+          false. Say in the message that nothing is charged, nothing ships and
+          nothing is kept.
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Basket'
+        responses:
+          '200':
+            description: The test order — nothing is charged and nothing ships
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    order_id:
+                      type: string
+                      description: The test order's number, TEST-…
+                    test:
+                      const: true
+                    charged:
+                      const: false
+                    ships:
+                      const: false
+                    lines:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Line'
+                    currency:
+                      type: string
+                    total:
+                      type: number
+                    message:
+                      type: string
+                  required:
+                    - order_id
+                    - test
+                    - charged
+                    - ships
+                    - lines
+                    - total
+                    - message
+        x-pap:
+          action: orders.place
+          tool: place_test_order
+          summary: Place a test order at the Demo Shop — nothing is charged and nothing ships.
+          scope: orders:write
+  components:
+    schemas:
+      Product:
+        type: object
+        properties:
+          id:
+            type: string
+          title:
+            type: string
+          category:
+            type: string
+          brand:
+            type: string
+          price:
+            type: number
+          currency:
+            type: string
+          rating:
+            type: number
+          stock:
+            type: integer
+          image:
+            type: string
+            format: uri
+            description: The product's photo
+          description:
+            type: string
+        required:
+          - id
+          - title
+          - price
+          - image
+      Products:
+        type: object
+        properties:
+          products:
+            type: array
+            items:
+              $ref: '#/components/schemas/Product'
+          count:
+            type: integer
+        required:
+          - products
+      Basket:
+        type: object
+        properties:
+          items:
+            type: array
+            minItems: 1
+            items:
+              type: object
+              properties:
+                product_id:
+                  type: string
+                quantity:
+                  type: integer
+                  minimum: 1
+              required:
+                - product_id
+        required:
+          - items
+      Line:
+        type: object
+        properties:
+          product_id:
+            type: string
+          title:
+            type: string
+          image:
+            type: string
+            format: uri
+            description: The product's photo
+          price:
+            type: number
+          quantity:
+            type: integer
+          line_total:
+            type: number
+        required:
+          - product_id
+          - title
+          - image
+          - price
+          - quantity
+          - line_total
+      Quote:
+        type: object
+        properties:
+          lines:
+            type: array
+            items:
+              $ref: '#/components/schemas/Line'
+          currency:
+            type: string
+          total:
+            type: number
+          message:
+            type: string
+        required:
+          - lines
+          - total

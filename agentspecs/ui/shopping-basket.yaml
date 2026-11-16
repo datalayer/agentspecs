@@ -13,7 +13,7 @@ id: "shopping-basket"
 version: 0.0.1
 name: Shopping basket
 description: >-
-  The basket the agent put together: each item, its seller and price, the shipping and the total summed by the tool; nothing is bought from it (show_basket).
+  The basket the agent put together: each item with its photo, its seller and price, the shipping and the total summed by the tool; nothing is bought from it (show_basket).
 emoji: "🛒"
 octicon: package
 plugin: "@datalayer/loop-plugin-shopping-basket"
