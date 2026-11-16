@@ -93,19 +93,19 @@ script:
       yet.
   - id: order
     cue:
-      say: Place the test order for that basket.
+      say: Place a test order of two tennis balls and the tennis racket.
     narration: An order, said to be a test — nothing is charged, nothing ships.
     moves:
       - who: shopper
         asks: demo-shop
         over: a2a
-        what: the test order for the basket quoted
+        what: a test order of two tennis balls and one tennis racket
       - who: demo-shop
         answers: words
         what: the test order's number, and that nothing is charged and nothing ships
       - who: shopper
         answers: words
-        what: the order placed, a test
+        what: the order placed, a test, with its number
     expect: >-
       A test order number (TEST-…) and the total, with the shop saying nothing
       is charged and nothing ships; the Shopper says the same.

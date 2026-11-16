@@ -418,6 +418,48 @@ no `operationId` (a letter, then letters, digits or `_`), says nothing in its
 text body) or answers `200` without a JSON schema. An application without
 `openapi` answers one operation, `ask`: a `question` in, the agent's `answer` out.
 
+### A gallery on its web page
+
+An application with a catalogue shows it on its web page: one operation carries
+`x-datalayer-gallery`, and the page calls it with no input and shows its answer
+as a grid of product cards — each item's photo, title, price and rating, the
+same cards its chat draws. The operation is a `get` that needs no input, and its
+`200` answers `products`, a list whose items have at least a `title` and an
+`image` (a URL); `price`, `currency`, `rating`, `stock` and `brand` are shown
+when they are there. `true`, or a mapping with the gallery's `title`:
+
+```yaml
+paths:
+  /products:
+    get:
+      operationId: listProducts
+      summary: List the shop's products.
+      x-datalayer-gallery:
+        title: The shop's products
+      responses:
+        "200":
+          description: The products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title: {type: string}
+                        image: {type: string, format: uri}
+                        price: {type: number}
+                        rating: {type: number}
+```
+
+The page reads it through its own address (`/api/gallery` at its web host), behind
+the same access check as the page: anybody for a public application, the people
+its owner allowed for a private one. Its answer is kept ten minutes, so a page
+seen often calls its agent once in that time. Only one operation carries it.
+
 ## Outputs
 
 An application answers in words. `interface.outputs` says, by media type, the

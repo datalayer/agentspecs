@@ -482,6 +482,8 @@ openapi:
       get:
         operationId: listProducts
         summary: List the shop's products, all of them or one category's.
+        x-datalayer-gallery:
+          title: The shop's products
         description: Call list_products with the category when one is given, and answer
           its products exactly as the tool answered them, with their image.
         parameters:

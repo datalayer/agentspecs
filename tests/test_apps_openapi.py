@@ -11,7 +11,7 @@ import yaml
 
 import agentspecs.apps
 from agentspecs.apps import load_app, parse_app
-from agentspecs.openapi import ASK, ask_document, openapi_operations, openapi_problems
+from agentspecs.openapi import ASK, GALLERY, ask_document, gallery_operation, openapi_operations, openapi_problems
 
 BASE = yaml.safe_load((Path(agentspecs.apps.__file__).parent / "web-research.yaml").read_text())
 
@@ -167,3 +167,89 @@ def test_in_a_file_openapi_is_a_path_beside_the_spec(tmp_path: Path) -> None:
     (tmp_path / "gone.yaml").write_text(yaml.safe_dump({**BASE, "openapi": "missing.yaml"}))
     with pytest.raises(ValueError, match="not a file beside it"):
         load_app(tmp_path / "gone.yaml")
+
+
+# --- the web page's gallery ------------------------------------------------------------
+
+PRODUCTS = {
+    "type": "object",
+    "properties": {
+        "products": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {"title": {"type": "string"}, "image": {"type": "string"}, "price": {"type": "number"}},
+            },
+        }
+    },
+}
+
+
+def _with_gallery(gallery: object, method: str = "get", inputs: object = None, answer: object = None):  # type: ignore[no-untyped-def]
+    document = copy.deepcopy(DOCUMENT)
+    operation = {
+        "operationId": "listProducts",
+        "summary": "The products",
+        GALLERY: gallery,
+        "responses": {
+            "200": {"description": "The products", "content": {"application/json": {"schema": answer or PRODUCTS}}}
+        },
+    }
+    if inputs is not None:
+        operation["parameters"] = inputs
+    document["paths"]["/products"] = {method: operation}
+    return document
+
+
+def test_one_operation_feeds_the_web_pages_gallery() -> None:
+    operations = openapi_operations(with_openapi(_with_gallery({"title": "Our products"})).openapi)
+    found = gallery_operation(operations)
+    assert found is not None and found.operation_id == "listProducts"
+    assert found.gallery == {"title": "Our products"}
+    assert openapi_operations(_with_gallery(True))[-1].gallery == {}
+    # An optional input is fine: the page calls it with none.
+    optional = [{"name": "category", "in": "query", "schema": {"type": "string"}}]
+    assert gallery_operation(openapi_operations(_with_gallery(True, inputs=optional))) is not None
+    assert gallery_operation(openapi_operations(DOCUMENT)) is None
+
+
+@pytest.mark.parametrize(
+    ("gallery", "method", "inputs", "answer", "says"),
+    [
+        ("yes", "get", None, None, "is `true` or a mapping"),
+        ({"heading": "x"}, "get", None, None, "says only its `title`"),
+        (True, "post", None, None, "is on a `get`"),
+        (
+            True,
+            "get",
+            [{"name": "category", "in": "query", "required": True, "schema": {"type": "string"}}],
+            None,
+            "needs no input",
+        ),
+        (True, "get", None, {"type": "object", "properties": {"items": {"type": "array"}}}, "answers `products`"),
+        (
+            True,
+            "get",
+            None,
+            {"type": "object", "properties": {"products": {"type": "array", "items": {"properties": {"title": {}}}}}},
+            "each with `image`",
+        ),
+    ],
+)
+def test_a_gallery_is_checked(gallery, method, inputs, answer, says) -> None:  # type: ignore[no-untyped-def]
+    with pytest.raises(ValueError, match=says):
+        with_openapi(_with_gallery(gallery, method, inputs, answer))
+
+
+def test_a_page_shows_one_gallery() -> None:
+    document = _with_gallery(True)
+    document["paths"]["/more"] = {"get": {**copy.deepcopy(document["paths"]["/products"]["get"]), "operationId": "more"}}
+    with pytest.raises(ValueError, match="a page shows one gallery"):
+        with_openapi(document)
+
+
+def test_the_demo_shops_page_shows_its_products() -> None:
+    shop = load_app(Path(agentspecs.apps.__file__).parent / "demo-shop.yaml")
+    found = gallery_operation(openapi_operations(shop.openapi))
+    assert found is not None and found.operation_id == "listProducts"
+    assert found.gallery == {"title": "The shop's products"}

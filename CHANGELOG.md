@@ -8,6 +8,11 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.207
+
+- **A gallery on an application's web page**: an operation of its `openapi` may carry `x-datalayer-gallery` (`true`, or its `title`) — a `get` that needs no input and answers `products`, items each with a `title` and an `image` — whose answer the web page shows as product cards (`OpenApiOperation.gallery`, `gallery_operation`); one per document. The Demo Shop's `listProducts` carries it. Docs: Applications › What it answers when called. Tests: test_apps_openapi
+- **Buy from a shop**: the order beat's cue says its basket (*Place a test order of two tennis balls and the tennis racket.*) — each beat of a rehearsal is a conversation of its own, and *that basket* was none: the Shopper asked for *the basket we discussed* and the shop had no basket to order, so no `TEST-` number came back. The team's suggestion and the Shopper's starter say the same; the Demo Shop and the Shopper give the test order's number (`TEST-…`) as the tool answered it. Docs: the scenes reference. Tests: test_scenes, test_teams, test_stages
+
 ## 0.0.206
 
 - **Buy from a shop**: the shop's member is `demo-shop`, its application's id, as the demo account's kept deployment names it and the nightly rehearsals reach it; the Shopper's link is `ask_demo_shop` (`shopper` 0.0.2). Docs: the scenes reference. Tests: all

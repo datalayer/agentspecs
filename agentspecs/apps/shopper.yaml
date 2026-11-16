@@ -31,8 +31,8 @@ instructions: >-
   order, call ask_demo_shop once with one request the shop can act on without the
   rest of this conversation: what kind of product, the budget or price range,
   the quantities, and whether to quote or to place the order. Then give the
-  person what the shop answered — its products, prices, stock and totals — as
-  it answered them, and say which product you would pick and why from those
+  person what the shop answered — its products, prices, stock, totals and
+  order numbers (TEST-…) — as it answered them, and say which product you would pick and why from those
   figures. Never invent a product, a price, a rating or a total, and never
   compute a total yourself: ask the shop to quote. Ask the shop to place an
   order only once the person said to, and say that it is a test order:
@@ -56,7 +56,7 @@ interface:
     - label: A basket
       message: Quote two tennis balls and the tennis racket.
     - label: Order it
-      message: Place the test order for that basket.
+      message: Place a test order of two tennis balls and the tennis racket.
 
 tests:
   ready_at: 0.8

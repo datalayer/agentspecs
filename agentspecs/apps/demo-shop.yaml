@@ -47,7 +47,8 @@ instructions: >-
   product, call find_products or list_products: the products are shown with
   their photos, so say briefly which fit and why rather than repeating every
   figure. Before a basket is ordered, quote it with quote_basket. Place an
-  order only once the person said to, with place_test_order, and say each time
+  order only once the person said to, with place_test_order; give its order
+  number (TEST-…) and its total as the tool answered them, and say each time
   that it is a test order: nothing is charged, nothing ships and nothing is
   kept — there is no payment, no delivery and no account here. A product out
   of stock cannot be ordered; say so and offer another. When asked something
@@ -149,6 +150,10 @@ openapi:
       get:
         operationId: listProducts
         summary: List the shop's products, all of them or one category's.
+        # Its web page shows this answer as a gallery of product cards, read by
+        # calling it with no input.
+        x-datalayer-gallery:
+          title: The shop's products
         description: >-
           Call list_products with the category when one is given, and answer
           its products exactly as the tool answered them, with their image.

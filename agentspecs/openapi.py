@@ -14,6 +14,10 @@ Protocol operation — and nothing else lists them:
   JSON object;
 - its ``200`` response's JSON schema is the JSON the agent must answer.
 
+One operation may carry ``x-datalayer-gallery``: the one whose answer the
+application's web page shows as a gallery of product cards (photo, title,
+price, rating), read by calling it (:func:`gallery_operation`).
+
 An application without ``openapi`` answers one operation, ``ask``: a question
 in, the agent's answer out (:func:`ask_document`).
 """
@@ -23,7 +27,7 @@ from __future__ import annotations
 import copy
 import re
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Mapping, Optional, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 #: The HTTP methods an operation is written under.
 METHODS: Tuple[str, ...] = ("get", "post", "put", "patch", "delete")
@@ -36,6 +40,13 @@ JSON = "application/json"
 
 #: The operation an application without ``openapi`` answers.
 ASK = "ask"
+
+#: The extension that names the operation whose answer the web page shows as a gallery.
+GALLERY = "x-datalayer-gallery"
+
+#: What a gallery's answer holds: a list of items under ``products``, each with these.
+GALLERY_ITEMS = "products"
+GALLERY_FIELDS: Tuple[str, ...] = ("title", "image")
 
 
 @dataclass(frozen=True)
@@ -59,6 +70,9 @@ class OpenApiOperation:
     #: Its ``x-pap`` extension, as written.
     pap: Optional[Dict[str, Any]] = None
     tags: Tuple[str, ...] = field(default=())
+    #: Its ``x-datalayer-gallery`` extension (``{}`` for ``true``, else its ``title``):
+    #: the web page shows its answer as a gallery.
+    gallery: Optional[Dict[str, Any]] = None
 
     @property
     def instruction(self) -> str:
@@ -194,6 +208,7 @@ def _operation(
     pap = operation.get("x-pap")
     if pap is not None and not isinstance(pap, Mapping):
         raise ValueError(f"The `x-pap` of `{operation_id}` is a mapping")
+    gallery = _gallery(operation_id, method, input_schema, output, operation.get(GALLERY))
     return OpenApiOperation(
         operation_id=operation_id,
         method=method,
@@ -206,7 +221,44 @@ def _operation(
         body=body,
         pap=copy.deepcopy(dict(pap)) if pap is not None else None,
         tags=tuple(str(tag) for tag in operation.get("tags") or ()),
+        gallery=gallery,
     )
+
+
+def _gallery(
+    operation_id: str, method: str, inputs: Mapping[str, Any], output: Mapping[str, Any], written: Any
+) -> Optional[Dict[str, Any]]:
+    """An operation's ``x-datalayer-gallery``, checked: a ``get`` that needs no input and
+    answers ``products``, a list of items each with a ``title`` and an ``image``."""
+    if written is None or written is False:
+        return None
+    where = f"The `{GALLERY}` of `{operation_id}`"
+    if written is True:
+        gallery: Dict[str, Any] = {}
+    elif isinstance(written, Mapping):
+        unknown = sorted(set(written) - {"title"})
+        if unknown:
+            raise ValueError(f"{where} says only its `title`, not {', '.join(f'`{key}`' for key in unknown)}")
+        title = written.get("title")
+        if title is not None and (not isinstance(title, str) or not title.strip()):
+            raise ValueError(f"{where} has a `title` in words")
+        gallery = {"title": title.strip()} if title else {}
+    else:
+        raise ValueError(f"{where} is `true` or a mapping with its `title`")
+    if method != "get":
+        raise ValueError(f"{where} is on a `get`: the page reads it, it changes nothing")
+    if inputs.get("required"):
+        raise ValueError(f"{where} needs no input: the page calls it with none")
+    items = (output.get("properties") or {}).get(GALLERY_ITEMS) or {}
+    fields = ((items.get("items") or {}).get("properties") or {}) if items.get("type") == "array" else None
+    if fields is None:
+        raise ValueError(f"{where} answers `{GALLERY_ITEMS}`, a list: the items the gallery shows")
+    missing = [name for name in GALLERY_FIELDS if name not in fields]
+    if missing:
+        raise ValueError(
+            f"{where} answers items each with {', '.join(f'`{name}`' for name in missing)}: what a card shows"
+        )
+    return gallery
 
 
 def openapi_operations(document: Mapping[str, Any]) -> List[OpenApiOperation]:
@@ -229,7 +281,20 @@ def openapi_operations(document: Mapping[str, Any]) -> List[OpenApiOperation]:
     twice = sorted({identity for identity in ids if ids.count(identity) > 1})
     if twice:
         raise ValueError(f"{', '.join(f'`{identity}`' for identity in twice)} names two operations")
+    galleries = [operation.operation_id for operation in found if operation.gallery is not None]
+    if len(galleries) > 1:
+        raise ValueError(
+            f"{', '.join(f'`{identity}`' for identity in galleries)} each carry `{GALLERY}`: a page shows one gallery"
+        )
     return found
+
+
+def gallery_operation(operations: Sequence[OpenApiOperation]) -> Optional[OpenApiOperation]:
+    """The operation whose answer the web page shows as a gallery, or none."""
+    for operation in operations:
+        if operation.gallery is not None:
+            return operation
+    return None
 
 
 def openapi_problems(document: Any) -> List[str]:
@@ -265,10 +330,14 @@ def openapi_problems(document: Any) -> List[str]:
 
 __all__ = [
     "ASK",
+    "GALLERY",
+    "GALLERY_FIELDS",
+    "GALLERY_ITEMS",
     "JSON",
     "METHODS",
     "OpenApiOperation",
     "ask_document",
+    "gallery_operation",
     "openapi_operations",
     "openapi_problems",
 ]
