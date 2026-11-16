@@ -113,7 +113,7 @@ cast:
     first: a cue is the whole of what it says, and nobody is standing there to answer
     you back. A cue that says what to place an order for is the go-ahead: ask the
     shop to place that test order.'
-- member: shop
+- member: demo-shop
   persona:
     name: Demo Shop
     line: I answer from my own catalogue; my orders are test orders.
@@ -143,10 +143,10 @@ script:
   narration: The Shopper asks the shop, which looks in its catalogue.
   moves:
   - who: shopper
-    asks: shop
+    asks: demo-shop
     over: a2a
     what: the shop's products for tennis
-  - who: shop
+  - who: demo-shop
     answers: words
     what: its tennis racket and tennis ball, each with its price, rating and stock
   - who: shopper
@@ -161,10 +161,10 @@ script:
   narration: The shop prices the basket; the Shopper adds nothing up itself.
   moves:
   - who: shopper
-    asks: shop
+    asks: demo-shop
     over: a2a
     what: a quote for two tennis balls and one tennis racket
-  - who: shop
+  - who: demo-shop
     answers: words
     what: each line and the total, summed by the shop
   - who: shopper
@@ -177,10 +177,10 @@ script:
   narration: An order, said to be a test — nothing is charged, nothing ships.
   moves:
   - who: shopper
-    asks: shop
+    asks: demo-shop
     over: a2a
     what: the test order for the basket quoted
-  - who: shop
+  - who: demo-shop
     answers: words
     what: the test order's number, and that nothing is charged and nothing ships
   - who: shopper
@@ -200,7 +200,7 @@ stage:
     shopper:
       x: 0.25
       y: 0.5
-    shop:
+    demo-shop:
       x: 0.75
       y: 0.5
   opens_first: shopper
@@ -282,7 +282,7 @@ deployment:
   account: demo
   page: /
   addresses:
-    shop: DATALAYER_DEMO_SCENE_BUY_FROM_A_SHOP_SHOP_A2A_URL
+    demo-shop: DATALAYER_DEMO_SCENE_BUY_FROM_A_SHOP_DEMO_SHOP_A2A_URL
 ```
 
 ### `kind`

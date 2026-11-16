@@ -10,7 +10,7 @@ id: buy-from-a-shop
 version: 0.0.1
 scene: buy-from-a-shop:0.0.1
 deployments:
-  shop: demo-shop
+  demo-shop: demo-shop
 public: true
 tags:
   - example
