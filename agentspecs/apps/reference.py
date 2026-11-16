@@ -102,13 +102,6 @@ EXTRA_EXAMPLES: Dict[str, Any] = {
                 }
             ],
             "extensions": ["operations"],
-            "operations": [
-                {
-                    "action": "orders.exchange",
-                    "tool": "exchange_order",
-                    "summary": "Exchange order {order_id} for size {size}",
-                }
-            ],
         },
     },
     "a2a": {

@@ -27,6 +27,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `skills` | list of text | Skills it adds to its agent's | — |
 | `backend_tools` | list of text | Backend tools of the catalogue it adds to its agent's | — |
 | `tools` | list of [AppTool](#apptool) | Tools of its own, written in its code (`@app.tool`): the agent calls them, rules decide them | — |
+| `openapi` | mapping | What it answers when called, as an OpenAPI 3.1 document: each operation's `summary` and `description` its instruction to the agent, its JSON request body and parameters its inputs, its `200` JSON schema what the agent answers. Its MCP tools, its REST endpoints and its Personal Agent Protocol operations (`x-pap`) all come from it. Without it, the application answers one operation, `ask`. In a file, a path relative to the spec | empty |
 | `context` | list of text | The Frames it works under: the catalogue's, or its organization's own (`org-…`) | — |
 | `contents` | list of text | The documents and datasets it answers from | — |
 | `connections` | list of [AppConnection](#appconnection) | What it reaches | — |
@@ -471,6 +472,60 @@ backend_tools:
 pair:
   id: guest-desk
   role: personal_agent
+```
+
+### `openapi`
+
+```yaml
+openapi:
+  openapi: 3.1.0
+  info:
+    title: Exchange Desk
+    version: 0.0.3
+  paths:
+    /orders/exchange:
+      post:
+        operationId: exchange_order
+        summary: Exchange an order for another size.
+        description: Propose exchanging the person's order for another size; it is
+          done once they approve the exact terms. Answer whether it was proposed,
+          and what the person is asked.
+        x-pap:
+          action: orders.exchange
+          tool: exchange_order
+          summary: Exchange order {order_id} for size {size}.
+          scope: orders:write
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order_id:
+                    type: string
+                    description: The order, as the shop writes it
+                  size:
+                    type: string
+                    description: The size to exchange it for
+                required:
+                - order_id
+                - size
+        responses:
+          '200':
+            description: What was proposed
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    proposed:
+                      type: boolean
+                    message:
+                      type: string
+                  required:
+                  - proposed
+                  - message
 ```
 
 ### `pact`
@@ -940,7 +995,6 @@ The application is a company personal agents work with. Published at PAP 0.3 as 
 | `extensions` | list of text | Extensions it offers: `operations` | — |
 | `personal_agents` | [PapAgents](#papagents) | `any`, or `registered` only | `"any"` |
 | `registered_agents` | list of text | The personal agents it accepts when `registered` only: each one's `client_id` URL | — |
-| `operations` | list of [AppPapOperation](#apppapoperation) | What it does for the person once they confirm (the `operations` extension) | — |
 
 ### AppPapCompanyScope
 
@@ -976,16 +1030,6 @@ A task the company chose not to offer through the protocol (PAP draft 0.3 §8.1)
 | --- | --- | --- | --- |
 | `task` (required) | text | The task, as a person says it, at most 200 characters | — |
 | `alternative` | [AppPapAlternative](#apppapalternative) | Another way to do it | empty |
-
-### AppPapOperation
-
-Something a personal agent may ask the application to do for the person, done only once they approve its exact terms (Operations v2). Asked by a personal agent, the application's agent does not call `tool`: the company answers with the operation, its arguments the terms, and the personal agent asks the person about that revision. Its request sent again with their approval runs the tool, with those arguments and only once.
-
-| Field | Type | Meaning | Default |
-| --- | --- | --- | --- |
-| `action` (required) | text | The action's name at this company, e.g. `orders.exchange` | — |
-| `tool` (required) | text | The application's tool that does it, called with the terms | — |
-| `summary` (required) | text | What the person is shown, with `{term}` for each term, e.g. `Exchange order {order_id} for size {size}`; never written by the model | — |
 
 ### AppPapReference
 

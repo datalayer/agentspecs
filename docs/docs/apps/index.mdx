@@ -113,6 +113,7 @@ deployment:
 | `connections` | What it reaches. See below. |
 | `protocols` | The agent protocols it speaks, ids of the [protocols catalogue](../agents/protocols): `pap`, `pact`, `ucp`, `acp`, `web-bot-auth`… A `pap`, `pact`, `commerce` or `signed_fetch` block needs its protocol listed here. |
 | `pap`, `pact`, `commerce`, `signed_fetch`, `pair` | Companies, businesses, merchants and websites it works with over those protocols, or is itself. See *Companies and businesses, over agent protocols* below. |
+| `openapi` | What it answers when called, as an OpenAPI 3.1 document: its MCP tools, its REST endpoints and its Personal Agent Protocol operations all come from it. Without it, the application answers one operation, `ask`. See *What it answers when called* below. |
 | `a2a` | The `extensions` its A2A Agent Card advertises beside the runtime's own, each a `uri`, a `description`, `required` and public `params`. |
 | `rules` | When it acts alone, and when it asks. See below. |
 | `permissions` | What else it may reach: `spaces` (a Space, `read` or `write`) and its `computer` — `browse`, `files`, `shell`, each off unless said, and a `repository` lent to it, checked out as its workspace (see *A repository lent to its computer* below). Nothing, unless said. |
@@ -260,10 +261,8 @@ pap:
           references:
             - {type: web, url: "https://manzanita.example/account/orders"}
     extensions: [operations]
-    operations:
-      - action: orders.exchange
-        tool: exchange_order                  # one of its own tools
-        summary: "Exchange order {order_id} for size {size}."
+    # What it does once the person approves comes from `openapi` (below): each operation
+    # carrying `x-pap` is one. `pap.company.operations` is never written.
 
 pact:
   # A business's own agent, asked for each person (PACT 1.0).
@@ -362,6 +361,62 @@ once, after they confirm that revision. Every key is in the
 *Travel Desk*, *Shopping Desk*, *Signed Reader*, *Guest Desk* and *Errand
 Runner* are written this way,
 and how each protocol tool is classed is under [Action classes](#action-classes).
+
+## What it answers when called
+
+Every application is reached at four addresses — its agent, its MCP server, its
+REST API and its web page — and what it answers there is written once, in a
+top-level `openapi`: an OpenAPI 3.1 document, inline or, in a file, a path
+relative to the spec (`openapi: shop.openapi.yaml`). Each operation is:
+
+- **its instruction to the agent**: its `summary` and `description`;
+- **its inputs**: its JSON request body (an object) and its path and query
+  parameters, one JSON object — given to the agent as JSON;
+- **its answer**: the JSON schema of its `200` response, which the agent's answer
+  is bound to and checked against.
+
+The same operation is an MCP tool named by its `operationId`, a REST endpoint at
+its path and method, and, when it carries `x-pap`, a Personal Agent Protocol
+operation the person approves (`action`, the `tool` that does it, the `summary`
+the person is shown, and the `scope` it needs).
+
+```yaml
+openapi:
+  openapi: 3.1.0
+  info: {title: Exchange Desk, version: 0.0.3}
+  paths:
+    /orders/exchange:
+      post:
+        operationId: exchange_order
+        summary: Exchange an order for another size.
+        x-pap:
+          action: orders.exchange
+          tool: exchange_order
+          summary: "Exchange order {order_id} for size {size}."
+          scope: orders:write
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {order_id: {type: string}, size: {type: string}}
+                required: [order_id, size]
+        responses:
+          "200":
+            description: What was proposed
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties: {proposed: {type: boolean}, message: {type: string}}
+                  required: [proposed, message]
+```
+
+The document is refused when it is not valid OpenAPI 3.1, when an operation has
+no `operationId` (a letter, then letters, digits or `_`), says nothing in its
+`summary` or `description`, takes anything but JSON (a header or a cookie, a
+text body) or answers `200` without a JSON schema. An application without
+`openapi` answers one operation, `ask`: a `question` in, the agent's `answer` out.
 
 ## Outputs
 

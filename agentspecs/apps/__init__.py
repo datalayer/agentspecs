@@ -49,6 +49,7 @@ from typing import Annotated, Any, Dict, List, Literal, Mapping, Optional, Seque
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, ValidationError, field_validator, model_validator
+from pydantic.json_schema import SkipJsonSchema
 
 from ..actions import (
     ActionClass,
@@ -641,9 +642,13 @@ class AppPapCompany(_Strict):
         default_factory=list,
         description="The personal agents it accepts when `registered` only: each one's `client_id` URL",
     )
-    operations: List[AppPapOperation] = Field(
+    operations: SkipJsonSchema[List[AppPapOperation]] = Field(
         default_factory=list,
-        description="What it does for the person once they confirm (the `operations` extension)",
+        exclude=True,
+        description=(
+            "What it does for the person once they confirm (the `operations` extension): derived from the "
+            "application's `openapi`, each operation carrying `x-pap`, and never written here"
+        ),
     )
 
     @field_validator("scopes")
@@ -3455,6 +3460,46 @@ class AppSamples(_Strict):
 # --- the application ------------------------------------------------------------------
 
 
+def _x_pap(document: Optional[Mapping[str, Any]]) -> List[Tuple[str, Dict[str, Any]]]:
+    """Each operation of ``document`` carrying ``x-pap``, with it: ``(operationId, x-pap)``."""
+    if not document:
+        return []
+    from ..openapi import openapi_operations  # noqa: PLC0415
+
+    return [(operation.operation_id, operation.pap) for operation in openapi_operations(document) if operation.pap]
+
+
+#: What an operation's `x-pap` says: the PAP operation, and the scope it needs.
+X_PAP_KEYS = frozenset({"action", "tool", "summary", "scope"})
+
+
+def pap_operations(document: Optional[Mapping[str, Any]]) -> List[AppPapOperation]:
+    """The Personal Agent Protocol operations of an application's ``openapi``: one per
+    operation carrying ``x-pap`` (``action``, ``tool``, ``summary``, and the ``scope``
+    it needs when it names one), in the document's order."""
+    found: List[AppPapOperation] = []
+    for operation_id, pap in _x_pap(document):
+        unknown = sorted(set(pap) - X_PAP_KEYS)
+        if unknown:
+            raise ValueError(
+                f"The `x-pap` of `{operation_id}` says {', '.join(f'`{key}`' for key in unknown)}: "
+                "it says `action`, `tool`, `summary` and `scope`"
+            )
+        scope = pap.get("scope")
+        if scope is not None:
+            _pap_scope(str(scope))
+        found.append(AppPapOperation.model_validate({key: pap[key] for key in ("action", "tool", "summary") if key in pap}))
+    return found
+
+
+def operation_scope(document: Optional[Mapping[str, Any]], action: str) -> Optional[str]:
+    """The scope the PAP operation ``action`` of ``document`` needs, when its ``x-pap`` names one."""
+    for _, pap in _x_pap(document):
+        if pap.get("action") == action:
+            return pap.get("scope")
+    return None
+
+
 class AppSpec(_Strict):
     """Specification for an application."""
 
@@ -3478,6 +3523,16 @@ class AppSpec(_Strict):
     tools: List[AppTool] = Field(
         default_factory=list,
         description="Tools of its own, written in its code (`@app.tool`): the agent calls them, rules decide them",
+    )
+    openapi: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description=(
+            "What it answers when called, as an OpenAPI 3.1 document: each operation's `summary` and "
+            "`description` its instruction to the agent, its JSON request body and parameters its inputs, its "
+            "`200` JSON schema what the agent answers. Its MCP tools, its REST endpoints and its Personal Agent "
+            "Protocol operations (`x-pap`) all come from it. Without it, the application answers one operation, "
+            "`ask`. In a file, a path relative to the spec"
+        ),
     )
     context: List[str] = Field(
         default_factory=list,
@@ -3630,6 +3685,54 @@ class AppSpec(_Strict):
         if not re.fullmatch(r"[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", identity):
             raise ValueError(f"cannot use {identity!r} as an id: lower-case letters, digits and hyphens")
         return identity
+
+    @model_validator(mode="before")
+    @classmethod
+    def _operations_from_openapi(cls, data: Any) -> Any:
+        pap = data.get("pap") if isinstance(data, Mapping) else None
+        company = pap.get("company") if isinstance(pap, Mapping) else None
+        if isinstance(company, Mapping) and "operations" in company:
+            raise ValueError(
+                "`pap.company.operations` are not written: they come from `openapi`, "
+                "each operation that a person approves carrying `x-pap` (`action`, `tool`, `summary`)"
+            )
+        return data
+
+    @field_validator("openapi")
+    @classmethod
+    def _an_openapi_document(cls, value: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+        if value is None:
+            return value
+        from ..openapi import openapi_problems  # noqa: PLC0415
+
+        problems = openapi_problems(value)
+        if problems:
+            raise ValueError("; ".join(problems))
+        return value
+
+    @model_validator(mode="after")
+    def _pap_operations_of_its_openapi(self) -> "AppSpec":
+        operations = pap_operations(self.openapi)
+        if not operations:
+            return self
+        company = self.pap.company
+        if not company.enabled:
+            raise ValueError(
+                "`x-pap` operations are a company's: enable `pap.company`, or remove `x-pap` from `openapi`"
+            )
+        if "operations" not in company.extensions:
+            raise ValueError("operations are offered with the `operations` extension: add it to `pap.company.extensions`")
+        offered = set(company.scope_names())
+        for operation in operations:
+            scope = (operation_scope(self.openapi, operation.action) or "").strip()
+            if scope and scope not in offered:
+                raise ValueError(f"the operation {operation.action!r} needs {scope!r}, a scope the company does not offer")
+        # Through the company's own checks: one action each, one tool each.
+        company.operations = list(operations)
+        AppPapCompany.model_validate(company.model_dump(mode="json", by_alias=True) | {
+            "operations": [operation.model_dump(mode="json") for operation in operations]
+        })
+        return self
 
     @model_validator(mode="after")
     def _publishes_skills_it_has(self) -> "AppSpec":
@@ -4297,8 +4400,14 @@ def _sentences(error: ValidationError, identity: str) -> str:
 
 
 def load_app(path: Path) -> AppSpec:
-    """An application from a YAML file."""
-    return parse_app(yaml.safe_load(Path(path).read_text()) or {})
+    """An application from a YAML file; its ``openapi``, when a path, read relative to it."""
+    data = yaml.safe_load(Path(path).read_text()) or {}
+    if isinstance(data.get("openapi"), str):
+        document = (Path(path).parent / data["openapi"]).resolve()
+        if not document.is_file():
+            raise AppError(f"{data.get('id', path)}: openapi names {data['openapi']!r}, which is not a file beside it")
+        data = {**data, "openapi": yaml.safe_load(document.read_text())}
+    return parse_app(data)
 
 
 def load_raw_apps(directory: Optional[Path] = None) -> Dict[str, Dict[str, Any]]:
@@ -4563,6 +4672,8 @@ __all__ = [
     "load_apps",
     "load_raw_apps",
     "output_media_types",
+    "operation_scope",
+    "pap_operations",
     "parse_app",
     "press_problems",
     "pick_language",

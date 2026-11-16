@@ -123,6 +123,33 @@ OPERATION = {
 }
 
 
+def openapi(*x_paps: dict) -> dict:
+    """An `openapi` with one operation per `x-pap` given, `op0`, `op1`…"""
+    answer = {"type": "object", "properties": {"proposed": {"type": "boolean"}}, "required": ["proposed"]}
+    return {
+        "openapi": "3.1.0",
+        "info": {"title": "Orders", "version": "1"},
+        "paths": {
+            f"/op{index}": {
+                "post": {
+                    "operationId": f"op{index}",
+                    "summary": "Exchange an order",
+                    "x-pap": x_pap,
+                    "requestBody": {"content": {"application/json": {"schema": {
+                        "type": "object", "properties": {"order_id": {"type": "string"}, "size": {"type": "string"}},
+                    }}}},
+                    "responses": {"200": {"description": "Done", "content": {"application/json": {"schema": answer}}}},
+                }
+            }
+            for index, x_pap in enumerate(x_paps)
+        },
+    }
+
+
+def company_app(company: dict, *x_paps: dict):  # type: ignore[no-untyped-def]
+    return parse_app({**BASE, "pap": {"profile": "draft-01", "company": company}, "openapi": openapi(*x_paps)})
+
+
 def test_a_company_may_turn_sign_in_off_for_personal_agents_and_then_answers_signed_out() -> None:
     """D4-08 (PAP 0.3 as published §3.2, `auth.disabled`): off by default; on, the company answers
     personal agents signed out only, so one admitting nobody signed out is refused."""
@@ -164,10 +191,20 @@ def test_a_companys_website_says_whether_it_gives_full_access_or_asks_agents_not
 
 
 def test_a_company_declares_what_it_does_once_the_person_confirms() -> None:
-    spec = app(company={"enabled": True, "scopes": [WRITE], "extensions": ["operations"],
-                        "operations": [OPERATION]})
+    spec = company_app({"enabled": True, "scopes": [WRITE], "extensions": ["operations"]}, OPERATION)
     operation = spec.pap.company.operations[0]
     assert (operation.action, operation.tool) == ("orders.exchange", "exchange_order")
+    # Derived, never written back: `openapi` is the one source.
+    import json
+
+    dumped = json.loads(spec.model_dump_json(by_alias=True, exclude_defaults=True))
+    assert "operations" not in dumped["pap"]["company"]
+    assert dumped["openapi"]["paths"]["/op0"]["post"]["x-pap"] == OPERATION
+
+
+def test_operations_are_never_written_by_hand() -> None:
+    with pytest.raises(ValueError, match="come from `openapi`"):
+        app(company={"enabled": True, "scopes": [WRITE], "extensions": ["operations"], "operations": [OPERATION]})
 
 
 @pytest.mark.parametrize(
@@ -177,23 +214,30 @@ def test_a_company_declares_what_it_does_once_the_person_confirms() -> None:
         ({"summary": "Exchange {order.id}"}, "names no term"),
         ({"summary": "Exchange {order_id"}, "not a template"),
         ({"summary": "  "}, "says what it does"),
+        ({"scope": "orders write"}, "not an OAuth scope"),
+        ({"scope": "orders:delete"}, "a scope the company does not offer"),
+        ({"approval": "always"}, "says `approval`"),
     ],
 )
 def test_an_operation_is_checked(change: dict, says: str) -> None:
     with pytest.raises(ValueError, match=says):
-        app(company={"enabled": True, "scopes": [WRITE], "extensions": ["operations"],
-                     "operations": [{**OPERATION, **change}]})
+        company_app({"enabled": True, "scopes": [WRITE], "extensions": ["operations"]}, {**OPERATION, **change})
 
 
-def test_operations_need_the_extension_and_each_action_and_tool_once() -> None:
+def test_operations_need_the_extension_a_company_and_each_action_and_tool_once() -> None:
     with pytest.raises(ValueError, match="`operations` extension"):
-        app(company={"enabled": True, "scopes": [WRITE], "operations": [OPERATION]})
+        company_app({"enabled": True, "scopes": [WRITE]}, OPERATION)
+    with pytest.raises(ValueError, match="a company's"):
+        company_app({"enabled": False}, OPERATION)
     with pytest.raises(ValueError, match="declared twice"):
-        app(company={"enabled": True, "scopes": [WRITE], "extensions": ["operations"],
-                     "operations": [OPERATION, {**OPERATION, "tool": "other"}]})
+        company_app({"enabled": True, "scopes": [WRITE], "extensions": ["operations"]},
+                    OPERATION, {**OPERATION, "tool": "other"})
     with pytest.raises(ValueError, match="one action"):
-        app(company={"enabled": True, "scopes": [WRITE], "extensions": ["operations"],
-                     "operations": [OPERATION, {**OPERATION, "action": "orders.other"}]})
+        company_app({"enabled": True, "scopes": [WRITE], "extensions": ["operations"]},
+                    OPERATION, {**OPERATION, "action": "orders.other"})
+    assert company_app(
+        {"enabled": True, "scopes": [WRITE], "extensions": ["operations"]}, {**OPERATION, "scope": "orders:write"}
+    ).pap.company.operations[0].action == "orders.exchange"
 
 
 def test_a_company_reached_over_mcp_and_by_registered_agents_only() -> None:
@@ -228,10 +272,10 @@ def test_an_operation_is_a_tool_the_person_approves_each_time() -> None:
     company = {"enabled": True, "scopes": [WRITE], "extensions": ["operations"]}
     for gone in ({"user_approval_required": True}, {"user_approval_required": False},
                  {"allows": {"connection": "orders", "action": "buy", "limits": [], "uses": "u", "days": "d"}}):
-        with pytest.raises(ValueError, match="is not a field of the spec"):
-            app(company={**company, "operations": [{**OPERATION, **gone}]})
+        with pytest.raises(ValueError, match="it says `action`, `tool`, `summary` and `scope`"):
+            company_app(company, {**OPERATION, **gone})
     with pytest.raises(ValueError, match="tool"):
-        app(company={**company, "operations": [{"action": "orders.exchange", "summary": "Exchange {order_id}"}]})
+        company_app(company, {"action": "orders.exchange", "summary": "Exchange {order_id}"})
     assert not hasattr(agentspecs.apps, "AppPapStanding")
 
 
