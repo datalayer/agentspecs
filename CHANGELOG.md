@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.203
+
+- **The Appspec's `openapi`** (the user, 16 November 2026): a top-level OpenAPI 3.1 document, inline or a path beside the spec, checked by `openapi-spec-validator` (a new dependency) — each operation named by its `operationId` (an MCP tool's name), said in its `summary`/`description` (its instruction to the agent), taking JSON (an object body, path and query parameters) and answering `200` with a JSON schema (what the agent answers); `agentspecs.openapi` (`openapi_operations`, `openapi_problems`, `ask_document`: an application without `openapi` answers one operation, `ask`). One source: `pap.company.operations` are derived from the operations carrying `x-pap` (`action`, `tool`, `summary`, `scope`), never written by hand (refused), never dumped; exchange-desk moved to `openapi`. Docs: [apps](https://agentspecs.datalayer.tech/docs/apps) (What it answers when called), the Appspec reference. Tests: test_apps_openapi, test_apps_pap
+
 ## 0.0.202
 
 - **The tokenizer host for the exact-egress agents** (the user, 15 November 2026): every runtime downloads a tokenizer file from `openaipublic.blob.core.windows.net` (tiktoken's encodings); the Marketer reached it under `*:443`, the Accountant, Terra and the Steward for AWS were refused. Their `policy.shield.egress` names `openaipublic.blob.core.windows.net:443`. Tests: test_agent_policy
