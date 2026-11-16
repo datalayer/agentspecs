@@ -28,9 +28,10 @@ def _stage(**changes):
 
 
 class TestCatalogue:
-    def test_thirteen_stages_of_the_three_kinds(self):
+    def test_fourteen_stages_of_the_three_kinds(self):
         assert sorted(STAGE_CATALOGUE) == [
             "accounting",
+            "buy-from-a-shop",
             "coding-agent-behind-the-shield",
             "crop-monitoring",
             "disaster-assessment",
@@ -51,6 +52,7 @@ class TestCatalogue:
     def test_the_demo_stages_are_public_and_deployed_the_scripted_ones_public_and_not(self):
         demo = [stage for stage in list_stages(StageKind.SCENE) if "demo" in stage.tags]
         assert sorted(stage.id for stage in demo) == [
+            "buy-from-a-shop",
             "coding-agent-behind-the-shield",
             "crop-monitoring",
             "disaster-assessment",

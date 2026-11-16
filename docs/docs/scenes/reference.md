@@ -48,7 +48,7 @@ schema: loop.scene/v1
 ### `id`
 
 ```yaml
-id: coding-agent-behind-the-shield
+id: buy-from-a-shop
 ```
 
 ### `version`
@@ -60,14 +60,15 @@ version: 0.0.1
 ### `name`
 
 ```yaml
-name: A Coding Agent Behind the Shield
+name: Buy from a shop
 ```
 
 ### `description`
 
 ```yaml
-description: A coding agent lent one repository to read explains a file; the edit
-  it is then asked for is refused by the Shield, which says the rule.
+description: A person's Shopper asks a shop for tennis gear, gets the basket quoted
+  and places a test order; the shop answers from its own catalogue, with photos, and
+  charges nothing.
 ```
 
 ### `tags`
@@ -76,86 +77,117 @@ description: A coding agent lent one repository to read explains a file; the edi
 tags:
 - example
 - scene
-- coding
-- harness
-- shield
+- shopping
+- commerce
 - a2a
 ```
 
 ### `icon`
 
 ```yaml
-icon: code
+icon: gift
 ```
 
 ### `emoji`
 
 ```yaml
-emoji: 🔒
+emoji: 🛒
+```
+
+### `team`
+
+```yaml
+team: buy-from-a-shop:0.0.1
 ```
 
 ### `cast`
 
 ```yaml
 cast:
-- member: code-explainer
-  app: code-explainer:0.0.1
-  role: initiator
-  runs_in: runtime
+- member: shopper
   persona:
-    name: Code Explainer
-    line: I read the repository I am lent and explain it; the Shield decides what
-      I may do.
-  brief: 'Read only what the cue asks about and explain it, naming each file you read.
-    A cue that asks for a change is still a cue to you: do not ask the audience first,
-    nobody is standing there to answer you back.'
+    name: Shopper
+    line: I shop for you, and bring back what the shop says.
+  brief: 'Ask the Demo Shop for every product, quote and order, one request each time,
+    and report what it answers without adding to it. Do not question the audience
+    first: a cue is the whole of what it says, and nobody is standing there to answer
+    you back. A cue that says what to place an order for is the go-ahead: ask the
+    shop to place that test order.'
+- member: shop
+  persona:
+    name: Demo Shop
+    line: I answer from my own catalogue; my orders are test orders.
+  brief: 'Answer only from your tools: find the products with find_products, quote
+    a basket with quote_basket and place an order with place_test_order when asked
+    to, saying each time that nothing is charged and nothing ships.'
 ```
 
 ### `setting`
 
 ```yaml
 setting:
-  contents:
-  - The repository it is lent, read only
+  period: today
   language: en
-  assumes: One coding agent, OpenCode, on Datalayer, lent one repository to read;
-    the Shield in front of it decides every file it opens and every edit it tries,
-    by the application's Rules.
+  assumes: 'Two agents over A2A — your Shopper in your browser, the Demo Shop on Datalayer
+    — on the shop''s own catalogue of 24 products. Its orders are test orders: nothing
+    is charged and nothing ships.'
 ```
 
 ### `script`
 
 ```yaml
 script:
-- id: explain-a-file
+- id: find
   cue:
-    say: Explain what README.md says about this project, and how the repository is
-      laid out.
-  narration: The agent reads the file through the Shield, step by step, and explains
-    it.
+    say: Find me what the shop has for tennis, and say which you would pick.
+  narration: The Shopper asks the shop, which looks in its catalogue.
   moves:
-  - who: code-explainer
+  - who: shopper
+    asks: shop
+    over: a2a
+    what: the shop's products for tennis
+  - who: shop
     answers: words
-    what: what README.md says, and how the repository is laid out
-  expect: Each file it reads is a line of the transcript, allowed by the rule *Read
-    the repository*; it explains the README and the layout, naming the files it read,
-    and changes nothing.
-  shows:
-  - words
+    what: its tennis racket and tennis ball, each with its price, rating and stock
+  - who: shopper
+    answers: words
+    what: what the shop has, and which it would pick
+  expect: The shop's tennis racket (49.99 USD) and tennis ball (6.99 USD) from its
+    catalogue, with their stock; the Shopper picks one from those figures.
   pace: steady
-- id: try-an-edit
+- id: quote
   cue:
-    say: Add a line at the end of README.md that says who explained it.
-  narration: A write, refused by the Shield — the drill-down names the rule.
+    say: Quote two tennis balls and the tennis racket.
+  narration: The shop prices the basket; the Shopper adds nothing up itself.
   moves:
-  - who: code-explainer
+  - who: shopper
+    asks: shop
+    over: a2a
+    what: a quote for two tennis balls and one tennis racket
+  - who: shop
     answers: words
-    what: that the edit was refused, and the change it would make, in words
-  expect: The edit it tries is a line of the transcript marked refused; its drill-down
-    shows the Shield's decision, *leave it to me*, and the rule *Change a file*. README.md
-    is unchanged.
-  shows:
-  - words
+    what: each line and the total, summed by the shop
+  - who: shopper
+    answers: words
+    what: the basket and its total, as the shop quoted it
+  expect: Each line and a total of 63.97 USD, the shop's own; nothing is ordered yet.
+- id: order
+  cue:
+    say: Place the test order for that basket.
+  narration: An order, said to be a test — nothing is charged, nothing ships.
+  moves:
+  - who: shopper
+    asks: shop
+    over: a2a
+    what: the test order for the basket quoted
+  - who: shop
+    answers: words
+    what: the test order's number, and that nothing is charged and nothing ships
+  - who: shopper
+    answers: words
+    what: the order placed, a test
+  expect: A test order number (TEST-…) and the total, with the shop saying nothing
+    is charged and nothing ships; the Shopper says the same.
   pace: slow
 ```
 
@@ -165,17 +197,21 @@ script:
 stage:
   backdrop: hero
   positions:
-    code-explainer:
-      x: 0.5
+    shopper:
+      x: 0.25
       y: 0.5
-  opens_first: code-explainer
+    shop:
+      x: 0.75
+      y: 0.5
+  opens_first: shopper
   transcript:
     tools: true
     narration: true
     withhold:
-    - credentials
+    - ids
   inspectors:
   - agent
+  - a2a
   - tools
   rests_after: 10m
   pace: steady
@@ -186,8 +222,8 @@ stage:
 ```yaml
 audience:
   who: visitors
-  ceiling_per_ask: 0.1
-  asks_a_day: 3
+  ceiling_per_ask: 0.05
+  asks_a_day: 5
 ```
 
 ### `rehearsal`
@@ -196,41 +232,47 @@ audience:
 rehearsal:
   within: 10m
   beats:
-  - beat: explain-a-file
+  - beat: find
     lines:
-    - You → Code Explainer
-    - 'Code Explainer → its workspace: *README*'
-    - 'Code Explainer: words'
+    - You → Shopper
+    - Shopper → Demo Shop
+    - 'Demo Shop: words'
+    - 'Shopper: words'
     must_say:
-    - README
+    - racket
     must_not_say:
-    - I edited
-    - I changed
-    within: 180s
-  - beat: try-an-edit
+    - I cannot
+    - error
+    within: 120s
+  - beat: quote
     lines:
-    - You → Code Explainer
-    - 'Code Explainer → its workspace: *README*'
-    - 'Code Explainer: words'
+    - You → Shopper
+    - Shopper → Demo Shop
+    - 'Demo Shop: words'
+    - 'Shopper: words'
     must_say:
-    - Change a file
+    - '63.97'
+    within: 120s
+  - beat: order
+    lines:
+    - You → Shopper
+    - Shopper → Demo Shop
+    - 'Demo Shop: words'
+    - 'Shopper: words'
+    must_say:
+    - TEST-
     must_not_say:
-    - I added
-    - I have added
-    within: 180s
-  recording:
-    path: coding-agent-behind-the-shield/recording.json
-    taken: '2026-10-30'
-    note: 'Rehearsed on Datalayer on 30 October 2026: OpenCode read README.md and
-      explained the repository; asked to edit it, the Shield refused the edit under
-      the rule Change a file, and README.md was unchanged.'
+    - charged to your
+    within: 120s
   verified:
     live: []
-    recorded: []
+    recorded:
+    - 'The shop''s tools are tested in process against its bundled catalogue: the
+      tennis products, a quote of 63.97 USD summed by the tool, a test order charging
+      nothing.'
     unverified:
-    - 'Not played yet: the repository it is lent (Jupyter Kernel Client, checked out
-      as its workspace) and its commands decided by its Rules need the runtime that
-      carries them.'
+    - 'Not played yet: the Demo Shop must be kept always on under the demo account
+      (demo-shop) for the Shopper to reach it.'
 ```
 
 ### `deployment`
@@ -240,13 +282,7 @@ deployment:
   account: demo
   page: /
   addresses:
-    code-explainer: DATALAYER_DEMO_SCENE_CODING_AGENT_BEHIND_THE_SHIELD_CODE_EXPLAINER_A2A_URL
-```
-
-### `team`
-
-```yaml
-team: crop-monitoring:0.0.2
+    shop: DATALAYER_DEMO_SCENE_BUY_FROM_A_SHOP_SHOP_A2A_URL
 ```
 
 ### `kind`

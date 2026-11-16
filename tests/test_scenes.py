@@ -92,8 +92,9 @@ def _minimal_cast(**overrides: Any) -> Dict[str, Any]:
 # --- the catalogue ----------------------------------------------------------------------
 
 
-#: The demo stages: the home page's four, and a coding agent behind the Shield.
-DEMO_SCENES = (*HOME_SCENES, "coding-agent-behind-the-shield")
+#: The demo stages: the home page's four, a coding agent behind the Shield, and a
+#: person's Shopper buying from the Demo Shop.
+DEMO_SCENES = (*HOME_SCENES, "coding-agent-behind-the-shield", "buy-from-a-shop")
 
 #: The Personal Agent Protocol's Stages, scripted (X-02).
 PAP_STAGES = ("pap-a-person-and-a-company", "pap-approve-once", "pap-your-application-a-company", "pap-two-companies")
