@@ -87,7 +87,7 @@
     },
     "CedarAuthorizerConfig": {
       "additionalProperties": false,
-      "description": "``cedar: {policies}``: a Cedar policy set inline, or the path of a ``.cedar`` file (AC-41).",
+      "description": "``cedar: {policies}``: a Cedar policy set inline, or the path of a ``.cedar`` file.",
       "properties": {
         "policies": {
           "description": "A Cedar policy set, inline, or the path of a .cedar file.",
@@ -104,7 +104,7 @@
     },
     "Dogwood": {
       "additionalProperties": false,
-      "description": "A Dogwood policy set (Cedar, and ``when temporal`` over the session's events), AC-42.\n\nRead as it is loaded: the temporal clauses parsed, AgentCore's quotas held\n(20 temporal policies, 3 temporal operators in one, a 24-hour window at\nmost) and, when ``cedarpy`` is installed, the Cedar parsed too.",
+      "description": "A Dogwood policy set (Cedar, and ``when temporal`` over the session's events).\n\nRead as it is loaded: the temporal clauses parsed, AgentCore's quotas held\n(20 temporal policies, 3 temporal operators in one, a 24-hour window at\nmost) and, when ``cedarpy`` is installed, the Cedar parsed too.",
       "properties": {
         "mode": {
           "default": "enforce",
@@ -440,7 +440,7 @@
     },
     "RateLimits": {
       "additionalProperties": false,
-      "description": "What each person may spend through the organization's AgentCore Gateways (AC-45).\n\nPer user \u2014 the Gateway's OAuth subject, or its IAM principal \u2014 across its\ntools, models and agents, as AgentCore's Gateway rate limits count them. The\nShield does not count these in process: they are pushed to the Gateways of an\norganization that runs on AgentCore.",
+      "description": "What each person may spend through the organization's AgentCore Gateways.\n\nPer user \u2014 the Gateway's OAuth subject, or its IAM principal \u2014 across its\ntools, models and agents, as AgentCore's Gateway rate limits count them. The\nShield does not count these in process: they are pushed to the Gateways of an\norganization that runs on AgentCore.",
       "properties": {
         "connections": {
           "anyOf": [
