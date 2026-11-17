@@ -330,7 +330,9 @@ pap:
     - agent
     scopes:
     - name: books:read
-      description: Read your books and balances
+      description: Read your books and balances, to answer what you ask about them;
+        asked when you first ask about your accounts; without it, only general bookkeeping
+        answers
       changes: none
       personal_data: true
     personal_agents: any

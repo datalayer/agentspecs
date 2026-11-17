@@ -460,6 +460,30 @@ the same access check as the page: anybody for a public application, the people
 its owner allowed for a private one. Its answer is kept ten minutes, so a page
 seen often calls its agent once in that time. Only one operation carries it.
 
+### Calling it
+
+Shipped with its addresses on, each operation answers at
+`https://{name}.api.datalayer.ai{path}` — the inputs of a `get` in the query, those of a
+`post` as a JSON object in the body; the document at `/openapi.json`, a reference at `/docs` —
+and as the MCP tool `{operationId}` at `https://{name}.mcp.datalayer.ai/mcp` (streamable
+HTTP). A public application may be called by anybody, rate-capped per caller and under its
+spend limit; a private one needs `Authorization: Bearer <Datalayer API key>` of its owner or
+of a person it lets in. The errors: 400 (the inputs are not the operation's), 401 or 403 (no
+key, or not allowed), 402 (the spend limit is reached), 422 (the agent's answer did not fit
+the `200` schema, twice), 429 (the rate cap).
+
+```bash
+curl -s https://demo-shop.api.datalayer.ai/openapi.json
+curl -s -X POST https://demo-shop.api.datalayer.ai/products/find \
+  -H 'Content-Type: application/json' -d '{"query": "tennis", "max_price": 60}'
+```
+
+A permission it offers (`pap.company.scopes`) says, in its `description`, what it unlocks,
+when a personal agent should ask for it and whether the task works without it, as the
+protocol's guide on scope descriptions asks: Studio's Validate says one that only names what
+it unlocks.
+
+
 ## Outputs
 
 An application answers in words. `interface.outputs` says, by media type, the

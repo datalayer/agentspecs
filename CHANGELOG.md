@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.208
+
+- **Permissions said as the protocol's guide asks**: the catalogue companies' `pap.company.scopes` descriptions say what each unlocks, when a personal agent should ask for it and whether the task works without it (Demo Shop, Exchange desk, Bookkeeping desk). Docs: Applications › What it answers when called › Calling it (its API and MCP addresses, the errors, the scope descriptions). Tests: all
+
 ## 0.0.207
 
 - **A gallery on an application's web page**: an operation of its `openapi` may carry `x-datalayer-gallery` (`true`, or its `title`) — a `get` that needs no input and answers `products`, items each with a `title` and an `image` — whose answer the web page shows as product cards (`OpenApiOperation.gallery`, `gallery_operation`); one per document. The Demo Shop's `listProducts` carries it. Docs: Applications › What it answers when called. Tests: test_apps_openapi

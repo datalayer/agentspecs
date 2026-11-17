@@ -67,11 +67,11 @@ pap:
       - web
     scopes:
       - name: catalog:read
-        description: See the shop's products, their prices, ratings and stock
+        description: See the shop's products, their prices, ratings and stock; asked when you look for or compare products; without it, only what the shop tells anybody
         changes: none
         personal_data: false
       - name: orders:write
-        description: Place a test order you approved — nothing is charged and nothing ships
+        description: Place a test order you approved — nothing is charged and nothing ships; asked only when you say to order; without it, the shop quotes a basket but places nothing
         # reversible, not none: placing an order is the company's one operation, and a company's
         # operations need a scope that changes something (the PAP SDK's write_scopes).
         changes: reversible
