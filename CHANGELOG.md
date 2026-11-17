@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.211
+
+- **The Shopper's public demo buys from the Demo Shop over the Personal Agent Protocol** (17 November 2026). `demo-shopper` 0.0.5 lists `pap` and connects to `demo-shop.agent.datalayer.ai` in its owner's account (`as: owner`, `access: write`, scopes `catalog:read` and `orders:write`, its API alone, Device Sign-In, the operations extension), reads and quotes with `do_it` rules, and places test orders the owner lets the gateway approve as the agent; its in-process `demo-shop-*` tools are gone. Datalayer's Demo Shop joins the hosted counterparts an example may reach. Tests: test_apps, test_apps_pap, test_ui
+
 ## 0.0.210
 
 - **0.0.208 and 0.0.209 as published**: those two tags never reached PyPI (the Dogwood parser carried verbatim no longer matched agent-shield 0.2.21's); this version carries both, with the Shield's policy schema and its Dogwood parser as datalayer-agent-shield 0.2.22 publishes them. Tests: all

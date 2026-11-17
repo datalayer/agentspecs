@@ -978,6 +978,8 @@ HOSTED_COUNTERPARTS = {
     "store.examples.datalayer.run",
     "outfitters.examples.datalayer.run",
     "verify.examples.datalayer.run",
+    # Datalayer's own Demo Shop, which the Shopper's public demo buys from.
+    "demo-shop.agent.datalayer.ai",
 }
 
 
