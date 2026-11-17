@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.210
+
+- **0.0.208 and 0.0.209 as published**: those two tags never reached PyPI (the Dogwood parser carried verbatim no longer matched agent-shield 0.2.21's); this version carries both, with the Shield's policy schema and its Dogwood parser as datalayer-agent-shield 0.2.22 publishes them. Tests: all
+
 ## 0.0.209
 
 - **The Exchange desk's builder says its permissions as its spec does**: `exchange-desk/app.py` carries the scope descriptions 0.0.208 gave `exchange-desk.yaml`, and the spec is the builder's output again. Tests: all; agent-runtimes' example builds
