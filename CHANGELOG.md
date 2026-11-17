@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.209
+
+- **The Exchange desk's builder says its permissions as its spec does**: `exchange-desk/app.py` carries the scope descriptions 0.0.208 gave `exchange-desk.yaml`, and the spec is the builder's output again. Tests: all; agent-runtimes' example builds
+
 ## 0.0.208
 
 - **Permissions said as the protocol's guide asks**: the catalogue companies' `pap.company.scopes` descriptions say what each unlocks, when a personal agent should ask for it and whether the task works without it (Demo Shop, Exchange desk, Bookkeeping desk). Docs: Applications › What it answers when called › Calling it (its API and MCP addresses, the errors, the scope descriptions). Tests: all
