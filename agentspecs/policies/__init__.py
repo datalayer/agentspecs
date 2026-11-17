@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""Policy specifications (SH-50).
+"""Policy specifications.
 
 A *policy* is the Shield's document: the rules that decide an agent's actions
 by class, kind, path and command, the stateful limits with their soft and hard

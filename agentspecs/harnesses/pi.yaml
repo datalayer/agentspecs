@@ -43,7 +43,7 @@ honours:
   model: true
   subagents: false
 
-# What a session may rely on of it (MH-20): read by swap, clone and resume,
+# What a session may rely on of it: read by swap, clone and resume,
 # never guessed per harness in code. `images` is the claim `initialize`'s
 # promptCapabilities must confirm; `native_session` is the drill's to answer.
 capabilities:

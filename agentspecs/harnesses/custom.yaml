@@ -23,7 +23,7 @@ honours:
   subagents: false
 
 # As declared by the organization's own spec; the shared catalogue's `custom`
-# claims the least (MH-20).
+# claims the least.
 capabilities:
   resume: none
   fork_history: none

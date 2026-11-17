@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Frontend tool set: the Space Invaders arena (AGENT_BATTLE B1-02, 7 November
+# Frontend tool set: the Space Invaders arena (7 November
 # 2026), drawn in the page by Datalayer's Battles: one wave for both
 # contestants, a cannon each. `arena_watch` streams: called once, it tells the
 # model where the invaders are every few ticks and at every hit, as Pong's.

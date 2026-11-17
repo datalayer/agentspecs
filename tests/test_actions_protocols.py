@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""Agent protocols' tools classed in the catalogue (PR-54, R-02)."""
+"""Agent protocols' tools classed in the catalogue."""
 
 import pytest
 
@@ -30,7 +30,7 @@ def test_every_protocol_spec_is_sound_and_its_prefix_its_own():
 @pytest.mark.parametrize(
     "server,tool,classes",
     [
-        # A message to the company goes out in the person's name: a Rule decides it (R-02).
+        # A message to the company goes out in the person's name: a Rule decides it.
         ("pap:manzanita.example", "pap_ask", (SEND,)),
         # Asking for one of the company's people is the conversation's own control, classed with it.
         ("pap:manzanita.example", "pap_handoff", (SEND,)),
@@ -47,7 +47,7 @@ def test_every_protocol_spec_is_sound_and_its_prefix_its_own():
         ("ucp:store.example", "ucp_complete", (BUY,)),
         ("acp:outfitters.example", "acp_update_checkout", (WRITE,)),
         ("acp:outfitters.example", "acp_complete", (BUY,)),
-        # A page read at a site it names, signed (EX-11): GET only.
+        # A page read at a site it names, signed: GET only.
         ("signed-fetch:verify.examples.datalayer.run", "signed_fetch", (READ,)),
         # An MCP server of the catalogue, as before.
         ("tavily", "tavily_search", (READ,)),

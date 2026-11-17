@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# The licence register of voice (VO-01).
+# The licence register of voice.
 #
 # Every library, model, voice and dataset voice uses or was weighed, with its
 # licence and where that was read, checked on 2026-10-20. Code and weights are
@@ -19,7 +19,7 @@
 # is not on them does not load, and every voice and model of the catalogue is
 # named here.
 #
-# Reviewed by the owner on 2026-10-20 (VO-01, VO-64), not by counsel: the
+# Reviewed by the owner on 2026-10-20, not by counsel: the
 # register, the voices' provenance (Kokoro's training data is not published per
 # voice, part of it is synthetic audio from commercial speech services, so no
 # speaker's consent is on record for Heart or Emma), and eSpeak NG's GPL and
@@ -149,7 +149,7 @@ entries:
   - {name: whisper-large-v3-turbo, kind: model, licence: MIT, where: server, status: used, source: https://huggingface.co/openai/whisper-large-v3-turbo, note: "Its CTranslate2 conversion, https://huggingface.co/dropbox-dash/faster-whisper-large-v3-turbo (MIT), pinned."}
   - {name: jiwer, kind: library, version: 4.0.0, licence: Apache-2.0, where: server, status: used, source: https://pypi.org/pypi/jiwer/json, note: "The WER check, in tests only."}
 
-  # --- on the person's machine (agent-runtimes[voice], VO-16), used ------------------------
+  # --- on the person's machine (agent-runtimes[voice]), used ------------------------
   - {name: sounddevice, kind: library, version: 0.5.6, licence: MIT, where: machine, status: used, source: https://pypi.org/pypi/sounddevice/json, note: "The `voice` extra's microphone and speaker (`loop --voice`); it brings PortAudio, below. Checked 2026-10-16."}
   - {name: PortAudio, kind: library, licence: MIT, where: machine, status: used, source: https://github.com/PortAudio/portaudio, note: "Inside sounddevice's wheels for macOS and Windows; the system's own on Linux."}
   - {name: kokoro-onnx, kind: library, version: 0.6.1, licence: MIT, where: machine, status: used, source: https://pypi.org/pypi/kokoro-onnx/json, note: "Answers said on the machine by the `voice` extra. It brings onnxruntime, espeakng-loader and phonemizer: the last two carry eSpeak NG (GPL-3.0), below."}

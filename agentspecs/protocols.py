@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The agent protocols Datalayer targets, as specs (PS-01).
+"""The agent protocols Datalayer targets, as specs.
 
 One YAML per protocol under ``protocols/``: what it is, who publishes it, its
 layer (transport, consent, identity, commerce, ui), the specification and the
@@ -10,8 +10,8 @@ version implemented, whether it is ``shipped`` or ``planned``, what it connects
 an agent to, the packages implementing it, the ``protocol-tools`` tables of its
 tools, and the Appspec block that configures it, if any.
 
-An agent spec or an application says the protocols it speaks in ``protocols``
-(PS-02): ids of this catalogue, a planned one refused for an application.
+An agent spec or an application says the protocols it speaks in ``protocols``:
+ids of this catalogue, a planned one refused for an application.
 
 ``python -m agentspecs.protocols`` writes the JSON Schema beside the specs and
 the reference page of the documentation.

@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""Scenes: a team, staged (A-11, A-13).
+"""Scenes: a team, staged.
 
 The catalogue loads, the four scenes of the home page are what the plan says,
 and what a scene promises is checked in sentences.
@@ -47,7 +47,7 @@ from agentspecs.teams import TeamPlace, TeamProtocol, get_team
 
 SCENES_DIR = pathlib.Path(agentspecs.scenes.__file__).parent
 
-#: The four scenes of the home page (A-08, A-13): the team each stages,
+#: The four scenes of the home page: the team each stages,
 #: its entry, the members on a runtime, and the system on stage.
 HOME_SCENES = {
     "sales-and-accounting": ("sales", ["accounting"], "odoo-accounting"),
@@ -96,9 +96,9 @@ def _minimal_cast(**overrides: Any) -> Dict[str, Any]:
 #: person's Shopper buying from the Demo Shop.
 DEMO_SCENES = (*HOME_SCENES, "coding-agent-behind-the-shield", "buy-from-a-shop")
 
-#: The Personal Agent Protocol's Stages, scripted (X-02).
+#: The Personal Agent Protocol's Stages, scripted.
 PAP_STAGES = ("pap-a-person-and-a-company", "pap-approve-once", "pap-your-application-a-company", "pap-two-companies")
-#: The other protocols' Stages, scripted (EX-14, EX-15).
+#: The other protocols' Stages, scripted.
 PROTOCOL_STAGES = ("ucp-a-purchase-approved", "pact-a-personal-agent-at-a-business")
 
 
@@ -134,7 +134,7 @@ def test_every_scene_has_a_face_of_its_own() -> None:
 
 
 def test_the_four_scenes_stage_their_teams() -> None:
-    """A-13: each with its setting, four beats, stage directions, a visitor audience and a rehearsal."""
+    """Each with its setting, four beats, stage directions, a visitor audience and a rehearsal."""
     for scene_id, (entry, on_runtime, system) in HOME_SCENES.items():
         scene = SCENE_CATALOGUE[scene_id]
         team = scene.team_of()
@@ -236,7 +236,7 @@ def test_a_scene_says_what_each_beat_shows() -> None:
 
 
 def test_each_scene_of_the_home_page_answers_four_kinds() -> None:
-    """H-02, H-03: the starters lead to the sources, a table, a chart and an approval."""
+    """The starters lead to the sources, a table, a chart and an approval."""
     wanted = {AnswerKind.SOURCES, AnswerKind.TABLE, AnswerKind.CHART, AnswerKind.APPROVAL}
     for scene_id in HOME_SCENES:
         shown = {kind for beat in SCENE_CATALOGUE[scene_id].script for kind in beat.shown}
@@ -327,7 +327,7 @@ def test_the_json_schema_is_the_one_beside_the_specs() -> None:
 
 
 def test_the_stage_says_its_backdrop_and_is_drawn_as_the_studio_when_it_says_none() -> None:
-    """SCENES S0-02: `stage.backdrop` is how the stage is drawn wherever the scene plays."""
+    """`stage.backdrop` is how the stage is drawn wherever the scene plays."""
     sales = raw("sales-and-accounting")
     hero = parse_scene({**sales, "stage": {**sales["stage"], "backdrop": "hero"}})
     assert hero.stage.backdrop is Backdrop.HERO
@@ -615,7 +615,7 @@ def test_a_scene_spec_is_a_pydantic_model_a_host_can_build() -> None:
     assert dump_scene(scene) == {"schema": SCENE_SCHEMA, "id": "solo", "name": "Solo", "emoji": "\U0001f3ad", "team": "month-end-close:0.0.2"}
 
 
-# --- a scripted scene (X-02) ------------------------------------------------
+# --- a scripted scene ------------------------------------------------
 
 
 def _scripted(**overrides: Any) -> Dict[str, Any]:
@@ -682,7 +682,7 @@ def test_the_pap_stages_are_scripted_from_the_sdks_demo_companies() -> None:
 
 
 def test_the_protocol_stages_are_scripted_from_the_test_counterparts() -> None:
-    """EX-14 (a purchase at a UCP test shop) and EX-15 (a business over PACT): the person decides on each."""
+    """A purchase at a UCP test shop and a business over PACT: the person decides on each."""
     purchase = SCENE_CATALOGUE["ucp-a-purchase-approved"]
     business = SCENE_CATALOGUE["pact-a-personal-agent-at-a-business"]
     for scene in (purchase, business):

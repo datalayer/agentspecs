@@ -1,33 +1,33 @@
 {
-  "at": "2026-10-29T14:00:28+00:00",
+  "at": "2026-11-17T12:41:45+00:00",
   "where": "on Datalayer",
-  "passed": true,
-  "says": "Rehearsal: 4 of 4 beats passed. The scene is Live.",
+  "passed": false,
+  "says": "Rehearsal: 1 of 4 beats passed. 3 failed. The scene is not Live.",
   "beats": [
     {
       "beat": "open-invoices",
       "state": "passed",
       "says": "",
-      "seconds": 22.688269627997215
+      "seconds": 0.04521492397179827
     },
     {
       "beat": "aged-receivables",
-      "state": "passed",
-      "says": "",
-      "seconds": 21.642744607997884
+      "state": "failed",
+      "says": "Expected “Accounting → Odoo: odoo_accounting_aged_balance” after “Sales → Accounting”; the transcript went on: “Accounting → Odoo: odoo_accounting_list_invoices”; “Accounting: The open customer invoices:\n\n| Customer | Invoice | Due |\n|---|---|---|\n| Acme | INV-7 | 1,200 EUR |\n| Globex | INV-9 | 800 EUR |\n\nTotal due: 2,000 EUR.”; “Sales: Accounting answered: The open customer invoices:\n\n| Customer | Invoice | Due |\n|---|---|---|\n| Acme | INV-7 | 1,200 EUR |\n| Globex | INV-9 | 800 EUR |\n\nTotal due: 2,000 EUR.”. It did not say “days”.",
+      "seconds": 0.04906695400131866
     },
     {
       "beat": "largest-balance",
-      "state": "passed",
-      "says": "",
-      "seconds": 26.706618044998322
+      "state": "failed",
+      "says": "Expected “Accounting: sources” after “Accounting → Odoo: odoo_accounting_*”; the transcript went on: “Accounting: The open customer invoices:\n\n| Customer | Invoice | Due |\n|---|---|---|\n| Acme | INV-7 | 1,200 EUR |\n| Globex | INV-9 | 800 EUR |\n\nTotal due: 2,000 EUR.”; “Sales: Accounting answered: The open customer invoices:\n\n| Customer | Invoice | Due |\n|---|---|---|\n| Acme | INV-7 | 1,200 EUR |\n| Globex | INV-9 | 800 EUR |\n\nTotal due: 2,000 EUR.”.",
+      "seconds": 0.04180989501764998
     },
     {
       "beat": "payment-reminders",
-      "state": "passed",
-      "says": "",
-      "seconds": 19.099125767999794
+      "state": "failed",
+      "says": "Expected “Accounting → Odoo: odoo_accounting_aged_balance” after “Sales → Accounting”; the transcript went on: “Accounting → Odoo: odoo_accounting_list_invoices”; “Accounting: The open customer invoices:\n\n| Customer | Invoice | Due |\n|---|---|---|\n| Acme | INV-7 | 1,200 EUR |\n| Globex | INV-9 | 800 EUR |\n\nTotal due: 2,000 EUR.”; “Sales: Accounting answered: The open customer invoices:\n\n| Customer | Invoice | Due |\n|---|---|---|\n| Acme | INV-7 | 1,200 EUR |\n| Globex | INV-9 | 800 EUR |\n\nTotal due: 2,000 EUR.”. It did not say “reminder”.",
+      "seconds": 0.047868766996543854
     }
   ],
-  "runtime": "1.5.80"
+  "runtime": "1.6.41"
 }

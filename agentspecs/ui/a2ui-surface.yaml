@@ -31,13 +31,13 @@ contribution_points: []
 renderers:
 - "a2ui"
 
-# The catalog of visual components it renders (C-13): one catalog for the
+# The catalog of visual components it renders: one catalog for the
 # spec, the Canvas and Python. The A2UI v0.9 basic catalog's components, named
 # and drawn as A2UI says (`standard: true`), then Datalayer's own, added as an
 # A2UI custom catalog. Every one has its version and its properties as a JSON
 # Schema of the catalog's own — what a builder sets: a value A2UI lets be bound
 # (`{path: …}`) is written here as the value itself — from which its properties
-# form is drawn (C-14) and its Python call typed (C-15). A standard one's
+# form is drawn and its Python call typed. A standard one's
 # property names, required ones and choices are A2UI's, kept in step by a test.
 catalog: a2ui/v0.9
 components:

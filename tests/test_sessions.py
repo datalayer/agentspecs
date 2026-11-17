@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The session file, `datalayer-session/1` (MH-12)."""
+"""The session file, `datalayer-session/1`."""
 
 from __future__ import annotations
 

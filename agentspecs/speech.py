@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The voice catalogue: voices, speech models, and the licence register (VO-40).
+"""The voice catalogue: voices, speech models, and the licence register.
 
 Three kinds of YAML, beside the other catalogues:
 
@@ -13,10 +13,10 @@ Three kinds of YAML, beside the other catalogues:
 - ``agentspecs/speech-models/*.yaml`` — the models behind them and behind
   speech-to-text and voice activity: each file pinned by its SHA-256 and its
   size, so that a model is never fetched from a third party's hub at run time
-  and a changed file is refused (VO-03, VO-48); kept in Datalayer's storage
+  and a changed file is refused; kept in Datalayer's storage
   (``https://models-speech.datalayer.tech``) under its ``provider``, the
   organisation its upstream names: ``<provider>/<model id>/<path>``;
-- ``agentspecs/speech-licences.yaml`` — the register (VO-01): every library,
+- ``agentspecs/speech-licences.yaml`` — the register: every library,
   model, voice and dataset weighed, with its licence and its source, and the
   two lists a licence is checked against: ``allowed`` (anywhere, the browser
   included) and ``server_only`` (GPL code that runs on Datalayer's servers
@@ -26,7 +26,7 @@ Three kinds of YAML, beside the other catalogues:
   owner; any other one there is refused.
 
 A voice or a model whose licence is on neither list does not load: the
-catalogue refuses it with a sentence (VO-04). Only the dependencies of the
+catalogue refuses it with a sentence. Only the dependencies of the
 package itself are imported (``pydantic``, ``yaml``), so that the speech
 service reads the catalogue without the rest of agentspecs.
 """
@@ -54,7 +54,7 @@ REGISTER_PATH = _ROOT / "speech-licences.yaml"
 
 #: Where a step of speech may run: in the person's browser (`device`), on ai-agents
 #: (`server`), or on the person's own machine through agent-runtimes' `voice` extra
-#: (`machine`: `loop --voice --speak`, VO-16).
+#: (`machine`: `loop --voice --speak`).
 Where = Literal["device", "server", "machine"]
 
 #: What a speech model does.
@@ -206,7 +206,7 @@ class Voice(_Strict):
         """Its own tag for a language it speaks — `fr` and `fr-FR` are `fr-FR` for a `fr-FR` voice — or `''`.
 
         The engine is given this tag, never the caller's: eSpeak NG, Kokoro's phonemizer,
-        knows `fr-fr` and refuses `fr` (VO-16).
+        knows `fr-fr` and refuses `fr`.
         """
         wanted = language.strip()
         for own in self.languages:
@@ -226,7 +226,7 @@ class RegisterEntry(_Strict):
     version: str = ""
     licence: str
     #: `machine` is the person's own machine, where an optional extra of agent-runtimes
-    #: installs it from PyPI (`agent-runtimes[voice]`, VO-16); a server-only licence is
+    #: installs it from PyPI (`agent-runtimes[voice]`); a server-only licence is
     #: admitted there only for a library the register names in `accepted_on_the_machine`.
     where: Literal["browser", "server", "machine", "tests"]
     status: Literal["used", "candidate", "refused"]
@@ -242,7 +242,7 @@ class AcceptedOnTheMachine(_Strict):
 
 
 class Register(_Strict):
-    """The licence register (VO-01)."""
+    """The licence register."""
 
     #: Who reviewed it — the owner, or counsel — and on which day; both or neither.
     reviewed_by: Optional[Literal["owner", "counsel"]] = None
@@ -322,7 +322,7 @@ def admitted(licence: str, where: List[str], book: Optional[Register] = None) ->
 def check_licences(
     name: str, licence: Licence, where: List[str], book: Optional[Register] = None
 ) -> None:
-    """Refuse, in a sentence, a voice or a model whose licences the register does not admit (VO-04)."""
+    """Refuse, in a sentence, a voice or a model whose licences the register does not admit."""
     book = book or register()
     for part, value in (("weights", licence.weights), ("data", licence.dataset)):
         if not value:
@@ -397,7 +397,7 @@ def get_voice(voice_id: str) -> Optional[Voice]:
 
 
 def voice_problems(voice_id: str, language: str = "") -> List[str]:
-    """What is wrong with a voice an application names, in sentences; empty when nothing is (VO-41)."""
+    """What is wrong with a voice an application names, in sentences; empty when nothing is."""
     voice = get_voice(voice_id)
     if voice is None:
         return [f"There is no voice named {voice_id!r} in the voice catalogue."]
@@ -419,7 +419,7 @@ def transcriber_for(language: str, where: str = "device") -> Optional[SpeechMode
     # On the device, tiny first: on the fixtures it heard better than base (WER
     # 3.3% against 4.9%, agent-runtimes tests/voice, 2026-10-05), at half the
     # download. On the server, large-v3-turbo hears a language at any length;
-    # the speech service picks a turn's model itself (VO-47).
+    # the speech service picks a turn's model itself.
     order = (
         ("moonshine-tiny-en", "moonshine-base-en")
         if where == "device"

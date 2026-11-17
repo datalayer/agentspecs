@@ -1913,7 +1913,7 @@ PAGE_FUNCTION_ACTION = "page"
 
 
 class AppAction(_Strict):
-    """An action of its code a person presses (`@app.action`, RU-5).
+    """An action of its code a person presses (`@app.action`).
 
     What its payload is, typed: the JSON Schema of an object, written from the
     pydantic model its code declares (`@app.action(name, payload=Model)`); an
@@ -2279,7 +2279,7 @@ class AppInterface(_Strict):
     actions: List[AppAction] = Field(
         default_factory=list,
         description=(
-            "The actions of its code a person presses (`@app.action`, RU-5), each with "
+            "The actions of its code a person presses (`@app.action`), each with "
             "the JSON Schema of its payload: what its buttons offer, with a token, and nothing else"
         ),
     )
@@ -4422,8 +4422,8 @@ def load_raw_apps(directory: Optional[Path] = None) -> Dict[str, Dict[str, Any]]
 
 
 def press_problems(app: AppSpec) -> List[str]:
-    """What its tests press that its code does not declare, in sentences
-    (RU-5): each press an action of ``interface.actions``, with
+    """What its tests press that its code does not declare, in sentences:
+    each press an action of ``interface.actions``, with
     the fields its payload takes. Asked of a whole Appspec — one built from
     its code, or the catalogue's — not of one its code is still declaring.
     """

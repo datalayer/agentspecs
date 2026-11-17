@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Agent Specification: A goose Agent
-# An agent that is a harness of the catalogue (SH-43): goose, driven over
+# An agent that is a harness of the catalogue: goose, driven over
 # the Agent Client Protocol by the Datalayer runtime's adapter behind the
 # Shield. Off in the shared catalogue: it needs the account's own
 # ANTHROPIC_API_KEY (the register: API keys only), which the harness declares and

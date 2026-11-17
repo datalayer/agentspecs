@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""Dogwood policy sets: the parser, AgentCore's quotas and the lowering to Cedar (AC-42).
+"""Dogwood policy sets: the parser, AgentCore's quotas and the lowering to Cedar.
 
 Dogwood (github.com/dogwood-policy/dogwood, Apache 2.0) is Cedar plus
 ``when temporal { … }`` / ``unless temporal { … }`` conditions over the

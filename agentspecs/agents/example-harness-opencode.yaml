@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Agent Specification: An OpenCode Agent
-# An agent that is a harness of the catalogue (SH-43): OpenCode, driven over
+# An agent that is a harness of the catalogue: OpenCode, driven over
 # the Agent Client Protocol by the Datalayer runtime's adapter behind the
 # Shield. Off in the shared catalogue. On Datalayer its model calls go
 # through ai-inference, on the platform's models and the account's credits,

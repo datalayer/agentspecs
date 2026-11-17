@@ -2,8 +2,8 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Application Specification: Disaster Assessment
-# Asked over A2A by Event response, in the scene `disaster-assessment`
-# (A-04, A-08). It estimates the area a disaster affected and the
+# Asked over A2A by Event response, in the scene `disaster-assessment`.
+# It estimates the area a disaster affected and the
 # extent of the damage by comparing the satellite imagery NASA Earthdata
 # holds before and after the event, found through the `earthdata` MCP
 # server at *Can read*: it searches and reads, and downloads nothing.

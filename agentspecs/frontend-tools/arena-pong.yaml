@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # The Pong arena's tools, as a frontend toolset a Battle's contestant names
-# (AGENT_BATTLE B1-01, 6 November 2026).
+# (6 November 2026).
 #
 # The arena is drawn in the page by Datalayer's Battles and bound to its
 # state there: `arena_read` says where the ball and the paddles are and the

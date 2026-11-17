@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""A remote MCP server whose bearer an identity mints for the run (AC-20)."""
+"""A remote MCP server whose bearer an identity mints for the run."""
 
 from __future__ import annotations
 

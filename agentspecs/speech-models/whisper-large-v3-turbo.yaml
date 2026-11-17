@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Speech model: Whisper large-v3-turbo, speech to text on ai-agents (VO-34)
+# Speech model: Whisper large-v3-turbo, speech to text on ai-agents
 
 id: whisper-large-v3-turbo
 version: 0.0.1

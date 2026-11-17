@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The voice catalogue (VO-40, VO-04) and the Appspec's voice (VO-41, VO-42)."""
+"""The voice catalogue and the Appspec's voice."""
 
 import pytest
 from pydantic import ValidationError
@@ -48,7 +48,7 @@ def test_every_voice_and_model_loads_and_is_admitted():
     ],
 )
 def test_a_non_commercial_voice_is_refused(licence):
-    """A Piper `ryan`, a `lessac`, a legacy Moonshine, XTTS: refused with a sentence (VO-04)."""
+    """A Piper `ryan`, a `lessac`, a legacy Moonshine, XTTS: refused with a sentence."""
     voice = speech.get_voice("kokoro-af-heart").model_dump()
     voice["licence"] = {"weights": licence}
     with pytest.raises(speech.SpeechCatalogueError, match="is not one the register allows"):
@@ -92,7 +92,7 @@ def test_every_file_is_pinned_by_its_hash_and_size():
 
 
 def test_each_model_is_kept_under_its_provider_the_organisation_its_upstream_names():
-    """Datalayer's storage keeps a model's files at `<provider>/<model id>/<path>` (VO-48)."""
+    """Datalayer's storage keeps a model's files at `<provider>/<model id>/<path>`."""
     for model in speech.list_speech_models():
         organisation = model.source.upstream.rstrip("/").split("/")[3].lower()
         assert model.provider == organisation, model.id
@@ -119,7 +119,7 @@ def test_the_first_languages_are_heard_and_spoken():
 
 
 def test_the_server_hears_the_first_languages_with_whisper_turbo():
-    """VO-34: faster-whisper large-v3-turbo on the server, never sent to a browser."""
+    """Faster-whisper large-v3-turbo on the server, never sent to a browser."""
     for language in ("en-US", "fr-FR"):
         heard = speech.transcriber_for(language, "server")
         assert heard is not None and heard.id == "whisper-large-v3-turbo", language
@@ -130,7 +130,7 @@ def test_the_server_hears_the_first_languages_with_whisper_turbo():
 
 
 def test_the_server_hears_short_turns_with_whisper_small():
-    """VO-47 (decided 2026-10-15): a smaller Whisper for turns, never sent to a browser."""
+    """Decided 2026-10-15: a smaller Whisper for turns, never sent to a browser."""
     small = speech.get_speech_model("whisper-small")
     assert small.where == ["server", "machine"] and small.engine == "faster-whisper"
     assert small.folder == "openai/whisper-small"
@@ -159,7 +159,7 @@ def test_moonshine_base_is_on_the_server_beside_whisper_small():
 
 
 def test_the_browser_hears_only_mit_moonshine():
-    """VO-04: only the MIT Moonshine models, English, are listed."""
+    """Only the MIT Moonshine models, English, are listed."""
     for model in speech.list_speech_models("stt"):
         if model.id.startswith("moonshine-"):
             assert model.licence.weights == "MIT" and model.languages == ["en"], model.id
@@ -231,7 +231,7 @@ def test_the_appspec_voice_is_off_unless_said_and_round_trips():
 
 
 def test_hands_free_is_a_way_to_talk():
-    """VO-12, built 15 October 2026: a conversation by voice, taken as said."""
+    """Built 15 October 2026: a conversation by voice, taken as said."""
     app = parse_app(_app(interface={"voice": {"enabled": True, "input": "hands_free"}}))
     assert app.interface.voice.input == "hands_free"
     assert json_schema()["$defs"]["VoiceInput"]["enum"] == ["off", "push_to_talk", "hands_free"]
@@ -284,7 +284,7 @@ def test_audio_is_kept_only_when_listening_and_never_in_public():
 
 
 def test_audio_is_kept_thirty_days_at_most():
-    """VO-63: what was said aloud is kept 30 days at most, by `keep_for` or a Track."""
+    """What was said aloud is kept 30 days at most, by `keep_for` or a Track."""
     listening = {"voice": {"enabled": True}}
     for keep_for in ("1_days", "30_days", "1_months"):
         parse_app(_app(interface=listening, record={"keep_for": keep_for, "include": ["audio"]}))
@@ -311,7 +311,7 @@ def test_audio_is_kept_thirty_days_at_most():
 
 
 def test_the_voice_extra_is_registered_on_the_person_s_machine():
-    """VO-16, VO-01: agent-runtimes' `voice` extra installs these on the person's own machine."""
+    """Agent-runtimes' `voice` extra installs these on the person's own machine."""
     book = speech.register()
     on_the_machine = {e.name: e for e in book.entries if e.where == "machine"}
     for name in (
@@ -354,7 +354,7 @@ def test_the_voice_extra_is_registered_on_the_person_s_machine():
 
 
 def test_the_voice_extra_s_models_and_voices_run_on_the_machine():
-    """VO-16: what agent-runtimes' `voice` extra hears and says with on the person's machine."""
+    """What agent-runtimes' `voice` extra hears and says with on the person's machine."""
     assert speech.transcriber_for("en-US", "machine").id == "whisper-small"
     assert "machine" in speech.get_speech_model("kokoro-82m").where
     for voice in speech.list_voices():
@@ -365,7 +365,7 @@ def test_the_voice_extra_s_models_and_voices_run_on_the_machine():
 
 
 def test_a_voice_is_given_its_own_language_tag():
-    """VO-16: eSpeak NG knows `fr-fr`, not `fr`: the engine is given the voice's own tag."""
+    """ESpeak NG knows `fr-fr`, not `fr`: the engine is given the voice's own tag."""
     siwis = speech.get_voice("kokoro-ff-siwis")
     assert siwis.spoken_as("fr") == "fr-FR" and siwis.spoken_as("fr-FR") == "fr-FR"
     assert siwis.spoken_as("en") == "" and siwis.spoken_as("fr-CA") == ""

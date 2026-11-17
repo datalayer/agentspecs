@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# The register of harnesses (SH-04), checked on 2026-10-15.
+# The register of harnesses, checked on 2026-10-15.
 #
 # Every harness of the catalogue, with its adapter and the version pinned,
 # its licence and where that was read, the agent's terms and where they were
@@ -145,14 +145,14 @@ entries:
     served_to_third_parties: organizations_own
     note: Not launchable from the shared catalogue; an organization's own harness spec names the command and answers for its terms.
 
-  # --- The listed tier (SH-57), read 2026-10-16 -------------------------------------------
+  # --- The listed tier, read 2026-10-16 -------------------------------------------
   #
   # Every other agent of agentclientprotocol.com/get-started/agents (43 on the page,
   # modified 2026-10-13; the seven above are the catalogue's), each read at its project's
   # own page, its command cross-checked against the ACP registry
   # (cdn.agentclientprotocol.com/registry/v1/latest/registry.json), the project's own
   # documentation winning where they differ. Listed, not drilled yet: none is offered,
-  # and naming one is refused in that sentence until SH-55's method drills it and a spec
+  # and naming one is refused in that sentence until a drill proves it and a spec
   # moves it to the catalogue. `refused` cites the clause; `unknown` says what was not read.
 
   - harness: agentpool

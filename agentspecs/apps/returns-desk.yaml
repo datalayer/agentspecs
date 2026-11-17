@@ -2,8 +2,8 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Application Specification: Returns Desk
-# The Personal Agent Protocol's operations journey (PR-05,
-# trace operations) as an application: the shop proposes a return or a
+# The Personal Agent Protocol's operations journey
+# (trace operations) as an application: the shop proposes a return or a
 # repair with its exact terms and a version; the person approves that version,
 # and it is done at most once.
 
@@ -44,7 +44,7 @@ rules:
   - action: Read your orders at the shop
     applies_to: read
     behaviour: do_it
-  # A message to the shop goes out in your name (R-02).
+  # A message to the shop goes out in your name.
   - action: Send the shop a message for you
     applies_to: send
     behaviour: ask_first

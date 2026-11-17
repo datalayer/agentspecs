@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""UI specs are Reactor plugins, UI renderers their own specs (R8, F-01, F-02).
+"""UI specs are Reactor plugins, UI renderers their own specs (R8).
 
 Every UI spec is one plugin of agent-runtimes, well formed, and names only
 renderers of the ``ui-renderers`` catalogue; every renderer is well formed;
@@ -39,7 +39,7 @@ def test_the_renderers_are_a2ui_mcp_apps_and_mcp_ui_and_nothing_else():
 
 
 def test_a_renderer_is_not_a_ui():
-    """The renderers moved to `ui-renderers` (F-01): none is left under `ui`, under its id or its shape."""
+    """The renderers moved to `ui-renderers`: none is left under `ui`, under its id or its shape."""
     for renderer in ui_renderers.UI_RENDERER_CATALOGUE:
         assert not (ROOT / "ui" / f"{renderer}.yaml").exists()
     for path in sorted((ROOT / "ui").glob("*.yaml")):
@@ -120,7 +120,7 @@ def test_an_agent_names_ui_plugins_with_their_renderer():
 
 
 def test_the_old_names_are_gone():
-    """`ui-plugins` is `ui` (PS-03): no spec says the old field, no folder keeps the old name."""
+    """`ui-plugins` is `ui`: no spec says the old field, no folder keeps the old name."""
     assert not (ROOT / "ui-plugins").exists()
     for path in sorted([*(ROOT / "agents").rglob("*.yaml"), *(ROOT / "cogs").rglob("*.yaml")]):
         spec = yaml.safe_load(path.read_text()) or {}
@@ -186,7 +186,7 @@ def test_a_server_a_skill_and_a_tool_bring_ui_plugins_of_the_catalogue(folder, w
 
 
 def test_the_seed_agents_capabilities_bring_their_ui():
-    """The UI belongs to the capability (UP-05): Shopify brings the basket, Odoo the reconciliation, Stripe its checkout."""
+    """The UI belongs to the capability: Shopify brings the basket, Odoo the reconciliation, Stripe its checkout."""
     def brought(folder, spec_id):
         spec = _yaml(folder, spec_id)
         return [choice["plugin"] for choice in spec.get("ui", [])]
@@ -260,7 +260,7 @@ def _brought(agent_id):
 
 @pytest.mark.parametrize("agent_id", SEED_AGENTS)
 def test_each_seed_agent_has_ui_in_the_chat_and_an_a2ui_message(agent_id):
-    """UP-12 (the user, 15 November 2026: "for the 6 agents, have such ui: for the chat itself, for the chat message (a2ui)")."""
+    """Asked 15 November 2026 ("for the 6 agents, have such ui: for the chat itself, for the chat message (a2ui)")."""
     chrome, a2ui_messages = [], []
     for choice in _brought(agent_id):
         spec = ui.UI_CATALOGUE[choice["plugin"]]

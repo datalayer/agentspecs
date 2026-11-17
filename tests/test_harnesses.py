@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The harnesses catalogue (SH-01) and its register (SH-04)."""
+"""The harnesses catalogue and its register."""
 
 from __future__ import annotations
 
@@ -50,7 +50,7 @@ def test_every_harness_has_a_register_entry_and_its_version_is_pinned():
         if spec.acp is not None:
             assert entry.version in " ".join([spec.acp.command, *spec.acp.args, *spec.requires.binaries])
     assert set(harnesses.HARNESS_REGISTER) - set(harnesses.LISTED_HARNESSES) == set(harnesses.HARNESS_CATALOGUE)
-    # The long tail (SH-57): every other agent of the ACP agents page, 36 of 43 on 16 October 2026.
+    # The long tail: every other agent of the ACP agents page, 36 of 43 on 16 October 2026.
     assert len(harnesses.LISTED_HARNESSES) == 35
 
 
@@ -155,7 +155,7 @@ def test_what_a_harness_cannot_honour_is_refused_in_a_sentence():
     ]
 
 
-# --- an organization's own harness (SH-46) ---------------------------------------------
+# --- an organization's own harness ---------------------------------------------
 
 ORG_SPEC = {
     "id": "org-acme-coder",
@@ -223,7 +223,7 @@ def test_an_organizations_own_harness_is_refused_in_the_shared_catalogue(tmp_pat
     ]
 
 
-# --- the listed tier (SH-57) -----------------------------------------------------------
+# --- the listed tier -----------------------------------------------------------
 
 
 def test_a_listed_harness_is_refused_listed_not_drilled_yet(tmp_path):
@@ -263,7 +263,7 @@ def test_the_tiers_hold_their_fields():
     assert listed.is_listed and listed.command is None
 
 
-# --- the capabilities table (MH-20) -----------------------------------------------------
+# --- the capabilities table -----------------------------------------------------
 
 
 def test_every_catalogue_harness_declares_its_capabilities_table():

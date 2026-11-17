@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # The MCP gateway's `pap` toolset: an application acting as a person's agent at
-# a Personal Agent Protocol company (ADR-1, B-03). Reached through
+# a Personal Agent Protocol company (ADR-1). Reached through
 # an application's `pap.connections[]`, granted as `datalayer_connection`
 # `pap:<domain>` and admitted at the connection's level.
 id: pap
@@ -11,8 +11,8 @@ description: A person's agent at a company, through Datalayer's MCP gateway.
 # The connection's `server` is `<connection>:<domain>`.
 connection: pap
 
-# What each tool does to the world (agentspecs.actions, R-02,
-# PR-54). A tool not named here is unknown, and unknown is the
+# What each tool does to the world (agentspecs.actions).
+# A tool not named here is unknown, and unknown is the
 # most restricted.
 actions:
   checked: "2026-10-27"

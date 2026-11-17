@@ -37,7 +37,7 @@ Subagents work here as they do on an agent: a member may delegate to
 specialists, and ``delegation`` bounds how far that can go for the team as a
 whole.
 
-**A scene is a team** (A-04, decided 2026-10-07). Agents arranged with
+**A scene is a team** (decided 2026-10-07). Agents arranged with
 their roles, their shared context and their interactions are a team and
 nothing else: a team may hold one member — an agent working alone with its
 data is a scene — and never none; each member names its ``role``; the team
@@ -137,7 +137,7 @@ class TeamProtocol(str, Enum):
     ACP = "acp"
     """The Agent Client Protocol: the member talked to is a harness
     (`harness`), driven through the Shield in front of it — its plan, its
-    diffs and its permission requests come back (SH-45)."""
+    diffs and its permission requests come back."""
 
 
 class TeamSharing(str, Enum):
@@ -160,7 +160,7 @@ class TeamSharing(str, Enum):
 class TeamContext(BaseModel):
     """What the members share: the conversation, and the context they work in.
 
-    A scene's shared context (A-04): how much of the conversation each
+    A scene's shared context: how much of the conversation each
     member is told (`sharing`), and the Frames — the rules, the vocabulary,
     the goals, the style and the norms of the organization, the department,
     the project (`agentspecs.frames`) — every member works under (`frames`),
@@ -302,7 +302,7 @@ class TeamMember(BaseModel):
             "and `server`: the member is that agent program over ACP — Claude Code, "
             "Codex, an organization's own — behind the Shield, asked over `a2a` or "
             "`acp` with a budget, a deadline and a manifest, and answering with its "
-            "plan and its diffs (SH-45)."
+            "plan and its diffs."
         ),
     )
     runs_in: Optional[TeamPlace] = Field(

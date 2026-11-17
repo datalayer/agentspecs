@@ -2,12 +2,12 @@
 #
 # BSD 3-Clause License
 
-"""The catalog of visual components a UI spec renders (C-13).
+"""The catalog of visual components a UI spec renders.
 
 One catalog for the spec, the Canvas and Python, hosted by the UI specs:
 A2UI's standard components by the names A2UI gives them, and Datalayer's own,
 each with its version and its properties as a JSON Schema a properties form
-is drawn from (`@datalayer/primer-rjsf`, C-14): valid, an object, each
+is drawn from (`@datalayer/primer-rjsf`): valid, an object, each
 property titled and described; a standard one's as A2UI's, Datalayer's own
 with an example valid against it.
 """
@@ -131,8 +131,8 @@ def test_a_wrong_value_is_refused_by_the_schema():
 
 
 def test_the_catalogue_page_says_every_component_and_is_the_one_in_the_docs():
-    """The documentation's page of components is generated from the plugins
-    (G-05): it names every component, and for Datalayer's own every
+    """The documentation's page of components is generated from the plugins:
+    it names every component, and for Datalayer's own every
     property, binding and event; the page in the docs is the generated one."""
     from agentspecs.ui import CATALOGUE_PATH, catalogue_markdown
 

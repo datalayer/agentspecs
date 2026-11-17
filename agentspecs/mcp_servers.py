@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""How a remote MCP server of ``agentspecs/mcp-servers`` is authenticated (AC-20).
+"""How a remote MCP server of ``agentspecs/mcp-servers`` is authenticated.
 
 A remote server says what it is sent in ``headers`` — a static bearer,
 ``Authorization: "Bearer ${HF_TOKEN}"``. A server whose bearer is minted for

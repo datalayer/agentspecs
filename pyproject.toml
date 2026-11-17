@@ -26,7 +26,7 @@ dependencies = [
     "mcp[cli]>=2.0",
     "pydantic>=2.0",
     "httpx>=0.24",
-    # The policies catalogue validates each document against the Shield's JSON Schema (SH-50).
+    # The policies catalogue validates each document against the Shield's JSON Schema.
     "jsonschema>=4.18",
     "openapi-spec-validator>=0.7",
 ]
@@ -36,7 +36,7 @@ pydantic-ai = [
   "pydantic-graph>=1.94.0",
   "pydantic-ai-slim>=1.94.0",
 ]
-# A policy document's Dogwood set has its Cedar parsed as it is read (AC-40); without it, the
+# A policy document's Dogwood set has its Cedar parsed as it is read; without it, the
 # temporal clauses and AgentCore's quotas alone, and the spec says so.
 cedar = ["cedarpy>=4.12,<5"]
 test = ["datalayer-agent-shield>=0.2.7", "cedarpy>=4.12,<5", "ipykernel", "jsonschema>=4.18", "jupyter_server>=1.6,<3", "pytest>=7.0", "pytest-asyncio>=0.21"]

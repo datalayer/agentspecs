@@ -11,7 +11,7 @@ signup_url: https://console.cloud.google.com/
 api_key_url: https://console.cloud.google.com/apis/credentials
 setup: "An OAuth client in a Google Cloud project, from [APIs and services, Credentials](https://console.cloud.google.com/apis/credentials) (`GOOGLE_OAUTH_CLIENT_ID` and `GOOGLE_OAUTH_CLIENT_SECRET`); Datalayer mints the person's token per call. See [workspace-mcp](https://github.com/taylorwilsdon/google_workspace_mcp)."
 
-# Gmail only, through Datalayer (W-02). The person connects Gmail in
+# Gmail only, through Datalayer. The person connects Gmail in
 # Google's own consent screen, at one of two levels — *can read*
 # (gmail.readonly) or *can read and send* (gmail.modify + gmail.send) — and
 # Datalayer's IAM keeps the refresh token as their secret. The server runs in
@@ -22,7 +22,7 @@ setup: "An OAuth client in a Google Cloud project, from [APIs and services, Cred
 # (`POST /api/iam/v1/oauth2/google-workspace/token`), narrowed to the
 # connection's level (`access: read` is *can read*, `write` *can read and
 # send*). Neither token is ever in the model's context or the runtime's
-# environment (R-19); the refresh token never leaves IAM.
+# environment; the refresh token never leaves IAM.
 #
 # `GOOGLE_OAUTH_CLIENT_ID` is a name, not Datalayer's client: in this mode the
 # server only validates tokens, which Google issued to IAM's client.
@@ -48,7 +48,7 @@ env:
   WORKSPACE_MCP_HOST: "127.0.0.1"
   WORKSPACE_MCP_PORT: "9711"
 
-# Offered on the platform: the person connects Gmail through IAM (W-02).
+# Offered on the platform: the person connects Gmail through IAM.
 enabled: true
 
 install:

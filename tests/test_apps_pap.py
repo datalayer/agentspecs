@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-"""Personal Agent Protocol in the Appspec (S-01, S-02, S-03)."""
+"""Personal Agent Protocol in the Appspec."""
 
 from pathlib import Path
 
@@ -151,7 +151,7 @@ def company_app(company: dict, *x_paps: dict):  # type: ignore[no-untyped-def]
 
 
 def test_a_company_may_turn_sign_in_off_for_personal_agents_and_then_answers_signed_out() -> None:
-    """D4-08 (PAP 0.3 as published §3.2, `auth.disabled`): off by default; on, the company answers
+    """`auth.disabled` (PAP 0.3 as published §3.2): off by default; on, the company answers
     personal agents signed out only, so one admitting nobody signed out is refused."""
     assert app(company={"enabled": True}).pap.company.sign_in_disabled is False
     off = app(company={"enabled": True, "scopes": [READ], "sign_in_disabled": True})
@@ -163,7 +163,7 @@ def test_a_company_may_turn_sign_in_off_for_personal_agents_and_then_answers_sig
 
 
 def test_a_company_may_publish_its_public_skills_to_personal_agents() -> None:
-    """D4-06 (PAP 0.3 §9.4): off by default; on, the application names skills to publish; which of
+    """PAP 0.3 §9.4: off by default; on, the application names skills to publish; which of
     them are public and secret-free is the platform's to say at Ship."""
     assert app(company={"enabled": True}).pap.company.publish_skills is False
     spec = parse_app({**BASE, "skills": ["accounting"], "pap": {"profile": "draft-01", "company": {"enabled": True, "publish_skills": True}}})
@@ -175,7 +175,7 @@ def test_a_company_may_publish_its_public_skills_to_personal_agents() -> None:
 
 
 def test_a_companys_website_says_whether_it_gives_full_access_or_asks_agents_not_to_browse() -> None:
-    """D5-09 (PAP draft 0.4 §6): `web_unscoped` (`web.unscoped`) needs the website; `web_disabled`
+    """PAP draft 0.4 §6: `web_unscoped` (`web.unscoped`) needs the website; `web_disabled`
     (`web.disabled`) lists no website and offers the company's agent or API; both off by default."""
     plain = app(company={"enabled": True}).pap.company
     assert (plain.web_unscoped, plain.web_disabled) == (False, False)

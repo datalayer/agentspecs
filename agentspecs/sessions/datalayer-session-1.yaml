@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# The session file (MH-12): `datalayer-session/1`, JSONL. The first line is the
+# The session file: `datalayer-session/1`, JSONL. The first line is the
 # session (or, for a team session, the team line followed by each seat's
 # session line); every other line is one entry of its record, in order,
 # redacted. The file carries no credential, no signed user, no runtime address

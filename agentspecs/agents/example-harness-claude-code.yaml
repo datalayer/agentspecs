@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Agent Specification: A Claude Code Agent
-# An agent that is a harness of the catalogue (SH-01, SH-10): Claude
+# An agent that is a harness of the catalogue: Claude
 # Code, driven over the Agent Client Protocol by the Datalayer runtime's
 # adapter behind the Shield. Off in the shared catalogue, and offered from
 # the Studio's Toolbox. On Datalayer its model calls go through ai-inference,

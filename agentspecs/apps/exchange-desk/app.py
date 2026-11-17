@@ -2,8 +2,8 @@
 #
 # BSD 3-Clause License
 
-"""Exchange Desk: a company to people's own agents, written in Python
-(E-02; PI-42).
+"""Exchange Desk: a company to people's own agents, written in Python.
+
 
 Shipped at its own domain, it answers before anybody signs in, lets people
 sign in with their Datalayer account, and proposes an exchange in its

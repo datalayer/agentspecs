@@ -2,8 +2,8 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Application Specification: Guest Desk
-# A business people's own agents ask over PACT 1.0 (PR-13,
-# PI-32; decided 2026-10-13): Datalayer is the Provider on its card, its
+# A business people's own agents ask over PACT 1.0 (decided 2026-10-13):
+# Datalayer is the Provider on its card, its
 # owner the Brand. It answers a personal agent alone about what it offers
 # and, once the person signs in with Datalayer and lets their agent see who
 # they are here, for that person — every answer under their permission

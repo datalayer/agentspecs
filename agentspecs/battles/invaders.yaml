@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Battle: Space Invaders (B1-02, 7 November 2026). Two Players at the Space
+# Battle: Space Invaders (7 November 2026). Two Players at the Space
 # Invaders arena, drawn in the page: one wave for both, a cannon each; a hit
 # scores the invader's row, and the game ends when the wave is cleared, a
 # cannon is hit or the wave lands. The arena keeps the score, which decides.

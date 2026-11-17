@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Agent Specification: A fast-agent Agent
-# An agent that is a harness of the catalogue (SH-43): fast-agent, driven over
+# An agent that is a harness of the catalogue: fast-agent, driven over
 # the Agent Client Protocol by the Datalayer runtime's adapter behind the
 # Shield. Off in the shared catalogue: it needs the account's own
 # ANTHROPIC_API_KEY (the register: API keys only), which the harness declares and

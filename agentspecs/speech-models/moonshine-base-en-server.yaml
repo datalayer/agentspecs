@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Speech model: Moonshine Base, English, on the server (VO-47)
+# Speech model: Moonshine Base, English, on the server
 
 id: moonshine-base-en-server
 version: 0.0.1

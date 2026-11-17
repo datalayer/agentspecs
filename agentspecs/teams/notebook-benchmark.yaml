@@ -7,7 +7,7 @@
 # benchmark, three specialists, one tree. It is a team rather than three
 # separate delegations because the order matters and the supervisor has to
 # answer from all three — which is exactly what `execution_mode: sequential`
-# and `depends_on` already express, so no new concept was needed (O2-13).
+# and `depends_on` already express, so no new concept was needed.
 #
 # The three roles are deliberately the ones that disagree with each other.
 # A runner that also judged its own output would have nothing to review, and

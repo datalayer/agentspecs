@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Stage: a purchase approved at a test shop over UCP, played in the page from
-# its scripted scene (AGENT_PROTOCOLS EX-14).
+# its scripted scene.
 
 id: ucp-a-purchase-approved
 version: 0.0.1

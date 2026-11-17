@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The standards catalogue (SH-60, SH-66): AIUC-1 at its
+"""The standards catalogue: AIUC-1 at its
 October 15, 2026 release, held to the published index; ISO/IEC 42001 through the crosswalk."""
 
 from __future__ import annotations
@@ -64,7 +64,7 @@ def test_every_control_carries_the_evidence_kinds_cadence_and_crosswalks_the_sta
             assert item.id.startswith(control.id + ".")
         for framework in control.crosswalks:
             assert framework in aiuc.frameworks
-    # The crosswalks of SH-62 and SH-66 are carried on the controls.
+    # The crosswalks are carried on the controls.
     assert "Article 72: Post-Market Monitoring by Providers and Post-Market Monitoring Plan for High-Risk AI Systems" in aiuc.control("D003").crosswalks["eu-ai-act"]
     assert aiuc.control("D003").crosswalks["nist-ai-rmf"] == ["GOVERN 6.1: Third-party risk policies"]
     assert "ASI02 - Tool Misuse and Exploitation" in aiuc.control("D003").crosswalks["owasp-agentic-top-10"]

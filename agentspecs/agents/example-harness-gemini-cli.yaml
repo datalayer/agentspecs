@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Agent Specification: A Gemini CLI Agent
-# An agent that is a harness of the catalogue (SH-43): Gemini CLI, driven over
+# An agent that is a harness of the catalogue: Gemini CLI, driven over
 # the Agent Client Protocol by the Datalayer runtime's adapter behind the
 # Shield. Off in the shared catalogue: it needs the account's own
 # GEMINI_API_KEY (the register: API keys only), which the harness declares and

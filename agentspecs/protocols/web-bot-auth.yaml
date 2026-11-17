@@ -21,5 +21,5 @@ packages:
 # Its tools' action classes, under protocol-tools/ (agentspecs.actions).
 protocol_tools: ["signed-fetch"]
 # The Appspec block it is configured by: refused unless `protocols` lists it.
-# A signed fetch reads a page at a site it names (EX-11).
+# A signed fetch reads a page at a site it names.
 appspec_block: signed_fetch

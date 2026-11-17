@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The session file (MH-12): ``datalayer-session/1``.
+"""The session file: ``datalayer-session/1``.
 
 A session — one conversation of one person with one application's agent,
 kept in the application's record — travels as a JSONL file whose first line
@@ -53,7 +53,7 @@ REFERENCE_PATH = _ROOT.parent.parent / "docs" / "docs" / "sessions" / "index.md"
 #: A session's uid: 8 to 128 letters, digits, hyphens or underscores, as the runtime says it.
 SESSION_UID = re.compile(r"^[A-Za-z0-9_-]{8,128}$")
 
-#: A title at most this long (MH-43).
+#: A title at most this long.
 TITLE_LIMIT = 200
 
 

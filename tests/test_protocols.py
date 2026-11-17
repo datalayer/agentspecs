@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The protocols catalogue (PS-01) and what speaks them (PS-02)."""
+"""The protocols catalogue and what speaks them."""
 
 from __future__ import annotations
 

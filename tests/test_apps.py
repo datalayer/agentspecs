@@ -216,7 +216,7 @@ def test_a_condition_is_read_or_refused() -> None:
 
 
 def test_a_tool_that_sends_says_which_argument_carries_its_words() -> None:
-    """I-10: what it sends is signed, in the argument its spec names."""
+    """What it sends is signed, in the argument its spec names."""
     servers = server_specs()
     assert server_tool_signs(servers["google-workspace"], "send_gmail_message") == "body"
     assert server_tool_signs(servers["google-workspace"], "draft_gmail_message") == "body"
@@ -372,7 +372,7 @@ def test_every_application_resolves_its_references() -> None:
 
 
 def test_every_example_says_what_was_verified_and_how() -> None:
-    # E-14: what was tried live, what runs on recorded data, what is not
+    # What was tried live, what runs on recorded data, what is not
     # verified yet — each example says at least one, in sentences.
     for identity, found in APP_CATALOGUE.items():
         verified = found.tests.verified
@@ -401,17 +401,17 @@ def test_what_is_not_enabled_is_said_as_setup_and_not_as_a_mistake() -> None:
 
 
 def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() -> None:
-    """E-01, decided 2026-10-06: an example whose agent needs nothing missing is on;
+    """Decided 2026-10-06: an example whose agent needs nothing missing is on;
     the others stay off, each saying why in a sentence its page shows."""
     off = {identity: spec for identity, spec in APP_CATALOGUE.items() if not spec.enabled}
-    # Exchange Desk and Order Desk are on since drilled live (PI-42; Exchange Desk on 14 October 2026).
-    # The Personal Agent Protocol's recorded journeys, written as applications (PR-05):
-    # Order Tracker and Sign-in Desk are on since drilled live at the hosted Manzanita (PI-42),
+    # Exchange Desk and Order Desk are on since drilled live (Exchange Desk on 14 October 2026).
+    # The Personal Agent Protocol's recorded journeys, written as applications:
+    # Order Tracker and Sign-in Desk are on since drilled live at the hosted Manzanita,
     # Returns Desk (pap_propose) and Shop Concierge (Marta's handoff) since 13 October 2026, evening.
-    # Travel Desk and Shopping Desk are on since drilled live at the hosted counterparts (PI-42).
-    # Signed Reader is on since drilled live at the hosted Example Verifier (EX-11).
-    # Guest Desk and Errand Runner are on since drilled live as a pair (PR-13).
-    # Inbox triage is on since 0.0.128: Gmail connected through Datalayer (W-02).
+    # Travel Desk and Shopping Desk are on since drilled live at the hosted counterparts.
+    # Signed Reader is on since drilled live at the hosted Example Verifier.
+    # Guest Desk and Errand Runner are on since drilled live as a pair.
+    # Inbox triage is on since 0.0.128: Gmail connected through Datalayer.
     assert sorted(off) == sorted(
         ["pipeline-report"]
         + [identity for identity in PAP_JOURNEYS if identity not in PAP_JOURNEYS_LIVE]
@@ -519,7 +519,7 @@ def test_an_application_survives_being_written_and_read_again() -> None:
 
 
 def test_its_address_shows_only_its_avatar_when_said() -> None:
-    """T-21: off unless said; said, it is written and read again."""
+    """Off unless said; said, it is written and read again."""
     assert app(deployment={"hosted": {"slug": "desk"}}).deployment.hosted.avatar_alone is False
     alone = app(deployment={"hosted": {"slug": "desk", "avatar_alone": True}})
     assert alone.deployment.hosted.avatar_alone is True
@@ -534,7 +534,7 @@ def test_the_old_character_alone_key_is_refused_with_its_new_name() -> None:
 
 
 def test_the_host_page_passes_values_and_offers_functions_each_decided_by_a_rule() -> None:
-    """D-10: what the host passes is read with host_context, its functions called as host_<name>."""
+    """What the host passes is read with host_context, its functions called as host_<name>."""
     host = {
         "context": ["user", "page", "plan"],
         "functions": [
@@ -573,7 +573,7 @@ def test_the_host_page_passes_values_and_offers_functions_each_decided_by_a_rule
 
 
 def test_an_application_acting_in_each_users_name_takes_only_a_signed_user() -> None:
-    """D-21: `user: signed` refuses what the page claims; `claimed` unless said."""
+    """`user: signed` refuses what the page claims; `claimed` unless said."""
     from agentspecs.apps import HOST_USER_TOKEN_ALGORITHM, HOST_USER_TOKEN_MAX_SECONDS, HostUser
 
     claimed = app(deployment={"embedded": {"host": {"context": ["user"]}}})
@@ -608,7 +608,7 @@ def test_a_decision_application_carries_the_whole_decision() -> None:
 
 
 def test_what_an_example_is_tried_on_is_published_with_it() -> None:
-    """E-06, E-11: a visitor without an account decides on sample
+    """A visitor without an account decides on sample
     alternatives with their evidence, and computes a quote from Datalayer's
     price list — each read only, published with the example."""
     for identity in ["ship-or-fix", "supplier-comparison", "data-quality", "model-choice"]:
@@ -629,7 +629,7 @@ def test_what_an_example_is_tried_on_is_published_with_it() -> None:
 
 
 def test_the_support_desk_answers_from_two_sample_documents() -> None:
-    """E-01: Support Desk's two documents are Datalayer's samples, given to
+    """Support Desk's two documents are Datalayer's samples, given to
     an application made from it, each holding what its tests ask."""
     desk = APP_CATALOGUE["support-desk"]
     documents = {document.name: document for document in desk.samples.documents}
@@ -640,7 +640,7 @@ def test_the_support_desk_answers_from_two_sample_documents() -> None:
 
 
 def test_a_report_from_a_file_test_gives_it_its_file() -> None:
-    """E-01: each test of Report from a File that is about a CSV gives it
+    """Each test of Report from a File that is about a CSV gives it
     the CSV, as its page would; the PDF it refuses is named, not given."""
     cases = APP_CATALOGUE["report-from-a-file"].tests.cases
     given = {case.ask: [file.name for file in case.files] for case in cases}
@@ -659,7 +659,7 @@ def test_a_report_from_a_file_test_gives_it_its_file() -> None:
 
 
 def test_a_test_can_be_a_short_conversation() -> None:
-    """E-01: a test is one message or a conversation of turns — what the
+    """A test is one message or a conversation of turns — what the
     person says, the option they choose, the action they press with its
     payload — judged whole; each turn does one thing, and a case does not
     both ask and converse."""
@@ -706,7 +706,7 @@ def test_a_test_s_conversation_is_refused_when_it_does_not_hold(case: dict, says
 
 
 def test_customer_interview_s_tests_are_conversations_its_code_can_pass() -> None:
-    """E-01: Customer Interview asks for consent (a choice), then the goal,
+    """Customer Interview asks for consent (a choice), then the goal,
     and keeps an insight and its result by its actions — one message could test
     only that it asks for consent first. Its tests answer its questions and press
     the actions its app.py defines."""
@@ -724,7 +724,7 @@ def test_customer_interview_s_tests_are_conversations_its_code_can_pass() -> Non
 
 
 def test_an_example_is_told_what_its_tests_ask() -> None:
-    """E-01: what an example's tests expect is in its instructions, so
+    """What an example's tests expect is in its instructions, so
     its agent can do it — the run on Datalayer of 2026-10-10 failed Quote
     Calculator's *0 seats.* (it asked what was meant) and Support Desk's two
     hand-overs (it told the person to contact support themselves)."""
@@ -808,7 +808,7 @@ def test_a_decision_is_tried_on_alternatives_it_can_rank(samples: dict, says: st
 
 
 def test_the_four_decision_templates_are_in_the_catalogue() -> None:
-    """E-01: the landing's four templates, each an Appspec of its own — the
+    """The landing's four templates, each an Appspec of its own — the
     Jupyter data analyst, the decision's ten components, typed decisions."""
     ship = APP_CATALOGUE["ship-or-fix"]
     templates = ["ship-or-fix", "supplier-comparison", "data-quality", "model-choice"]
@@ -878,7 +878,7 @@ EXAMPLES = {
     "decide": AppKind.CHAT,
     "sales": AppKind.CHAT,
     "accounting": AppKind.CHAT,
-    # The scenes of A-08: one agent and its data, and a desk that asks two.
+    # The scenes: one agent and its data, and a desk that asks two.
     "month-end-close": AppKind.CHAT,
     "crop-monitoring": AppKind.CHAT,
     "code-explainer": AppKind.CHAT,
@@ -892,19 +892,19 @@ EXAMPLES = {
     "inbox-triage": AppKind.WORKER,
     # Datalayer Steward for AWS: an AWS account's savings, read with a read-only role.
     "aws-steward-agent": AppKind.WORKER,
-    # The Personal Agent Protocol's: a personal agent at a shop, and a company (E-01, E-02).
+    # The Personal Agent Protocol's: a personal agent at a shop, and a company.
     "order-desk": AppKind.CHAT,
     "exchange-desk": AppKind.CHAT,
-    # A personal agent at an airline, over PACT (EX-13).
+    # A personal agent at an airline, over PACT.
     "travel-desk": AppKind.CHAT,
-    # Shopping at a test merchant over UCP, each purchase asked first (EX-12).
+    # Shopping at a test merchant over UCP, each purchase asked first.
     "shopping-desk": AppKind.CHAT,
-    # Reading a page at a site that checks its signature (EX-11).
+    # Reading a page at a site that checks its signature.
     "signed-reader": AppKind.CHAT,
-    # A PACT business and the personal agent that asks it, a pair (PR-13).
+    # A PACT business and the personal agent that asks it, a pair.
     "guest-desk": AppKind.CHAT,
     "errand-runner": AppKind.CHAT,
-    # The Personal Agent Protocol's recorded journeys, written as applications (PR-05).
+    # The Personal Agent Protocol's recorded journeys, written as applications.
     "order-tracker": AppKind.CHAT,
     "shop-concierge": AppKind.CHAT,
     "live-shop-chat": AppKind.CHAT,
@@ -937,14 +937,14 @@ PAP_JOURNEYS = {
     "bookkeeping-desk": "two-companies",
 }
 
-#: The journeys drilled live at the hosted Manzanita on 13 October 2026, and switched on (PI-42):
+#: The journeys drilled live at the hosted Manzanita on 13 October 2026, and switched on:
 #: Shop Concierge (nobody at the test company), Live Shop Chat (replies read whole), Returns Desk (returns and
 #: repairs only through the company's API) and Bookkeeping Desk (no hosted counterpart) say why not.
 PAP_JOURNEYS_LIVE = {"order-desk", "order-tracker", "returns-desk", "shop-concierge", "sign-in-desk"}
 
 
 def test_the_seven_pap_journeys_are_examples_saying_they_are_recorded() -> None:
-    """PR-05 (decided 2026-10-13): each recorded PAP trace is a Studio example, off until run live."""
+    """Decided 2026-10-13: each recorded PAP trace is a Studio example, off until run live."""
     journeys = {**PAP_JOURNEYS, "order-desk": "user-with-a-company"}
     assert sorted(journeys.values()) == [
         "account-tokens", "conversation-control", "conversation-streaming", "mediated-sign-in",
@@ -956,7 +956,7 @@ def test_the_seven_pap_journeys_are_examples_saying_they_are_recorded() -> None:
         # account-tokens is said in a Maker's words: a token is a builder's word.
         said = "of a sign-in kept for each person" if trace == "account-tokens" else trace
         assert any(f"recorded journey {said}" in line for line in found.tests.verified.recorded), identity
-        # On since drilled live at the hosted Manzanita (PI-42); the others say why not.
+        # On since drilled live at the hosted Manzanita; the others say why not.
         assert (bool(found.tests.verified.live) and found.enabled) is (identity in PAP_JOURNEYS_LIVE), identity
         assert found.enabled or found.unavailable_because.strip().endswith("."), identity
         if identity != "order-desk":
@@ -971,7 +971,7 @@ def test_the_seven_pap_journeys_are_examples_saying_they_are_recorded() -> None:
     assert [connection.company for connection in bookkeeping.connections] == ["northwind.example"]
 
 
-#: Datalayer's hosted test counterparts (PI-42): Manzanita, Example Air, the test merchants.
+#: Datalayer's hosted test counterparts: Manzanita, Example Air, the test merchants.
 HOSTED_COUNTERPARTS = {
     "manzanita.examples.datalayer.run",
     "air.examples.datalayer.run",
@@ -982,7 +982,7 @@ HOSTED_COUNTERPARTS = {
 
 
 def test_the_protocol_examples_reach_the_hosted_counterparts() -> None:
-    """PI-42 (decided 2026-10-13): every protocol example names a counterpart Datalayer
+    """Decided 2026-10-13: every protocol example names a counterpart Datalayer
     hosts; Bookkeeping Desk's Northwind has none, so it stays off."""
     reached: dict[str, list[str]] = {}
     for identity, found in APP_CATALOGUE.items():
@@ -1005,7 +1005,7 @@ def test_the_protocol_examples_reach_the_hosted_counterparts() -> None:
 
 
 def test_the_examples_are_in_the_catalogue() -> None:
-    """E-01: every example, and Decide, of its kind, with its face its own."""
+    """Every example, and Decide, of its kind, with its face its own."""
     assert {identity: found.kind for identity, found in APP_CATALOGUE.items()} == EXAMPLES
     # A home page demo (tagged `demo`) keeps the face the home page shows, which may be
     # another application's; every other face is its own.
@@ -1072,7 +1072,7 @@ def test_accounting_only_reads_the_books_and_asks_before_anything_that_would_cha
 
 
 def test_the_python_examples_sit_beside_their_spec() -> None:
-    """E-02: an example built in Python keeps its `app.py` in a folder named
+    """An example built in Python keeps its `app.py` in a folder named
     for it, and its spec is the one `loop apps build` wrote from it."""
     built = sorted(path.parent.name for path in APPS_DIR.glob("*/app.py"))
     assert built == ["customer-interview", "exchange-desk", "report-from-a-file"]
@@ -1083,7 +1083,7 @@ def test_the_python_examples_sit_beside_their_spec() -> None:
 
 
 def test_the_canvas_example_says_its_page_was_composed_on_the_canvas() -> None:
-    """E-05: how an example was built is in the catalogue. An example built in
+    """How an example was built is in the catalogue. An example built in
     Python has its `app.py`; one whose page was composed on the Canvas says
     `composed_by: canvas`; *Support desk* is the Canvas example."""
     on_canvas = sorted(
@@ -1113,7 +1113,7 @@ def test_the_weekly_pipeline_report_runs_the_op_s_checks_and_asks_before_sending
 
 
 def test_an_application_embeds_in_four_modes() -> None:
-    """D-07: inline, bubble, panel, and the assistant — an avatar that speaks in a balloon."""
+    """Inline, bubble, panel, and the assistant — an avatar that speaks in a balloon."""
     from agentspecs.apps import EmbedMode
 
     assert [mode.value for mode in EmbedMode] == ["inline", "bubble", "panel", "assistant"]
@@ -1128,7 +1128,7 @@ def test_an_application_embeds_in_four_modes() -> None:
 
 
 def test_an_application_names_the_avatar_of_its_assistant() -> None:
-    """T-24: any avatar an enabled plugin contributes, by id, or none.
+    """Any avatar an enabled plugin contributes, by id, or none.
 
     Which ids exist is known where the plugins are, the runtime and the page:
     the spec takes any id of the right shape, a plugin's own as Datalayer's."""
@@ -1180,7 +1180,7 @@ def test_the_old_assistant_and_character_keys_are_refused_with_the_new_name() ->
 
 
 def test_an_application_says_how_its_balloon_shows_the_conversation() -> None:
-    """T-23: the whole history, or only what it says or does now; the page's own when unsaid."""
+    """The whole history, or only what it says or does now; the page's own when unsaid."""
     plain = app()
     assert plain.interface.balloon is None
     assert "interface" not in dump_app(plain)
@@ -1200,7 +1200,7 @@ def test_an_application_says_how_its_balloon_shows_the_conversation() -> None:
 
 
 def test_an_application_names_the_theme_it_runs_in_by_default() -> None:
-    """T-30: a theme of Appearance's and, optionally, a colour mode; the person's own when unsaid."""
+    """A theme of Appearance's and, optionally, a colour mode; the person's own when unsaid."""
     plain = app()
     assert plain.interface.theme is None
     assert "interface" not in dump_app(plain)
@@ -1220,7 +1220,7 @@ def test_an_application_names_the_theme_it_runs_in_by_default() -> None:
 
 
 def test_an_application_declares_slash_commands_for_its_composer() -> None:
-    """P-19: a command's name follows the slash; picking it sends its prompt, the words typed in `{input}`."""
+    """A command's name follows the slash; picking it sends its prompt, the words typed in `{input}`."""
     plain = app()
     assert plain.interface.commands == []
     assert "interface" not in dump_app(plain)
@@ -1259,7 +1259,7 @@ def test_an_application_declares_slash_commands_for_its_composer() -> None:
 
 
 def test_an_application_declares_the_actions_of_its_code_typed() -> None:
-    """RU-5: each action of its code is declared with the JSON Schema
+    """Each action of its code is declared with the JSON Schema
     of its payload; a test presses only a declared action, with what it takes."""
     insight = {
         "type": "object",
@@ -1302,7 +1302,7 @@ def test_an_application_declares_the_actions_of_its_code_typed() -> None:
 
 
 def test_an_application_declares_mode_switches_whose_option_goes_with_every_run() -> None:
-    """P-19: a mode's options say what the agent is told and, for one mode, the model it runs on."""
+    """A mode's options say what the agent is told and, for one mode, the model it runs on."""
     plain = app()
     assert plain.interface.modes == []
     assert plain.interface.mode_choice() == {}
@@ -1358,7 +1358,7 @@ def test_an_application_declares_mode_switches_whose_option_goes_with_every_run(
 
 
 def test_an_application_says_what_a_person_may_send_without_being_asked() -> None:
-    """P-21: the kinds of file the composer takes, each with its largest size, and how many at once."""
+    """The kinds of file the composer takes, each with its largest size, and how many at once."""
     plain = app()
     assert plain.interface.uploads is None
     uploads = {
@@ -1405,7 +1405,7 @@ def test_an_application_says_what_a_person_may_send_without_being_asked() -> Non
 
 
 def test_a_mode_runs_on_a_model_of_the_catalogue() -> None:
-    """P-19: a model a mode names that the catalogue does not have is a problem, said in words."""
+    """A model a mode names that the catalogue does not have is a problem, said in words."""
     from agentspecs.models import list_models
 
     known = list_models()[0].id
@@ -1419,7 +1419,7 @@ def test_a_mode_runs_on_a_model_of_the_catalogue() -> None:
 
 
 def test_an_application_offers_several_profiles_each_with_its_own_starters() -> None:
-    """P-20: profiles — a variant of the agent, its model, instructions and starters — and starters by category."""
+    """Profiles — a variant of the agent, its model, instructions and starters — and starters by category."""
     plain = app()
     assert plain.interface.profiles == []
     assert plain.interface.profile_choice() is None
@@ -1461,7 +1461,7 @@ def test_an_application_offers_several_profiles_each_with_its_own_starters() -> 
 
 
 def test_settings_are_drawn_with_the_nine_inputs() -> None:
-    """P-20: the nine inputs are JSON Schema fields and the widget a uiSchema names for each."""
+    """The nine inputs are JSON Schema fields and the widget a uiSchema names for each."""
     from agentspecs.apps import FORM_WIDGETS, SETTING_INPUTS
 
     assert list(SETTING_INPUTS) == [
@@ -1526,7 +1526,7 @@ def test_settings_are_drawn_with_the_nine_inputs() -> None:
 
 
 def test_an_application_is_translated_in_its_spec() -> None:
-    """P-26: its words in other languages, by BCP 47 tag; a person reads theirs, else its own."""
+    """Its words in other languages, by BCP 47 tag; a person reads theirs, else its own."""
     from agentspecs.apps import pick_language
 
     assert pick_language(["en", "fr", "pt-BR"], ["fr-CA", "en"]) == "fr"
@@ -1750,7 +1750,7 @@ def test_a_reference_that_does_not_resolve_is_a_problem_said_in_words() -> None:
         "There is no agent or Cog named 'no-such-agent'."
     ]
     assert "There is no Frame named 'nope'." in app_problems(app(context=["nope"]))
-    # An organization's own context resolves among its organization's (U-32).
+    # An organization's own context resolves among its organization's.
     assert app_problems(app(context=["org-house-style"]), ["org-house-style"]) == []
     assert app_problems(app(context=["org-house-style"]), []) == [
         "Its organization has no context named 'org-house-style'."
@@ -1775,7 +1775,7 @@ def test_a_reference_that_does_not_resolve_is_a_problem_said_in_words() -> None:
 
 
 def test_a_component_is_one_a_ui_renders() -> None:
-    """C-13: the UI specs' catalogs — what a layout names resolves, or is refused."""
+    """The UI specs' catalogs — what a layout names resolves, or is refused."""
     from agentspecs.apps import component_named
 
     assert component_named("Table")["standard"] is False  # type: ignore[index]
@@ -2077,7 +2077,7 @@ def test_inbox_triage_forwards_outside_nothing_and_leaves_it_to_me() -> None:
     forward = {**mailbox, "forward_message_id": "m1"}
     assert behaviour_for(triage, send, arguments={**forward, "to": "ana@datalayer.io"}) is Behaviour.ASK_FIRST
     assert behaviour_for(triage, send, arguments={**forward, "to": "lawyer@firm.com"}) is Behaviour.LEAVE_TO_ME
-    # Its rules say the four behaviours, with the defaults of the plan (W-04).
+    # Its rules say the four behaviours, with the defaults of the plan.
     said = {rule.action: rule.behaviour for rule in triage.rules}
     assert said["Label and archive a message"] is Behaviour.DO_IT
     assert said["Draft a reply"] is Behaviour.DO_IT
@@ -2221,14 +2221,14 @@ def test_the_reference_says_every_field_and_is_the_one_in_the_docs() -> None:
         if key == "team":
             document.pop("agent")
         if key in ("pap", "pact", "a2a"):
-            # A block configuring a protocol is read with its protocol listed (PS-02).
+            # A block configuring a protocol is read with its protocol listed.
             document["protocols"] = [key]
         parse_app(document)
     if REFERENCE_PATH.exists():
         assert REFERENCE_PATH.read_text() == page, "run `python -m agentspecs.apps`"
 
 
-# --- whether its conversations may suggest tests (V-16) ----------------------------
+# --- whether its conversations may suggest tests ----------------------------
 
 
 def test_conversations_suggest_no_test_unless_said() -> None:
@@ -2262,7 +2262,7 @@ def test_accounting_answers_in_markdown_a_notebook_and_components() -> None:
 
 
 def test_the_scenes_members_answer_with_components_of_the_catalog() -> None:
-    """H-02: every member on a runtime offers the catalog's surface, A2UI's media type."""
+    """Every member on a runtime offers the catalog's surface, A2UI's media type."""
     from agentspecs.apps import output_media_types
 
     assert "application/json+a2ui" in output_media_types()
@@ -2298,7 +2298,7 @@ def test_an_output_the_catalogue_does_not_give_is_a_problem() -> None:
     )
 
 
-# --- what the record keeps, as its record or its Track says (R-07) ---------------
+# --- what the record keeps, as its record or its Track says ---------------
 
 
 def test_the_record_keeps_what_it_says_for_as_long_as_it_says() -> None:
@@ -2339,7 +2339,7 @@ def test_a_track_the_catalogue_does_not_have_is_said() -> None:
 
 
 def test_a_form_asks_named_fields() -> None:
-    """C-16: a Form block is the JSON Schema of what it asks — an object
+    """A Form block is the JSON Schema of what it asks — an object
     whose fields are named, each required one among them."""
 
     def page(form: dict) -> AppSpec:
@@ -2368,7 +2368,7 @@ def test_a_form_asks_named_fields() -> None:
 
 
 def test_settings_are_a_form() -> None:
-    """C-16, one form kind: an application's settings are the JSON Schema
+    """One form kind: an application's settings are the JSON Schema
     of a form, checked as a Form block's are (`form_problems`); the old list of
     settings is refused, not read."""
     tone = {"type": "string", "title": "Tone", "enum": ["warm", "dry"], "default": "warm"}
@@ -2401,11 +2401,11 @@ def test_the_catalogue_settings_are_forms() -> None:
             jsonschema.validate(field["default"], field)
 
 
-# --- what its code declares (P-06) -------------------------------------------------
+# --- what its code declares -------------------------------------------------
 
 
 def test_an_application_declares_tools_of_its_own_that_the_rules_decide() -> None:
-    """P-06: `@app.tool` — a tool written in its code, named, said in what it does, ruled by name."""
+    """`@app.tool` — a tool written in its code, named, said in what it does, ruled by name."""
     plain = app()
     assert plain.tools == [] and plain.tool("lookup") is None
     lookup = {
@@ -2446,7 +2446,7 @@ def test_an_application_declares_tools_of_its_own_that_the_rules_decide() -> Non
 
 
 def test_an_application_declares_checks_and_tests_written_in_its_code() -> None:
-    """P-06: `@app.check` at a stage, `@app.test` deciding a case: declared by name, said in words."""
+    """`@app.check` at a stage, `@app.test` deciding a case: declared by name, said in words."""
     plain = app()
     assert plain.checks.code == []
     check = {"name": "no_prices", "on": "answer", "description": "It never quotes a price."}
@@ -2473,7 +2473,7 @@ def test_an_application_declares_checks_and_tests_written_in_its_code() -> None:
     assert set(schema["AppTool"]["required"]) == {"name", "description", "does"}
 
 
-# --- a widget's page written in its code (P-05) ------------------------------------
+# --- a widget's page written in its code ------------------------------------
 
 PAGE = {
     "function": "quote",
@@ -2533,7 +2533,7 @@ def test_a_page_is_refused_in_sentences() -> None:
         app(kind="widget", interface={"page": PAGE, "settings": settings})
 
 
-# --- components its developer wrote (P-17) -----------------------------------------
+# --- components its developer wrote -----------------------------------------
 
 GAUGE = {
     "name": "Gauge",
@@ -2621,7 +2621,7 @@ def test_a_component_its_developer_wrote_is_refused_in_sentences() -> None:
 
 
 def test_a_component_of_the_applications_folder_is_named_by_its_path_in_it() -> None:
-    """P-29: a file of the folder, packaged with the application."""
+    """A file of the folder, packaged with the application."""
     for source in ("gauge.js", "./gauge.js", "components/gauge.mjs"):
         assert app(interface={"custom_components": [{**GAUGE, "source": source}]}) is not None
 

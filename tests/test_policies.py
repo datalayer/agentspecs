@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 
-"""The policies catalogue (SH-50): the Shield's schema carried verbatim, the documents it holds."""
+"""The policies catalogue: the Shield's schema carried verbatim, the documents it holds."""
 
 from __future__ import annotations
 
@@ -116,7 +116,7 @@ def test_a_file_named_otherwise_than_its_id_is_refused(tmp_path: pathlib.Path):
         policies.get_policy("nope")
 
 
-# -- the dogwood section (AC-40) ---------------------------------------------------------------
+# -- the dogwood section ---------------------------------------------------------------
 
 
 def _installed_shield(at_least: str):

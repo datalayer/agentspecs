@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Coding agents as a team (SH-45: "an agent delegates to a
+# Coding agents as a team ("an agent delegates to a
 # coding agent").
 #
 # Two harnesses, each an agent program over ACP behind the Shield: Claude
