@@ -52,6 +52,12 @@ rules:
   - action: Quote a basket and place a test order at the Demo Shop
     applies_to: write
     behaviour: do_it
+  # Confirming an operation may buy: here the one company is the Demo Shop, whose
+  # orders are test orders, and the gateway approves as the agent only those (a
+  # write that moves no money); anything else would wait for a person nobody is.
+  - action: Confirm a test order at the Demo Shop
+    applies_to: buy
+    behaviour: do_it
 goal: >-
   Show a visitor how the Shopper finds and compares products and puts a basket
   together, and that it would buy only once the person approved, without
