@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.218
+
+- **`image-stock`, a skill with optional keys** (the user, 18 November 2026): the skill spec of datalayer-skills' stock image skill (0.7.0, `datalayer_skills.skills.image_stock`) — stock photos searched on Unsplash, Pexels, Pixabay and Freepik, the credit line each provider asks for, a photo downloaded into the workspace. A skill takes `any_of_env_vars`, its activation rule: one at least of the variables it names, each also under `optional_env_vars`, must be set; with none the skill is not activated and the agent starts without it. `image-stock` names its four keys there (`UNSPLASH_ACCESS_KEY`, `PEXELS_API_KEY`, `PIXABAY_API_KEY`, `FREEPIK_API_KEY`), requires none, and takes `UNSPLASH_TIER` as an optional setting; the five are new env vars. `worker-marketer` carries the skill, optional, and its instructions say to show where a picture comes from and to put its credit line where it is used. Docs: [Skills](https://agentspecs.datalayer.tech/agents/skills), [Environment variables](https://agentspecs.datalayer.tech/agents/env-vars). Tests: test_agents_optional
+
 ## 0.0.217
 
 - **`demo-shopper` 0.0.9 orders again, through an approval** (18 November 2026), with agent-runtimes 1.6.90, where a company's API answers an order a person approves with `403 approval_required` and the operation, for every caller. Its `write` and `buy` rules say `do_it` again, as before 0.0.8; its instructions say that a proposed order comes back as an operation with nothing done, that `pap_confirm` places it once, and that an operation's reference is no order number. The gateway approves the test order as the agent, as its owner lets it, and records it. Tests: test_apps, test_apps_pap, test_presentation

@@ -1,0 +1,16 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: UNSPLASH_TIER
+version: 0.0.1
+name: Unsplash Tier
+description: The rate limit of the Unsplash application whose key is UNSPLASH_ACCESS_KEY, either demo (50 requests an hour, the default) or production (1000 an hour, once Unsplash approved the application). A setting, not a secret; optional.
+registrationUrl: https://unsplash.com/documentation#rate-limiting
+tags:
+  - setting
+  - images
+  - stock
+  - skill
+
+icon: gear
+emoji: ⚙️

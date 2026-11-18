@@ -335,7 +335,7 @@ Defines reusable skill modules.
 Common fields:
 
 - `id`, `version`, `name`, `description`, `module`
-- `envvars`, `optional_env_vars`, `dependencies`
+- `envvars` (each required), `optional_env_vars` (given when the account has them), `any_of_env_vars` (one at least, or the skill is not activated), `dependencies`
 - `tags`, `icon`, `emoji`
 
 ### Backend Tools (`agentspecs/backend-tools`)

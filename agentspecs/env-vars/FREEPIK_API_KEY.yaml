@@ -1,0 +1,17 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: FREEPIK_API_KEY
+version: 0.0.1
+name: Freepik API Key
+description: API key for Freepik's stock content (its API is now served as Magnific's, with the same key), for the stock image skill to search and download its photos. Optional, as one stock image provider's key is enough.
+registrationUrl: https://www.magnific.com/api
+tags:
+  - authentication
+  - api-key
+  - images
+  - stock
+  - skill
+
+icon: key
+emoji: 🔑

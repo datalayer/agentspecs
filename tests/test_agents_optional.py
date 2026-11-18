@@ -62,7 +62,12 @@ def test_the_marketer_needs_one_network_and_neither_search_nor_the_repositories(
         "discord:0.0.1",
         "linkedin:0.0.1",
     ]
-    assert marketer["skills"] == ["crawl:0.0.1", "github:0.0.1", "datalayer-email:0.0.1"]
+    assert marketer["skills"] == [
+        "crawl:0.0.1",
+        "github:0.0.1",
+        "datalayer-email:0.0.1",
+        "image-stock:0.0.1",
+    ]
     assert marketer["backend_tools"] == [
         "social-post-x:0.0.1",
         "social-read-x:0.0.1",
@@ -286,3 +291,33 @@ def test_the_marketer_mails_the_person_alone_through_datalayer():
     assert spec["dependencies"] == ["datalayer-skills>=0.6.0"]
     assert "envvars" not in spec
     assert "datalayer-email" in marketer["system_prompt"] and "to\n  them alone" not in marketer["system_prompt"]
+
+
+def test_the_marketer_finds_stock_pictures_when_the_person_has_a_key():
+    """18 November 2026: datalayer-skills' image-stock, optional for the Marketer; no key is required, one is enough."""
+    marketer = dict(_agents())["worker-marketer"]
+    assert "image-stock:0.0.1" in marketer["skills"]
+    assert "image-stock:0.0.1" in marketer["optional"]["skills"]
+    assert "image-stock" in marketer["system_prompt"] and "credit line" in marketer["system_prompt"]
+    spec = yaml.safe_load((ROOT / "skills" / "image-stock.yaml").read_text())
+    assert spec["module"] == "datalayer_skills.skills.image_stock"
+    assert spec["dependencies"] == ["datalayer-skills>=0.7.0"]
+    assert spec["enabled"] is True
+    assert "envvars" not in spec
+    keys = [
+        "UNSPLASH_ACCESS_KEY:0.0.1",
+        "PEXELS_API_KEY:0.0.1",
+        "PIXABAY_API_KEY:0.0.1",
+        "FREEPIK_API_KEY:0.0.1",
+    ]
+    assert spec["any_of_env_vars"] == keys
+    assert spec["optional_env_vars"] == [*keys, "UNSPLASH_TIER:0.0.1"]
+    # What activates it is among what it is given, and each is a declared env var.
+    assert set(spec["any_of_env_vars"]) <= set(spec["optional_env_vars"])
+    for ref in spec["optional_env_vars"]:
+        name, version = ref.split(":")
+        declared = yaml.safe_load((ROOT / "env-vars" / f"{name}.yaml").read_text())
+        assert (declared["id"], declared["version"]) == (name, version)
+    # Only the Marketer carries it: its firewall opens the web, the others' name their hosts.
+    carriers = [name for name, agent in _agents() if "image-stock:0.0.1" in (agent.get("skills") or [])]
+    assert carriers == ["worker-marketer"]
