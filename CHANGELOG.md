@@ -8,6 +8,11 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.219
+
+- Header UIs: buttons, drop-downs and indicators in the chat's title bar, set by the agent; the seven demo applications carry theirs (demo-marketer 0.0.5, demo-shopper 0.0.10, demo-accountant 0.0.6, demo-traveller 0.0.4, demo-terra 0.0.5, demo-aws-steward 0.0.6, demo-jupyter-data-analyst 0.0.2).
+- A deck and a sheet the agent builds in the conversation: the `page-deck` and `page-sheet` frontend tools (the Marketer's and the Accountant's demos).
+
 ## 0.0.218
 
 - **`image-stock`, a skill with optional keys** (the user, 18 November 2026): the skill spec of datalayer-skills' stock image skill (0.7.0, `datalayer_skills.skills.image_stock`) — stock photos searched on Unsplash, Pexels, Pixabay and Freepik, the credit line each provider asks for, a photo downloaded into the workspace. A skill takes `any_of_env_vars`, its activation rule: one at least of the variables it names, each also under `optional_env_vars`, must be set; with none the skill is not activated and the agent starts without it. `image-stock` names its four keys there (`UNSPLASH_ACCESS_KEY`, `PEXELS_API_KEY`, `PIXABAY_API_KEY`, `FREEPIK_API_KEY`), requires none, and takes `UNSPLASH_TIER` as an optional setting; the five are new env vars. `worker-marketer` carries the skill, optional, and its instructions say to show where a picture comes from and to put its credit line where it is used. Docs: [Skills](https://agentspecs.datalayer.tech/agents/skills), [Environment variables](https://agentspecs.datalayer.tech/agents/env-vars). Tests: test_agents_optional
