@@ -24,6 +24,22 @@ description: >-
   puts them together into three practical trip options, each with a map, a daily
   schedule, a budget with its total and the booking links. It books nothing: you
   book on the provider's site.
+# What it does on its own, in one line, and what it is as one Markdown
+# document, for a page that presents it (a public demo repeats it).
+tagline: Finds flights, stays and places, plans three options
+presentation: |
+  A travel companion: finds flights, stays, restaurants and things to do, and
+  puts them together into three practical trip options, each with a map, a daily
+  schedule, a budget with its total and the booking links. It books nothing: you
+  book on the provider's site.
+
+  - Asks your dates, places, travellers, preferences and budget
+  - Compares flights on Kiwi.com by fare, baggage, connections and travel time
+  - Finds stays, restaurants and sights with Google Maps, and Booking.com with your partner access
+  - Plans three options, each with a map, a daily schedule and a budget with its total
+  - Hands you the booking links: it books and pays nothing
+
+  [The seed agents, in slides](/visitors/decks/agents/seed-agents)
 tags:
   - travel
   - itinerary

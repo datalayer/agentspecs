@@ -586,6 +586,54 @@ conversation: `history`, every message, or `current`, only what it says or
 does now (the answer being written, or the tool it calls). The key was
 `assistant` and then `character`: both are refused, with the new name.
 
+## Its presentation
+
+`presentation` says what the application is, as one Markdown document, for a
+page that presents it beside its conversation: a panel its host adds to the
+application, closed until the person opens it. Nothing is presented when it
+is unsaid. Its name and its `emoji` are the heading above the document, so
+the document has no heading of its own.
+
+```yaml
+# apps/demo-marketer.yaml
+presentation: |
+  Plans and drafts social posts for X, Bluesky, LinkedIn and Discord in the
+  brand's voice, reads what comes back, remembers what worked, and publishes
+  only with approval.
+
+  - Plans a campaign around the goal you give it
+  - Drafts each post for its network, in your brand's voice
+  - Publishes nothing until you approve the exact text
+
+  *Try it here: it plans and drafts for an example coffee roaster, or for your
+  brand, and posts nothing.*
+
+  **[Start building](/signin)**
+  [The seed agents, in slides](/visitors/decks/agents/seed-agents)
+```
+
+It is plain Markdown and reads as such. A page that presents it draws four
+kinds of block in a way of its own, and the rest as Markdown:
+
+| Block | Written | Drawn |
+| --- | --- | --- |
+| A paragraph | Text | What it is, in a sentence or two |
+| A bullet list | `- ` an item, one line each | What it does, a check mark before each item |
+| A note | A paragraph wholly in emphasis, `*Try it here: …*` | Quieter, in italics |
+| Actions | A paragraph holding only links | A row of buttons: a link in bold, `**[Start building](/signin)**`, is the main button, the others stand beside it |
+
+A link that starts with `/` is an address of the site that shows the
+presentation; any other is written whole (`https://…`). Raw HTML and
+headings are refused, and a presentation is 4,000 characters at most.
+
+An agent says its own in the same way ([Agents](../agents), `presentation`
+and its one-line `tagline`). A public demo of an agent repeats its agent's
+paragraph and list word for word, then says what the demo is and where to
+go next: the catalogue's `demo-*` applications are held to that.
+`agentspecs.presentation` reads a document into its blocks
+(`presentation_blocks`) and says what is wrong with one
+(`presentation_problems`).
+
 ## Its voice
 
 `interface.voice` says whether a person may talk to the application and

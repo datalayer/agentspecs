@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.214
+
+- **A presentation, in Markdown** (the user, 18 November 2026): the Appspec takes `presentation`, what the application is as one Markdown document, for a page that presents it beside its conversation (a panel its host adds, closed until opened); an agent takes `presentation` too, and `tagline`, what it does on its own in one line. Plain Markdown with four blocks a page draws in a way of its own: a paragraph, a bullet list (a check mark before each item), a note wholly in emphasis, and a paragraph holding only links, its actions, the one in bold the main button; the name and the emoji are the heading, so headings and raw HTML are refused, and a document is 4,000 characters at most (`agentspecs.presentation`: `presentation_blocks`, `presentation_problems`, `tagline_problems`). The six seed agents say theirs (`worker-marketer`, `worker-shopper`, `worker-accountant`, `worker-traveller`, `worker-terra`, `worker-steward-aws`) and their public demos repeat their agent's paragraph and list word for word, then say what the demo is and where to go next: `demo-marketer` 0.0.3, `demo-shopper` 0.0.6, `demo-accountant` 0.0.4, `demo-traveller` 0.0.3, `demo-terra` 0.0.4, `demo-aws-steward` 0.0.5. The reference writes an example of several lines as a block. Docs: [apps](https://agentspecs.datalayer.tech/docs/apps) (Its presentation), agents (`tagline`, `presentation`), the Appspec reference. Tests: test_presentation (new)
+
 ## 0.0.213
 
 - **The Voyager is the Traveller, ids included**: `worker-voyager` is `worker-traveller` and the home page's demo `demo-voyager` is `demo-traveller`, with the names, descriptions, prompts, the `traveller` tag on the trip cards' backend tools and the seed-agent lists (🧭 kept). Tests: all

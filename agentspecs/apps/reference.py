@@ -142,6 +142,19 @@ EXTRA_EXAMPLES: Dict[str, Any] = {
 }
 
 
+class _ExampleDumper(yaml.SafeDumper):
+    """Writes text of several lines as a block (``|``), as a spec's file does."""
+
+
+def _text(dumper: yaml.SafeDumper, value: str) -> yaml.ScalarNode:
+    if "\n" in value.strip():
+        return dumper.represent_scalar("tag:yaml.org,2002:str", value, style="|")
+    return dumper.represent_scalar("tag:yaml.org,2002:str", value)
+
+
+_ExampleDumper.add_representer(str, _text)
+
+
 def _catalogue_files() -> List[Path]:
     return sorted((Path(__file__).resolve().parent).glob("*.yaml"))
 
@@ -199,7 +212,7 @@ def reference_markdown(schema: Optional[Mapping[str, Any]] = None) -> str:
         "",
     ]
     for name, value in examples().items():
-        lines += [f"### `{name}`", "", "```yaml", yaml.safe_dump({name: value}, sort_keys=False, allow_unicode=True).rstrip(), "```", ""]
+        lines += [f"### `{name}`", "", "```yaml", yaml.dump({name: value}, Dumper=_ExampleDumper, sort_keys=False, allow_unicode=True).rstrip(), "```", ""]
     objects = {name: spec for name, spec in definitions.items() if spec.get("properties")}
     choices = {name: spec for name, spec in definitions.items() if "enum" in spec}
     if objects:

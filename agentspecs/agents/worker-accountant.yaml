@@ -8,6 +8,20 @@ domain: accounting
 description: >-
   Work with Odoo accounting data to reconcile invoices and payments, analyze
   journal balances, and prepare close-ready summaries.
+# What it does on its own, in one line, and what it is as one Markdown
+# document, for a page that presents it (a public demo repeats it).
+tagline: Matches payments, checks balances
+presentation: |
+  Work with Odoo accounting data to reconcile invoices and payments, analyze
+  journal balances, and prepare close-ready summaries.
+
+  - Reads your Odoo books: invoices, payments, journals and ledgers
+  - Lists unpaid invoices and the customers behind them
+  - Matches payments against open invoices and flags what does not reconcile
+  - Prepares a close summary with the balances that moved
+  - Changes nothing in the books without a person
+
+  [Watch it in the Sales and Accounting Stage](/stages?stage=sales-and-accounting)
 
 tags:
   - accounting

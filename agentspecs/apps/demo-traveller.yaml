@@ -15,7 +15,7 @@
 
 schema: loop.app/v1
 id: demo-traveller
-version: 0.0.2
+version: 0.0.3
 name: Traveller
 kind: chat
 description: >-
@@ -110,3 +110,22 @@ tags:
   - travel
 icon: paper-airplane
 emoji: "🧭"
+# What a page that presents it shows beside its conversation: what its agent
+# says of itself, then what this demo is and where to go next.
+presentation: |
+  A travel companion: finds flights, stays, restaurants and things to do, and
+  puts them together into three practical trip options, each with a map, a daily
+  schedule, a budget with its total and the booking links. It books nothing: you
+  book on the provider's site.
+
+  - Asks your dates, places, travellers, preferences and budget
+  - Compares flights on Kiwi.com by fare, baggage, connections and travel time
+  - Finds stays, restaurants and sights with Google Maps, and Booking.com with your partner access
+  - Plans three options, each with a map, a daily schedule and a budget with its total
+  - Hands you the booking links: it books and pays nothing
+
+  *Try it here: it plans an example weekend in Lisbon from example flights,
+  stays and restaurants, books nothing and contacts no real service.*
+
+  **[Start building](/signin)**
+  [The seed agents, in slides](/visitors/decks/agents/seed-agents)

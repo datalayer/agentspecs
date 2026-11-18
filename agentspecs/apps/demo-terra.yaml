@@ -13,7 +13,7 @@
 
 schema: loop.app/v1
 id: demo-terra
-version: 0.0.3
+version: 0.0.4
 name: Terra
 kind: chat
 description: >-
@@ -90,3 +90,21 @@ tags:
   - satellite
 icon: globe
 emoji: "🌏"
+# What a page that presents it shows beside its conversation: what its agent
+# says of itself, then what this demo is and where to go next.
+presentation: |
+  Analyses satellite images and Earth observation data: finds the scenes in NASA
+  Earthdata, computes indices such as NDVI and change between dates in a
+  notebook, and reports what the pixels show with their dates and cloud cover.
+
+  - Finds satellite scenes in NASA Earthdata by place, date and cloud cover
+  - Downloads the images and analyses them in a notebook
+  - Computes indices such as NDVI and the change between two dates
+  - Names each scene by its sensor, date and cloud cover
+  - Says what the images cannot tell
+
+  *Try it here: it reasons over an example catalogue of scenes near Lleida and
+  reads no live imagery.*
+
+  **[Start building](/signin)**
+  [The Earthdata connection it uses](/docs/mcp/toolsets)

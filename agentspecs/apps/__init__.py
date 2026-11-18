@@ -23,7 +23,9 @@ What it says:
 - **what it works under and knows** — ``context`` (Frames) and ``contents``;
 - **who it is** — its ``name``, and its ``emoji``: the face it is known by
   wherever it appears; optionally an ``avatar`` and a ``banner``, drawings
-  chosen by name as a person chooses theirs on their profile;
+  chosen by name as a person chooses theirs on their profile; and its
+  ``presentation``, what it is as one Markdown document, for a page that
+  presents it beside its conversation (``agentspecs.presentation``);
 - **what it reaches** — ``connections``: an MCP server, how far (``read`` or
   ``write``), and in whose name (the builder's, or each user's); and
   ``permissions``: the Spaces it reads or writes, and what it may do on its
@@ -61,6 +63,7 @@ from ..actions import (
     server_tool_conditions,
     split_ref,
 )
+from ..presentation import PRESENTATION_MAX, presentation_problems
 from ..ui import UiChoice, ui_choices_problems
 
 _ROOT = Path(__file__).parent.parent
@@ -3630,6 +3633,26 @@ class AppSpec(_Strict):
         ),
         json_schema_extra=_DRAWING_SCHEMA,
     )
+    presentation: str = Field(
+        default="",
+        max_length=PRESENTATION_MAX,
+        description=(
+            "What it is, as one Markdown document, for a page that presents it beside its conversation "
+            "(a panel a host adds to the application): a paragraph, a bullet list of what it does, "
+            "a note wholly in emphasis, and a paragraph of links for its actions, the main one in bold. "
+            "Its name and its emoji are the heading above it; raw HTML and headings are refused. "
+            "Nothing is presented when unsaid"
+        ),
+    )
+
+    @field_validator("presentation")
+    @classmethod
+    def _is_a_presentation(cls, presentation: str) -> str:
+        document = presentation.strip()
+        problems = presentation_problems(document)
+        if problems:
+            raise ValueError("; ".join(problems))
+        return document
 
     @field_validator("emoji")
     @classmethod

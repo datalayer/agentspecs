@@ -16,6 +16,21 @@ description: >-
   brand's voice, reads what comes back (on LinkedIn once signed in there from
   the chat), remembers
   what worked, and publishes only with approval.
+# What it does on its own, in one line, and what it is as one Markdown
+# document, for a page that presents it (a public demo repeats it).
+tagline: Plans, drafts, reads the replies
+presentation: |
+  Plans and drafts social posts for X, Bluesky, LinkedIn and Discord in the
+  brand's voice, reads what comes back (on LinkedIn once signed in there from
+  the chat), remembers what worked, and publishes only with approval.
+
+  - Plans a campaign around the goal you give it
+  - Drafts each post for its network, in your brand’s voice
+  - Reads what the audience says back
+  - Remembers the voice, what was posted and what worked
+  - Publishes nothing until you approve the exact text
+
+  [The seed agents, in slides](/visitors/decks/agents/seed-agents)
 tags:
   - marketing
   - social

@@ -14,7 +14,7 @@
 
 schema: loop.app/v1
 id: demo-accountant
-version: 0.0.3
+version: 0.0.4
 name: Accountant
 kind: chat
 description: >-
@@ -89,3 +89,20 @@ tags:
   - finance
 icon: book
 emoji: "🧮"
+# What a page that presents it shows beside its conversation: what its agent
+# says of itself, then what this demo is and where to go next.
+presentation: |
+  Work with Odoo accounting data to reconcile invoices and payments, analyze
+  journal balances, and prepare close-ready summaries.
+
+  - Reads your Odoo books: invoices, payments, journals and ledgers
+  - Lists unpaid invoices and the customers behind them
+  - Matches payments against open invoices and flags what does not reconcile
+  - Prepares a close summary with the balances that moved
+  - Changes nothing in the books without a person
+
+  *Try it here: it answers from the books of an example roaster and changes
+  nothing.*
+
+  **[Start building](/signin)**
+  [Watch it in the Sales and Accounting Stage](/stages?stage=sales-and-accounting)

@@ -19,7 +19,7 @@
 
 schema: loop.app/v1
 id: demo-shopper
-version: 0.0.5
+version: 0.0.6
 name: Shopper
 kind: chat
 description: >-
@@ -127,3 +127,22 @@ tags:
   - commerce
 icon: gift
 emoji: "🛍️"
+# What a page that presents it shows beside its conversation: what its agent
+# says of itself, then what this demo is and where to go next.
+presentation: |
+  Finds products on Shopify stores, compares prices, variants and sellers,
+  builds the basket, and buys for you through the Personal Agent Protocol only
+  once you approve the exact purchase.
+
+  - Searches products across Shopify stores
+  - Compares price, shipping, rating and seller, and says which it would pick
+  - Builds the basket and shows its total
+  - Remembers your sizes, budgets and the stores you like
+  - Buys through the Personal Agent Protocol only once you approve the exact purchase
+
+  *Try it here: it shops at the Demo Shop, an example shop of real products with
+  their photos, quotes the basket and places a test order: nothing is charged
+  and nothing ships.*
+
+  **[Start building](/signin)**
+  [How a personal agent acts for you](/docs/applications/personal-agent-protocol)

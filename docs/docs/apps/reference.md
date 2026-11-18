@@ -59,6 +59,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `emoji` | text | Its face: one emoji, shown wherever the application appears | `"👀"` |
 | `avatar` | text | Its avatar, as people keep theirs on their profile: `emoji:<emoji>`, or `@datalayer/icons-react:<Name>Icon` for a drawing of the set. Its emoji stands for it when unsaid, and where only text goes. Published as a company, it is served to personal agents as its logo (`organization.logo_uri`) | empty |
 | `banner` | text | Its banner, by name, from the set people choose theirs from on their profile. The one its id seeds when unsaid | empty |
+| `presentation` | text | What it is, as one Markdown document, for a page that presents it beside its conversation (a panel a host adds to the application): a paragraph, a bullet list of what it does, a note wholly in emphasis, and a paragraph of links for its actions, the main one in bold. Its name and its emoji are the heading above it; raw HTML and headings are refused. Nothing is presented when unsaid | empty |
 
 ## Examples
 
@@ -466,6 +467,26 @@ samples:
 ```yaml
 backend_tools:
 - decide:0.0.1
+```
+
+### `presentation`
+
+```yaml
+presentation: |
+  Work with Odoo accounting data to reconcile invoices and payments, analyze
+  journal balances, and prepare close-ready summaries.
+
+  - Reads your Odoo books: invoices, payments, journals and ledgers
+  - Lists unpaid invoices and the customers behind them
+  - Matches payments against open invoices and flags what does not reconcile
+  - Prepares a close summary with the balances that moved
+  - Changes nothing in the books without a person
+
+  *Try it here: it answers from the books of an example roaster and changes
+  nothing.*
+
+  **[Start building](/signin)**
+  [Watch it in the Sales and Accounting Stage](/stages?stage=sales-and-accounting)
 ```
 
 ### `openapi`

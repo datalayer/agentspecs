@@ -16,6 +16,21 @@ description: >-
   Finds products on Shopify stores, compares prices, variants and sellers, builds
   the basket, and buys for you through the Personal Agent Protocol only once you
   approve the exact purchase.
+# What it does on its own, in one line, and what it is as one Markdown
+# document, for a page that presents it (a public demo repeats it).
+tagline: Searches, compares, builds the basket
+presentation: |
+  Finds products on Shopify stores, compares prices, variants and sellers,
+  builds the basket, and buys for you through the Personal Agent Protocol only
+  once you approve the exact purchase.
+
+  - Searches products across Shopify stores
+  - Compares price, shipping, rating and seller, and says which it would pick
+  - Builds the basket and shows its total
+  - Remembers your sizes, budgets and the stores you like
+  - Buys through the Personal Agent Protocol only once you approve the exact purchase
+
+  [How a personal agent acts for you](/docs/applications/personal-agent-protocol)
 tags:
   - shopping
   - commerce

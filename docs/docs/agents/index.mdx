@@ -268,6 +268,25 @@ welcome_message: >
   visualize market trends.
 ```
 
+### `tagline` (string, optional)
+What the agent does on its own, in one line of 80 characters at most: what a list of agents shows under its name.
+```yaml
+tagline: Plans, drafts, reads the replies
+```
+
+### `presentation` (string, optional)
+What the agent is, as one Markdown document, for a page that presents it: a paragraph, a bullet list of what it does, and a paragraph of links for where to read more. Its `name` and `emoji` are the heading above it, so it has none of its own; raw HTML and headings are refused. The few blocks a page draws in a way of its own (a check mark before each item of a list, a note in emphasis, links as buttons) are described under [Applications › Its presentation](../apps#its-presentation). A public demo of the agent, an application, repeats its paragraph and list word for word.
+```yaml
+presentation: |
+  Finds products on Shopify stores, compares prices, variants and sellers,
+  builds the basket, and buys for you only once you approve the exact purchase.
+
+  - Searches products across Shopify stores
+  - Builds the basket and shows its total
+
+  [How a personal agent acts for you](/docs/applications/personal-agent-protocol)
+```
+
 ### `system_prompt` (string)
 Base system prompt for the agent. Defines the agent's role and capabilities.
 ```yaml
@@ -397,6 +416,7 @@ Commonly used fields:
 - `icon`, `emoji`, `color`
 - `suggestions`
 - `welcome_message`, `welcome_notebook`, `welcome_document`
+- `tagline`, `presentation`
 - `system_prompt`, `system_prompt_codemode_addons`
 
 Advanced workflow fields:
