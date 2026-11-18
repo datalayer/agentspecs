@@ -59,7 +59,10 @@ def raw(folder: str, name: str) -> dict:
 
 
 def test_a_page_ui_is_a_ui_and_a_frontend_tool_set_of_one_id():
-    assert sorted(i for i in ui.UI_CATALOGUE if ui.hands_frontend_tools(i)) == sorted(PAGE_UIS)
+    # Besides the deck and the sheet, the side panels and the notices (tests/test_ui_side_panels.py).
+    assert sorted(i for i in ui.UI_CATALOGUE if ui.hands_frontend_tools(i)) == sorted(
+        [*PAGE_UIS, "notices", "side-panels"]
+    )
     # A UI that draws a backend tool's card hands no tool; an id that is no id reads no file.
     assert not ui.hands_frontend_tools("trial-balance")
     assert not ui.hands_frontend_tools("books-header")
@@ -70,7 +73,8 @@ def test_a_page_ui_is_a_ui_and_a_frontend_tool_set_of_one_id():
 def test_a_page_ui_goes_in_the_conversation_and_hands_its_tools_with_the_chats_extras(ui_id):
     spec = ui.UI_CATALOGUE[ui_id]
     assert spec.plugin == f"@datalayer/loop-plugin-{ui_id}"
-    assert [p.value for p in spec.placements] == ["message"]
+    # In the conversation by default; in a side panel where an agent places it (18 November 2026).
+    assert [p.value for p in spec.placements] == ["message", "right", "left"]
     assert spec.header is None
     assert sorted(spec.contributions.points) == ["loop.chat.extras", "reactor.ui.renderer", "reactor.ui.toolBinding"]
 
@@ -90,7 +94,8 @@ def test_the_agent_names_the_set_and_the_ui_together_and_is_told_when_to_use_the
     agent_id, _demo, tools = PAGE_UIS[ui_id]
     agent = raw("agents", agent_id)
     assert f"{ui_id}:0.0.1" in agent["frontend_tools"]
-    assert {"plugin": ui_id} in agent["ui"]
+    # Placed in the chat's right panel: drawn there, a line per call in the conversation.
+    assert {"plugin": ui_id, "placement": "right"} in agent["ui"]
     prompt = " ".join(agent["system_prompt"].split())
     first = tools[0]
     assert first in prompt, f"{agent_id} is not told {first}"
@@ -115,7 +120,7 @@ def test_the_public_demo_has_it_and_builds_from_its_example_only(ui_id):
     agent_id, demo_id, tools = PAGE_UIS[ui_id]
     demo = raw("apps", demo_id)
     assert demo["agent"].split(":")[0] == agent_id
-    assert {"plugin": ui_id} in demo["ui"]
+    assert {"plugin": ui_id, "placement": "right"} in demo["ui"]
     said = " ".join(demo["instructions"].split())
     for tool in tools:
         if tool != "deck_set_title":

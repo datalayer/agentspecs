@@ -50,6 +50,7 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `notebook-header` (Notebook header) | `@datalayer/loop-plugin-notebook-header` | — | — | none of its own |
 | `notebook-toolbar` (Notebook toolbar) | `@datalayer/loop-plugin-notebook-toolbar` | — | — | none of its own |
 | `notebook-view` (Notebook button) | `@datalayer/loop-plugin-notebook-view` | — | — | none of its own |
+| `notices` (Notices) | `@datalayer/loop-plugin-notices` | — | — | none of its own |
 | `odoo-context` (Odoo company and period) | `@datalayer/loop-plugin-odoo-context` | — | — | none of its own |
 | `page-deck` (Deck in the page) | `@datalayer/loop-plugin-page-deck` | — | — | none of its own |
 | `page-layout` (Page layout) | `@datalayer/loop-plugin-page-layout` | — | — | none of its own |
@@ -61,6 +62,7 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `prompt` (Floating composer) | `@datalayer/loop-plugin-prompt` | — | — | none of its own |
 | `shop-header` (Shopping header) | `@datalayer/loop-plugin-shop-header` | — | — | none of its own |
 | `shopping-basket` (Shopping basket) | `@datalayer/loop-plugin-shopping-basket` | `a2ui` | — | none of its own |
+| `side-panels` (Side panels) | `@datalayer/loop-plugin-side-panels` | — | — | none of its own |
 | `social-accounts` (Linked social accounts) | `@datalayer/loop-plugin-social-accounts` | — | — | none of its own |
 | `social-header` (Social header) | `@datalayer/loop-plugin-social-header` | — | — | none of its own |
 | `spreadsheet` (Spreadsheet) | `@datalayer/loop-plugin-spreadsheet` | — | — | none of its own |

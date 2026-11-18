@@ -37,6 +37,8 @@ renderers: []
 # Where in the chat it goes, its default first (agentspecs 0.0.197).
 placements:
 - header
+- right
+- left
 # The UI it stands in for: a chat that has it leaves them out of its title bar.
 supersedes:
 - trip-summary

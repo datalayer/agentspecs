@@ -1,0 +1,31 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Frontend tool set: notices (the user, 18 November 2026: "the N/E/S/W
+# sliding panels are only for notices ... triggered by the agent through one
+# frontend tool (e.g. `show_notice` with tone, title, text, edge, optional
+# duration). They hold no controls or plugins").
+#
+# `show_notice` runs in the page: a notice — info, success, warning or error,
+# a title and a line — slides in from an edge of the chat (north, east,
+# south, west), inside its bounds, says it comes from the agent, and goes
+# after its seconds or when closed. One per edge. Words only, nothing kept.
+# Its handler comes from agent-runtimes' `notices` UI plugin
+# (src/apps/plugins/notices). An agent that names this set names the
+# `notices` UI too. A visitor's demo has it.
+
+id: notices
+version: 0.0.1
+name: Notices
+description: Slide a short notice in from an edge of the chat — info, success, warning or error, a title and a line — for a few seconds or until closed; run in the page.
+tags:
+  - frontend
+  - page
+  - notices
+enabled: true
+
+toolset:
+  - show_notice
+
+icon: "@primer/octicons-react:bell"
+emoji: "🔔"

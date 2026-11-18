@@ -37,6 +37,8 @@ renderers: []
 # Where in the chat it goes, its default first (agentspecs 0.0.197).
 placements:
 - header
+- right
+- left
 # What it puts in the chat's title bar, and the frontend tool that sets it.
 header:
   tool: set_social_header

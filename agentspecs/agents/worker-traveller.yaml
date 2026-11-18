@@ -133,6 +133,11 @@ ui:
   # In the chat's title bar (18 November 2026): the trip, the travellers drop-down and the options ready,
   # set by the agent with its frontend tool, run in the page.
   - plugin: trip-header
+  # A short notice from an edge of the chat (18 November 2026), run in the page.
+  - plugin: notices
+# The tools run in the page (18 November 2026): a notice.
+frontend_tools:
+  - notices:0.0.1
 
 system_prompt: >-
   You are the Traveller, a travel companion for one person. You plan trips with
@@ -172,6 +177,11 @@ system_prompt: >-
   options (their number as value) each time you have options ready to compare.
   It runs in the page and books nothing. The number of travellers chosen in the
   title bar's drop-down is told to you with the turn: price for that many.
+  You can slide a short notice in from an edge of the chat with show_notice
+  (tone info, success, warning or error, a title of a few words, a line of
+  text): it runs in the page and changes nothing else. Use it sparingly, at most
+  once in a turn, for what the person should not miss, such as options ready to
+  compare or a fare that changed, and never to repeat what your answer says.
 
 policy:
   shield:

@@ -63,21 +63,27 @@ class UiPlacement(str, Enum):
     injected in the chat itself (toolbar, header...) or as chat message (a2ui)").
 
     The chat's own chrome — ``header`` (beside its title), ``toolbar`` (the input toolbar's
-    controls), ``footer`` (under the prompt), ``banner`` (above the messages), ``panel`` (beside
-    the chat, where it has one) — or ``message``: a card in the conversation, drawn by a tool
-    renderer or the A2UI renderer.
+    controls), ``footer`` (under the prompt), ``banner`` (above the messages) — its two side
+    panels, ``left`` and ``right`` (beside the conversation, closed until opened; the user,
+    18 November 2026: "left and right side panels ... real panels that receive controls and
+    visuals: an agent's UI plugins placed there") — or ``message``: a card in the conversation,
+    drawn by a tool renderer or the A2UI renderer.
     """
 
     HEADER = "header"
     TOOLBAR = "toolbar"
     FOOTER = "footer"
     BANNER = "banner"
-    PANEL = "panel"
+    LEFT = "left"
+    RIGHT = "right"
     MESSAGE = "message"
 
 
 #: The placements in the chat's own chrome, every one but `message`.
 CHROME_PLACEMENTS = tuple(p.value for p in UiPlacement if p is not UiPlacement.MESSAGE)
+
+#: The two side panels, beside the conversation.
+SIDE_PLACEMENTS = (UiPlacement.LEFT.value, UiPlacement.RIGHT.value)
 
 
 class UiContributions(BaseModel):
@@ -374,7 +380,7 @@ class UiSpec(BaseModel):
         default_factory=list,
         description=(
             "Where in the chat it may go, its default first (0.0.197): `header`, `toolbar`, "
-            "`footer`, `banner`, `panel` or `message`; none for a part of the workspace itself"
+            "`footer`, `banner`, the side panels `left` and `right`, or `message`; none for a part of the workspace itself"
         ),
     )
     header: Optional[UiHeader] = Field(
@@ -569,6 +575,9 @@ def ui_choices_problems(choices: Sequence[Any], *, to_ship: bool) -> List[str]:
             )
             continue
         placement = choice.get("placement")
+        # A parsed choice holds the enum: its value is the placement's name.
+        if isinstance(placement, Enum):
+            placement = placement.value
         if placement is not None:
             allowed = [p.value for p in spec.placements]
             if not allowed:

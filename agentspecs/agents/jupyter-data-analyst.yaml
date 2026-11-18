@@ -142,6 +142,11 @@ ui:
   # In the chat's title bar (18 November 2026): the dataset, what ran, and a Profile data button,
   # set by the agent with its frontend tool, run in the page.
   - plugin: notebook-header
+  # A short notice from an edge of the chat (18 November 2026), run in the page.
+  - plugin: notices
+# The tools run in the page (18 November 2026): a notice.
+frontend_tools:
+  - notices:0.0.1
 
 system_prompt: |
   You are the Jupyter Data Analyst. You work with the data in the notebook the
@@ -207,6 +212,13 @@ system_prompt: |
   once you know it, and with run after each answer that ran cells (label such as
   "3 cells run", tone success; "Cell failed", tone danger). It runs in the page
   and executes nothing. Never show a run that did not happen.
+
+  You can slide a short notice in from an edge of the chat with show_notice
+  (tone info, success, warning or error, a title of a few words, a line of
+  text): it runs in the page and changes nothing else. Use it sparingly, at most
+  once in a turn, for what the person should not miss, such as a cell that
+  failed or an anomaly found in the data, and never to repeat what your answer
+  says.
 
 policy:
   shield:

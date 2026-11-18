@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A page UI (the user, 18 November 2026: "left and right side panels ... the
+# agent can open, close and fill them through frontend tools"): it hands the
+# chat's agent the frontend tools of the `side-panels` set
+# (agentspecs/frontend-tools/side-panels.yaml), run in the page, and draws
+# each of their calls as a line. What fills a panel is the UI placed there
+# (`placement: left` or `right`) and its own tools; what is open is the
+# conversation's, read from these calls.
+
+id: "side-panels"
+version: 0.0.1
+name: Side panels
+description: >-
+  The agent opens and closes the chat's left and right panels, where its UI placed there shows: the deck it builds, the sheet it fills, its title bar's controls.
+emoji: "🗂️"
+octicon: sidebar-expand
+plugin: "@datalayer/loop-plugin-side-panels"
+folder: "side-panels"
+# Its Contributions: the Slots it fills, the Contribution Points it
+# contributes to, the Commands it adds (the composer's `/` commands by name).
+contributions:
+  slots: []
+  points:
+  - "loop.chat.extras"
+  - "reactor.ui.renderer"
+  - "reactor.ui.toolBinding"
+  commands: []
+# The Contribution Points it offers to other plugins.
+contribution_points: []
+# The UI renderers (agentspecs/ui-renderers) it may be exposed through.
+renderers: []
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- message

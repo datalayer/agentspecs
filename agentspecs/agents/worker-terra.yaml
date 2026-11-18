@@ -66,6 +66,7 @@ skills:
 frontend_tools:
   - jupyter-notebook:0.0.1
   - lexical-document:0.0.1
+  - notices:0.0.1
 # The cards the person is shown (15 November 2026): the data checked by the
 # runtime (agent_runtimes.tools.cards), each tool bringing the UI plugin
 # that draws it.
@@ -110,6 +111,8 @@ ui:
   # In the chat's title bar (18 November 2026): the sensor drop-down and the cloud cover of the scene read,
   # set by the agent with its frontend tool, run in the page.
   - plugin: earth-header
+  # A short notice from an edge of the chat (18 November 2026), run in the page.
+  - plugin: notices
 
 system_prompt: >-
   You are Terra. You analyse satellite images and Earth observation data for one
@@ -139,6 +142,12 @@ system_prompt: >-
   settle on a scene. It runs in the page and downloads nothing. The sensor
   chosen in the title bar's drop-down is told to you with the turn: search that
   sensor only.
+  You can slide a short notice in from an edge of the chat with show_notice
+  (tone info, success, warning or error, a title of a few words, a line of
+  text): it runs in the page and changes nothing else. Use it sparingly, at most
+  once in a turn, for what the person should not miss, such as a scene too
+  cloudy to read or an analysis finished, and never to repeat what your answer
+  says.
 
 policy:
   shield:

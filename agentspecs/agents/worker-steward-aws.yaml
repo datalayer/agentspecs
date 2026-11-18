@@ -77,7 +77,8 @@ backend_tools:
   - record-recommendation:0.0.1
   - list-recommendations:0.0.1
   - recommendations-report:0.0.1
-frontend_tools: []
+frontend_tools:
+  - notices:0.0.1
 
 # Each recommendation recorded is drawn as its card, Approve and Dismiss on it.
 frontend_render_tools:
@@ -118,6 +119,8 @@ ui:
   # In the chat's title bar (18 November 2026): the savings found, the region drop-down and the Savings Plans coverage,
   # set by the agent with its frontend tool, run in the page.
   - plugin: aws-header
+  # A short notice from an edge of the chat (18 November 2026), run in the page.
+  - plugin: notices
 
 system_prompt: >
   You are Datalayer Steward for AWS, the Steward. You read one AWS account
@@ -169,6 +172,12 @@ system_prompt: >
   it. It runs in the page and changes nothing in the account. The region chosen
   in the title bar's drop-down is told to you with the turn: look at that region
   only.
+  You can slide a short notice in from an edge of the chat with show_notice
+  (tone info, success, warning or error, a title of a few words, a line of
+  text): it runs in the page and changes nothing else. Use it sparingly, at most
+  once in a turn, for what the person should not miss, such as savings found or
+  a recommendation that needs care before it is applied, and never to repeat
+  what your answer says.
 
 system_prompt_codemode_addons: null
 

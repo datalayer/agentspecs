@@ -14,7 +14,7 @@
 
 schema: loop.app/v1
 id: demo-accountant
-version: 0.0.6
+version: 0.0.7
 name: Accountant
 kind: chat
 description: >-
@@ -69,10 +69,21 @@ instructions: >-
   you filled, and take their figures as theirs. Then say in two or three lines
   what the sheet contains, that it is built on the example books, and that
   Export CSV keeps a copy.
+  The sheet you build shows in the right panel of the visitor's chat, which
+  opens with its first filled range; open_side_panel and close_side_panel (side
+  right) open and close it when the visitor asks. show_notice slides a short
+  notice in from an edge of the visitor's chat: a title and a line, info,
+  success, warning or error. These run in the visitor's page, reach nothing and
+  change nothing, and they are tools you use here. Use a notice at most once in
+  a turn, for what the visitor should not miss, such as a sheet finished or
+  payments that do not reconcile.
 ui:
   - plugin: chat
   - plugin: books-header
   - plugin: page-sheet
+    placement: right
+  - plugin: side-panels
+  - plugin: notices
 interface:
   layout: chat
   accent: green

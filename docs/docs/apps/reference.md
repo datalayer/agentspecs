@@ -1738,7 +1738,7 @@ A UI plugin an agent or an application names, and the renderer it is exposed thr
 
 ### UiPlacement {#uiplacement}
 
-`header`, `toolbar`, `footer`, `banner`, `panel`, `message`
+`header`, `toolbar`, `footer`, `banner`, `left`, `right`, `message`
 
 ### Visibility {#visibility}
 

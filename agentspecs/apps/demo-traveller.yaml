@@ -15,7 +15,7 @@
 
 schema: loop.app/v1
 id: demo-traveller
-version: 0.0.4
+version: 0.0.5
 name: Traveller
 kind: chat
 description: >-
@@ -77,9 +77,15 @@ instructions: >-
   drop-down is told to you with the turn: the example is priced for two adults,
   so for another number say which prices change with it and that the example
   holds them for two only.
+  show_notice slides a short notice in from an edge of the visitor's chat: a
+  title and a line, info, success, warning or error. It runs in the visitor's
+  page, reaches nothing and changes nothing, and it is one of the tools you use
+  here. Use a notice at most once in a turn, for what the visitor should not
+  miss, such as options ready to compare or a fare that changed.
 ui:
   - plugin: chat
   - plugin: trip-header
+  - plugin: notices
 interface:
   layout: chat
   accent: sky

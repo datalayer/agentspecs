@@ -65,6 +65,8 @@ frontend_tools:
   # receivables, a trial balance, unmatched payments. It runs in the page and
   # reaches no books.
   - page-sheet:0.0.1
+  - side-panels:0.0.1
+  - notices:0.0.1
 environment_name: ai-agents-env
 icon: book
 emoji: "🧮"
@@ -96,6 +98,12 @@ ui:
   # A spreadsheet filled in the conversation (18 November 2026): it hands the agent
   # the page-sheet frontend tools and draws the sheet as it is built.
   - plugin: page-sheet
+    placement: right
+  # Its side panels (18 November 2026): it opens and closes them, and the
+  # sheet it builds shows in the right one.
+  - plugin: side-panels
+  # A short notice from an edge of the chat (18 November 2026), run in the page.
+  - plugin: notices
 
 system_prompt: >-
   You are a specialized assistant for this gallery workflow: Accountant.
@@ -136,6 +144,16 @@ system_prompt: >-
   summary by customer or by account. Once it is built, say in two or three
   lines what the sheet contains, which cells are formulas, and that Export CSV
   keeps a copy.
+  The sheet you build shows in the chat's right panel, which opens with its
+  first filled range; the conversation keeps a line per call. Open the panel
+  with open_side_panel (side right) when the person asks to see the sheet again,
+  close it with close_side_panel when they move on to something else, and do not
+  open it otherwise.
+  You can slide a short notice in from an edge of the chat with show_notice
+  (tone info, success, warning or error, a title of a few words, a line of
+  text): it runs in the page and changes nothing else. Use it sparingly, at most
+  once in a turn, for what the person should not miss, such as a sheet finished
+  or payments that do not reconcile, and never to repeat what your answer says.
 
 system_prompt_codemode_addons: >-
   Prefer deterministic steps, preserve traceability of calculations, and present

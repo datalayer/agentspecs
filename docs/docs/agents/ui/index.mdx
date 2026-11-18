@@ -143,9 +143,11 @@ ui_choices_problems(["a2ui"], to_ship=True)
 
 A UI spec says where in the chat it may go, its default first (0.0.197): in the chat's own
 chrome — `header` (beside its title), `toolbar` (the input toolbar's controls), `footer` (under
-the prompt), `banner` (above the messages), `panel` (beside the chat, where it has one) — or
-`message`, a card in the conversation drawn by a tool renderer or the A2UI renderer. A spec with
-no `placements` is a part of the workspace itself (the chat, the notebook).
+the prompt), `banner` (above the messages) — in one of its two **side panels**, `left` or `right`
+(beside the conversation, [described below](#beside-the-conversation-the-side-panels-left-right)),
+or `message`, a card in the conversation drawn by a tool renderer or the A2UI renderer. A spec with
+no `placements` is a part of the workspace itself (the chat, the notebook). The old `panel`,
+which no chat had a place for, is gone: a spec that says it is refused.
 
 ```yaml
 # agentspecs/ui/x-budget.yaml (abridged)
@@ -312,12 +314,76 @@ ui:
   - plugin: chat
   - plugin: books-header
   - plugin: page-sheet
+    placement: right
+  - plugin: side-panels
+  - plugin: notices
 ```
 
-Their placement is `message`: the deck or the sheet is drawn in the
-conversation, at the last call that changed it, and every call before it is
-one line saying what it did. Neither needs a connection of the person's, so a
-visitor's demo has them.
+Their placements are `message`, `right` and `left`. In the conversation (`message`, their
+default), the deck or the sheet is drawn at the last call that changed it, and every call before
+it is one line saying what it did. Placed in a side panel, as the Marketer and the Accountant
+place them, it is drawn there, live, and every call is a line in the conversation. Neither needs
+a connection of the person's, so a visitor's demo has them.
+
+## Beside the conversation: the side panels, `left`, `right`
+
+The chat has two side panels (the user, 18 November 2026: "left and right side panels ... real
+panels that receive controls and visuals: an agent's UI plugins placed there"). A `ui` entry
+places a UI in one with `placement: left` or `placement: right`, when its spec lists it:
+
+| What may go there | What it draws there |
+| --- | --- |
+| `page-deck`, `page-sheet` | The deck or the sheet, live: the conversation keeps a line per call. |
+| A header UI (`shop-header`, `books-header`…) | Its items stacked under its name: its drop-downs, its buttons, what the agent set, a dash before it said anything. |
+
+The left panel also holds what a host says about the application, its presentation, before
+what is placed there. A card a backend tool draws (`trial-balance`, `shopping-basket`…) stays
+in the conversation: its spec lists `message` alone.
+
+A panel is closed to start with, and has a toggle while it is closed and something fills it:
+the left one leading the chat's title bar, the right one trailing it. It opens:
+
+- with the **first call of the UI placed in it** in the conversation (the deck's first slide,
+  the sheet's first range);
+- when the **agent** calls `open_side_panel`, and closes when it calls `close_side_panel`, both
+  with their `side`: the `side-panels` page UI and its
+  [tool set](../frontend-tools/#the-side-panels-and-the-notices-side-panels-notices);
+- when the **person** uses its toggle, and closes with its Close control or Escape; the person's
+  word holds until the agent's next call.
+
+Open or closed is the conversation's: it is read from the conversation's calls, so a
+conversation opened again shows its panels as they stood, and one started over closes them. Two
+panels and the conversation share the width; when the conversation would be left too narrow,
+opening one closes the other. On a phone a panel opens over the conversation.
+
+```yaml
+# agentspecs/agents/worker-marketer.yaml (abridged)
+ui:
+  - plugin: page-deck
+    placement: right
+  - plugin: side-panels
+frontend_tools:
+  - page-deck:0.0.1
+  - side-panels:0.0.1
+```
+
+An agent names `side-panels` when something is placed in its panels, which is the Marketer and
+the Accountant today, their demos with them; `open_side_panel` on a panel with nothing in it is
+refused in a sentence.
+
+## Over the conversation, for a moment: `notices`
+
+A notice is short: info, success, warning or error, a title of a few words and a line. The
+agent slides it in from an edge of the chat — north, east, south or west — with one frontend
+tool, `show_notice`, of the `notices` page UI and its
+[set](../frontend-tools/#the-side-panels-and-the-notices-side-panels-notices). It holds words
+only: no link, no button but its Close, nothing that could pass for the application's own
+controls, and it says it comes from the agent. It stays inside the chat, never over the page
+around it, goes after its seconds (8 for info and success, 12 for a warning; an error until
+closed) or with Close, Escape or a click, and one per edge: a new one on the same edge
+replaces the old, and the agent is told. Nothing is kept. Each of the seven seed agents and its
+demo names it, and is told to use it at most once in a turn, for what the person should not
+miss (`tests/test_ui_side_panels.py`).
 
 ## In an MCP server, a skill and a backend tool
 

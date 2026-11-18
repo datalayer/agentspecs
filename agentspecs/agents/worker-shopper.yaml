@@ -90,6 +90,11 @@ ui:
   # In the chat's title bar (18 November 2026): the basket, the budget drop-down and a purchase waiting,
   # set by the agent with its frontend tool, run in the page.
   - plugin: shop-header
+  # A short notice from an edge of the chat (18 November 2026), run in the page.
+  - plugin: notices
+# The tools run in the page (18 November 2026): a notice.
+frontend_tools:
+  - notices:0.0.1
 goal: >-
   Buy what the person needs at a fair price: the products found and compared
   honestly, the basket shown with its total, and nothing paid without the
@@ -155,6 +160,12 @@ system_prompt: >-
   confirmed or dropped. It runs in the page and buys nothing. The budget chosen
   in the title bar's drop-down is told to you with the turn: keep the basket
   within it.
+  You can slide a short notice in from an edge of the chat with show_notice
+  (tone info, success, warning or error, a title of a few words, a line of
+  text): it runs in the page and changes nothing else. Use it sparingly, at most
+  once in a turn, for what the person should not miss, such as a purchase
+  waiting for their approval or an item out of stock, and never to repeat what
+  your answer says.
 
 policy:
   shield:

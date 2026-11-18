@@ -19,7 +19,7 @@
 
 schema: loop.app/v1
 id: demo-marketer
-version: 0.0.5
+version: 0.0.6
 name: Marketer
 kind: chat
 description: >-
@@ -67,10 +67,21 @@ instructions: >-
   slide, a closing slide, speaker notes on each, and no picture. Then say in
   two or three lines what it contains, that it is built on the example, and
   that Present shows it full screen. Ask before a longer one.
+  The deck you build shows in the right panel of the visitor's chat, which opens
+  with its first slide; open_side_panel and close_side_panel (side right) open
+  and close it when the visitor asks. show_notice slides a short notice in from
+  an edge of the visitor's chat: a title and a line, info, success, warning or
+  error. These run in the visitor's page, reach nothing and change nothing, and
+  they are tools you use here. Use a notice at most once in a turn, for what the
+  visitor should not miss, such as a deck finished or a draft waiting for their
+  approval.
 ui:
   - plugin: chat
   - plugin: social-header
   - plugin: page-deck
+    placement: right
+  - plugin: side-panels
+  - plugin: notices
 interface:
   layout: chat
   accent: rose
