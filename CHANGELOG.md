@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.217
+
+- **`demo-shopper` 0.0.9 orders again, through an approval** (18 November 2026), with agent-runtimes 1.6.90, where a company's API answers an order a person approves with `403 approval_required` and the operation, for every caller. Its `write` and `buy` rules say `do_it` again, as before 0.0.8; its instructions say that a proposed order comes back as an operation with nothing done, that `pap_confirm` places it once, and that an operation's reference is no order number. The gateway approves the test order as the agent, as its owner lets it, and records it. Tests: test_apps, test_apps_pap, test_presentation
+
 ## 0.0.216
 
 - **`demo-shopper` 0.0.8 browses and does not order** (the user, 18 November 2026). The Demo Shop's API placed a proposed order at once, with no approval asked, so a visitor's test order was approved by nobody. Until the shop's API holds an order to an approval, the demo's `write` and `buy` rules are `ask_first`: on the visitors' runtime nobody is there to ask, so a visitor's proposal (the shop's quote and its orders alike) is refused before it reaches the shop. It reads the catalogue, compares, adds up a basket from the listed prices and says that ordering needs an account for now. Tests: test_apps, test_presentation
