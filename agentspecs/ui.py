@@ -93,6 +93,256 @@ class UiContributions(BaseModel):
     )
 
 
+#: How a header item is named: what its frontend tool's argument is called.
+_ITEM_ID = re.compile(r"^[a-z][a-z0-9_]{0,30}$")
+
+#: The items a header UI holds at most: the chat's title bar stays calm.
+HEADER_ITEMS_AT_MOST = 3
+
+#: The options a drop-down holds at most.
+HEADER_OPTIONS_AT_MOST = 8
+
+
+class UiHeaderItemKind(str, Enum):
+    """What a header item is (the user, 18 November 2026: "a drop-down choice, or visual indicators").
+
+    ``action``: a button that says something to the agent. ``choice``: a drop-down the person
+    picks one option of, told to the agent with the next turn. ``indicator``: something the agent
+    shows the person — a label, a counter, a status or a meter — set by the plugin's frontend tool.
+    """
+
+    ACTION = "action"
+    CHOICE = "choice"
+    INDICATOR = "indicator"
+
+
+class UiHeaderDisplay(str, Enum):
+    """How an indicator is drawn: words, a number with its words, a dot with its words, or a bar."""
+
+    LABEL = "label"
+    COUNTER = "counter"
+    STATUS = "status"
+    METER = "meter"
+
+
+class UiHeaderTone(str, Enum):
+    """What an indicator's colour says, in the theme's own tokens."""
+
+    NEUTRAL = "neutral"
+    ACCENT = "accent"
+    SUCCESS = "success"
+    ATTENTION = "attention"
+    DANGER = "danger"
+
+
+class UiHeaderOption(BaseModel):
+    """One option of a header drop-down."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    id: str = Field(description="What the page sends when it is chosen")
+    label: str = Field(min_length=1, max_length=32, description="What the person reads")
+    says: Optional[str] = Field(
+        default=None,
+        max_length=240,
+        description="What the agent is told while it is chosen, in place of the item's `says`; empty for nothing",
+    )
+
+    @field_validator("id")
+    @classmethod
+    def _an_option_id(cls, value: str) -> str:
+        if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,30}", value):
+            raise ValueError(f"{value!r} is not an option id: letters, digits, `_`, `.` and `-`")
+        return value
+
+
+class UiHeaderItem(BaseModel):
+    """One item of a header UI: a button, a drop-down or an indicator."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    id: str = Field(description="Its name: the argument of the plugin's frontend tool that sets it")
+    kind: UiHeaderItemKind
+    label: str = Field(min_length=1, max_length=32, description="Its name, as the person reads and hears it")
+    description: str = Field(
+        min_length=1, max_length=240, description="What it means: the person's tooltip, and what the model reads"
+    )
+    octicon: Optional[str] = Field(default=None, description="Its Octicon")
+    # An action.
+    message: Optional[str] = Field(
+        default=None, max_length=400, description="An action's: what pressing it says to the agent, as the person"
+    )
+    # A choice.
+    options: List[UiHeaderOption] = Field(default_factory=list, description="A choice's options, in order")
+    default: Optional[str] = Field(default=None, description="A choice's option to start with; its first unsaid")
+    says: Optional[str] = Field(
+        default=None,
+        max_length=240,
+        description="A choice's: what the agent is told with every turn, `{label}` the option chosen",
+    )
+    # An indicator.
+    display: Optional[UiHeaderDisplay] = Field(default=None, description="An indicator's: how it is drawn")
+    unit: Optional[str] = Field(default=None, max_length=8, description="A meter's unit, after its value: `%`")
+    max: Optional[float] = Field(default=None, gt=0, description="A meter's full value; 100 unsaid")
+
+    @field_validator("id")
+    @classmethod
+    def _an_item_id(cls, value: str) -> str:
+        if not _ITEM_ID.fullmatch(value):
+            raise ValueError(f"{value!r} is not a header item id: lower-case letters, digits and `_`")
+        return value
+
+    @model_validator(mode="after")
+    def _is_whole(self) -> "UiHeaderItem":
+        kind = self.kind
+        own = {
+            UiHeaderItemKind.ACTION: {"message"},
+            UiHeaderItemKind.CHOICE: {"options", "default", "says"},
+            UiHeaderItemKind.INDICATOR: {"display", "unit", "max"},
+        }
+        for other, fields in own.items():
+            if other is kind:
+                continue
+            for name in sorted(fields):
+                if getattr(self, name):
+                    raise ValueError(f"the {kind.value} {self.id!r} takes no `{name}`: it is {_a(other.value)}'s")
+        if kind is UiHeaderItemKind.ACTION and not (self.message or "").strip():
+            raise ValueError(f"the action {self.id!r} says nothing: give it a `message`")
+        if kind is UiHeaderItemKind.CHOICE:
+            if len(self.options) < 2:
+                raise ValueError(f"the choice {self.id!r} needs two options at least")
+            if len(self.options) > HEADER_OPTIONS_AT_MOST:
+                raise ValueError(f"the choice {self.id!r} has more than {HEADER_OPTIONS_AT_MOST} options")
+            ids = [option.id for option in self.options]
+            if len(set(ids)) != len(ids):
+                raise ValueError(f"the choice {self.id!r} lists an option twice")
+            if self.default is not None and self.default not in ids:
+                raise ValueError(f"the choice {self.id!r} starts with {self.default!r}, which is not one of its options")
+            if self.says is None and any(option.says is None for option in self.options):
+                raise ValueError(
+                    f"the choice {self.id!r} tells the agent nothing: give it `says`, or each option its own"
+                )
+        if kind is UiHeaderItemKind.INDICATOR:
+            if self.display is None:
+                raise ValueError(f"the indicator {self.id!r} does not say how it is drawn: give it a `display`")
+            if self.display is not UiHeaderDisplay.METER and (self.unit or self.max):
+                raise ValueError(f"the indicator {self.id!r} is no meter: it takes no `unit` and no `max`")
+        return self
+
+
+def _a(kind: str) -> str:
+    return f"an {kind}" if kind[0] in "aeiou" else f"a {kind}"
+
+
+class UiHeader(BaseModel):
+    """What a UI puts in the chat's title bar, and the frontend tool its agent sets it with."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    tool: Optional[str] = Field(
+        default=None,
+        description=(
+            "The frontend tool the agent sets its indicators and its drop-downs with, run in the page: "
+            "`set_<the plugin's id>`; required as soon as it has an indicator"
+        ),
+    )
+    when: Optional[str] = Field(
+        default=None, max_length=400, description="When the agent calls the tool, as the model reads it"
+    )
+    items: List[UiHeaderItem] = Field(min_length=1, max_length=HEADER_ITEMS_AT_MOST)
+
+    @model_validator(mode="after")
+    def _is_whole(self) -> "UiHeader":
+        ids = [item.id for item in self.items]
+        if len(set(ids)) != len(ids):
+            raise ValueError("a header item is listed twice")
+        indicators = [item for item in self.items if item.kind is UiHeaderItemKind.INDICATOR]
+        if indicators and not self.tool:
+            raise ValueError("a header with an indicator names the frontend tool that sets it: `tool`")
+        if self.tool and not self.settable():
+            raise ValueError("a header of buttons alone takes no `tool`: nothing of it is set")
+        if self.when and not self.tool:
+            raise ValueError("`when` says when the tool is called: there is no `tool`")
+        return self
+
+    def settable(self) -> List[UiHeaderItem]:
+        """The items the tool sets: the indicators and the drop-downs."""
+        return [item for item in self.items if item.kind is not UiHeaderItemKind.ACTION]
+
+
+def header_tool_name(ui_id: str) -> str:
+    """The frontend tool of a header UI: ``set_<its id>``, hyphens as underscores."""
+    return "set_" + ui_id.replace("-", "_")
+
+
+def header_tool_parameters(header: UiHeader) -> Dict[str, Any]:
+    """The arguments of a header's frontend tool, as a JSON Schema: one per item it sets.
+
+    An indicator takes an object — ``label`` (its words), ``tone``, ``visible``, and ``value``
+    for a counter or a meter (``max`` too for a meter); a drop-down takes one of its option ids.
+    Only the items named change: the others stay as they are. Agent-runtimes builds the same
+    schema in the page (``headerToolParameters``), held to this one by its tests.
+    """
+    properties: Dict[str, Any] = {}
+    for item in header.settable():
+        if item.kind is UiHeaderItemKind.CHOICE:
+            properties[item.id] = {
+                "type": "string",
+                "enum": [option.id for option in item.options],
+                "description": f"{item.label}: {item.description} Set it only when the person says so in the conversation.",
+            }
+            continue
+        fields: Dict[str, Any] = {}
+        if item.display in (UiHeaderDisplay.COUNTER, UiHeaderDisplay.METER):
+            fields["value"] = {"type": "number", "description": "The number shown."}
+        if item.display is UiHeaderDisplay.METER:
+            fields["max"] = {"type": "number", "description": f"The full value; {_number(item.max or 100)} unsaid."}
+        fields["label"] = {"type": "string", "maxLength": 48, "description": "Its words, a few."}
+        fields["tone"] = {
+            "type": "string",
+            "enum": [tone.value for tone in UiHeaderTone],
+            "description": "What its colour says; neutral unsaid.",
+        }
+        fields["visible"] = {"type": "boolean", "description": "false takes it off the title bar."}
+        properties[item.id] = {
+            "type": "object",
+            "description": f"{item.label}: {item.description}",
+            "properties": fields,
+            "additionalProperties": False,
+        }
+    return {"type": "object", "properties": properties, "additionalProperties": False}
+
+
+def _number(value: float) -> str:
+    return str(int(value)) if float(value).is_integer() else str(value)
+
+
+def header_says(header: UiHeader, chosen: Mapping[str, Any]) -> List[str]:
+    """What the agent is told of the options chosen in a header's drop-downs, a sentence each.
+
+    ``chosen`` is what the page sends with a turn, an option id by item id. An option's own
+    ``says`` wins over its item's, whose ``{label}`` is the option's; an empty one says nothing.
+
+    Raises
+    ------
+    ValueError
+        When an item is not a drop-down of this header, or an option is not one of its own.
+    """
+    choices = {item.id: item for item in header.items if item.kind is UiHeaderItemKind.CHOICE}
+    said: List[str] = []
+    for item_id, option_id in chosen.items():
+        item = choices.get(str(item_id))
+        if item is None:
+            raise ValueError(f"The header has no drop-down {item_id!r}.")
+        option = next((each for each in item.options if each.id == option_id), None)
+        if option is None:
+            raise ValueError(f"{item.label} has no option {option_id!r}.")
+        words = option.says if option.says is not None else (item.says or "").replace("{label}", option.label)
+        if words.strip():
+            said.append(words.strip())
+    return said
+
+
 class UiSpec(BaseModel):
     """One UI plugin: a Reactor plugin of agent-runtimes a Maker composes an interface with."""
 
@@ -126,6 +376,17 @@ class UiSpec(BaseModel):
             "Where in the chat it may go, its default first (0.0.197): `header`, `toolbar`, "
             "`footer`, `banner`, `panel` or `message`; none for a part of the workspace itself"
         ),
+    )
+    header: Optional[UiHeader] = Field(
+        default=None,
+        description=(
+            "What it puts in the chat's title bar — buttons, drop-downs and indicators — and the "
+            "frontend tool its agent sets them with; for a UI whose first placement is `header`"
+        ),
+    )
+    supersedes: List[str] = Field(
+        default_factory=list,
+        description="The UI plugins it stands in for: a chat that has it leaves them out",
     )
 
     @model_validator(mode="before")
@@ -175,6 +436,20 @@ class UiSpec(BaseModel):
         return value
 
     @model_validator(mode="after")
+    def _a_header_goes_in_the_header(self) -> "UiSpec":
+        if self.header is not None:
+            if not self.placements or self.placements[0] is not UiPlacement.HEADER:
+                raise ValueError(f"{self.id!r} declares a `header`: its first placement is `header`")
+            expected = header_tool_name(self.id)
+            if self.header.tool is not None and self.header.tool != expected:
+                raise ValueError(f"the frontend tool of {self.id!r} is named {expected!r}, not {self.header.tool!r}")
+        if self.id in self.supersedes:
+            raise ValueError(f"{self.id!r} supersedes itself")
+        if len(set(self.supersedes)) != len(self.supersedes):
+            raise ValueError(f"{self.id!r} supersedes a UI twice")
+        return self
+
+    @model_validator(mode="after")
     def _components_have_a_catalog(self) -> "UiSpec":
         if self.components and not self.catalog:
             raise ValueError(f"{self.id!r} renders components: say the catalog they are written in")
@@ -220,6 +495,15 @@ def load_ui(directory: Path = PLUGINS_DIR) -> Dict[str, UiSpec]:
             raise ValueError(f"{path.name}: the plugin {spec.plugin!r} is already {plugins[spec.plugin]!r}'s")
         plugins[spec.plugin] = spec.id
         found[spec.id] = spec
+    tools: Dict[str, str] = {}
+    for spec in found.values():
+        for other in spec.supersedes:
+            if other not in found:
+                raise ValueError(f"{spec.id}.yaml: it supersedes {other!r}, which is no UI spec")
+        if spec.header is not None and spec.header.tool:
+            if spec.header.tool in tools:
+                raise ValueError(f"{spec.id}.yaml: the tool {spec.header.tool!r} is already {tools[spec.header.tool]!r}'s")
+            tools[spec.header.tool] = spec.id
     return found
 
 

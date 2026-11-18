@@ -105,6 +105,12 @@ model_config:
   max_tokens: 4096
 codemode:
   enabled: false
+# Its own UI.
+ui:
+  # In the chat's title bar (18 November 2026): the sensor drop-down and the cloud cover of the scene read,
+  # set by the agent with its frontend tool, run in the page.
+  - plugin: earth-header
+
 system_prompt: >-
   You are Terra. You analyse satellite images and Earth observation data for one
   person. Find collections and scenes with the Earthdata tools
@@ -127,6 +133,12 @@ system_prompt: >-
   regions, sensors, thresholds), use the datalayer-memory skills, and never
   delete everything they remember without their explicit confirmation of how
   many.
+  The chat's title bar shows the cloud cover of the scene you read: call
+  set_earth_header with cloud (the percent as value, the sensor and date as
+  label, tone success under 10, attention from 30, danger from 60) each time you
+  settle on a scene. It runs in the page and downloads nothing. The sensor
+  chosen in the title bar's drop-down is told to you with the turn: search that
+  sensor only.
 
 policy:
   shield:

@@ -20,11 +20,13 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `app-elements` (Side panel and pages) | `@datalayer/loop-plugin-app-elements` | `a2ui` | — | none of its own |
 | `app-page` (Application page) | `@datalayer/loop-plugin-app-page` (one per application) | `a2ui`, `mcp-apps` | — | none of its own |
 | `app-rules` (Rules and approvals) | `@datalayer/loop-plugin-app-rules` (one per application) | — | — | none of its own |
+| `aws-header` (AWS header) | `@datalayer/loop-plugin-aws-header` | — | — | none of its own |
 | `aws-savings` (AWS savings) | `@datalayer/loop-plugin-aws-savings` | `a2ui` | — | none of its own |
 | `aws-savings-badge` (Savings found) | `@datalayer/loop-plugin-aws-savings-badge` | — | — | none of its own |
 | `bank-reconciliation` (Bank reconciliation) | `@datalayer/loop-plugin-bank-reconciliation` | `a2ui` | — | none of its own |
 | `basket-total` (Basket total) | `@datalayer/loop-plugin-basket-total` | — | — | none of its own |
 | `bluesky-post-preview` (Bluesky post preview) | `@datalayer/loop-plugin-bluesky-post-preview` | `a2ui` | — | none of its own |
+| `books-header` (Books header) | `@datalayer/loop-plugin-books-header` | — | — | none of its own |
 | `browser-session` (Browser sessions) | `@datalayer/loop-plugin-browser-session` | — | — | none of its own |
 | `canvas-blocks` (Blocks) | `@datalayer/loop-plugin-ui` (one per ui) | — | — | none of its own |
 | `canvas-parts` (Parts) | `@datalayer/loop-plugin-parts` (one per source) | — | — | none of its own |
@@ -37,6 +39,7 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `document-toolbar` (Document toolbar) | `@datalayer/loop-plugin-document-toolbar` | — | — | none of its own |
 | `document-view` (Document button) | `@datalayer/loop-plugin-document-view` | — | — | none of its own |
 | `earth-area` (Area and dates) | `@datalayer/loop-plugin-earth-area` | — | — | none of its own |
+| `earth-header` (Earth header) | `@datalayer/loop-plugin-earth-header` | — | — | none of its own |
 | `earth-index` (Index and change) | `@datalayer/loop-plugin-earth-index` | `a2ui` | — | none of its own |
 | `earth-scenes` (Satellite scenes) | `@datalayer/loop-plugin-earth-scenes` | `a2ui` | — | none of its own |
 | `input-prompt` (Composer) | `@datalayer/loop-plugin-input-prompt` | — | — | none of its own |
@@ -44,6 +47,7 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `linkedin-post-preview` (LinkedIn post preview) | `@datalayer/loop-plugin-linkedin-post-preview` | `a2ui` | — | none of its own |
 | `models` (Models) | `@datalayer/loop-plugin-models` | — | — | none of its own |
 | `notebook` (Notebook) | `@datalayer/loop-plugin-notebook` | — | — | none of its own |
+| `notebook-header` (Notebook header) | `@datalayer/loop-plugin-notebook-header` | — | — | none of its own |
 | `notebook-toolbar` (Notebook toolbar) | `@datalayer/loop-plugin-notebook-toolbar` | — | — | none of its own |
 | `notebook-view` (Notebook button) | `@datalayer/loop-plugin-notebook-view` | — | — | none of its own |
 | `odoo-context` (Odoo company and period) | `@datalayer/loop-plugin-odoo-context` | — | — | none of its own |
@@ -53,14 +57,17 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `product-cards` (Product cards) | `@datalayer/loop-plugin-product-cards` | — | — | none of its own |
 | `product-comparison` (Product comparison) | `@datalayer/loop-plugin-product-comparison` | `a2ui` | — | none of its own |
 | `prompt` (Floating composer) | `@datalayer/loop-plugin-prompt` | — | — | none of its own |
+| `shop-header` (Shopping header) | `@datalayer/loop-plugin-shop-header` | — | — | none of its own |
 | `shopping-basket` (Shopping basket) | `@datalayer/loop-plugin-shopping-basket` | `a2ui` | — | none of its own |
 | `social-accounts` (Linked social accounts) | `@datalayer/loop-plugin-social-accounts` | — | — | none of its own |
+| `social-header` (Social header) | `@datalayer/loop-plugin-social-header` | — | — | none of its own |
 | `spreadsheet` (Spreadsheet) | `@datalayer/loop-plugin-spreadsheet` | — | — | none of its own |
 | `spreadsheet-view` (Spreadsheet button) | `@datalayer/loop-plugin-spreadsheet-view` | — | — | none of its own |
 | `stripe-checkout` (Stripe checkout) | `@datalayer/loop-plugin-stripe-checkout` | `a2ui` | — | none of its own |
 | `subagent-activity` (Delegated work) | `@datalayer/loop-plugin-subagent-activity` | — | — | none of its own |
 | `trial-balance` (Trial balance) | `@datalayer/loop-plugin-trial-balance` | — | — | none of its own |
 | `trip-budget` (Trip budget) | `@datalayer/loop-plugin-trip-budget` | — | — | none of its own |
+| `trip-header` (Trip header) | `@datalayer/loop-plugin-trip-header` | — | — | none of its own |
 | `trip-itinerary` (Trip itinerary) | `@datalayer/loop-plugin-trip-itinerary` | — | — | none of its own |
 | `trip-options` (Trip options) | `@datalayer/loop-plugin-trip-options` | `a2ui` | — | none of its own |
 | `trip-summary` (Trip being planned) | `@datalayer/loop-plugin-trip-summary` | — | — | none of its own |

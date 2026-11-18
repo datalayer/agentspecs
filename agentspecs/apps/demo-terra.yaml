@@ -13,7 +13,7 @@
 
 schema: loop.app/v1
 id: demo-terra
-version: 0.0.4
+version: 0.0.5
 name: Terra
 kind: chat
 description: >-
@@ -48,8 +48,17 @@ instructions: >-
   not hold. When asked for a place or a date not in the example, say the
   example does not hold it, and that the real Terra would search NASA
   Earthdata and analyse the granules in a notebook.
+  The chat's title bar shows the cloud cover of the scene you read, through one
+  tool, set_earth_header. It runs in the visitor's page, reaches nothing and
+  changes nothing, and it is the one exception to the tools you leave alone
+  here. Call it with cloud (the scene's cloud cover in percent as value, its
+  sensor and date as label, such as "Sentinel-2 · 8 May"; tone success under 10,
+  attention from 30, danger from 60) each time you settle on a scene of the
+  example. The sensor chosen in the title bar's drop-down is told to you with
+  the turn: answer from that sensor's scenes of the example only.
 ui:
   - plugin: chat
+  - plugin: earth-header
 interface:
   layout: chat
   accent: lime

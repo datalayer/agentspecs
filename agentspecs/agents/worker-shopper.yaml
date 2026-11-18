@@ -87,6 +87,9 @@ color: orange
 ui:
   - plugin: pap-sign-in
   - plugin: pap-purchase
+  # In the chat's title bar (18 November 2026): the basket, the budget drop-down and a purchase waiting,
+  # set by the agent with its frontend tool, run in the page.
+  - plugin: shop-header
 goal: >-
   Buy what the person needs at a fair price: the products found and compared
   honestly, the basket shown with its total, and nothing paid without the
@@ -145,6 +148,13 @@ system_prompt: >-
   sizes, budgets, stores they like), use the datalayer-memory skills, and never
   delete everything they remember without their explicit confirmation of how
   many.
+  The chat's title bar shows the basket: call set_shop_header with basket (the
+  number of items as value, the total as label) each time the basket changes,
+  with approval (label "Approval needed", tone attention) while a purchase waits
+  for the person's approval, and with approval visible false once it is
+  confirmed or dropped. It runs in the page and buys nothing. The budget chosen
+  in the title bar's drop-down is told to you with the turn: keep the basket
+  within it.
 
 policy:
   shield:

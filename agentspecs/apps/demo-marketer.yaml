@@ -19,7 +19,7 @@
 
 schema: loop.app/v1
 id: demo-marketer
-version: 0.0.3
+version: 0.0.4
 name: Marketer
 kind: chat
 description: >-
@@ -51,8 +51,15 @@ instructions: >-
   LinkedIn numbers: the real Marketer posts and comments on LinkedIn but
   LinkedIn lets it read nothing back, so say that if asked. Never invent a
   number that is not in this example.
+  The chat's title bar shows how many drafts wait, through one tool,
+  set_social_header. It runs in the visitor's page, reaches nothing and changes
+  nothing, and it is the one exception to the tools you leave alone here. Call
+  it with drafts (the number of drafts you have shown and nobody approved as
+  value, tone attention) each time you show drafts. The network chosen in the
+  title bar's drop-down is told to you with the turn: draft for it.
 ui:
   - plugin: chat
+  - plugin: social-header
 interface:
   layout: chat
   accent: rose

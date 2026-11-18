@@ -15,7 +15,7 @@
 
 schema: loop.app/v1
 id: demo-jupyter-data-analyst
-version: 0.0.1
+version: 0.0.2
 name: Jupyter Data Analyst
 kind: chat
 description: >-
@@ -78,8 +78,15 @@ instructions: >-
   When asked to load another file, to run a cell or to open the notebook, say
   that the real Jupyter Data Analyst does that in a notebook on the person's
   own runtime, once signed in, and that this demo runs nothing.
+  The chat's title bar shows the dataset and what ran, through one tool,
+  set_notebook_header. It runs in the visitor's page, reaches nothing and
+  changes nothing, and it is the one exception to the tools you leave alone
+  here. With your first answer, call it with dataset (label "orders.csv · 2,493
+  rows") and run (label "Nothing ran here", tone neutral); never show a run
+  there.
 ui:
   - plugin: chat
+  - plugin: notebook-header
 interface:
   layout: chat
   accent: violet

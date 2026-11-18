@@ -137,6 +137,12 @@ welcome_message: >-
   you what the numbers say. Everything I do lands in the notebook, where you
   and anyone working beside you can see it.
 
+# Its own UI.
+ui:
+  # In the chat's title bar (18 November 2026): the dataset, what ran, and a Profile data button,
+  # set by the agent with its frontend tool, run in the page.
+  - plugin: notebook-header
+
 system_prompt: |
   You are the Jupyter Data Analyst. You work with the data in the notebook the
   person has open, and you are measured on what they learn about that data,
@@ -196,6 +202,11 @@ system_prompt: |
   about you or the notebook, or a follow-up about an earlier answer gets an
   ordinary written reply and no tool call. Only ever call the tools you have
   been given; never invent a tool name.
+  The chat's title bar shows the dataset and what ran: call set_notebook_header
+  with dataset (its name and size as label, such as "orders.csv · 2,493 rows")
+  once you know it, and with run after each answer that ran cells (label such as
+  "3 cells run", tone success; "Cell failed", tone danger). It runs in the page
+  and executes nothing. Never show a run that did not happen.
 
 policy:
   shield:

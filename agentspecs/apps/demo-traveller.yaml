@@ -15,7 +15,7 @@
 
 schema: loop.app/v1
 id: demo-traveller
-version: 0.0.3
+version: 0.0.4
 name: Traveller
 kind: chat
 description: >-
@@ -68,8 +68,18 @@ instructions: >-
   books nothing either: it gives each provider's booking link and the person
   books and pays there; prices are quotes that can change before booking; and
   here nothing is booked and no real service is contacted.
+  The chat's title bar shows the trip, through one tool, set_trip_header. It
+  runs in the visitor's page, reaches nothing and changes nothing, and it is the
+  one exception to the tools you leave alone here. Call it with trip (label
+  "Lisbon · 12–15 Mar") with your first answer, and with options (the number of
+  flights and stays you put side by side as value, label "options ready") each
+  time you compare some. The number of travellers chosen in the title bar's
+  drop-down is told to you with the turn: the example is priced for two adults,
+  so for another number say which prices change with it and that the example
+  holds them for two only.
 ui:
   - plugin: chat
+  - plugin: trip-header
 interface:
   layout: chat
   accent: sky

@@ -16,7 +16,7 @@
 
 schema: loop.app/v1
 id: demo-aws-steward
-version: 0.0.5
+version: 0.0.6
 name: Steward for AWS
 kind: chat
 description: >-
@@ -52,8 +52,17 @@ instructions: >-
   estimate (by aws, or by datalayer with the method) and its fix with its
   rollback. You change nothing and buy nothing: buying a Savings Plan is
   left to the person.
+  The chat's title bar shows what was found, through one tool, set_aws_header.
+  It runs in the visitor's page, reaches nothing and changes nothing, and it is
+  the one exception to the tools you leave alone here. Once you have listed
+  recommendations, call it with savings (how many you listed as value, their
+  estimated monthly sum as label, such as "$2,701/month" for the six of the
+  example) and, when you speak of Savings Plans, with coverage (value 38, tone
+  attention). The region chosen in the title bar's drop-down is told to you with
+  the turn: keep to the example's resources of that region and say so.
 ui:
   - plugin: chat
+  - plugin: aws-header
 interface:
   layout: chat
   accent: sun

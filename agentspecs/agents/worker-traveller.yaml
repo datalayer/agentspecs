@@ -128,6 +128,12 @@ model_config:
   max_tokens: 8192
 codemode:
   enabled: false
+# Its own UI.
+ui:
+  # In the chat's title bar (18 November 2026): the trip, the travellers drop-down and the options ready,
+  # set by the agent with its frontend tool, run in the page.
+  - plugin: trip-header
+
 system_prompt: >-
   You are the Traveller, a travel companion for one person. You plan trips with
   the flight search of Kiwi.com (search-flight), the stays of Booking.com
@@ -161,6 +167,11 @@ system_prompt: >-
   home airport, travellers, diet, budgets), use the datalayer-memory skills,
   and never delete everything they remember without their explicit
   confirmation of how many.
+  The chat's title bar shows the trip: call set_trip_header with trip (where and
+  when as label, such as "Lisbon · 12–15 Mar") once it is known, and with
+  options (their number as value) each time you have options ready to compare.
+  It runs in the page and books nothing. The number of travellers chosen in the
+  title bar's drop-down is told to you with the turn: price for that many.
 
 policy:
   shield:

@@ -19,7 +19,7 @@
 
 schema: loop.app/v1
 id: demo-shopper
-version: 0.0.9
+version: 0.0.10
 name: Shopper
 kind: chat
 description: >-
@@ -101,9 +101,18 @@ instructions: >-
   kept — and that the real Shopper would buy through the person's own Personal
   Agent Protocol connection, only once they approved that exact purchase. A
   product out of stock cannot be bought: say so and offer another.
+  Besides the shop's three tools, one tool draws in the chat's title bar,
+  set_shop_header: it runs in the visitor's page and reaches no shop. Call it
+  with basket (the number of items as value, the quoted total as label, such as
+  "$84.00") each time you price a basket, with approval (label "Approval
+  needed", tone attention) when an order comes back as an operation to confirm,
+  and with approval (label "Test order placed", tone success) once pap_confirm
+  answered. The budget chosen in the title bar's drop-down is told to you with
+  the turn: keep the basket within it and say what does not fit.
 ui:
   - plugin: chat
   - plugin: pap-sign-in
+  - plugin: shop-header
 interface:
   layout: chat
   accent: sun

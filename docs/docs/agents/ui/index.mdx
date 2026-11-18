@@ -46,6 +46,9 @@ in [the catalog of visual components](./components.md), generated from the plugi
 | `contribution_points` | The Contribution Points it offers to other plugins. |
 | `settings` | Its settings, as the JSON Schema of an object; each default is the plugin's. |
 | `renderers` | The UI renderers it may be exposed through, ids of `agentspecs/ui-renderers`; any other is refused. |
+| `placements` | Where in the chat it may go, its default first; see below. |
+| `header` | For a UI in the chat's title bar: its buttons, drop-downs and indicators, and the frontend tool that sets them; see below. |
+| `supersedes` | The UI plugins it stands in for: a chat that has it leaves them out. |
 | `catalog`, `components` | For a plugin that renders components: the catalog they are written in (`a2ui/v0.9`) and the components; see below. |
 
 ```yaml
@@ -165,7 +168,127 @@ ui:
 `ui_choices_problems` refuses a placement the spec does not list. Each of the six seed agents
 that bring cards collects at least one UI in the chat's chrome and one A2UI message
 (`tests/test_ui.py`); the seventh, the Jupyter Data Analyst, works in the notebook's cells and
-brings no card of its own.
+brings no card of its own. Each of the seven has a header UI, described next.
+
+## In the chat's title bar: `header`
+
+A UI whose first placement is `header` may say what it puts there, under `header`: three items at
+most, so the title bar stays calm, and the **frontend tool** its agent sets them with. An item is
+one of three kinds:
+
+| `kind` | What the person sees | How it talks with the chat |
+|--------|----------------------|----------------------------|
+| `action` | A button. | Pressing it says its `message` to the agent, as the person. |
+| `choice` | A drop-down of two to eight `options`, one chosen (`default`, else the first). | The option chosen is told to the agent **with every turn**, in a sentence: the option's own `says`, else the item's `says` with `{label}` the option's label. An empty `says` tells nothing ("No limit"). The agent may set it too, when the person says so in the conversation. |
+| `indicator` | Something the agent shows: a `label` (words), a `counter` (a number and its words), a `status` (a dot and its words) or a `meter` (a small bar, with its `unit` and `max`) — its `display`. | Set by the agent through the frontend tool. Nothing is drawn before the agent said it. |
+
+Every item has an `id` (lower-case letters, digits and `_`: the tool's argument), a `label` (what
+the person reads and a screen reader says), a `description` (the tooltip, and what the model
+reads) and an `octicon`.
+
+```yaml
+# agentspecs/ui/shop-header.yaml (abridged)
+id: shop-header
+placements:
+- header
+supersedes:
+- basket-total
+header:
+  tool: set_shop_header
+  when: >-
+    Call it each time the basket changes (how many items, and the total as its label), when an
+    order is proposed and waits for the person's approval, and again once it is confirmed or dropped.
+  items:
+  - id: basket
+    kind: indicator
+    display: counter
+    label: Basket
+    description: How many items the basket holds, and its total as the label (such as "$84.00").
+    octicon: package
+  - id: budget
+    kind: choice
+    label: Budget
+    description: The most the person wants to spend on the basket.
+    octicon: credit-card
+    default: none
+    says: "The person's budget for the whole basket, chosen in the chat's header: {label}. Keep the basket within it."
+    options:
+    - { id: none, label: No limit, says: "" }
+    - { id: "50", label: Under $50 }
+    - { id: "100", label: Under $100 }
+  - id: approval
+    kind: indicator
+    display: status
+    label: Approval
+    description: Whether a purchase waits for the person's approval.
+    octicon: shield-check
+```
+
+### The tool: one per header, `set_<its id>`
+
+A header with an indicator names its tool, `set_` and the UI's id with underscores
+(`set_shop_header`); any other name is refused. It is a **frontend tool**: the page offers it to
+the agent with each turn and runs it itself when the model calls it, so the title bar changes
+with no call to a server, and the tool reads and changes nothing else. One tool per header, and
+not one shared `set_header_indicator`, because a frontend tool is offered by name with its JSON
+Schema: a header's own tool has exactly its items as arguments, each described in the words of
+its declaration, and an agent is offered only the tool of the header it has.
+
+Its arguments are one per item it sets, all optional — only the items named change
+(`agentspecs.ui.header_tool_parameters`):
+
+| Item | Argument |
+|------|----------|
+| An indicator | An object: `label` (its words, 48 characters at most), `tone` (`neutral`, `accent`, `success`, `attention` or `danger`; neutral unsaid), `visible` (`false` takes it off the title bar), and `value` for a `counter` or a `meter` (`max` too for a meter, 100 unsaid). |
+| A drop-down | One of its option ids. |
+| A button | None: nobody sets a button. |
+
+```json
+{ "basket": { "value": 3, "label": "$84.00" },
+  "approval": { "label": "Approval needed", "tone": "attention" } }
+```
+
+`when` says when the agent calls it, as the model reads it in the tool's description; the agent's
+own instructions say it too (after it builds the basket, when an order waits…). The indicators of
+a conversation are the tool's calls in it, in order: opened again, a conversation shows them as
+they stood. A drop-down the person changed is kept by the page for the conversation on screen.
+
+### What the agent is told of a drop-down
+
+The page sends the options chosen with each turn (`forwardedProps.loop.header`, an option id by
+item id, by UI id), and the runtime tells the agent their sentences for that turn only
+(`agentspecs.ui.header_says`); an item or an option the header does not have is refused:
+
+```python
+from agentspecs.ui import UI_CATALOGUE, header_says
+
+header_says(UI_CATALOGUE["shop-header"].header, {"budget": "100"})
+# ["The person's budget for the whole basket, chosen in the chat's header: Under $100. Keep the basket within it, …"]
+```
+
+### `supersedes`
+
+A header UI may stand in for an older chip that showed the same fact (`shop-header` for
+`basket-total`, `trip-header` for `trip-summary`, `aws-header` for `aws-savings-badge`): a chat
+that has it leaves those out of its title bar, whoever brought them, so the fact is said once.
+The header keeps reading what the chip read — the basket shown by `show_basket`, the savings
+listed — until its tool says otherwise.
+
+### The seed agents' headers
+
+| Agent | UI | In its title bar |
+|-------|----|------------------|
+| Marketer | `social-header` | **Network** (drop-down: all, X, Bluesky, LinkedIn, Discord) · **Drafts to approve** (counter) |
+| Shopper | `shop-header` | **Basket** (counter: items, total) · **Budget** (drop-down) · **Approval** (status, while a purchase waits) |
+| Accountant | `books-header` | **Period** (drop-down) · **Payments to match** (counter) · **Open invoices** (counter, total due) |
+| Traveller | `trip-header` | **Trip** (label: where and when) · **Travellers** (drop-down) · **Options ready** (counter) |
+| Terra | `earth-header` | **Sensor** (drop-down: any, Sentinel-2, Landsat) · **Cloud cover** (meter, of the scene read) |
+| Steward for AWS | `aws-header` | **Savings found** (counter: recommendations, monthly sum) · **Region** (drop-down) · **Savings Plans coverage** (meter) |
+| Jupyter Data Analyst | `notebook-header` | **Dataset** (label) · **Run** (status: what ran, or that nothing did) · **Profile data** (button) |
+
+Each agent names its header under `ui`, and so does its public demo, whose instructions allow
+that one tool and say what to show from the example data (`tests/test_ui_header.py`). An
+application lists a header UI beside the plugins of its kind.
 
 ## In an MCP server, a skill and a backend tool
 
