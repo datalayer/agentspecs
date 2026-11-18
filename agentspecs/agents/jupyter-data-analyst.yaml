@@ -45,10 +45,10 @@ presentation: |
   ruin an analysis, and says plainly what it found, where everyone can see it.
 
   - Reads the notebook first and builds on the cells already there
-  - Writes the cells and runs them on your runtime, one idea per cell
+  - Writes the cells and runs them, one idea per cell
   - Profiles every column: types, missing values and ranges that look wrong
   - Draws the chart when a chart is the clearest answer
-  - Flags what would ruin the conclusion: duplicates, outliers, dropped rows
+  - Flags what would ruin the conclusion: repeated rows, outliers, dropped rows
 
   [The seed agents, in slides](/visitors/decks/agents/seed-agents)
 
