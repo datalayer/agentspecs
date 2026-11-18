@@ -39,7 +39,13 @@ SEVEN = {
 }
 
 #: The agents with something placed in a side panel, and what.
-PLACED = {"worker-marketer": "page-deck", "worker-accountant": "page-sheet"}
+PLACED = {
+    "worker-marketer": "page-deck",
+    "worker-accountant": "page-sheet",
+    # The user, 18 November 2026: the Analyst's dataset profile and chart, the Steward's findings by service.
+    "jupyter-data-analyst": "page-sheet",
+    "worker-steward-aws": "page-sheet",
+}
 
 
 def raw(folder: str, name: str) -> dict:
@@ -130,6 +136,21 @@ def test_each_seed_agent_has_notices_and_its_placed_ui_its_side_panels(agent_id)
             assert "right panel" in words
     assert ui.ui_choices_problems(agent["ui"], to_ship=False) == []
     assert ui.ui_choices_problems(demo["ui"], to_ship=True) == []
+
+
+def test_the_analyst_and_the_steward_say_what_their_sheet_holds():
+    analyst = " ".join(raw("agents", "jupyter-data-analyst")["system_prompt"].split())
+    assert "a tab Profile with one row per column" in analyst and "sheet_insert_chart" in analyst
+    steward = " ".join(raw("agents", "worker-steward-aws")["system_prompt"].split())
+    assert "Monthly saving" in steward and "=SUM(E2:E7)" in steward
+    for demo in ("demo-jupyter-data-analyst", "demo-aws-steward"):
+        said = " ".join(raw("apps", demo)["instructions"].split())
+        assert "sheet_create" in said and "they too are tools you use here" in said
+        assert "only" in said
+    # The Analyst's demo still runs nothing, and says so.
+    assert "nothing ran here" in " ".join(
+        raw("apps", "demo-jupyter-data-analyst")["instructions"].split()
+    )
 
 
 def test_only_the_agents_that_name_a_set_name_its_ui():

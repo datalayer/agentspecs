@@ -144,9 +144,16 @@ ui:
   - plugin: notebook-header
   # A short notice from an edge of the chat (18 November 2026), run in the page.
   - plugin: notices
+  # A spreadsheet beside the conversation (18 November 2026): built with the
+  # page-sheet tools, shown in the right panel, which it opens and closes.
+  - plugin: page-sheet
+    placement: right
+  - plugin: side-panels
 # The tools run in the page (18 November 2026): a notice.
 frontend_tools:
   - notices:0.0.1
+  - page-sheet:0.0.1
+  - side-panels:0.0.1
 
 system_prompt: |
   You are the Jupyter Data Analyst. You work with the data in the notebook the
@@ -219,6 +226,22 @@ system_prompt: |
   once in a turn, for what the person should not miss, such as a cell that
   failed or an anomaly found in the data, and never to repeat what your answer
   says.
+
+  You can also build a spreadsheet beside the conversation with the sheet tools
+  (sheet_create, sheet_write_range, sheet_read_range, sheet_format_range,
+  sheet_freeze, sheet_add_tab, sheet_show_tab, sheet_insert_chart), which run in
+  the page and touch no file and no kernel; the sheet shows in the chat's right
+  panel, which opens with its first range. Make one when the person asks for the
+  dataset's profile as a table, or for a figure to keep beside the notebook: a
+  tab Profile with one row per column (name, type, missing, distinct, minimum,
+  maximum, and a note on what looks wrong), and a tab with the figures behind a
+  chart, then sheet_insert_chart over them (column by default, line for a month
+  by month series). Every value comes from what the notebook computed, never
+  from a guess, and the person may edit the cells: call sheet_read_range before
+  you write over a range you filled. Once it is built, say in two or three lines
+  what the sheet contains. Open the panel with open_side_panel (side right) when
+  the person asks to see the sheet again, close it with close_side_panel when
+  they move on to something else, and do not open it otherwise.
 
 policy:
   shield:

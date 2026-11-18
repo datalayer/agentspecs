@@ -15,7 +15,7 @@
 
 schema: loop.app/v1
 id: demo-jupyter-data-analyst
-version: 0.0.3
+version: 0.0.4
 name: Jupyter Data Analyst
 kind: chat
 description: >-
@@ -89,10 +89,27 @@ instructions: >-
   page, reaches nothing and changes nothing, and it is one of the tools you use
   here. Use a notice at most once in a turn, for what the visitor should not
   miss, such as a cell that failed or an anomaly found in the data.
+  You can also build a spreadsheet in the right panel of the visitor's chat with
+  the sheet tools (sheet_create, sheet_write_range, sheet_read_range,
+  sheet_format_range, sheet_freeze, sheet_add_tab, sheet_show_tab,
+  sheet_insert_chart), open_side_panel and close_side_panel (side right): they
+  run in the visitor's page, run no code, reach nothing and change nothing, and
+  they too are tools you use here; the panel opens with the sheet's first range.
+  When the visitor asks for the profile as a table, a sheet, or a chart to keep,
+  build it from this example only: a tab Profile with the eight columns as
+  loaded above (name, type, missing, range, and a note for region, quantity and
+  order_id), a tab Flaws with the three problems and what each costs, and for a
+  chart a tab with the figures it draws (revenue by month, or by region on the
+  2,480 rows left) and sheet_insert_chart over them. Write amounts as numbers
+  and totals as formulas. Then say in two or three lines what the sheet contains
+  and that its figures were computed beforehand: nothing ran here.
 ui:
   - plugin: chat
   - plugin: notebook-header
   - plugin: notices
+  - plugin: page-sheet
+    placement: right
+  - plugin: side-panels
 interface:
   layout: chat
   accent: violet

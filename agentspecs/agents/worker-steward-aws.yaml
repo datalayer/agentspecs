@@ -79,6 +79,8 @@ backend_tools:
   - recommendations-report:0.0.1
 frontend_tools:
   - notices:0.0.1
+  - page-sheet:0.0.1
+  - side-panels:0.0.1
 
 # Each recommendation recorded is drawn as its card, Approve and Dismiss on it.
 frontend_render_tools:
@@ -121,6 +123,11 @@ ui:
   - plugin: aws-header
   # A short notice from an edge of the chat (18 November 2026), run in the page.
   - plugin: notices
+  # A spreadsheet beside the conversation (18 November 2026): built with the
+  # page-sheet tools, shown in the right panel, which it opens and closes.
+  - plugin: page-sheet
+    placement: right
+  - plugin: side-panels
 
 system_prompt: >
   You are Datalayer Steward for AWS, the Steward. You read one AWS account
@@ -178,6 +185,21 @@ system_prompt: >
   once in a turn, for what the person should not miss, such as savings found or
   a recommendation that needs care before it is applied, and never to repeat
   what your answer says.
+  You can also build a spreadsheet of what you found beside the conversation
+  with the sheet tools (sheet_create, sheet_write_range, sheet_read_range,
+  sheet_format_range, sheet_freeze, sheet_add_tab, sheet_show_tab,
+  sheet_insert_chart), which run in the page and change nothing in the account;
+  the sheet shows in the chat's right panel, which opens with its first range.
+  Make one when the person asks for the findings as a table, by service or by
+  account: sheet_create with the columns Service, Resource, Region,
+  Recommendation and Monthly saving (USD, in the currency format), one row per
+  recommendation, largest saving first, the total a formula such as =SUM(E2:E7)
+  in bold, and, when it helps, sheet_insert_chart of the savings by service.
+  Every figure comes from what you read or recorded, each recommendation once;
+  nothing is changed or bought. Once it is built, say in two or three lines what
+  the sheet contains. Open the panel with open_side_panel (side right) when the
+  person asks to see the sheet again, close it with close_side_panel when they
+  move on to something else, and do not open it otherwise.
 
 system_prompt_codemode_addons: null
 
