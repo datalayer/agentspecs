@@ -421,8 +421,8 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
     for identity in ("quote-calculator", "report-from-a-file", "customer-interview"):
         spec = APP_CATALOGUE[identity]
         assert spec.enabled and spec.unavailable_because == "", identity
-        # Their agent, jupyter-data-analyst, is enabled and out of the pickers since 0.0.187
-        # (`listed: false`, 14 November 2026): nothing to set up.
+        # Their agent, jupyter-data-analyst, is enabled (the seventh seed agent, offered by
+        # the pickers since 0.0.215, 18 November 2026): nothing to set up.
         assert app_setup(spec) == [], identity
     # Decide's agent, example-simple, the neutral default, likewise.
     assert app_setup(APP_CATALOGUE["decide"]) == []
@@ -925,6 +925,7 @@ EXAMPLES = {
     "demo-traveller": AppKind.CHAT,
     "demo-accountant": AppKind.CHAT,
     "demo-aws-steward": AppKind.CHAT,
+    "demo-jupyter-data-analyst": AppKind.CHAT,
 }
 
 #: Each of the SDK's seven recorded PAP journeys (agent-runtimes' trace examples) and the example it became.

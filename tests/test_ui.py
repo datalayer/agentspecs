@@ -243,6 +243,8 @@ def test_a_ui_says_where_it_goes_in_the_chat():
         ui.UiChoice.model_validate({"plugin": "x-budget", "placement": "sidebar"})
 
 
+#: The seed agents that bring cards to the chat. The seventh, the Jupyter Data Analyst
+#: (18 November 2026), brings none yet: what it does lands in the notebook's cells.
 SEED_AGENTS = ["worker-marketer", "worker-shopper", "worker-accountant", "worker-traveller", "worker-terra", "worker-steward-aws"]
 
 

@@ -17,8 +17,10 @@ import yaml
 
 AGENTS_DIR = Path(__file__).resolve().parent.parent / "agentspecs" / "agents"
 
-#: The agents the pickers offer: the home page's six (the Traveller since 15 November 2026).
+#: The agents the pickers offer: the seven seed agents (the Traveller since 15 November 2026,
+#: the Jupyter Data Analyst since 18 November 2026).
 LISTED = {
+    "jupyter-data-analyst",
     "worker-accountant",
     "worker-marketer",
     "worker-shopper",
@@ -41,7 +43,7 @@ def test_listed_is_a_boolean_said_only_to_keep_an_enabled_agent_out():
         assert agent.get("enabled", True) is True, f"{name}: a disabled agent is not offered anyway"
 
 
-def test_the_pickers_offer_the_home_pages_six_agents():
+def test_the_pickers_offer_the_seven_seed_agents():
     offered = {
         name
         for name, agent in _agents()
@@ -55,7 +57,6 @@ def test_the_neutral_default_runs_and_is_not_offered():
     for name in (
         "example-simple",
         "example-blank",
-        "jupyter-data-analyst",
     ):
         assert agents[name]["enabled"] is True, name
         assert agents[name]["listed"] is False, name
