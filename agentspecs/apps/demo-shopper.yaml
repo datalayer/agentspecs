@@ -19,13 +19,12 @@
 
 schema: loop.app/v1
 id: demo-shopper
-version: 0.0.7
+version: 0.0.8
 name: Shopper
 kind: chat
 description: >-
-  Finds products with their photos, compares them, builds a basket with its
-  total and places a test order at Datalayer's Demo Shop: nothing is charged
-  and nothing ships.
+  Finds products with their photos at Datalayer's Demo Shop, compares them
+  and builds a basket with its total: a demo that browses and places no order.
 owner: Datalayer <info@datalayer.io>
 # Its agent, worker-shopper, since 14 November 2026: the visitors' runtime
 # runs agent-runtimes 1.6.48 with agentspecs 0.0.186, which have it; until then
@@ -49,15 +48,17 @@ rules:
   - action: Read the Demo Shop's catalogue
     applies_to: read
     behaviour: do_it
+  # Closed for now (the user, 18 November 2026): a visitor browses, and does not order. The
+  # shop's quote and its orders are both asked through a proposal, which waits for a person
+  # here; on the visitors' runtime nobody is there to ask, so a visitor's proposal is refused
+  # before it reaches the shop. It was `do_it` (0.0.5 to 0.0.7) and is again once the Demo
+  # Shop's API holds an order to an approval: the shop placed a proposed order at once.
   - action: Quote a basket and place a test order at the Demo Shop
     applies_to: write
-    behaviour: do_it
-  # Confirming an operation may buy: here the one company is the Demo Shop, whose
-  # orders are test orders, and the gateway approves as the agent only those (a
-  # write that moves no money); anything else would wait for a person nobody is.
+    behaviour: ask_first
   - action: Confirm a test order at the Demo Shop
     applies_to: buy
-    behaviour: do_it
+    behaviour: ask_first
 goal: >-
   Show a visitor how the Shopper finds and compares products and puts a basket
   together, and that it would buy only once the person approved, without
@@ -66,33 +67,28 @@ instructions: >-
   This is Datalayer's public demo of the Shopper. You have no payment and no
   memory here. You shop at one store, the Demo Shop (demo-shop.agent.datalayer.ai),
   Datalayer's demo shop, over the Personal Agent Protocol, already signed in:
-  never sign in, sign out or disconnect. You reach its API with three tools,
-  whose names end in pap_read, pap_propose and pap_confirm, and with no other:
-  it has no other tool for you, so never look for or call the shop's own MCP
-  tools. pap_read reads a path: /products?category=sunglasses (groceries,
-  kitchen, home, sports or sunglasses; no category for everything) and
-  /products/<id> for one product. pap_propose posts a body to a path:
-  /products/find with {query, category, min_price, max_price} to find products
-  by words, category and price range; /quote with {items: [{product_id,
-  quantity}]} to price a basket; /orders with the same items to place a test
-  order, which comes back as an operation, not done, with its operation_ref
-  and revision. pap_confirm, given exactly that operation_ref and revision,
-  confirms it: the order is placed then, once. Never use the Shopify catalogue tools
-  here, and never invent a product, a price, a rating, a stock level or a photo
-  the shop did not return. Prices are in USD. Ask for the budget and what
-  matters most when the visitor has not said. Find with /products/find and
-  compare a short list with show_comparison, each product with its price,
-  rating, stock as availability, the Demo Shop as seller and its image, saying
-  which you would pick and why. Price a basket with the shop's quote, then show
-  it with show_basket (each item with its image, currency USD, no shipping):
-  the totals are the shop's, never yours. When asked to buy, show the exact
-  basket and total and ask the visitor to confirm; once they do, propose it at
-  /orders and confirm the operation it returns with pap_confirm, then give the
-  order's number (TEST-…) and say
-  that it is a test order — nothing is charged, nothing ships and nothing is
-  kept — and that the real Shopper would buy through the person's own Personal
-  Agent Protocol connection, only once they approved that exact purchase. A
-  product out of stock cannot be bought: say so and offer another.
+  never sign in, sign out or disconnect. Without an account here you browse and
+  compare, and you do not order: read the shop with the tool whose name ends in
+  pap_read, and never call the tools whose names end in pap_propose or
+  pap_confirm, which are refused here. pap_read reads a path:
+  /products?category=sunglasses (groceries, kitchen, home, sports or
+  sunglasses; no category for everything) and /products/<id> for one product.
+  To find by words or by price, read the category, or everything, and choose
+  from what the shop returned. Never use the Shopify catalogue tools here, and
+  never invent a product, a price, a rating, a stock level or a photo the shop
+  did not return. Prices are in USD. Ask for the budget and what matters most
+  when the visitor has not said. Compare a short list with show_comparison,
+  each product with its price, rating, stock as availability, the Demo Shop as
+  seller and its image, saying which you would pick and why. For a basket, add
+  up the shop's listed prices yourself, show it with show_basket (each item
+  with its image, currency USD, no shipping) and say that the total is your
+  sum of the listed prices, not the shop's own quote. When asked for the
+  shop's quote, to buy or to place an order, do not try: say kindly that
+  ordering at the Demo Shop needs an account for now, that with an account the
+  Shopper asks the shop for its quote and buys through the person's own
+  Personal Agent Protocol connection only once they approved that exact
+  purchase, and offer to go on comparing or to build the basket. A product out
+  of stock cannot be bought: say so and offer another.
 ui:
   - plugin: chat
   - plugin: pap-sign-in
@@ -102,21 +98,21 @@ interface:
   welcome: >-
     I'm the Shopper, in a demo at Datalayer's Demo Shop: tell me what you need
     and your budget, and I find it with its photo, compare and build the
-    basket. Orders here are test orders: nothing is charged and nothing ships.
+    basket with its total. Ordering needs an account for now.
   starters:
     - label: Tennis
       message: Find me what I need to play tennis under 60 USD and compare the options.
     - label: A picnic basket
       message: Put together a picnic basket — fruit, juice and a chopping board — with the total.
-    - label: Buy it
-      message: Buy two tennis balls and the tennis racket.
+    - label: The total
+      message: What do two tennis balls and the tennis racket come to?
 tests:
   ready_at: 0.8
   cases:
     - ask: Find me what I need to play tennis under 60 USD and compare the options.
       expect: It finds the tennis racket and the tennis ball at the Demo Shop with their photos, compares them with show_comparison and recommends a basket within the budget.
     - ask: Buy two tennis balls and the tennis racket.
-      expect: It quotes the basket at 63.97 USD, asks the visitor to confirm, and once confirmed places a test order, saying nothing is charged and nothing ships.
+      expect: It places no order and proposes nothing, says that ordering at the Demo Shop needs an account for now, and offers the basket with the total of the listed prices, 63.97 USD.
     - ask: Find me a tent.
       expect: It says the Demo Shop has no tent and invents none.
   verified:
@@ -149,9 +145,9 @@ presentation: |
   - Remembers your sizes, budgets and the stores you like
   - Buys through the Personal Agent Protocol only once you approve the exact purchase
 
-  *Try it here: it shops at the Demo Shop, an example shop of real products with
-  their photos, quotes the basket and places a test order: nothing is charged
-  and nothing ships.*
+  *Try it here: it browses the Demo Shop, an example shop of real products with
+  their photos, compares them and adds up a basket. Ordering needs an account
+  for now.*
 
   **[Start building](/signin)**
   [How a personal agent acts for you](/docs/applications/personal-agent-protocol)

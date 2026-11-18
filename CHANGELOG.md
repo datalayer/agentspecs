@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.216
+
+- **`demo-shopper` 0.0.8 browses and does not order** (the user, 18 November 2026). The Demo Shop's API placed a proposed order at once, with no approval asked, so a visitor's test order was approved by nobody. Until the shop's API holds an order to an approval, the demo's `write` and `buy` rules are `ask_first`: on the visitors' runtime nobody is there to ask, so a visitor's proposal (the shop's quote and its orders alike) is refused before it reaches the shop. It reads the catalogue, compares, adds up a basket from the listed prices and says that ordering needs an account for now. Tests: test_apps, test_presentation
+
 ## 0.0.215
 
 - **The Jupyter Data Analyst is the seventh seed agent** (the user, 18 November 2026). `jupyter-data-analyst` says its `tagline` and its `presentation` as the six do, and the pickers offer it (`listed: false` is gone): the new agent page, the chats, the assign menu and loop offer seven. Its public demo, `demo-jupyter-data-analyst` 0.0.1, is a chat on the visitors' runtime, which has no notebook and runs no code: it answers from an example file of orders (Harbor & Pine Roasters, January to June 2026) whose profile, totals and three flaws were computed beforehand, shows the cell the agent would write for each answer, and says that nothing ran. It brings no card to the chat: its results land in the notebook's cells. Its firewall rule stays `["*"]`. Docs: agents (the firewall), agents' UI. Tests: test_agents_listed, test_presentation, test_apps, test_ui
