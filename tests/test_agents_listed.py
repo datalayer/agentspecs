@@ -17,14 +17,14 @@ import yaml
 
 AGENTS_DIR = Path(__file__).resolve().parent.parent / "agentspecs" / "agents"
 
-#: The agents the pickers offer: the home page's six (the Voyager since 15 November 2026).
+#: The agents the pickers offer: the home page's six (the Traveller since 15 November 2026).
 LISTED = {
     "worker-accountant",
     "worker-marketer",
     "worker-shopper",
     "worker-steward-aws",
     "worker-terra",
-    "worker-voyager",
+    "worker-traveller",
 }
 
 

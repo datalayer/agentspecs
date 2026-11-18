@@ -12,7 +12,7 @@ description: >-
 tags:
   - travel
   - card
-  - voyager
+  - traveller
 enabled: true
 action: read
 approval: auto

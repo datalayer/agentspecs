@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.213
+
+- **The Voyager is the Traveller, ids included**: `worker-voyager` is `worker-traveller` and the home page's demo `demo-voyager` is `demo-traveller`, with the names, descriptions, prompts, the `traveller` tag on the trip cards' backend tools and the seed-agent lists (🧭 kept). Tests: all
+
 ## 0.0.212
 
 - **`demo-shopper` 0.0.5 confirms its test orders**: a `buy` rule with `do_it`, its one company being the Demo Shop, whose orders are test orders the gateway approves as the agent only when they move no money. Tests: test_apps, test_apps_pap, test_ui

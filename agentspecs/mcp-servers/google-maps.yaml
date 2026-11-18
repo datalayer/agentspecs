@@ -3,7 +3,7 @@
 
 # MCP Server Specification: Google Maps
 # Google's Maps Experience agent tools (formerly Maps Grounding Lite), hosted
-# by Google as an MCP server (the user, 15 November 2026, for the Voyager):
+# by Google as an MCP server (the user, 15 November 2026, for the Traveller):
 # places, routes and their travel times, places along a route, and weather.
 #
 # What Google offers agents today (read off

@@ -250,16 +250,16 @@ def test_the_marketer_reads_and_acts_on_x_with_the_linked_account_within_a_budge
     assert "X_BEARER_TOKEN" not in yaml.safe_dump(marketer["optional"]) and "read_x" in marketer["system_prompt"]
 
 
-def test_the_voyager_plans_with_kiwi_and_starts_without_booking_and_maps():
-    """The Voyager (the user, 15 November 2026): Kiwi.com anonymous, Booking.com and Google Maps the person's own."""
-    voyager = dict(_agents())["worker-voyager"]
-    assert voyager["mcp_servers"] == ["kiwi:0.0.1", "booking-com:0.0.1", "google-maps:0.0.1"]
-    assert voyager["optional"] == {
+def test_the_traveller_plans_with_kiwi_and_starts_without_booking_and_maps():
+    """The Traveller (the user, 15 November 2026): Kiwi.com anonymous, Booking.com and Google Maps the person's own."""
+    traveller = dict(_agents())["worker-traveller"]
+    assert traveller["mcp_servers"] == ["kiwi:0.0.1", "booking-com:0.0.1", "google-maps:0.0.1"]
+    assert traveller["optional"] == {
         "mcp_servers": ["booking-com:0.0.1", "google-maps:0.0.1"],
         "skills": ["crawl:0.0.1"],
     }
     for skill in ("travel-planning:0.0.1", "fare-and-stay-comparison:0.0.1", "dining:0.0.1"):
-        assert skill in voyager["skills"]
+        assert skill in traveller["skills"]
         spec = yaml.safe_load((ROOT / "skills" / f"{_base(skill)}.yaml").read_text())
         assert spec["enabled"] is True and spec["module"].startswith("datalayer_skills.skills.")
     servers = {
@@ -272,7 +272,7 @@ def test_the_voyager_plans_with_kiwi_and_starts_without_booking_and_maps():
     assert servers["booking-com"]["envvars"] == ["BOOKING_AFFILIATE_ID:0.0.1", "BOOKING_DEMAND_API_KEY:0.0.1"]
     for name in ("GOOGLE_MAPS_API_KEY", "BOOKING_AFFILIATE_ID", "BOOKING_DEMAND_API_KEY"):
         assert (ROOT / "env-vars" / f"{name}.yaml").exists(), name
-    prompt = " ".join(voyager["system_prompt"].split())
+    prompt = " ".join(traveller["system_prompt"].split())
     assert "You book nothing and pay nothing" in prompt and "can change" in prompt
 
 

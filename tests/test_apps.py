@@ -922,7 +922,7 @@ EXAMPLES = {
     "demo-shop": AppKind.CHAT,
     "demo-shopper": AppKind.CHAT,
     "demo-terra": AppKind.CHAT,
-    "demo-voyager": AppKind.CHAT,
+    "demo-traveller": AppKind.CHAT,
     "demo-accountant": AppKind.CHAT,
     "demo-aws-steward": AppKind.CHAT,
 }

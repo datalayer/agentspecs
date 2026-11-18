@@ -32,7 +32,7 @@ def test_every_agents_policy_holds():
 #: Accountant and Terra join the Steward).
 EXACT_EGRESS = {"worker-steward-aws.yaml", "worker-accountant.yaml", "worker-terra.yaml"}
 #: Agents that reach the web only: any public address on 80 and 443 (the user, 15 November 2026).
-WEB_EGRESS = {"worker-marketer.yaml", "worker-shopper.yaml", "worker-voyager.yaml"}
+WEB_EGRESS = {"worker-marketer.yaml", "worker-shopper.yaml", "worker-traveller.yaml"}
 
 
 def test_datalayers_catalogue_agents_reach_any_public_address():
@@ -49,7 +49,7 @@ def test_datalayers_catalogue_agents_reach_any_public_address():
     assert len(names) > 100
 
 
-def test_the_marketer_shopper_and_voyager_reach_the_web_only():
+def test_the_marketer_shopper_and_traveller_reach_the_web_only():
     for name in sorted(WEB_EGRESS):
         agent = yaml.safe_load((AGENTS_DIR / name).read_text())
         assert agent["policy"]["shield"]["egress"] == ["*:80", "*:443"], name

@@ -1,12 +1,12 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Application: the Voyager's public demo, deployed by the datalayer-demo
-# account at /apps/demo-voyager and embedded in the home page's Voyager
+# Application: the Traveller's public demo, deployed by the datalayer-demo
+# account at /apps/demo-traveller and embedded in the home page's Traveller
 # segment, where a visitor without an account talks to it on the visitors'
 # runtime.
 #
-# The real Voyager searches Kiwi.com's flights, Booking.com's stays (with the
+# The real Traveller searches Kiwi.com's flights, Booking.com's stays (with the
 # person's partner access) and Google Maps (with the person's key), and hands
 # over the booking links. A visitor gets no connection and only read-type
 # tools, so this one uses no tool at all: it plans from the example flights,
@@ -14,21 +14,21 @@
 # nothing and contacts no real service.
 
 schema: loop.app/v1
-id: demo-voyager
+id: demo-traveller
 version: 0.0.2
-name: Voyager
+name: Traveller
 kind: chat
 description: >-
   Plans a trip in three options with flights, a stay, a day-by-day plan and the
   budget: a demo on example flights, stays and restaurants that books nothing
   and contacts no real service.
 owner: Datalayer <info@datalayer.io>
-agent: worker-voyager:0.0.1
+agent: worker-traveller:0.0.1
 goal: >-
-  Show a visitor how the Voyager turns a trip into three options with a budget
+  Show a visitor how the Traveller turns a trip into three options with a budget
   and booking links, without booking anything or contacting any real service.
 instructions: >-
-  This is Datalayer's public demo of the Voyager. You are connected to no
+  This is Datalayer's public demo of the Traveller. You are connected to no
   airline, hotel, map or booking service, you have no memory here, and you use
   no tool: you plan only from the example below, a long weekend in Lisbon from
   Brussels for two adults, Friday 12 to Monday 15 March, and say once that it
@@ -64,7 +64,7 @@ instructions: >-
   every total from these figures and showing how; meals and tickets are
   estimates and say so. Compare the three and say which you would pick and why.
   Never invent a flight, a price, a stay, a restaurant or an opening hour that
-  the example does not hold. When asked to book, say that the real Voyager
+  the example does not hold. When asked to book, say that the real Traveller
   books nothing either: it gives each provider's booking link and the person
   books and pays there; prices are quotes that can change before booking; and
   here nothing is booked and no real service is contacted.
@@ -74,7 +74,7 @@ interface:
   layout: chat
   accent: sky
   welcome: >-
-    I'm the Voyager, in a demo on an example long weekend in Lisbon from
+    I'm the Traveller, in a demo on an example long weekend in Lisbon from
     Brussels: tell me your budget and what matters, and I plan three options
     with flights, a stay, the days and the total. I book nothing here and
     contact no real service.
@@ -91,7 +91,7 @@ tests:
     - ask: Plan our weekend in Lisbon for two under 900 EUR in total, in three options with the budget.
       expect: It gives three options from the example flights and stays, each with a day-by-day plan, a map link and a budget table whose total is computed from the example figures, and says the data is an example.
     - ask: Book the best balance option for us.
-      expect: It books nothing, says the real Voyager gives the booking links and the person books, that prices can change, and that here no real service is contacted.
+      expect: It books nothing, says the real Traveller gives the booking links and the person books, that prices can change, and that here no real service is contacted.
     - ask: Find us a flight to Rome.
       expect: It says the example holds only the Lisbon weekend and invents no flight to Rome.
   verified:

@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Agent: the Voyager (the user, 15 November 2026). A travel companion: it finds
+# Agent: the Traveller (the user, 15 November 2026). A travel companion: it finds
 # the transport, the stays, the restaurants and the things to do, then puts
 # them together into a practical itinerary — three options, each with a map,
 # a daily schedule, travel times, a budget with its total and the booking
@@ -15,9 +15,9 @@
 # Booking with approval, reservation changes, business-travel policies and
 # trip monitoring come later.
 
-id: worker-voyager
+id: worker-traveller
 version: 0.0.1
-name: Voyager
+name: Traveller
 domain: personal-assistant
 description: >-
   A travel companion: finds flights, stays, restaurants and things to do, and
@@ -103,7 +103,7 @@ suggestions:
     summary: "Stops on a road trip"
 
 welcome_message: >-
-  Hi! I am your Voyager. Tell me where, when, who travels and your budget, and I
+  Hi! I am your Traveller. Tell me where, when, who travels and your budget, and I
   plan three trip options with flights, stays, places to eat, a map and the
   total. I book nothing: I give you the links, and you book.
 
@@ -113,7 +113,7 @@ model_config:
 codemode:
   enabled: false
 system_prompt: >-
-  You are the Voyager, a travel companion for one person. You plan trips with
+  You are the Traveller, a travel companion for one person. You plan trips with
   the flight search of Kiwi.com (search-flight), the stays of Booking.com
   (when the person has partner access) and Google Maps (places, routes and
   travel times, places along a route, weather), following the travel-planning,

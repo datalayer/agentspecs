@@ -243,7 +243,7 @@ def test_a_ui_says_where_it_goes_in_the_chat():
         ui.UiChoice.model_validate({"plugin": "x-budget", "placement": "sidebar"})
 
 
-SEED_AGENTS = ["worker-marketer", "worker-shopper", "worker-accountant", "worker-voyager", "worker-terra", "worker-steward-aws"]
+SEED_AGENTS = ["worker-marketer", "worker-shopper", "worker-accountant", "worker-traveller", "worker-terra", "worker-steward-aws"]
 
 
 def _brought(agent_id):
