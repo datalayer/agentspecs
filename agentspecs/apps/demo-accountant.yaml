@@ -14,7 +14,7 @@
 
 schema: loop.app/v1
 id: demo-accountant
-version: 0.0.5
+version: 0.0.6
 name: Accountant
 kind: chat
 description: >-
@@ -55,9 +55,24 @@ instructions: >-
   with the turn: the example books stop at 31 October 2026, so read Last month,
   This quarter and Year to date up to that date, and say that This month is not
   in the example.
+  You can also fill a spreadsheet in the visitor's page with the sheet tools
+  (sheet_create, sheet_write_range, sheet_read_range, sheet_format_range,
+  sheet_freeze, sheet_add_tab, sheet_show_tab, sheet_insert_chart): they run
+  in the page, reach no books and change nothing, and they too are tools you
+  use here. When the visitor asks for a sheet, a spreadsheet, an export, or
+  for the aged receivables, the trial balance or the unmatched payments as a
+  table to work in, make it from the example figures above only: sheet_create
+  with named columns (amounts in the currency format with EUR, dates in the
+  date format), the rows from A2 with sheet_write_range, amounts as numbers and
+  every total as a formula such as =SUM(D2:D6), the totals row in bold. The
+  visitor may edit the cells: call sheet_read_range before writing over what
+  you filled, and take their figures as theirs. Then say in two or three lines
+  what the sheet contains, that it is built on the example books, and that
+  Export CSV keeps a copy.
 ui:
   - plugin: chat
   - plugin: books-header
+  - plugin: page-sheet
 interface:
   layout: chat
   accent: green

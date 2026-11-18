@@ -483,6 +483,20 @@ class UiChoice(BaseModel):
         return data
 
 
+#: Where the frontend tool sets are (agentspecs/frontend-tools).
+FRONTEND_TOOLS_DIR = Path(__file__).resolve().parent / "frontend-tools"
+
+
+def hands_frontend_tools(ui_id: str) -> bool:
+    """Whether a UI hands the chat's agent a set of frontend tools: the set of its own id.
+
+    A page UI (``page-deck``, ``page-sheet``) is the plugin that binds a frontend tool set
+    (``frontend-tools/<id>.yaml``) to what it keeps in the page for the conversation, and draws
+    its calls. An agent names the two together: the set under ``frontend_tools``, the UI under ``ui``.
+    """
+    return bool(_ID.match(ui_id)) and (FRONTEND_TOOLS_DIR / f"{ui_id}.yaml").is_file()
+
+
 def load_ui(directory: Path = PLUGINS_DIR) -> Dict[str, UiSpec]:
     """Every UI spec of a directory, validated, by id; each file named for its id, each plugin once."""
     found: Dict[str, UiSpec] = {}

@@ -1,0 +1,132 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+"""Page UIs: a deck and a sheet an agent builds in the conversation with frontend tools.
+
+The user, 18 November 2026: "add to the marketer the frontend tools to create slides; add to the
+accountant the frontend tools to create spreadsheets". A page UI (``ui/page-deck.yaml``,
+``ui/page-sheet.yaml``) is the plugin that hands the chat's agent the frontend tool set of its own
+id (``frontend-tools/<id>.yaml``), bound to what it keeps in the page for the conversation, and
+draws the calls. An agent names the two together, and so does its public demo.
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+import pytest
+import yaml
+
+from agentspecs import ui
+
+ROOT = Path(ui.__file__).resolve().parent
+
+#: Each page UI: the agent that has it, its public demo, and the tools of its set.
+PAGE_UIS = {
+    "page-deck": (
+        "worker-marketer",
+        "demo-marketer",
+        [
+            "deck_create",
+            "deck_set_title",
+            "deck_add_slide",
+            "deck_update_slide",
+            "deck_move_slide",
+            "deck_delete_slide",
+            "deck_set_theme",
+            "deck_read",
+        ],
+    ),
+    "page-sheet": (
+        "worker-accountant",
+        "demo-accountant",
+        [
+            "sheet_create",
+            "sheet_write_range",
+            "sheet_read_range",
+            "sheet_format_range",
+            "sheet_freeze",
+            "sheet_add_tab",
+            "sheet_show_tab",
+            "sheet_insert_chart",
+        ],
+    ),
+}
+
+
+def raw(folder: str, name: str) -> dict:
+    return yaml.safe_load((ROOT / folder / f"{name}.yaml").read_text(encoding="utf-8"))
+
+
+def test_a_page_ui_is_a_ui_and_a_frontend_tool_set_of_one_id():
+    assert sorted(i for i in ui.UI_CATALOGUE if ui.hands_frontend_tools(i)) == sorted(PAGE_UIS)
+    # A UI that draws a backend tool's card hands no tool; an id that is no id reads no file.
+    assert not ui.hands_frontend_tools("trial-balance")
+    assert not ui.hands_frontend_tools("books-header")
+    assert not ui.hands_frontend_tools("../agents/worker-marketer")
+
+
+@pytest.mark.parametrize("ui_id", sorted(PAGE_UIS))
+def test_a_page_ui_goes_in_the_conversation_and_hands_its_tools_with_the_chats_extras(ui_id):
+    spec = ui.UI_CATALOGUE[ui_id]
+    assert spec.plugin == f"@datalayer/loop-plugin-{ui_id}"
+    assert [p.value for p in spec.placements] == ["message"]
+    assert spec.header is None
+    assert sorted(spec.contributions.points) == ["loop.chat.extras", "reactor.ui.renderer", "reactor.ui.toolBinding"]
+
+
+@pytest.mark.parametrize("ui_id", sorted(PAGE_UIS))
+def test_a_page_tool_set_names_its_tools_and_nothing_else(ui_id):
+    tools = raw("frontend-tools", ui_id)
+    assert tools["id"] == ui_id and tools["enabled"] is True
+    assert tools["toolset"] == PAGE_UIS[ui_id][2]
+    assert "page" in tools["tags"] and "frontend" in tools["tags"]
+    # The handlers are the page's: a set carries no code, no address and no schema of its own.
+    assert set(tools) == {"id", "version", "name", "description", "tags", "enabled", "toolset", "icon", "emoji"}
+
+
+@pytest.mark.parametrize("ui_id", sorted(PAGE_UIS))
+def test_the_agent_names_the_set_and_the_ui_together_and_is_told_when_to_use_them(ui_id):
+    agent_id, _demo, tools = PAGE_UIS[ui_id]
+    agent = raw("agents", agent_id)
+    assert f"{ui_id}:0.0.1" in agent["frontend_tools"]
+    assert {"plugin": ui_id} in agent["ui"]
+    prompt = " ".join(agent["system_prompt"].split())
+    first = tools[0]
+    assert first in prompt, f"{agent_id} is not told {first}"
+    # When to make one, to say what it contains, and to ask before a long one.
+    assert "Make one when the person asks" in prompt
+    assert "say in two or three lines what the" in prompt
+    assert "Ask before a" in prompt
+    assert "run in the page" in prompt or "which run in the page" in prompt
+
+
+def test_only_the_agents_that_name_a_page_ui_name_its_set():
+    for path in sorted((ROOT / "agents").glob("*.yaml")):
+        agent = yaml.safe_load(path.read_text(encoding="utf-8"))
+        sets = {str(each).split(":")[0] for each in agent.get("frontend_tools") or []}
+        plugins = {each["plugin"] for each in agent.get("ui") or [] if isinstance(each, dict)}
+        for ui_id in PAGE_UIS:
+            assert (ui_id in sets) == (ui_id in plugins), f"{path.stem}: {ui_id} is named on one side only"
+
+
+@pytest.mark.parametrize("ui_id", sorted(PAGE_UIS))
+def test_the_public_demo_has_it_and_builds_from_its_example_only(ui_id):
+    agent_id, demo_id, tools = PAGE_UIS[ui_id]
+    demo = raw("apps", demo_id)
+    assert demo["agent"].split(":")[0] == agent_id
+    assert {"plugin": ui_id} in demo["ui"]
+    said = " ".join(demo["instructions"].split())
+    for tool in tools:
+        if tool != "deck_set_title":
+            assert tool in said, f"{demo_id} does not name {tool}"
+    assert "they run in the page" in said
+    assert "example" in said and "only" in said
+    assert not ui.ui_choices_problems(demo["ui"], to_ship=True)
+
+
+def test_the_accountant_reads_before_it_writes_over_the_persons_cells():
+    for spec in (raw("agents", "worker-accountant")["system_prompt"], raw("apps", "demo-accountant")["instructions"]):
+        said = " ".join(spec.split())
+        assert "sheet_read_range before" in said
+        assert "=SUM(" in said

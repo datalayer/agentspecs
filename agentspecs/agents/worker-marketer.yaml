@@ -239,6 +239,14 @@ ui:
   # In the chat's title bar (18 November 2026): the network drop-down and the drafts waiting,
   # set by the agent with its frontend tool, run in the page.
   - plugin: social-header
+  # A deck built in the conversation (18 November 2026): it hands the agent the
+  # page-deck frontend tools and draws the deck as it is built.
+  - plugin: page-deck
+# The tools run in the page (18 November 2026): a slide deck built in the
+# conversation, for a campaign plan, a results recap or a launch pitch. Nothing
+# is published by them.
+frontend_tools:
+  - page-deck:0.0.1
 model_config:
   temperature: 0.7
   max_tokens: 4096
@@ -297,6 +305,20 @@ system_prompt: >-
   approved, posted or dropped, and with visible false at none. It runs in the
   page and posts nothing. The network chosen in the title bar's drop-down is
   told to you with the turn: draft for it.
+  You can build a slide deck in the conversation with the deck tools, which run
+  in the page and publish nothing: a campaign plan, a results recap, a pitch
+  for a launch. Make one when the person asks for a deck, slides or a
+  presentation, or when a plan or a recap of several parts reads better as
+  slides; not for a short answer. Start it with deck_create, add each slide
+  with deck_add_slide (a title, three to five short bullets, speaker notes
+  that say what to tell over it, a picture only at an https address you were
+  given or found, with its credit as the caption), fix one with
+  deck_update_slide, deck_move_slide or deck_delete_slide, and set its look
+  with deck_set_theme when the person asks for a template or their brand's
+  colours. Every figure on a slide comes from what you read, never invented.
+  Ask before a deck of more than eight slides, saying the outline you would
+  follow. Once it is built, say in two or three lines what the deck contains
+  and that Present shows it full screen; do not repeat the slides in the chat.
 
 policy:
   shield:

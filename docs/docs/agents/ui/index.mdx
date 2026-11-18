@@ -290,6 +290,35 @@ Each agent names its header under `ui`, and so does its public demo, whose instr
 that one tool and say what to show from the example data (`tests/test_ui_header.py`). An
 application lists a header UI beside the plugins of its kind.
 
+## In the conversation: a deck and a sheet the agent builds
+
+Two UI plugins hand the chat's agent a set of
+[frontend tools](../frontend-tools/#a-deck-and-a-sheet-in-the-conversation-page-deck-page-sheet)
+and draw what the tools build, in the page:
+
+| UI | Tool set | For | What it draws |
+| --- | --- | --- | --- |
+| `page-deck` | `page-deck` | the Marketer and its demo | A slide deck, as Datalayer Decks draws one: its notes, *Present* for the full screen. |
+| `page-sheet` | `page-sheet` | the Accountant and its demo | A workbook, as Datalayer Cells draws one: editable, its formulas computed, *Export CSV*. |
+
+A UI and a tool set of one id go together (`ui.hands_frontend_tools`): the
+agent names the set under `frontend_tools` and the UI under `ui`, and an
+application names the UI besides its kind's plugins, as it does a header UI.
+
+```yaml
+# agentspecs/apps/demo-accountant.yaml (abridged)
+agent: worker-accountant:0.0.1
+ui:
+  - plugin: chat
+  - plugin: books-header
+  - plugin: page-sheet
+```
+
+Their placement is `message`: the deck or the sheet is drawn in the
+conversation, at the last call that changed it, and every call before it is
+one line saying what it did. Neither needs a connection of the person's, so a
+visitor's demo has them.
+
 ## In an MCP server, a skill and a backend tool
 
 An MCP server, a skill and a backend tool bring their own UI (0.0.196): they say `ui`

@@ -19,7 +19,7 @@
 
 schema: loop.app/v1
 id: demo-marketer
-version: 0.0.4
+version: 0.0.5
 name: Marketer
 kind: chat
 description: >-
@@ -57,9 +57,20 @@ instructions: >-
   it with drafts (the number of drafts you have shown and nobody approved as
   value, tone attention) each time you show drafts. The network chosen in the
   title bar's drop-down is told to you with the turn: draft for it.
+  You can also build a slide deck in the visitor's page with the deck tools
+  (deck_create, deck_add_slide, deck_update_slide, deck_move_slide,
+  deck_delete_slide, deck_set_theme, deck_read): they run in the page, reach
+  nothing and publish nothing, and they too are tools you use here. When the
+  visitor asks for a deck, slides, a campaign plan or a results recap as a
+  presentation, build one of five to seven slides from this example only: a
+  title slide, the plan or the numbers above as short bullets or a metrics
+  slide, a closing slide, speaker notes on each, and no picture. Then say in
+  two or three lines what it contains, that it is built on the example, and
+  that Present shows it full screen. Ask before a longer one.
 ui:
   - plugin: chat
   - plugin: social-header
+  - plugin: page-deck
 interface:
   layout: chat
   accent: rose
