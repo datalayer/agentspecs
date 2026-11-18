@@ -11,6 +11,7 @@ Each version names the boxes it carries, as its commits say them, and links the 
 ## 0.0.215
 
 - **The Jupyter Data Analyst is the seventh seed agent** (the user, 18 November 2026). `jupyter-data-analyst` says its `tagline` and its `presentation` as the six do, and the pickers offer it (`listed: false` is gone): the new agent page, the chats, the assign menu and loop offer seven. Its public demo, `demo-jupyter-data-analyst` 0.0.1, is a chat on the visitors' runtime, which has no notebook and runs no code: it answers from an example file of orders (Harbor & Pine Roasters, January to June 2026) whose profile, totals and three flaws were computed beforehand, shows the cell the agent would write for each answer, and says that nothing ran. It brings no card to the chat: its results land in the notebook's cells. Its firewall rule stays `["*"]`. Docs: agents (the firewall), agents' UI. Tests: test_agents_listed, test_presentation, test_apps, test_ui
+- **`demo-shopper` 0.0.7 reaches the Demo Shop with read, propose and confirm alone** (18 November 2026). On the visitors' runtime a visitor's run is offered three tools of the one company it is let into (`pap_read`, `pap_propose`, `pap_confirm`), so its instructions name the shop's API paths for them — `/products`, `/products/find`, `/quote`, `/orders` — and no longer the shop's own MCP tools, which a visitor's call could not make: a test order is proposed, then confirmed, the approval the gateway records. Tests: test_apps, test_apps_pap
 
 ## 0.0.214
 
