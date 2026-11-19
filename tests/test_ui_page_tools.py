@@ -30,6 +30,7 @@ PAGE_UIS = {
             "deck_create",
             "deck_set_title",
             "deck_add_slide",
+            "deck_add_slides",
             "deck_update_slide",
             "deck_move_slide",
             "deck_delete_slide",
@@ -135,3 +136,14 @@ def test_the_accountant_reads_before_it_writes_over_the_persons_cells():
         said = " ".join(spec.split())
         assert "sheet_read_range before" in said
         assert "=SUM(" in said
+
+
+def test_the_marketer_lays_a_deck_out_in_one_or_two_calls():
+    # One call a slide took a run a slide, and a message takes five runs of page tools at most.
+    agent = " ".join(raw("agents", "worker-marketer")["system_prompt"].split())
+    demo = " ".join(raw("apps", "demo-marketer")["instructions"].split())
+    assert "in one or two deck_add_slides calls" in agent
+    assert "in one deck_add_slides call" in demo
+    for said in (agent, demo):
+        assert "never a call a slide" in said
+        assert "eep deck_add_slide for a single slide" in said

@@ -133,6 +133,7 @@ ui:
 | `deck_create` | `title`, `subtitle` | Starts a new deck; a deck made before in the conversation is replaced. |
 | `deck_set_title` | `title`, `subtitle` | Renames the deck, its slides kept. |
 | `deck_add_slide` | `type`, the fields of that type, `notes`, `at` | Adds a slide at the end, or before slide `at`. |
+| `deck_add_slides` | `slides` (each as for `deck_add_slide`), `at` | Adds several slides at once, in order: a deck's outline in one or two calls. One bad slide refuses the whole batch; nothing is added. |
 | `deck_update_slide` | `slide`, then as for a new slide | Replaces a slide, whole. |
 | `deck_move_slide` | `slide`, `to` | Moves a slide to another place. |
 | `deck_delete_slide` | `slide` | Deletes a slide. |
