@@ -2671,7 +2671,7 @@ DEMO_CONNECTIONS = {
     "demo-shopper": ["shopify:0.0.1"],
     "demo-accountant": ["odoo-accounting:0.0.1"],
     "demo-terra": ["earthdata:0.0.1"],
-    "demo-traveller": ["kiwi:0.0.1", "google-maps:0.0.1"],
+    "demo-traveller": ["kiwi:0.0.1", "overture:0.0.1", "google-maps:0.0.1"],
     "demo-marketer": [],
     "demo-aws-steward": [],
     "demo-jupyter-data-analyst": [],
@@ -2695,8 +2695,10 @@ def test_the_demos_connect_to_every_server_they_can_and_only_read() -> None:
         assert app_problems(found) == [], identity
         assert app_setup(found) == [], identity
     # The Traveller's Kiwi.com: its search alone, never the feedback form that sends to Kiwi.
-    kiwi, maps = APP_CATALOGUE["demo-traveller"].connections
+    kiwi, overture, maps = APP_CATALOGUE["demo-traveller"].connections
     assert kiwi.only == ["search-flight"] and not kiwi.optional
+    # Its Overture places: every tool, all reads, never optional (no key).
+    assert not overture.only and not overture.optional
     # The Shopper still buys its test orders at the Demo Shop alone.
     [shop] = APP_CATALOGUE["demo-shopper"].pap.connections
     assert shop.company == "demo-shop.agent.datalayer.ai"
@@ -2706,7 +2708,7 @@ def test_the_traveller_demo_starts_google_maps_only_with_its_key() -> None:
     # The user, 19 November 2026: the demo may use Google Maps with the billed key among the demo
     # account's own secrets; without it, Kiwi.com alone, and nothing said about Maps.
     found = APP_CATALOGUE["demo-traveller"]
-    assert found.version == "0.0.6"
+    assert found.version == "0.0.7"
     maps = next(c for c in found.connections if c.server == "google-maps:0.0.1")
     # Optional, so the runtime leaves it off when the account holds no such secret, as the agent does.
     assert maps.optional
@@ -2729,3 +2731,20 @@ def test_the_demos_that_read_live_services_say_so_and_invent_nothing() -> None:
     assert "search_catalog" in APP_CATALOGUE["demo-shopper"].instructions
     assert "search_earth_datagranules" in APP_CATALOGUE["demo-terra"].instructions
     assert "search-flight" in APP_CATALOGUE["demo-traveller"].instructions
+    assert "overture_search_places" in APP_CATALOGUE["demo-traveller"].instructions
+
+
+def test_the_traveller_demo_finds_real_places_with_overture_in_any_city() -> None:
+    # The user, 19 November 2026: real restaurants and sights in any city from Overture,
+    # attributed, on a map; flights from Kiwi.com; the stays stay an example.
+    found = APP_CATALOGUE["demo-traveller"]
+    instructions = found.instructions
+    assert "in any city" in instructions
+    assert "attribution" in instructions and "Overture Maps" in instructions
+    assert "show_trip_map" in instructions
+    # The example's restaurants are gone: places come from Overture, stays from the example.
+    assert "Taberna da Rua" not in instructions and "Casa do Largo" in instructions
+    assert "places are in the example for Lisbon only" not in instructions
+    # The map comes with the overture server and show_trip_map, not the application's own ui.
+    server = agentspecs.apps._catalogue("mcp-servers")["overture"]
+    assert [ui["plugin"] for ui in server["ui"]] == ["trip-map"]

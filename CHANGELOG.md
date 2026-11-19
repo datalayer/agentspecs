@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## Unreleased
+
+- Overture Maps for the Traveller (the user, 19 November 2026: "for traveller add also maps with https://overturemaps.org/"): the `overture` MCP server, Datalayer's gateway with its `overture` toolset (`https://mcp.datalayer.run/mcp?only=overture`, the person's Datalayer key, no other), Overture Maps' open places with no key — `overture_search_places`, `overture_place_details` and `overture_place_categories`, classed `read` under it and under `datalayer` (the gateway's table); it brings the `trip-map` plugin. worker-traveller holds it always and shows its options' places on a map with the new `show-trip-map` backend tool (agent_runtimes.tools.cards.show_trip_map, drawn by `trip-map` over Overture's open basemap); Overture for places, Google Maps for travel times when the person has a key. demo-traveller 0.0.7 connects `overture` read only in its owner's account and finds real restaurants and sights in any city, attributed (flights from Kiwi.com, stays still the example), on a map. Docs: UI components (trip-map). Tests: test_overture (4), test_apps (the demos' connections; the Traveller's Overture places), test_agents_optional, test_ui
+
 ## 0.1.2
 
 - A sheet built a step a response (the user, 19 November 2026): the agents and demos that build a sheet with the `page-sheet` tools make all the calls of a step together in one response, `sheet_create` and `sheet_write_range` in one, then `sheet_format_range`, `open_side_panel` if the panel is closed and the title bar's header tool in the next, and keep single calls for later edits. One page call a response took more rounds than a person's message has. worker-accountant, jupyter-data-analyst, worker-steward-aws; demo-accountant (already 0.0.8 above), demo-jupyter-data-analyst 0.0.5, demo-aws-steward 0.0.9. Tests: test_ui_page_tools (every sheet builder listed, each told to build a step a response)

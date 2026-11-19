@@ -73,6 +73,7 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `trip-budget` (Trip budget) | `@datalayer/loop-plugin-trip-budget` | — | — | none of its own |
 | `trip-header` (Trip header) | `@datalayer/loop-plugin-trip-header` | — | — | none of its own |
 | `trip-itinerary` (Trip itinerary) | `@datalayer/loop-plugin-trip-itinerary` | — | — | none of its own |
+| `trip-map` (Trip map) | `@datalayer/loop-plugin-trip-map` | — | — | none of its own |
 | `trip-options` (Trip options) | `@datalayer/loop-plugin-trip-options` | `a2ui` | — | none of its own |
 | `trip-summary` (Trip being planned) | `@datalayer/loop-plugin-trip-summary` | — | — | none of its own |
 | `vat-summary` (VAT summary) | `@datalayer/loop-plugin-vat-summary` | — | — | none of its own |

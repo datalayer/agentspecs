@@ -64,7 +64,7 @@ actions:
   note: >-
     Read off the gateway's own table of what it serves (datalayer-mcp-server's
     tool_policy), every toolset included: the base surface and those a URL turns
-    on (contents, library, odoo, earthdata, marimo). Running code is a write:
+    on (contents, library, odoo, earthdata, overture, marimo). Running code is a write:
     what it changes is what it is given. Launching a sandbox spends credits; a
     snapshot of one is storage that is billed. An application's connection to
     this server is what the gateway grants it, tool by tool, by these classes:
@@ -88,6 +88,9 @@ actions:
     search_earth_datasets: read
     search_earth_datagranules: read
     download_earth_data_granules: read
+    overture_search_places: read
+    overture_place_details: read
+    overture_place_categories: read
     odoo_get_context: read
     odoo_get_account: read
     odoo_get_settings: read
