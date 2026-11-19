@@ -16,7 +16,7 @@ version: 0.0.1
 name: Analysis header
 description: >-
   The Analyst's title bar: what is being analysed, whether its diagrams parse, and a button that asks for it on the canvas.
-emoji: "🧭"
+emoji: "📐"
 octicon: workflow
 plugin: "@datalayer/loop-plugin-analysis-header"
 folder: "analysis-header"
