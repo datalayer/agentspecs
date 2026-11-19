@@ -14,6 +14,7 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `a2ui-surface` (Surfaces in the conversation) | `@datalayer/loop-plugin-a2ui-surface` | `a2ui` | a2ui/v0.9 | 25 |
 | `a2ui-view` (Surface view) | `@datalayer/loop-plugin-a2ui` | `a2ui` | — | none of its own |
 | `agentspecs` (Agent picker) | `@datalayer/loop-plugin-agentspecs` | — | — | none of its own |
+| `analysis-header` (Analysis header) | `@datalayer/loop-plugin-analysis-header` | — | — | none of its own |
 | `app-activity` (Activity) | `@datalayer/loop-plugin-app-activity` (one per application) | — | — | none of its own |
 | `app-components` (Your own components) | `@datalayer/loop-plugin-app-components` (one per application) | `a2ui` | — | none of its own |
 | `app-computer` (Computer) | `@datalayer/loop-plugin-app-computer` (one per application) | — | — | none of its own |
@@ -53,7 +54,9 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `notices` (Notices) | `@datalayer/loop-plugin-notices` | — | — | none of its own |
 | `odoo-context` (Odoo company and period) | `@datalayer/loop-plugin-odoo-context` | — | — | none of its own |
 | `page-deck` (Deck in the page) | `@datalayer/loop-plugin-page-deck` | — | — | none of its own |
+| `page-excalidraw` (Excalidraw in the page) | `@datalayer/loop-plugin-page-excalidraw` | — | — | none of its own |
 | `page-layout` (Page layout) | `@datalayer/loop-plugin-page-layout` | — | — | none of its own |
+| `page-mermaid` (Mermaid in the page) | `@datalayer/loop-plugin-page-mermaid` | — | — | none of its own |
 | `page-sheet` (Sheet in the page) | `@datalayer/loop-plugin-page-sheet` | — | — | none of its own |
 | `pap-purchase` (Approve a purchase) | `@datalayer/loop-plugin-pap-purchase` | — | — | none of its own |
 | `pap-sign-in` (Sign in at a company) | `@datalayer/loop-plugin-pap-sign-in` | `mcp-ui` | — | none of its own |

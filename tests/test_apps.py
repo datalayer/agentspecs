@@ -926,6 +926,7 @@ EXAMPLES = {
     "demo-accountant": AppKind.CHAT,
     "demo-aws-steward": AppKind.CHAT,
     "demo-jupyter-data-analyst": AppKind.CHAT,
+    "demo-analyst": AppKind.CHAT,
 }
 
 #: Each of the SDK's seven recorded PAP journeys (agent-runtimes' trace examples) and the example it became.
@@ -2665,7 +2666,7 @@ def test_a_lent_repository_is_a_public_url_at_one_commit() -> None:
 #: owner's account. Left out, a server that needs a person's own account or a key the demo
 #: account does not hold: the Marketer's Discord (a bot in a server of the person's) and LinkedIn
 #: (the person's session); the Traveller's Booking.com (a partner's keys); the Steward and the
-#: Jupyter Data Analyst name no server. The Traveller's Google Maps is optional: started only
+#: Jupyter Data Analyst name no server, nor does the Analyst, whose tools all run in the page. The Traveller's Google Maps is optional: started only
 #: with the billed GOOGLE_MAPS_API_KEY among the demo account's secrets (the user, 19 November 2026).
 DEMO_CONNECTIONS = {
     "demo-shopper": ["shopify:0.0.1"],
@@ -2675,6 +2676,7 @@ DEMO_CONNECTIONS = {
     "demo-marketer": [],
     "demo-aws-steward": [],
     "demo-jupyter-data-analyst": [],
+    "demo-analyst": [],
 }
 
 

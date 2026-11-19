@@ -1,0 +1,34 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Frontend tool set: Mermaid diagrams in the page (the user, 19 November
+# 2026: the Analyst's Mermaid tools).
+#
+# The tools are @datalayer/reactor-mermaid's six, run in the page on the
+# conversation's diagrams with Mermaid itself: they reach nothing beyond the
+# page. Their handlers come from agent-runtimes' `page-mermaid` UI plugin,
+# never from the spec. A source is checked with Mermaid's parser before it is
+# kept, and refused with the parser's line when it does not parse. An agent
+# that names this set names the `page-mermaid` UI too.
+
+id: page-mermaid
+version: 0.0.1
+name: Mermaid in the page
+description: Write Mermaid diagrams in the conversation — create or replace a diagram's source, read it back, check a source with Mermaid's parser, render to SVG, list the diagram types — each drawn for the person as it is written.
+tags:
+  - frontend
+  - mermaid
+  - diagrams
+  - page
+enabled: true
+
+toolset:
+  - datalayer_mermaidSetDiagram
+  - datalayer_mermaidReadDiagram
+  - datalayer_mermaidListDiagrams
+  - datalayer_mermaidValidate
+  - datalayer_mermaidRenderSvg
+  - datalayer_mermaidListDiagramTypes
+
+icon: "@primer/octicons-react:workflow"
+emoji: "🧜"
