@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.1.0
+
+- 0.0.220's content, released as 0.1.0: the chat's side panels and the agent's notices, teams on models the platform serves, the seven demo applications' new versions. 0.0.220 is superseded.
+
 ## 0.0.220
 
 - The chat's side panels, left and right, and the agent's notices: page UIs and frontend-tool sets placed `left` or `right`; the deck and the sheet placeable in a side panel (the Marketer's deck, and the sheets of the Accountant, the Jupyter Data Analyst and the Steward for AWS, in the right panel).
