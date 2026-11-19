@@ -473,5 +473,12 @@ def test_the_old_tools_field_is_refused():
 
     with pytest.raises(CompositionError, match="backend_tools"):
         resolve_spec({"id": "old", "tools": ["runtime-echo:0.0.1"]}, {}, {})
+    # An included fragment that still says `tools` is refused as well, before it is merged.
+    with pytest.raises(CompositionError, match="Fragment 'old-fragment:0.0.1' says `tools`.*backend_tools"):
+        resolve_spec(
+            {"id": "new", "includes": ["old-fragment:0.0.1"]},
+            {},
+            {"old-fragment": {"id": "old-fragment", "version": "0.0.1", "tools": ["runtime-echo:0.0.1"]}},
+        )
     with pytest.raises(ValueError, match="backend_tools"):
         FrameSpec.model_validate({"id": "old", "tools": ["runtime-echo:0.0.1"]})

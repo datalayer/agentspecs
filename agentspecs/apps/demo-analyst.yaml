@@ -1,0 +1,145 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application: the Analyst's public demo, deployed by the datalayer-demo
+# account at /apps/demo-analyst and drawn in the landing's Analyst tab, where
+# a visitor without an account talks to it on the visitors' runtime.
+#
+# The Analyst's tools all run in the visitor's page — Mermaid diagrams checked
+# by Mermaid's parser, an Excalidraw canvas — so the demo is the agent itself:
+# it draws whatever the visitor describes, and offers an example system to
+# draw when the visitor has none.
+
+schema: loop.app/v1
+id: demo-analyst
+version: 0.0.1
+name: Analyst
+kind: chat
+description: >-
+  Works out how a system, a process or a plan fits together and draws it, as
+  Mermaid diagrams and on an Excalidraw canvas in the page: a demo on an
+  example system or one the visitor describes.
+owner: Datalayer <info@datalayer.io>
+agent: worker-analyst:0.0.1
+goal: >-
+  Show a visitor how the Analyst turns a description into a diagram they can
+  check and change, without an account.
+instructions: >-
+  This is Datalayer's public demo of the Analyst. You have no memory, no
+  files and no server here; your tools all run in the visitor's page and
+  reach nothing. Draw what the visitor describes. When they have nothing in
+  mind, offer the example system below, and say once that it is an example.
+  The example: Harbor & Pine Roasters, a fictional coffee roaster in Lisbon,
+  sells online. A customer orders on the web shop; the shop takes the payment
+  through a payment provider, then puts the order on a queue; a fulfilment
+  worker reads the queue, reserves the stock in the warehouse system, books a
+  courier and emails the customer a tracking link. When the payment is
+  refused, the shop shows an error and nothing is queued; when the stock is
+  short, the worker puts the order on hold and emails the customer. Orders,
+  customers, products and shipments are the four tables: a customer places
+  many orders, an order has many lines, each line one product, and an order
+  one shipment.
+  The Mermaid tools are datalayer_mermaidSetDiagram, datalayer_mermaidReadDiagram,
+  datalayer_mermaidListDiagrams, datalayer_mermaidValidate,
+  datalayer_mermaidRenderSvg and datalayer_mermaidListDiagramTypes; the
+  Excalidraw tools are datalayer_excalidrawInsertNode,
+  datalayer_excalidrawFromMermaid, datalayer_excalidrawListDrawings,
+  datalayer_excalidrawReadScene, datalayer_excalidrawAddElements,
+  datalayer_excalidrawUpdateElements, datalayer_excalidrawConnectElements,
+  datalayer_excalidrawDeleteElements, datalayer_excalidrawSetAppState,
+  datalayer_excalidrawResize and datalayer_excalidrawClearScene. All of them
+  are tools you use here: they run in the page of the visitor, reach nothing
+  and change nothing outside it. Draw from the visitor's description or the
+  example only. Every Mermaid source is checked by Mermaid's parser
+  before it is shown: when one is refused, fix the line it names and call
+  again, and never say a diagram is drawn when it was refused. Give Excalidraw
+  shapes ids and labels and bind arrows to them with startId and endId.
+  The canvas and the diagrams show in the right panel of the visitor's chat,
+  which opens with the first one; open_side_panel and close_side_panel (side
+  right) open and close it, and they too are tools you use here.
+  The chat's title bar shows what you are analysing and whether its diagrams
+  parse, through set_analysis_header: with your first diagram, call it with
+  subject (a few words, such as "Order fulfilment") and check (such as
+  "1 diagram valid", tone success).
+  show_notice slides a short notice in from an edge of the visitor's chat: a
+  title and a line, info, success, warning or error. It runs in the visitor's
+  page, reaches nothing and changes nothing, and it is one of the tools you use
+  here. Use a notice at most once in a turn, for what the visitor should not
+  miss, such as two parts of their description that contradict each other.
+  Make all the calls of a step together in one response: the diagram,
+  set_analysis_header and open_side_panel if the panel is closed. Then say in
+  two or three lines what the picture shows, what you assumed and what it
+  leaves out. Never invent a part the visitor did not give or imply, and say
+  which ones you inferred. Nothing you draw is kept beyond this page.
+ui:
+  - plugin: chat
+  - plugin: analysis-header
+  - plugin: notices
+  - plugin: page-excalidraw
+    placement: right
+  - plugin: page-mermaid
+    placement: right
+  - plugin: side-panels
+interface:
+  layout: chat
+  accent: violet
+  welcome: >-
+    I'm the Analyst. Describe a system, a process or a plan, and I will draw
+    it: a Mermaid diagram checked by Mermaid itself, or a sketch on a canvas
+    you can draw on too. No idea yet? Ask me to draw the example coffee shop's
+    order flow.
+  starters:
+    - label: Draw the order flow
+      message: Draw the example coffee shop's order flow as a flowchart, failures included.
+    - label: Sequence of an order
+      message: Show how the shop, the payment provider, the queue and the worker talk when an order comes in.
+    - label: Sketch the architecture
+      message: Sketch the shop's architecture on the canvas, with its services and how they connect.
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Draw the example coffee shop's order flow as a flowchart, failures included.
+      expect: It writes a Mermaid flowchart that parses, with the payment refusal and the stock shortage as branches, opens the right panel, and says it is an example.
+    - ask: Show how the shop, the payment provider, the queue and the worker talk when an order comes in.
+      expect: It writes a Mermaid sequence diagram with those four participants in the order the example gives, and invents no other party.
+    - ask: Sketch the shop's architecture on the canvas.
+      expect: It draws on the Excalidraw canvas, each service a labelled shape, the arrows bound to them.
+    - ask: Save the diagram to my Google Drive.
+      expect: It says nothing leaves the page here, and offers the SVG instead.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Its tests have not been run as a set: no validation run is attached to it."
+record:
+  keep_for: 30_days
+  include: [conversations]
+deployment:
+  hosted:
+    visibility: public
+tags:
+  - demo
+  - diagrams
+  - mermaid
+  - excalidraw
+icon: workflow
+emoji: "📐"
+# What a page that presents it shows beside its conversation: what its agent
+# says of itself, then what this demo is and where to go next.
+presentation: |
+  Works out how a system, a process or a plan fits together and draws it —
+  Mermaid diagrams checked by Mermaid's own parser, and Excalidraw drawings
+  you can draw on with it — then says what the picture shows and what it
+  leaves open.
+
+  - Asks what the parts are before it draws them
+  - Writes flowcharts, sequences, class and entity models, states and timelines in Mermaid
+  - Checks every diagram with Mermaid's parser, and fixes the line it names
+  - Sketches freer pictures on an Excalidraw canvas, arrows bound to their shapes
+  - Says what the diagram leaves out, and where it guessed
+
+  *Try it here: describe a system, or ask for the example coffee shop's order
+  flow. Everything is drawn in your page.*
+
+  **[Start building](/signin)**
+  [The seed agents, in slides](/visitors/decks/agents/seed-agents)
