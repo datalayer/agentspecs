@@ -143,7 +143,7 @@ def test_the_accountant_reads_before_it_writes_over_the_persons_cells():
 
 
 def test_the_marketer_lays_a_deck_out_in_one_or_two_calls():
-    # One call a slide took a run a slide, and a message takes five runs of page tools at most.
+    # One call a slide took a run a slide, and a message takes ten runs of page tools at most.
     agent = " ".join(raw("agents", "worker-marketer")["system_prompt"].split())
     demo = " ".join(raw("apps", "demo-marketer")["instructions"].split())
     assert "in one or two deck_add_slides calls" in agent
@@ -151,3 +151,41 @@ def test_the_marketer_lays_a_deck_out_in_one_or_two_calls():
     for said in (agent, demo):
         assert "never a call a slide" in said
         assert "eep deck_add_slide for a single slide" in said
+
+
+#: Every agent and demo that builds a sheet, with the title bar's tool it sets beside it.
+SHEET_BUILDERS = {
+    ("agents", "worker-accountant"): "set_books_header",
+    ("apps", "demo-accountant"): "set_books_header",
+    ("agents", "jupyter-data-analyst"): "set_notebook_header",
+    ("apps", "demo-jupyter-data-analyst"): "set_notebook_header",
+    ("agents", "worker-steward-aws"): "set_aws_header",
+    ("apps", "demo-aws-steward"): "set_aws_header",
+}
+
+
+def test_every_sheet_builder_is_listed():
+    found = set()
+    for folder in ("agents", "apps"):
+        for path in sorted((ROOT / folder).glob("*.yaml")):
+            spec = yaml.safe_load(path.read_text(encoding="utf-8"))
+            plugins = {each["plugin"] for each in spec.get("ui") or [] if isinstance(each, dict)}
+            if "page-sheet" in plugins:
+                found.add((folder, path.stem))
+    assert found == set(SHEET_BUILDERS)
+
+
+@pytest.mark.parametrize("where", sorted(SHEET_BUILDERS), ids=lambda where: where[1])
+def test_a_sheet_is_built_a_step_a_response(where):
+    # The user, 19 November 2026: on the visitors' runtime the Accountant's demo made one page call
+    # a response (the sheet, a range, a format, the panel, the header) and one sheet took more
+    # rounds than a message has. A step's calls go together in one response; edits stay single.
+    folder, name = where
+    spec = raw(folder, name)
+    said = " ".join((spec.get("system_prompt") or spec["instructions"]).split())
+    header = SHEET_BUILDERS[where]
+    assert "Build the sheet in as few responses as you can" in said, name
+    assert "making all the calls of a step together in one response" in said, name
+    assert "sheet_create and sheet_write_range in one response" in said, name
+    assert f"then sheet_format_range, open_side_panel if the panel is closed, and {header} in the next" in said, name
+    assert "Keep single calls for later edits" in said, name

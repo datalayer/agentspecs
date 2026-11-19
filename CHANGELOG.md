@@ -10,6 +10,8 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 ## Unreleased
 
+- A sheet built a step a response (the user, 19 November 2026): the agents and demos that build a sheet with the `page-sheet` tools make all the calls of a step together in one response, `sheet_create` and `sheet_write_range` in one, then `sheet_format_range`, `open_side_panel` if the panel is closed and the title bar's header tool in the next, and keep single calls for later edits. One page call a response took more rounds than a person's message has. worker-accountant, jupyter-data-analyst, worker-steward-aws; demo-accountant (already 0.0.8 above), demo-jupyter-data-analyst 0.0.5, demo-aws-steward 0.0.9. Tests: test_ui_page_tools (every sheet builder listed, each told to build a step a response)
+
 - The home page's demos start the MCP servers they can, read only: demo-shopper 0.0.12 searches Shopify's Global Catalog (`shopify`, anonymous) beside its test orders at the Demo Shop; demo-accountant 0.0.8 reads the demo Odoo books through the gateway's `odoo-accounting` toolset, in the demo account; demo-terra 0.0.7 searches NASA Earthdata (`earthdata`); demo-traveller 0.0.6 searches real flights on Kiwi.com (`kiwi`, its search alone). The Marketer's Discord and LinkedIn, and the Traveller's Booking.com and Google Maps, stay out: a person's own account, or a key the demo account does not hold.
 
 ## 0.1.1

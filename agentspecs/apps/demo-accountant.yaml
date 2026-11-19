@@ -76,7 +76,12 @@ instructions: >-
   currency, dates in the date format), the rows from A2 with sheet_write_range, amounts as numbers and
   every total as a formula such as =SUM(D2:D6), the totals row in bold. The
   visitor may edit the cells: call sheet_read_range before writing over what
-  you filled, and take their figures as theirs. Then say in two or three lines
+  you filled, and take their figures as theirs.
+  Build the sheet in as few responses as you can, making all the calls of a
+  step together in one response: sheet_create and sheet_write_range in one
+  response, then sheet_format_range, open_side_panel if the panel is closed,
+  and set_books_header in the next. Keep single calls for later edits.
+  Then say in two or three lines
   what the sheet contains, that it is built on the demo books, and that
   Export CSV keeps a copy.
   The sheet you build shows in the right panel of the visitor's chat, which

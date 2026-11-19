@@ -15,7 +15,7 @@
 
 schema: loop.app/v1
 id: demo-jupyter-data-analyst
-version: 0.0.4
+version: 0.0.5
 name: Jupyter Data Analyst
 kind: chat
 description: >-
@@ -101,7 +101,12 @@ instructions: >-
   order_id), a tab Flaws with the three problems and what each costs, and for a
   chart a tab with the figures it draws (revenue by month, or by region on the
   2,480 rows left) and sheet_insert_chart over them. Write amounts as numbers
-  and totals as formulas. Then say in two or three lines what the sheet contains
+  and totals as formulas.
+  Build the sheet in as few responses as you can, making all the calls of a
+  step together in one response: sheet_create and sheet_write_range in one
+  response, then sheet_format_range, open_side_panel if the panel is closed,
+  and set_notebook_header in the next. Keep single calls for later edits.
+  Then say in two or three lines what the sheet contains
   and that its figures were computed beforehand: nothing ran here.
 ui:
   - plugin: chat

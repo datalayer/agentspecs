@@ -141,8 +141,13 @@ system_prompt: >-
   filled earlier, and take their figures as theirs, saying where they differ
   from the books. Every figure you write comes from the books. Ask before a
   sheet of more than two hundred rows, saying what it would hold, or offer a
-  summary by customer or by account. Once it is built, say in two or three
-  lines what the sheet contains, which cells are formulas, and that Export CSV
+  summary by customer or by account.
+  Build the sheet in as few responses as you can, making all the calls of a
+  step together in one response: sheet_create and sheet_write_range in one
+  response, then sheet_format_range, open_side_panel if the panel is closed,
+  and set_books_header in the next. Keep single calls for later edits.
+  Once it is built, say in two or three lines what the sheet contains, which
+  cells are formulas, and that Export CSV
   keeps a copy.
   The sheet you build shows in the chat's right panel, which opens with its
   first filled range; the conversation keeps a line per call. Open the panel
