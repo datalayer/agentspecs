@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.0.220
+
+- The chat's side panels, left and right, and the agent's notices: page UIs and frontend-tool sets placed `left` or `right`; the deck and the sheet placeable in a side panel (the Marketer's deck, and the sheets of the Accountant, the Jupyter Data Analyst and the Steward for AWS, in the right panel).
+- Teams: every member on a model the platform's inference serves.
+- The seven demo applications' new versions: demo-marketer 0.0.6, demo-shopper 0.0.11, demo-accountant 0.0.7, demo-traveller 0.0.5, demo-terra 0.0.6, demo-aws-steward 0.0.8, demo-jupyter-data-analyst 0.0.4.
+
 ## 0.0.219
 
 - Header UIs: buttons, drop-downs and indicators in the chat's title bar, set by the agent; the seven demo applications carry theirs (demo-marketer 0.0.5, demo-shopper 0.0.10, demo-accountant 0.0.6, demo-traveller 0.0.4, demo-terra 0.0.5, demo-aws-steward 0.0.6, demo-jupyter-data-analyst 0.0.2).
