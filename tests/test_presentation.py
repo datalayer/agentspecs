@@ -30,6 +30,7 @@ DEMOS = {
     "demo-terra": "worker-terra",
     "demo-aws-steward": "worker-steward-aws",
     "demo-jupyter-data-analyst": "jupyter-data-analyst",
+    "demo-analyst": "worker-analyst",
 }
 
 

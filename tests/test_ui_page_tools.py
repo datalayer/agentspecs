@@ -52,6 +52,37 @@ PAGE_UIS = {
             "sheet_insert_chart",
         ],
     ),
+    # The Analyst's canvas and diagrams (the user, 19 November 2026): the tools of
+    # @datalayer/reactor-excalidraw and @datalayer/reactor-mermaid, run in the page.
+    "page-excalidraw": (
+        "worker-analyst",
+        "demo-analyst",
+        [
+            "datalayer_excalidrawInsertNode",
+            "datalayer_excalidrawFromMermaid",
+            "datalayer_excalidrawListDrawings",
+            "datalayer_excalidrawReadScene",
+            "datalayer_excalidrawAddElements",
+            "datalayer_excalidrawUpdateElements",
+            "datalayer_excalidrawConnectElements",
+            "datalayer_excalidrawDeleteElements",
+            "datalayer_excalidrawSetAppState",
+            "datalayer_excalidrawResize",
+            "datalayer_excalidrawClearScene",
+        ],
+    ),
+    "page-mermaid": (
+        "worker-analyst",
+        "demo-analyst",
+        [
+            "datalayer_mermaidSetDiagram",
+            "datalayer_mermaidReadDiagram",
+            "datalayer_mermaidListDiagrams",
+            "datalayer_mermaidValidate",
+            "datalayer_mermaidRenderSvg",
+            "datalayer_mermaidListDiagramTypes",
+        ],
+    ),
 }
 
 

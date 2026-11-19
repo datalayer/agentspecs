@@ -36,15 +36,18 @@ SEVEN = {
     "worker-terra": "demo-terra",
     "worker-steward-aws": "demo-aws-steward",
     "jupyter-data-analyst": "demo-jupyter-data-analyst",
+    "worker-analyst": "demo-analyst",
 }
 
 #: The agents with something placed in a side panel, and what.
 PLACED = {
-    "worker-marketer": "page-deck",
-    "worker-accountant": "page-sheet",
-    # The user, 18 November 2026: the Analyst's dataset profile and chart, the Steward's findings by service.
-    "jupyter-data-analyst": "page-sheet",
-    "worker-steward-aws": "page-sheet",
+    "worker-marketer": ("page-deck",),
+    "worker-accountant": ("page-sheet",),
+    # The user, 18 November 2026: the Jupyter Data Analyst's dataset profile and chart, the Steward's findings by service.
+    "jupyter-data-analyst": ("page-sheet",),
+    "worker-steward-aws": ("page-sheet",),
+    # The user, 19 November 2026: the Analyst's canvas and diagrams, one above the other.
+    "worker-analyst": ("page-excalidraw", "page-mermaid"),
 }
 
 
@@ -127,9 +130,10 @@ def test_each_seed_agent_has_notices_and_its_placed_ui_its_side_panels(agent_id)
     placed = PLACED.get(agent_id)
     # The side panels, for those with something placed there: opened by its first call.
     assert ("side-panels" in sets) == bool(placed) == ("side-panels" in plugins)
+    for each in placed or ():
+        assert {"plugin": each, "placement": "right"} in agent["ui"]
+        assert {"plugin": each, "placement": "right"} in demo["ui"]
     if placed:
-        assert {"plugin": placed, "placement": "right"} in agent["ui"]
-        assert {"plugin": placed, "placement": "right"} in demo["ui"]
         assert {"plugin": "side-panels"} in demo["ui"]
         for words in (prompt, said):
             assert "open_side_panel" in words and "close_side_panel" in words
