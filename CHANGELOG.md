@@ -8,7 +8,7 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
-## Unreleased
+## 0.1.2
 
 - A sheet built a step a response (the user, 19 November 2026): the agents and demos that build a sheet with the `page-sheet` tools make all the calls of a step together in one response, `sheet_create` and `sheet_write_range` in one, then `sheet_format_range`, `open_side_panel` if the panel is closed and the title bar's header tool in the next, and keep single calls for later edits. One page call a response took more rounds than a person's message has. worker-accountant, jupyter-data-analyst, worker-steward-aws; demo-accountant (already 0.0.8 above), demo-jupyter-data-analyst 0.0.5, demo-aws-steward 0.0.9. Tests: test_ui_page_tools (every sheet builder listed, each told to build a step a response)
 
