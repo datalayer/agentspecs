@@ -14,6 +14,8 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 - The home page's demos start the MCP servers they can, read only: demo-shopper 0.0.12 searches Shopify's Global Catalog (`shopify`, anonymous) beside its test orders at the Demo Shop; demo-accountant 0.0.8 reads the demo Odoo books through the gateway's `odoo-accounting` toolset, in the demo account; demo-terra 0.0.7 searches NASA Earthdata (`earthdata`); demo-traveller 0.0.6 searches real flights on Kiwi.com (`kiwi`, its search alone). The Marketer's Discord and LinkedIn, and the Traveller's Booking.com and Google Maps, stay out: a person's own account, or a key the demo account does not hold.
 
+- The Traveller's demo may use Google Maps (the user, 19 November 2026): demo-traveller (already 0.0.6 above) connects to `google-maps`, read only in its owner's account and optional, so it starts only with GOOGLE_MAPS_API_KEY among the demo account's own secrets (a billed key); without it the demo runs with Kiwi.com alone and says nothing of Maps. Its instructions name Maps' tools only as ones it may have. Tests: test_apps (the demos' connections; the Traveller's google-maps optional on GOOGLE_MAPS_API_KEY)
+
 ## 0.1.1
 
 - A deck's outline in one call: `deck_add_slides` in the `page-deck` set, several slides at once, refused whole on one bad slide. The Marketer (worker-marketer, and demo-marketer 0.0.7) lays a deck out in one or two such calls and keeps `deck_add_slide` for a single slide added later.

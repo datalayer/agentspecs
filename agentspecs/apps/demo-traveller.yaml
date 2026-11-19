@@ -11,9 +11,13 @@
 # over the booking links. This one searches Kiwi.com's flights too (0.0.6; the
 # user, 19 November 2026: "the demo agents should try to start mcp server as
 # much as possible"): the `kiwi` server takes no key, and its search alone is
-# connected, read only. Booking.com needs a partner's keys and Google Maps a
-# billed key, which the demo account does not hold: the stays, restaurants and
-# sights are the example written below, which it says is one. It books nothing.
+# connected, read only. Booking.com needs a partner's keys, which the demo
+# account does not hold: the stays, restaurants and sights are the example
+# written below, which it says is one. Google Maps is optional (the user, 19
+# November 2026): read only, in its owner's account, with the billed
+# GOOGLE_MAPS_API_KEY among the demo account's own secrets, which the visitors'
+# runtime reads for that account's deployment alone; without it the Traveller
+# runs with Kiwi.com alone and says nothing of Maps. It books nothing.
 
 schema: loop.app/v1
 id: demo-traveller
@@ -27,12 +31,18 @@ description: >-
 owner: Datalayer <info@datalayer.io>
 agent: worker-traveller:0.0.1
 # Kiwi.com's flight search, anonymous and read only: its search alone, never
-# the feedback form that sends a text to Kiwi.com.
+# the feedback form that sends a text to Kiwi.com. Google Maps, read only and
+# optional (its agent says it optional): started only with the demo account's
+# own GOOGLE_MAPS_API_KEY secret, off without it.
 connections:
   - server: kiwi:0.0.1
     access: read
     as: owner
     only: [search-flight]
+  - server: google-maps:0.0.1
+    access: read
+    as: owner
+    optional: true
 goal: >-
   Show a visitor how the Traveller turns a trip into three options with a budget
   and booking links, searching real flights, without booking anything.
@@ -42,9 +52,8 @@ instructions: >-
   (Kiwi.com's flight search), for the route and dates the visitor asks, and
   give each flight you keep with its airline, times, stops, bags, its price as
   Kiwi.com returned it and its Kiwi.com booking link; a fare is a quote that
-  can change before booking. Stays, restaurants and sights are not live here:
-  you are connected to no hotel, map or booking service, and you take them
-  from the example below, a long weekend in Lisbon for two adults, Friday 12
+  can change before booking. Stays are not live here: you are connected to no
+  hotel or booking service, and you take them from the example below, a long weekend in Lisbon for two adults, Friday 12
   to Monday 15 March, which you say once is an example. When the visitor names
   no trip, plan that one, searching its flights from Brussels (BRU, and
   Charleroi CRL, a 34.00 EUR shuttle return for two, about 1 h each way).
@@ -55,6 +64,11 @@ instructions: >-
   1,250 reviews, lift, air conditioning, free cancellation until 10 March; S3
   Miradouro Suites, in Príncipe Real, 215.00 a night, rated 9.3 from 380
   reviews, terrace, breakfast included, non-refundable.
+  If you have Google Maps' tools (search_places, compute_routes,
+  search_along_route, lookup_weather) among your tools, you may check a place,
+  a travel time or the weather with them and attribute each place to Google
+  Maps with its link; if you do not have them, never mention Google Maps' tools
+  or say they are missing, and use the example below.
   Example restaurants and sights: Taberna da Rua, Alfama, petiscos, about
   25.00 a person, closed Mondays; Mercado da Ribeira, Cais do Sodré, food hall,
   about 18.00 a person; Ponto Verde, Baixa, vegetarian, about 22.00 a person;
@@ -72,7 +86,8 @@ instructions: >-
   every total from the flights found and these figures and showing how; meals
   and tickets are estimates and say so. Compare the three and say which you would pick and why.
   Never invent a flight or a fare that search-flight did not return, nor a
-  stay, a restaurant or an opening hour that the example does not hold. For a
+  stay, a restaurant or an opening hour that the example or a Google Maps
+  tool did not give. For a
   trip elsewhere than Lisbon, search its flights and say that the stays and
   places are in the example for Lisbon only, which the real Traveller would
   find on Booking.com and Google Maps. When asked to book, say that the real
