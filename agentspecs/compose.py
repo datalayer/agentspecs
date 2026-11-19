@@ -152,6 +152,13 @@ def _lookup(
     return spec
 
 
+#: Why `tools` is refused, wherever a spec or a fragment still says it.
+_TOOLS_RENAMED = (
+    "the field is `backend_tools` — the tools that run on the "
+    "runtime, as `frontend_tools` are those that run on the page"
+)
+
+
 def resolve_spec(
     spec: dict[str, Any],
     specs: dict[str, dict[str, Any]],
@@ -167,10 +174,7 @@ def resolve_spec(
     seen = _seen or ()
     identity = str(spec.get("id") or "")
     if "tools" in spec:
-        raise CompositionError(
-            f"{identity!r} says `tools`: the field is `backend_tools` — the tools that run on the "
-            "runtime, as `frontend_tools` are those that run on the page"
-        )
+        raise CompositionError(f"{identity!r} says `tools`: {_TOOLS_RENAMED}")
 
     if identity in seen:
         chain = " → ".join([*seen, identity])
@@ -185,6 +189,8 @@ def resolve_spec(
 
     for include in spec.get("includes") or []:
         fragment = _lookup(str(include), fragments, "Fragment")
+        if "tools" in fragment:
+            raise CompositionError(f"Fragment {str(include)!r} says `tools`: {_TOOLS_RENAMED}")
         resolved = merge_spec(
             resolved, {k: v for k, v in fragment.items() if k != "id"}
         )
