@@ -127,7 +127,11 @@ def test_the_public_demo_has_it_and_builds_from_its_example_only(ui_id):
         if tool != "deck_set_title":
             assert tool in said, f"{demo_id} does not name {tool}"
     assert "they run in the page" in said
-    assert "example" in said and "only" in said
+    if demo_id == "demo-accountant":
+        # It reads the demo Odoo books (0.0.8): the sheet holds what the books' tools returned.
+        assert "make it from what the tools returned only" in said
+    else:
+        assert "example" in said and "only" in said
     assert not ui.ui_choices_problems(demo["ui"], to_ship=True)
 
 

@@ -482,8 +482,7 @@ presentation: |
   - Prepares a close summary with the balances that moved
   - Changes nothing in the books without a person
 
-  *Try it here: it answers from the books of an example roaster and changes
-  nothing.*
+  *Try it here: it reads Datalayer's demo Odoo books and changes nothing.*
 
   **[Start building](/signin)**
   [Watch it in the Sales and Accounting Stage](/stages?stage=sales-and-accounting)

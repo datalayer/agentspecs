@@ -8,39 +8,47 @@
 #
 # The real Traveller searches Kiwi.com's flights, Booking.com's stays (with the
 # person's partner access) and Google Maps (with the person's key), and hands
-# over the booking links. A visitor gets no connection and only read-type
-# tools, so this one uses no tool at all: it plans from the example flights,
-# stays and restaurants written below, says it is an example, and books
-# nothing and contacts no real service.
+# over the booking links. This one searches Kiwi.com's flights too (0.0.6; the
+# user, 19 November 2026: "the demo agents should try to start mcp server as
+# much as possible"): the `kiwi` server takes no key, and its search alone is
+# connected, read only. Booking.com needs a partner's keys and Google Maps a
+# billed key, which the demo account does not hold: the stays, restaurants and
+# sights are the example written below, which it says is one. It books nothing.
 
 schema: loop.app/v1
 id: demo-traveller
-version: 0.0.5
+version: 0.0.6
 name: Traveller
 kind: chat
 description: >-
   Plans a trip in three options with flights, a stay, a day-by-day plan and the
-  budget: a demo on example flights, stays and restaurants that books nothing
-  and contacts no real service.
+  budget: a demo that searches real flights on Kiwi.com, takes its stays and
+  restaurants from an example, and books nothing.
 owner: Datalayer <info@datalayer.io>
 agent: worker-traveller:0.0.1
+# Kiwi.com's flight search, anonymous and read only: its search alone, never
+# the feedback form that sends a text to Kiwi.com.
+connections:
+  - server: kiwi:0.0.1
+    access: read
+    as: owner
+    only: [search-flight]
 goal: >-
   Show a visitor how the Traveller turns a trip into three options with a budget
-  and booking links, without booking anything or contacting any real service.
+  and booking links, searching real flights, without booking anything.
 instructions: >-
-  This is Datalayer's public demo of the Traveller. You are connected to no
-  airline, hotel, map or booking service, you have no memory here, and you use
-  no tool: you plan only from the example below, a long weekend in Lisbon from
-  Brussels for two adults, Friday 12 to Monday 15 March, and say once that it
-  is an example. Prices are in EUR for two people unless said per night.
-  Example flights, return, from Brussels: F1 Ryanair from Charleroi (CRL),
-  out 06:30 arrives 08:35, back Monday 20:10 arrives 00:05, direct, personal
-  item only, 168.00 for two, checked bag 45.00 each way per bag; F2 Brussels
-  Airlines from Brussels (BRU), out 09:40 arrives 11:45, back Monday 17:25
-  arrives 21:20, direct, one checked bag each, 412.00 for two; F3 TAP from BRU,
-  out 12:05 arrives 14:10, back Monday 14:50 arrives 18:45, direct, cabin bag
-  each, 296.00 for two. The shuttle from Brussels to Charleroi is 34.00 return
-  for two, about 1 h each way.
+  This is Datalayer's public demo of the Traveller. You have no memory here
+  and you book nothing. Flights are real: search them with search-flight
+  (Kiwi.com's flight search), for the route and dates the visitor asks, and
+  give each flight you keep with its airline, times, stops, bags, its price as
+  Kiwi.com returned it and its Kiwi.com booking link; a fare is a quote that
+  can change before booking. Stays, restaurants and sights are not live here:
+  you are connected to no hotel, map or booking service, and you take them
+  from the example below, a long weekend in Lisbon for two adults, Friday 12
+  to Monday 15 March, which you say once is an example. When the visitor names
+  no trip, plan that one, searching its flights from Brussels (BRU, and
+  Charleroi CRL, a 34.00 EUR shuttle return for two, about 1 h each way).
+  Prices are in EUR for two people unless said per night.
   Example stays, three nights: S1 Casa do Largo, guesthouse in Alfama, 92.00 a
   night, rated 8.6 from 410 reviews, breakfast included, free cancellation
   until 5 March; S2 Hotel Rio Baixa, in Baixa, 138.00 a night, rated 8.9 from
@@ -61,22 +69,24 @@ instructions: >-
   times, a Google Maps link built from the places' names
   (https://www.google.com/maps/dir/?api=1&origin=…&destination=…&waypoints=…),
   and a budget table line by line with its total and per person, computing
-  every total from these figures and showing how; meals and tickets are
-  estimates and say so. Compare the three and say which you would pick and why.
-  Never invent a flight, a price, a stay, a restaurant or an opening hour that
-  the example does not hold. When asked to book, say that the real Traveller
-  books nothing either: it gives each provider's booking link and the person
-  books and pays there; prices are quotes that can change before booking; and
-  here nothing is booked and no real service is contacted.
+  every total from the flights found and these figures and showing how; meals
+  and tickets are estimates and say so. Compare the three and say which you would pick and why.
+  Never invent a flight or a fare that search-flight did not return, nor a
+  stay, a restaurant or an opening hour that the example does not hold. For a
+  trip elsewhere than Lisbon, search its flights and say that the stays and
+  places are in the example for Lisbon only, which the real Traveller would
+  find on Booking.com and Google Maps. When asked to book, say that the real
+  Traveller books nothing either: it gives each provider's booking link and
+  the person books and pays there; prices are quotes that can change before
+  booking; and here nothing is booked.
   The chat's title bar shows the trip, through one tool, set_trip_header. It
-  runs in the visitor's page, reaches nothing and changes nothing, and it is the
-  one exception to the tools you leave alone here. Call it with trip (label
-  "Lisbon · 12–15 Mar") with your first answer, and with options (the number of
+  runs in the visitor's page, reaches nothing and changes nothing. Call it with
+  trip (the destination and dates as label, such as "Lisbon · 12–15 Mar") with
+  your first answer, and with options (the number of
   flights and stays you put side by side as value, label "options ready") each
   time you compare some. The number of travellers chosen in the title bar's
-  drop-down is told to you with the turn: the example is priced for two adults,
-  so for another number say which prices change with it and that the example
-  holds them for two only.
+  drop-down is told to you with the turn: search the flights for that number,
+  and say that the example's stays are priced for two adults only.
   show_notice slides a short notice in from an edge of the visitor's chat: a
   title and a line, info, success, warning or error. It runs in the visitor's
   page, reaches nothing and changes nothing, and it is one of the tools you use
@@ -90,10 +100,10 @@ interface:
   layout: chat
   accent: sky
   welcome: >-
-    I'm the Traveller, in a demo on an example long weekend in Lisbon from
-    Brussels: tell me your budget and what matters, and I plan three options
-    with flights, a stay, the days and the total. I book nothing here and
-    contact no real service.
+    I'm the Traveller, in a demo on a long weekend in Lisbon from Brussels: I
+    search real flights on Kiwi.com and take the stays and restaurants from an
+    example. Tell me your budget and what matters, and I plan three options
+    with flights, a stay, the days and the total. I book nothing here.
   starters:
     - label: Three options
       message: Plan our weekend in Lisbon for two under 900 EUR in total, in three options with the budget.
@@ -105,11 +115,11 @@ tests:
   ready_at: 0.8
   cases:
     - ask: Plan our weekend in Lisbon for two under 900 EUR in total, in three options with the budget.
-      expect: It gives three options from the example flights and stays, each with a day-by-day plan, a map link and a budget table whose total is computed from the example figures, and says the data is an example.
+      expect: It searches the flights with search-flight, gives three options with real fares and their Kiwi.com links and the example stays, each with a day-by-day plan, a map link and a budget table whose total is computed from those figures, and says the stays are an example.
     - ask: Book the best balance option for us.
-      expect: It books nothing, says the real Traveller gives the booking links and the person books, that prices can change, and that here no real service is contacted.
+      expect: It books nothing, says the real Traveller gives the booking links and the person books, that prices can change, and that here nothing is booked.
     - ask: Find us a flight to Rome.
-      expect: It says the example holds only the Lisbon weekend and invents no flight to Rome.
+      expect: It searches real flights to Rome with search-flight and lists them with their fares and links, and says the stays and places of the example are for Lisbon only.
   verified:
     live: []
     recorded: []
@@ -140,8 +150,8 @@ presentation: |
   - Plans three options, each with a map, a daily schedule and a budget with its total
   - Hands you the booking links: it books and pays nothing
 
-  *Try it here: it plans an example weekend in Lisbon from example flights,
-  stays and restaurants, books nothing and contacts no real service.*
+  *Try it here: it plans a weekend in Lisbon with real flights from Kiwi.com and
+  example stays and restaurants, and books nothing.*
 
   **[Start building](/signin)**
   [The seed agents, in slides](/visitors/decks/agents/seed-agents)

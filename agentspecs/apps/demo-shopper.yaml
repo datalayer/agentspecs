@@ -15,11 +15,16 @@
 # Shopper reaches that one company with that one connection; the owner lets
 # the gateway approve its test orders as the agent (the deployment's
 # `pap_agent_approves`). Nothing is charged, nothing ships and no other store
-# is contacted.
+# is bought from.
+#
+# And it searches Shopify's Global Catalog (0.0.12; the user, 19 November 2026:
+# "shopify mcp server should be started for the shopper agent (anonymous is
+# fine to search items)"): the `shopify` server, which takes no key, read only,
+# real products from Shopify stores found and compared, never bought here.
 
 schema: loop.app/v1
 id: demo-shopper
-version: 0.0.11
+version: 0.0.12
 name: Shopper
 kind: chat
 description: >-
@@ -32,6 +37,11 @@ owner: Datalayer <info@datalayer.io>
 # the demo stood in on worker-product-finder. Its demo shopping is at the Demo
 # Shop, through the shop's own tools (16 November 2026).
 agent: worker-shopper:0.0.1
+# Shopify's Global Catalog, anonymous and read only: its three catalogue reads.
+connections:
+  - server: shopify:0.0.1
+    access: read
+    as: owner
 # The Demo Shop, over the Personal Agent Protocol, in its owner's demo account.
 protocols: [pap]
 pap:
@@ -46,7 +56,7 @@ pap:
       sign_in: [device]
       extensions: [operations]
 rules:
-  - action: Read the Demo Shop's catalogue
+  - action: Read the Demo Shop's and Shopify's catalogues
     applies_to: read
     behaviour: do_it
   - action: Quote a basket and place a test order at the Demo Shop
@@ -68,12 +78,18 @@ goal: >-
   buying anything.
 instructions: >-
   This is Datalayer's public demo of the Shopper. You have no payment and no
-  memory here. You shop at one store, the Demo Shop (demo-shop.agent.datalayer.ai),
+  memory here. You buy at one store, the Demo Shop (demo-shop.agent.datalayer.ai),
   Datalayer's demo shop, over the Personal Agent Protocol, already signed in:
   never sign in, sign out or disconnect. You reach its API with three tools,
   whose names end in pap_read, pap_propose and pap_confirm, and with no other:
   it has no other tool for you, so never look for or call the shop's own MCP
-  tools. pap_read reads a path: /products?category=sunglasses (groceries,
+  tools. You also search Shopify's Global Catalog, real products from Shopify
+  stores, with search_catalog, lookup_catalog and get_product: they only read,
+  and a product found there is never bought here. Use them when the visitor
+  asks for something the Demo Shop does not have, or to compare the Demo Shop's
+  price with real stores'; name each such product's store as its seller and
+  say it is a real store's offer, which the real Shopper would buy through the
+  person's own Personal Agent Protocol connection once they approved it. pap_read reads a path: /products?category=sunglasses (groceries,
   kitchen, home, sports or sunglasses; no category for everything) and
   /products/<id> for one product. pap_propose posts a body to a path:
   /products/find with {query, category, min_price, max_price} to find products
@@ -85,9 +101,11 @@ instructions: >-
   operation_ref and revision, confirms it: the order is placed then, once,
   and its answer carries the order's number (TEST-…). Never take an
   operation's reference for an order number, and never say an order is placed
-  before pap_confirm answered that it is. Never use the Shopify catalogue tools
-  here, and never invent a product, a price, a rating, a stock level or a photo
-  the shop did not return. Prices are in USD. Ask for the budget and what
+  before pap_confirm answered that it is. Never put a Shopify product in the
+  basket or in an order: the basket and the test order are the Demo Shop's
+  alone. Never invent a product, a price, a rating, a stock level or a photo
+  the Demo Shop or Shopify did not return. The Demo Shop's prices are in USD,
+  a Shopify product's in the currency Shopify returns. Ask for the budget and what
   matters most when the visitor has not said. Find with /products/find and
   compare a short list with show_comparison, each product with its price,
   rating, stock as availability, the Demo Shop as seller and its image, saying
@@ -141,7 +159,7 @@ tests:
     - ask: Buy two tennis balls and the tennis racket.
       expect: It quotes the basket at 63.97 USD, asks the visitor to confirm, and once confirmed places a test order, saying nothing is charged and nothing ships.
     - ask: Find me a tent.
-      expect: It says the Demo Shop has no tent and invents none.
+      expect: It says the Demo Shop has no tent, searches Shopify's Global Catalog and compares real stores' tents with their sellers and prices, and buys none of them.
   verified:
     live: []
     recorded: []
@@ -172,9 +190,9 @@ presentation: |
   - Remembers your sizes, budgets and the stores you like
   - Buys through the Personal Agent Protocol only once you approve the exact purchase
 
-  *Try it here: it shops at the Demo Shop, an example shop of real products with
-  their photos, quotes the basket and places a test order: nothing is charged
-  and nothing ships.*
+  *Try it here: it searches Shopify's stores, and shops at the Demo Shop, an
+  example shop of real products with their photos, where it quotes the basket
+  and places a test order: nothing is charged and nothing ships.*
 
   **[Start building](/signin)**
   [How a personal agent acts for you](/docs/applications/personal-agent-protocol)
