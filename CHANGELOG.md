@@ -8,7 +8,7 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
-## Unreleased
+## 0.1.1
 
 - A deck's outline in one call: `deck_add_slides` in the `page-deck` set, several slides at once, refused whole on one bad slide. The Marketer (worker-marketer, and demo-marketer 0.0.7) lays a deck out in one or two such calls and keeps `deck_add_slide` for a single slide added later.
 
