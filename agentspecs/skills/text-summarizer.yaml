@@ -9,19 +9,24 @@ description: Summarize text content using extractive and abstractive techniques.
 # Variant 2: package + method reference
 # Attributes (license, compatibility, allowed-tools, metadata) are read
 # from the SKILL.md packaged inside the Python package at runtime.
-package: agent_skills.skills.text_summarizer
+package: datalayer_skills.skills.text_summarizer
 method: summarize_text
 
 dependencies:
-  - agent-skills>=0.0.1
+  - datalayer-skills>=0.3.0
 
-# Not offered on the platform yet: the integrations page lists it as not available.
-enabled: false
+# Offered on the platform (the user, 7 November 2026): the runtime image installs datalayer-skills[skills].
+enabled: true
+
+install:
+  type: python
+  command: "pip install datalayer-skills"
+  note: "No dependencies of its own."
 
 tags:
   - nlp
   - summarization
   - text-processing
 
-icon: note
+icon: "@primer/octicons-react:note"
 emoji: 📝

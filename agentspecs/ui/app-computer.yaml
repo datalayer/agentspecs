@@ -1,0 +1,30 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Specification: Computer — the Reactor plugin `@datalayer/loop-plugin-app-computer`, one per application.
+#
+# Read from the plugin's registration in agent-runtimes (src/apps/plugins/app-computer):
+# its Slots, Contributions, Commands and Contribution Points are what the
+# reactor registers for it, held to it by agent-runtimes' ui-specs test.
+
+id: "app-computer"
+version: 0.0.1
+name: Computer
+description: >-
+  The computer your application works on: what ran there, its files, and taking it over.
+emoji: "🖥️"
+octicon: device-desktop
+plugin: "@datalayer/loop-plugin-app-computer"
+folder: "app-computer"
+per: application
+# Its Contributions: the Slots it fills, the Contribution Points it
+# contributes to, the Commands it adds (the composer's `/` commands by name).
+contributions:
+  slots:
+  - "loop.sidebar"
+  points: []
+  commands: []
+# The Contribution Points it offers to other plugins.
+contribution_points: []
+# The UI renderers (agentspecs/ui-renderers) it may be exposed through.
+renderers: []

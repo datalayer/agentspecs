@@ -45,8 +45,9 @@ jobs:
           grep -q '^agentspecs/teams/.*\.yaml$' wheel-files.txt
           grep -q '^agentspecs/frames/.*\.yaml$' wheel-files.txt
           grep -q '^agentspecs/cogs/.*\.yaml$' wheel-files.txt
-          for kind in ops guards gates tracks apps; do grep -q "^agentspecs/$kind/.*\.yaml$" wheel-files.txt; done
+          for kind in ops guards gates tracks apps scenes; do grep -q "^agentspecs/$kind/.*\.yaml$" wheel-files.txt; done
           grep -q '^agentspecs/apps/appspec\.schema\.json$' wheel-files.txt
+          grep -q '^agentspecs/scenes/loop\.scene\.schema\.json$' wheel-files.txt
 
       - name: Import the built wheel
         run: |
@@ -56,6 +57,7 @@ jobs:
           /tmp/wheel-env/bin/python -c "import agentspecs; from agentspecs.models import list_models; from agentspecs.teams import list_teams; from agentspecs.frames import list_frames; from agentspecs.cogs import list_cogs, get_resolved_cog; assert all(get_resolved_cog(cog.id)['frames'] for cog in list_cogs()); print(agentspecs.__version__, len(list_models()), 'models,', len(list_teams()), 'teams,', len(list_frames()), 'frames,', len(list_cogs()), 'cogs')"
           /tmp/wheel-env/bin/python -c "from agentspecs.ops import list_ops, get_resolved_op; from agentspecs.guards import list_guards; from agentspecs.gates import list_gates; from agentspecs.tracks import list_tracks; assert all(get_resolved_op(op.id)['track'] for op in list_ops()); print(len(list_ops()), 'ops,', len(list_guards()), 'guards,', len(list_gates()), 'gates,', len(list_tracks()), 'tracks')"
           /tmp/wheel-env/bin/python -c "from agentspecs.apps import list_apps, app_problems, SCHEMA_PATH, schema_text; from agentspecs.actions import tool_specs, tool_classes; assert all(not app_problems(app) for app in list_apps()); assert SCHEMA_PATH.read_text() == schema_text(); assert all(tool_classes(tool) for tool in tool_specs().values()); print(len(list_apps()), 'applications')"
+          /tmp/wheel-env/bin/python -c "from agentspecs.scenes import list_scenes, scene_problems, SCHEMA_PATH, schema_text; assert all(not scene_problems(scene) for scene in list_scenes()); assert SCHEMA_PATH.read_text() == schema_text(); print(len(list_scenes()), 'scenes')"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -80,3 +82,23 @@ jobs:
 
       - name: Test
         run: python -m pytest tests -v
+
+  # The documentation builds on every pull request, as it is published: a page
+  # that does not compile, or a link to a page or a heading that does not
+  # exist, fails it (onBrokenLinks and onBrokenMarkdownLinks throw).
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Build the docs
+        env:
+          NODE_OPTIONS: '--max-old-space-size=8192'
+        run: |
+          cd docs
+          npm install --no-audit --no-fund
+          npm run build

@@ -19,6 +19,6 @@ local: true
 required_env_vars: []
 
 # No capabilities declared: this model does not do reliable tool
-# calling, and LOOP warns at selection rather than failing mid-run.
+# calling, and the model picker warns at selection rather than failing mid-run.
 capabilities:
   - chat

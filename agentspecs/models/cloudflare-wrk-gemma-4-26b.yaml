@@ -19,6 +19,15 @@ billing: standard
 route: workers-ai
 context_window: 256000
 
+# Cloudflare's per-token price, from
+# https://developers.cloudflare.com/workers-ai/platform/pricing/ (read
+# 2026-10-08). Workers AI bills neurons ($0.011 per thousand), which
+# ai-inference meters when the answer reports them; this is the same price per
+# token, for a call that reports none.
+pricing:
+  input_usd_per_million: 0.1
+  output_usd_per_million: 0.3
+
 # Hosted through datalayer-ai-inference, which holds the Cloudflare account
 # and token and routes the call through the account's AI Gateway. Nothing is
 # required in the agent runtime environment.

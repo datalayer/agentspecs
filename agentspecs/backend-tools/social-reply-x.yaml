@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The datalayer-social toolset (15 November 2026): a reply as the person under
+# one X post. It publishes, so it waits for the person's word every time
+# (approval: manual). X bills a reply as a post: USD 0.015, or USD 0.20 with a
+# link, held to the person's X budget. Set up when the person linked X.
+
+id: social-reply-x
+version: 0.0.1
+name: Reply on X
+description: >-
+  Reply as the person under one X post, through Datalayer's IAM; it waits for
+  the person's approval every time. A reply costs Datalayer USD 0.015 at X, USD
+  0.20 with a link, held to the person's X budget.
+tags:
+  - social
+  - x
+  - datalayer-social
+enabled: true
+action: publish
+approval: manual
+linked_accounts:
+  - x
+runtime:
+  language: python
+  package: agent_runtimes.tools.social
+  method: reply_on_x
+icon: "@primer/octicons-react:reply"
+emoji: "↩️"
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: x-post-preview
+    renderer: a2ui

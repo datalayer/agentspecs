@@ -16,6 +16,8 @@ tags:
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
 inference_provider: local
 
 sandbox_variant: jupyter-server
@@ -26,7 +28,7 @@ mcp_servers: []
 skills:
   - events:0.0.1
 
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 
 frontend_tools: []
@@ -35,7 +37,7 @@ environment_name: ai-agents-env
 
 icon: pulse
 emoji: "🧠"
-color: "#2563EB"
+color: blue
 
 suggestions:
   - text: Compare local and datalayer inference providers for latency and routing.
@@ -57,3 +59,8 @@ system_prompt_codemode_addons: null
 welcome_notebook: null
 welcome_document: null
 trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

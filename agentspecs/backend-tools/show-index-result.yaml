@@ -1,0 +1,30 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A card the person is shown: the data the agent passes, checked and answered
+# normalized; it reads and writes nothing (agent_runtimes.tools.cards).
+
+id: show-index-result
+version: 0.0.1
+name: Show Index Result
+description: >-
+  Show the person an index computed from the pixels (NDVI, NDWI, NBR) over an area on each date, the change between the dates, its map and what limits the reading. Drawn by the earth-index UI plugin.
+tags:
+  - earth-observation
+  - card
+  - terra
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.cards
+  method: show_index_result
+icon: "@primer/octicons-react:graph"
+emoji: "🌿"
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: earth-index
+    renderer: a2ui

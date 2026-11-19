@@ -1,0 +1,32 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# An agent acting for a person on Datalayer: the person is the subject, the agent beside it.
+id: datalayer-acting-agent
+version: 0.0.1
+name: Agent acting for a person
+description: >-
+  A deployed agent acting for the person it answers to: a 15-minute acting token
+  whose subject is the person, carrying the application and the agent. Every tool
+  call is checked by the Shield against the person, the agent and the call.
+subject: agent
+provider: datalayer
+inbound:
+  kind: jwt
+  issuer: https://prod1.datalayer.run/api/iam/v1/oauth
+  algorithms: [HS256]
+  lifetime_seconds: 900
+workload:
+  token: acting
+  lifetime_seconds: 900
+credentials:
+  vault: datalayer
+custody:
+  keys: shared-secret
+  algorithm: HS256
+consent:
+  by: person
+  hosted_by: datalayer
+tags: [datalayer, agent]
+icon: dependabot
+emoji: "🤖"

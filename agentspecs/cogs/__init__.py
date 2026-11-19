@@ -187,7 +187,7 @@ def resolve_cog(
     except (CompositionError, FrameError) as error:
         raise CogError(f"Cog {spec.id!r}: {error}") from error
 
-    for field in ("skills", "tools", "mcp_servers"):
+    for field in ("skills", "backend_tools", "mcp_servers"):
         brought = getattr(context, field)
         if brought:
             flat[field] = merge_lists(list(flat.get(field) or []), list(brought))

@@ -8,11 +8,11 @@ id: permission-guard
 version: 0.0.1
 name: Permission Guard
 description: >-
-  Checks that the person or the system launching the Op holds every
-  permission the Op's Cogs need, as the guardrail states them.
+  Checks that the person or the system launching the Op may do what the
+  Op's Cogs do, by the rules of the Policy it extends.
 
-# A Guard extends a guardrail: the policy it verifies, and runs within.
-extends: default-platform-user:0.0.1
+# A Guard extends a Policy: the rules it verifies, and runs within.
+extends: default:0.0.1
 
 category: policy-safety
 stages:
@@ -20,8 +20,10 @@ stages:
 method: algorithmic
 
 check: >-
-  Each permission the Op's Cogs use is granted to the launching identity by
-  the guardrail; nothing the guardrail denies is requested.
+  Each class of action the Op's Cogs take — read, write, delete, execute,
+  send, buy — is one the Policy's rules allow or ask about for the launching
+  identity; none is a class the Policy denies, or needs an authorization the
+  identity does not hold.
 
 signals:
   - name: permission_denied

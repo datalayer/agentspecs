@@ -1,0 +1,18 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Stage: Buy from a shop, the scene kept running under the demo account: the
+# Demo Shop answers from its deployment (demo-shop, kept always on); the
+# Shopper plays in the browser. Rehearsed every night with the other demo
+# Stages.
+
+id: buy-from-a-shop
+version: 0.0.1
+scene: buy-from-a-shop:0.0.1
+deployments:
+  demo-shop: demo-shop
+public: true
+tags:
+  - example
+  - demo
+  - scene

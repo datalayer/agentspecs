@@ -24,6 +24,17 @@ default: false
 available: false
 tokens_limit: 32000
 
+# AWS's on-demand price for the US cross-region (geo) inference profile this
+# `us.` id names, US East (N. Virginia) — "Geo and In-region Cross-region
+# Inference" on https://aws.amazon.com/bedrock/pricing/ (AWS price list
+# published 2026-10-07, read 2026-10-08). Cache writes and reads are priced
+# apart there (5m write $6.875, 1h write $11, read $0.55); the catalogue has
+# no field for them.
+# The same as pydantic/genai-prices (main bd966a9, read 2026-10-08).
+pricing:
+  input_usd_per_million: 5.5
+  output_usd_per_million: 27.5
+
 required_env_vars:
   - AWS_ACCESS_KEY_ID
   - AWS_SECRET_ACCESS_KEY

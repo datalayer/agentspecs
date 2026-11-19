@@ -35,7 +35,7 @@ module: agent_skills.web_search
 ## Optional Fields
 
 ### `envvars` (list of strings)
-Required environment variable IDs. References specs in `envvars/` directory.
+Required environment variable IDs. References specs in `env-vars/` directory.
 ```yaml
 envvars:
   - OPENAI_API_KEY:0.0.1
@@ -43,13 +43,36 @@ envvars:
 ```
 
 ### `optional_env_vars` (list of strings)
-Optional environment variables that enhance functionality
+Environment variables the skill reads when they are set and works without. Each references a spec in
+`env-vars/`. The runtime and its sandbox are given the ones the person's account has; none is ever
+required, and the agent is never held back for one.
 ```yaml
 optional_env_vars:
-  - PLOT_DPI
-  - CHART_THEME
-  - LOG_LEVEL
+  - PEXELS_API_KEY:0.0.1
+  - PIXABAY_API_KEY:0.0.1
+  - UNSPLASH_TIER:0.0.1
 ```
+
+### `any_of_env_vars` (list of strings)
+The skill's activation rule (0.0.218): of these variables, each also listed under `optional_env_vars`,
+one at least must be set. With none, the skill is not activated: the agent starts without it, is not
+offered its tools, and is told in its instructions which variables would set it up, as for an entry
+of its `optional` list. With some, the skill offers what those give.
+```yaml
+any_of_env_vars:
+  - PEXELS_API_KEY:0.0.1
+  - PIXABAY_API_KEY:0.0.1
+```
+
+A skill's `envvars` are its **all of** rule: each must be set, and an agent that does not list the
+skill under `optional` is refused without them. `any_of_env_vars` is its **any of** rule. A skill may
+say both. The same rules are written in the skill's own `SKILL.md` frontmatter (`env.required`,
+`env.optional`, `env.any_of`, agent-skills 1.5.0), which is what its toolset reads.
+
+`image-stock` is the catalogue's example: stock photos from Unsplash, Pexels, Pixabay and Freepik,
+each offered when its key is set (`UNSPLASH_ACCESS_KEY`, `PEXELS_API_KEY`, `PIXABAY_API_KEY`,
+`FREEPIK_API_KEY`), the skill itself when one at least is. A person sets a key in Settings › Secrets,
+under that name. The Marketer carries it, as an `optional` skill.
 
 ### `dependencies` (list of strings)
 Required Python packages with version constraints
@@ -59,6 +82,18 @@ dependencies:
   - matplotlib>=3.7.0
   - seaborn>=0.12.0
   - numpy>=1.24.0
+```
+
+### `install` (object)
+How the skill is installed where an agent runs it: `type` (`python` for the skills of
+datalayer-skills and agent-skills), `command` the shell command that installs it on your own machine, `note`
+what else to know — Chromium for the image and video skills.
+
+```yaml
+install:
+  type: python
+  command: "pip install \"datalayer-skills[skills]\" && python -m playwright install chromium"
+  note: "Chromium for its page snapshots; the runtime image carries it."
 ```
 
 ### `tags` (list of strings)
@@ -71,10 +106,15 @@ tags:
 ```
 
 ### `icon` (string)
-UI icon identifier
+Where the icon is: `<package>:<name>`, the package one of `@datalayer/icons-react` and
+`@primer/octicons-react`, the name the icon's own in kebab case as that package names it —
+`@datalayer/icons-react:odoo` (the Datalayer icons' `odoo.svg`, `OdooIcon`),
+`@primer/octicons-react:mark-github` (`MarkGithubIcon`). A bare name is refused
+(`agentspecs.marks`, `MARKS_SCHEMA`). A page draws it where it shows this entry — a list
+of the catalogue, a call in the chat — and loads only that package.
 
 ### `emoji` (string)
-UI emoji identifier
+Drawn where there is no icon; where there is neither, nothing is.
 
 ## Complete Example
 
@@ -118,7 +158,8 @@ Skill Specification
 ├── Implementation (module)
 ├── Environment
 │   ├── envvars (required environment variables)
-│   └── optional_env_vars (optional variables)
+│   ├── optional_env_vars (optional variables)
+│   └── any_of_env_vars (one at least must be set)
 ├── Dependencies (Python packages)
 └── UI (icon, emoji)
 ```
@@ -160,6 +201,7 @@ Common optional fields:
 
 - `envvars` (prefer `id:version` refs)
 - `optional_env_vars`
+- `any_of_env_vars`
 - `dependencies`
 - `tags`
 - `icon`, `emoji`

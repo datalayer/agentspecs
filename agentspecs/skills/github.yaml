@@ -6,7 +6,7 @@ version: 0.0.1
 name: GitHub Skill
 description: GitHub repository management and code operations
 
-module: agent_skills.skills.github
+module: datalayer_skills.skills.github
 
 envvars:
   - GITHUB_TOKEN:0.0.1
@@ -14,13 +14,18 @@ envvars:
 dependencies:
   - PyGithub>=2.1.0
 
-# Not offered on the platform yet: the integrations page lists it as not available.
-enabled: false
+# Offered on the platform (the user, 7 November 2026): the runtime image installs datalayer-skills[skills].
+enabled: true
+
+install:
+  type: python
+  command: "pip install \"datalayer-skills[skills]\""
+  note: "datalayer-skills with every skill's dependencies; the runtime image installs it the same way."
 
 tags:
   - github
   - git
   - code
 
-icon: mark-github
+icon: "@datalayer/icons-react:github-mark"
 emoji: 🐙

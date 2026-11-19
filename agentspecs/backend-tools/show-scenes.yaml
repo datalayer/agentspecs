@@ -1,0 +1,30 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A card the person is shown: the data the agent passes, checked and answered
+# normalized; it reads and writes nothing (agent_runtimes.tools.cards).
+
+id: show-scenes
+version: 0.0.1
+name: Show Scenes
+description: >-
+  Show the person the satellite scenes found, by date, each with its collection, sensor and cloud cover as the catalogue gave them. Drawn by the earth-scenes UI plugin.
+tags:
+  - earth-observation
+  - card
+  - terra
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.cards
+  method: show_scenes
+icon: "@primer/octicons-react:globe"
+emoji: "🛰️"
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: earth-scenes
+    renderer: a2ui

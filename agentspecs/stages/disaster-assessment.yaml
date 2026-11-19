@@ -1,0 +1,17 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Stage: Disaster Assessment, kept running under the demo account: two
+# members on runtimes, each at its own address.
+
+id: disaster-assessment
+version: 0.0.1
+scene: disaster-assessment:0.0.1
+deployments:
+  disaster-assessment: demo-disaster-assessment
+  change-detection: demo-change-detection
+public: true
+tags:
+  - example
+  - demo
+  - scene

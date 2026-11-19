@@ -10,31 +10,32 @@ policy-compliant and ready for use. Guards check; Gates (``agentspecs.gates``)
 decide. The idea, and the words, are the Intelligence Hub whitepaper's
 (section 5.1).
 
-**A Guard extends a guardrail.** A guardrail (``agentspecs/guardrails``) is a
-policy: what may be read, written, executed and sent, how much, and how data
-is handled. It bounds what an agent may do, and nothing in it verifies that
-the bounds held. A Guard is that verification. ``extends`` names the
-guardrail, by the extension mechanism every spec uses
-(``docs/modularity/extension``): the resolved Guard carries the guardrail's
-policy — the standard it checks against, and the bounds it runs within when
-the Guard is itself a Cog or a person — with what the Guard adds: which of
-the seven categories it is, at which stages of an Op it runs, what it checks,
-and the signals it reports for a Gate to decide on.
+**A Guard extends a Policy.** A Policy (``agentspecs/policies``) is the
+Shield's document: the rules that decide what may be read, written, deleted,
+executed, sent and bought, the limits, the hosts and the MCP servers lent. It
+bounds what an agent may do, and nothing in it verifies that the bounds held.
+A Guard is that verification. ``extends`` names the Policy, ``id`` or
+``id:version``; a Guard naming a Policy the catalogue does not hold is
+refused. Resolution does not merge the Policy into the Guard: the resolved
+Guard carries ``policy``, the Policy's ``id:version``, and :func:`policy_of`
+gives the :class:`~agentspecs.policies.PolicySpec` — the standard the Guard
+checks against, and the bounds it runs within when the Guard is itself a Cog
+or a person — beside what the Guard adds: which of the seven categories it
+is, at which stages of an Op it runs, what it checks, and the signals it
+reports for a Gate to decide on.
 """
 
 from __future__ import annotations
 
-import copy
+from collections.abc import Mapping
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from ..compose import merge_spec
-
-_ROOT = Path(__file__).parent.parent
+from ..policies import POLICY_CATALOGUE, PolicySpec
 
 
 class GuardError(ValueError):
@@ -98,13 +99,9 @@ class GuardSignal(BaseModel):
 
 
 class GuardSpec(BaseModel):
-    """Specification for a Guard, as it is written.
+    """Specification for a Guard, as it is written."""
 
-    Any other field is a guardrail field the Guard overrides, by the rules of
-    extension: a mapping replaces the guardrail's, a scalar wins.
-    """
-
-    model_config = ConfigDict(extra="allow")
+    model_config = ConfigDict(extra="forbid")
 
     id: str = Field(..., description="Unique Guard identifier")
     version: str = Field(default="0.0.1", description="Guard spec version")
@@ -112,19 +109,21 @@ class GuardSpec(BaseModel):
     description: str = Field(default="", description="What the Guard is for")
     extends: str = Field(
         ...,
-        description="The guardrail the Guard extends, `id` or `id:version`",
+        description="The Policy the Guard extends, `id` or `id:version`",
     )
     category: GuardCategory = Field(..., description="Which of the seven categories it is")
-    stages: List[GuardStage] = Field(
+    stages: list[GuardStage] = Field(
         ...,
         description="The stages of an Op it may run at",
     )
-    method: GuardMethod = Field(default=GuardMethod.ALGORITHMIC, description="How the check is made")
+    method: GuardMethod = Field(
+        default=GuardMethod.ALGORITHMIC, description="How the check is made"
+    )
     check: str = Field(
         ...,
         description="What is verified, written so that code, a Cog or a person can run it",
     )
-    signals: List[GuardSignal] = Field(
+    signals: list[GuardSignal] = Field(
         default_factory=list,
         description="What it reports beside pass or fail, for a Gate to decide on",
     )
@@ -133,13 +132,13 @@ class GuardSpec(BaseModel):
         description="Whether the work counts only once the Guard has passed",
     )
     enabled: bool = Field(default=True, description="Whether an Op may name it today")
-    tags: List[str] = Field(default_factory=list)
+    tags: list[str] = Field(default_factory=list)
     icon: str = Field(default="shield-check", description="Icon identifier")
     emoji: str = Field(default="\U0001f6e1️", description="Emoji representation")
 
     @field_validator("stages")
     @classmethod
-    def _runs_somewhere(cls, stages: List[GuardStage]) -> List[GuardStage]:
+    def _runs_somewhere(cls, stages: list[GuardStage]) -> list[GuardStage]:
         if not stages:
             raise ValueError("a Guard names at least one stage it runs at")
         if len(set(stages)) != len(stages):
@@ -153,6 +152,12 @@ class GuardSpec(BaseModel):
             raise ValueError("a Guard says what it checks")
         return check
 
+    @field_validator("extends")
+    @classmethod
+    def _extends_a_policy(cls, extends: str) -> str:
+        policy_ref(extends)
+        return extends
+
 
 def id_of(ref: str) -> str:
     """The id of a reference, `id` or `id:version`."""
@@ -160,74 +165,80 @@ def id_of(ref: str) -> str:
     return base if base and "." in version else str(ref)
 
 
-def load_raw(directory: Path) -> Dict[str, Dict[str, Any]]:
+def policy_ref(ref: str, *, policies: Mapping[str, PolicySpec] | None = None) -> str:
+    """The `id:version` of the Policy a reference names, from the catalogue.
+
+    Refused, in a sentence, when no Policy has the id, or when the reference
+    gives a version the catalogue's Policy does not have.
+    """
+    policies = policies if policies is not None else POLICY_CATALOGUE
+    base = id_of(ref)
+    policy = policies.get(base)
+    if policy is None:
+        known = ", ".join(sorted(policies)) or "nothing"
+        raise ValueError(f"{ref!r} is not a Policy of the catalogue (known: {known})")
+    _, _, version = str(ref).rpartition(":")
+    if base != str(ref) and version != policy.version:
+        raise ValueError(
+            f"{ref!r} names a version the Policy {base!r} does not have ({policy.version})"
+        )
+    return f"{policy.id}:{policy.version}"
+
+
+def load_raw(directory: Path) -> dict[str, dict[str, Any]]:
     """Every YAML spec of a directory as plain data, by id; the file is named for the id."""
-    raw: Dict[str, Dict[str, Any]] = {}
+    raw: dict[str, dict[str, Any]] = {}
     for path in sorted(directory.glob("*.yaml")):
         data = yaml.safe_load(path.read_text()) or {}
         if data.get("id") != path.stem:
-            raise GuardError(f"{path.name}: the file is named for id {path.stem!r}, the spec says {data.get('id')!r}")
+            raise GuardError(
+                f"{path.name}: the file is named for id {path.stem!r}, "
+                f"the spec says {data.get('id')!r}"
+            )
         raw[path.stem] = data
     return raw
 
 
-def load_raw_guards(directory: Optional[Path] = None) -> Dict[str, Dict[str, Any]]:
+def load_raw_guards(directory: Path | None = None) -> dict[str, dict[str, Any]]:
     """Every Guard YAML of a directory as plain data, by id, unresolved."""
     return load_raw(directory or Path(__file__).parent)
 
 
-_GUARDRAILS: Dict[str, Dict[str, Any]] = {}
+def resolve_guard(guard: dict[str, Any]) -> dict[str, Any]:
+    """One Guard, resolved: what it says, with ``policy`` in place of ``extends``.
 
-
-def _default_guardrails() -> Dict[str, Dict[str, Any]]:
-    """This package's guardrails, read once."""
-    if not _GUARDRAILS:
-        _GUARDRAILS.update(load_raw(_ROOT / "guardrails"))
-    return _GUARDRAILS
-
-
-#: What identifies the guardrail and is the Guard's own in the resolved spec.
-_IDENTITY = ("id", "version", "name", "description", "extends")
-
-
-def resolve_guard(
-    guard: Dict[str, Any],
-    *,
-    guardrails: Optional[Dict[str, Dict[str, Any]]] = None,
-) -> Dict[str, Any]:
-    """One Guard, flat: the guardrail it extends, with what the Guard adds.
-
-    The result carries every field of the guardrail — its permissions, its
-    data scope and handling, its limits, its approval policy — under the
-    Guard's own identity, and ``guardrail``, the id of the guardrail extended.
+    ``policy`` is the `id:version` of the Policy it extends, as the catalogue
+    holds it; the Policy's document is not merged in — :func:`policy_of`
+    gives it. A Guard naming a Policy the catalogue does not hold fails
+    validation (``extends`` is checked as the spec is read).
     """
-    guardrails = guardrails if guardrails is not None else _default_guardrails()
     spec = GuardSpec(**guard)
-    guardrail_id = id_of(spec.extends)
-    if guardrail_id not in guardrails:
-        known = ", ".join(sorted(guardrails)) or "nothing"
-        raise GuardError(
-            f"Guard {spec.id!r} extends {spec.extends!r}, which is not a guardrail (known: {known})"
-        )
-    policy = {key: value for key, value in guardrails[guardrail_id].items() if key not in _IDENTITY}
-    flat = copy.deepcopy(merge_spec(policy, {key: value for key, value in guard.items() if key != "extends"}))
-    flat.update(
-        {
-            "id": spec.id,
-            "version": spec.version,
-            "guardrail": guardrail_id,
-            "category": spec.category.value,
-            "stages": [stage.value for stage in spec.stages],
-            "method": spec.method.value,
-            "signals": [signal.model_dump() for signal in spec.signals],
-            "required": spec.required,
-            "enabled": spec.enabled,
-        }
-    )
+    flat = spec.model_dump(mode="json", exclude={"extends"})
+    flat["policy"] = policy_ref(spec.extends)
     return flat
 
 
-def load_guards(directory: Optional[Path] = None) -> Dict[str, GuardSpec]:
+def policy_of(guard: GuardSpec | Mapping[str, Any]) -> PolicySpec:
+    """The Policy a Guard extends, as written (``extends``) or resolved (``policy``)."""
+    ref = (
+        guard.extends
+        if isinstance(guard, GuardSpec)
+        else guard.get("policy") or guard.get("extends")
+    )
+    if not ref:
+        raise GuardError("the Guard names no Policy")
+    try:
+        policy_ref(str(ref))
+    except ValueError as error:
+        raise GuardError(f"Guard {_name(guard)!r} extends {error}") from None
+    return POLICY_CATALOGUE[id_of(str(ref))]
+
+
+def _name(guard: GuardSpec | Mapping[str, Any]) -> str:
+    return str(guard.id if isinstance(guard, GuardSpec) else guard.get("id", ""))
+
+
+def load_guards(directory: Path | None = None) -> dict[str, GuardSpec]:
     """Every Guard of a directory, validated and checked to resolve, as it is written."""
     raw = load_raw_guards(directory)
     for guard in raw.values():
@@ -235,31 +246,31 @@ def load_guards(directory: Optional[Path] = None) -> Dict[str, GuardSpec]:
     return {identity: GuardSpec(**guard) for identity, guard in raw.items()}
 
 
-_RAW_GUARDS: Dict[str, Dict[str, Any]] = load_raw_guards()
+_RAW_GUARDS: dict[str, dict[str, Any]] = load_raw_guards()
 
 #: Every Guard, by id, as it is written.
-GUARD_CATALOGUE: Dict[str, GuardSpec] = load_guards()
+GUARD_CATALOGUE: dict[str, GuardSpec] = load_guards()
 
 
-def get_guard(guard_id: str) -> Optional[GuardSpec]:
+def get_guard(guard_id: str) -> GuardSpec | None:
     """A Guard as it is written, by `id` or `id:version`, or None."""
     return GUARD_CATALOGUE.get(id_of(guard_id))
 
 
-def get_resolved_guard(guard_id: str) -> Optional[Dict[str, Any]]:
-    """A Guard, flat — see `resolve_guard` — or None."""
+def get_resolved_guard(guard_id: str) -> dict[str, Any] | None:
+    """A Guard, resolved — see `resolve_guard` — or None."""
     guard = _RAW_GUARDS.get(id_of(guard_id))
     return None if guard is None else resolve_guard(guard)
 
 
-def list_guards() -> List[GuardSpec]:
+def list_guards() -> list[GuardSpec]:
     """Every Guard, as it is written."""
     return list(GUARD_CATALOGUE.values())
 
 
-def guards_extending(guardrail_id: str) -> List[GuardSpec]:
-    """The Guards that verify one guardrail."""
-    wanted = id_of(guardrail_id)
+def guards_extending(policy_id: str) -> list[GuardSpec]:
+    """The Guards that verify one Policy."""
+    wanted = id_of(policy_id)
     return [guard for guard in GUARD_CATALOGUE.values() if id_of(guard.extends) == wanted]
 
 
@@ -279,5 +290,7 @@ __all__ = [
     "load_guards",
     "load_raw",
     "load_raw_guards",
+    "policy_of",
+    "policy_ref",
     "resolve_guard",
 ]

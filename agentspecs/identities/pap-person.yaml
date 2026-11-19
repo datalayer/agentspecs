@@ -1,0 +1,31 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A person acting for themselves under PAP, with no application between.
+id: pap-person
+version: 0.0.1
+name: PAP person, for themselves
+description: >-
+  A person who connects their own account at a company, with no application acting
+  for them: the tenant is the person, pairwise and DPoP-bound as an application is.
+subject: person
+provider: pap
+protocols: [pap]
+inbound:
+  kind: dpop
+  algorithms: [ES256]
+credentials:
+  vault: datalayer
+custody:
+  keys: vault-transit
+  algorithm: ES256
+consent:
+  by: person
+  hosted_by: datalayer
+  binding: true
+pap:
+  roles: [personal-agent]
+  client_id_per_application: false
+tags: [pap, person]
+icon: person
+emoji: "🧑‍💼"

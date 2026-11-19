@@ -1,0 +1,34 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A personal agent under PAP: an application acting for a person at a company.
+id: pap-personal-agent
+version: 0.0.1
+name: PAP personal agent
+description: >-
+  An application acting for a person at a company, under the Personal Agent
+  Protocol: one client id per application published with its keys, a pairwise
+  user id per company that companies cannot link, DPoP-bound tokens, keys signed
+  in Vault transit and never handed to a runtime.
+subject: application
+provider: pap
+protocols: [pap, web-bot-auth]
+inbound:
+  kind: dpop
+  algorithms: [ES256]
+workload:
+  token: acting
+credentials:
+  vault: datalayer
+custody:
+  keys: vault-transit
+  algorithm: ES256
+consent:
+  by: person
+  hosted_by: datalayer
+  binding: true
+pap:
+  roles: [personal-agent]
+tags: [pap, personal-agent]
+icon: person
+emoji: "🙋"

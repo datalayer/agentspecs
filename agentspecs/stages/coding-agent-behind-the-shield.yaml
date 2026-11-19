@@ -1,0 +1,16 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Stage: A Coding Agent Behind the Shield (30 October 2026): a scene whose
+# cast is written in its spec, OpenCode lent one repository to read.
+
+id: coding-agent-behind-the-shield
+version: 0.0.1
+scene: coding-agent-behind-the-shield:0.0.1
+deployments:
+  code-explainer: demo-code-explainer
+public: true
+tags:
+  - example
+  - demo
+  - scene

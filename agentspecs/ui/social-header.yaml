@@ -1,0 +1,72 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Specification: Social header — the Reactor plugin `@datalayer/loop-plugin-social-header`.
+#
+# A header UI (the user, 18 November 2026: "plugins to show suited buttons in
+# the header for the other seed agents ... a drop-down choice, or visual
+# indicators; the chat can interact to share visual indications"): what it
+# puts in the chat's title bar is declared under `header`, and drawn by
+# agent-runtimes from this declaration (src/apps/plugins/social-header). Its
+# indicators are set by the agent with the frontend tool `set_social_header`, run in
+# the page; its drop-downs are told to the agent with every turn; its
+# buttons say their message as the person.
+
+id: "social-header"
+version: 0.0.1
+name: Social header
+description: >-
+  The Marketer's title bar: a drop-down for the network it drafts for, and how many drafts wait for the person's approval.
+emoji: "📣"
+octicon: megaphone
+plugin: "@datalayer/loop-plugin-social-header"
+folder: "social-header"
+# Its Contributions: the Slots it fills, the Contribution Points it
+# contributes to, the Commands it adds (the composer's `/` commands by name).
+contributions:
+  slots:
+  - "loop.chatHeader"
+  points:
+  - "loop.chat.extras"
+  - "loop.runProps"
+  commands: []
+# The Contribution Points it offers to other plugins.
+contribution_points: []
+# The UI renderers (agentspecs/ui-renderers) it may be exposed through.
+renderers: []
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- header
+- right
+- left
+# What it puts in the chat's title bar, and the frontend tool that sets it.
+header:
+  tool: set_social_header
+  when: >-
+    Call it each time the number of drafts waiting for the person's approval changes: after you show a draft, and after one is approved, posted or dropped.
+  items:
+  - id: network
+    kind: choice
+    label: Network
+    description: The network the next drafts are written for.
+    octicon: broadcast
+    default: all
+    says: "Chosen in the chat's header: draft for {label}, in that network's own voice and length, unless the person names another."
+    options:
+    - id: all
+      label: All networks
+      says: ""
+    - id: x
+      label: X
+    - id: bluesky
+      label: Bluesky
+    - id: linkedin
+      label: LinkedIn
+    - id: discord
+      label: Discord
+  - id: drafts
+    kind: indicator
+    display: counter
+    label: Drafts to approve
+    description: How many drafts wait for the person's approval; nothing is posted before it. Tone "attention" while some wait, and visible false at none.
+    octicon: pencil

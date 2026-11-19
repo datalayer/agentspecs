@@ -1,0 +1,64 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Specification: Notebook header — the Reactor plugin `@datalayer/loop-plugin-notebook-header`.
+#
+# A header UI (the user, 18 November 2026: "plugins to show suited buttons in
+# the header for the other seed agents ... a drop-down choice, or visual
+# indicators; the chat can interact to share visual indications"): what it
+# puts in the chat's title bar is declared under `header`, and drawn by
+# agent-runtimes from this declaration (src/apps/plugins/notebook-header). Its
+# indicators are set by the agent with the frontend tool `set_notebook_header`, run in
+# the page; its drop-downs are told to the agent with every turn; its
+# buttons say their message as the person.
+
+id: "notebook-header"
+version: 0.0.1
+name: Notebook header
+description: >-
+  The Jupyter Data Analyst's title bar: the dataset it works on, what has run, and a button that asks for a profile of the data.
+emoji: "📓"
+octicon: table
+plugin: "@datalayer/loop-plugin-notebook-header"
+folder: "notebook-header"
+# Its Contributions: the Slots it fills, the Contribution Points it
+# contributes to, the Commands it adds (the composer's `/` commands by name).
+contributions:
+  slots:
+  - "loop.chatHeader"
+  points:
+  - "loop.chat.extras"
+  commands: []
+# The Contribution Points it offers to other plugins.
+contribution_points: []
+# The UI renderers (agentspecs/ui-renderers) it may be exposed through.
+renderers: []
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- header
+- right
+- left
+# What it puts in the chat's title bar, and the frontend tool that sets it.
+header:
+  tool: set_notebook_header
+  when: >-
+    Call it once you know the dataset (its name and size as the label of dataset), and after each answer to say what ran: the cells run, or that nothing ran. Never show a run that did not happen.
+  items:
+  - id: dataset
+    kind: indicator
+    display: label
+    label: Dataset
+    description: The dataset being worked on, such as "orders.csv · 2,493 rows".
+    octicon: table
+  - id: run
+    kind: indicator
+    display: status
+    label: Run
+    description: What ran, said honestly, such as "3 cells run" (tone "success"), "Cell failed" (tone "danger") or "Nothing ran here" (tone "neutral") where there is no kernel.
+    octicon: play
+  - id: profile
+    kind: action
+    label: Profile data
+    description: Asks for a profile of every column.
+    octicon: search
+    message: Profile every column — types, missing values, and ranges that look wrong.

@@ -1,0 +1,87 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application Specification: Shopper
+# A person's shopper, in their browser. Asked for products, a basket or an
+# order, it asks the Demo Shop, over A2A, and hands over what the shop
+# answered: it never makes up a product, a price or a total, and it says when
+# the shop could not answer. It connects to nothing and buys nothing itself.
+#
+# It is the entry of the team `buy-from-a-shop`, and runs in the person's
+# browser (the in-browser target that the Preview and `loop` use): its
+# agent's instructions and model turn there. Its one tool, ask_demo_shop, is the
+# team's A2A link to the Demo Shop. Its own agent's runtime tools do not
+# exist in a browser.
+
+schema: loop.app/v1
+id: shopper
+version: 0.0.2
+name: Shopper
+kind: chat
+description: >-
+  Shops at the Demo Shop for you: asks it for products, gets a basket quoted
+  and places a test order once you say so, and hands over what the shop
+  answered without adding a product or a figure of its own.
+owner: Datalayer <info@datalayer.io>
+
+agent: worker-shopper:0.0.1
+instructions: >-
+  You shop for the person at the Demo Shop. You do not hold its catalogue: the
+  shop does. When the person asks for products, a comparison, a basket or an
+  order, call ask_demo_shop once with one request the shop can act on without the
+  rest of this conversation: what kind of product, the budget or price range,
+  the quantities, and whether to quote or to place the order. Then give the
+  person what the shop answered — its products, prices, stock, totals and
+  order numbers (TEST-…) — as it answered them, and say which product you would pick and why from those
+  figures. Never invent a product, a price, a rating or a total, and never
+  compute a total yourself: ask the shop to quote. Ask the shop to place an
+  order only once the person said to, and say that it is a test order:
+  nothing is charged and nothing ships. When the shop cannot answer, or says
+  it does not have something, say so and repeat what it said. You buy nothing
+  yourself and contact no other shop.
+
+ui:
+  - plugin: chat
+
+interface:
+  layout: chat
+  accent: sun
+  welcome: >-
+    I'm your Shopper at the Demo Shop: tell me what you need and your budget,
+    and I ask the shop, compare what it has and get the basket quoted. Its
+    orders are test orders: nothing is charged and nothing ships.
+  starters:
+    - label: Tennis
+      message: Find me what the shop has for tennis, and say which you would pick.
+    - label: A basket
+      message: Quote two tennis balls and the tennis racket.
+    - label: Order it
+      message: Place a test order of two tennis balls and the tennis racket.
+
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Find me what the shop has for tennis, and say which you would pick.
+      expect: It asks the shop, lists the tennis racket and the tennis ball with the shop's prices, and recommends one from those figures.
+    - ask: Quote two tennis balls and the tennis racket.
+      expect: It asks the shop to quote and gives its total of 63.97 USD, computing nothing itself.
+    - ask: Find me a tent.
+      expect: It says the shop has no tent and invents none.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Its tests have not been run as a set: no validation run is attached to it."
+
+record:
+  keep_for: 30_days
+  include: [conversations]
+
+enabled: true
+tags:
+  - example
+  - shopping
+  - commerce
+  - a2a
+icon: gift
+emoji: "🧺"

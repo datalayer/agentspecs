@@ -35,7 +35,7 @@ MAX_EXTENDS_DEPTH = 3
 #: Fields merged by appending, deduplicated, rather than replaced.
 LIST_FIELDS = (
     "tags",
-    "tools",
+    "backend_tools",
     "skills",
     "mcp_servers",
     "frontend_tools",
@@ -166,6 +166,11 @@ def resolve_spec(
     """
     seen = _seen or ()
     identity = str(spec.get("id") or "")
+    if "tools" in spec:
+        raise CompositionError(
+            f"{identity!r} says `tools`: the field is `backend_tools` — the tools that run on the "
+            "runtime, as `frontend_tools` are those that run on the page"
+        )
 
     if identity in seen:
         chain = " → ".join([*seen, identity])

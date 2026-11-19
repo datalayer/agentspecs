@@ -1,0 +1,30 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A card the person is shown: the data the agent passes, checked and answered
+# normalized; it reads and writes nothing (agent_runtimes.tools.cards).
+
+id: show-trip-options
+version: 0.0.1
+name: Show Trip Options
+description: >-
+  Show the person up to three trips, one card each with dates, price and highlights, to choose from; the choice comes back as their next turn. Nothing is booked. Drawn by the trip-options UI plugin.
+tags:
+  - travel
+  - card
+  - traveller
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.cards
+  method: show_trip_options
+icon: "@primer/octicons-react:briefcase"
+emoji: "🧳"
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: trip-options
+    renderer: a2ui

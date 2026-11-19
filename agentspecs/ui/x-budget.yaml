@@ -1,0 +1,35 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Specification: X budget — the Reactor plugin `@datalayer/loop-plugin-x-budget`.
+#
+# Read from the plugin's registration in agent-runtimes (src/apps/plugins/x-budget):
+# its Slots, Contributions, Commands and Contribution Points are what the
+# reactor registers for it, held to it by agent-runtimes' ui-specs test.
+# Brought to the chat by the agent, MCP server, skill or backend tool that
+# names it under `ui` (the user, 15 November 2026).
+
+id: "x-budget"
+version: 0.0.1
+name: X budget
+description: >-
+  What is left of your X budget today, in the chat's title bar, read from the agent's X budget guardrail (x-api-budget); never for an anonymous visitor.
+emoji: "💲"
+octicon: meter
+plugin: "@datalayer/loop-plugin-x-budget"
+folder: "x-budget"
+# Its Contributions: the Slots it fills, the Contribution Points it
+# contributes to, the Commands it adds (the composer's `/` commands by name).
+contributions:
+  slots:
+  - "loop.chatHeader"
+  points: []
+  commands: []
+# The Contribution Points it offers to other plugins.
+contribution_points: []
+# The UI renderers (agentspecs/ui-renderers) it may be exposed through.
+renderers: []
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- header
+- footer

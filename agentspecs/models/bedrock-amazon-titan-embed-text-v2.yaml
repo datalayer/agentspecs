@@ -1,0 +1,33 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Bedrock Titan Text Embeddings V2
+
+id: "bedrock:amazon.titan-embed-text-v2:0"
+version: 0.0.1
+name: Bedrock Titan Text Embeddings V2
+description: Amazon Titan Text Embeddings V2 via AWS Bedrock - 1024, 512 or 256 dimensions
+provider: bedrock
+provider_url: "https://aws.amazon.com/bedrock/titan/"
+default: false
+available: true
+tokens_limit: null
+context_window: 8192
+
+# AWS's on-demand price in US East (N. Virginia), the region ai-inference asks
+# Bedrock in (DATALAYER_BEDROCK_AWS_DEFAULT_REGION us-east-1): usage type
+# USE1-TitanEmbeddingV2-Text-input-tokens, $0.00002 per 1K input tokens, in
+# AWS's price list API (AmazonBedrock, us-east-1, published 2026-11-06, read
+# 2026-11-08). An embedding has no output tokens.
+# The same as pydantic/genai-prices (main 7de757d, read 2026-11-08).
+pricing:
+  input_usd_per_million: 0.02
+  output_usd_per_million: 0.0
+
+# Asked through datalayer-ai-inference's `POST /api/ai-inference/v1/embeddings`
+# (OpenAI's wire format), which holds the AWS keys and meters the call.
+required_env_vars: []
+
+# Not a chat model: it turns texts into vectors, nothing else.
+capabilities:
+  - embeddings

@@ -1,0 +1,56 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# MCP server: X (the user, 7 November 2026). X hosts its own MCP server at
+# https://api.x.com/mcp over Streamable HTTP. Reached there with an App-only
+# Bearer Token, it answers its read tools with no user context: posts, search,
+# users, news and trends. Writing — bookmarks, draft and published articles —
+# needs the `xurl` bridge (`npx -y @xdevplatform/xurl mcp https://api.x.com/mcp`)
+# with an X app's CLIENT_ID and CLIENT_SECRET and an OAuth 2.0 login in a
+# browser on first run, which a headless runtime cannot do; the bridge is on
+# the runtime image for a person's own machine.
+
+id: x
+version: 0.0.1
+name: X
+description: X's own MCP server — posts, full-archive search, users, news and trends, read with an app's bearer token; bookmarks and articles with a signed-in bridge
+# Where to read about it, sign up and make the key it needs.
+documentation_url: https://docs.x.com/tools/mcp
+signup_url: https://developer.x.com
+api_key_url: https://developer.x.com/en/portal/dashboard
+setup: "Create an app in the [X Developer Portal](https://developer.x.com/en/portal/dashboard), copy its App-only Bearer Token from **Keys and tokens** into `X_BEARER_TOKEN`; the runtime reaches [https://api.x.com/mcp](https://api.x.com/mcp) with it and reads. For bookmarks and articles, run the [xurl bridge](https://docs.x.com/tools/mcp) on a machine with a browser instead, with the app's `CLIENT_ID` and `CLIENT_SECRET`."
+transport: streamable-http
+url: "https://api.x.com/mcp"
+headers:
+  Authorization: "Bearer ${X_BEARER_TOKEN}"
+enabled: true
+env: {}
+envvars:
+  - X_BEARER_TOKEN:0.0.1
+
+install:
+  type: remote
+  command: ""
+  note: "Nothing to install: X's hosted MCP server, reached at https://api.x.com/mcp with your X_BEARER_TOKEN."
+
+tags:
+  - social
+  - x
+  - search
+  - news
+
+icon: "@datalayer/icons-react:x"
+emoji: ✖️
+
+# What each tool does to the world (agentspecs.actions). X's page names its
+# capabilities by group and one tool by name; a tool not named here is
+# unknown, and unknown is the most restricted.
+actions:
+  checked: null
+  note: >-
+    Read off X's documentation, not the running server: posts, search, users,
+    news and trends are reads; bookmarks are read and written; articles are
+    drafted and published (`article_publish` is the one tool named there). A
+    server not read off classes nothing: run it, list its tools, and class each
+    one here.
+  tools: {}

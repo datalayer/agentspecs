@@ -1,0 +1,78 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Specification: Trip header — the Reactor plugin `@datalayer/loop-plugin-trip-header`.
+#
+# A header UI (the user, 18 November 2026: "plugins to show suited buttons in
+# the header for the other seed agents ... a drop-down choice, or visual
+# indicators; the chat can interact to share visual indications"): what it
+# puts in the chat's title bar is declared under `header`, and drawn by
+# agent-runtimes from this declaration (src/apps/plugins/trip-header). Its
+# indicators are set by the agent with the frontend tool `set_trip_header`, run in
+# the page; its drop-downs are told to the agent with every turn; its
+# buttons say their message as the person.
+
+id: "trip-header"
+version: 0.0.1
+name: Trip header
+description: >-
+  The Traveller's title bar: the trip being planned (where and when), a drop-down for how many travel, and how many options are ready to compare.
+emoji: "🧭"
+octicon: paper-airplane
+plugin: "@datalayer/loop-plugin-trip-header"
+folder: "trip-header"
+# Its Contributions: the Slots it fills, the Contribution Points it
+# contributes to, the Commands it adds (the composer's `/` commands by name).
+contributions:
+  slots:
+  - "loop.chatHeader"
+  points:
+  - "loop.chat.extras"
+  - "loop.runProps"
+  commands: []
+# The Contribution Points it offers to other plugins.
+contribution_points: []
+# The UI renderers (agentspecs/ui-renderers) it may be exposed through.
+renderers: []
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- header
+- right
+- left
+# The UI it stands in for: a chat that has it leaves them out of its title bar.
+supersedes:
+- trip-summary
+# What it puts in the chat's title bar, and the frontend tool that sets it.
+header:
+  tool: set_trip_header
+  when: >-
+    Call it once the trip is known (where and when, as the label of trip), and each time you have options ready to compare (their number). Nothing is booked by showing it.
+  items:
+  - id: trip
+    kind: indicator
+    display: label
+    label: Trip
+    description: The trip being planned, in a few words, such as "Lisbon · 12–15 Mar". Nothing is booked.
+    octicon: paper-airplane
+  - id: travellers
+    kind: choice
+    label: Travellers
+    description: How many people travel.
+    octicon: people
+    default: "2"
+    says: "Chosen in the chat's header: the trip is for {label}. Price flights, stays and totals for that many."
+    options:
+    - id: "1"
+      label: 1 traveller
+    - id: "2"
+      label: 2 travellers
+    - id: "3"
+      label: 3 travellers
+    - id: "4"
+      label: 4 travellers
+  - id: options
+    kind: indicator
+    display: counter
+    label: Options ready
+    description: How many flight and stay options are ready for the person to compare; its label says of what, such as "options ready".
+    octicon: list-unordered

@@ -1,0 +1,35 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Email through Datalayer's mailer (the user, 15 November 2026: "for email, you
+# can create a skill in the datalayer-skill repo and use it"), implemented in
+# datalayer-skills (0.6.0) as `datalayer-email`: its script asks the agent
+# runtime beside it, which sends the mail with the runtime's social token through
+# IAM's /social/mail — to the person the runtime runs for alone, never an address
+# the agent names, at most ten a day. No mail credential in the runtime.
+
+id: datalayer-email
+version: 0.0.1
+name: Email Skill
+description: Send the person whose agent this is one email — a summary, a report, a draft they asked for — through Datalayer's mailer, to them alone, a few a day
+
+module: datalayer_skills.skills.email
+
+dependencies:
+  - datalayer-skills>=0.6.0
+
+# Offered on the platform: the runtime image installs datalayer-skills (0.6.0 and later).
+enabled: true
+
+install:
+  type: python
+  command: "pip install \"datalayer-skills>=0.6.0\""
+  note: "Standard library only; the runtime sends the mail (agent-runtimes 1.6.65, IAM 1.1.124)."
+
+tags:
+  - email
+  - mail
+  - datalayer
+
+icon: "@primer/octicons-react:mail"
+emoji: "✉️"

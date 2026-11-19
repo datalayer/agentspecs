@@ -35,6 +35,18 @@ A spec may include many fragments. They are applied first and
 [`extends`](./extension) second, so a parent can override what a fragment
 brought in. See [Merge semantics](./#merge-semantics) for how the fields combine.
 
+A fragment has an `id` and a `version`, and any of the fields an agent spec
+may have that it brings in — its tools, skills, MCP servers, tags. A spec
+names fragments in `includes`, by `id:version`; a fragment that is not
+defined is refused. Includes are resolved when a catalogue is generated, so
+what is generated stays flat.
+
+### The fragments catalogue
+
+| Fragment | Brings in | Included by | What it is |
+| --- | --- | --- | --- |
+| `notebook-surfaces` | the `jupyter-notebook` frontend tool; the `notebook` tag | `jupyter-data-analyst`, `jupyter-notebook-compactor`, `jupyter-cell-fixer`, `jupyter-tutor`, `jupyter-notebook-reproducer` | The surfaces an agent drives. The notebook specialists include it rather than inheriting from the base agent, because inheriting would also bring in the base's subagent list and let a specialist delegate to itself. |
+
 ## Subagents by reference
 
 The same idea one level up: a subagent may **be** another spec rather than

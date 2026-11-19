@@ -1,0 +1,40 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# An AgentCore Gateway: APIs as MCP tools, behind the same trust.
+id: aws-agentcore-gateway
+version: 0.0.1
+name: AgentCore Gateway tools
+description: >-
+  An AgentCore Gateway turning the customer's APIs and Lambda functions into MCP
+  tools. Datalayer agents reach it as an MCP server; its inbound authorizer trusts
+  Datalayer IAM, and its outbound calls take machine-to-machine credentials.
+subject: service
+provider: aws-agentcore
+protocols: [mcp]
+inbound:
+  kind: jwt
+  issuer: https://prod1.datalayer.run/api/iam/v1/oauth
+  discovery_url: https://prod1.datalayer.run/api/iam/v1/oauth/.well-known/openid-configuration
+  algorithms: [RS256]
+  audiences: ["arn:aws:bedrock-agentcore:<region>:<account>:gateway/<gateway-id>"]
+  clients: [datalayer-platform]
+workload:
+  token: agentcore-runtime
+credentials:
+  vault: agentcore
+  providers:
+    - name: internal-api
+      kind: oauth2
+      flow: m2m
+    - name: partner-api-key
+      kind: api-key
+custody:
+  keys: vault-transit
+  algorithm: RS256
+consent:
+  by: organization
+  hosted_by: provider
+tags: [aws, agentcore, gateway, mcp]
+icon: plug
+emoji: "🔌"

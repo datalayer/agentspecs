@@ -1,0 +1,42 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Frontend tool set: a deck built in the page (the user, 18 November 2026:
+# "add to the marketer the frontend tools to create slides").
+#
+# The tools run in the page, on a deck kept for the conversation: nothing is
+# saved, published or sent by them. Their handlers come from agent-runtimes'
+# `page-deck` UI plugin (src/apps/pageTools/deck.ts), never from the spec,
+# and each checks what it is given there: a slide is text, figures and a
+# picture at an https address; a deck holds 40 slides. An agent that names
+# this set names the `page-deck` UI too, which hands it the tools and draws
+# the deck. Unlike `decks`, it needs no decks workspace beside the chat: a
+# visitor's demo has it.
+#
+# `deck_set_title`, `deck_add_slide` and `deck_read` are also the deck arena
+# of Datalayer's Battles, which binds them to a contestant's deck.
+
+id: page-deck
+version: 0.0.1
+name: Deck in the page
+description: Build a slide deck in the conversation — create it, lay its slides out in one call, add, replace, move and delete slides with speaker notes and pictures, set its look, read it back — shown to the person as it is built.
+tags:
+  - frontend
+  - decks
+  - presentations
+  - page
+enabled: true
+
+toolset:
+  - deck_create
+  - deck_set_title
+  - deck_add_slide
+  - deck_add_slides
+  - deck_update_slide
+  - deck_move_slide
+  - deck_delete_slide
+  - deck_set_theme
+  - deck_read
+
+icon: "@primer/octicons-react:project"
+emoji: "🎞️"

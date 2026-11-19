@@ -1,0 +1,79 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Memory Specification: Amazon Bedrock AgentCore Memory
+# Short-term events and long-term records extracted by strategies, in a
+# memory resource of the person's own AWS account.
+
+id: agentcore
+version: 0.0.1
+name: AgentCore Memory
+# Whether an agent spec is offered this memory today.
+enabled: true
+description: >
+  Amazon Bedrock AgentCore Memory, in your own AWS account. The agent's turns
+  are kept as short-term events of the person (the actor) in the agent's own
+  session; the memory's strategies (semantic facts, user preferences, session
+  summaries) extract long-term records from them, which the agent searches by
+  meaning. Names an existing memory resource (memory_config.memory_id and
+  region, or AGENT_RUNTIMES_AGENTCORE_MEMORY_ID and AWS_REGION); never creates
+  one.
+
+# Memory lifecycle
+persistence: permanent     # none | session | cross-session | permanent
+scope: user                # agent | team | repository | user | global
+
+# Storage backend
+backend: agentcore         # in-memory | sqlite | lancedb | postgres | redis | mem0 | agentcore
+
+# Memory creation
+creation:
+  mode: automatic
+  description: >
+    Each kept turn is a CreateEvent of the person's actor id in the agent's
+    session (its agentspec's id). AgentCore's strategies extract long-term
+    records from the events on their own schedule (about a minute).
+
+# Memory retrieval
+retrieval:
+  method: rag
+  description: >
+    RetrieveMemoryRecords in each namespace of the memory's strategies, with
+    {actorId} (and {sessionId}) filled in; a namespace that does not name
+    {actorId} is refused. The namespaces are memory_config.namespaces,
+    AGENT_RUNTIMES_AGENTCORE_MEMORY_NAMESPACES, or read once from the memory.
+
+verification:
+  enabled: false
+  description: >
+    AgentCore's strategies consolidate and deduplicate records.
+
+sharing:
+  enabled: false
+  description: >
+    Turns are per person and agent. Long-term records are per person, and per
+    agent when the strategy's namespace names {sessionId}.
+
+resources:
+  llm_for_extraction: true
+
+dependencies:
+  - boto3>=1.42
+
+# AWS credentials as boto3 finds them (environment, profile or role); the
+# region from memory_config.region or AWS_REGION. No secret is declared.
+required_env_vars: []
+
+config:
+  platform: hosted
+  docs_url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory.html
+
+tags:
+  - persistent
+  - semantic
+  - user-memory
+  - aws
+  - agentcore
+
+icon: database
+emoji: 🧠

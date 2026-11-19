@@ -1,0 +1,32 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Typed decisions asked of a decision model, through datalayer-ai-inference's
+# `POST /api/ai-inference/v1/decisions`, with the token the runtime calls its
+# models with. It reaches nothing but ai-inference: a reader.
+#
+# It comes with the decisions capability: an agent that names `decisions`
+# (agentspecs/decisions, for example `decisions: jev:0.0.1`) gets it, asked of
+# that spec's model. It is not listed under `backend_tools`.
+
+id: decide
+version: 0.0.1
+name: Decide
+description: >-
+  Ask the agent's decision model typed questions about a text — noul (does a
+  statement hold, with its probability), choice (one of named options) or
+  score (a step on a rubric) — and get the typed answers back, through
+  datalayer-ai-inference. An agent has it when its spec names decisions.
+tags:
+  - runtime
+  - decisions
+  - jev
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.decisions
+  method: decide
+icon: "@primer/octicons-react:law"
+emoji: "⚖️"

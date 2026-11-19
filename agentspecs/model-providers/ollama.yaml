@@ -13,3 +13,7 @@ docs_url: "https://docs.ollama.com/"
 terms_url: "https://ollama.com/terms"
 privacy_url: "https://ollama.com/privacy"
 hosting: local
+# The agent calls the provider itself, with the person's own key (the models'
+# required_env_vars): Datalayer holds no account with it, so no call of this
+# provider goes through ai-inference.
+via: direct

@@ -6,7 +6,7 @@
 id: "cloudflare:wrk/typesafe/jev"
 version: 0.0.1
 name: Jev (Cloudflare Workers AI)
-description: Typesafe's typed-judgment model at Workers AI's own endpoint - noul, choice and score questions answered as calibrated probabilities; 32k context; zero data retention; billed from the account's credits, no gateway in the way
+description: Typesafe's typed-decision model at Workers AI's own endpoint - noul, choice and score questions answered as calibrated probabilities; 32k context; zero data retention; billed from the account's credits, no gateway in the way
 provider: cloudflare
 provider_url: "https://docs.typesafe.ai/models"
 default: false
@@ -30,10 +30,10 @@ pricing:
   input_usd_per_million: 0.042
   output_usd_per_million: 0.0
 
-# Asked through datalayer-ai-inference's typed-judgment endpoint
-# (`POST /api/ai-inference/v1/judgments`), which holds the account and token.
+# Asked through datalayer-ai-inference's typed-decision endpoint
+# (`POST /api/ai-inference/v1/decisions`), which holds the account and token.
 required_env_vars: []
 
 # Not a chat model: it answers typed questions about a state, nothing else.
 capabilities:
-  - judgments
+  - decisions

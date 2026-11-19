@@ -1,0 +1,52 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Stock images (the user, 18 November 2026), implemented in datalayer-skills
+# (0.7.0) as `image-stock`: stock photos searched on Unsplash, Pexels, Pixabay
+# and Freepik, the credit line each provider asks for, and a photo downloaded
+# into the workspace. Its scripts use the standard library alone and run in
+# the sandbox.
+
+id: image-stock
+version: 0.0.1
+name: Stock Image Skill
+description: Stock photos searched on Unsplash, Pexels, Pixabay and Freepik (the ones the person has a key for), the credit line each asks for, and a photo downloaded into the workspace
+
+module: datalayer_skills.skills.image_stock
+
+# No variable is required. Each is given to the runtime and its sandbox when
+# the person's account has it; a provider without its key is not offered.
+optional_env_vars:
+  - UNSPLASH_ACCESS_KEY:0.0.1
+  - PEXELS_API_KEY:0.0.1
+  - PIXABAY_API_KEY:0.0.1
+  - FREEPIK_API_KEY:0.0.1
+  - UNSPLASH_TIER:0.0.1
+
+# One key at least: with none the skill is not activated, the agent starts
+# without it and is not offered its tools.
+any_of_env_vars:
+  - UNSPLASH_ACCESS_KEY:0.0.1
+  - PEXELS_API_KEY:0.0.1
+  - PIXABAY_API_KEY:0.0.1
+  - FREEPIK_API_KEY:0.0.1
+
+dependencies:
+  - datalayer-skills>=0.7.0
+
+# Offered on the platform: the runtime image installs datalayer-skills (0.7.0 and later).
+enabled: true
+
+install:
+  type: python
+  command: "pip install \"datalayer-skills>=0.7.0\""
+  note: "Standard library only. One provider's key is enough; agent-skills 1.5.0 or later keeps it out without any."
+
+tags:
+  - image
+  - photo
+  - stock
+  - media
+
+icon: "@primer/octicons-react:image"
+emoji: 📷

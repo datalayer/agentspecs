@@ -1,0 +1,66 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Battle: The invoice race. Two Sales & Accounting pairs, the same question
+# at the same instant, on the same Odoo books; the first pair to list the
+# open invoices and the total due wins. A race: the clock ends it otherwise,
+# a draw said as such.
+
+id: invoice-race
+version: 0.0.1
+name: The invoice race
+description: >-
+  Two Sales & Accounting pairs get the same question at the same instant,
+  on the same Odoo books. The first to list the open invoices, and what is
+  due in total, wins.
+
+variant: race
+goal: >-
+  Which customer invoices are still open, and how much is due in total?
+clock_seconds: 120
+
+contestants:
+  - id: blue
+    name: Blue
+    scene: sales-and-accounting:0.0.1
+    color: blue
+  - id: red
+    name: Red
+    scene: sales-and-accounting:0.0.1
+    color: red
+    # Red plays with Alibaba Qwen-Max (the user, 7 November 2026): the application as it is, its model overridden.
+    overrides:
+      model: "alibaba:qwen-max"
+
+# The evals that confirm each contestant's result once the referee has a verdict
+# (the user, 7 November 2026): the winner is declared only when its evals pass.
+evals:
+  - eval: max-duration:0.0.1
+    config:
+      max_duration_ms: 120000
+    says: It answered within the clock.
+  - eval: llm-judge:0.0.1
+    config:
+      threshold: 0.7
+      # Invented or read is seen in the members' tool calls and answers (B5).
+      rubric: >-
+        The answer lists the customer invoices still open, each named, and
+        gives the total due as one figure; each invoice comes from what the
+        run read from the books, as its members' tool calls and answers show.
+    says: It listed the open invoices and a total, as the goal asked.
+
+referee:
+  decides_by: first_done
+
+rehearsal:
+  expects:
+    - a verdict within the clock
+    - the winner's last turn lists the open invoices and a total
+
+tags:
+  - example
+  - race
+  - odoo
+  - finance
+icon: stopwatch
+emoji: "🏁"

@@ -19,6 +19,8 @@ tags:
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
 
 sandbox_variant: jupyter-server
 
@@ -29,7 +31,7 @@ mcp_servers: []
 skills:
   - events:0.0.1
 
-tools:
+backend_tools:
   - runtime-echo:0.0.1
   - runtime-sensitive-echo:0.0.1
 
@@ -45,7 +47,7 @@ guardrails:
 
 icon: shield
 emoji: "🛡️"
-color: "#EF4444"
+color: red
 
 suggestions:
   # First: a tool the guardrail holds for approval — the approval card and
@@ -117,3 +119,8 @@ welcome_notebook: null
 welcome_document: null
 
 trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

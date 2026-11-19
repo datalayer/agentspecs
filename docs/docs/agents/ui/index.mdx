@@ -1,0 +1,480 @@
+---
+title: UI
+---
+
+# UI Specifications
+
+The interface of an application is made of **UI plugins**: Reactor plugins of
+Agent Runtimes — the chat, the composer, the notebook and its toolbar, the document
+and its toolbar, the page an application draws, its rules and approvals, its activity,
+the *Sign in at a company* card, the page layout… — the ones the Loop editor assembles.
+**A UI spec is one of them**: one YAML per plugin under `agentspecs/ui/`.
+
+A **UI renderer** is something else: how a plugin's interface reaches a host that is
+not Datalayer's own page — A2UI, MCP Apps, MCP UI. Renderers are their own specs,
+under `agentspecs/ui-renderers/` ([Renderers](./renderers.md)). Each UI plugin says the
+renderers it may be exposed through, and an agent or an application names its UI
+plugins and, per plugin, the renderer. A renderer listed as a UI — the old shape,
+`ui: a2ui` — is refused, with no compatibility reading.
+
+A plugin's Slots, Contributions, Commands and Contribution Points are its registration
+in Agent Runtimes, read from it: a test of Agent Runtimes
+(`src/apps/__tests__/ui-specs.test.ts`) builds each plugin on a reactor and holds the
+spec and the registration to each other, both ways — and holds every plugin folder of
+`src/apps/plugins/` to a UI spec, or to the reason it has none.
+
+The plugin that draws A2UI surfaces (`a2ui-surface`) hosts **the catalog of visual
+components**: the 18 components of A2UI's v0.9 basic catalog and Datalayer's
+own. The catalog is one for the three editors of an application — the Appspec, the
+Canvas and Python — and a component the catalog does not have is reached by none of
+them. Every component, with its properties, bindings, events and an example, is listed
+in [the catalog of visual components](./components.md), generated from the plugins' files.
+
+## Fields
+
+| Field | Meaning |
+|-------|---------|
+| `id` | What an agent's or an application's `ui` names: `chat`, `notebook`, `a2ui-surface`. The file is named for it. |
+| `version` | The spec's version. |
+| `name` | What a Maker reads. |
+| `description` | What it is, in a Maker's words. |
+| `emoji`, `octicon` | Its faces. |
+| `plugin` | The name the Reactor plugin registers under: `@datalayer/loop-plugin-chat`. |
+| `folder` | The plugin's folder in Agent Runtimes, under `src/apps/plugins/`. |
+| `per` | For a plugin registered once per something, `application`, `source` or `ui`: it registers as `<plugin>-<its id>`. |
+| `contributions` | Its Contributions: the `slots` it fills, the Contribution Points it contributes to (`points`), and the `commands` it adds — Reactor Commands by id, the composer's `/` commands by name. |
+| `contribution_points` | The Contribution Points it offers to other plugins. |
+| `settings` | Its settings, as the JSON Schema of an object; each default is the plugin's. |
+| `renderers` | The UI renderers it may be exposed through, ids of `agentspecs/ui-renderers`; any other is refused. |
+| `placements` | Where in the chat it may go, its default first; see below. |
+| `header` | For a UI in the chat's title bar: its buttons, drop-downs and indicators, and the frontend tool that sets them; see below. |
+| `supersedes` | The UI plugins it stands in for: a chat that has it leaves them out. |
+| `catalog`, `components` | For a plugin that renders components: the catalog they are written in (`a2ui/v0.9`) and the components; see below. |
+
+```yaml
+# agentspecs/ui/app-rules.yaml
+id: app-rules
+version: 0.0.1
+name: Rules and approvals
+description: >-
+  When your application acts alone, when it asks you, and the approvals waiting for your yes.
+emoji: "🛡️"
+octicon: shield-check
+plugin: "@datalayer/loop-plugin-app-rules"
+folder: app-rules
+per: application
+contributions:
+  slots: [loop.sidebar]
+  points: []
+  commands: []
+contribution_points: []
+renderers: []
+```
+
+The catalogue, with each plugin's registration and renderers, is listed on
+[the components page](./components.md).
+
+## A component
+
+Each entry of `a2ui-surface`'s `components`:
+
+| Field | Meaning |
+|-------|---------|
+| `id` | The name a surface gives it, as the protocol names it: `Text`, `ChoicePicker`, `Table`. |
+| `name` | What a builder reads on the palette: *Select* for `ChoicePicker`. |
+| `category` | `text`, `input`, `action`, `data`, `conversation`, `media` or `layout`. |
+| `emoji` | Its face on the palette. |
+| `description` | What it is for, in a sentence. |
+| `standard` | `true` for a component of the protocol's own catalog: its properties are the protocol's, and not copied here. |
+| `properties` | For Datalayer's own: its properties as a JSON Schema (an object; each property with a `title`, a `description`, its type, and its default, bounds and choices when it has them). The Canvas draws the component's properties form from it, with `@datalayer/primer-rjsf`. |
+| `bindings` | For Datalayer's own: what it can be bound to — what it `shows` (the rows of a table, the points of a chart) and what it `sends` (the row selected, the files given). |
+| `events` | What it reports: `select`, `upload`, `send`, `open`, `submit`. |
+| `example` | A configuration of it, valid against its `properties`. |
+
+```yaml
+# agentspecs/ui/a2ui-surface.yaml (one of Datalayer's own)
+- id: Table
+  name: Table
+  category: data
+  emoji: 📋
+  description: Rows the application found or keeps, with the columns the builder chooses.
+  standard: false
+  properties:
+    type: object
+    required: [columns]
+    properties:
+      columns: { type: array, title: Columns, description: The columns, in order., minItems: 1, items: { type: string } }
+      page_size: { type: integer, title: Rows per page, description: How many rows show at once., minimum: 1, maximum: 500, default: 20 }
+  bindings:
+    shows: [rows]
+    sends: [selected]
+  events: [select]
+  example:
+    columns: [model, pass rate, cost]
+```
+
+The tests (`tests/test_ui_components.py`) hold that A2UI's standard components
+are exactly its basic catalog, that each component says what it is, that each of
+Datalayer's own has a valid JSON Schema whose every property is titled and described,
+bindings and events, and an example its schema accepts — and that
+[the catalog's page](./components.md) is the one `python -m agentspecs.ui` writes.
+
+## In an agent spec, and in an Appspec
+
+```yaml
+ui:
+  - plugin: a2ui-surface
+    renderer: a2ui
+  - plugin: chat
+```
+
+Each entry names a UI plugin, once, and the renderer it is exposed through when it is
+one: one the plugin's `renderers` lists, and — for an application that is offered — an
+enabled one. `agentspecs.ui.ui_choices_problems` says what is wrong, in sentences:
+
+```python
+from agentspecs.ui import ui_choices_problems
+
+ui_choices_problems(["a2ui"], to_ship=True)
+# ["`ui` lists UI plugins, each as `{plugin, renderer}`: 'a2ui' is not one ('a2ui' is a UI renderer: …)."]
+```
+
+## Where it goes: `placements`
+
+A UI spec says where in the chat it may go, its default first (0.0.197): in the chat's own
+chrome — `header` (beside its title), `toolbar` (the input toolbar's controls), `footer` (under
+the prompt), `banner` (above the messages) — in one of its two **side panels**, `left` or `right`
+(beside the conversation, [described below](#beside-the-conversation-the-side-panels-left-right)),
+or `message`, a card in the conversation drawn by a tool renderer or the A2UI renderer. A spec with
+no `placements` is a part of the workspace itself (the chat, the notebook). The old `panel`,
+which no chat had a place for, is gone: a spec that says it is refused.
+
+```yaml
+# agentspecs/ui/x-budget.yaml (abridged)
+id: x-budget
+placements:
+  - header
+  - footer
+```
+
+Where it is declared, a `ui` entry picks one of them with `placement`; unsaid, the spec's first:
+
+```yaml
+ui:
+  - plugin: x-budget
+    placement: footer
+  - plugin: shopping-basket
+    renderer: a2ui        # a message, drawn by the A2UI renderer
+```
+
+`ui_choices_problems` refuses a placement the spec does not list. Each of the six seed agents
+that bring cards collects at least one UI in the chat's chrome and one A2UI message
+(`tests/test_ui.py`); the seventh, the Jupyter Data Analyst, works in the notebook's cells and
+brings no card of its own. Each of the seven has a header UI, described next.
+
+## In the chat's title bar: `header`
+
+A UI whose first placement is `header` may say what it puts there, under `header`: three items at
+most, so the title bar stays calm, and the **frontend tool** its agent sets them with. An item is
+one of three kinds:
+
+| `kind` | What the person sees | How it talks with the chat |
+|--------|----------------------|----------------------------|
+| `action` | A button. | Pressing it says its `message` to the agent, as the person. |
+| `choice` | A drop-down of two to eight `options`, one chosen (`default`, else the first). | The option chosen is told to the agent **with every turn**, in a sentence: the option's own `says`, else the item's `says` with `{label}` the option's label. An empty `says` tells nothing ("No limit"). The agent may set it too, when the person says so in the conversation. |
+| `indicator` | Something the agent shows: a `label` (words), a `counter` (a number and its words), a `status` (a dot and its words) or a `meter` (a small bar, with its `unit` and `max`) — its `display`. | Set by the agent through the frontend tool. Nothing is drawn before the agent said it. |
+
+Every item has an `id` (lower-case letters, digits and `_`: the tool's argument), a `label` (what
+the person reads and a screen reader says), a `description` (the tooltip, and what the model
+reads) and an `octicon`.
+
+```yaml
+# agentspecs/ui/shop-header.yaml (abridged)
+id: shop-header
+placements:
+- header
+supersedes:
+- basket-total
+header:
+  tool: set_shop_header
+  when: >-
+    Call it each time the basket changes (how many items, and the total as its label), when an
+    order is proposed and waits for the person's approval, and again once it is confirmed or dropped.
+  items:
+  - id: basket
+    kind: indicator
+    display: counter
+    label: Basket
+    description: How many items the basket holds, and its total as the label (such as "$84.00").
+    octicon: package
+  - id: budget
+    kind: choice
+    label: Budget
+    description: The most the person wants to spend on the basket.
+    octicon: credit-card
+    default: none
+    says: "The person's budget for the whole basket, chosen in the chat's header: {label}. Keep the basket within it."
+    options:
+    - { id: none, label: No limit, says: "" }
+    - { id: "50", label: Under $50 }
+    - { id: "100", label: Under $100 }
+  - id: approval
+    kind: indicator
+    display: status
+    label: Approval
+    description: Whether a purchase waits for the person's approval.
+    octicon: shield-check
+```
+
+### The tool: one per header, `set_<its id>`
+
+A header with an indicator names its tool, `set_` and the UI's id with underscores
+(`set_shop_header`); any other name is refused. It is a **frontend tool**: the page offers it to
+the agent with each turn and runs it itself when the model calls it, so the title bar changes
+with no call to a server, and the tool reads and changes nothing else. One tool per header, and
+not one shared `set_header_indicator`, because a frontend tool is offered by name with its JSON
+Schema: a header's own tool has exactly its items as arguments, each described in the words of
+its declaration, and an agent is offered only the tool of the header it has.
+
+Its arguments are one per item it sets, all optional — only the items named change
+(`agentspecs.ui.header_tool_parameters`):
+
+| Item | Argument |
+|------|----------|
+| An indicator | An object: `label` (its words, 48 characters at most), `tone` (`neutral`, `accent`, `success`, `attention` or `danger`; neutral unsaid), `visible` (`false` takes it off the title bar), and `value` for a `counter` or a `meter` (`max` too for a meter, 100 unsaid). |
+| A drop-down | One of its option ids. |
+| A button | None: nobody sets a button. |
+
+```json
+{ "basket": { "value": 3, "label": "$84.00" },
+  "approval": { "label": "Approval needed", "tone": "attention" } }
+```
+
+`when` says when the agent calls it, as the model reads it in the tool's description; the agent's
+own instructions say it too (after it builds the basket, when an order waits…). The indicators of
+a conversation are the tool's calls in it, in order: opened again, a conversation shows them as
+they stood. A drop-down the person changed is kept by the page for the conversation on screen.
+
+### What the agent is told of a drop-down
+
+The page sends the options chosen with each turn (`forwardedProps.loop.header`, an option id by
+item id, by UI id), and the runtime tells the agent their sentences for that turn only
+(`agentspecs.ui.header_says`); an item or an option the header does not have is refused:
+
+```python
+from agentspecs.ui import UI_CATALOGUE, header_says
+
+header_says(UI_CATALOGUE["shop-header"].header, {"budget": "100"})
+# ["The person's budget for the whole basket, chosen in the chat's header: Under $100. Keep the basket within it, …"]
+```
+
+### `supersedes`
+
+A header UI may stand in for an older chip that showed the same fact (`shop-header` for
+`basket-total`, `trip-header` for `trip-summary`, `aws-header` for `aws-savings-badge`): a chat
+that has it leaves those out of its title bar, whoever brought them, so the fact is said once.
+The header keeps reading what the chip read — the basket shown by `show_basket`, the savings
+listed — until its tool says otherwise.
+
+### The seed agents' headers
+
+| Agent | UI | In its title bar |
+|-------|----|------------------|
+| Marketer | `social-header` | **Network** (drop-down: all, X, Bluesky, LinkedIn, Discord) · **Drafts to approve** (counter) |
+| Shopper | `shop-header` | **Basket** (counter: items, total) · **Budget** (drop-down) · **Approval** (status, while a purchase waits) |
+| Accountant | `books-header` | **Period** (drop-down) · **Payments to match** (counter) · **Open invoices** (counter, total due) |
+| Traveller | `trip-header` | **Trip** (label: where and when) · **Travellers** (drop-down) · **Options ready** (counter) |
+| Terra | `earth-header` | **Sensor** (drop-down: any, Sentinel-2, Landsat) · **Cloud cover** (meter, of the scene read) |
+| Steward for AWS | `aws-header` | **Savings found** (counter: recommendations, monthly sum) · **Region** (drop-down) · **Savings Plans coverage** (meter) |
+| Jupyter Data Analyst | `notebook-header` | **Dataset** (label) · **Run** (status: what ran, or that nothing did) · **Profile data** (button) |
+
+Each agent names its header under `ui`, and so does its public demo, whose instructions allow
+that one tool and say what to show from the example data (`tests/test_ui_header.py`). An
+application lists a header UI beside the plugins of its kind.
+
+## In the conversation: a deck and a sheet the agent builds
+
+Two UI plugins hand the chat's agent a set of
+[frontend tools](../frontend-tools/#a-deck-and-a-sheet-in-the-conversation-page-deck-page-sheet)
+and draw what the tools build, in the page:
+
+| UI | Tool set | For | What it draws |
+| --- | --- | --- | --- |
+| `page-deck` | `page-deck` | the Marketer and its demo | A slide deck, as Datalayer Decks draws one: its notes, *Present* for the full screen. |
+| `page-sheet` | `page-sheet` | the Accountant and its demo | A workbook, as Datalayer Cells draws one: editable, its formulas computed, *Export CSV*. |
+
+A UI and a tool set of one id go together (`ui.hands_frontend_tools`): the
+agent names the set under `frontend_tools` and the UI under `ui`, and an
+application names the UI besides its kind's plugins, as it does a header UI.
+
+```yaml
+# agentspecs/apps/demo-accountant.yaml (abridged)
+agent: worker-accountant:0.0.1
+ui:
+  - plugin: chat
+  - plugin: books-header
+  - plugin: page-sheet
+    placement: right
+  - plugin: side-panels
+  - plugin: notices
+```
+
+Their placements are `message`, `right` and `left`. In the conversation (`message`, their
+default), the deck or the sheet is drawn at the last call that changed it, and every call before
+it is one line saying what it did. Placed in a side panel, as the Marketer and the Accountant
+place them, it is drawn there, live, and every call is a line in the conversation. Neither needs
+a connection of the person's, so a visitor's demo has them.
+
+## Beside the conversation: the side panels, `left`, `right`
+
+The chat has two side panels (the user, 18 November 2026: "left and right side panels ... real
+panels that receive controls and visuals: an agent's UI plugins placed there"). A `ui` entry
+places a UI in one with `placement: left` or `placement: right`, when its spec lists it:
+
+| What may go there | What it draws there |
+| --- | --- |
+| `page-deck`, `page-sheet` | The deck or the sheet, live: the conversation keeps a line per call. |
+| A header UI (`shop-header`, `books-header`…) | Its items stacked under its name: its drop-downs, its buttons, what the agent set, a dash before it said anything. |
+
+The left panel also holds what a host says about the application, its presentation, before
+what is placed there. A card a backend tool draws (`trial-balance`, `shopping-basket`…) stays
+in the conversation: its spec lists `message` alone.
+
+A panel is closed to start with, and has a toggle while it is closed and something fills it:
+the left one leading the chat's title bar, the right one trailing it. It opens:
+
+- with the **first call of the UI placed in it** in the conversation (the deck's first slide,
+  the sheet's first range);
+- when the **agent** calls `open_side_panel`, and closes when it calls `close_side_panel`, both
+  with their `side`: the `side-panels` page UI and its
+  [tool set](../frontend-tools/#the-side-panels-and-the-notices-side-panels-notices);
+- when the **person** uses its toggle, and closes with its Close control or Escape; the person's
+  word holds until the agent's next call.
+
+Open or closed is the conversation's: it is read from the conversation's calls, so a
+conversation opened again shows its panels as they stood, and one started over closes them. Two
+panels and the conversation share the width; when the conversation would be left too narrow,
+opening one closes the other. On a phone a panel opens over the conversation.
+
+```yaml
+# agentspecs/agents/worker-marketer.yaml (abridged)
+ui:
+  - plugin: page-deck
+    placement: right
+  - plugin: side-panels
+frontend_tools:
+  - page-deck:0.0.1
+  - side-panels:0.0.1
+```
+
+An agent names `side-panels` when something is placed in its panels: the Marketer (its deck), and
+the Accountant, the Jupyter Data Analyst and the Steward for AWS (a sheet each: the books, the dataset's
+profile and a chart, the findings by service), their demos with them; `open_side_panel` on a panel with nothing in it is
+refused in a sentence.
+
+## Over the conversation, for a moment: `notices`
+
+A notice is short: info, success, warning or error, a title of a few words and a line. The
+agent slides it in from an edge of the chat — north, east, south or west — with one frontend
+tool, `show_notice`, of the `notices` page UI and its
+[set](../frontend-tools/#the-side-panels-and-the-notices-side-panels-notices). It holds words
+only: no link, no button but its Close, nothing that could pass for the application's own
+controls, and it says it comes from the agent. It stays inside the chat, never over the page
+around it, goes after its seconds (8 for info and success, 12 for a warning; an error until
+closed) or with Close, Escape or a click, and one per edge: a new one on the same edge
+replaces the old, and the agent is told. Nothing is kept. Each of the seven seed agents and its
+demo names it, and is told to use it at most once in a turn, for what the person should not
+miss (`tests/test_ui_side_panels.py`).
+
+## In an MCP server, a skill and a backend tool
+
+An MCP server, a skill and a backend tool bring their own UI (0.0.196): they say `ui`
+in the same format, and the chat that uses them injects it. Shopify brings the
+basket and the comparison, Odoo the reconciliation, the trial balance and the VAT,
+Stripe its checkout card:
+
+```yaml
+# agentspecs/mcp-servers/stripe.yaml (abridged)
+id: stripe
+ui:
+  - plugin: stripe-checkout
+    renderer: a2ui
+```
+
+The chat's UI is the agent's `ui`, then the `ui` of each MCP server it runs, then that
+of each skill it has enabled, then that of each backend tool it carries, in that order,
+each plugin once. An optional server or skill left out (its secret missing) brings
+none, and an anonymous visitor gets only the UI that needs no connection of theirs.
+`agentspecs.ui.brought_ui_problems` says what is wrong with one, and
+`check_mcp_servers` refuses a server whose `ui` names a plugin `ui/` does not have:
+
+```python
+from agentspecs.ui import brought_ui_problems
+
+brought_ui_problems({"id": "shop", "ui": [{"plugin": "nope"}]}, "MCP server")
+# ["MCP server 'shop': There is no UI plugin named 'nope': one of …"]
+```
+
+## In an Appspec: how a surface names a component
+
+An application's `interface` lists the components its surface may use, and its
+`surface` is a tree of them, written as A2UI's `updateComponents` carries them: each
+node has an `id` and names its `component` by the catalog's `id`, and the tree starts
+from the node whose `id` is `root`. A node's other keys are the component's properties.
+
+```yaml
+# agentspecs/apps/quote-calculator.yaml (abridged)
+interface:
+  layout: page
+  accent: sun
+  components: [Card, Column, Text, Slider, Button]
+  surface:
+    protocol: a2ui/v0.9
+    components:
+      - id: root
+        component: Column
+        children: [title, seats, run]
+      - id: title
+        component: Text
+        text: Quote
+        variant: h2
+      - id: seats
+        component: Slider
+        label: Seats
+        value: { path: /inputs/seats }
+        min: 1
+        max: 1000
+      - id: run
+        component: Button
+        child: run-label
+        variant: primary
+        action: { event: { name: run } }
+      - id: run-label
+        component: Text
+        text: Compute the quote
+```
+
+`app_problems` (`agentspecs.apps`) refuses an application that names a component the
+catalog does not have — in `interface.components`, or as the `component` of a node of
+its surface — in a sentence each:
+
+```python
+from agentspecs.apps import app_problems, load_app
+
+app_problems(load_app("apps/my-app.yaml"))
+# ["There is no component named 'Gauge' in the catalog.",
+#  "The surface's 'speed' is a 'Gauge', which the catalog does not have."]
+```
+
+A component is in the catalog when a UI plugin renders it
+(`agentspecs.apps.component_named`). What is not checked yet: a node's properties
+against its component's JSON Schema, and a version per component.
+
+## In Python and TypeScript
+
+Agent Runtimes generates both kinds into its catalogues with `make specs`:
+`UI_CATALOGUE` (`agent_runtimes.specs.ui`, `src/specs/ui.ts`) and
+`UI_RENDERER_CATALOGUE` (`agent_runtimes.specs.ui_renderers`, `src/specs/uiRenderers.ts`),
+and `COMPONENT_CATALOGUE` with `get_component` / `list_components` in Python and
+`getComponent` / `listComponents` in TypeScript — the components of the UI plugins, by
+the name a surface gives them.

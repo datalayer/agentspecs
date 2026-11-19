@@ -1,0 +1,79 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Specification: Shopping header — the Reactor plugin `@datalayer/loop-plugin-shop-header`.
+#
+# A header UI (the user, 18 November 2026: "plugins to show suited buttons in
+# the header for the other seed agents ... a drop-down choice, or visual
+# indicators; the chat can interact to share visual indications"): what it
+# puts in the chat's title bar is declared under `header`, and drawn by
+# agent-runtimes from this declaration (src/apps/plugins/shop-header). Its
+# indicators are set by the agent with the frontend tool `set_shop_header`, run in
+# the page; its drop-downs are told to the agent with every turn; its
+# buttons say their message as the person.
+
+id: "shop-header"
+version: 0.0.1
+name: Shopping header
+description: >-
+  The Shopper's title bar: the basket it is putting together (items and total), a budget drop-down, and whether a purchase waits for the person's approval.
+emoji: "🛍️"
+octicon: package
+plugin: "@datalayer/loop-plugin-shop-header"
+folder: "shop-header"
+# Its Contributions: the Slots it fills, the Contribution Points it
+# contributes to, the Commands it adds (the composer's `/` commands by name).
+contributions:
+  slots:
+  - "loop.chatHeader"
+  points:
+  - "loop.chat.extras"
+  - "loop.runProps"
+  commands: []
+# The Contribution Points it offers to other plugins.
+contribution_points: []
+# The UI renderers (agentspecs/ui-renderers) it may be exposed through.
+renderers: []
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- header
+- right
+- left
+# The UI it stands in for: a chat that has it leaves them out of its title bar.
+supersedes:
+- basket-total
+# What it puts in the chat's title bar, and the frontend tool that sets it.
+header:
+  tool: set_shop_header
+  when: >-
+    Call it each time the basket changes (how many items, and the total as its label), when an order is proposed and waits for the person's approval, and again once it is confirmed or dropped.
+  items:
+  - id: basket
+    kind: indicator
+    display: counter
+    label: Basket
+    description: How many items the basket holds, and its total as the label (such as "$84.00"). Nothing is bought by showing it.
+    octicon: package
+  - id: budget
+    kind: choice
+    label: Budget
+    description: The most the person wants to spend on the basket.
+    octicon: credit-card
+    default: none
+    says: "The person's budget for the whole basket, chosen in the chat's header: {label}. Keep the basket within it, and say so when something does not fit."
+    options:
+    - id: none
+      label: No limit
+      says: ""
+    - id: "50"
+      label: Under $50
+    - id: "100"
+      label: Under $100
+    - id: "250"
+      label: Under $250
+  - id: approval
+    kind: indicator
+    display: status
+    label: Approval
+    description: Whether a purchase waits for the person's approval. Show it with the tone "attention" while one waits, and take it off (visible false) once it is confirmed or dropped.
+    octicon: shield-check

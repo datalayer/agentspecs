@@ -1,0 +1,35 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The datalayer-social toolset (15 November 2026): a reply as the person under
+# one Bluesky post, named by its address. Public: it waits for the person's word
+# every time (approval: manual). Set up when the person linked Bluesky.
+
+id: social-reply-bluesky
+version: 0.0.1
+name: Reply on Bluesky
+description: >-
+  Reply as the person under one Bluesky post they or the agent named by its
+  address, through Datalayer's IAM; it waits for the person's approval every
+  time.
+tags:
+  - social
+  - bluesky
+  - datalayer-social
+enabled: true
+action: publish
+approval: manual
+linked_accounts:
+  - bluesky
+runtime:
+  language: python
+  package: agent_runtimes.tools.social
+  method: reply_on_bluesky
+icon: "@datalayer/icons-react:bluesky"
+emoji: "💬"
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: bluesky-post-preview
+    renderer: a2ui

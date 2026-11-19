@@ -1,0 +1,70 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Specification: Earth header — the Reactor plugin `@datalayer/loop-plugin-earth-header`.
+#
+# A header UI (the user, 18 November 2026: "plugins to show suited buttons in
+# the header for the other seed agents ... a drop-down choice, or visual
+# indicators; the chat can interact to share visual indications"): what it
+# puts in the chat's title bar is declared under `header`, and drawn by
+# agent-runtimes from this declaration (src/apps/plugins/earth-header). Its
+# indicators are set by the agent with the frontend tool `set_earth_header`, run in
+# the page; its drop-downs are told to the agent with every turn; its
+# buttons say their message as the person.
+
+id: "earth-header"
+version: 0.0.1
+name: Earth header
+description: >-
+  Terra's title bar: a drop-down for the sensor it searches, and the cloud cover of the scene it is reading.
+emoji: "🛰️"
+octicon: globe
+plugin: "@datalayer/loop-plugin-earth-header"
+folder: "earth-header"
+# Its Contributions: the Slots it fills, the Contribution Points it
+# contributes to, the Commands it adds (the composer's `/` commands by name).
+contributions:
+  slots:
+  - "loop.chatHeader"
+  points:
+  - "loop.chat.extras"
+  - "loop.runProps"
+  commands: []
+# The Contribution Points it offers to other plugins.
+contribution_points: []
+# The UI renderers (agentspecs/ui-renderers) it may be exposed through.
+renderers: []
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- header
+- right
+- left
+# What it puts in the chat's title bar, and the frontend tool that sets it.
+header:
+  tool: set_earth_header
+  when: >-
+    Call it each time you settle on a scene to read: its cloud cover in percent as the value, and the scene as the label (sensor and date, such as "Sentinel-2 · 8 May").
+  items:
+  - id: sensor
+    kind: choice
+    label: Sensor
+    description: The satellite sensor the scenes are searched from.
+    octicon: broadcast
+    default: any
+    says: "Chosen in the chat's header: use {label} scenes only, and say when it holds none for what is asked."
+    options:
+    - id: any
+      label: Any sensor
+      says: ""
+    - id: sentinel-2
+      label: Sentinel-2
+    - id: landsat
+      label: Landsat
+  - id: cloud
+    kind: indicator
+    display: meter
+    unit: "%"
+    max: 100
+    label: Cloud cover
+    description: The cloud cover of the scene being read, in percent; its label names the scene. Tone "success" under 10, "attention" from 30, "danger" from 60, where a scene misleads.
+    octicon: cloud

@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Specification: Bank reconciliation — the Reactor plugin `@datalayer/loop-plugin-bank-reconciliation`.
+#
+# Read from the plugin's registration in agent-runtimes (src/apps/plugins/bank-reconciliation):
+# its Slots, Contributions, Commands and Contribution Points are what the
+# reactor registers for it, held to it by agent-runtimes' ui-specs test.
+# Brought to the chat by the agent, MCP server, skill or backend tool that
+# names it under `ui` (the user, 15 November 2026).
+
+id: "bank-reconciliation"
+version: 0.0.1
+name: Bank reconciliation
+description: >-
+  Bank lines beside the invoices they would settle, with the difference and how sure the agent is; you tick the matches you approve and send them back (show_reconciliation).
+emoji: "🧾"
+octicon: git-compare
+plugin: "@datalayer/loop-plugin-bank-reconciliation"
+folder: "bank-reconciliation"
+# Its Contributions: the Slots it fills, the Contribution Points it
+# contributes to, the Commands it adds (the composer's `/` commands by name).
+contributions:
+  slots: []
+  points:
+  - "reactor.ui.renderer"
+  - "reactor.ui.toolBinding"
+  commands: []
+# The Contribution Points it offers to other plugins.
+contribution_points: []
+# The UI renderers (agentspecs/ui-renderers) it may be exposed through.
+renderers:
+- "a2ui"
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- message

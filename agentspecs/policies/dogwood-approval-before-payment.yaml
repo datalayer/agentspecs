@@ -1,0 +1,31 @@
+id: dogwood-approval-before-payment
+version: 0.0.1
+name: Approval before a payment
+description: 'An example of a Dogwood set an administrator writes for the organization: a payment
+  is permitted only when an approval of the same invoice completed in the session within the hour
+  before it; every other action is left to the rules. Deny by default: without the approval, the
+  payment is refused.'
+enabled: false
+tags:
+- policy
+- organization
+- dogwood
+- example
+policy:
+  scope: organization
+  version: 1
+  dogwood:
+    mode: enforce
+    policies: |
+      @id("everything but a payment")
+      permit (principal, action, resource)
+      unless { action == Datalayer::Action::"payments___pay" };
+
+      @id("a payment needs its invoice approved within the hour")
+      permit (principal, action == Datalayer::Action::"payments___pay", resource)
+      when temporal {
+          formerly within 1h Datalayer::Action::"payments___approve"::response{
+              eventResource: resource,
+              input.invoice: context.input.invoice
+          }
+      };

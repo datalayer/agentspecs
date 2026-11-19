@@ -1,0 +1,28 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The GitHub repositories of the person the agent works for, with the
+# person's own token from the runtime's identity provider: on AWS AgentCore,
+# AgentCore Identity's token vault through the organization's credential
+# provider named github (the person connects GitHub in the chat the first
+# time). No GITHUB_TOKEN is configured for it.
+
+id: github-repositories
+version: 0.0.1
+name: GitHub Repositories
+description: >-
+  List the GitHub repositories of the person the agent works for, with the
+  person's own GitHub grant; the first time, the person is asked to connect
+  GitHub in the chat.
+tags:
+  - github
+  - identity
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.github
+  method: github_repositories
+icon: "@primer/octicons-react:mark-github"
+emoji: 🐙

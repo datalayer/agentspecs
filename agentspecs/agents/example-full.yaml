@@ -24,6 +24,8 @@ tags:
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
 
 sandbox_variant: jupyter-server
 
@@ -49,7 +51,7 @@ envvars:
   - GITHUB_TOKEN:0.0.1
 
 # Runtime tools (runtime-echo = auto approval, runtime-sensitive-echo = manual approval)
-tools:
+backend_tools:
   - runtime-echo:0.0.1
   - runtime-sensitive-echo:0.0.1
 frontend_tools:
@@ -62,7 +64,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: shield
 emoji: 🛡️
-color: "#6366F1"  # Indigo
+color: indigo
 
 # Chat suggestions
 suggestions:
@@ -110,3 +112,8 @@ welcome_document: null
 
 # No trigger — this is an interactive agent
 trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

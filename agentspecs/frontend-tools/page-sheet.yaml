@@ -1,0 +1,44 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Frontend tool set: a spreadsheet filled in the page (the user, 18 November
+# 2026: "add to the accountant the frontend tools to create spreadsheets").
+#
+# The tools run in the page, on a Datalayer Cells workbook kept for the
+# conversation: they reach no books and no file. Their handlers come from
+# agent-runtimes' `page-sheet` UI plugin (src/apps/pageTools/sheet.ts), never
+# from the spec, and each checks what it is given there: a cell is a number,
+# a text or a boolean, a text starting with = a formula computed by Cells'
+# engine; formats are named, never a format code; a tab holds 20,000 cells
+# and a workbook 8 tabs. The person may edit the grid, and a read answers
+# what is on screen. An agent that names this set names the `page-sheet` UI
+# too, which hands it the tools and draws the sheet. Unlike `cells`, it
+# needs no spreadsheet editor beside the chat: a visitor's demo has it.
+#
+# `sheet_write_range`, `sheet_read_range` and `sheet_insert_chart` are also
+# the sheet arena of Datalayer's Battles, which binds them to a contestant's
+# workbook.
+
+id: page-sheet
+version: 0.0.1
+name: Sheet in the page
+description: Fill a spreadsheet in the conversation — a sheet with named columns, rows and ranges, formulas, number and currency formats, a frozen header, tabs, a chart — shown to the person as it is built, editable and exported as CSV.
+tags:
+  - frontend
+  - cells
+  - spreadsheets
+  - page
+enabled: true
+
+toolset:
+  - sheet_create
+  - sheet_write_range
+  - sheet_read_range
+  - sheet_format_range
+  - sheet_freeze
+  - sheet_add_tab
+  - sheet_show_tab
+  - sheet_insert_chart
+
+icon: "@primer/octicons-react:table"
+emoji: "📑"

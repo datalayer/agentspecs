@@ -19,5 +19,5 @@ toolset:
   - proposeCellUpdate
   - runCell
 
-icon: notebook
+icon: "@datalayer/icons-react:jupyter"
 emoji: "📓"

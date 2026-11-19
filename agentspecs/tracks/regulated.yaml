@@ -1,0 +1,60 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Track Specification: Regulated
+# The full record of a clinical, legal or public-sector Op (whitepaper,
+# section 5.4): everything, ten years, readable by Compliance and Legal and
+# produced to a regulator or an external auditor on request, with personal
+# data kept out of it.
+
+id: regulated
+version: 0.0.1
+name: Regulated Track
+description: >-
+  The complete record of a clinical, legal or public-sector Op: every input
+  and source, every model and setting, every Guard result, Gate decision,
+  approval, edit and action. Kept ten years, readable by Compliance and
+  Legal, produced to a regulator or an external auditor on request, with
+  personal data kept out, and fed back to Organizational Memory.
+
+retain_for: 10_years
+include:
+  - op
+  - frames_used
+  - cogs_invoked
+  - input_data
+  - source_documents
+  - model_versions
+  - configuration
+  - guard_results
+  - gate_decisions
+  - human_approvals
+  - human_edits
+  - final_output
+  - actions_taken
+  - timestamps
+  - user_identity
+  - permissions
+  - environment
+  - memory_links
+
+readers:
+  - compliance
+  - legal
+  - external-audit
+
+redact:
+  - "*Password*"
+  - "*Secret*"
+  - "*Token*"
+  - "*SSN*"
+  - "*PatientId*"
+  - "*DateOfBirth*"
+
+feeds_memory: true
+exchangeable: false
+
+tags:
+  - regulated
+  - compliance
+  - audit

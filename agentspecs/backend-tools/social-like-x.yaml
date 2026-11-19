@@ -1,0 +1,29 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The datalayer-social toolset (15 November 2026): a like as the person on one
+# X post. It waits for the person's word every time (approval: manual). Set up
+# when the person linked X; an X linked before 15 November likes once linked
+# again (like.write).
+
+id: social-like-x
+version: 0.0.1
+name: Like on X
+description: >-
+  Like one X post as the person, through Datalayer's IAM; it waits for the
+  person's approval every time, held to the person's X budget.
+tags:
+  - social
+  - x
+  - datalayer-social
+enabled: true
+action: write
+approval: manual
+linked_accounts:
+  - x
+runtime:
+  language: python
+  package: agent_runtimes.tools.social
+  method: like_on_x
+icon: "@primer/octicons-react:heart"
+emoji: "❤️"

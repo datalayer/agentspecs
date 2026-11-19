@@ -1,0 +1,15 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: BLUESKY_IDENTIFIER
+version: 0.0.1
+name: Bluesky Handle
+description: The handle of the Bluesky account the server acts as, `name.bsky.social` or a custom domain. Read by the Bluesky MCP server with the app password beside it.
+registrationUrl: https://bsky.app
+tags:
+  - authentication
+  - username
+  - bluesky
+  - social
+icon: key
+emoji: 🦋

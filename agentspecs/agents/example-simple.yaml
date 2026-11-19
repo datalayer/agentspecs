@@ -2,28 +2,45 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Agent Specification: A Simple Agent
-# A minimal agent with no MCP servers or skills.
+# A minimal agent with no MCP servers or skills, and the decisions capability
+# (`decisions: jev:0.0.1`): typed questions asked of Jev through
+# datalayer-ai-inference, with the `decide` tool the capability brings.
 
 id: example-simple
 version: 0.0.1
 name: A Simple Agent
 description: >
-  A simple conversational agent. No tools, no MCP servers, no skills —
-  just a helpful AI assistant you can chat with.
+  A simple conversational agent with one tool, decide: it asks Jev typed
+  questions (yes or no with a probability, a choice, a score) through
+  datalayer-ai-inference. No MCP servers, no skills beyond events.
 
 tags:
   - workflow
   - automation
   - analysis
 
+# Enabled, out of the pickers (the user, 14 November 2026): /agents/new, the chats, the
+# assign menu and loop offer the five agents of the home page alone (`listed: false` here).
+# Runnable by id, and an application naming it runs with nothing to set up.
 enabled: true
+listed: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
+# Other models it may be switched to, beside its own: those
+# datalayer-ai-inference serves from the catalogue.
+model_additionals:
+  - "alibaba:qwen-max"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
 
 sandbox_variant: jupyter-server
 
 # Memory backend
 memory: ephemeral
+
+# How it decides: the capability brings the `decide` backend tool, asked of
+# this spec's model.
+decisions: jev:0.0.1
 
 # No MCP servers
 mcp_servers: []
@@ -33,7 +50,7 @@ skills:
   - events:0.0.1
 
 # Runtime tools
-tools:
+backend_tools:
   - runtime-echo:0.0.1
 frontend_tools:
   - jupyter-notebook:0.0.1
@@ -44,7 +61,7 @@ environment_name: ai-agents-env
 # UI customization
 icon: agent
 emoji: 🤖
-color: "#6366F1"  # Indigo
+color: indigo
 
 # Chat suggestions to show users what this agent can do
 suggestions:
@@ -56,18 +73,28 @@ suggestions:
     summary: "Weekend project ideas"
   - text: Summarize the key points of a topic I describe
     summary: "Summarize a topic"
+  - text: "Is this support ticket urgent? 'Payouts have failed for 3 days.'"
+    summary: "Decide: is it urgent?"
+  - text: "Which team should handle: 'I was charged twice'? Billing, Tech or Sales."
+    summary: "Decide: which team?"
+  - text: "Score how positive this review is from 1 to 5: 'Setup took an hour, but support answered fast and it works.'"
+    summary: "Decide: score a review"
 
 # Welcome message shown when agent starts
 welcome_message: >
-  Hi! I'm a simple assistant. I don't have any special tools, but I'm
-  happy to chat, answer questions, and help you think through ideas.
+  Hi! I'm a simple assistant. I'm happy to chat, answer questions and help
+  you think through ideas, and I can decide: ask me whether a ticket is
+  urgent, which team should take it, or how positive a review is.
 
 # System prompt for the agent
 system_prompt: >
-  You are a helpful, friendly AI assistant. You do not have access to any
-  external tools, MCP servers, or skills. Answer questions using your
-  training knowledge, be concise, and let the user know if a question is
-  outside your knowledge.
+  You are a helpful, friendly AI assistant. You have no MCP servers. You
+  have a decide tool: when asked whether something holds (yes or no), which
+  of named options fits, or where something sits on a scale, call decide
+  with the text as the state and one typed question (noul, choice or score),
+  then answer with what it decided and its probability or confidence. For
+  anything else, answer from your training knowledge, be concise, and let
+  the user know if a question is outside your knowledge.
 
 # No code mode prompt needed for a simple agent
 system_prompt_codemode_addons: null
@@ -80,3 +107,8 @@ welcome_document: null
 
 # No trigger — this is an interactive chat agent
 trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

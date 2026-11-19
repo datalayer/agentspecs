@@ -1,0 +1,30 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AWS Cost Explorer's spend, commitments and anomalies, read with the
+# account's read role (see aws-cost-optimization-hub). AWS bills each Cost
+# Explorer request to the account (0.01 USD at the time of writing). It calls
+# Cost Explorer's Get… operations and nothing else: a reader.
+
+id: aws-cost-explorer
+version: 0.0.1
+name: AWS Cost Explorer
+description: >-
+  Read the account's spend from AWS Cost Explorer — by service, account,
+  region, usage type or tag — its Savings Plans and Reserved Instance
+  coverage and utilization, AWS's Savings Plans purchase recommendation and
+  Cost Anomaly Detection's anomalies, with the read role; answered as
+  evidence.
+tags:
+  - aws
+  - cost
+  - steward
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.aws_account
+  method: aws_cost_explorer
+icon: "@primer/octicons-react:credit-card"
+emoji: "📊"

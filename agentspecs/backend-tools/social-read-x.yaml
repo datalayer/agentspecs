@@ -1,0 +1,35 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The datalayer-social toolset (the user, 15 November 2026: "move X read/write
+# to iam"): X read as the person, with their own account linked in Settings —
+# their profile, someone's, a post, their timeline, their posts, their
+# mentions, the replies to a post, a search of recent posts. The runtime asks
+# IAM with its social token; IAM reads with the person's grant, which never
+# leaves IAM. It only reads (approval: auto). No key is pasted for it. X bills
+# Datalayer per resource returned: the agent's x-api-budget guardrail prices
+# each read, asks for 20 posts at most and holds the person's budget.
+
+id: social-read-x
+version: 0.0.1
+name: Read X
+description: >-
+  Read X as the person, with their account linked in Settings: their own
+  profile, someone's, a post, their timeline, their posts, their mentions, the
+  replies to a post and a search of recent posts, through Datalayer's IAM; each
+  read is held to the person's X budget.
+tags:
+  - social
+  - x
+  - datalayer-social
+enabled: true
+action: read
+approval: auto
+linked_accounts:
+  - x
+runtime:
+  language: python
+  package: agent_runtimes.tools.social
+  method: read_x
+icon: "@datalayer/icons-react:x"
+emoji: "✖️"

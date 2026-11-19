@@ -11,8 +11,8 @@ description: >-
   Replays a golden set of past runs after a model, a Frame, a Cog or the
   Op itself changes, and compares the results with the validated ones.
 
-# A Guard extends a guardrail: the policy it verifies, and runs within.
-extends: data-engineering-power-user:0.0.1
+# A Guard extends a Policy: the rules it verifies, and runs within.
+extends: default:0.0.1
 
 category: regression-drift
 stages:

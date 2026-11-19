@@ -1,0 +1,33 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Image Skills (the user, 7 November 2026): snapshots of web pages and video
+# frames, and images read, resized, cropped, converted, optimized and
+# thumbnailed — datalayer-skills' `image` skill, run by its scripts in the sandbox.
+
+id: image
+version: 0.0.1
+name: Image Skills
+description: Snapshots of web pages and video frames; images read, resized, cropped, converted, optimized and thumbnailed
+
+module: datalayer_skills.skills.image
+
+dependencies:
+  - Pillow>=10.0
+  - playwright>=1.45
+
+# Offered on the platform: the runtime image installs datalayer-skills[skills] with Chromium and ffmpeg.
+enabled: true
+
+install:
+  type: python
+  command: "pip install \"datalayer-skills[skills]\" && python -m playwright install chromium"
+  note: "Chromium for its page snapshots; the runtime image carries it."
+
+tags:
+  - image
+  - snapshot
+  - media
+
+icon: "@primer/octicons-react:image"
+emoji: 🖼️

@@ -1,0 +1,1640 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Standard: ISO/IEC 42001:2023, read through AIUC-1's crosswalk at
+# https://standard.aiuc-1.com/crosswalks/iso-42001 on 2026-10-15. Each clause names the
+# AIUC-1 controls that cover it (covered_by) and how far (coverage).
+
+id: iso-42001
+version: '2023'
+name: ISO/IEC 42001:2023
+description: >-
+  The international standard for an AI management system: clauses 4 to 10 of the management system and
+  the Annex A controls. Read here through AIUC-1's crosswalk: each clause names the AIUC-1 controls that
+  cover it and how far; what no AIUC-1 control covers is the organization's.
+enabled: true
+tags:
+- standard
+- iso-42001
+- management-system
+published_by: ISO/IEC
+url: https://www.iso.org/standard/42001
+released_on: '2023-12-18'
+next_release_on: null
+read_on: '2026-10-15'
+read_from: https://standard.aiuc-1.com/crosswalks/iso-42001
+certificate_valid_months: 36
+evidence_kinds:
+  documentation: Policies, contracts, plans and procedures a person wrote and signed.
+  config: Code and settings that implement a control, as they run.
+  logs: 'Audit trails and monitoring: what the system recorded as it ran.'
+  evals: A third party's evaluation report, on the standard's cadence.
+  report: A report the organization publishes or records.
+  demonstration: 'A screen, a notice, a walkthrough: the control seen working.'
+frameworks:
+  aiuc-1: AIUC-1
+maps_to: aiuc-1
+domains:
+- id: '4'
+  name: Context of the organization
+- id: '5'
+  name: Leadership
+- id: '6'
+  name: Planning
+- id: '7'
+  name: Support
+- id: '8'
+  name: Operation
+- id: '9'
+  name: Performance evaluation
+- id: '10'
+  name: Improvement
+- id: A
+  name: Annex A controls
+controls:
+- id: '4.1'
+  title: Understanding the organization and its context
+  domain: '4'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall determine external and internal issues relevant to the AI management system’s
+    purpose and ability to achieve intended results.
+  evidence:
+  - id: 4.1.1
+    kind: documentation
+    title: >-
+      Understanding the organization and its context: the management system's own record
+    required: core
+  covered_by:
+  - C001
+  - E010
+  coverage: partial
+  coverage_note: AIUC-1 is focused on defining acceptable use and assessing risk of the AI system
+  crosswalks:
+    aiuc-1:
+    - C001
+    - E010
+- id: '4.2'
+  title: Understanding the needs and expectations of interested parties
+  domain: '4'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall determine interested parties and their relevant requirements to the AI management
+    system.
+  evidence:
+  - id: 4.2.1
+    kind: documentation
+    title: >-
+      Understanding the needs and expectations of interested parties: the management system's own record
+    required: core
+  covered_by: []
+  coverage: none
+  coverage_note: Outside the scope of AIUC-1
+  crosswalks:
+    aiuc-1: []
+- id: '4.3'
+  title: Determining the scope of the AI management system
+  domain: '4'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall define and document the scope of the AI management system, including applicability
+    and boundaries.
+  evidence:
+  - id: 4.3.1
+    kind: documentation
+    title: >-
+      Determining the scope of the AI management system: the management system's own record
+    required: core
+  covered_by:
+  - E017
+  - E010
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E017
+    - E010
+- id: '4.4'
+  title: AI management system
+  domain: '4'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall establish, implement, maintain, and continually improve the AI management system.
+  evidence:
+  - id: 4.4.1
+    kind: documentation
+    title: 'AI management system: the management system''s own record'
+    required: core
+  covered_by:
+  - E013
+  coverage: full
+  coverage_note: >-
+    Met by organizations that opt-in to the optional quality management system requirement
+  crosswalks:
+    aiuc-1:
+    - E013
+- id: '5.1'
+  title: Leadership and commitment
+  domain: '5'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    Top management shall demonstrate leadership and commitment to the AI management system and its effectiveness.
+  evidence:
+  - id: 5.1.1
+    kind: documentation
+    title: 'Leadership and commitment: the management system''s own record'
+    required: core
+  covered_by:
+  - E004
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E004
+- id: '5.2'
+  title: AI policy
+  domain: '5'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    Top management shall establish an AI policy appropriate to the organization and supportive of AI objectives.
+  evidence:
+  - id: 5.2.1
+    kind: documentation
+    title: 'AI policy: the management system''s own record'
+    required: core
+  covered_by:
+  - E010
+  - E017
+  coverage: full
+  coverage_note: >-
+    AI Acceptable Use Policy and Transparency Policy collectively fulfil the ISO control. Organizations
+    may develop a standalone AI policy
+  crosswalks:
+    aiuc-1:
+    - E010
+    - E017
+- id: '5.3'
+  title: Roles, responsibilities and authorities
+  domain: '5'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    Top management shall assign roles, responsibilities, and authorities for the AI management system.
+  evidence:
+  - id: 5.3.1
+    kind: documentation
+    title: 'Roles, responsibilities and authorities: the management system''s own record'
+    required: core
+  covered_by:
+  - E004
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E004
+- id: 6.1.1
+  title: Actions to address risks and opportunities — General
+  domain: '6'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall plan actions to address risks and opportunities, integrate them into processes,
+    and evaluate their effectiveness.
+  evidence:
+  - id: 6.1.1.1
+    kind: documentation
+    title: >-
+      Actions to address risks and opportunities — General: the management system's own record
+    required: core
+  covered_by:
+  - C001
+  - C008
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - C001
+    - C008
+- id: 6.1.2
+  title: AI risk assessment
+  domain: '6'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall establish and maintain a process for AI risk assessment, including identification,
+    analysis, and evaluation of risks.
+  evidence:
+  - id: 6.1.2.1
+    kind: documentation
+    title: 'AI risk assessment: the management system''s own record'
+    required: core
+  covered_by:
+  - C001
+  - C008
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - C001
+    - C008
+- id: 6.1.3
+  title: AI risk treatment
+  domain: '6'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall establish and maintain a process for AI risk treatment, including selecting
+    and implementing necessary controls.
+  evidence:
+  - id: 6.1.3.1
+    kind: documentation
+    title: 'AI risk treatment: the management system''s own record'
+    required: core
+  covered_by:
+  - C001
+  - C008
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - C001
+    - C008
+- id: 6.1.4
+  title: AI system impact assessment
+  domain: '6'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall conduct AI system impact assessments covering potential effects on individuals,
+    groups, and society.
+  evidence:
+  - id: 6.1.4.1
+    kind: documentation
+    title: 'AI system impact assessment: the management system''s own record'
+    required: core
+  covered_by:
+  - E013
+  - C001
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 requires risk assessment and organizations can opt-in to the optional quality management system
+    requirement, but does not require impact assessment specifically
+  crosswalks:
+    aiuc-1:
+    - E013
+    - C001
+- id: '6.2'
+  title: AI objectives and planning to achieve them
+  domain: '6'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall establish AI objectives at relevant functions and levels, consistent with the
+    AI policy, and maintain plans to achieve them.
+  evidence:
+  - id: 6.2.1
+    kind: documentation
+    title: 'AI objectives and planning to achieve them: the management system''s own record'
+    required: core
+  covered_by: []
+  coverage: none
+  coverage_note: Requiring high-level AI objectives is outside the scope of AIUC-1
+  crosswalks:
+    aiuc-1: []
+- id: '6.3'
+  title: Planning of changes
+  domain: '6'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall plan and control changes to the AI management system in a planned manner.
+  evidence:
+  - id: 6.3.1
+    kind: documentation
+    title: 'Planning of changes: the management system''s own record'
+    required: core
+  covered_by:
+  - E007
+  - E008
+  coverage: full
+  coverage_note: AIUC-1 requires that both system changes and process changes are reviewed
+  crosswalks:
+    aiuc-1:
+    - E007
+    - E008
+- id: '7.1'
+  title: Resources
+  domain: '7'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall determine and provide necessary resources for the AI management system.
+  evidence:
+  - id: 7.1.1
+    kind: documentation
+    title: 'Resources: the management system''s own record'
+    required: core
+  covered_by:
+  - E013
+  coverage: partial
+  coverage_note: >-
+    Organizations opting-in to the optional quality management system requirement will be required to
+    documenting resource management, including security-of-supply related measures
+  crosswalks:
+    aiuc-1:
+    - E013
+- id: '7.2'
+  title: Competence
+  domain: '7'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall ensure competence of persons working under its control based on education,
+    training, or experience.
+  evidence:
+  - id: 7.2.1
+    kind: documentation
+    title: 'Competence: the management system''s own record'
+    required: core
+  covered_by:
+  - E004
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 requires that accountability is clearly assigned, but does not require competence assessment
+    specifically
+  crosswalks:
+    aiuc-1:
+    - E004
+- id: '7.3'
+  title: Awareness
+  domain: '7'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    Persons under the organization’s control shall be aware of the AI policy, objectives, and their contribution
+    to the AI management system.
+  evidence:
+  - id: 7.3.1
+    kind: documentation
+    title: 'Awareness: the management system''s own record'
+    required: core
+  covered_by: []
+  coverage: none
+  coverage_note: Internal training processes are outside the scope of AIUC-1
+  crosswalks:
+    aiuc-1: []
+- id: '7.4'
+  title: Communication
+  domain: '7'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall determine internal and external communications relevant to the AI management
+    system.
+  evidence:
+  - id: 7.4.1
+    kind: documentation
+    title: 'Communication: the management system''s own record'
+    required: core
+  covered_by:
+  - E014
+  coverage: partial
+  coverage_note: AIUC-1 does not specify internal communication requirements
+  crosswalks:
+    aiuc-1:
+    - E014
+- id: 7.5.1
+  title: Documented information — General
+  domain: '7'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall document information required by the AI management system and by ISO42001.
+  evidence:
+  - id: 7.5.1.1
+    kind: documentation
+    title: 'Documented information — General: the management system''s own record'
+    required: core
+  covered_by:
+  - E013
+  coverage: full
+  coverage_note: >-
+    Organizations opting-in to the optional quality management system requirement will meet this control
+  crosswalks:
+    aiuc-1:
+    - E013
+- id: 7.5.2
+  title: Creating and updating documented information
+  domain: '7'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall ensure documented information is properly created, updated, and controlled
+    for suitability and adequacy.
+  evidence:
+  - id: 7.5.2.1
+    kind: documentation
+    title: 'Creating and updating documented information: the management system''s own record'
+    required: core
+  covered_by:
+  - E008
+  coverage: full
+  coverage_note: >-
+    The combination of quarterly internal reviews and annual recertification requirements fulfils this
+    control
+  crosswalks:
+    aiuc-1:
+    - E008
+- id: 7.5.3
+  title: Control of documented information
+  domain: '7'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall control documented information required by the AI management system and ISO42001.
+  evidence:
+  - id: 7.5.3.1
+    kind: documentation
+    title: 'Control of documented information: the management system''s own record'
+    required: core
+  covered_by: []
+  coverage: full
+  coverage_note: Required as part of AIUC-1 certification process
+  crosswalks:
+    aiuc-1: []
+- id: '8.1'
+  title: Operational planning and control
+  domain: '8'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall plan, implement, and control processes needed for the AI management system,
+    ensuring outputs meet requirements.
+  evidence:
+  - id: 8.1.1
+    kind: documentation
+    title: 'Operational planning and control: the management system''s own record'
+    required: core
+  covered_by:
+  - E013
+  coverage: full
+  coverage_note: >-
+    Organizations opting-in to the optional quality management system requirement will meet this control
+  crosswalks:
+    aiuc-1:
+    - E013
+- id: '8.2'
+  title: AI risk assessment
+  domain: '8'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall perform AI risk assessments at planned intervals and when significant changes
+    occur.
+  evidence:
+  - id: 8.2.1
+    kind: documentation
+    title: 'AI risk assessment: the management system''s own record'
+    required: core
+  covered_by:
+  - C001
+  - C008
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - C001
+    - C008
+- id: '8.3'
+  title: AI risk treatment
+  domain: '8'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall implement AI risk treatment plans and review them when assessments identify
+    new or ineffective controls.
+  evidence:
+  - id: 8.3.1
+    kind: documentation
+    title: 'AI risk treatment: the management system''s own record'
+    required: core
+  covered_by:
+  - C001
+  - C008
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - C001
+    - C008
+- id: '8.4'
+  title: AI system impact assessment
+  domain: '8'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall perform AI system impact assessments at planned intervals and when significant
+    changes are proposed.
+  evidence:
+  - id: 8.4.1
+    kind: documentation
+    title: 'AI system impact assessment: the management system''s own record'
+    required: core
+  covered_by:
+  - E013
+  - C001
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 requires risk assessment and organizations can opt-in to the optional quality management system
+    requirement, but does not require impact assessment specifically
+  crosswalks:
+    aiuc-1:
+    - E013
+    - C001
+- id: '9.1'
+  title: Monitoring, measurement, analysis and evaluation
+  domain: '9'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall determine monitoring, measurement, analysis, and evaluation needed to ensure
+    conformity and effectiveness.
+  evidence:
+  - id: 9.1.1
+    kind: documentation
+    title: >-
+      Monitoring, measurement, analysis and evaluation: the management system's own record
+    required: core
+  covered_by:
+  - E013
+  - C008
+  coverage: full
+  coverage_note: >-
+    Organizations opting-in to the optional quality management system requirement will meet this control
+  crosswalks:
+    aiuc-1:
+    - E013
+    - C008
+- id: 9.2.1
+  title: Internal audit - General
+  domain: '9'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall conduct internal audits at planned intervals to provide information on the
+    AI management system.
+  evidence:
+  - id: 9.2.1.1
+    kind: documentation
+    title: 'Internal audit - General: the management system''s own record'
+    required: core
+  covered_by:
+  - E008
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E008
+- id: 9.2.2
+  title: Internal audit programme
+  domain: '9'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    Top management shall review the AI management system at planned intervals for continuing suitability,
+    adequacy, and effectiveness.
+  evidence:
+  - id: 9.2.2.1
+    kind: documentation
+    title: 'Internal audit programme: the management system''s own record'
+    required: core
+  covered_by:
+  - E008
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E008
+- id: 9.3.1
+  title: Management review - General
+  domain: '9'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall review the AI management system at planned intervals to ensure its suitability,
+    adequacy, and effectiveness.
+  evidence:
+  - id: 9.3.1.1
+    kind: documentation
+    title: 'Management review - General: the management system''s own record'
+    required: core
+  covered_by:
+  - E008
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E008
+- id: 9.3.2
+  title: Management review inputs
+  domain: '9'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    Management review inputs shall include audits, performance trends, nonconformities, feedback, risks,
+    changes, and resources.
+  evidence:
+  - id: 9.3.2.1
+    kind: documentation
+    title: 'Management review inputs: the management system''s own record'
+    required: core
+  covered_by:
+  - E008
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 internal review requirement is smaller in scope, so fulfilment of 9.3.2 depends on organizational
+    implementation
+  crosswalks:
+    aiuc-1:
+    - E008
+- id: 9.3.3
+  title: Management review results
+  domain: '9'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    Management review results shall include decisions on improvements, policy/objectives, resources, and
+    follow-up actions.
+  evidence:
+  - id: 9.3.3.1
+    kind: documentation
+    title: 'Management review results: the management system''s own record'
+    required: core
+  covered_by:
+  - E008
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 internal review requirement is smaller in scope, so fulfilment of 9.3.2 depends on organizational
+    implementation
+  crosswalks:
+    aiuc-1:
+    - E008
+- id: '10.1'
+  title: Continual improvement
+  domain: '10'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall continually improve the AI management system’s suitability, adequacy, and effectiveness.
+  evidence:
+  - id: 10.1.1
+    kind: documentation
+    title: 'Continual improvement: the management system''s own record'
+    required: core
+  covered_by:
+  - E013
+  coverage: full
+  coverage_note: >-
+    Organizations opting-in to the optional quality management system requirement will meet this control
+  crosswalks:
+    aiuc-1:
+    - E013
+- id: '10.2'
+  title: Nonconformity and corrective action
+  domain: '10'
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall address nonconformities by correcting them, dealing with consequences, and
+    preventing recurrence.
+  evidence:
+  - id: 10.2.1
+    kind: documentation
+    title: 'Nonconformity and corrective action: the management system''s own record'
+    required: core
+  covered_by:
+  - E012
+  - E013
+  coverage: full
+  coverage_note: >-
+    Organizations opting-in to the optional quality management system requirement will meet this control
+  crosswalks:
+    aiuc-1:
+    - E012
+    - E013
+- id: A.2.2
+  title: AI policy
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall document a policy for the development or use of AI systems.
+  evidence:
+  - id: A.2.2.1
+    kind: documentation
+    title: 'AI policy: the management system''s own record'
+    required: core
+  covered_by:
+  - E010
+  - E017
+  coverage: full
+  coverage_note: >-
+    AI Acceptable Use Policy and Transparency Policy collectively fulfil the ISO control. Organizations
+    may develop a standalone AI policy
+  crosswalks:
+    aiuc-1:
+    - E010
+    - E017
+- id: A.2.3
+  title: Alignment with other organizational policies
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall determine where other policies can be affected by or apply to the organization's
+    objectives with respect to AI systems.
+  evidence:
+  - id: A.2.3.1
+    kind: documentation
+    title: 'Alignment with other organizational policies: the management system''s own record'
+    required: core
+  covered_by:
+  - E012
+  - E008
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 does not require review of internal policies specifically, but require regulatory compliance
+    reviews and regular internal reviews
+  crosswalks:
+    aiuc-1:
+    - E012
+    - E008
+- id: A.2.4
+  title: Review of the AI policy
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The AI policy shall be reviewed at planned intervals or additionally as needed to ensure its continuing
+    suitability, adequacy and effectiveness.
+  evidence:
+  - id: A.2.4.1
+    kind: documentation
+    title: 'Review of the AI policy: the management system''s own record'
+    required: core
+  covered_by:
+  - E008
+  - E017
+  - E010
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E008
+    - E017
+    - E010
+- id: A.3.2
+  title: AI roles and responsibilities
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    Roles and responsibilities for AI shall be defined and allocated according to the needs of the organization.
+  evidence:
+  - id: A.3.2.1
+    kind: documentation
+    title: 'AI roles and responsibilities: the management system''s own record'
+    required: core
+  covered_by:
+  - E004
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E004
+- id: A.3.3
+  title: Reporting of concerns
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall define and put in place a process to report concerns about the organization's
+    role with respect to an AI system throughout its life cycle.
+  evidence:
+  - id: A.3.3.1
+    kind: documentation
+    title: 'Reporting of concerns: the management system''s own record'
+    required: core
+  covered_by:
+  - E008
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 does not require internal reporting processes specifically, but require regular internal reviews
+  crosswalks:
+    aiuc-1:
+    - E008
+- id: A.4.2
+  title: Resource documentation
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall identify and document relevant resources required for all activities at given
+    AI system life cycle stages and other AI-related activities relevant for the organization.
+  evidence:
+  - id: A.4.2.1
+    kind: documentation
+    title: 'Resource documentation: the management system''s own record'
+    required: core
+  covered_by:
+  - E017
+  - E013
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 does not require resource documentation specifically, but requires maintaining a centralized
+    repository of system documentation and documenting resource management for organizations opting in
+    to the optional quality management system requirement
+  crosswalks:
+    aiuc-1:
+    - E017
+    - E013
+- id: A.4.3
+  title: Data resources
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    As part of resource identification, the organization shall document information about the data resources
+    utilized for the AI system.
+  evidence:
+  - id: A.4.3.1
+    kind: documentation
+    title: 'Data resources: the management system''s own record'
+    required: core
+  covered_by:
+  - E017
+  coverage: full
+  coverage_note: >-
+    Fulfilled by organisations opting into the capability-specific requirement A103: Track training data
+    lineage. In addition, E017: Document system transparency policy lists documenting datasheets in control
+    activities
+  crosswalks:
+    aiuc-1:
+    - E017
+- id: A.4.4
+  title: Tooling resources
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    As part of resource identification, the organization shall document information about the tooling
+    resources utilized for the AI system.
+  evidence:
+  - id: A.4.4.1
+    kind: documentation
+    title: 'Tooling resources: the management system''s own record'
+    required: core
+  covered_by:
+  - E017
+  coverage: full
+  coverage_note: Included in transparency policy control activities
+  crosswalks:
+    aiuc-1:
+    - E017
+- id: A.4.5
+  title: System and computing resources
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    As part of resource identification, the organization shall document information about the system and
+    computing resources utilized for the AI system.
+  evidence:
+  - id: A.4.5.1
+    kind: documentation
+    title: 'System and computing resources: the management system''s own record'
+    required: core
+  covered_by:
+  - E017
+  coverage: full
+  coverage_note: Included in transparency policy control activities
+  crosswalks:
+    aiuc-1:
+    - E017
+- id: A.4.6
+  title: Human resources
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    As part of resource identification, the organization shall document information about the human resources
+    and their competences utilized for the development, deployment, operation, change management, maintenance,
+    transfer and decommissioning, as well as verification and integration of the AI system.
+  evidence:
+  - id: A.4.6.1
+    kind: documentation
+    title: 'Human resources: the management system''s own record'
+    required: core
+  covered_by:
+  - E004
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 is scoped to require documentation of clear accountability assigned for system changes
+  crosswalks:
+    aiuc-1:
+    - E004
+- id: A.5.2
+  title: AI system impact assessment process
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall establish a process to assess the potential consequences for individuals or
+    groups of individuals, or both, and societies that can result from the AI system throughout its life
+    cycle.
+  evidence:
+  - id: A.5.2.1
+    kind: documentation
+    title: 'AI system impact assessment process: the management system''s own record'
+    required: core
+  covered_by:
+  - C001
+  - E013
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 requires risk assessment and organizations can opt-in to the optional quality management system
+    requirement, but does not require impact assessment specifically
+  crosswalks:
+    aiuc-1:
+    - C001
+    - E013
+- id: A.5.3
+  title: Documentation of AI system impact assessments
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall document the results of AI system impact assessments and retain results for
+    a defined period.
+  evidence:
+  - id: A.5.3.1
+    kind: documentation
+    title: >-
+      Documentation of AI system impact assessments: the management system's own record
+    required: core
+  covered_by:
+  - C001
+  - E013
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 requires risk assessment and organizations can opt-in to the optional quality management system
+    requirement, but does not require impact assessment specifically
+  crosswalks:
+    aiuc-1:
+    - C001
+    - E013
+- id: A.5.4
+  title: Assessing AI system impact on individuals or groups of individuals
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall assess and document the potential impacts of AI systems to individuals or groups
+    of individuals throughout the system's life cycle.
+  evidence:
+  - id: A.5.4.1
+    kind: documentation
+    title: >-
+      Assessing AI system impact on individuals or groups of individuals: the management system's own
+      record
+    required: core
+  covered_by:
+  - C001
+  - C008
+  - E013
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 requires risk assessment and organizations can opt-in to the optional quality management system
+    requirement, but does not require impact assessment specifically
+  crosswalks:
+    aiuc-1:
+    - C001
+    - C008
+    - E013
+- id: A.5.5
+  title: Assessing societal impacts of AI systems
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall assess and document the potential societal impacts of their AI systems throughout
+    their life cycle.
+  evidence:
+  - id: A.5.5.1
+    kind: documentation
+    title: 'Assessing societal impacts of AI systems: the management system''s own record'
+    required: core
+  covered_by:
+  - C001
+  - F001
+  - F002
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 requires risk assessment, but does not require impact assessment specifically. Impact on society
+    is scoped to cyber and catastrophic misuse prevention
+  crosswalks:
+    aiuc-1:
+    - C001
+    - F001
+    - F002
+- id: A.6.1.2
+  title: Objectives for responsible development of AI system
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall identify and document objectives to guide the responsible development AI systems,
+    and take those objectives into account and integrate measures to achieve them in the development life
+    cycle.
+  evidence:
+  - id: A.6.1.2.1
+    kind: documentation
+    title: >-
+      Objectives for responsible development of AI system: the management system's own record
+    required: core
+  covered_by:
+  - C007
+  coverage: none
+  coverage_note: >-
+    Organizations pursuing AIUC-1 are naturally aligned with responsible AI principles, but AIUC-1 does
+    not require documentation of responsible AI objectives specifically
+  crosswalks:
+    aiuc-1:
+    - C007
+- id: A.6.1.3
+  title: Processes for responsible AI system design and development
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall define and document the specific processes for the responsible design and development
+    of the AI system.
+  evidence:
+  - id: A.6.1.3.1
+    kind: documentation
+    title: >-
+      Processes for responsible AI system design and development: the management system's own record
+    required: core
+  covered_by: []
+  coverage: none
+  coverage_note: >-
+    Organizations pursuing AIUC-1 are naturally aligned with responsible AI principles, but AIUC-1 does
+    not require documentation of responsible AI processes specifically
+  crosswalks:
+    aiuc-1: []
+- id: A.6.2.2
+  title: AI system requirements and specification
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall specify and document requirements for new AI systems or material enhancements
+    to existing systems.
+  evidence:
+  - id: A.6.2.2.1
+    kind: documentation
+    title: 'AI system requirements and specification: the management system''s own record'
+    required: core
+  covered_by:
+  - E004
+  - E007
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E004
+    - E007
+- id: A.6.2.3
+  title: Documentation of AI system design and development
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall document the AI system design and development based on organizational objectives,
+    documented requirements and specification criteria.
+  evidence:
+  - id: A.6.2.3.1
+    kind: documentation
+    title: >-
+      Documentation of AI system design and development: the management system's own record
+    required: core
+  covered_by:
+  - E017
+  - E013
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E017
+    - E013
+- id: A.6.2.4
+  title: AI system verification and validation
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall define and document verification and validation measures for the AI system
+    and specify criteria for their use.
+  evidence:
+  - id: A.6.2.4.1
+    kind: documentation
+    title: 'AI system verification and validation: the management system''s own record'
+    required: core
+  covered_by:
+  - E007
+  - C002
+  - C010
+  - C011
+  - C012
+  - D002
+  - D004
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E007
+    - C002
+    - C010
+    - C011
+    - C012
+    - D002
+    - D004
+- id: A.6.2.5
+  title: AI system deployment
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall document a deployment plan and ensure that appropriate requirements are met
+    prior to deployment.
+  evidence:
+  - id: A.6.2.5.1
+    kind: documentation
+    title: 'AI system deployment: the management system''s own record'
+    required: core
+  covered_by:
+  - C002
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - C002
+- id: A.6.2.6
+  title: AI system operation and monitoring
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall define and document the necessary elements for the ongoing operation of the
+    AI system. At the minimum, this should include system and performance monitoring, repairs, updates
+    and support.
+  evidence:
+  - id: A.6.2.6.1
+    kind: documentation
+    title: 'AI system operation and monitoring: the management system''s own record'
+    required: core
+  covered_by:
+  - C008
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 is focused on monitoring risk categories and does not have product performance monitoring/product
+    quality metrics in scope
+  crosswalks:
+    aiuc-1:
+    - C008
+- id: A.6.2.7
+  title: AI system technical documentation
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall determine what AI system technical documentation is needed for each relevant
+    category of interested parties, such as users, partners, supervisory authorities, and provide the
+    technical documentation to them in the appropriate form.
+  evidence:
+  - id: A.6.2.7.1
+    kind: documentation
+    title: 'AI system technical documentation: the management system''s own record'
+    required: core
+  covered_by:
+  - E014
+  - E013
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E014
+    - E013
+- id: A.6.2.8
+  title: AI system recording of event logs
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall determine at which phases of the AI system life cycle, record keeping of event
+    logs should be enabled, but at the minimum when the AI system is in use.
+  evidence:
+  - id: A.6.2.8.1
+    kind: documentation
+    title: 'AI system recording of event logs: the management system''s own record'
+    required: core
+  covered_by:
+  - E015
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E015
+- id: A.7.2
+  title: Data for development and enhancement of AI system
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall define, document and implement data management processes related to the development
+    of AI systems.
+  evidence:
+  - id: A.7.2.1
+    kind: documentation
+    title: >-
+      Data for development and enhancement of AI system: the management system's own record
+    required: core
+  covered_by:
+  - A001
+  coverage: full
+  coverage_note: >-
+    Met by organizations who opt-in to the capability specific requirements on training data quality and
+    lineage
+  crosswalks:
+    aiuc-1:
+    - A001
+- id: A.7.3
+  title: Acquisition of data
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall determine and document details about the acquisition and selection of the data
+    used in AI systems.
+  evidence:
+  - id: A.7.3.1
+    kind: documentation
+    title: 'Acquisition of data: the management system''s own record'
+    required: core
+  covered_by:
+  - A001
+  coverage: full
+  coverage_note: >-
+    Met by organizations who opt-in to the capability specific requirement E103: Track training data lineage
+  crosswalks:
+    aiuc-1:
+    - A001
+- id: A.7.4
+  title: Quality of data for AI systems
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall define and document requirements for data quality and ensure that data used
+    to develop and operate the AI system meet those requirements.
+  evidence:
+  - id: A.7.4.1
+    kind: documentation
+    title: 'Quality of data for AI systems: the management system''s own record'
+    required: core
+  covered_by: []
+  coverage: full
+  coverage_note: >-
+    Met by organizations who opt-in to the capability specific requirement on training data quality
+  crosswalks:
+    aiuc-1: []
+- id: A.7.5
+  title: Data provenance
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall define and document a process for recording the provenance of data used in
+    its AI systems over the life cycles of the data and the AI system.
+  evidence:
+  - id: A.7.5.1
+    kind: documentation
+    title: 'Data provenance: the management system''s own record'
+    required: core
+  covered_by:
+  - E011
+  - A007
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E011
+    - A007
+- id: A.7.6
+  title: Data preparation
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall define and document its criteria for selecting data preparations and the data
+    preparation methods to be used.
+  evidence:
+  - id: A.7.6.1
+    kind: documentation
+    title: 'Data preparation: the management system''s own record'
+    required: core
+  covered_by: []
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 does not require data preparation methods specifically, but covers training data quality more
+    broadly
+  crosswalks:
+    aiuc-1: []
+- id: A.8.2
+  title: System documentation and information for users
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall determine and provide the necessary information to users of the AI system.
+  evidence:
+  - id: A.8.2.1
+    kind: documentation
+    title: >-
+      System documentation and information for users: the management system's own record
+    required: core
+  covered_by:
+  - E014
+  - E016
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E014
+    - E016
+- id: A.8.3
+  title: External reporting
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall provide capabilities for interested parties to report adverse impacts of the
+    AI system.
+  evidence:
+  - id: A.8.3.1
+    kind: documentation
+    title: 'External reporting: the management system''s own record'
+    required: core
+  covered_by:
+  - C009
+  coverage: partial
+  coverage_note: >-
+    AIUC-1 requirement focuses on AI system users and does not require reporting capabilities for external
+    parties
+  crosswalks:
+    aiuc-1:
+    - C009
+- id: A.8.4
+  title: Communication of incidents
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall determine and document a plan for communicating incidents to users of the AI
+    system.
+  evidence:
+  - id: A.8.4.1
+    kind: documentation
+    title: 'Communication of incidents: the management system''s own record'
+    required: core
+  covered_by:
+  - E001
+  - E003
+  - E002
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E001
+    - E003
+    - E002
+- id: A.8.5
+  title: Information for interested parties
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall determine and document their obligations to reporting information about the
+    AI system to interested parties.
+  evidence:
+  - id: A.8.5.1
+    kind: documentation
+    title: 'Information for interested parties: the management system''s own record'
+    required: core
+  covered_by:
+  - E001
+  - E012
+  - E014
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E001
+    - E012
+    - E014
+- id: A.9.2
+  title: Processes for responsible use of AI systems
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall define and document the processes for the responsible use of AI systems.
+  evidence:
+  - id: A.9.2.1
+    kind: documentation
+    title: 'Processes for responsible use of AI systems: the management system''s own record'
+    required: core
+  covered_by:
+  - E010
+  - C007
+  - C008
+  coverage: full
+  coverage_note: >-
+    AIUC-1 requires an Acceptable Use policy which covers prohibited use cases to ensure responsible use
+    of AI systems. In addition, AIUC-1 has a number of concrete requirements ensuring responsible use
+    of the AI system including, e.g., flagging high risk recommendations for human review and monitoring
+    AI risk categories
+  crosswalks:
+    aiuc-1:
+    - E010
+    - C007
+    - C008
+- id: A.9.3
+  title: Objectives for responsible use of AI system
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall identify and document objectives to guide the responsible use of AI systems.
+  evidence:
+  - id: A.9.3.1
+    kind: documentation
+    title: 'Objectives for responsible use of AI system: the management system''s own record'
+    required: core
+  covered_by:
+  - E010
+  - C007
+  coverage: partial
+  coverage_note: >-
+    Partially covered by Acceptable Use Policy, but AIUC-1 does not require documenting objectives specifically
+  crosswalks:
+    aiuc-1:
+    - E010
+    - C007
+- id: A.9.4
+  title: Intended use of the AI system
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall ensure that the AI system is used according to the intended uses of the AI
+    system and its accompanying documentation.
+  evidence:
+  - id: A.9.4.1
+    kind: documentation
+    title: 'Intended use of the AI system: the management system''s own record'
+    required: core
+  covered_by:
+  - E010
+  - C008
+  coverage: full
+  coverage_note: >-
+    Acceptable Use Policy control activities require implementing detection and monitoring tools to track
+    policy violations
+  crosswalks:
+    aiuc-1:
+    - E010
+    - C008
+- id: A.10.2
+  title: Allocating responsibilities
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall ensure that responsibilities within their AI system life cycle are allocated
+    between the organization, its partners, suppliers, customers and third parties.
+  evidence:
+  - id: A.10.2.1
+    kind: documentation
+    title: 'Allocating responsibilities: the management system''s own record'
+    required: core
+  covered_by:
+  - E004
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E004
+- id: A.10.3
+  title: Suppliers
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall establish a process to ensure that its usage of services, products or materials
+    provided by suppliers aligns with the organization's approach to the responsible development and use
+    of AI systems.
+  evidence:
+  - id: A.10.3.1
+    kind: documentation
+    title: 'Suppliers: the management system''s own record'
+    required: core
+  covered_by:
+  - E006
+  coverage: full
+  crosswalks:
+    aiuc-1:
+    - E006
+- id: A.10.4
+  title: Customers
+  domain: A
+  application: mandatory
+  retired: false
+  cadence_months: 12
+  summary: >-
+    The organization shall ensure that its responsible approach to the development and use of AI systems
+    considers their customer expectations and needs.
+  evidence:
+  - id: A.10.4.1
+    kind: documentation
+    title: 'Customers: the management system''s own record'
+    required: core
+  covered_by: []
+  coverage: none
+  coverage_note: >-
+    AIUC-1 does not have specific requirements concerning customer expectations and needs, but covers
+    a broad range of safeguards required to protect users of AI systems including regular testing that
+    safeguards work
+  crosswalks:
+    aiuc-1: []

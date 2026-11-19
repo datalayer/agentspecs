@@ -5,34 +5,58 @@ title: Outputs
 
 # Output Specifications
 
-Output specs define standardized output channel/templates for agent results.
+An output spec is a format an agent's or an application's results may be
+delivered in — a notebook, a CSV file, components drawn under the answer — and
+the media types it comes as. The catalogue is `agentspecs/outputs/`, one YAML
+per format, and its media types are what an application may name under
+`interface.outputs` (`output_media_types()`; see
+[Applications](../../apps#outputs)).
 
-## Required Fields
+## Fields
 
-- `id`
-- `version`
-- `name`
-- `description`
-
-## Common Fields
-
-- format capabilities
-- template support
-- storage support
-- mime types
-- icon
-
-## Example
+| Field | Meaning |
+| --- | --- |
+| `id`, `version`, `name`, `description` | As on every spec. |
+| `mime_types` | The media types the format comes as. |
+| `supports_template` | Whether a template shapes it. |
+| `supports_storage` | Whether it can be kept, beside the answer. |
+| `enabled` | Whether it is enabled on the platform today. |
+| `icon` | An icon id for the lists. |
 
 ```yaml
-id: dashboard
+# outputs/csv.yaml
+id: csv
 version: 0.0.1
-name: Dashboard
-description: Deliver results as an interactive dashboard
-supports_template: true
+name: CSV
+description: >-
+  Deliver results as a CSV file for easy import into spreadsheets,
+  data pipelines, or other analysis tools.
+enabled: true
+
+icon: table
+supports_template: false
 supports_storage: true
 mime_types:
-  - text/html
-  - application/json
-icon: graph
+  - text/csv
 ```
+
+## The catalogue
+
+| Output | Media types | Enabled | What it is |
+| --- | --- | --- | --- |
+| `components` | `application/json+a2ui` | no | Deliver results as components of the catalog drawn under the answer: the sources as cards that open, a comparison as a table, a series as a chart, a choice as buttons that answer the application. Over A2A, one A2UI surface per artifact (`application/json+a2ui`, A2UI's media type). |
+| `csv` | `text/csv` | yes | Deliver results as a CSV file for easy import into spreadsheets, data pipelines, or other analysis tools. |
+| `dashboard` | `text/html`, `application/json` | no | Deliver results as an interactive dashboard with charts, tables, and filter controls rendered in the browser. |
+| `database` | `application/sql`, `application/json` | no | Write results back to a SQL or NoSQL store, where the rest of the business already reads from rather than into a file somebody must find. |
+| `document` | `application/pdf`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document`, `text/markdown` | no | Deliver results as a structured document (PDF, DOCX, or Markdown) suitable for sharing, archiving, or regulatory compliance. |
+| `email` | `text/html`, `application/pdf` | no | Send results as an email attachment or inline HTML body. Supports rich formatting with embedded tables and charts. |
+| `json` | `application/json` | yes | Deliver results as structured JSON data, suitable for programmatic consumption by APIs, pipelines, or dashboards. |
+| `notebook` | `application/x-ipynb+json` | no | Deliver results as a Jupyter notebook with executable cells, inline visualizations, and rich markdown narrative. |
+| `spreadsheet` | `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet` | no | Deliver results as an Excel spreadsheet with formatted tables, charts, and multiple sheets for structured analysis. |
+| `webhook` | `application/json`, `text/plain` | no | Push results to any HTTP endpoint as they are produced, so a run can hand its answer straight to whatever is waiting for it. |
+
+An application's answers start in words (`text/plain` or `text/markdown`), and
+may also come in the media types it names; served over A2A, they are its
+Agent Card's output modes. How an answer's blocks are drawn in a chat — a
+table, a chart, a spreadsheet drawn by Datalayer Cells — is shown by the
+*Example Output Agent*, under [Frontend Tools](../frontend-tools#an-agent-beside-a-spreadsheet).

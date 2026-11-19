@@ -1,0 +1,38 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A person signed in to Datalayer: the identity of record everywhere else.
+id: datalayer-person
+version: 0.0.1
+name: Datalayer person
+description: >-
+  A person signed in to Datalayer IAM, by password, GitHub, Google, LinkedIn or
+  Okta. The platform token stays inside Datalayer; anything a third party must
+  verify is exchanged for a short-lived, audience-bound token signed asymmetrically.
+subject: person
+provider: datalayer
+inbound:
+  kind: session
+  issuer: https://prod1.datalayer.run/api/iam/v1/oauth
+  algorithms: [HS256]
+  lifetime_seconds: 86400
+credentials:
+  vault: datalayer
+  providers:
+    - name: google-workspace
+      kind: oauth2
+      flow: user-federation
+      scopes: [https://www.googleapis.com/auth/gmail.readonly]
+    - name: github
+      kind: oauth2
+      flow: user-federation
+      scopes: [read:user, repo]
+custody:
+  keys: shared-secret
+  algorithm: HS256
+consent:
+  by: person
+  hosted_by: datalayer
+tags: [datalayer, person]
+icon: person
+emoji: "🧑"

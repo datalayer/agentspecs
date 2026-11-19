@@ -1,0 +1,30 @@
+id: dogwood-spend-per-session
+version: 0.0.1
+name: Spend per session, as Dogwood
+description: 'An example of a Dogwood set for the organization: the session''s model requests are
+  refused once the credits they asked for within 24 hours, the one being decided included, would
+  pass 1 000 (10 USD); a model request is the Shield''s action shield___model. The form `agent-shield
+  policy export --dogwood` gives a document''s spend limit, in log_only: decided and recorded, never
+  refused.'
+enabled: false
+tags:
+- policy
+- organization
+- dogwood
+- example
+policy:
+  scope: organization
+  version: 1
+  dogwood:
+    mode: log_only
+    policies: |
+      permit (principal, action, resource);
+
+      @id("spend")
+      forbid (principal, action == Datalayer::Action::"shield___model", resource)
+      when temporal {
+          exists (total: Long).
+              (sum v for (v: Long), (t: Timepoint).
+                  where (formerly within 24h (Datalayer::Action::"shield___model"::request{ eventResource: resource, input.credits: v } && tp(t)))) == total
+              && total > 1000
+      };

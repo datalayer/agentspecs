@@ -1,0 +1,82 @@
+---
+sidebar_position: 1
+title: Voices
+---
+
+# Voice Specifications
+
+A voice spec is a voice an agent or an application may speak its answers
+with: the engine and the [speech model](../speech-models) that speak it, the
+engine's own name for it, the languages it speaks and where it may run. The
+catalogue is `agentspecs/voices/`, one YAML per voice, read by
+`agentspecs.speech` (`list_voices()`, `get_voice()`).
+
+A voice is admitted by the licence of its weights and of the data it was
+trained on, checked against the licence register
+(`agentspecs/speech-licences.yaml`) as a speech model is. A voice must name a
+text-to-speech model of the catalogue, and may run only where that model runs;
+otherwise the catalogue refuses it when it loads.
+
+## Fields
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `version`, `name`, `description` | As on every spec. |
+| `engine` | The engine that speaks it: `kokoro`. |
+| `model` | The speech model it is a voice of, by id: a `tts` model. |
+| `voice` | The engine's own name for it (`af_heart`). |
+| `languages` | The languages it speaks, BCP 47 (`en-US`, `fr-FR`); at least one. |
+| `where` | Where it may run: `device`, `server`, `machine`; at least one, and only where its model runs. |
+| `licence` | `weights` (required), and `code` and `dataset` when they have their own: SPDX names. |
+| `attribution` | What the page listing the voices shows, when its licence asks. |
+| `watermark` | Whether what it says carries a provenance mark (default `false`). |
+| `sample` | A sentence to hear it say. |
+
+```yaml
+# voices/kokoro-af-heart.yaml
+id: kokoro-af-heart
+version: 0.0.1
+name: Heart
+description: A warm American English voice, Kokoro's best graded (A).
+engine: kokoro
+model: kokoro-82m
+voice: af_heart
+languages: [en-US]
+where: [server, machine]
+licence:
+  weights: Apache-2.0
+attribution: ""
+watermark: false
+sample: Hello. I read the answers aloud, sentence by sentence, as they are written.
+```
+
+A voice speaks a language when it is one of its `languages`, or the same
+language without the region: `fr` and `fr-FR` are both spoken by a `fr-FR`
+voice.
+
+## How it is referred to
+
+An application names its voice under `interface.voice.voice`, and an agent
+that is not an application under `voice.voice`, by the voice's id
+([Applications](../../apps#its-voice), [Agents](../#voice-mapping-optional)):
+
+```yaml
+interface:
+  voice:
+    enabled: true
+    output: on_request
+    voice: kokoro-af-heart   # the language's first when unsaid
+    language: en-US
+```
+
+When the block is enabled and its answers may be heard, a voice the catalogue
+does not have, or one that does not speak the block's language, is refused
+with a sentence.
+
+## The catalogue
+
+| Voice | Name | Model | Languages | Where | What it is |
+| --- | --- | --- | --- | --- | --- |
+| `kokoro-af-heart` | Heart | `kokoro-82m` (`af_heart`) | en-US | server, machine | A warm American English voice, Kokoro's best graded (A). |
+| `kokoro-bf-emma` | Emma | `kokoro-82m` (`bf_emma`) | en-GB | server, machine | A clear British English voice. |
+| `kokoro-ff-siwis` | Siwis | `kokoro-82m` (`ff_siwis`) | fr-FR | server, machine | A French voice, Kokoro's only one, trained on the SIWIS French Speech Synthesis Database, whose licence (CC BY 4.0) asks for its attribution. |

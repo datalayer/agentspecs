@@ -1,0 +1,49 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# MCP Server Specification: an Amazon Bedrock AgentCore Gateway (example)
+# The organization's APIs and Lambda functions as MCP tools, behind the trust
+# of its AgentCore identity.
+
+id: agentcore-gateway-example
+version: 0.0.1
+name: AgentCore Gateway (example)
+description: An Amazon Bedrock AgentCore Gateway, its targets as MCP tools — copy it with your gateway's URL
+documentation_url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway.html
+setup: "Copy this spec with your gateway's MCP URL. The gateway's inbound authorizer trusts Datalayer IAM ([the aws-agentcore-gateway identity](https://agentspecs.datalayer.tech/identities)): the runtime sends the token it obtains for the run as the bearer, and no key is written here."
+
+# A gateway is remote, reached over Streamable HTTP at its MCP URL. Its bearer
+# is minted for the run by the identity it trusts, never a header written here.
+transport: streamable-http
+url: "https://example-gateway-a1b2c3d4e5.gateway.bedrock-agentcore.us-east-1.amazonaws.com/mcp"
+auth:
+  kind: agentcore-gateway
+  identity: aws-agentcore-gateway
+
+# An example: off until copied with a real gateway.
+enabled: false
+envvars: []
+env: {}
+
+install:
+  type: remote
+  command: ""
+  note: "Nothing to install: an AgentCore Gateway in your AWS account, reached at its URL with a token Datalayer IAM signs."
+
+tags:
+  - aws
+  - agentcore
+  - gateway
+
+icon: "@primer/octicons-react:plug"
+emoji: "🔌"
+
+# What each tool does to the world (agentspecs.actions). A gateway's tools are
+# the organization's own targets: unknown here, and unknown is the most
+# restricted.
+actions:
+  checked: null
+  note: >-
+    A gateway's tools are its targets, the organization's own: list them on the running
+    gateway and class each one in your copy of this spec.
+  tools: {}

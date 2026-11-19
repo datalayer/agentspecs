@@ -34,6 +34,7 @@ from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 from ..cogs import _RAW_COGS, CogError, resolve_cog
+from ..colors import check_color
 from ..frames import FrameError, compose_frames
 from ..gates import GATE_CATALOGUE, GateSpec
 from ..guards import _RAW_GUARDS, GuardError, GuardStage, id_of, load_raw, resolve_guard
@@ -118,7 +119,17 @@ class OpSpec(BaseModel):
     tags: List[str] = Field(default_factory=list)
     icon: str = Field(default="workflow", description="Icon identifier")
     emoji: str = Field(default="⚙️", description="Emoji representation")
-    color: str = Field(default="", description="Accent colour")
+    color: str = Field(
+        default="",
+        description=(
+            "A name of the palette (`indigo`, `teal`, `primary`…), drawn in the current theme's value for it, or a hex (`#RGB`, `#RRGGBB`) where no name fits"
+        ),
+    )
+
+    @field_validator("color")
+    @classmethod
+    def _names_a_colour(cls, color: str) -> str:
+        return check_color(color)
 
     @field_validator("owner")
     @classmethod
@@ -161,7 +172,7 @@ def resolve_op(op: Dict[str, Any]) -> Dict[str, Any]:
     - ``cogs``: each Cog's id, the agent it extends, its Frames and its kind;
     - ``frames`` and ``lineage``: the workflow-level Frames, and every Frame
       that orients the Op — those, and the ones its Cogs carry;
-    - ``guards``: by stage, each Guard resolved with the guardrail it extends;
+    - ``guards``: by stage, each Guard resolved, naming the Policy it extends;
     - ``frame_guards``: the checks the Frames themselves declare;
     - ``gates``: each Gate, with the signals it reads;
     - ``track``: the Track, with its retention in days.

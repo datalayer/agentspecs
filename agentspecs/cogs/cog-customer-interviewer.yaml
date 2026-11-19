@@ -19,7 +19,7 @@ frames:
   - customer-research:0.0.1
 
 kind: context
-enabled: false
+enabled: true
 
 tags:
   - cog

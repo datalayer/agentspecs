@@ -1,0 +1,623 @@
+{
+  "name": "Demo Shop",
+  "taken": "2026-11-16",
+  "currency": "USD",
+  "about": "A snapshot for Datalayer's demo shop: nothing here is for sale, no order is charged or shipped.",
+  "sources": {
+    "texts": "DummyJSON (https://dummyjson.com/products, github.com/Ovi/DummyJSON): titles, descriptions, categories, prices, ratings and stock as they were on 16 November 2026.",
+    "photos": "Burst by Shopify (https://www.shopify.com/stock-photos), under the Burst Some Rights Reserved licence: free for commercial and noncommercial use, no attribution required, never sold as photos. Each matched to its product by Datalayer and served from images.datalayer.io. DummyJSON's own photos are not used: their terms of reuse are not stated."
+  },
+  "categories": [
+    "groceries",
+    "kitchen",
+    "home",
+    "sports",
+    "sunglasses"
+  ],
+  "products": [
+    {
+      "id": "apple",
+      "title": "Apple",
+      "description": "Fresh and crisp apples, perfect for snacking or incorporating into various recipes.",
+      "category": "groceries",
+      "price": 1.99,
+      "currency": "USD",
+      "rating": 4.19,
+      "stock": 8,
+      "image": "https://images.datalayer.io/landing/demo-shop/apple.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/apple.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/apple.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/16"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/red-apple-against-white-background",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "eggs",
+      "title": "Eggs",
+      "description": "Fresh eggs, a versatile ingredient for baking, cooking, or breakfast.",
+      "category": "groceries",
+      "price": 2.99,
+      "currency": "USD",
+      "rating": 2.53,
+      "stock": 9,
+      "image": "https://images.datalayer.io/landing/demo-shop/eggs.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/eggs.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/eggs.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/23"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/eleven-eggs-in-cardboard-carton-on-black-background",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "juice",
+      "title": "Juice",
+      "description": "Refreshing fruit juice, packed with vitamins and great for staying hydrated.",
+      "category": "groceries",
+      "price": 3.99,
+      "currency": "USD",
+      "rating": 3.94,
+      "stock": 50,
+      "image": "https://images.datalayer.io/landing/demo-shop/juice.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/juice.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/juice.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/29"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/a-glass-tumbler-of-juice-on-a-marble-counter",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "lemon",
+      "title": "Lemon",
+      "description": "Zesty and tangy lemons, versatile for cooking, baking, or making refreshing beverages.",
+      "category": "groceries",
+      "price": 0.79,
+      "currency": "USD",
+      "rating": 3.53,
+      "stock": 31,
+      "image": "https://images.datalayer.io/landing/demo-shop/lemon.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/lemon.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/lemon.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/31"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/lemon-on-yellow",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "strawberry",
+      "title": "Strawberry",
+      "description": "Sweet and succulent strawberries, great for snacking, desserts, or blending into smoothies.",
+      "category": "groceries",
+      "price": 3.99,
+      "currency": "USD",
+      "rating": 3.08,
+      "stock": 46,
+      "image": "https://images.datalayer.io/landing/demo-shop/strawberry.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/strawberry.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/strawberry.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/40"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/ripe-red-strawberries-in-a-white-bowl",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "black-whisk",
+      "title": "Black Whisk",
+      "description": "The Black Whisk is a kitchen essential for whisking and beating ingredients. Its ergonomic handle and sleek design make it a practical and stylish tool.",
+      "category": "kitchen",
+      "price": 9.99,
+      "currency": "USD",
+      "rating": 3.9,
+      "stock": 73,
+      "image": "https://images.datalayer.io/landing/demo-shop/black-whisk.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/black-whisk.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/black-whisk.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/50"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/kitchen-whisk-tool-in-hand",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "chopping-board",
+      "title": "Chopping Board",
+      "description": "The Chopping Board is an essential kitchen accessory for food preparation. Made from durable material, it provides a safe and hygienic surface for cutting and chopping.",
+      "category": "kitchen",
+      "price": 12.99,
+      "currency": "USD",
+      "rating": 3.7,
+      "stock": 14,
+      "image": "https://images.datalayer.io/landing/demo-shop/chopping-board.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/chopping-board.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/chopping-board.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/53"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/cutting-board-with-veg",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "knife",
+      "title": "Knife",
+      "description": "The Knife is an essential kitchen tool for chopping, slicing, and dicing. Its sharp blade and ergonomic handle make it a reliable choice for food preparation.",
+      "category": "kitchen",
+      "price": 14.99,
+      "currency": "USD",
+      "rating": 3.26,
+      "stock": 7,
+      "image": "https://images.datalayer.io/landing/demo-shop/knife.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/knife.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/knife.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/64"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/knife-chopping-vegetables",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "pan",
+      "title": "Pan",
+      "description": "The Pan is a versatile and essential cookware item for frying, sautéing, and cooking various dishes. Its non-stick coating ensures easy food release and cleanup.",
+      "category": "kitchen",
+      "price": 24.99,
+      "currency": "USD",
+      "rating": 2.79,
+      "stock": 90,
+      "image": "https://images.datalayer.io/landing/demo-shop/pan.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/pan.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/pan.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/68"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/wooden-spoon-mixes-meat-in-a-black-frying-pan",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "slotted-turner",
+      "title": "Slotted Turner",
+      "description": "The Slotted Turner is a kitchen utensil designed for flipping and turning food items. Its slotted design allows excess liquid to drain, making it ideal for frying and sautéing.",
+      "category": "kitchen",
+      "price": 8.99,
+      "currency": "USD",
+      "rating": 3.4,
+      "stock": 88,
+      "image": "https://images.datalayer.io/landing/demo-shop/slotted-turner.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/slotted-turner.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/slotted-turner.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/72"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/kitchen-utensils-on-counter",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "wooden-rolling-pin",
+      "title": "Wooden Rolling Pin",
+      "description": "The Wooden Rolling Pin is a classic kitchen tool for rolling out dough for baking. Its smooth surface and sturdy handles make it easy to achieve uniform thickness.",
+      "category": "kitchen",
+      "price": 11.99,
+      "currency": "USD",
+      "rating": 2.92,
+      "stock": 80,
+      "image": "https://images.datalayer.io/landing/demo-shop/wooden-rolling-pin.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/wooden-rolling-pin.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/wooden-rolling-pin.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/76"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/wooden-rolling-pin-lays-on-top-of-rolled-out-dough",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "house-showpiece-plant",
+      "title": "House Showpiece Plant",
+      "description": "The House Showpiece Plant is an artificial plant that brings a touch of nature to your home without the need for maintenance. It adds greenery and style to any space.",
+      "category": "home",
+      "price": 39.99,
+      "currency": "USD",
+      "rating": 4.67,
+      "stock": 28,
+      "image": "https://images.datalayer.io/landing/demo-shop/house-showpiece-plant.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/house-showpiece-plant.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/house-showpiece-plant.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/45"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/artificial-plant-in-white-pot",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "plant-pot",
+      "title": "Plant Pot",
+      "description": "The Plant Pot is a stylish container for your favorite plants. With a sleek design, it complements your indoor or outdoor garden, adding a modern touch to your plant display.",
+      "category": "home",
+      "price": 14.99,
+      "currency": "USD",
+      "rating": 3.01,
+      "stock": 59,
+      "image": "https://images.datalayer.io/landing/demo-shop/plant-pot.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/plant-pot.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/plant-pot.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/46"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/small-plant-sprouts-in-a-terracotta-pot",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "table-lamp",
+      "title": "Table Lamp",
+      "description": "The Table Lamp is a functional and decorative lighting solution for your living space. With a modern design, it provides both ambient and task lighting, enhancing the atmosphere.",
+      "category": "home",
+      "price": 49.99,
+      "currency": "USD",
+      "rating": 3.55,
+      "stock": 9,
+      "image": "https://images.datalayer.io/landing/demo-shop/table-lamp.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/table-lamp.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/table-lamp.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/47"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/silver-lamp-on-a-white-table-next-to-books",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "baseball-ball",
+      "title": "Baseball Ball",
+      "description": "The Baseball Ball is a standard baseball used in baseball games. It features a durable leather cover and is designed for pitching, hitting, and fielding in the game of baseball.",
+      "category": "sports",
+      "price": 8.99,
+      "currency": "USD",
+      "rating": 2.57,
+      "stock": 100,
+      "image": "https://images.datalayer.io/landing/demo-shop/baseball-ball.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/baseball-ball.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/baseball-ball.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/138"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/baseball-bat-ball",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "baseball-glove",
+      "title": "Baseball Glove",
+      "description": "The Baseball Glove is a protective glove worn by baseball players. It is designed to catch and field the baseball, providing players with comfort and control during the game.",
+      "category": "sports",
+      "price": 24.99,
+      "currency": "USD",
+      "rating": 3.96,
+      "stock": 22,
+      "image": "https://images.datalayer.io/landing/demo-shop/baseball-glove.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/baseball-glove.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/baseball-glove.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/139"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/baseball-glove",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "football",
+      "title": "Football",
+      "description": "The Football, also known as a soccer ball, is the standard ball used in the sport of football (soccer). It is designed for kicking and passing in the game.",
+      "category": "sports",
+      "price": 17.99,
+      "currency": "USD",
+      "rating": 3.28,
+      "stock": 96,
+      "image": "https://images.datalayer.io/landing/demo-shop/football.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/football.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/football.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/147"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/soccer-ball-in-grass",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "tennis-ball",
+      "title": "Tennis Ball",
+      "description": "The Tennis Ball is a standard ball used in the sport of tennis. It is designed for bouncing and hitting with tennis rackets during matches or practice sessions.",
+      "category": "sports",
+      "price": 6.99,
+      "currency": "USD",
+      "rating": 4.06,
+      "stock": 28,
+      "image": "https://images.datalayer.io/landing/demo-shop/tennis-ball.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/tennis-ball.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/tennis-ball.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/151"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/single-tennis-ball-sits-in-the-sun-on-the-court",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "tennis-racket",
+      "title": "Tennis Racket",
+      "description": "The Tennis Racket is an essential piece of equipment used in the sport of tennis. It features a frame with strings and a grip, allowing players to hit the tennis ball.",
+      "category": "sports",
+      "price": 49.99,
+      "currency": "USD",
+      "rating": 4.03,
+      "stock": 6,
+      "image": "https://images.datalayer.io/landing/demo-shop/tennis-racket.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/tennis-racket.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/tennis-racket.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/152"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/tennis-racket-ready-to-play",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "volleyball",
+      "title": "Volleyball",
+      "description": "The Volleyball is a standard ball used in the sport of volleyball. It is designed for passing, setting, and spiking over the net during volleyball matches.",
+      "category": "sports",
+      "price": 11.99,
+      "currency": "USD",
+      "rating": 3.84,
+      "stock": 0,
+      "image": "https://images.datalayer.io/landing/demo-shop/volleyball.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/volleyball.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/volleyball.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/153"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/volleyball-close-up",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      }
+    },
+    {
+      "id": "black-sun-glasses",
+      "title": "Black Sun Glasses",
+      "description": "The Black Sun Glasses are a classic and stylish choice, featuring a sleek black frame and tinted lenses. They provide both UV protection and a fashionable look.",
+      "category": "sunglasses",
+      "price": 29.99,
+      "currency": "USD",
+      "rating": 4.41,
+      "stock": 60,
+      "image": "https://images.datalayer.io/landing/demo-shop/black-sun-glasses.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/black-sun-glasses.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/black-sun-glasses.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/154"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/sunglasses-making-a-splash",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      },
+      "brand": "Fashion Shades"
+    },
+    {
+      "id": "classic-sun-glasses",
+      "title": "Classic Sun Glasses",
+      "description": "The Classic Sun Glasses offer a timeless design with a neutral frame and UV-protected lenses. These sunglasses are versatile and suitable for various occasions.",
+      "category": "sunglasses",
+      "price": 24.99,
+      "currency": "USD",
+      "rating": 3.86,
+      "stock": 1,
+      "image": "https://images.datalayer.io/landing/demo-shop/classic-sun-glasses.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/classic-sun-glasses.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/classic-sun-glasses.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/155"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/summer-sunglasses",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      },
+      "brand": "Fashion Shades"
+    },
+    {
+      "id": "party-glasses",
+      "title": "Party Glasses",
+      "description": "The Party Glasses are designed to add flair to your party outfit. With unique shapes or colorful frames, they're perfect for adding a playful touch to your look during celebrations.",
+      "category": "sunglasses",
+      "price": 19.99,
+      "currency": "USD",
+      "rating": 2.79,
+      "stock": 86,
+      "image": "https://images.datalayer.io/landing/demo-shop/party-glasses.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/party-glasses.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/party-glasses.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/157"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/light-blue-sunglass-frames-against-white",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      },
+      "brand": "Fashion Fun"
+    },
+    {
+      "id": "sunglasses",
+      "title": "Sunglasses",
+      "description": "The Sunglasses offer a classic and simple design with a focus on functionality. These sunglasses provide essential UV protection while maintaining a timeless look.",
+      "category": "sunglasses",
+      "price": 22.99,
+      "currency": "USD",
+      "rating": 3.02,
+      "stock": 27,
+      "image": "https://images.datalayer.io/landing/demo-shop/sunglasses.jpg",
+      "thumbnail": "https://images.datalayer.io/landing/demo-shop/sunglasses.jpg",
+      "images": [
+        "https://images.datalayer.io/landing/demo-shop/sunglasses.jpg"
+      ],
+      "texts": {
+        "source": "DummyJSON",
+        "url": "https://dummyjson.com/products/158"
+      },
+      "photo": {
+        "source": "Burst by Shopify",
+        "url": "https://www.shopify.com/stock-photos/photos/reflective-sunglasses",
+        "licence": "Burst Some Rights Reserved",
+        "licence_url": "https://www.shopify.com/stock-photos/licenses/shopify-some-rights-reserved"
+      },
+      "brand": "Fashion Shades"
+    }
+  ]
+}

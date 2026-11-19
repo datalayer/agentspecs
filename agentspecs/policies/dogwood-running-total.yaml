@@ -1,0 +1,29 @@
+id: dogwood-running-total
+version: 0.0.1
+name: A running total of payments
+description: 'An example of a Dogwood set for the organization: payments are permitted until their
+  total within 24 hours of the session, the one being decided included, would pass 5 000.00 (500 000
+  cents); the payment that would cross it is refused. Amounts are integers (cents): Dogwood sums
+  and orders integers alone.'
+enabled: false
+tags:
+- policy
+- organization
+- dogwood
+- example
+policy:
+  scope: organization
+  version: 1
+  dogwood:
+    mode: enforce
+    policies: |
+      permit (principal, action, resource);
+
+      @id("payments total at most 500000 cents a day")
+      forbid (principal, action == Datalayer::Action::"payments___pay", resource)
+      when temporal {
+          exists (total: Long).
+              (sum amount for (amount: Long), (t: Timepoint).
+                  where (formerly within 24h (Datalayer::Action::"payments___pay"::request{ eventResource: resource, input.amountCents: amount } && tp(t)))) == total
+              && total > 500000
+      };

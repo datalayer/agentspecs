@@ -36,6 +36,8 @@ from agentspecs.guards import (
     get_resolved_guard,
     guards_extending,
     list_guards,
+    policy_of,
+    policy_ref,
     resolve_guard,
 )
 from agentspecs.ops import (
@@ -48,6 +50,7 @@ from agentspecs.ops import (
     ops_using,
     resolve_op,
 )
+from agentspecs.policies import POLICY_CATALOGUE, PolicySpec
 from agentspecs.tracks import (
     REQUIRED_ITEMS,
     TRACK_CATALOGUE,
@@ -71,7 +74,7 @@ def _guard(**fields) -> dict:
     return {
         "id": "g",
         "name": "G",
-        "extends": "default-platform-user:0.0.1",
+        "extends": "default:0.0.1",
         "category": "algorithmic",
         "stages": ["post_run"],
         "check": "something",
@@ -80,62 +83,101 @@ def _guard(**fields) -> dict:
 
 
 def _gate(**fields) -> dict:
-    return {"id": "t", "name": "T", "guards": ["confidence-guard"], "when": "confidence < 0.8", "then": "pause", **fields}
+    return {
+        "id": "t",
+        "name": "T",
+        "guards": ["confidence-guard"],
+        "when": "confidence < 0.8",
+        "then": "pause",
+        **fields,
+    }
 
 
 def _track(**fields) -> dict:
-    return {"id": "t", "name": "T", "retain_for": "1_years", "include": [item.value for item in REQUIRED_ITEMS], **fields}
+    return {
+        "id": "t",
+        "name": "T",
+        "retain_for": "1_years",
+        "include": [item.value for item in REQUIRED_ITEMS],
+        **fields,
+    }
 
 
-class TestAGuardExtendsAGuardrail:
-    def test_every_guard_extends_a_guardrail_of_the_catalogue(self):
-        guardrails = {path.stem for path in (ROOT / "guardrails").glob("*.yaml")}
+class TestAGuardExtendsAPolicy:
+    def test_every_guard_extends_a_policy_of_the_catalogue(self):
         assert len(list_guards()) == len(GUARD_CATALOGUE) >= 12
         for guard in list_guards():
-            assert guard.extends.split(":")[0] in guardrails, guard.id
+            assert guard.extends.split(":")[0] in POLICY_CATALOGUE, guard.id
             assert guard.check.strip() and guard.description.strip()
+            assert "guardrail" not in (guard.description + guard.check).lower(), guard.id
 
     def test_the_seven_categories_and_the_four_stages_are_all_covered(self):
         assert {guard.category for guard in list_guards()} == set(GuardCategory)
         assert {stage for guard in list_guards() for stage in guard.stages} == set(GuardStage)
 
-    def test_a_resolved_guard_carries_the_policy_it_verifies(self):
-        guardrail = _raw("guardrails", "restricted-viewer")
+    def test_a_resolved_guard_names_the_policy_it_verifies_and_carries_nothing_of_it(self):
         guard = get_resolved_guard("sensitive-data-guard:0.0.1")
-        assert guard["guardrail"] == "restricted-viewer"
-        for inherited in ("permissions", "data_scope", "data_handling", "token_limits", "approval_policy"):
-            assert guard[inherited] == guardrail[inherited]
-        # Its own identity and what it adds; not the guardrail's name.
+        assert guard["policy"] == "organization-baseline:0.0.1"
+        assert "extends" not in guard
+        # The Policy's document is not merged in: it is read through `policy_of`.
+        assert not {"rules", "limits", "permissions", "data_scope", "token_limits"} & set(guard)
         assert (guard["id"], guard["name"]) == ("sensitive-data-guard", "Sensitive Data Guard")
         assert guard["category"] == "policy-safety" and guard["stages"] == ["in_flight", "post_run"]
         assert guard["signals"][0]["name"] == "sensitive_data_detected"
-        assert "extends" not in guard
+        assert guard["tags"] == ["privacy", "pii", "secrets"] and guard["icon"] == "shield-check"
 
-    def test_a_guard_may_override_what_the_guardrail_says(self):
-        guard = resolve_guard(_guard(token_limits={"per_run": "1K"}))
-        assert guard["token_limits"] == {"per_run": "1K"}
-        assert guard["permissions"] == _raw("guardrails", "default-platform-user")["permissions"]
+    def test_policy_of_gives_the_policy_spec_written_or_resolved(self):
+        written = policy_of(get_guard("permission-guard"))
+        assert isinstance(written, PolicySpec) and written.id == "default"
+        assert written is POLICY_CATALOGUE["default"]
+        resolved = policy_of(get_resolved_guard("sensitive-data-guard"))
+        assert resolved.id == "organization-baseline" and resolved.scope == "organization"
+        assert policy_of({"id": "g", "extends": "default"}).version == "0.0.1"
+        with pytest.raises(GuardError, match="names no Policy"):
+            policy_of({"id": "g"})
+        with pytest.raises(GuardError, match=r"Guard 'g' extends 'nope' is not a Policy"):
+            policy_of({"id": "g", "policy": "nope"})
 
-    def test_a_resolved_guard_is_the_callers(self):
-        first = get_resolved_guard("permission-guard")
-        first["permissions"]["write:data"] = True
-        assert get_resolved_guard("permission-guard")["permissions"]["write:data"] is False
+    def test_a_reference_resolves_to_the_catalogues_id_and_version(self):
+        assert policy_ref("default") == "default:0.0.1"
+        assert policy_ref("organization-baseline:0.0.1") == "organization-baseline:0.0.1"
+        with pytest.raises(ValueError, match="names a version the Policy 'default' does not have"):
+            policy_ref("default:0.0.9")
 
-    def test_a_guard_that_extends_nothing_or_no_guardrail_is_refused(self):
+    def test_a_guard_that_extends_nothing_or_no_policy_is_refused(self):
         with pytest.raises(ValidationError):
             GuardSpec(**{key: value for key, value in _guard().items() if key != "extends"})
-        with pytest.raises(GuardError, match="not a guardrail"):
-            resolve_guard(_guard(extends="worker-crawler:0.0.1"))
+        with pytest.raises(ValidationError, match="is not a Policy of the catalogue"):
+            GuardSpec(**_guard(extends="worker-crawler:0.0.1"))
+        with pytest.raises(ValidationError, match="is not a Policy of the catalogue"):
+            resolve_guard(_guard(extends="default-platform-user:0.0.1"))
+        with pytest.raises(ValidationError, match="does not have"):
+            resolve_guard(_guard(extends="default:0.0.2"))
+
+    def test_a_guard_carries_no_field_of_a_policy(self):
+        with pytest.raises(ValidationError):
+            GuardSpec(**_guard(permissions={"read:data": True}))
+        with pytest.raises(ValidationError):
+            GuardSpec(**_guard(rules=[]))
+        assert resolve_guard(_guard())["policy"] == "default:0.0.1"
 
     def test_a_guard_names_a_stage_a_category_and_a_check(self):
-        for broken in (_guard(stages=[]), _guard(stages=["post_run", "post_run"]), _guard(category="vibes"), _guard(check="  ")):
+        for broken in (
+            _guard(stages=[]),
+            _guard(stages=["post_run", "post_run"]),
+            _guard(category="vibes"),
+            _guard(check="  "),
+        ):
             with pytest.raises(ValidationError):
                 GuardSpec(**broken)
         with pytest.raises(ValidationError):
             GuardSpec(**_guard(signals=[{"name": "s", "type": "list"}]))
 
-    def test_the_guards_of_a_guardrail_are_found(self):
-        assert [guard.id for guard in guards_extending("restricted-viewer:0.0.1")] == ["sensitive-data-guard"]
+    def test_the_guards_of_a_policy_are_found(self):
+        assert [guard.id for guard in guards_extending("organization-baseline:0.0.1")] == [
+            "sensitive-data-guard"
+        ]
+        assert len(guards_extending("default")) == len(GUARD_CATALOGUE) - 1
         assert get_guard("no-such-guard") is None and get_resolved_guard("no-such-guard") is None
 
 
@@ -161,7 +203,10 @@ class TestAGateDecides:
 
     def test_a_condition_is_read_or_refused(self):
         assert signals_of("confidence < 0.80") == ["confidence"]
-        assert signals_of("schema_valid == false or unsupported_claims > 0") == ["schema_valid", "unsupported_claims"]
+        assert signals_of("schema_valid == false or unsupported_claims > 0") == [
+            "schema_valid",
+            "unsupported_claims",
+        ]
         assert signals_of("a and b or a") == ["a", "b"]
         assert signals_of("vendor_risk == high") == ["vendor_risk"]
         assert signals_of("always") == []
@@ -172,11 +217,15 @@ class TestAGateDecides:
     def test_a_gate_that_hands_over_to_a_person_says_to_whom(self):
         with pytest.raises(ValidationError, match="reviewers"):
             GateSpec(**_gate(then="human_review_required"))
-        assert GateSpec(**_gate(then="human_review_required", reviewers=["op-owner"])).reviewers == ["op-owner"]
+        assert GateSpec(
+            **_gate(then="human_review_required", reviewers=["op-owner"])
+        ).reviewers == ["op-owner"]
         # Whichever branch hands over.
         with pytest.raises(ValidationError, match="decides human_approval_required"):
             GateSpec(**_gate(then="pause", otherwise="human_approval_required"))
-        assert GateSpec(**_gate(then="pause", otherwise="stop_and_escalate", reviewers=["op-owner"]))
+        assert GateSpec(
+            **_gate(then="pause", otherwise="stop_and_escalate", reviewers=["op-owner"])
+        )
 
     def test_a_gate_that_retries_says_how_often_and_one_that_decides_nothing_is_refused(self):
         with pytest.raises(ValidationError, match="max_retries"):
@@ -222,7 +271,15 @@ class TestATrackKeepsEvidence:
     def test_a_track_keeps_what_makes_a_record(self):
         assert TrackSpec(**_track()).include == list(REQUIRED_ITEMS)
         with pytest.raises(ValidationError, match="missing: gate_decisions"):
-            TrackSpec(**_track(include=[item.value for item in REQUIRED_ITEMS if item is not TrackItem.GATE_DECISIONS]))
+            TrackSpec(
+                **_track(
+                    include=[
+                        item.value
+                        for item in REQUIRED_ITEMS
+                        if item is not TrackItem.GATE_DECISIONS
+                    ]
+                )
+            )
         with pytest.raises(ValidationError):
             TrackSpec(**_track(include=[*[item.value for item in REQUIRED_ITEMS], "vibes"]))
 
@@ -246,11 +303,14 @@ class TestTheComprehensiveOp:
         assert len(op["gates"]) == 8
         assert op["track"]["id"] == "financial-reporting" and op["track"]["retention_days"] == 2555
 
-    def test_its_guards_are_of_all_seven_categories_each_with_its_guardrail(self):
+    def test_its_guards_are_of_all_seven_categories_each_naming_its_policy(self):
         guards = [guard for stage in get_resolved_op(OP)["guards"].values() for guard in stage]
-        assert {guard["category"] for guard in guards} == {category.value for category in GuardCategory}
+        assert {guard["category"] for guard in guards} == {
+            category.value for category in GuardCategory
+        }
         for guard in guards:
-            assert guard["guardrail"] and "permissions" in guard
+            assert guard["policy"].split(":")[0] in POLICY_CATALOGUE and "extends" not in guard
+            assert policy_of(guard).id == guard["policy"].split(":")[0]
 
     def test_it_carries_the_guards_its_frames_declare(self):
         declared = [guard["id"] for guard in get_resolved_op(OP)["frame_guards"]]
@@ -262,10 +322,18 @@ class TestTheComprehensiveOp:
         ran = {guard["id"] for stage in op["guards"].values() for guard in stage}
         for gate in op["gates"]:
             assert {ref.split(":")[0] for ref in gate["guards"]} <= ran
-        assert [gate["id"] for gate in op["gates"]][-2:] == ["release-approval", "quality-drift-review"]
+        assert [gate["id"] for gate in op["gates"]][-2:] == [
+            "release-approval",
+            "quality-drift-review",
+        ]
 
     def test_what_names_a_spec_is_found(self):
-        for ref in ("cog-sales-pipeline-board-report", "schema-guard:0.0.1", "release-approval", "financial-reporting"):
+        for ref in (
+            "cog-sales-pipeline-board-report",
+            "schema-guard:0.0.1",
+            "release-approval",
+            "financial-reporting",
+        ):
             assert [op.id for op in ops_using(ref)] == [OP]
         assert ops_using("standard") == []
 
@@ -308,15 +376,21 @@ class TestAnOpIsNotCompleteWithoutItsValidation:
 
     def test_a_guard_is_run_at_a_stage_it_runs_at(self):
         guards = {**_raw("ops", OP)["guards"], "preflight": ["schema-guard:0.0.1"]}
-        with pytest.raises(OpError, match="runs Guard 'schema-guard' at preflight; it runs at post_run"):
+        with pytest.raises(
+            OpError, match="runs Guard 'schema-guard' at preflight; it runs at post_run"
+        ):
             resolve_op(self._op(guards=guards))
         with pytest.raises(OpError, match="Guard 'ghost', which is not defined"):
             resolve_op(self._op(guards={**guards, "preflight": ["ghost"]}))
 
     def test_a_gate_reads_a_guard_the_op_runs(self):
         guards = dict(_raw("ops", OP)["guards"])
-        guards["post_run"] = [ref for ref in guards["post_run"] if not ref.startswith("consensus-guard")]
-        with pytest.raises(OpError, match="reads Guard 'consensus-guard:0.0.1', which the Op does not run"):
+        guards["post_run"] = [
+            ref for ref in guards["post_run"] if not ref.startswith("consensus-guard")
+        ]
+        with pytest.raises(
+            OpError, match="reads Guard 'consensus-guard:0.0.1', which the Op does not run"
+        ):
             resolve_op(self._op(guards=guards))
 
     def test_gates_are_listed_in_the_order_of_the_stages(self):
@@ -335,13 +409,20 @@ class TestAnOpIsNotCompleteWithoutItsValidation:
     def test_an_op_that_is_offered_has_workers_that_are(self):
         # The example is a draft, as its Cog is: that resolves.
         assert get_resolved_op(OP)["enabled"] is False
-        with pytest.raises(OpError, match="is enabled and names Cog 'cog-sales-pipeline-board-report', which is not"):
+        with pytest.raises(
+            OpError,
+            match="is enabled and names Cog 'cog-sales-pipeline-board-report', which is not",
+        ):
             resolve_op(self._op(enabled=True))
         assert resolve_op(self._op(enabled=True, cogs=["cog-crawler:0.0.1"]))["enabled"] is True
 
     def test_a_gate_does_not_decide_before_its_guard_has_run(self):
         guards = dict(_raw("ops", OP)["guards"])
         # The sensitive-data Gate decides in flight; run its Guard post-run only.
-        guards["in_flight"] = [ref for ref in guards["in_flight"] if not ref.startswith("sensitive-data-guard")]
-        with pytest.raises(OpError, match="decides at in_flight, before Guard 'sensitive-data-guard' has run"):
+        guards["in_flight"] = [
+            ref for ref in guards["in_flight"] if not ref.startswith("sensitive-data-guard")
+        ]
+        with pytest.raises(
+            OpError, match="decides at in_flight, before Guard 'sensitive-data-guard' has run"
+        ):
             resolve_op(self._op(guards=guards))

@@ -1,0 +1,36 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A page UI (the user, 18 November 2026: "the N/E/S/W sliding panels are only
+# for notices: info, success, warning, error and the like. They are short,
+# dismissible, triggered by the agent through one frontend tool"): it hands
+# the chat's agent `show_notice` (agentspecs/frontend-tools/notices.yaml),
+# run in the page, slides the notice in from an edge of the view, inside its
+# bounds, and draws each call as a line in the conversation. Words only.
+
+id: "notices"
+version: 0.0.1
+name: Notices
+description: >-
+  A short notice the agent slides in from an edge of the chat for a few seconds: info, success, warning or error, a title and a line, said to come from the agent.
+emoji: "🔔"
+octicon: bell
+plugin: "@datalayer/loop-plugin-notices"
+folder: "notices"
+# Its Contributions: the Slots it fills, the Contribution Points it
+# contributes to, the Commands it adds (the composer's `/` commands by name).
+contributions:
+  slots:
+  - "loop.viewOverlay"
+  points:
+  - "loop.chat.extras"
+  - "reactor.ui.renderer"
+  - "reactor.ui.toolBinding"
+  commands: []
+# The Contribution Points it offers to other plugins.
+contribution_points: []
+# The UI renderers (agentspecs/ui-renderers) it may be exposed through.
+renderers: []
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- message

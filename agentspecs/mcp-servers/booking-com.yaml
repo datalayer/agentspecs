@@ -1,0 +1,88 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# MCP Server Specification: Booking.com
+# Booking.com's own MCP server for its partners (the user, 15 November 2026,
+# for the Traveller): stays searched and compared — location, price, amenities,
+# cancellation terms — each with its link at Booking.com.
+#
+# What Booking.com offers agents today (read off
+# https://developers.booking.com/mcp-server/docs on 15 November 2026):
+# - `https://demandapi-mcp.booking.com/v1/sp/mcp/` (the trailing slash kept),
+#   Streamable HTTP, for approved partners only. Without credentials it answers
+#   401 Unauthorized (probed 15 November 2026).
+# - Two headers on every request: `x-booking-affiliate-id`, the partner's
+#   affiliate id (digits), and `x-booking-authorization`, the Demand API key as
+#   issued, with no `Bearer ` prefix.
+# - The tools depend on what Booking.com enabled for the affiliate account;
+#   the one its documentation names is `accommodations_search`. An empty
+#   tools/list means none is enabled for the account, not a bad key.
+# - Access: partner onboarding with Booking.com (the Affiliate Partner
+#   Programme, https://www.booking.com/affiliate-program/v2/index.html, then
+#   the Demand API), which issues the affiliate id and the Demand API key; the
+#   Account Manager confirms which tools the account has.
+#
+# Datalayer holds no Booking.com partner access: a person who has their own
+# sets the two secrets. Without them the Traveller leaves it out and finds stays
+# with Google Maps, saying so. The tools are not classed: nobody without
+# partner access can list them, and unknown is the most restricted.
+
+id: booking-com
+version: 0.0.1
+name: Booking.com
+description: >-
+  Stays from Booking.com — hotels and apartments compared by location, price,
+  amenities and cancellation terms — for Booking.com partners, with their
+  affiliate id and Demand API key
+documentation_url: https://developers.booking.com/mcp-server/docs/about
+signup_url: https://www.booking.com/affiliate-program/v2/index.html
+api_key_url: https://developers.booking.com/mcp-server/docs/get-started
+setup: "For Booking.com partners only: once your partner onboarding is done, Booking.com issues an affiliate id and a Demand API key. Paste them into `BOOKING_AFFILIATE_ID` and `BOOKING_DEMAND_API_KEY`; the runtime reaches [Booking.com's MCP server](https://developers.booking.com/mcp-server/docs/get-started) with them. Your Account Manager says which tools your account has. Without partner access, leave it: the Traveller finds stays with Google Maps instead."
+
+transport: streamable-http
+url: "https://demandapi-mcp.booking.com/v1/sp/mcp/"
+headers:
+  x-booking-affiliate-id: "${BOOKING_AFFILIATE_ID}"
+  x-booking-authorization: "${BOOKING_DEMAND_API_KEY}"
+
+# On for those who hold partner access: the endpoint answers and refuses
+# without it (15 November 2026). Its tools have not been listed.
+enabled: true
+
+envvars:
+  - BOOKING_AFFILIATE_ID:0.0.1
+  - BOOKING_DEMAND_API_KEY:0.0.1
+
+env: {}
+
+install:
+  type: remote
+  command: ""
+  note: "Nothing to install: Booking.com's hosted MCP server, reached at its URL with your affiliate id and Demand API key."
+
+tags:
+  - travel
+  - accommodation
+  - hotels
+  - booking
+
+icon: "@primer/octicons-react:home"
+emoji: "🏨"
+
+# What each tool does to the world (agentspecs.actions).
+actions:
+  checked: null
+  note: >-
+    Not read off the running server: listing its tools needs partner access,
+    which Datalayer does not hold. Booking.com's documentation names one tool,
+    accommodations_search, a search. A tool not classed here is unknown, and
+    unknown is the most restricted: run it with partner credentials, list its
+    tools, and class each one here.
+  tools: {}
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: trip-options
+    renderer: a2ui
+  - plugin: trip-budget

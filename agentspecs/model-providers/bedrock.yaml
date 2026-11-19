@@ -14,3 +14,7 @@ terms_url: "https://aws.amazon.com/service-terms/"
 privacy_url: "https://aws.amazon.com/privacy/"
 data_usage_url: "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html"
 hosting: cloud
+# Datalayer holds the account: a runtime's calls go through ai-inference, with
+# a Datalayer token, metered in credits; the provider's key never leaves the
+# service.
+via: ai-inference

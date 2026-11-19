@@ -1,0 +1,27 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# An organization's own identity provider, signing its people in to Datalayer.
+id: organization-oidc
+version: 0.0.1
+name: Organization sign-in (OIDC)
+description: >-
+  An organization's own OpenID Connect provider (Entra ID, Okta, Google), registered
+  on Datalayer for enterprise sign-in and SCIM: its issuer is checked against its
+  discovery document and its keys.
+subject: organization
+provider: oidc
+inbound:
+  kind: jwt
+  issuer: https://login.example.com
+  discovery_url: https://login.example.com/.well-known/openid-configuration
+  algorithms: [RS256]
+custody:
+  keys: provider
+  algorithm: RS256
+consent:
+  by: organization
+  hosted_by: provider
+tags: [enterprise, sso]
+icon: organization
+emoji: "🏢"

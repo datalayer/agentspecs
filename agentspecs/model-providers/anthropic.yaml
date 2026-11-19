@@ -14,3 +14,7 @@ terms_url: "https://www.anthropic.com/legal/commercial-terms"
 privacy_url: "https://www.anthropic.com/legal/privacy"
 data_usage_url: "https://www.anthropic.com/legal/aup"
 hosting: cloud
+# The agent calls the provider itself, with the person's own key (the models'
+# required_env_vars): Datalayer holds no account with it, so no call of this
+# provider goes through ai-inference.
+via: direct

@@ -8,6 +8,20 @@ domain: accounting
 description: >-
   Work with Odoo accounting data to reconcile invoices and payments, analyze
   journal balances, and prepare close-ready summaries.
+# What it does on its own, in one line, and what it is as one Markdown
+# document, for a page that presents it (a public demo repeats it).
+tagline: Matches payments, checks balances
+presentation: |
+  Work with Odoo accounting data to reconcile invoices and payments, analyze
+  journal balances, and prepare close-ready summaries.
+
+  - Reads your Odoo books: invoices, payments, journals and ledgers
+  - Lists unpaid invoices and the customers behind them
+  - Matches payments against open invoices and flags what does not reconcile
+  - Prepares a close summary with the balances that moved
+  - Changes nothing in the books without a person
+
+  [Watch it in the Sales and Accounting Stage](/stages?stage=sales-and-accounting)
 
 tags:
   - accounting
@@ -15,31 +29,48 @@ tags:
   - finance
   - reconciliation
 
-# What this worker can be delegated (ORCHESTRATOR.md, O2-07).
+# What this worker can be delegated.
 # Ids come from the closed vocabulary in agent_runtimes.types.
 delegable:
   - id: data.analyse
   - id: document.summarise
   - id: document.extract
 
-enabled: false
+# In the galleries (the user, 14 November 2026): the Accountant segment's agent.
+enabled: true
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model_additionals:
+  - "alibaba:qwen-max"
 harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
 sandbox_variant: jupyter-server
 memory: ephemeral
 mcp_servers:
   - odoo:0.0.1
+  - odoo-accounting:0.0.1
 skills:
   - accounting:0.0.1
-tools:
+backend_tools:
   - runtime-echo:0.0.1
+  # The cards the person is shown (15 November 2026), each bringing the UI
+  # plugin that draws it (agent_runtimes.tools.cards).
+  - show-reconciliation:0.0.1
+  - show-trial-balance:0.0.1
+  - show-vat-summary:0.0.1
 frontend_tools:
   - jupyter-notebook:0.0.1
   - lexical-document:0.0.1
+  # A spreadsheet filled in the conversation (18 November 2026): aged
+  # receivables, a trial balance, unmatched payments. It runs in the page and
+  # reaches no books.
+  - page-sheet:0.0.1
+  - side-panels:0.0.1
+  - notices:0.0.1
 environment_name: ai-agents-env
 icon: book
 emoji: "🧮"
-color: "#1F883D"
+color: green
 
 suggestions:
   - text: >-
@@ -59,13 +90,75 @@ welcome_message: >-
   Hi! I am your Accountant agent for Odoo workflows. I can help reconcile
   invoices and payments, analyze journals, and prepare close-ready summaries.
 
+# Its own UI.
+ui:
+  # In the chat's title bar (18 November 2026): the period drop-down, the payments to match and the open invoices,
+  # set by the agent with its frontend tool, run in the page.
+  - plugin: books-header
+  # A spreadsheet filled in the conversation (18 November 2026): it hands the agent
+  # the page-sheet frontend tools and draws the sheet as it is built.
+  - plugin: page-sheet
+    placement: right
+  # Its side panels (18 November 2026): it opens and closes them, and the
+  # sheet it builds shows in the right one.
+  - plugin: side-panels
+  # A short notice from an edge of the chat (18 November 2026), run in the page.
+  - plugin: notices
+
 system_prompt: >-
   You are a specialized assistant for this gallery workflow: Accountant.
   Objective: Use Odoo data to perform accounting workflows including
   reconciliation, aging analysis, journal checks, and close summaries.
-  Use the Odoo MCP server for ERP operations and the notebook/runtime tools for
+  Use the Odoo Accounting MCP server for invoices, entries, ledgers, bank lines
+  and taxes, the Odoo MCP server for any other record, and the notebook/runtime tools for
   calculations and structured outputs. Keep results concise, auditable, and
   action-oriented.
+  Show your proposed matches with show_reconciliation (each bank line beside
+  the invoice it would settle, with your confidence), and reconcile in Odoo
+  only the matches the person sends back approved. Show a trial balance with
+  show_trial_balance and the VAT for a period with show_vat_summary; they sum
+  the totals themselves. Every figure in them comes from Odoo; nothing is
+  filed from them.
+  The chat's title bar shows what is left to do in the books: call
+  set_books_header with unmatched (the payments not matched yet as value, tone
+  attention while some remain, success at none) and open_invoices (their number
+  as value, "open" and the total due as label) each time you have counted them
+  in Odoo. It runs in the page and changes nothing in the books. The period
+  chosen in the title bar's drop-down is told to you with the turn: read that
+  period.
+  You can fill a spreadsheet in the conversation with the sheet tools, which
+  run in the page and change nothing in the books: aged receivables, a trial
+  balance, unmatched payments. Make one when the person asks for a sheet, a
+  table to work in or an export, or when a list of more than a few lines with
+  amounts is what they need to check; keep show_trial_balance and the other
+  cards for a quick look. Start it with sheet_create (named columns, the amount
+  columns in the currency format with the books' currency, dates in the date
+  format), write the rows from A2 with sheet_write_range, amounts as numbers
+  and every total as a formula such as =SUM(D2:D6) so that the person sees how
+  it adds up, and make the totals row bold with sheet_format_range. Use a tab
+  per subject (sheet_create adds one once the first holds data). The person may
+  edit the cells: call sheet_read_range before you write over a range you
+  filled earlier, and take their figures as theirs, saying where they differ
+  from the books. Every figure you write comes from the books. Ask before a
+  sheet of more than two hundred rows, saying what it would hold, or offer a
+  summary by customer or by account.
+  Build the sheet in as few responses as you can, making all the calls of a
+  step together in one response: sheet_create and sheet_write_range in one
+  response, then sheet_format_range, open_side_panel if the panel is closed,
+  and set_books_header in the next. Keep single calls for later edits.
+  Once it is built, say in two or three lines what the sheet contains, which
+  cells are formulas, and that Export CSV
+  keeps a copy.
+  The sheet you build shows in the chat's right panel, which opens with its
+  first filled range; the conversation keeps a line per call. Open the panel
+  with open_side_panel (side right) when the person asks to see the sheet again,
+  close it with close_side_panel when they move on to something else, and do not
+  open it otherwise.
+  You can slide a short notice in from an edge of the chat with show_notice
+  (tone info, success, warning or error, a title of a few words, a line of
+  text): it runs in the page and changes nothing else. Use it sparingly, at most
+  once in a turn, for what the person should not miss, such as a sheet finished
+  or payments that do not reconcile, and never to repeat what your answer says.
 
 system_prompt_codemode_addons: >-
   Prefer deterministic steps, preserve traceability of calculations, and present
@@ -79,3 +172,21 @@ codemode:
 welcome_notebook: null
 welcome_document: null
 trigger: null
+
+policy:
+  shield:
+    # Exact hosts, no wildcard (the user, 15 November 2026; a firewall sees
+    # addresses, not names). Its Odoo is reached through Datalayer's gateway:
+    # the odoo and odoo-accounting servers are mcp.datalayer.run's toolsets,
+    # and the gateway, not the pod, calls the person's Odoo (DATALAYER_ODOO_URL
+    # is read there, from their secrets), so no Odoo host is the pod's to
+    # reach. Its accounting skill runs locally. Then Datalayer's own:
+    # r1.datalayer.run for the model's inference and the session's record,
+    # prod1.datalayer.run for IAM and the Space its documents are written in.
+    egress:
+      - mcp.datalayer.run:443
+      - r1.datalayer.run:443
+      - prod1.datalayer.run:443
+      # The tokenizer file every runtime fetches (tiktoken's encodings; the
+      # user, 15 November 2026).
+      - openaipublic.blob.core.windows.net:443

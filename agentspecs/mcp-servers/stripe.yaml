@@ -1,0 +1,82 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Stripe's official MCP server (https://docs.stripe.com/mcp, read 15 November
+# 2026): remote, Streamable HTTP at https://mcp.stripe.com, authenticated with
+# OAuth or with an agent API key as the Bearer token. Datalayer uses it in TEST
+# MODE ONLY for now (the user, 15 November 2026): the key is a sandbox agent
+# key (STRIPE_TEST_AGENT_API_KEY), and the stripe-checkout UI plugin refuses a
+# live Checkout Session. Most of Stripe's API is reached through two tools,
+# stripe_api_read (any GET) and stripe_api_write (any POST, PATCH, PUT, DELETE)
+# — a Checkout Session is created with stripe_api_write on
+# POST /v1/checkout/sessions and read back with stripe_api_read on
+# GET /v1/checkout/sessions/{id}.
+
+id: stripe
+version: 0.0.1
+name: Stripe (test mode)
+description: >-
+  Stripe, in test mode — products, prices and Checkout Sessions created through
+  Stripe's own MCP server with a sandbox key; the person pays on Stripe's
+  Checkout page with a test card, and no real charge is ever made
+documentation_url: https://docs.stripe.com/mcp
+signup_url: https://dashboard.stripe.com/register
+api_key_url: https://docs.stripe.com/keys#agent-keys
+setup: "Test mode only. In a Stripe sandbox, create an [agent API key](https://docs.stripe.com/keys#agent-keys) with Checkout Sessions write and Products and Prices read, and paste it into `STRIPE_TEST_AGENT_API_KEY`. Never paste a live key: the checkout card refuses a live session. Pay with Stripe's test card 4242 4242 4242 4242, any future date and any CVC."
+
+transport: streamable-http
+url: "https://mcp.stripe.com"
+headers:
+  Authorization: "Bearer ${STRIPE_TEST_AGENT_API_KEY}"
+
+enabled: true
+
+envvars:
+  - STRIPE_TEST_AGENT_API_KEY:0.0.1
+
+env: {}
+
+install:
+  type: remote
+  command: ""
+  note: "Nothing to install: Stripe's hosted MCP server, reached at its URL with a sandbox agent API key."
+
+tags:
+  - payments
+  - checkout
+  - stripe
+  - test-mode
+
+icon: "@primer/octicons-react:credit-card"
+emoji: "💳"
+
+actions:
+  checked: "2026-11-15"
+  note: >-
+    Read off Stripe's documentation (https://docs.stripe.com/mcp), not off a
+    running server: Datalayer holds no Stripe key yet. stripe_api_write reaches
+    every POST, PATCH, PUT and DELETE of the API, a Checkout Session among them,
+    so it is asked first; Stripe asks a human confirmation of its own for a
+    refund. The Treasury tools move money and are classed buy.
+  tools:
+    stripe_api_search: read
+    stripe_api_details: read
+    stripe_api_read: read
+    stripe_api_write: write
+    get_stripe_account_info: read
+    stripe_analytics: read
+    get_balance_summary: read
+    search_stripe_documentation: read
+    stripe_implementation_planner: read
+    send_stripe_feedback: send
+    convert_currency: buy
+    send_money: buy
+    transfer_money: buy
+    setup_recipient: write
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# a Checkout Session as an A2UI card — its line items, total and currency, a
+# Checkout button opening Stripe's page, its status when the person is back.
+ui:
+  - plugin: stripe-checkout
+    renderer: a2ui

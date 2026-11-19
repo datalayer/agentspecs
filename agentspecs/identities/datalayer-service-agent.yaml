@@ -1,0 +1,31 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# An unattended agent: a service principal of an organization.
+id: datalayer-service-agent
+version: 0.0.1
+name: Service agent
+description: >-
+  An agent that works unattended for an organization (a schedule, a trigger, a
+  team's worker): a service principal that obtains its token with OAuth 2.0
+  client credentials, scoped by the organization's policy.
+subject: service
+provider: datalayer
+inbound:
+  kind: jwt
+  issuer: https://prod1.datalayer.run/api/iam/v1/oauth
+  algorithms: [HS256]
+workload:
+  token: client-credentials
+  lifetime_seconds: 3600
+credentials:
+  vault: datalayer
+custody:
+  keys: shared-secret
+  algorithm: HS256
+consent:
+  by: organization
+  hosted_by: datalayer
+tags: [datalayer, service]
+icon: server
+emoji: "⚙️"

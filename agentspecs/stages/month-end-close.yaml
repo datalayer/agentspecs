@@ -1,0 +1,15 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Stage: Month-end Close, kept running under the demo account.
+
+id: month-end-close
+version: 0.0.1
+scene: month-end-close:0.0.1
+deployments:
+  month-end-close: demo-month-end-close
+public: true
+tags:
+  - example
+  - demo
+  - scene

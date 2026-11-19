@@ -13,5 +13,13 @@ default: false
 available: false
 tokens_limit: 32768
 
+# OpenAI's Standard-tier price, from
+# https://developers.openai.com/api/docs/pricing (read 2026-10-08). Cached
+# input is $0.025 per million there; the catalogue has no field for it.
+# The same as pydantic/genai-prices (main bd966a9, read 2026-10-08).
+pricing:
+  input_usd_per_million: 0.1
+  output_usd_per_million: 0.4
+
 required_env_vars:
   - OPENAI_API_KEY

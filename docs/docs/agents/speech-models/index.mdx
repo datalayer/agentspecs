@@ -1,0 +1,99 @@
+---
+sidebar_position: 1
+title: Speech Models
+---
+
+# Speech Model Specifications
+
+A speech model spec is a model behind an agent's or an application's voice:
+one that turns speech into text (`stt`), one that turns text into speech
+(`tts`), or one that finds where speech starts and ends in what the microphone
+heard (`vad`). The catalogue is `agentspecs/speech-models/`, one YAML per
+model, read by `agentspecs.speech` (`list_speech_models()`,
+`get_speech_model()`).
+
+Every file of a model is pinned by its SHA-256 and its size, so a model is
+never fetched from a third party's hub at run time and a changed file is
+refused. The files are kept in Datalayer's storage under the model's
+`provider`: `<provider>/<id>/<path>`.
+
+A model is admitted by the licence of its weights. The licence register,
+`agentspecs/speech-licences.yaml`, lists the licences that may run anywhere,
+the browser included (`allowed`), and those that may run only on Datalayer's
+servers and are never sent to a browser (`server_only`). A model whose licences
+the register does not admit where it says it runs does not load: the catalogue
+refuses it with a sentence.
+
+## Fields
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `version`, `name`, `description` | As on every spec. |
+| `provider` | The organisation its upstream names, lowercase: the folder Datalayer's storage keeps it under. |
+| `task` | `stt` (speech to text), `tts` (text to speech) or `vad` (voice activity). |
+| `engine` | What runs it: `transformers.js`, `onnxruntime`, `faster-whisper`, `kokoro-onnx`, `vad-web`. |
+| `dtype` | The precision of its weights: `q8`, `fp32`, `float16`. |
+| `languages` | The languages it hears or speaks, BCP 47 (`en`, `fr`); empty for voice activity. |
+| `where` | Where it may run, at least one of `device` (the person's browser), `server` (Datalayer's servers) and `machine` (the person's own machine, through agent-runtimes' `voice` extra). |
+| `streaming` | Whether it works on a stream rather than a clip at a time (default `false`). |
+| `licence` | `weights` (required), and `code` and `dataset` when they have their own: SPDX names. |
+| `attribution` | What a page listing it shows, when its licence asks. |
+| `source` | `upstream` (the model as its authors published it), `repository` (the export the files were copied from) and `revision` (the revision of that export). |
+| `files` | The files, each with its `path` under the model's folder, its `sha256` and its `size` in bytes. |
+
+```yaml
+# speech-models/silero-vad.yaml
+id: silero-vad
+version: 0.0.1
+name: Silero VAD
+description: >-
+  Where speech starts and ends in what the microphone heard, in the browser:
+  Silero VAD (about 2 MB), the build @ricky0123/vad-web 0.0.31 ships and runs
+  on onnxruntime-web. Push-to-talk keeps the speech it finds and drops the rest.
+provider: snakers4
+task: vad
+engine: vad-web
+dtype: fp32
+languages: []
+where: [device]
+streaming: true
+licence:
+  weights: MIT
+  code: ISC
+attribution: ""
+source:
+  upstream: https://github.com/snakers4/silero-vad
+  repository: https://www.npmjs.com/package/@ricky0123/vad-web
+  revision: 0.0.31
+files:
+  - path: silero_vad_legacy.onnx
+    sha256: a35ebf52fd3ce5f1469b2a36158dba761bc47b973ea3382b3186ca15b1f5af28
+    size: 1807522
+```
+
+## How it is used
+
+Neither an agent nor an application names a speech model. An application says
+its voice under `interface.voice`, and an agent that is not an application
+says the same block as `voice:` ([Applications](../../apps#its-voice)): the
+[voice](../voices) it speaks with, its language and where its speech runs.
+Each voice names the text-to-speech model it is a voice of (`model`), and may
+run only where that model runs.
+
+The speech-to-text model is chosen for the language and the place it runs
+(`transcriber_for()`): in the browser, Moonshine Tiny, then Moonshine Base,
+where they hear the language, and Whisper otherwise; on the server, Whisper
+Large v3 Turbo.
+
+## The catalogue
+
+| Model | Name | Task | Where | Languages | What it is |
+| --- | --- | --- | --- | --- | --- |
+| `kokoro-82m` | Kokoro 82M | tts | server, machine | en, fr, es, it, pt, hi, ja, zh | Text to speech on Datalayer's servers, on CPU: hexgrad's Kokoro-82M v1.0 exported to ONNX, in full precision, run by kokoro-onnx, with the voices file that holds its 54 voices. |
+| `moonshine-base-en` | Moonshine Base (English) | stt | device | en | Speech to text in the browser, in English: Useful Sensors' Moonshine Base (61M parameters), quantized to 8 bits, run by transformers.js. |
+| `moonshine-base-en-server` | Moonshine Base (English, server) | stt | server | en | Speech to text on Datalayer's servers, in English: the same Moonshine Base export the browser runs, run by onnxruntime on the CPU, with no 30-second window. |
+| `moonshine-tiny-en` | Moonshine Tiny (English) | stt | device | en | Speech to text in the browser, in English: Useful Sensors' Moonshine Tiny (27M parameters), quantized to 8 bits, run by transformers.js. |
+| `silero-vad` | Silero VAD | vad | device | — | Where speech starts and ends in what the microphone heard, in the browser: Silero VAD, as @ricky0123/vad-web ships it. |
+| `whisper-base` | Whisper Base | stt | device | en, fr | Speech to text in the browser for the languages Moonshine's MIT models do not speak, French first: OpenAI's Whisper base (74M parameters), quantized to 8 bits, run by transformers.js. |
+| `whisper-large-v3-turbo` | Whisper Large v3 Turbo | stt | server | en, fr, es, it, pt, de, nl, ja, zh, hi | Speech to text on Datalayer's servers, on CPU: OpenAI's Whisper large-v3-turbo (809M parameters), run by faster-whisper; a recording of up to a minute at a time. |
+| `whisper-small` | Whisper Small | stt | server, machine | en, fr, es, it, pt, de, nl, ja, zh, hi | Speech to text on Datalayer's servers for short spoken turns, on CPU: OpenAI's Whisper small (244M parameters), run by faster-whisper, about four times faster than large-v3-turbo. |

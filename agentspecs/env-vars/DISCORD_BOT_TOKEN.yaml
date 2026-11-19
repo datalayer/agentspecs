@@ -1,0 +1,15 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: DISCORD_BOT_TOKEN
+version: 0.0.1
+name: Discord Bot Token
+description: The token of a Discord bot, from its application's Bot page in the Discord Developer Portal (Reset Token to see it once). The bot is invited to the server with the permissions of what the agent may do, and the Message Content intent when it reads messages. Read by the Discord MCP server as DISCORD_TOKEN.
+registrationUrl: https://discord.com/developers/applications
+tags:
+  - authentication
+  - token
+  - discord
+  - social
+icon: key
+emoji: 🔑

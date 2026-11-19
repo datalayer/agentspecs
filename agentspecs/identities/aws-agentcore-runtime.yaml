@@ -1,0 +1,52 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A Datalayer agent running in Amazon Bedrock AgentCore Runtime, trusting Datalayer IAM.
+id: aws-agentcore-runtime
+version: 0.0.1
+name: AgentCore Runtime agent
+description: >-
+  A Datalayer agent in AgentCore Runtime, in the customer's AWS account. Its JWT
+  authorizer trusts Datalayer IAM's discovery document; Runtime hands the agent a
+  workload access token for the person, and third-party tokens come from
+  AgentCore's token vault, consent bound by Datalayer.
+subject: agent
+provider: aws-agentcore
+protocols: [ag-ui, a2a, mcp]
+inbound:
+  kind: jwt
+  issuer: https://prod1.datalayer.run/api/iam/v1/oauth
+  discovery_url: https://prod1.datalayer.run/api/iam/v1/oauth/.well-known/openid-configuration
+  algorithms: [RS256]
+  audiences: ["arn:aws:bedrock-agentcore:<region>:<account>:runtime/<runtime-id>"]
+  clients: [datalayer-platform]
+  claims:
+    org_uid: <organization>
+  lifetime_seconds: 900
+workload:
+  token: agentcore-runtime
+credentials:
+  vault: agentcore
+  providers:
+    - name: github
+      kind: oauth2
+      flow: user-federation
+      scopes: [read:user]
+    - name: google-workspace
+      kind: oauth2
+      flow: user-federation
+      scopes: [https://www.googleapis.com/auth/drive.metadata.readonly]
+    - name: salesforce
+      kind: oauth2
+      flow: user-federation
+      scopes: [api, refresh_token]
+custody:
+  keys: vault-transit
+  algorithm: RS256
+consent:
+  by: person
+  hosted_by: datalayer
+  binding: true
+tags: [aws, agentcore, runtime]
+icon: cloud
+emoji: "☁️"

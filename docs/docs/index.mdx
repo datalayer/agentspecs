@@ -15,17 +15,27 @@ Declarative YAML specifications for AI agents, MCP servers, skills and more...
 
 Agentspecs is the source of truth for runtime catalogs compiled into Python and TypeScript.
 
-The documentation has ten parts, and they answer different questions.
+The documentation has these parts, and they answer different questions.
 
 **[Agents](./agents)** — what one agent is, and everything it is made of. An
 agent spec is mostly references: to the skills it has, the tools and MCP
-servers it can reach, the model it runs on, where its memory lives, what it is
+servers it can reach, the model it runs on, where its memory lives, how it decides, what it is
 judged by. Each of those is a catalogue of its own, documented under Agents:
 
-- Skills, Tools, MCP Servers
-- Models, Memory, Env Vars
-- Hooks, Triggers, Guardrails
-- Evals, Benchmarks, Outputs, Notifications
+- [Skills](./agents/skills), [Backend Tools](./agents/backend-tools),
+  [Frontend Tools](./agents/frontend-tools), [MCP Servers](./agents/mcp-servers)
+- [Models](./agents/models), [Model Providers](./agents/model-providers),
+  [Memory](./agents/memory), [Decisions](./agents/decisions), [Env Vars](./agents/env-vars)
+- [Hooks](./agents/hooks), [Triggers](./agents/triggers), [Events](./agents/events),
+  [Strategies](./agents/strategies)
+- [Evals](./agents/evals), [Benchmarks](./agents/benchmarks),
+  [Outputs](./agents/outputs), [Notifications](./agents/notifications)
+- [Protocols](./agents/protocols) and their [tools' action classes](./agents/protocols/tools),
+  [UI plugins](./agents/ui) and their [renderers](./agents/ui/renderers)
+- [Voices](./agents/voices) and the [speech models](./agents/speech-models) behind them
+
+Fragments, the bundles of capability a spec includes, are documented under
+[Composition](./modularity/composition#fragments).
 
 **[Agent Teams](./agent-teams)** — several agents working on one job, plus a
 supervisor deciding what happens next. A team composes agents from the
@@ -41,19 +51,51 @@ composed.
 and is equipped with Frames: the same agent, oriented by the context of the
 people it works for, and answerable to their Guards.
 
+**[Harnesses](./harnesses)** — an agent program driven over the Agent Client
+Protocol: Claude Code, Codex, OpenCode, pi, Gemini CLI, goose, OpenHands, or any
+agent a framework exposes over ACP. How it is launched, what it needs, what it
+honours of an agent spec, and the register of the terms it is served under.
+
 **[Ops](./ops)** — the orchestrated, supervised workflow a person launches: the
 Cogs that do the work and the validation strategy that says how it is
 verified. An Op is not complete without one.
 
 **[Guards](./guards)**, **[Gates](./gates)** and **[Tracks](./tracks)** — the
-accountability plane. Guards check, and each extends a guardrail: the policy
-it verifies. Gates decide what happens on what the Guards found. Tracks say
+accountability plane. Guards check, and each extends a [Policy](./policies):
+the rules it verifies. Gates decide what happens on what the Guards found. Tracks say
 what evidence is kept, and for how long.
 
 **[Applications](./apps)** — what a person uses and relies on: an agent with an
-interface, rules, tests and a place to run. One spec, the Appspec, for a chat,
-a widget, a decision and an always-on worker; rules written in a person's
-words and enforced on what each tool does.
+interface, rules, tests and a place to run. One spec, the Appspec
+(`schema: loop.app/v1`), for a chat, a widget, a decision and an always-on
+worker; rules written in a person's words and enforced on what each tool does,
+what was verified said in sentences, and — for a coding agent — a repository
+lent to its computer at one commit.
+
+**[Scenes](./scenes)** — a team, staged: the setting, the script (beats: a cue,
+the moves, what to expect), the stage directions and the backdrop it is drawn
+on, the audience, the rehearsal and its recording, and where it plays. The team
+says who; the scene says what happens.
+
+**[Battles](./battles)** — scenes composed against each other: two or more
+contestants, each a scene played whole or one application, the same goal at the
+same instant under one clock, and a referee — a race decided by the first done,
+a game by its arena's score, a challenge by a Guard's measure.
+
+**[Stages](./stages)** — something of the catalogue put on stage, and where it
+plays: a scene played whole, one application or a Battle, each member on a
+runtime at the deployment that answers for it, and whether anyone may watch
+without an account.
+
+**[Identities](./identities)** — who is acting when an agent acts: a person, an
+agent, an application, an organization, a visitor or a service, under Datalayer
+IAM, the Personal Agent Protocol, Amazon Bedrock AgentCore Identity or an
+organization's OIDC provider; how each proves it and where its credentials are kept.
+
+**[Policies](./policies)**, **[Standards](./standards)** and
+**[Sessions](./sessions)** — the Shield's policy documents, the standards an
+organization's controls answer to (AIUC-1, ISO/IEC 42001), and the file a
+session is exported to and imported from.
 
 **[Modularity](./modularity)** — how a spec is built out of other specs, rather
 than copied from them. Extension (`extends`) for "the same agent, adjusted",
@@ -86,25 +128,45 @@ Generated catalogs are keyed by unversioned id only (e.g. `tavily`). The `get_*`
 ```
 agentspecs/
 ├── agents/
-├── teams/
-├── frames/
-├── cogs/
-├── ops/
-├── guards/
-├── gates/
-├── tracks/
-├── mcp-servers/
-├── skills/
-├── tools/
-├── envvars/
-├── models/
-├── memory/
-├── guardrails/
-├── evals/
+├── apps/
+├── backend-tools/
 ├── benchmarks/
-├── triggers/
+├── cogs/
+├── decisions/
+├── env-vars/
+├── evals/
+├── events/
+├── fragments/
+├── frames/
+├── frontend-tools/
+├── gates/
+├── guards/
+├── harnesses/
+├── mcp-servers/
+├── memory/
+├── model-providers/
+├── models/
+├── notifications/
+├── ops/
 ├── outputs/
-└── notifications/
+├── policies/
+├── protocol-tools/
+├── protocols/
+├── scenes/
+├── battles/
+├── identities/
+├── stages/
+├── sessions/
+├── skills/
+├── speech-models/
+├── standards/
+├── strategies/
+├── teams/
+├── tracks/
+├── triggers/
+├── ui/
+├── ui-renderers/
+└── voices/
 ```
 
 ## Writing Specs

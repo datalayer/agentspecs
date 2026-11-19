@@ -1,0 +1,23 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# An agent that proves who is calling when it fetches the web.
+id: web-bot-auth-agent
+version: 0.0.1
+name: Signed web agent
+description: >-
+  An agent whose outbound requests are signed (HTTP Message Signatures, RFC 9421)
+  with a key a website checks against the agent's published key directory, so a
+  site knows which agent is calling.
+subject: agent
+provider: datalayer
+protocols: [web-bot-auth]
+inbound:
+  kind: http-signature
+  algorithms: [Ed25519]
+custody:
+  keys: vault-transit
+  algorithm: Ed25519
+tags: [web-bot-auth, agent]
+icon: globe
+emoji: "✍️"

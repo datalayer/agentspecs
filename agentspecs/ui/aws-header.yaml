@@ -1,0 +1,83 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Specification: AWS header — the Reactor plugin `@datalayer/loop-plugin-aws-header`.
+#
+# A header UI (the user, 18 November 2026: "plugins to show suited buttons in
+# the header for the other seed agents ... a drop-down choice, or visual
+# indicators; the chat can interact to share visual indications"): what it
+# puts in the chat's title bar is declared under `header`, and drawn by
+# agent-runtimes from this declaration (src/apps/plugins/aws-header). Its
+# indicators are set by the agent with the frontend tool `set_aws_header`, run in
+# the page; its drop-downs are told to the agent with every turn; its
+# buttons say their message as the person.
+
+id: "aws-header"
+version: 0.0.1
+name: AWS header
+description: >-
+  The Steward's title bar: the monthly savings it found, a drop-down for the region it looks at, and how much of the compute Savings Plans cover.
+emoji: "💸"
+octicon: graph
+plugin: "@datalayer/loop-plugin-aws-header"
+folder: "aws-header"
+# Its Contributions: the Slots it fills, the Contribution Points it
+# contributes to, the Commands it adds (the composer's `/` commands by name).
+contributions:
+  slots:
+  - "loop.chatHeader"
+  points:
+  - "loop.chat.extras"
+  - "loop.runProps"
+  commands: []
+# The Contribution Points it offers to other plugins.
+contribution_points: []
+# The UI renderers (agentspecs/ui-renderers) it may be exposed through.
+renderers: []
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- header
+- right
+- left
+# The UI it stands in for: a chat that has it leaves them out of its title bar.
+supersedes:
+- aws-savings-badge
+# What it puts in the chat's title bar, and the frontend tool that sets it.
+header:
+  tool: set_aws_header
+  when: >-
+    Call it once you have read them: the savings found so far (the number of recommendations as the value, their estimated monthly sum as the label, such as "$2,701/month"), and the Savings Plans coverage of compute in percent. Nothing is changed in the account.
+  items:
+  - id: savings
+    kind: indicator
+    display: counter
+    label: Savings found
+    description: The recommendations found in this session (the value) and their estimated monthly sum (the label). Estimates only, nothing is changed in the account.
+    octicon: graph
+  - id: region
+    kind: choice
+    label: Region
+    description: The AWS region the readings are narrowed to.
+    octicon: globe
+    default: all
+    says: "Chosen in the chat's header: look at the region {label} only, and say so in the answer."
+    options:
+    - id: all
+      label: All regions
+      says: ""
+    - id: us-east-1
+      label: us-east-1
+    - id: us-west-2
+      label: us-west-2
+    - id: eu-west-1
+      label: eu-west-1
+    - id: eu-central-1
+      label: eu-central-1
+  - id: coverage
+    kind: indicator
+    display: meter
+    unit: "%"
+    max: 100
+    label: Savings Plans coverage
+    description: How much of the compute spend Savings Plans cover, in percent, as Cost Explorer says it. Tone "attention" under 50, "success" from 70.
+    octicon: meter

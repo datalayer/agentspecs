@@ -1,0 +1,93 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# MCP Server Specification: Google Maps
+# Google's Maps Experience agent tools (formerly Maps Grounding Lite), hosted
+# by Google as an MCP server (the user, 15 November 2026, for the Traveller):
+# places, routes and their travel times, places along a route, and weather.
+#
+# What Google offers agents today (read off
+# https://developers.google.com/maps/ai/grounding-lite and the running server
+# on 15 November 2026):
+# - `https://mapstools.googleapis.com/mcp`, Streamable HTTP, fully managed by
+#   Google. Six tools: search_places, search_along_route, compute_routes,
+#   lookup_weather (weather, air quality, pollen; forecasts up to ten days),
+#   resolve_names and resolve_maps_urls (names and Maps links to place ids).
+#   Routes give distance and duration, no step-by-step directions.
+# - Authentication: a Google Maps Platform API key in `X-Goog-Api-Key`, or an
+#   OAuth token with the scope maps-platform.mapstools. initialize and
+#   tools/list answer without one; a tool call without a key answers
+#   "Permission denied on the service".
+# - Billing: a Google Cloud project with billing on and the Maps Experience
+#   agent tools API (mapstools.googleapis.com) enabled, and the key restricted
+#   to it. Essentials: 10,000 requests a month free, then USD 7 per 1,000;
+#   Pro (search_along_route, live traffic, more places): 5,000 free, then
+#   USD 14 per 1,000. resolve_names and resolve_maps_urls are free. 300
+#   queries a minute per project (600 for the resolvers). Google bills the
+#   key's project, not Datalayer.
+# - Terms: each place shown is attributed to Google Maps with its
+#   googleMapsLinks.placeUrl, the sources right after what they support.
+#
+# Why here: remote, so the runtime reaches it; the key is the person's
+# (GOOGLE_MAPS_API_KEY), and Datalayer holds none for them.
+
+id: google-maps
+version: 0.0.1
+name: Google Maps
+description: >-
+  Google Maps — places, restaurants and sights, routes with their travel times,
+  stops along a route and the weather — through Google's Maps Experience agent tools
+documentation_url: https://developers.google.com/maps/ai/grounding-lite
+signup_url: https://console.cloud.google.com/google/maps-apis/start
+api_key_url: https://console.cloud.google.com/google/maps-apis/credentials
+setup: "In a Google Cloud project with billing on, enable the **Maps Experience agent tools API** (`mapstools.googleapis.com`), create an API key restricted to it in [Keys & Credentials](https://console.cloud.google.com/google/maps-apis/credentials) and paste it into `GOOGLE_MAPS_API_KEY`. Google bills your project: 10,000 requests a month are free, then USD 7 per 1,000 ([pricing](https://developers.google.com/maps/ai/grounding-lite))."
+
+transport: streamable-http
+url: "https://mapstools.googleapis.com/mcp"
+headers:
+  X-Goog-Api-Key: "${GOOGLE_MAPS_API_KEY}"
+
+# On: usable with the person's key; tools/list read on 15 November 2026, a
+# call without a key refused.
+enabled: true
+
+envvars:
+  - GOOGLE_MAPS_API_KEY:0.0.1
+
+env: {}
+
+install:
+  type: remote
+  command: ""
+  note: "Nothing to install: Google's hosted Maps Experience agent tools, reached at their URL with your GOOGLE_MAPS_API_KEY."
+
+tags:
+  - travel
+  - maps
+  - places
+  - routes
+  - weather
+  - google
+
+icon: "@primer/octicons-react:location"
+emoji: "🗺️"
+
+# What each tool does to the world (agentspecs.actions).
+actions:
+  checked: "2026-11-15"
+  note: >-
+    Read off the running server's tools/list: six reads of Google Maps — places,
+    places along a route, routes, weather, and names or Maps links resolved to
+    place ids. Nothing here changes anything.
+  tools:
+    search_places: read
+    search_along_route: read
+    compute_routes: read
+    lookup_weather: read
+    resolve_names: read
+    resolve_maps_urls: read
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: trip-itinerary

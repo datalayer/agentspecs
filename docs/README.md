@@ -1,4 +1,4 @@
-[![Datalayer](https://assets.datalayer.tech/datalayer-25.svg)](https://datalayer.io)
+[![Datalayer](https://images.datalayer.io/legacy/datalayer-25.svg)](https://datalayer.ai)
 
 [![Become a Sponsor](https://img.shields.io/static/v1?label=Become%20a%20Sponsor&message=%E2%9D%A4&logo=GitHub&style=flat&color=1ABC9C)](https://github.com/sponsors/datalayer)
 
@@ -8,7 +8,7 @@
 
 Agentspecs covers declarative YAML catalogs including:
 
-- Agents, teams, MCP servers, skills, tools, models, memory, guardrails, evals
+- Agents, teams, MCP servers, skills, tools, models, memory, policies, evals
 - Workflow and delivery specs (triggers, outputs, notifications)
 - Agent launch-time **parameters** (JSON Schema validated)
 - Agent lifecycle **hooks** (`pre_hooks`, `post_hooks`) for sandbox setup/teardown

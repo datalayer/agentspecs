@@ -1,0 +1,82 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# MCP Server Specification: Overture Maps
+# The Datalayer MCP server (the gateway behind `datalayer`) with its `overture`
+# toolset and nothing else (the user, 19 November 2026: "for traveller add
+# also maps with https://overturemaps.org/"): Overture Maps' open places —
+# restaurants, cafés, hotels, museums, sights and shops, with their names,
+# categories, addresses, phones, websites and the datasets each came from —
+# read from the Overture Maps Foundation's monthly release on S3, with no key.
+#
+# No community server fitted (19 November 2026): each is a local server a
+# runtime pod cannot install (no package index there), and each predates
+# Overture's schema 2.0.0 (2026-11-18.0: `basic_category` and `taxonomy`, no
+# `categories`). The gateway reads the release's GeoParquet itself, the files
+# and row groups of the area only (services' mcp-server, extensions/overture).
+#
+# The tools carry `overture_` because Google Maps' agent tools call theirs
+# `search_places`, and the Traveller holds both servers.
+
+id: overture
+version: 0.0.1
+name: Overture Maps
+description: >-
+  Open places from Overture Maps — restaurants, cafés, hotels, museums, sights
+  and shops with their addresses, phones, websites and sources — around a point
+  or in a box, through the Datalayer MCP server, with no key
+documentation_url: https://datalayer.ai/docs/mcp/toolsets
+signup_url: https://overturemaps.org/
+api_key_url: https://datalayer.ai/settings/api-keys
+setup: "Nothing to set beyond your [Datalayer API key](https://datalayer.ai/settings/api-keys) in `DATALAYER_API_KEY`: Datalayer's gateway reads [Overture Maps](https://overturemaps.org/)' open release itself, with no key. Show the places with their attribution: © OpenStreetMap contributors, Overture Maps Foundation, and each place's sources."
+
+# The same hosted server as `datalayer`, `earthdata` and `odoo`, the toolset
+# chosen in the URL (`only=`): an agent given several of these servers never
+# sees one tool twice, and an application's connection to `overture` is what
+# the gateway checks the session against.
+transport: streamable-http
+url: "https://mcp.datalayer.run/mcp?only=overture"
+headers:
+  Authorization: "Bearer ${DATALAYER_API_KEY}"
+
+enabled: true
+
+envvars:
+  - DATALAYER_API_KEY:0.0.1
+
+env: {}
+
+install:
+  type: remote
+  command: ""
+  note: "Nothing to install: Datalayer's MCP gateway with its overture toolset, reached at its URL."
+
+tags:
+  - travel
+  - maps
+  - places
+  - open-data
+  - overture
+
+icon: "@primer/octicons-react:location"
+emoji: "📍"
+
+# What each tool does to the world (agentspecs.actions).
+actions:
+  checked: "2026-11-19"
+  note: >-
+    Read off the gateway's own code (datalayer-mcp-server's extensions/overture,
+    its tool_policy): three reads of Overture's public release on S3 — places in
+    an area, one place at its point, the categories of an area. Nothing here
+    writes or sends.
+  tools:
+    # Places around a point (radius at most 5 km) or in a box (at most 10 km a side), at most 50.
+    overture_search_places: read
+    # One place in full, by its id and its point.
+    overture_place_details: read
+    # The categories of the places around a point, with their counts.
+    overture_place_categories: read
+
+# The UI plugins it brings to the chat that uses it: the places on a map.
+ui:
+  - plugin: trip-map

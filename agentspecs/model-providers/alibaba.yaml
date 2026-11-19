@@ -13,3 +13,7 @@ docs_url: "https://www.alibabacloud.com/help/en/model-studio/"
 terms_url: "https://www.alibabacloud.com/help/en/legal/latest/alibaba-cloud-international-website-product-terms-of-service"
 privacy_url: "https://www.alibabacloud.com/help/en/legal/latest/privacy-policy"
 hosting: cloud
+# Datalayer holds the account: a runtime's calls go through ai-inference, with
+# a Datalayer token, metered in credits; the provider's key never leaves the
+# service.
+via: ai-inference

@@ -1,0 +1,16 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: BOOKING_AFFILIATE_ID
+version: 0.0.1
+name: Booking.com Affiliate ID
+description: The digit-only affiliate id of a Booking.com partner account, issued at partner onboarding. Sent as x-booking-affiliate-id to Booking.com's MCP server at https://demandapi-mcp.booking.com/v1/sp/mcp/, with the Demand API key.
+registrationUrl: https://www.booking.com/affiliate-program/v2/index.html
+tags:
+  - authentication
+  - booking
+  - travel
+  - partner
+
+icon: key
+emoji: 🔑

@@ -1,0 +1,88 @@
+---
+sidebar_position: 1
+title: Events
+---
+
+# Event Specifications
+
+An event spec is a kind of event an agent runtime records: an agent assigned
+to a runtime, a run started, a run's output, a tool waiting for approval. The
+catalogue is `agentspecs/events/`, one YAML per kind, and each spec says the
+fields of that kind's payload — their names, labels, types and whether they
+are required — so a client can show an event of any kind without code of its
+own for it.
+
+An event, as it is recorded, has a title, a `kind`, a status and a payload. The
+spec of its kind describes the payload; an event with no kind of its own is a
+`generic` one, with no typed payload.
+
+## Fields
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `version`, `name`, `description` | As on every spec. |
+| `kind` | The kind constant an event of this type is recorded with. |
+| `fields` | The payload's fields, each described below. Empty for `generic`. |
+
+Each entry of `fields`:
+
+| Field | Meaning |
+| --- | --- |
+| `name` | The key in the event's payload. |
+| `label` | The label a client shows for it. |
+| `type` | `string`, `number` or `boolean`. |
+| `required` | Whether an event of this kind always carries it (default `false`). |
+| `description` | What it holds. |
+| `placeholder` | Optional placeholder text for a form. |
+
+```yaml
+# events/tool-approval-requested.yaml
+id: tool-approval-requested
+version: 0.0.1
+name: Tool Approval Requested
+description: >-
+  Emitted when an agent invokes a tool that requires manual approval
+  before execution. The agent pauses until the request is approved or rejected.
+kind: tool-approval-requested
+fields:
+  - name: agent_runtime_id
+    label: Agent Runtime ID
+    type: string
+    required: true
+    description: Runtime pod or instance identifier.
+  - name: tool_name
+    label: Tool Name
+    type: string
+    required: true
+    description: Name of the tool requiring approval.
+  - name: tool_args
+    label: Tool Arguments
+    type: string
+    required: false
+    description: JSON-serialized arguments passed to the tool.
+```
+
+## How it is used
+
+Agents do not reference events in their specs: the runtime emits them. The
+catalogue is generated into `agent-runtimes` (Python `agent_runtimes.specs.events`,
+with an `EVENT_KIND_*` constant per kind, `get_event_spec()` and
+`list_event_specs()`), and the runtime records an event with the kind's
+constant and a payload of the spec's fields — `agent-assigned` when a runtime
+is given its agent, `agent-started` and `agent-output` around a triggered run,
+`agent-output` when a chat turn completes. The cards that list events read the
+kind to choose how each one is drawn.
+
+## The catalogue
+
+| Event | Name | Payload fields (required in bold) | What it is |
+| --- | --- | --- | --- |
+| `agent-assigned` | Agent Assigned | **`agent_runtime_id`**, **`agent_name`**, **`assignment_source`**, **`assigned_at`**, `sandbox_variant`, `mcp_proxy_url`, `env_vars_set` | Emitted when a running runtime is given its agent: the agent is created in the runtime, its MCP servers started and its environment set. |
+| `agent-ended` | Agent Ended | **`agent_runtime_id`**, **`agent_spec_id`**, **`started_at`**, **`ended_at`**, **`duration_ms`**, **`exit_status`**, `outputs`, `error_message` | Emitted when an agent finishes execution, with timing information, exit status, an optional output summary, and error details if applicable. |
+| `agent-output` | Agent Output | **`exit_status`**, **`duration_ms`**, `outputs`, `agent_runtime_id`, `agent_spec_id`, `agent_id`, `started_at`, `ended_at`, `error_message` | Emitted when an agent run produces its output: a triggered run that finished (with its timing and exit status) or a chat turn that completed. The event's status is the run's exit status. |
+| `agent-started` | Agent Started | **`agent_runtime_id`**, **`agent_spec_id`**, **`started_at`**, **`trigger_type`**, `trigger_prompt` | Emitted when an agent begins execution, with the runtime identifier, agent spec, trigger type, and the prompt being executed. |
+| `generic` | Generic | — | An event with no kind of its own: what the events client and the CLI create when none is named. It carries a title and a status, and no typed payload. |
+| `tool-approval-requested` | Tool Approval Requested | **`agent_runtime_id`**, **`tool_name`**, `agent_spec_id`, `tool_args` | Emitted when an agent invokes a tool that requires manual approval before execution. The agent pauses until the request is approved or rejected. |
+
+See also [Triggers](../triggers), which start the runs these events record, and
+[Notifications](../notifications), the channels a run's results can be sent on.

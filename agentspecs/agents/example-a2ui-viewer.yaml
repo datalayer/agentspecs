@@ -29,6 +29,8 @@ model: "bedrock:us.anthropic.claude-sonnet-4-6"
 # The loop turns in the page by default, like the Loop Shell's agent; on a
 # server target the location decides the harness, whatever is said here.
 harness: vercel-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
 sandbox_variant: browser
 memory: ephemeral
 
@@ -37,7 +39,7 @@ skills: []
 
 # The same generative-UI tool the A2UI Agent has: a field spec in, a
 # validated A2UI surface out, drawn inline by the 'a2ui-surface' renderer.
-tools:
+backend_tools:
   - example-render-a2ui-surface:0.0.1
 frontend_tools: []
 frontend_render_tools:
@@ -47,7 +49,7 @@ frontend_render_tools:
 environment_name: ai-agents-env
 icon: browser
 emoji: 🔍
-color: "#6366F1"
+color: indigo
 
 # One suggestion per scene of the Viewer, in the scene's own words — then
 # the sandbox: the same demonstrations the Loop Shell offers, because the
@@ -107,3 +109,8 @@ system_prompt: |
 
 system_prompt_codemode_addons: null
 trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

@@ -1,0 +1,13 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: DISCORD_GUILD_ID
+version: 0.0.1
+name: Discord Server ID
+description: The id of the Discord server (guild) the bot works in by default — copied from the server with Developer Mode on, Copy Server ID. Optional; a tool may name another server.
+registrationUrl: https://support.discord.com/hc/en-us/articles/206346498
+tags:
+  - configuration
+  - discord
+icon: link
+emoji: 🔗

@@ -17,5 +17,5 @@ toolset:
   - readCell
   - readAllCells
 
-icon: notebook
+icon: "@datalayer/icons-react:jupyter"
 emoji: "📓"

@@ -1,0 +1,75 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Specification: Books header — the Reactor plugin `@datalayer/loop-plugin-books-header`.
+#
+# A header UI (the user, 18 November 2026: "plugins to show suited buttons in
+# the header for the other seed agents ... a drop-down choice, or visual
+# indicators; the chat can interact to share visual indications"): what it
+# puts in the chat's title bar is declared under `header`, and drawn by
+# agent-runtimes from this declaration (src/apps/plugins/books-header). Its
+# indicators are set by the agent with the frontend tool `set_books_header`, run in
+# the page; its drop-downs are told to the agent with every turn; its
+# buttons say their message as the person.
+
+id: "books-header"
+version: 0.0.1
+name: Books header
+description: >-
+  The Accountant's title bar: a drop-down for the period it reads, how many payments are still to match, and the invoices still open.
+emoji: "🧮"
+octicon: book
+plugin: "@datalayer/loop-plugin-books-header"
+folder: "books-header"
+# Its Contributions: the Slots it fills, the Contribution Points it
+# contributes to, the Commands it adds (the composer's `/` commands by name).
+contributions:
+  slots:
+  - "loop.chatHeader"
+  points:
+  - "loop.chat.extras"
+  - "loop.runProps"
+  commands: []
+# The Contribution Points it offers to other plugins.
+contribution_points: []
+# The UI renderers (agentspecs/ui-renderers) it may be exposed through.
+renderers: []
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- header
+- right
+- left
+# What it puts in the chat's title bar, and the frontend tool that sets it.
+header:
+  tool: set_books_header
+  when: >-
+    Call it each time you have counted them in the books: the payments not matched yet, and the open invoices with their total due as the label. Every figure comes from the books.
+  items:
+  - id: period
+    kind: choice
+    label: Period
+    description: The accounting period the answers are about.
+    octicon: calendar
+    default: last-month
+    says: "Chosen in the chat's header: the period to read is {label}, counted from today's date in the books, unless the person names another."
+    options:
+    - id: last-month
+      label: Last month
+    - id: this-month
+      label: This month
+    - id: this-quarter
+      label: This quarter
+    - id: year-to-date
+      label: Year to date
+  - id: unmatched
+    kind: indicator
+    display: counter
+    label: Payments to match
+    description: How many payments received are not matched to an invoice yet. Tone "attention" while some remain, "success" at none.
+    octicon: git-compare
+  - id: open_invoices
+    kind: indicator
+    display: counter
+    label: Open invoices
+    description: How many customer invoices are still open; the label carries the total due, such as "open · 14,585.50 EUR".
+    octicon: file

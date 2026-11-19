@@ -1,0 +1,83 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# MCP Server Specification: Kiwi.com
+# Kiwi.com's own flight search server (the user, 15 November 2026, for the
+# Traveller): flights between two places for given dates and travellers, each
+# itinerary with its fare, baggage, connections and a booking link at Kiwi.com.
+#
+# What Kiwi.com offers agents today (read off https://www.kiwi.com/ag/pages/mcp/
+# and the running server on 15 November 2026):
+# - `https://mcp.kiwi.com`, Streamable HTTP, built with Alpic, anonymous: no
+#   key, no sign-in. initialize answers `kiwicom-flight-search`.
+# - Two tools: `search-flight` (one-way or return; origin and destination as a
+#   city or an airport, resolved by the server; dates with up to three days of
+#   flexibility; adults, children, infants; cabin class; currency and locale;
+#   stopovers, durations, departure and arrival windows, airlines, bags,
+#   self-transfer and overnight stopovers) answering itineraries with `price`,
+#   `priceFormatted`, `totalDurationSeconds`, `baggage`, each leg's segments and
+#   a `bookingUrl`; and `feedback-to-devs`, which sends a text to Kiwi.com's
+#   developers.
+# - Booking is a handoff: the `bookingUrl` opens Kiwi.com, where the person
+#   books and pays. The server books nothing.
+#
+# Why here: anonymous and remote, so a runtime reaches it with nothing set.
+# A fare is Kiwi.com's quote at the time of the search and can change before
+# the person books.
+
+id: kiwi
+version: 0.0.1
+name: Kiwi.com
+description: >-
+  Flights from Kiwi.com — routes, fares, baggage and connections compared for
+  your dates and travellers, each with its booking link at Kiwi.com
+documentation_url: https://www.kiwi.com/ag/pages/mcp/
+signup_url: https://www.kiwi.com/ag/pages/mcp/
+api_key_url: https://www.kiwi.com/ag/pages/mcp/
+setup: "Nothing to set: the runtime reaches [Kiwi.com's flight search](https://www.kiwi.com/ag/pages/mcp/) at https://mcp.kiwi.com anonymously. It searches and compares flights and returns each one's booking link at Kiwi.com, where you book and pay; it books nothing."
+
+transport: streamable-http
+url: "https://mcp.kiwi.com"
+# None: the server asks for no credential.
+headers: {}
+
+# On: no credential; answered on 15 November 2026 (initialize, tools/list and
+# search-flight, anonymously).
+enabled: true
+
+envvars: []
+
+env: {}
+
+install:
+  type: remote
+  command: ""
+  note: "Nothing to install: Kiwi.com's hosted flight search, reached at its URL over Streamable HTTP."
+
+tags:
+  - travel
+  - flights
+  - kiwi
+
+icon: "@primer/octicons-react:paper-airplane"
+emoji: "✈️"
+
+# What each tool does to the world (agentspecs.actions).
+actions:
+  checked: "2026-11-15"
+  note: >-
+    Read off the running server's tools/list (kiwicom-flight-search): one
+    search that reads fares and returns booking links, and a feedback form that
+    sends a text to Kiwi.com's developers. Nothing here books or pays.
+  tools:
+    # Search for one-way and return flights between two places.
+    search-flight: read
+    # Send feedback about the search tools to Kiwi.com's developers.
+    feedback-to-devs: send
+
+# The UI plugins it brings to the chat that uses it (agentspecs 0.0.196):
+# injected after the agent's own while it is in use.
+ui:
+  - plugin: trip-options
+    renderer: a2ui
+  - plugin: trip-budget

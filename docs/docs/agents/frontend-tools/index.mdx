@@ -1,0 +1,228 @@
+---
+sidebar_position: 1
+title: Frontend Tools
+---
+
+# Frontend Tool Specifications
+
+A frontend tool runs **on the page**, beside the agent's conversation: it reads
+or changes what the person has on screen — a notebook, a document, a
+spreadsheet, a deck. Frontend tool specs (`agentspecs/frontend-tools`) name
+those tools a set at a time, and an agent lists the sets it is meant to sit
+beside under `frontend_tools`.
+
+A set only names the tools. Their handlers come from the Reactor plugin that
+draws the page — each declares its tools in its `AgentTools` bundle, and they
+run through the reactor's command registry on what the person sees — never
+from the spec. When the page is not shown, the tool says so — the Cells tools
+answer that no grid is shown — and the agent asks for it first.
+
+## Fields
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `version`, `name`, `description` | As on every spec. |
+| `toolset` | The tools of the set, by the name the plugin registers them under. |
+| `enabled` | Whether the set is offered, `true` unless said. |
+| `tags` | Words to find it by. |
+| `icon`, `emoji` | Its marks: `icon` is `<package>:<name>`, the package `@datalayer/icons-react` or `@primer/octicons-react` (see [MCP servers](../mcp-servers/#icon-string)); `emoji` is drawn where there is no icon. |
+
+```yaml
+# frontend-tools/cells.yaml
+id: cells
+version: 0.0.1
+name: Cells
+description: Read and write the spreadsheet on the person's screen, and chart it — the grid drawn by Datalayer Cells.
+tags: [frontend, cells, spreadsheets]
+enabled: true
+
+# Data: the values of a range, read or written. Charts: insert one over a
+# range, list them. Screen: select a range to show the person.
+toolset:
+  - cells_read_range
+  - cells_write_range
+  - cells_insert_chart
+  - cells_list_charts
+  - cells_select_range
+
+icon: "@primer/octicons-react:table"
+emoji: "🧮"
+```
+
+## The catalogue
+
+| Set | Tools | What it does |
+| --- | --- | --- |
+| `cells` | 5 | Read and write the spreadsheet on the person's screen, and chart it — the grid drawn by Datalayer Cells. |
+| `decks` | 18 | Read, write and drive presentations kept as data — a deck, its slides, and the one on screen. |
+| `jupyter-notebook` | 3 | Interact with a Jupyter notebook. |
+| `jupyter-notebook-read` | 2 | Read a notebook without changing it — cells, outputs and errors. |
+| `jupyter-notebook-propose` | 4 | Read a notebook and propose changes for a person to accept, never applying them. |
+| `jupyter-notebook-edit` | 6 | Read and edit a notebook, and run cells — but never delete from it. |
+| `lexical-document` | 3 | Read and write the blocks of a Lexical document, run Jupyter cells in the page, and draw diagrams into the document with Excalidraw. |
+| `page-deck` | 8 | Build a slide deck in the conversation: create it, add, replace, move and delete slides with speaker notes and pictures, set its look, read it back. |
+| `page-sheet` | 8 | Fill a spreadsheet in the conversation: a sheet with named columns, rows and ranges, formulas, number and currency formats, a frozen header, tabs, a chart. |
+
+The three notebook sets beside `jupyter-notebook` say how far an agent may go
+in a notebook: `jupyter-notebook-reproducer` names `jupyter-notebook-read`,
+and `jupyter-cell-fixer` names `jupyter-notebook-propose`, so its fixes wait
+for the person to accept them.
+
+## An agent beside a spreadsheet
+
+The *Example Output Agent* (`agents/example-output.yaml`) answers in one of six
+output modes. Five are a block in the answer, which the page detects and draws;
+the sixth works on the grid through the `cells` set:
+
+| Mode | What the answer is |
+| --- | --- |
+| `TABLE` | One GitHub-flavoured Markdown table. |
+| `JSON` | One fenced `json` block. |
+| `CHART` | One fenced `json` block whose first line is `// chart`, the rest an ECharts option. |
+| `SPREADSHEET` | One fenced `csv` block whose first line is `# filename: <name>.csv`, drawn with Datalayer Cells in the chat and in the side panel. |
+| `FILE` | One fenced block whose info string is a file extension, its first line `# filename: <name.ext>`. |
+| `SHEET CHART` | No block: asked to chart the spreadsheet shown, it calls `cells_read_range` to find the data and `cells_insert_chart` over it, then says which chart it inserted where. |
+
+```yaml
+# agents/example-output.yaml
+id: example-output
+harness: pydantic-ai
+backend_tools: []
+frontend_tools:
+  - cells:0.0.1
+disable_tool_approvals: true
+suggestions:
+  - text: >-
+      Give me a spreadsheet of twelve months of sales by region (North,
+      South, Online), with a Month column, as one ```csv fenced block whose
+      first line is `# filename: sales.csv`.
+    summary: "Sales spreadsheet"
+  - text: >-
+      Chart the sales spreadsheet: a column chart of the three regions by
+      month, titled Sales by region, inserted on the grid below the data.
+    summary: "Chart the spreadsheet"
+```
+
+## A deck and a sheet in the conversation: `page-deck`, `page-sheet`
+
+`decks` and `cells` work on an editor the person has open beside the chat.
+`page-deck` and `page-sheet` need none: the deck or the workbook is kept **in
+the page, for the conversation**, and shown as it is built: in the conversation,
+or in the chat's right or left panel where the agent's `ui` places it (the
+Marketer and the Accountant place theirs `right`). An
+application with nothing but a chat has them, and so has a visitor's demo.
+Nothing is saved, published or sent by these tools, and they reach no file and
+no books.
+
+Each set comes with the [UI plugin](../ui/#in-the-conversation-a-deck-and-a-sheet-the-agent-builds)
+of its own id, which hands the agent the tools and draws their calls. An agent
+names the two together:
+
+```yaml
+# agents/worker-marketer.yaml (abridged)
+frontend_tools:
+  - page-deck:0.0.1
+ui:
+  - plugin: page-deck
+```
+
+### `page-deck`
+
+| Tool | Takes | Does |
+| --- | --- | --- |
+| `deck_create` | `title`, `subtitle` | Starts a new deck; a deck made before in the conversation is replaced. |
+| `deck_set_title` | `title`, `subtitle` | Renames the deck, its slides kept. |
+| `deck_add_slide` | `type`, the fields of that type, `notes`, `at` | Adds a slide at the end, or before slide `at`. |
+| `deck_add_slides` | `slides` (each as for `deck_add_slide`), `at` | Adds several slides at once, in order: a deck's outline in one or two calls. One bad slide refuses the whole batch; nothing is added. |
+| `deck_update_slide` | `slide`, then as for a new slide | Replaces a slide, whole. |
+| `deck_move_slide` | `slide`, `to` | Moves a slide to another place. |
+| `deck_delete_slide` | `slide` | Deletes a slide. |
+| `deck_set_theme` | `template`, `theme`, `color_mode` | Sets the deck's look: `datalayer`, `brand` (the theme's brand colours) or `ink`; a theme; `light`, `dark` or `auto`. |
+| `deck_read` | | The deck in words: its title and each slide, in order. |
+
+A slide is one of seven types: `title` (title, subtitle), `section` (title),
+`bullets` (title, items, and an `image` beside them), `statement` (statement,
+attribution), `closing` (title, cta), `metrics` (title, and up to six metrics
+of a `value` and a `label`) and `image` (image, image_alt, caption). Any slide
+takes `notes`, the speaker notes. Slides are numbered from 1.
+
+### `page-sheet`
+
+| Tool | Takes | Does |
+| --- | --- | --- |
+| `sheet_create` | `name`, `columns` (each a `name`, a `format`, a `currency`, `decimals`), `freeze_header` | Starts a sheet with named columns: the header row bold and kept in sight, each column in its format. The tab shown takes it while empty; otherwise a tab is added. |
+| `sheet_write_range` | `range`, `values`, `tab` | Writes rows from a top-left cell. A text starting with `=` is a formula. |
+| `sheet_read_range` | `range`, `tab` | The values of a range, or everything written: what is on screen, the person's own edits included. |
+| `sheet_format_range` | `range`, `format`, `currency`, `decimals`, `bold`, `align`, `tab` | Formats a range. |
+| `sheet_freeze` | `rows`, `columns`, `tab` | Keeps the first rows and columns in sight. |
+| `sheet_add_tab` | `name` | Adds a tab and shows it. |
+| `sheet_show_tab` | `name` | Shows a tab. |
+| `sheet_insert_chart` | `range`, `type`, `title` | Draws a chart of a range under it. |
+
+A format is named, never a format code: `number`, `integer`, `currency` (with
+the currency's three letters), `percent`, `date` or `text`.
+
+### What the page checks
+
+The page checks every call before it changes anything, and answers a refusal
+as a sentence the model can act on; a refused call leaves the deck or the sheet
+as it was.
+
+- **Typed arguments.** A field the tool does not take is refused by name, and
+  so is a value of the wrong type.
+- **Content is data.** A slide's text is drawn as text and a cell as a number,
+  a text or a boolean: markup in either is shown as written, never run. A
+  picture, and a link in a slide's text, is an `https://` address or is
+  refused. A formula is computed by Datalayer Cells' own engine, and by nothing
+  else.
+- **Limits.** A deck holds 40 slides, a slide 8 items and 6 metrics, a title
+  160 characters, a line 280, the notes 2,000. A workbook holds 8 tabs; a tab
+  reaches row 2,000 and column AZ and holds 20,000 cells; one write takes 2,000
+  cells; a cell 2,000 characters. Past a limit the tool says which, and what to
+  do instead.
+
+### What is kept
+
+The deck or the workbook belongs to the conversation and stays as the
+conversation is drawn again. It is kept in the page only. When the page is
+loaded again and the conversation comes back, it is built again by replaying
+the calls the conversation recorded; **what a person typed into the sheet's
+cells is not kept**, so the sheet says to export it. A conversation started
+over starts with no deck and no sheet.
+
+A deck is presented full screen from its *Present* button, with its speaker
+notes under *Notes*. A sheet is exported as CSV, by Cells' own writer, from
+*Export CSV*. A deck is not saved or printed from here: Datalayer Decks prints
+a deck from a page of its own, which a deck kept in a conversation does not
+have.
+
+### In a Battle
+
+Three tools of each set are also the deck and the sheet arenas of
+[Battles](../../battles): `deck_set_title`, `deck_add_slide` and `deck_read`
+with the first five slide types, and `sheet_write_range`, `sheet_read_range`
+and `sheet_insert_chart` on one tab, each bound to a contestant's own deck or
+workbook.
+
+## The side panels and the notices: `side-panels`, `notices`
+
+Two small sets every chat can carry, run in the page (18 November 2026):
+
+| Set | Tools | What they do |
+| --- | --- | --- |
+| `side-panels` | `open_side_panel({side})`, `close_side_panel({side})` | Open or close the chat's `left` or `right` panel, where the UI an agent placed there shows. Refused in a sentence when nothing is placed on that side. |
+| `notices` | `show_notice({tone, title, text?, edge?, seconds?})` | Slide a short notice in from an edge of the chat: `tone` info, success, warning or error; a `title` of up to 80 characters and a `text` of up to 280; `edge` north (unsaid), east, south or west; `seconds` from 0 (until closed) to 60. Anything else is refused in a sentence. |
+
+```json
+{ "tone": "success", "title": "Deck ready", "text": "Six slides on the roast-day launch.", "edge": "north" }
+```
+
+Their handlers are agent-runtimes' `side-panels` and `notices` UI plugins: an agent names each
+set under `frontend_tools` with its UI under `ui`. What a panel shows is the UI placed in it and
+its own tools; what is open is read from these calls, so a conversation opened again shows its
+panels as it left them. A notice is not kept. Both run for a visitor too.
+
+## Backend tools and frontend tools
+
+A tool that runs on the runtime, in Python, is a [backend tool](../backend-tools);
+a tool that runs on the page is a frontend tool. An agent may list both.

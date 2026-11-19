@@ -1,0 +1,37 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Track Specification: Drafting
+# The record of a low-risk drafting Op (whitepaper, section 5.4): what ran,
+# what was found and decided, and what was produced, for its owner, and no
+# longer than a quarter. Nothing of it feeds Organizational Memory.
+
+id: drafting
+version: 0.0.1
+name: Drafting Track
+description: >-
+  The record of a low-risk drafting Op: what ran, what the Guards found and
+  the Gates decided, and what was produced. Kept ninety days, readable by
+  the Op's owner only, and not fed back to Organizational Memory.
+
+retain_for: 90_days
+include:
+  - op
+  - cogs_invoked
+  - guard_results
+  - gate_decisions
+  - final_output
+  - timestamps
+  - user_identity
+
+redact:
+  - "*Password*"
+  - "*Secret*"
+  - "*Token*"
+
+feeds_memory: false
+exchangeable: false
+
+tags:
+  - drafting
+  - low-risk
