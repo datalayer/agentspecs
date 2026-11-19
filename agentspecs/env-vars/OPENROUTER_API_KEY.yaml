@@ -4,7 +4,7 @@
 id: OPENROUTER_API_KEY
 version: 0.0.1
 name: OpenRouter API Key
-description: "API key for OpenRouter, one key in front of the models of many vendors. Required by any harness configured with OpenRouter as its model provider run locally; the person's own. A Datalayer runtime takes no key: its model calls go through ai-inference."
+description: "API key for OpenRouter, one key in front of the models of many vendors, the person's own. Required to use OpenRouter's models everywhere, on a Datalayer runtime too: OpenRouter is a direct provider (`via: direct`), called by the agent with this key, and nothing of it goes through ai-inference. Also required by any harness configured with OpenRouter as its model provider run locally."
 registrationUrl: https://openrouter.ai/settings/keys
 tags:
   - authentication
