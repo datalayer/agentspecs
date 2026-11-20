@@ -36,7 +36,7 @@ SEVEN = {
     "worker-terra": "demo-terra",
     "worker-steward-aws": "demo-aws-steward",
     "jupyter-data-analyst": "demo-jupyter-data-analyst",
-    "worker-analyst": "demo-analyst",
+    "worker-functional-analyst": "demo-functional-analyst",
 }
 
 #: The agents with something placed in a side panel, and what.
@@ -47,7 +47,7 @@ PLACED = {
     "jupyter-data-analyst": ("page-sheet",),
     "worker-steward-aws": ("page-sheet",),
     # The user, 19 November 2026: the Analyst's canvas and diagrams, one above the other.
-    "worker-analyst": ("page-excalidraw", "page-mermaid"),
+    "worker-functional-analyst": ("page-excalidraw", "page-mermaid"),
 }
 
 
