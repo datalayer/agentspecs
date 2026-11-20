@@ -491,7 +491,7 @@ def test_a_tool_a_connection_does_not_offer_is_refused() -> None:
         # A pattern is read as the tools it names: one that reaches past what
         # the connection offers is refused like any other.
         "The rehearsal of 'largest-balance' expects 'odoo_accounting_*', a tool no connection of Accounting offers.",
-        "The rehearsal of 'payment-reminders' expects 'odoo_accounting_aged_balance', a tool no connection of Accounting offers.",
+        "The rehearsal of 'payment-reminders' expects 'odoo_accounting_*', a tool no connection of Accounting offers.",
     ]
 
 
@@ -722,3 +722,41 @@ def test_a_cast_member_may_override_its_application_s_model_and_the_model_is_one
     assert not any("model" in problem for problem in scene_problems(fine))
     # Resolved, the cast carries what was said of it.
     assert fine.cast_of()[0].overrides == {"model": "alibaba:qwen-max"}
+
+
+def test_a_rehearsal_tool_line_fits_only_tools_of_its_move_s_class() -> None:
+    """A tool line with a pattern fits only the tools its beat's move may use (Copilot on #30, 20 November 2026).
+
+    `odoo_accounting_*` also names odoo_accounting_post_invoice (a write) and
+    odoo_accounting_delete_draft (a delete): read under the move's `does: read`,
+    the line fits the books' reads alone, and a write or a delete fails the beat.
+    """
+    from agentspecs.scenes import tool_line_fits
+
+    scene = get_scene("sales-and-accounting")
+    assert scene is not None
+    for beat in ("payment-reminders", "largest-balance"):
+        [rehearsed] = [item for item in scene.rehearsal.beats if item.beat == beat]
+        [line] = [line for line in rehearsed.parsed() if line.detail.startswith("odoo_accounting_")]
+        for read in ("odoo_accounting_aged_balance", "odoo_accounting_list_invoices", "odoo_accounting_list_open_balances"):
+            assert tool_line_fits(scene, beat, line, read), (beat, read)
+        for other in ("odoo_accounting_post_invoice", "odoo_accounting_delete_draft", "odoo_accounting_create_draft_invoice"):
+            assert not tool_line_fits(scene, beat, line, other), (beat, other)
+        # The pattern still decides: a read of another server's is not this line's.
+        assert not tool_line_fits(scene, beat, line, "search_earth_datasets")
+
+
+def test_a_tool_line_whose_pattern_names_no_tool_of_its_move_s_class_is_refused() -> None:
+    """A pattern under `does: read` that names no read of the system is a problem, in a sentence."""
+    rehearsal = raw("sales-and-accounting")["rehearsal"]
+    for beat in rehearsal["beats"]:
+        if beat["beat"] == "payment-reminders":
+            beat["lines"] = [
+                "Accounting → Odoo: odoo_accounting_delete_*" if line.startswith("Accounting → Odoo") else line
+                for line in beat["lines"]
+            ]
+    found = problems(rehearsal=rehearsal)
+    assert (
+        "The rehearsal of 'payment-reminders' expects 'odoo_accounting_delete_*' to read, and no tool it names reads."
+        in found
+    )

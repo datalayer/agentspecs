@@ -14,6 +14,7 @@ module.exports = {
   organizationName: 'datalayer',
   projectName: 'datalayer',
   markdown: {
+    format: 'detect',
     mermaid: true,
     // A link to a page that does not exist fails the build.
     hooks: {
