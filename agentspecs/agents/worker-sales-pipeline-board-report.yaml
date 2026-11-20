@@ -24,8 +24,15 @@ delegable:
   - id: document.extract
   - id: report.author
 
-enabled: false
+# The Sales desk of the sales-and-accounting scene runs as this agent (apps/sales.yaml):
+# runnable by id, and kept out of the pickers (20 November 2026).
+enabled: true
+listed: false
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
+# Other models it may be switched to, beside its own: those
+# datalayer-ai-inference serves from the catalogue.
+model_additionals:
+  - "alibaba:qwen-max"
 harness: pydantic-ai
 runtime_engine: datalayer
 identity: datalayer-acting-agent
