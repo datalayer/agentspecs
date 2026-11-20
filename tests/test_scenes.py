@@ -491,7 +491,7 @@ def test_a_tool_a_connection_does_not_offer_is_refused() -> None:
         # A pattern is read as the tools it names: one that reaches past what
         # the connection offers is refused like any other.
         "The rehearsal of 'largest-balance' expects 'odoo_accounting_*', a tool no connection of Accounting offers.",
-        "The rehearsal of 'payment-reminders' expects 'odoo_accounting_aged_balance', a tool no connection of Accounting offers.",
+        "The rehearsal of 'payment-reminders' expects 'odoo_accounting_*', a tool no connection of Accounting offers.",
     ]
 
 

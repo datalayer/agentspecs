@@ -253,7 +253,10 @@ rehearsal:
       lines:
         - "You → Sales"
         - "Sales → Accounting"
-        - "Accounting → Odoo: odoo_accounting_aged_balance"
+        # Any read of the books: who is overdue comes from the aged balance or
+        # from the open invoices' due dates, and both answer the beat (a real
+        # rehearsal on 20 November 2026 read the invoices and was right).
+        - "Accounting → Odoo: odoo_accounting_*"
         - "Accounting: an approval"
         - "Sales: words"
       must_say:
