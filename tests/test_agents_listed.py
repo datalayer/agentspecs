@@ -18,11 +18,11 @@ import yaml
 AGENTS_DIR = Path(__file__).resolve().parent.parent / "agentspecs" / "agents"
 
 #: The agents the pickers offer: the eight seed agents (the Traveller since 15 November 2026,
-#: the Jupyter Data Analyst since 18 November 2026, the Analyst since 19 November 2026).
+#: the Jupyter Data Analyst since 18 November 2026, the Functional Analyst since 19 November 2026).
 LISTED = {
     "jupyter-data-analyst",
     "worker-accountant",
-    "worker-analyst",
+    "worker-functional-analyst",
     "worker-marketer",
     "worker-shopper",
     "worker-steward-aws",

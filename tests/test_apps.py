@@ -926,7 +926,7 @@ EXAMPLES = {
     "demo-accountant": AppKind.CHAT,
     "demo-aws-steward": AppKind.CHAT,
     "demo-jupyter-data-analyst": AppKind.CHAT,
-    "demo-analyst": AppKind.CHAT,
+    "demo-functional-analyst": AppKind.CHAT,
 }
 
 #: Each of the SDK's seven recorded PAP journeys (agent-runtimes' trace examples) and the example it became.
@@ -2676,7 +2676,7 @@ DEMO_CONNECTIONS = {
     "demo-marketer": [],
     "demo-aws-steward": [],
     "demo-jupyter-data-analyst": [],
-    "demo-analyst": [],
+    "demo-functional-analyst": [],
 }
 
 

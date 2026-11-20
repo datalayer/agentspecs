@@ -52,11 +52,11 @@ PAGE_UIS = {
             "sheet_insert_chart",
         ],
     ),
-    # The Analyst's canvas and diagrams (the user, 19 November 2026): the tools of
+    # The Functional Analyst's canvas and diagrams (the user, 19 November 2026): the tools of
     # @datalayer/reactor-excalidraw and @datalayer/reactor-mermaid, run in the page.
     "page-excalidraw": (
-        "worker-analyst",
-        "demo-analyst",
+        "worker-functional-analyst",
+        "demo-functional-analyst",
         [
             "datalayer_excalidrawInsertNode",
             "datalayer_excalidrawFromMermaid",
@@ -72,8 +72,8 @@ PAGE_UIS = {
         ],
     ),
     "page-mermaid": (
-        "worker-analyst",
-        "demo-analyst",
+        "worker-functional-analyst",
+        "demo-functional-analyst",
         [
             "datalayer_mermaidSetDiagram",
             "datalayer_mermaidReadDiagram",

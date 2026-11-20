@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Frontend tool set: drawings on an Excalidraw canvas in the page (the user,
-# 19 November 2026: the Analyst's Excalidraw tools).
+# 19 November 2026: the Functional Analyst's Excalidraw tools).
 #
 # The tools are @datalayer/reactor-excalidraw's eleven, run in the page on
 # the conversation's drawings: they reach nothing beyond the page. Their

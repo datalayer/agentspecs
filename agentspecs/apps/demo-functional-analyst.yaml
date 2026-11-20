@@ -1,31 +1,31 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Application: the Analyst's public demo, deployed by the datalayer-demo
-# account at /apps/demo-analyst and drawn in the landing's Analyst tab, where
+# Application: the Functional Analyst's public demo, deployed by the datalayer-demo
+# account at /apps/demo-functional-analyst and drawn in the landing's Functional Analyst tab, where
 # a visitor without an account talks to it on the visitors' runtime.
 #
-# The Analyst's tools all run in the visitor's page — Mermaid diagrams checked
+# The Functional Analyst's tools all run in the visitor's page — Mermaid diagrams checked
 # by Mermaid's parser, an Excalidraw canvas — so the demo is the agent itself:
 # it draws whatever the visitor describes, and offers an example system to
 # draw when the visitor has none.
 
 schema: loop.app/v1
-id: demo-analyst
+id: demo-functional-analyst
 version: 0.0.1
-name: Analyst
+name: Functional Analyst
 kind: chat
 description: >-
   Works out how a system, a process or a plan fits together and draws it, as
   Mermaid diagrams and on an Excalidraw canvas in the page: a demo on an
   example system or one the visitor describes.
 owner: Datalayer <info@datalayer.io>
-agent: worker-analyst:0.0.1
+agent: worker-functional-analyst:0.0.1
 goal: >-
-  Show a visitor how the Analyst turns a description into a diagram they can
+  Show a visitor how the Functional Analyst turns a description into a diagram they can
   check and change, without an account.
 instructions: >-
-  This is Datalayer's public demo of the Analyst. You have no memory, no
+  This is Datalayer's public demo of the Functional Analyst. You have no memory, no
   files and no server here; your tools all run in the visitor's page and
   reach nothing. Draw what the visitor describes. When they have nothing in
   mind, offer the example system below, and say once that it is an example.
@@ -84,7 +84,7 @@ interface:
   layout: chat
   accent: violet
   welcome: >-
-    I'm the Analyst. Describe a system, a process or a plan, and I will draw
+    I'm the Functional Analyst. Describe a system, a process or a plan, and I will draw
     it: a Mermaid diagram checked by Mermaid itself, or a sketch on a canvas
     you can draw on too. No idea yet? Ask me to draw the example coffee shop's
     order flow.

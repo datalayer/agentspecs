@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Frontend tool set: Mermaid diagrams in the page (the user, 19 November
-# 2026: the Analyst's Mermaid tools).
+# 2026: the Functional Analyst's Mermaid tools).
 #
 # The tools are @datalayer/reactor-mermaid's six, run in the page on the
 # conversation's diagrams with Mermaid itself: they reach nothing beyond the
