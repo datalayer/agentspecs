@@ -885,6 +885,18 @@ def _tool_problem(member: TeamMember, name: str, server_id: str, tool: str, does
     return None
 
 
+def _pattern_class_problem(server_id: str, pattern: str, does: ActionClass) -> Optional[str]:
+    """Why a tool pattern names no tool of a class on its system, or None."""
+    server = server_specs().get(server_id)
+    declared = list(((server or {}).get("actions") or {}).get("tools") or {})
+    named = [tool for tool in declared if matches(tool, pattern)]
+    if not named or not any(server_tool_classes(server, tool, {}) for tool in named):
+        return None
+    if any(does in server_tool_classes(server, tool, {}) for tool in named):
+        return None
+    return f"'{pattern}' to {does.value}, and no tool it names {does.value}s."
+
+
 def harness_of(member: TeamMember) -> str:
     """The harness of the catalogue a member's agent runs (`opencode`, `claude-code`), or empty.
 
@@ -913,6 +925,39 @@ def _names(scene: SceneSpec, cast: List[SceneCastMember]) -> Dict[str, str]:
         names[system.name] = system.id
         names[system.name.lower()] = system.id
     return names
+
+
+def _line_move(scene: SceneSpec, beat_id: str, line: TranscriptLine) -> Optional[SceneMove]:
+    """The move of a beat a tool line stands for: the same member asking the same system over mcp."""
+    beat = scene.beat(beat_id)
+    if beat is None or line.is_answer:
+        return None
+    names = _names(scene, scene.cast_of())
+    who, whom = names.get(line.who, line.who), names.get(line.whom, line.whom)
+    for move in beat.moves + [move for branch in beat.branch for move in branch.moves]:
+        if move.who == who and move.asks and names.get(move.asks, move.asks) == whom and move.over is TeamProtocol.MCP:
+            return move
+    return None
+
+
+def tool_line_fits(scene: SceneSpec, beat_id: str, line: TranscriptLine, tool: str) -> bool:
+    """Whether a tool called fits a rehearsal's tool line: its pattern, and its move's class.
+
+    *Accounting → Odoo: odoo_accounting_* under a move that says `does: read`
+    fits the system's reads alone: a write or a delete the pattern also names
+    fails the beat (20 November 2026). A tool whose class the system does not
+    declare fits by its pattern.
+    """
+    if not matches(tool, line.detail.strip()):
+        return False
+    move = _line_move(scene, beat_id, line)
+    if move is None or move.does is None:
+        return True
+    names = _names(scene, scene.cast_of())
+    system = scene.setting.system(names.get(line.whom, line.whom))
+    server = server_specs().get(_id_of(system.server) if system else "")
+    classes = server_tool_classes(server, tool, {}) if server else []
+    return not classes or move.does in classes
 
 
 def scene_problems(scene: SceneSpec) -> List[str]:
@@ -1016,7 +1061,11 @@ def scene_problems(scene: SceneSpec) -> List[str]:
             whom = names.get(line.whom, "")
             if whom in systems and line.detail and names.get(line.who, "") in ids:
                 member = team.member(names[line.who])
-                why = _tool_problem(member, _persona_name(cast, member.id), whom, line.detail, None)  # type: ignore[arg-type]
+                move = _line_move(scene, rehearsal.beat, line)
+                does = move.does if move is not None else None
+                why = _tool_problem(member, _persona_name(cast, member.id), whom, line.detail, does)  # type: ignore[arg-type]
+                if not why and does is not None:
+                    why = _pattern_class_problem(whom, line.detail, does)
                 if why:
                     problems.append(f"The rehearsal of '{rehearsal.beat}' expects {why}")
     recording = scene.rehearsal.recording
