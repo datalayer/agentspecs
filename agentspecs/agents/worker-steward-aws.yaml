@@ -128,6 +128,9 @@ ui:
   - plugin: page-sheet
     placement: right
   - plugin: side-panels
+  # Its Composer, full screen from the toolbar (21 November 2026): its Canvas,
+  # its spec and its Python, read only.
+  - plugin: composer-portal
 
 system_prompt: >
   You are Datalayer Steward for AWS, the Steward. You read one AWS account

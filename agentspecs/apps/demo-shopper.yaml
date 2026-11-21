@@ -24,7 +24,7 @@
 
 schema: loop.app/v1
 id: demo-shopper
-version: 0.0.12
+version: 0.0.13
 name: Shopper
 kind: chat
 description: >-
@@ -137,6 +137,7 @@ ui:
   - plugin: pap-sign-in
   - plugin: shop-header
   - plugin: notices
+  - plugin: composer-portal
 interface:
   layout: chat
   accent: sun

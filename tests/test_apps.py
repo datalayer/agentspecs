@@ -2710,7 +2710,7 @@ def test_the_traveller_demo_starts_google_maps_only_with_its_key() -> None:
     # The user, 19 November 2026: the demo may use Google Maps with the billed key among the demo
     # account's own secrets; without it, Kiwi.com alone, and nothing said about Maps.
     found = APP_CATALOGUE["demo-traveller"]
-    assert found.version == "0.0.7"
+    assert found.version == "0.0.8"
     maps = next(c for c in found.connections if c.server == "google-maps:0.0.1")
     # Optional, so the runtime leaves it off when the account holds no such secret, as the agent does.
     assert maps.optional

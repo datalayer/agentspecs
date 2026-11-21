@@ -15,7 +15,7 @@
 
 schema: loop.app/v1
 id: demo-jupyter-data-analyst
-version: 0.0.5
+version: 0.0.6
 name: Jupyter Data Analyst
 kind: chat
 description: >-
@@ -115,6 +115,7 @@ ui:
   - plugin: page-sheet
     placement: right
   - plugin: side-panels
+  - plugin: composer-portal
 interface:
   layout: chat
   accent: violet

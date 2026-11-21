@@ -113,6 +113,9 @@ ui:
   - plugin: earth-header
   # A short notice from an edge of the chat (18 November 2026), run in the page.
   - plugin: notices
+  # Its Composer, full screen from the toolbar (21 November 2026): its Canvas,
+  # its spec and its Python, read only.
+  - plugin: composer-portal
 
 system_prompt: >-
   You are Terra. You analyse satellite images and Earth observation data for one

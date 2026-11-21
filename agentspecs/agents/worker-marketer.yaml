@@ -248,6 +248,9 @@ ui:
   - plugin: side-panels
   # A short notice from an edge of the chat (18 November 2026), run in the page.
   - plugin: notices
+  # Its Composer, full screen from the toolbar (21 November 2026): its Canvas,
+  # its spec and its Python, read only.
+  - plugin: composer-portal
 # The tools run in the page (18 November 2026): a slide deck built in the
 # conversation, for a campaign plan, a results recap or a launch pitch. Nothing
 # is published by them.

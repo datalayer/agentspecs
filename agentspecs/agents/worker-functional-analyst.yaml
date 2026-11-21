@@ -120,6 +120,9 @@ ui:
   - plugin: page-mermaid
     placement: right
   - plugin: side-panels
+  # Its Composer, full screen from the toolbar (21 November 2026): its Canvas,
+  # its spec and its Python, read only.
+  - plugin: composer-portal
 # The tools run in the page.
 frontend_tools:
   - notices:0.0.1

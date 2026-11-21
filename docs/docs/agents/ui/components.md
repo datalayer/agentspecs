@@ -36,6 +36,7 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `chat-header` (Chat title bar) | `@datalayer/loop-plugin-chat-header` | — | — | none of its own |
 | `chat-view` (Chat button) | `@datalayer/loop-plugin-chat-view` | — | — | none of its own |
 | `commands` (Command palette) | `@datalayer/loop-plugin-commands` | — | — | none of its own |
+| `composer-portal` (Composer) | `@datalayer/loop-plugin-composer-portal` | — | — | none of its own |
 | `document` (Document) | `@datalayer/loop-plugin-document` | — | — | none of its own |
 | `document-toolbar` (Document toolbar) | `@datalayer/loop-plugin-document-toolbar` | — | — | none of its own |
 | `document-view` (Document button) | `@datalayer/loop-plugin-document-view` | — | — | none of its own |

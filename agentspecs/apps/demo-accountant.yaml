@@ -21,7 +21,7 @@
 
 schema: loop.app/v1
 id: demo-accountant
-version: 0.0.8
+version: 0.0.9
 name: Accountant
 kind: chat
 description: >-
@@ -99,6 +99,7 @@ ui:
     placement: right
   - plugin: side-panels
   - plugin: notices
+  - plugin: composer-portal
 interface:
   layout: chat
   accent: green

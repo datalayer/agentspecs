@@ -19,7 +19,7 @@
 
 schema: loop.app/v1
 id: demo-marketer
-version: 0.0.7
+version: 0.0.8
 name: Marketer
 kind: chat
 description: >-
@@ -85,6 +85,7 @@ ui:
     placement: right
   - plugin: side-panels
   - plugin: notices
+  - plugin: composer-portal
 interface:
   layout: chat
   accent: rose
