@@ -41,6 +41,9 @@ SCHEMA_PATH = PROTOCOLS_DIR / "protocol.schema.json"
 REFERENCE_PATH = Path(__file__).resolve().parents[1] / "docs" / "docs" / "agents" / "protocols" / "index.md"
 
 _ID = re.compile(r"^[a-z][a-z0-9-]{0,40}$")
+#: The same, for a JSON Schema: `$` there may match before a final newline, which fullmatch refuses,
+#: so the end is a strict end-of-input assertion (ECMAScript and Python regexes both read it).
+_SCHEMA_ID = r"^[a-z][a-z0-9-]{0,40}(?![\s\S])"
 
 
 class ProtocolLayer(str, Enum):
@@ -95,6 +98,8 @@ class ProtocolSpec(BaseModel):
     connects: str = Field(min_length=1, description="What it connects an agent to")
     roles: List[str] = Field(
         min_length=1,
+        # What _roles checks, said in the JSON Schema too, so its readers refuse what the catalogue refuses.
+        json_schema_extra={"uniqueItems": True, "items": {"type": "string", "pattern": _SCHEMA_ID}},
         description=(
             "What a runtime can be in it (client, server, signer, verifier…): what its "
             "plugin says it implements, and what the Agentspecs pages show"

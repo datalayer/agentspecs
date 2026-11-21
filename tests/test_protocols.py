@@ -127,3 +127,15 @@ def test_a_planned_protocol_is_refused_to_an_application_offered(planned_tap):
 def test_a_planned_protocol_is_listed_only_while_the_application_is_not_offered(planned_tap):
     off = {**BASE, "protocols": ["tap"], "enabled": False, "unavailable_because": "Card networks wait on TAP."}
     assert AppSpec.model_validate(off).protocols == ["tap"]
+
+
+@pytest.mark.parametrize("roles", [["Client"], ["client", "client"], ["has space"], [], ["client\n"]])
+def test_the_json_schema_refuses_the_roles_the_catalogue_refuses(roles):
+    """The schema says what ``_roles`` checks: its readers refuse what the catalogue cannot load."""
+    jsonschema = pytest.importorskip("jsonschema")
+    good = yaml.safe_load((protocols.PROTOCOLS_DIR / "a2a.yaml").read_text())
+    jsonschema.validate(good, protocols.json_schema())
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate({**good, "roles": roles}, protocols.json_schema())
+    with pytest.raises(ValidationError):
+        protocols.ProtocolSpec.model_validate({**good, "roles": roles})
