@@ -125,6 +125,50 @@ def test_the_schema_and_the_reference_are_the_specs():
             },
             "not an entry point",
         ),
+        (
+            {
+                "implementation": {
+                    "package": "@a/b",
+                    "module": "lib/x",
+                    "export": "X",
+                    "backend": {"package": "b", "entry_point": "agent_runtimes..reactor_extension:plugin"},
+                }
+            },
+            "not an entry point",
+        ),
+        (
+            {
+                "implementation": {
+                    "package": "@a/b",
+                    "module": "lib/x",
+                    "export": "X",
+                    "backend": {"package": "b", "entry_point": "agent_runtimes.reactor_extension:plugin."},
+                }
+            },
+            "not an entry point",
+        ),
+        (
+            {
+                "implementation": {
+                    "package": "@a/b",
+                    "module": "lib/x",
+                    "export": "X",
+                    "backend": {"package": "b", "entry_point": ".a:b"},
+                }
+            },
+            "not an entry point",
+        ),
+        (
+            {
+                "implementation": {
+                    "package": "@a/b",
+                    "module": "lib/x",
+                    "export": "X",
+                    "backend": {"package": "b", "entry_point": "a:.b"},
+                }
+            },
+            "not an entry point",
+        ),
         ({"per": "application"}, "its export is a factory"),
         ({"per": "source"}, "its export is a list of plugins"),
     ],
