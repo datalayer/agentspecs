@@ -15,6 +15,7 @@ spec_url: https://datatracker.ietf.org/doc/draft-ietf-webbotauth-httpsig-protoco
 spec_version: "draft-ietf-webbotauth-httpsig-protocol-00"
 status: shipped
 connects: Websites, which can tell the application's requests from someone pretending
+roles: [signer, verifier, directory]
 packages:
   python: ["agent-runtimes"]
   typescript: ["@datalayer/agent-runtimes", "web-bot-auth"]

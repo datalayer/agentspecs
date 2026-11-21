@@ -40,6 +40,21 @@ def test_the_schema_and_the_reference_are_the_specs():
         assert protocols.REFERENCE_PATH.read_text() == protocols.reference_text()
 
 
+def test_each_protocol_says_the_roles_a_runtime_takes_in_it():
+    assert {p.id: p.roles for p in protocols.PROTOCOL_CATALOGUE.values()} == {
+        "a2a": ["client", "server"],
+        "a2ui": ["agent", "renderer"],
+        "acp": ["buyer"],
+        "ag-ui": ["server", "client"],
+        "mcp": ["client", "server"],
+        "pact": ["personal-agent", "provider"],
+        "pap": ["personal-agent", "company"],
+        "tap": ["signer", "verifier"],
+        "ucp": ["shopper"],
+        "web-bot-auth": ["signer", "verifier", "directory"],
+    }
+
+
 @pytest.mark.parametrize(
     "change,why",
     [
@@ -48,6 +63,9 @@ def test_the_schema_and_the_reference_are_the_specs():
         ({"status": "soon"}, "status"),
         ({"protocol_tools": ["nothing"]}, "no protocol-tools table"),
         ({"token": "x"}, "Extra inputs"),
+        ({"roles": []}, "at least 1"),
+        ({"roles": ["Client"]}, "not a role"),
+        ({"roles": ["client", "client"]}, "said once"),
     ],
 )
 def test_a_spec_refuses(change, why):
