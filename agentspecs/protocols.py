@@ -95,6 +95,8 @@ class ProtocolSpec(BaseModel):
     connects: str = Field(min_length=1, description="What it connects an agent to")
     roles: List[str] = Field(
         min_length=1,
+        # What _roles checks, said in the JSON Schema too, so its readers refuse what the catalogue refuses.
+        json_schema_extra={"uniqueItems": True, "items": {"type": "string", "pattern": _ID.pattern}},
         description=(
             "What a runtime can be in it (client, server, signer, verifier…): what its "
             "plugin says it implements, and what the Agentspecs pages show"
