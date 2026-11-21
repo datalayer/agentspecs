@@ -193,6 +193,10 @@ DEFAULT_LAYOUTS = {
 #: The media type of an answer drawn as A2UI surfaces.
 A2UI_OUTPUT = "application/json+a2ui"
 
+#: The UI plugin every application's chat has in its toolbar without listing it in `ui`, unless it
+#: leaves it out (`interface.composer_portal_disabled`): the Composer button, how it is built, read only.
+COMPOSER_PORTAL = "composer-portal"
+
 
 def ui_for(
     kind: Union[AppKind, str],
@@ -2394,6 +2398,15 @@ class AppInterface(_Strict):
             "Plain text alone when unsaid"
         ),
     )
+    composer_portal_disabled: bool = Field(
+        default=False,
+        description=(
+            "Whether its chat leaves out the Composer button (the `composer-portal` UI plugin), which every "
+            "application's chat has in its toolbar otherwise, without listing it in `ui`: how it is built (its "
+            "Canvas, its spec, its Python) is then not shown from its chat. An application that sets it does not "
+            "list `composer-portal` in `ui`"
+        ),
+    )
 
     @field_validator("avatar", mode="before")
     @classmethod
@@ -3557,7 +3570,9 @@ class AppSpec(_Strict):
         description=(
             "Its UI plugins, each `{plugin, renderer}`: a plugin of `agentspecs/ui`, each once, "
             "and the renderer of `agentspecs/ui-renderers` it is exposed through, when it is — one the plugin "
-            "may be exposed through, and one that is not enabled only while the application is not offered"
+            "may be exposed through, and one that is not enabled only while the application is not offered. "
+            "Its chat has the Composer button (`composer-portal`) in its toolbar besides, listed or not, unless "
+            "`interface.composer_portal_disabled` leaves it out"
         ),
     )
     pap: AppPap = Field(
@@ -3883,6 +3898,12 @@ class AppSpec(_Strict):
                     f"add {protocol_id!r} to `protocols`."
                 )
         problems += ui_choices_problems([choice.model_dump(exclude_none=True) for choice in self.ui], to_ship=self.enabled)
+        # The Composer button is every chat's unless the application leaves it out: never both.
+        if self.interface.composer_portal_disabled and any(choice.plugin == COMPOSER_PORTAL for choice in self.ui):
+            problems.append(
+                f"It lists the UI plugin {COMPOSER_PORTAL!r} and leaves it out "
+                "(`interface.composer_portal_disabled`): say one."
+            )
         if problems:
             raise ValueError(" ".join(problems))
 
@@ -4580,6 +4601,7 @@ def list_apps(kind: Optional[AppKind] = None) -> List[AppSpec]:
 
 __all__ = [
     "A2UI_OUTPUT",
+    "COMPOSER_PORTAL",
     "agent_voice_problems",
     "APP_CATALOGUE",
     "APP_SCHEMA",

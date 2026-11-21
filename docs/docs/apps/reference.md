@@ -32,7 +32,7 @@ Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, a
 | `contents` | list of text | The documents and datasets it answers from | — |
 | `connections` | list of [AppConnection](#appconnection) | What it reaches | — |
 | `protocols` | list of text | The agent protocols it speaks, ids of the protocols catalogue: its `pap`, `pact`, `signed_fetch` and `a2a` blocks, and each merchant of `commerce`, are refused unless their protocol is listed, and a planned protocol only while it is not offered | — |
-| `ui` | list of [UiChoice](#uichoice) | Its UI plugins, each `{plugin, renderer}`: a plugin of `agentspecs/ui`, each once, and the renderer of `agentspecs/ui-renderers` it is exposed through, when it is — one the plugin may be exposed through, and one that is not enabled only while the application is not offered | — |
+| `ui` | list of [UiChoice](#uichoice) | Its UI plugins, each `{plugin, renderer}`: a plugin of `agentspecs/ui`, each once, and the renderer of `agentspecs/ui-renderers` it is exposed through, when it is — one the plugin may be exposed through, and one that is not enabled only while the application is not offered. Its chat has the Composer button (`composer-portal`) in its toolbar besides, listed or not, unless `interface.composer_portal_disabled` leaves it out | — |
 | `pap` | [AppPap](#apppap) | Personal Agent Protocol: companies it works with, or being one | — |
 | `pact` | [AppPact](#apppact) | PACT: businesses it asks for each person | — |
 | `commerce` | [AppCommerce](#appcommerce) | UCP and ACP: merchants it shops at for each person | — |
@@ -1087,6 +1087,7 @@ What the user sees.
 | `balloon` | [BalloonDisplay](#balloondisplay) | How its floating assistant's balloon shows the conversation: `history` (every message, scrolled, the composer last) or `current` (only what it says or does now, the answer being written or the tool it calls, in one balloon). The page's own when unsaid: `history` for the floating chat | empty |
 | `voice` | [AppVoice](#appvoice) | Its voice: whether it listens and speaks, with which voice, in which language (off unless said) | — |
 | `outputs` | list of text | The formats its answers come in, by media type, words first: `text/markdown`, then `application/x-ipynb+json` for a Jupyter notebook. Over A2A, its agent card's output modes; a caller asks for some of them (`acceptedOutputModes`). Plain text alone when unsaid | — |
+| `composer_portal_disabled` | true or false | Whether its chat leaves out the Composer button (the `composer-portal` UI plugin), which every application's chat has in its toolbar otherwise, without listing it in `ui`: how it is built (its Canvas, its spec, its Python) is then not shown from its chat. An application that sets it does not list `composer-portal` in `ui` | `false` |
 
 ### AppMode
 
