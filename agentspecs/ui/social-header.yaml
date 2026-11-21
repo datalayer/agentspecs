@@ -21,6 +21,13 @@ emoji: "📣"
 octicon: megaphone
 plugin: "@datalayer/loop-plugin-social-header"
 folder: "social-header"
+# Its implementation: `import { socialHeaderPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/social-header"`
+# is what makes the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/social-header"
+  export: "socialHeaderPlugin"
+  kind: factory
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

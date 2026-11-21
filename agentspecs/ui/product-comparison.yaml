@@ -18,6 +18,13 @@ emoji: "📊"
 octicon: table
 plugin: "@datalayer/loop-plugin-product-comparison"
 folder: "product-comparison"
+# Its implementation: `import { ProductComparisonPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/product-comparison"`
+# is the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/product-comparison"
+  export: "ProductComparisonPlugin"
+  kind: plugin
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

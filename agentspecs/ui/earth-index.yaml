@@ -18,6 +18,13 @@ emoji: "🌿"
 octicon: graph
 plugin: "@datalayer/loop-plugin-earth-index"
 folder: "earth-index"
+# Its implementation: `import { EarthIndexPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/earth-index"`
+# is the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/earth-index"
+  export: "EarthIndexPlugin"
+  kind: plugin
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

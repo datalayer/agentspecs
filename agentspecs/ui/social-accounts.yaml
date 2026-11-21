@@ -18,6 +18,13 @@ emoji: "🪪"
 octicon: person
 plugin: "@datalayer/loop-plugin-social-accounts"
 folder: "social-accounts"
+# Its implementation: `import { socialAccountsPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/social-accounts"`
+# is what makes the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/social-accounts"
+  export: "socialAccountsPlugin"
+  kind: factory
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

@@ -21,6 +21,13 @@ emoji: "💸"
 octicon: graph
 plugin: "@datalayer/loop-plugin-aws-header"
 folder: "aws-header"
+# Its implementation: `import { awsHeaderPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/aws-header"`
+# is what makes the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/aws-header"
+  export: "awsHeaderPlugin"
+  kind: factory
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

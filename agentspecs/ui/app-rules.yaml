@@ -16,6 +16,13 @@ emoji: "🛡️"
 octicon: shield-check
 plugin: "@datalayer/loop-plugin-app-rules"
 folder: "app-rules"
+# Its implementation: `import { defineAppRulesPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/app-rules"`
+# is what makes the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/app-rules"
+  export: "defineAppRulesPlugin"
+  kind: factory
 per: application
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).

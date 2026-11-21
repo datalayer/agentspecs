@@ -16,6 +16,13 @@ emoji: "🪶"
 octicon: paper-airplane
 plugin: "@datalayer/loop-plugin-prompt"
 folder: "prompt"
+# Its implementation: `import { PromptPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/prompt"`
+# is the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/prompt"
+  export: "PromptPlugin"
+  kind: plugin
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

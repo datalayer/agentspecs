@@ -18,6 +18,13 @@ emoji: "🧭"
 octicon: paper-airplane
 plugin: "@datalayer/loop-plugin-trip-summary"
 folder: "trip-summary"
+# Its implementation: `import { tripSummaryPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/trip-summary"`
+# is what makes the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/trip-summary"
+  export: "tripSummaryPlugin"
+  kind: factory
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

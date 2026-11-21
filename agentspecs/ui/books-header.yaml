@@ -21,6 +21,13 @@ emoji: "🧮"
 octicon: book
 plugin: "@datalayer/loop-plugin-books-header"
 folder: "books-header"
+# Its implementation: `import { booksHeaderPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/books-header"`
+# is what makes the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/books-header"
+  export: "booksHeaderPlugin"
+  kind: factory
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

@@ -23,6 +23,13 @@ in Agent Runtimes, read from it: a test of Agent Runtimes
 spec and the registration to each other, both ways — and holds every plugin folder of
 `src/apps/plugins/` to a UI spec, or to the reason it has none.
 
+A spec says where its plugin is (`implementation`): the package, the module and the
+export. The plugin's Reactor manifest carries what the spec says — its name and faces,
+its package, its settings as `configSchema`, its Slots, Contributions and Commands as
+`declares`, and the rest (placements, renderers, header, components…) under its
+`metadata` — so a host listing the plugins reads the same facts as this catalogue, and
+the test above resolves each spec's export and holds its manifest to the spec.
+
 The plugin that draws A2UI surfaces (`a2ui-surface`) hosts **the catalog of visual
 components**: the 18 components of A2UI's v0.9 basic catalog and Datalayer's
 own. The catalog is one for the three editors of an application — the Appspec, the
@@ -41,6 +48,7 @@ in [the catalog of visual components](./components.md), generated from the plugi
 | `emoji`, `octicon` | Its faces. |
 | `plugin` | The name the Reactor plugin registers under: `@datalayer/loop-plugin-chat`. |
 | `folder` | The plugin's folder in Agent Runtimes, under `src/apps/plugins/`. |
+| `implementation` | Where the plugin is: the npm `package` that ships it, the `module` of the package that exports it and the `export` (`import { ChatPlugin } from '@datalayer/agent-runtimes/lib/apps/plugins/chat'`), what the export is (`kind`: `plugin`, `plugins` for one per instance, or `factory`, called with the application for a plugin `per: application` and with its placement for one placed in the chat's chrome or a side panel), and, for a UI with a server side, its `backend` Reactor plugin: the PyPI `package` and the `entry_point` (`module.path:attribute`). |
 | `per` | For a plugin registered once per something, `application`, `source` or `ui`: it registers as `<plugin>-<its id>`. |
 | `contributions` | Its Contributions: the `slots` it fills, the Contribution Points it contributes to (`points`), and the `commands` it adds — Reactor Commands by id, the composer's `/` commands by name. |
 | `contribution_points` | The Contribution Points it offers to other plugins. |
@@ -62,6 +70,11 @@ emoji: "🛡️"
 octicon: shield-check
 plugin: "@datalayer/loop-plugin-app-rules"
 folder: app-rules
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: lib/apps/plugins/app-rules
+  export: defineAppRulesPlugin
+  kind: factory
 per: application
 contributions:
   slots: [loop.sidebar]

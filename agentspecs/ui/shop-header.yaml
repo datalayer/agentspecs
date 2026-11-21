@@ -21,6 +21,13 @@ emoji: "🛍️"
 octicon: package
 plugin: "@datalayer/loop-plugin-shop-header"
 folder: "shop-header"
+# Its implementation: `import { shopHeaderPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/shop-header"`
+# is what makes the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/shop-header"
+  export: "shopHeaderPlugin"
+  kind: factory
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

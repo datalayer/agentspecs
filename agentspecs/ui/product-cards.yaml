@@ -18,6 +18,13 @@ emoji: "🛍️"
 octicon: apps
 plugin: "@datalayer/loop-plugin-product-cards"
 folder: "product-cards"
+# Its implementation: `import { ProductCardsPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/product-cards"`
+# is the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/product-cards"
+  export: "ProductCardsPlugin"
+  kind: plugin
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

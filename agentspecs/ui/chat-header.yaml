@@ -16,6 +16,13 @@ emoji: "🏷️"
 octicon: rows
 plugin: "@datalayer/loop-plugin-chat-header"
 folder: "chat-header"
+# Its implementation: `import { ChatHeaderPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/chat-header"`
+# is the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/chat-header"
+  export: "ChatHeaderPlugin"
+  kind: plugin
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

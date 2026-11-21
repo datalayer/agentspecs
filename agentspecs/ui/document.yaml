@@ -16,6 +16,13 @@ emoji: "📄"
 octicon: file
 plugin: "@datalayer/loop-plugin-document"
 folder: "document"
+# Its implementation: `import { DocumentPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/document"`
+# is the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/document"
+  export: "DocumentPlugin"
+  kind: plugin
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
