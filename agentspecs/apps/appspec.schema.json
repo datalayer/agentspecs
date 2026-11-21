@@ -749,6 +749,12 @@
           "default": null,
           "description": "A widget's page written in its code (`@app.page`): its inputs as a form, its outputs as values; run again as an input changes, its outputs shown in place. None when unsaid"
         },
+        "plugin_manager_disabled": {
+          "default": false,
+          "description": "Whether it leaves out the plugins manager's button (the `plugin-manager` UI plugin), which every application has in its chat's footer otherwise, without listing it in `ui`: its plugins are then not listed nor switched on and off from its page. An application that sets it does not list `plugin-manager` in `ui`",
+          "title": "Plugin Manager Disabled",
+          "type": "boolean"
+        },
         "profiles": {
           "description": "Several assistants in one application, two at least: the person picks one before the conversation starts \u2014 the first unless they do \u2014 and keeps it to the end; its instructions, model and starters go with every run. None when unsaid",
           "items": {
@@ -3186,7 +3192,7 @@
       "type": "array"
     },
     "ui": {
-      "description": "Its UI plugins, each `{plugin, renderer}`: a plugin of `agentspecs/ui`, each once, and the renderer of `agentspecs/ui-renderers` it is exposed through, when it is \u2014 one the plugin may be exposed through, and one that is not enabled only while the application is not offered. Its chat has the Composer button (`composer-portal`) in its toolbar besides, listed or not, unless `interface.composer_portal_disabled` leaves it out",
+      "description": "Its UI plugins, each `{plugin, renderer}`: a plugin of `agentspecs/ui`, each once, and the renderer of `agentspecs/ui-renderers` it is exposed through, when it is \u2014 one the plugin may be exposed through, and one that is not enabled only while the application is not offered. Its chat has the Composer button (`composer-portal`) in its toolbar besides, listed or not, unless `interface.composer_portal_disabled` leaves it out; and the plugins manager's button (`plugin-manager`) in its footer, listed or not, unless `interface.plugin_manager_disabled` leaves it out",
       "items": {
         "$ref": "#/$defs/UiChoice"
       },

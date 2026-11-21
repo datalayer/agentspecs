@@ -427,3 +427,40 @@ def test_every_application_has_the_composer_unless_it_leaves_it_out():
         AppSpec.model_validate({**base, "interface": {"composer_portal_disabled": "maybe"}})
     # The catalogue's applications all have it today: none leaves it out.
     assert not [app.id for app in load_apps().values() if app.interface.composer_portal_disabled]
+
+
+def test_every_application_has_the_plugins_manager_unless_it_leaves_it_out():
+    """Every application has the plugins manager's button in its chat's footer, listed in `ui` or not (the user,
+    21 November 2026: "all our apps should render with that plugin"), unless its spec leaves it out with
+    `interface.plugin_manager_disabled`; never both said."""
+    from agentspecs.apps import PLUGIN_MANAGER, load_apps
+
+    assert PLUGIN_MANAGER == "plugin-manager" and PLUGIN_MANAGER in ui.UI_CATALOGUE
+    manager = ui.UI_CATALOGUE[PLUGIN_MANAGER]
+    assert manager.plugin == "@datalayer/loop-plugin-plugin-manager"
+    assert [p.value for p in manager.placements][0] == "footer"
+    assert manager.contributions.slots == ["loop.status"]
+    assert manager.implementation.model_dump(exclude_none=True) == {
+        "package": "@datalayer/agent-runtimes",
+        "module": "lib/apps/plugins/plugin-manager",
+        "export": "pluginManagerPlugin",
+        "kind": "factory",
+    }
+    base = {"id": "notes", "name": "Notes", "kind": "chat", "agent": "a"}
+    assert AppSpec.model_validate(base).interface.plugin_manager_disabled is False
+    left_out = AppSpec.model_validate({**base, "interface": {"plugin_manager_disabled": True}})
+    assert left_out.interface.plugin_manager_disabled is True
+    with pytest.raises(ValidationError, match="leaves it out"):
+        AppSpec.model_validate(
+            {
+                **base,
+                "ui": [{"plugin": "chat"}, {"plugin": PLUGIN_MANAGER}],
+                "interface": {"plugin_manager_disabled": True},
+            }
+        )
+    with pytest.raises(ValidationError):
+        AppSpec.model_validate({**base, "interface": {"plugin_manager_disabled": "maybe"}})
+    # None of the catalogue's applications lists it or leaves it out today: each has it by default.
+    for app in load_apps().values():
+        assert not app.interface.plugin_manager_disabled, app.id
+        assert PLUGIN_MANAGER not in [choice.plugin for choice in app.ui], app.id

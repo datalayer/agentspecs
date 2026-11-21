@@ -197,6 +197,10 @@ A2UI_OUTPUT = "application/json+a2ui"
 #: leaves it out (`interface.composer_portal_disabled`): the Composer button, how it is built, read only.
 COMPOSER_PORTAL = "composer-portal"
 
+#: The UI plugin every application has in its chat's footer without listing it in `ui`, unless it leaves
+#: it out (`interface.plugin_manager_disabled`): the plug button that opens the plugins manager.
+PLUGIN_MANAGER = "plugin-manager"
+
 
 def ui_for(
     kind: Union[AppKind, str],
@@ -2407,6 +2411,15 @@ class AppInterface(_Strict):
             "list `composer-portal` in `ui`"
         ),
     )
+    plugin_manager_disabled: bool = Field(
+        default=False,
+        description=(
+            "Whether it leaves out the plugins manager's button (the `plugin-manager` UI plugin), which every "
+            "application has in its chat's footer otherwise, without listing it in `ui`: its plugins are then not "
+            "listed nor switched on and off from its page. An application that sets it does not list "
+            "`plugin-manager` in `ui`"
+        ),
+    )
 
     @field_validator("avatar", mode="before")
     @classmethod
@@ -3572,7 +3585,8 @@ class AppSpec(_Strict):
             "and the renderer of `agentspecs/ui-renderers` it is exposed through, when it is — one the plugin "
             "may be exposed through, and one that is not enabled only while the application is not offered. "
             "Its chat has the Composer button (`composer-portal`) in its toolbar besides, listed or not, unless "
-            "`interface.composer_portal_disabled` leaves it out"
+            "`interface.composer_portal_disabled` leaves it out; and the plugins manager's button "
+            "(`plugin-manager`) in its footer, listed or not, unless `interface.plugin_manager_disabled` leaves it out"
         ),
     )
     pap: AppPap = Field(
@@ -3903,6 +3917,12 @@ class AppSpec(_Strict):
             problems.append(
                 f"It lists the UI plugin {COMPOSER_PORTAL!r} and leaves it out "
                 "(`interface.composer_portal_disabled`): say one."
+            )
+        # The plugins manager's button is every application's unless it leaves it out: never both.
+        if self.interface.plugin_manager_disabled and any(choice.plugin == PLUGIN_MANAGER for choice in self.ui):
+            problems.append(
+                f"It lists the UI plugin {PLUGIN_MANAGER!r} and leaves it out "
+                "(`interface.plugin_manager_disabled`): say one."
             )
         if problems:
             raise ValueError(" ".join(problems))
@@ -4602,6 +4622,7 @@ def list_apps(kind: Optional[AppKind] = None) -> List[AppSpec]:
 __all__ = [
     "A2UI_OUTPUT",
     "COMPOSER_PORTAL",
+    "PLUGIN_MANAGER",
     "agent_voice_problems",
     "APP_CATALOGUE",
     "APP_SCHEMA",

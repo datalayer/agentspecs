@@ -1,0 +1,48 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# UI Specification: Plugins — the Reactor plugin `@datalayer/loop-plugin-plugin-manager`.
+#
+# Read from the plugin's registration in agent-runtimes (src/apps/plugins/plugin-manager):
+# its Slots, Contributions, Commands and Contribution Points are what the
+# reactor registers for it, held to it by agent-runtimes' ui-specs test.
+# A plug button in the chat's footer that opens Reactor's plugins manager
+# (`@datalayer/reactor-manager`) in a dialog over the page (the user,
+# 21 November 2026: "reactor has a plugin plugin-manager to list, enable,
+# disable the plugins of the reactor app"): every plugin of the platform the
+# page runs, a switch each, the button's own plugin and the manager protected.
+# On every application by default (the user, 21 November 2026: "all our apps
+# should render with that plugin"), unless its spec sets
+# `interface.plugin_manager_disabled: true`.
+
+id: "plugin-manager"
+version: 0.0.1
+name: Plugins
+description: >-
+  A plug button in the chat's footer that opens the plugins manager in a dialog over the page: every plugin of the application's platform, filtered by name, each with a switch to turn it off and back on while the application runs. Every application has it, listed in its `ui` or not, unless its spec leaves it out (`interface.plugin_manager_disabled: true`). Needs no connection: an anonymous visitor has it.
+emoji: "🔌"
+octicon: plug
+plugin: "@datalayer/loop-plugin-plugin-manager"
+folder: "plugin-manager"
+# Its implementation: `import { pluginManagerPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/plugin-manager"`
+# is what makes the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/plugin-manager"
+  export: "pluginManagerPlugin"
+  kind: factory
+# Its Contributions: the Slots it fills, the Contribution Points it
+# contributes to, the Commands it adds (the composer's `/` commands by name).
+contributions:
+  slots:
+  - "loop.status"
+  points: []
+  commands: []
+# The Contribution Points it offers to other plugins.
+contribution_points: []
+# The UI renderers (agentspecs/ui-renderers) it may be exposed through.
+renderers: []
+# Where in the chat it goes, its default first (agentspecs 0.0.197).
+placements:
+- footer
+- header

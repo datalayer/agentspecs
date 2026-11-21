@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.1.12
+
+- The plugins manager on every application (the user, 21 November 2026: "reactor has a plugin plugin-manager to list, enable, disable the plugins … add that plugin in the list of ui specs", then "all our apps should render with that plugin"): the new UI spec `plugin-manager`, the Reactor plugin `@datalayer/loop-plugin-plugin-manager` (agent-runtimes' `pluginManagerPlugin`, a factory per placement, `footer` first, then `header`): a plug button in the chat's footer (`loop.status`) that opens Reactor's plugins manager in a dialog, every plugin of the application's platform with a switch each. Every application has it, listed in its `ui` or not, unless its spec leaves it out with the new `interface.plugin_manager_disabled: true` (default `false`); an application that both lists `plugin-manager` and leaves it out is refused. `agentspecs.apps.PLUGIN_MANAGER` names the plugin. 74 UI specs. Docs: Appspec reference (`ui`, `interface.plugin_manager_disabled`), the components page. Tests: test_ui
+
 ## 0.1.11
 
 - A UI spec's backend `entry_point` refuses empty dotted segments on either side of the colon (`a..b:c`, `a:b.`, `.a:b`): each side is dotted identifiers, as a Python object reference is.

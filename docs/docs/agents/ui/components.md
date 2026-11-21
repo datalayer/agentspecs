@@ -61,6 +61,7 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `page-sheet` (Sheet in the page) | `@datalayer/loop-plugin-page-sheet` | — | — | none of its own |
 | `pap-purchase` (Approve a purchase) | `@datalayer/loop-plugin-pap-purchase` | — | — | none of its own |
 | `pap-sign-in` (Sign in at a company) | `@datalayer/loop-plugin-pap-sign-in` | `mcp-ui` | — | none of its own |
+| `plugin-manager` (Plugins) | `@datalayer/loop-plugin-plugin-manager` | — | — | none of its own |
 | `product-cards` (Product cards) | `@datalayer/loop-plugin-product-cards` | — | — | none of its own |
 | `product-comparison` (Product comparison) | `@datalayer/loop-plugin-product-comparison` | `a2ui` | — | none of its own |
 | `prompt` (Floating composer) | `@datalayer/loop-plugin-prompt` | — | — | none of its own |
