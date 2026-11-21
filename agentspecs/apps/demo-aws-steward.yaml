@@ -16,7 +16,7 @@
 
 schema: loop.app/v1
 id: demo-aws-steward
-version: 0.0.9
+version: 0.0.10
 name: Steward for AWS
 kind: chat
 description: >-
@@ -91,6 +91,7 @@ ui:
   - plugin: page-sheet
     placement: right
   - plugin: side-panels
+  - plugin: composer-portal
 interface:
   layout: chat
   accent: sun

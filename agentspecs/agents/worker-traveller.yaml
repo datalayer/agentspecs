@@ -145,6 +145,9 @@ ui:
   - plugin: trip-header
   # A short notice from an edge of the chat (18 November 2026), run in the page.
   - plugin: notices
+  # Its Composer, full screen from the toolbar (21 November 2026): its Canvas,
+  # its spec and its Python, read only.
+  - plugin: composer-portal
 # The tools run in the page (18 November 2026): a notice.
 frontend_tools:
   - notices:0.0.1

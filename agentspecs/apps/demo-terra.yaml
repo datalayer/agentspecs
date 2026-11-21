@@ -16,7 +16,7 @@
 
 schema: loop.app/v1
 id: demo-terra
-version: 0.0.7
+version: 0.0.8
 name: Terra
 kind: chat
 description: >-
@@ -79,6 +79,7 @@ ui:
   - plugin: chat
   - plugin: earth-header
   - plugin: notices
+  - plugin: composer-portal
 interface:
   layout: chat
   accent: lime

@@ -175,11 +175,14 @@ def test_an_application_of_the_catalogue_lists_the_ui_plugins_it_is_drawn_with()
     assert apps
     for identity, app in apps.items():
         # A header UI is the application's own addition (its agent's title bar), not its kind's;
-        # so is a page UI, which hands its agent a set of frontend tools (a deck, a sheet in the page).
+        # so is a page UI, which hands its agent a set of frontend tools (a deck, a sheet in the page),
+        # and the Composer's button, which a demo adds to show how it is built (21 November 2026).
         drawn = [
             c.model_dump(exclude_none=True)
             for c in app.ui
-            if ui.UI_CATALOGUE[c.plugin].header is None and not ui.hands_frontend_tools(c.plugin)
+            if ui.UI_CATALOGUE[c.plugin].header is None
+            and not ui.hands_frontend_tools(c.plugin)
+            and c.plugin != "composer-portal"
         ]
         assert drawn == ui_of(app), identity
 
@@ -280,3 +283,30 @@ def test_each_seed_agent_has_ui_in_the_chat_and_an_a2ui_message(agent_id):
             a2ui_messages.append(choice["plugin"])
     assert chrome, agent_id
     assert a2ui_messages, agent_id
+
+
+SEED_AGENTS_WITH_COMPOSER = {
+    "worker-marketer": "demo-marketer",
+    "worker-shopper": "demo-shopper",
+    "worker-accountant": "demo-accountant",
+    "worker-traveller": "demo-traveller",
+    "worker-terra": "demo-terra",
+    "worker-steward-aws": "demo-aws-steward",
+    "jupyter-data-analyst": "demo-jupyter-data-analyst",
+    "worker-functional-analyst": "demo-functional-analyst",
+}
+
+
+@pytest.mark.parametrize("agent,demo", sorted(SEED_AGENTS_WITH_COMPOSER.items()))
+def test_each_seed_agent_and_its_demo_bring_the_composer(agent, demo):
+    """The seed agents and their public demos bring the Composer's button (the user, 21 November 2026):
+    it opens how the application is built — its Canvas, its spec and its Python — full screen, from the toolbar."""
+    from agentspecs.apps import load_apps
+
+    spec = yaml.safe_load((ROOT / "agents" / f"{agent}.yaml").read_text())
+    assert "composer-portal" in [choice["plugin"] for choice in spec["ui"]], agent
+    app = load_apps()[demo]
+    assert "composer-portal" in [choice.plugin for choice in app.ui], demo
+    composer = ui.UI_CATALOGUE["composer-portal"]
+    assert composer.plugin == "@datalayer/loop-plugin-composer-portal"
+    assert [p.value for p in composer.placements][0] == "toolbar"
