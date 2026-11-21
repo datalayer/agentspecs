@@ -119,7 +119,9 @@ _NPM_PACKAGE = re.compile(r"^(@[a-z0-9-~][a-z0-9-._~]*/)?[a-z0-9-~][a-z0-9-._~]*
 _JS_EXPORT = re.compile(r"^[A-Za-z_$][A-Za-z0-9_$]*$")
 
 #: A Python entry point's object reference: ``module.path:attribute``.
-_PY_ENTRY_POINT = re.compile(r"^[A-Za-z_][A-Za-z0-9_.]*:[A-Za-z_][A-Za-z0-9_.]*$")
+#: Each side is dotted identifiers, none empty (``a..b`` and ``a.`` are refused).
+_PY_DOTTED = r"[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*"
+_PY_ENTRY_POINT = re.compile(rf"^{_PY_DOTTED}:{_PY_DOTTED}$")
 
 
 class UiBackendImplementation(BaseModel):

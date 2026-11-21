@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.1.11
+
+- A UI spec's backend `entry_point` refuses empty dotted segments on either side of the colon (`a..b:c`, `a:b.`, `.a:b`): each side is dotted identifiers, as a Python object reference is.
+
 ## 0.1.10
 
 - A UI spec says where its plugin is (the user, 21 November 2026: "make sure the specs has a way to identify the package and plugins class"): the new required `implementation` — the npm `package`, the `module` of the package that exports the plugin, the `export`, its `kind` (`plugin`, `plugins` for one per instance, `factory`), and an optional `backend` (`package`, `entry_point`) for a UI with a server side. A plugin registered per application is exported as a factory, one per source or UI spec as a list; anything else is refused. Every UI spec of the catalogue names its export in `@datalayer/agent-runtimes`. Docs: UI (`implementation`). Tests: test_ui
