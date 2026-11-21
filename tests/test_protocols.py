@@ -129,7 +129,7 @@ def test_a_planned_protocol_is_listed_only_while_the_application_is_not_offered(
     assert AppSpec.model_validate(off).protocols == ["tap"]
 
 
-@pytest.mark.parametrize("roles", [["Client"], ["client", "client"], ["has space"], []])
+@pytest.mark.parametrize("roles", [["Client"], ["client", "client"], ["has space"], [], ["client\n"]])
 def test_the_json_schema_refuses_the_roles_the_catalogue_refuses(roles):
     """The schema says what ``_roles`` checks: its readers refuse what the catalogue cannot load."""
     jsonschema = pytest.importorskip("jsonschema")
