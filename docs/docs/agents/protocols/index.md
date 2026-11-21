@@ -26,6 +26,7 @@ application may not list a planned one, and its `pap`, `pact`, `signed_fetch` an
 
 How agents talk to agents: teams and scenes talk over it, an application's route serves it, and its Agent Card advertises its extensions.
 
+- Roles: `client`, `server`
 - Python: `fasta2a`, `a2a-sdk`
 - TypeScript: `@a2a-js/sdk`
 
@@ -33,6 +34,7 @@ How agents talk to agents: teams and scenes talk over it, an application's route
 
 How an agent's answer becomes an interface: components the host renders from a declarative surface.
 
+- Roles: `agent`, `renderer`
 - Python: `agent-runtimes`
 - TypeScript: `@a2ui/react`, `@a2ui/web_core`
 
@@ -40,6 +42,7 @@ How an agent's answer becomes an interface: components the host renders from a d
 
 Checkout sessions at a seller, completed with a payment the model never sees. In applications at test merchants only, with no real payment token (decided 2026-10-13): each purchase asked of the person first, made at most once.
 
+- Roles: `buyer`
 - Python: `agent-runtimes`
 - TypeScript: `@datalayer/agent-runtimes`
 - Its tools' action classes: `protocol-tools/agentic-commerce.yaml`
@@ -48,6 +51,7 @@ Checkout sessions at a seller, completed with a payment the model never sees. In
 
 How an agent streams its run to a page: messages, tool calls and state as events.
 
+- Roles: `server`, `client`
 - Python: `ag-ui-protocol`
 - TypeScript: `@ag-ui/client`, `@ag-ui/core`
 
@@ -55,6 +59,7 @@ How an agent streams its run to a page: messages, tool calls and state as events
 
 How an agent calls tools and reads resources: clients and servers in both languages, and the MCP gateway every connection goes through.
 
+- Roles: `client`, `server`
 - Python: `mcp`
 - TypeScript: `@modelcontextprotocol/sdk`, `@mcp-ui/client`
 
@@ -62,6 +67,7 @@ How an agent calls tools and reads resources: clients and servers in both langua
 
 A personal agent asking a business's agent over A2A, first as itself, then for a person who delegated some of their permissions.
 
+- Roles: `personal-agent`, `provider`
 - Python: `agent-runtimes`
 - TypeScript: `@datalayer/agent-runtimes`
 - Its tools' action classes: `protocol-tools/pact.yaml`
@@ -70,6 +76,7 @@ A personal agent asking a business's agent over A2A, first as itself, then for a
 
 A person's agent working with a company for them — signed out, then signed in at the company, its changes confirmed by the person — and an application being a company personal agents reach.
 
+- Roles: `personal-agent`, `company`
 - Python: `personal-agent-protocol`
 - TypeScript: `@datalayer/personal-agent-protocol`
 - Its tools' action classes: `protocol-tools/pap.yaml`
@@ -78,6 +85,7 @@ A person's agent working with a company for them — signed out, then signed in 
 
 An agent-recognition profile over Web Bot Auth for merchants: a signature tagged agent-browser-auth to browse or agent-payer-auth to pay. Still a draft profile, built from Visa's public Merchant Specifications (2026-10-13) until Visa confirms it. In applications at test merchants only (decided 2026-10-14): the MCP gateway signs each UCP or ACP purchase with agent-payer-auth under the application's own key, and the test merchants verify it; browsing stays Web Bot Auth.
 
+- Roles: `signer`, `verifier`
 - Python: `agent-runtimes`
 - TypeScript: `@datalayer/agent-runtimes`, `http-message-sig`
 
@@ -85,6 +93,7 @@ An agent-recognition profile over Web Bot Auth for merchants: a signature tagged
 
 Shopping at a merchant: catalogue, checkout and orders, every purchase an exact proposal the person approves. In applications at test merchants only, with no real payment (decided 2026-10-13): each purchase asked of the person first, made at most once.
 
+- Roles: `shopper`
 - Python: `ucp-sdk`, `agent-runtimes`
 - TypeScript: `@ucp-js/sdk`, `@datalayer/agent-runtimes`
 - Its tools' action classes: `protocol-tools/ucp.yaml`
@@ -93,6 +102,7 @@ Shopping at a merchant: catalogue, checkout and orders, every purchase an exact 
 
 Signed outbound requests (RFC 9421) and the key directory a website checks them against. In applications, every request to a company, business or merchant is signed, and a signed fetch reads pages at the sites an application names, GET only (decided 2026-10-13).
 
+- Roles: `signer`, `verifier`, `directory`
 - Python: `agent-runtimes`
 - TypeScript: `@datalayer/agent-runtimes`, `web-bot-auth`
 - Its tools' action classes: `protocol-tools/signed-fetch.yaml`

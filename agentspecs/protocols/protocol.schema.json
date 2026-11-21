@@ -118,6 +118,15 @@
       "title": "Publisher",
       "type": "string"
     },
+    "roles": {
+      "description": "What a runtime can be in it (client, server, signer, verifier\u2026): what its plugin says it implements, and what the Agentspecs pages show",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Roles",
+      "type": "array"
+    },
     "spec_url": {
       "description": "The specification, https",
       "title": "Spec Url",
@@ -149,7 +158,8 @@
     "spec_url",
     "spec_version",
     "status",
-    "connects"
+    "connects",
+    "roles"
   ],
   "title": "Protocol",
   "type": "object"

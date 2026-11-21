@@ -8,6 +8,11 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.1.12
+
+- A protocol says the roles a runtime takes in it (the user, 21 November 2026: the protocols and harness engines pages driven by Reactor manifests): the new required `roles` of a protocol spec, lower-case ids each said once (`client`, `server`, `signer`, `verifier`, `directory`, `personal-agent`, `company`, `provider`, `buyer`, `shopper`, `agent`, `renderer`), on the ten protocols; agent-runtimes' protocol plugins describe these roles and carry them, with the rest of the spec, in their Reactor manifests. The reference page has a Roles line per protocol. Docs: Protocols. Tests: test_protocols
+- The plugins manager on every application (the user, 21 November 2026): the new UI spec `plugin-manager` (`@datalayer/loop-plugin-plugin-manager`), a plug button in the chat's footer that opens Reactor's plugins manager, unless the application's spec leaves it out with `interface.plugin_manager_disabled: true`; listing it and leaving it out is refused; `agentspecs.apps.PLUGIN_MANAGER`. 74 UI specs. Docs: Appspec reference, the components page. Tests: test_ui, test_apps
+
 ## 0.1.11
 
 - A UI spec's backend `entry_point` refuses empty dotted segments on either side of the colon (`a..b:c`, `a:b.`, `.a:b`): each side is dotted identifiers, as a Python object reference is.

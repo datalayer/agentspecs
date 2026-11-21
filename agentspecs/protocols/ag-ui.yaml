@@ -15,6 +15,7 @@ spec_url: https://docs.ag-ui.com
 spec_version: "0.0.57 (@ag-ui/core)"
 status: shipped
 connects: The page a person talks to the agent on
+roles: [server, client]
 packages:
   python: ["ag-ui-protocol"]
   typescript: ["@ag-ui/client", "@ag-ui/core"]

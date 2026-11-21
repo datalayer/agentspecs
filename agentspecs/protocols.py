@@ -7,7 +7,7 @@
 One YAML per protocol under ``protocols/``: what it is, who publishes it, its
 layer (transport, consent, identity, commerce, ui), the specification and the
 version implemented, whether it is ``shipped`` or ``planned``, what it connects
-an agent to, the packages implementing it, the ``protocol-tools`` tables of its
+an agent to, the roles a runtime can take in it, the packages implementing it, the ``protocol-tools`` tables of its
 tools, and the Appspec block that configures it, if any.
 
 An agent spec or an application says the protocols it speaks in ``protocols``:
@@ -93,6 +93,13 @@ class ProtocolSpec(BaseModel):
     spec_version: str = Field(min_length=1, description="The version of the specification implemented")
     status: ProtocolStatus = Field(description="shipped, or planned")
     connects: str = Field(min_length=1, description="What it connects an agent to")
+    roles: List[str] = Field(
+        min_length=1,
+        description=(
+            "What a runtime can be in it (client, server, signer, verifier…): what its "
+            "plugin says it implements, and what the Agentspecs pages show"
+        ),
+    )
     packages: ProtocolPackages = Field(default_factory=ProtocolPackages)
     protocol_tools: List[str] = Field(
         default_factory=list, description="Its tools' action-class tables, under protocol-tools/"
@@ -107,6 +114,16 @@ class ProtocolSpec(BaseModel):
         if not _ID.fullmatch(value):
             raise ValueError(f"{value!r} is not a protocol id: lower-case letters, digits and hyphens")
         return value
+
+    @field_validator("roles")
+    @classmethod
+    def _roles(cls, values: List[str]) -> List[str]:
+        for role in values:
+            if not _ID.fullmatch(role):
+                raise ValueError(f"{role!r} is not a role: lower-case letters, digits and hyphens")
+        if len(set(values)) != len(values):
+            raise ValueError("a role is said once")
+        return values
 
     @field_validator("spec_url")
     @classmethod
@@ -221,6 +238,7 @@ def reference_text() -> str:
     lines += ["", "## Each protocol", ""]
     for spec in sorted(PROTOCOL_CATALOGUE.values(), key=lambda s: s.id):
         lines += [f"### {spec.name} (`{spec.id}`)", "", " ".join(spec.description.split()), ""]
+        lines.append(f"- Roles: {', '.join(f'`{role}`' for role in spec.roles)}")
         if spec.packages.python:
             lines.append(f"- Python: {', '.join(f'`{name}`' for name in spec.packages.python)}")
         if spec.packages.typescript:
