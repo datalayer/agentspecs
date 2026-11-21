@@ -23,6 +23,13 @@ emoji: "📑"
 octicon: table
 plugin: "@datalayer/loop-plugin-page-sheet"
 folder: "page-sheet"
+# Its implementation: `import { PageSheetPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/page-sheet"`
+# is the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/page-sheet"
+  export: "PageSheetPlugin"
+  kind: plugin
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

@@ -99,6 +99,93 @@ class UiContributions(BaseModel):
     )
 
 
+class UiImplementationKind(str, Enum):
+    """What a UI spec's export is: the plugin, its instances, or what makes it."""
+
+    #: A Reactor plugin.
+    PLUGIN = "plugin"
+    #: A list of Reactor plugins, one per instance (``per: source``, ``per: ui``).
+    PLUGINS = "plugins"
+    #: A function returning the plugin: called with the application for a plugin
+    #: ``per: application``, with its placement for one whose first placement is in
+    #: the chat's chrome or a side panel, and with nothing otherwise.
+    FACTORY = "factory"
+
+
+#: An npm package name: ``name`` or ``@scope/name``.
+_NPM_PACKAGE = re.compile(r"^(@[a-z0-9-~][a-z0-9-._~]*/)?[a-z0-9-~][a-z0-9-._~]*$")
+
+#: A JavaScript export name.
+_JS_EXPORT = re.compile(r"^[A-Za-z_$][A-Za-z0-9_$]*$")
+
+#: A Python entry point's object reference: ``module.path:attribute``.
+_PY_ENTRY_POINT = re.compile(r"^[A-Za-z_][A-Za-z0-9_.]*:[A-Za-z_][A-Za-z0-9_.]*$")
+
+
+class UiBackendImplementation(BaseModel):
+    """The backend (Python) Reactor plugin of a UI, when it has a server side."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    package: str = Field(min_length=1, description="The PyPI distribution that ships it, e.g. `agent-runtimes`")
+    entry_point: str = Field(
+        description="Its entry point, as `module.path:attribute`, the object the reactor registers"
+    )
+
+    @field_validator("entry_point")
+    @classmethod
+    def _an_entry_point(cls, value: str) -> str:
+        if not _PY_ENTRY_POINT.fullmatch(value):
+            raise ValueError(f"{value!r} is not an entry point: `module.path:attribute`")
+        return value
+
+
+class UiImplementation(BaseModel):
+    """Where a UI spec's Reactor plugin is: the package, the module and the export that are it.
+
+    ``import { <export> } from '<package>/<module>'`` gives the plugin (``kind: plugin``), its
+    instances (``plugins``) or what makes it (``factory``), whose manifest says what the spec
+    says.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    package: str = Field(description="The npm package that ships the plugin, e.g. `@datalayer/agent-runtimes`")
+    module: str = Field(
+        min_length=1,
+        description="The module of the package that exports it, from the package's root (`lib/apps/plugins/chat`)",
+    )
+    export: str = Field(description="The name it is exported under, e.g. `ChatPlugin`")
+    kind: UiImplementationKind = Field(
+        default=UiImplementationKind.PLUGIN,
+        description="What the export is: a plugin, a list of plugins, or a factory",
+    )
+    backend: Optional[UiBackendImplementation] = Field(
+        default=None, description="Its backend (Python) Reactor plugin, when it has a server side"
+    )
+
+    @field_validator("package")
+    @classmethod
+    def _an_npm_package(cls, value: str) -> str:
+        if not _NPM_PACKAGE.fullmatch(value):
+            raise ValueError(f"{value!r} is not an npm package name")
+        return value
+
+    @field_validator("module")
+    @classmethod
+    def _a_module(cls, value: str) -> str:
+        if value.startswith(("/", ".")) or value.endswith((".ts", ".tsx", ".js")) or "\\" in value:
+            raise ValueError(f"{value!r} is not a module path from the package's root, without extension")
+        return value
+
+    @field_validator("export")
+    @classmethod
+    def _an_export(cls, value: str) -> str:
+        if not _JS_EXPORT.fullmatch(value):
+            raise ValueError(f"{value!r} is not a JavaScript export name")
+        return value
+
+
 #: How a header item is named: what its frontend tool's argument is called.
 _ITEM_ID = re.compile(r"^[a-z][a-z0-9_]{0,30}$")
 
@@ -362,6 +449,9 @@ class UiSpec(BaseModel):
     octicon: Optional[str] = Field(default=None, description="Its Octicon")
     plugin: str = Field(description="The name the Reactor plugin registers under")
     folder: str = Field(min_length=1, description="The plugin's folder in agent-runtimes, under `src/apps/plugins/`")
+    implementation: UiImplementation = Field(
+        description="Where its plugin is: the npm package, the module and the export, and its backend part if any"
+    )
     per: Optional[UiInstances] = Field(
         default=None,
         description="Registered once per application, per source or per UI spec, as `<plugin>-<its id>`",
@@ -453,6 +543,15 @@ class UiSpec(BaseModel):
             raise ValueError(f"{self.id!r} supersedes itself")
         if len(set(self.supersedes)) != len(self.supersedes):
             raise ValueError(f"{self.id!r} supersedes a UI twice")
+        return self
+
+    @model_validator(mode="after")
+    def _a_factory_for_instances(self) -> "UiSpec":
+        kind = self.implementation.kind
+        if self.per is UiInstances.APPLICATION and kind is not UiImplementationKind.FACTORY:
+            raise ValueError(f"{self.id!r} is registered per application: its export is a factory")
+        if self.per in (UiInstances.SOURCE, UiInstances.UI) and kind is not UiImplementationKind.PLUGINS:
+            raise ValueError(f"{self.id!r} is registered per {self.per.value}: its export is a list of plugins")
         return self
 
     @model_validator(mode="after")

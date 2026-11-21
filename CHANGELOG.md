@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.1.10
+
+- A UI spec says where its plugin is (the user, 21 November 2026: "make sure the specs has a way to identify the package and plugins class"): the new required `implementation` — the npm `package`, the `module` of the package that exports the plugin, the `export`, its `kind` (`plugin`, `plugins` for one per instance, `factory`), and an optional `backend` (`package`, `entry_point`) for a UI with a server side. A plugin registered per application is exported as a factory, one per source or UI spec as a list; anything else is refused. Every UI spec of the catalogue names its export in `@datalayer/agent-runtimes`. Docs: UI (`implementation`). Tests: test_ui
+
 ## 0.1.9
 
 - The Composer on every application (the user, 21 November 2026): every application's chat has the Composer button (`composer-portal`) in its toolbar, listed in its `ui` or not, unless its spec leaves it out with the new `interface.composer_portal_disabled: true` (default `false`); an application that both lists `composer-portal` and leaves it out is refused. `agentspecs.apps.COMPOSER_PORTAL` names the plugin. The seed agents and their demos keep listing it. Docs: Appspec reference (`ui`, `interface.composer_portal_disabled`). Tests: test_ui

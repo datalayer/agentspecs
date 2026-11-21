@@ -16,6 +16,13 @@ emoji: "🧮"
 octicon: table
 plugin: "@datalayer/loop-plugin-spreadsheet-view"
 folder: "spreadsheet-view"
+# Its implementation: `import { SpreadsheetViewPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/spreadsheet-view"`
+# is the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/spreadsheet-view"
+  export: "SpreadsheetViewPlugin"
+  kind: plugin
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

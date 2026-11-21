@@ -16,6 +16,13 @@ emoji: "🪟"
 octicon: browser
 plugin: "@datalayer/loop-plugin-window-frame"
 folder: "window-frame"
+# Its implementation: `import { WindowFramePlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/window-frame"`
+# is the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/window-frame"
+  export: "WindowFramePlugin"
+  kind: plugin
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

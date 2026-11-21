@@ -18,6 +18,13 @@ emoji: "💸"
 octicon: list-ordered
 plugin: "@datalayer/loop-plugin-aws-savings"
 folder: "aws-savings"
+# Its implementation: `import { AwsSavingsPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/aws-savings"`
+# is the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/aws-savings"
+  export: "AwsSavingsPlugin"
+  kind: plugin
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

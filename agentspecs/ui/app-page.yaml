@@ -16,6 +16,13 @@ emoji: "📈"
 octicon: browser
 plugin: "@datalayer/loop-plugin-app-page"
 folder: "app-page"
+# Its implementation: `import { defineAppPagePlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/app-page"`
+# is what makes the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/app-page"
+  export: "defineAppPagePlugin"
+  kind: factory
 per: application
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).

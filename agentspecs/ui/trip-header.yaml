@@ -21,6 +21,13 @@ emoji: "🧭"
 octicon: paper-airplane
 plugin: "@datalayer/loop-plugin-trip-header"
 folder: "trip-header"
+# Its implementation: `import { tripHeaderPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/trip-header"`
+# is what makes the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/trip-header"
+  export: "tripHeaderPlugin"
+  kind: factory
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

@@ -16,6 +16,13 @@ emoji: "🧱"
 octicon: apps
 plugin: "@datalayer/loop-plugin-ui"
 folder: "canvas-blocks"
+# Its implementation: `import { CANVAS_BLOCK_PLUGINS } from "@datalayer/agent-runtimes/lib/apps/plugins/canvas-blocks"`
+# is its instances, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/canvas-blocks"
+  export: "CANVAS_BLOCK_PLUGINS"
+  kind: plugins
 per: ui
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).

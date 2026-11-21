@@ -22,6 +22,13 @@ emoji: "💳"
 octicon: credit-card
 plugin: "@datalayer/loop-plugin-stripe-checkout"
 folder: "stripe-checkout"
+# Its implementation: `import { StripeCheckoutPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/stripe-checkout"`
+# is the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/stripe-checkout"
+  export: "StripeCheckoutPlugin"
+  kind: plugin
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

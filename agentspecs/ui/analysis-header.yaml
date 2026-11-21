@@ -20,6 +20,13 @@ emoji: "📐"
 octicon: workflow
 plugin: "@datalayer/loop-plugin-analysis-header"
 folder: "analysis-header"
+# Its implementation: `import { analysisHeaderPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/analysis-header"`
+# is what makes the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/analysis-header"
+  export: "analysisHeaderPlugin"
+  kind: factory
 contributions:
   slots:
   - "loop.chatHeader"

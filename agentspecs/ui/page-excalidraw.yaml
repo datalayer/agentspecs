@@ -23,6 +23,13 @@ emoji: "🖌️"
 octicon: paintbrush
 plugin: "@datalayer/loop-plugin-page-excalidraw"
 folder: "page-excalidraw"
+# Its implementation: `import { PageExcalidrawPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/page-excalidraw"`
+# is the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/page-excalidraw"
+  export: "PageExcalidrawPlugin"
+  kind: plugin
 contributions:
   slots: []
   points:

@@ -16,6 +16,13 @@ emoji: "✏️"
 octicon: pencil
 plugin: "@datalayer/loop-plugin-input-prompt"
 folder: "input-prompt"
+# Its implementation: `import { InputPromptPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/input-prompt"`
+# is the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/input-prompt"
+  export: "InputPromptPlugin"
+  kind: plugin
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

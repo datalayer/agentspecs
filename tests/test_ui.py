@@ -58,6 +58,37 @@ def test_a_ui_spec_is_a_reactor_plugin_named_for_its_file():
         assert spec.name and spec.description.strip() and spec.emoji, spec.id
 
 
+def test_a_ui_spec_says_where_its_plugin_is():
+    """Each spec names its implementation: the package, a module under the plugin's folder, the export.
+
+    A plugin registered per instance is exported as what makes it: a factory per
+    application, a list per source or UI spec.
+    """
+    for spec in ui.UI_CATALOGUE.values():
+        implementation = spec.implementation
+        assert implementation.package == "@datalayer/agent-runtimes", spec.id
+        assert implementation.module == f"lib/apps/plugins/{spec.folder}", spec.id
+        assert implementation.export, spec.id
+        assert implementation.backend is None, spec.id
+    assert ui.UI_CATALOGUE["chat"].implementation.export == "ChatPlugin"
+    assert ui.UI_CATALOGUE["app-page"].implementation.kind is ui.UiImplementationKind.FACTORY
+    assert ui.UI_CATALOGUE["canvas-parts"].implementation.kind is ui.UiImplementationKind.PLUGINS
+
+
+def test_a_ui_spec_may_name_its_backend_plugin():
+    good = _yaml("ui", "a2ui-surface")
+    spec = ui.UiSpec.model_validate(
+        {
+            **good,
+            "implementation": {
+                **good["implementation"],
+                "backend": {"package": "agent-runtimes", "entry_point": "agent_runtimes.reactor_extension:plugin"},
+            },
+        }
+    )
+    assert spec.implementation.backend.entry_point == "agent_runtimes.reactor_extension:plugin"
+
+
 def test_only_a2ui_surface_renders_the_catalog_of_components():
     with_components = {spec.id for spec in ui.UI_CATALOGUE.values() if spec.components}
     assert with_components == {"a2ui-surface"}
@@ -79,6 +110,23 @@ def test_the_schema_and_the_reference_are_the_specs():
         ({"plugin": "chat"}, "not the name of a Reactor plugin"),
         ({"settings": {"type": "string"}}, "JSON Schema of an object"),
         ({"enabled": True}, "Extra inputs"),
+        ({"implementation": {"package": "Not A Package", "module": "lib/x", "export": "X"}}, "not an npm package"),
+        ({"implementation": {"package": "@a/b", "module": "./lib/x", "export": "X"}}, "not a module path"),
+        ({"implementation": {"package": "@a/b", "module": "lib/x.ts", "export": "X"}}, "not a module path"),
+        ({"implementation": {"package": "@a/b", "module": "lib/x", "export": "not-a-name"}}, "not a JavaScript export"),
+        (
+            {
+                "implementation": {
+                    "package": "@a/b",
+                    "module": "lib/x",
+                    "export": "X",
+                    "backend": {"package": "b", "entry_point": "no colon"},
+                }
+            },
+            "not an entry point",
+        ),
+        ({"per": "application"}, "its export is a factory"),
+        ({"per": "source"}, "its export is a list of plugins"),
     ],
 )
 def test_a_ui_spec_refuses(change, why):

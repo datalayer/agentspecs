@@ -18,6 +18,13 @@ emoji: "💸"
 octicon: graph
 plugin: "@datalayer/loop-plugin-aws-savings-badge"
 folder: "aws-savings-badge"
+# Its implementation: `import { awsSavingsBadgePlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/aws-savings-badge"`
+# is what makes the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/aws-savings-badge"
+  export: "awsSavingsBadgePlugin"
+  kind: factory
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:

@@ -18,6 +18,13 @@ emoji: "𝕏"
 octicon: megaphone
 plugin: "@datalayer/loop-plugin-x-post-preview"
 folder: "x-post-preview"
+# Its implementation: `import { XPostPreviewPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/x-post-preview"`
+# is the plugin, whose manifest says what this spec says.
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/x-post-preview"
+  export: "XPostPreviewPlugin"
+  kind: plugin
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
