@@ -5,18 +5,27 @@
 
 /**
  * Primer React for the pages of this site, its theme pinned: Datalayer's,
- * following the reader's system colour mode (`auto`), with no chooser. A
- * chooser here would repaint the Primer parts while the Docusaurus page
- * around them stays put.
+ * in the colour mode Docusaurus shows, with no chooser of its own. A chooser
+ * here would repaint the Primer parts while the Docusaurus page around them
+ * stays put.
+ *
+ * The mode follows the `data-theme` Docusaurus sets on `<html>`, so a site
+ * pinned to light stays light on a dark system, and its switch, where it has
+ * one, moves Primer with it. `Root` sits above Docusaurus' colour mode
+ * provider, so the attribute is read, then watched; the first render, the
+ * server's included, starts from the site's `colorMode.defaultMode`.
  *
  * The same file in every Datalayer Docusaurus site; `src/theme/Root` wraps
- * the site in it. `BaseStyles` gives the Primer components their colour-mode
- * attributes and leaves the font, colour and line height to Docusaurus; the
- * primitives give them their CSS variables.
+ * the site in it. A plain element carries the colour-mode attributes Primer's
+ * components read (what `BaseStyles` would set), without `BaseStyles` itself:
+ * its global rules painted every link of the site Primer's blue, over
+ * Docusaurus' own colours (21 November 2026). The primitives give the
+ * components their CSS variables.
  */
 
-import React, { type ReactNode } from 'react';
-import { BaseStyles, ThemeProvider } from '@primer/react';
+import React, { useEffect, useState, type ReactNode } from 'react';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { ThemeProvider } from '@primer/react';
 import { datalayerTheme } from '@datalayer/primer-addons/lib/theme/themes/datalayerTheme';
 
 import '@primer/primitives/dist/css/base/size/size.css';
@@ -30,12 +39,51 @@ import '@primer/primitives/dist/css/functional/themes/light.css';
 import '@primer/primitives/dist/css/functional/themes/dark.css';
 import '@primer/primitives/dist/css/functional/typography/typography.css';
 
-const INHERIT = { fontFamily: 'inherit', fontSize: 'inherit', lineHeight: 'inherit', color: 'inherit' };
+type PrimerMode = 'day' | 'night';
+
+/** Docusaurus' `light` or `dark` as Primer's `day` or `night`. */
+const primerModeOf = (docusaurusMode: string | null | undefined): PrimerMode =>
+  docusaurusMode === 'dark' ? 'night' : 'day';
+
+/*
+ * The element sits between #__docusaurus (a column flex box) and the navbar,
+ * .main-wrapper and footer: it grows in the root and is a column flex box
+ * itself, so .main-wrapper's flex: 1 still fills a short page and the footer
+ * stays at the bottom. Font, colour and line height stay Docusaurus'.
+ */
+const INHERIT = {
+  fontFamily: 'inherit',
+  fontSize: 'inherit',
+  lineHeight: 'inherit',
+  color: 'inherit',
+  display: 'flex',
+  flexDirection: 'column',
+  flex: '1 0 auto',
+} as const;
 
 export function PrimerRoot({ children }: { children: ReactNode }) {
+  const { siteConfig } = useDocusaurusContext();
+  const defaultMode = (siteConfig.themeConfig as { colorMode?: { defaultMode?: string } })?.colorMode?.defaultMode;
+  const [colorMode, setColorMode] = useState<PrimerMode>(primerModeOf(defaultMode));
+  useEffect(() => {
+    const html = document.documentElement;
+    const follow = () => setColorMode(primerModeOf(html.getAttribute('data-theme')));
+    follow();
+    const observer = new MutationObserver(follow);
+    observer.observe(html, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
   return (
-    <ThemeProvider theme={datalayerTheme} colorMode="auto">
-      <BaseStyles style={INHERIT}>{children}</BaseStyles>
+    <ThemeProvider theme={datalayerTheme} colorMode={colorMode}>
+      <div
+        data-portal-root
+        data-color-mode={colorMode === 'night' ? 'dark' : 'light'}
+        data-light-theme="light"
+        data-dark-theme="dark"
+        style={INHERIT}
+      >
+        {children}
+      </div>
     </ThemeProvider>
   );
 }

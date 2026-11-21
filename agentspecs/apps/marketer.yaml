@@ -105,7 +105,7 @@ tests:
     live: []
     recorded: []
     unverified:
-      - "Not played live yet: posting to X, Bluesky and LinkedIn on the linked accounts waits for the runtime image that carries the posting tools; Discord's runs in Docker."
+      - "Not played live yet: posting to X, Bluesky and LinkedIn on the linked accounts waits for the update that carries the posting connections; Discord's runs in Docker."
 record:
   keep_for: 90_days
   include: [conversations, sources, feedback]
