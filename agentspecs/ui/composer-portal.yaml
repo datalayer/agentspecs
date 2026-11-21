@@ -10,12 +10,14 @@
 # screen (the user, 21 November 2026): its Canvas, its spec and its Python,
 # read only. What fills it is the host's when the host contributes to the
 # `loop.composerView` slot, otherwise the plugin's own spec and Python.
+# On every application's chat by default (the user, 21 November 2026), unless
+# its spec sets `interface.composer_portal_disabled: true`.
 
 id: "composer-portal"
 version: 0.0.1
 name: Composer
 description: >-
-  A button in the chat's toolbar that opens the application's Composer full screen: its Canvas, its spec and its Python, read only. Needs no connection: an anonymous visitor has it.
+  A button in the chat's toolbar that opens the application's Composer full screen: its Canvas, its spec and its Python, read only. Every application's chat has it, listed in its `ui` or not, unless its spec leaves it out (`interface.composer_portal_disabled: true`). Needs no connection: an anonymous visitor has it.
 emoji: "🧱"
 octicon: stack
 plugin: "@datalayer/loop-plugin-composer-portal"

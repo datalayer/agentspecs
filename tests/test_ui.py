@@ -310,3 +310,28 @@ def test_each_seed_agent_and_its_demo_bring_the_composer(agent, demo):
     composer = ui.UI_CATALOGUE["composer-portal"]
     assert composer.plugin == "@datalayer/loop-plugin-composer-portal"
     assert [p.value for p in composer.placements][0] == "toolbar"
+
+
+def test_every_application_has_the_composer_unless_it_leaves_it_out():
+    """Every application's chat has the Composer button, listed in `ui` or not (the user, 21 November 2026),
+    unless its spec leaves it out with `interface.composer_portal_disabled`; never both said."""
+    from agentspecs.apps import COMPOSER_PORTAL, load_apps
+
+    assert COMPOSER_PORTAL == "composer-portal" and COMPOSER_PORTAL in ui.UI_CATALOGUE
+    base = {"id": "notes", "name": "Notes", "kind": "chat", "agent": "a"}
+    assert AppSpec.model_validate(base).interface.composer_portal_disabled is False
+    left_out = AppSpec.model_validate({**base, "interface": {"composer_portal_disabled": True}})
+    assert left_out.interface.composer_portal_disabled is True
+    assert COMPOSER_PORTAL not in [choice.plugin for choice in left_out.ui]
+    with pytest.raises(ValidationError, match="leaves it out"):
+        AppSpec.model_validate(
+            {
+                **base,
+                "ui": [{"plugin": "chat"}, {"plugin": COMPOSER_PORTAL}],
+                "interface": {"composer_portal_disabled": True},
+            }
+        )
+    with pytest.raises(ValidationError):
+        AppSpec.model_validate({**base, "interface": {"composer_portal_disabled": "maybe"}})
+    # The catalogue's applications all have it today: none leaves it out.
+    assert not [app.id for app in load_apps().values() if app.interface.composer_portal_disabled]

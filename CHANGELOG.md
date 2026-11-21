@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.1.9
+
+- The Composer on every application (the user, 21 November 2026): every application's chat has the Composer button (`composer-portal`) in its toolbar, listed in its `ui` or not, unless its spec leaves it out with the new `interface.composer_portal_disabled: true` (default `false`); an application that both lists `composer-portal` and leaves it out is refused. `agentspecs.apps.COMPOSER_PORTAL` names the plugin. The seed agents and their demos keep listing it. Docs: Appspec reference (`ui`, `interface.composer_portal_disabled`). Tests: test_ui
+
 ## 0.1.4
 
 - The Analyst, the eighth seed agent (the user, 19 November 2026: "a seed agent in the technology family called Analyst, which will have mermaid and excalidraw frontend tools"): `worker-analyst`, enabled and offered by the pickers, works out how a system, a process or a plan fits together and draws it. Its frontend tools are two new page sets, `page-excalidraw` (the eleven tools of `@datalayer/reactor-excalidraw`) and `page-mermaid` (the six of `@datalayer/reactor-mermaid`: a source checked by Mermaid's parser before it is shown, refused with the line), with their UIs placed in the chat's right panel, one above the other; its title bar is the new `analysis-header` (subject, whether the diagrams parse, Draw on the canvas). Its public demo `demo-analyst` 0.0.1 draws what a visitor describes, or an example coffee shop's order flow, connecting to no server. Docs: the UI components page.
