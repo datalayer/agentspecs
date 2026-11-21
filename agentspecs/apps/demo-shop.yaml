@@ -116,7 +116,7 @@ tests:
   verified:
     live: []
     recorded:
-      - "Its tools are tested in process in agent-runtimes against the bundled catalogue: the products, a quote summed by the tool, a test order charging nothing."
+      - "Tested on the Datalayer test bench against the bundled catalogue: the products, a quote it sums itself, a test order charging nothing."
     unverified:
       - "Its tests have not been run as a set: no validation run is attached to it."
 record:
