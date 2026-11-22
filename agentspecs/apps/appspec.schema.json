@@ -2179,7 +2179,7 @@
         },
         "variant": {
           "$ref": "#/$defs/ThemeVariant",
-          "description": "The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop` or `vscode`"
+          "description": "The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `agent` or `vscode`"
         }
       },
       "required": [
@@ -2791,7 +2791,7 @@
         "sand",
         "ivory",
         "sun",
-        "loop",
+        "agent",
         "vscode"
       ],
       "title": "ThemeVariant",
@@ -2906,7 +2906,7 @@
       "type": "string"
     }
   },
-  "$id": "https://agentspecs.datalayer.tech/schemas/loop.app/v1.json",
+  "$id": "https://agentspecs.datalayer.tech/schemas/agent.app/v1.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "description": "Specification for an application.",
@@ -3141,8 +3141,8 @@
       "description": "What it is tried on before it is anybody's: published with it by Datalayer, read only"
     },
     "schema": {
-      "const": "loop.app/v1",
-      "default": "loop.app/v1",
+      "const": "agent.app/v1",
+      "default": "agent.app/v1",
       "description": "The version of the spec itself",
       "title": "Schema"
     },

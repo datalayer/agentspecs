@@ -61,5 +61,5 @@ def test_the_map_card_and_its_plugin() -> None:
     assert tool["action"] == "read"
     assert [ui["plugin"] for ui in tool["ui"]] == ["trip-map"]
     plugin = _spec("ui", "trip-map")
-    assert plugin["plugin"] == "@datalayer/loop-plugin-trip-map"
+    assert plugin["plugin"] == "@datalayer/agent-plugin-trip-map"
     assert plugin["folder"] == "trip-map"

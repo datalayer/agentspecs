@@ -16,7 +16,7 @@ description: >-
   The agent opens and closes the chat's left and right panels, where its UI placed there shows: the deck it builds, the sheet it fills, its title bar's controls.
 emoji: "🗂️"
 octicon: sidebar-expand
-plugin: "@datalayer/loop-plugin-side-panels"
+plugin: "@datalayer/agent-plugin-side-panels"
 folder: "side-panels"
 # Its implementation: `import { SidePanelsPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/side-panels"`
 # is the plugin, whose manifest says what this spec says.
@@ -30,7 +30,7 @@ implementation:
 contributions:
   slots: []
   points:
-  - "loop.chat.extras"
+  - "agent.chat.extras"
   - "reactor.ui.renderer"
   - "reactor.ui.toolBinding"
   commands: []

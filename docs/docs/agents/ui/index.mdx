@@ -7,7 +7,7 @@ title: UI
 The interface of an application is made of **UI plugins**: Reactor plugins of
 Agent Runtimes — the chat, the composer, the notebook and its toolbar, the document
 and its toolbar, the page an application draws, its rules and approvals, its activity,
-the *Sign in at a company* card, the page layout… — the ones the Loop editor assembles.
+the *Sign in at a company* card, the page layout… — the ones the Agent editor assembles.
 **A UI spec is one of them**: one YAML per plugin under `agentspecs/ui/`.
 
 A **UI renderer** is something else: how a plugin's interface reaches a host that is
@@ -46,7 +46,7 @@ in [the catalog of visual components](./components.md), generated from the plugi
 | `name` | What a Maker reads. |
 | `description` | What it is, in a Maker's words. |
 | `emoji`, `octicon` | Its faces. |
-| `plugin` | The name the Reactor plugin registers under: `@datalayer/loop-plugin-chat`. |
+| `plugin` | The name the Reactor plugin registers under: `@datalayer/agent-plugin-chat`. |
 | `folder` | The plugin's folder in Agent Runtimes, under `src/apps/plugins/`. |
 | `implementation` | Where the plugin is: the npm `package` that ships it, the `module` of the package that exports it and the `export` (`import { ChatPlugin } from '@datalayer/agent-runtimes/lib/apps/plugins/chat'`), what the export is (`kind`: `plugin`, `plugins` for one per instance, or `factory`, called with the application for a plugin `per: application` and with its placement for one placed in the chat's chrome or a side panel), and, for a UI with a server side, its `backend` Reactor plugin: the PyPI `package` and the `entry_point` (`module.path:attribute`). |
 | `per` | For a plugin registered once per something, `application`, `source` or `ui`: it registers as `<plugin>-<its id>`. |
@@ -68,7 +68,7 @@ description: >-
   When your application acts alone, when it asks you, and the approvals waiting for your yes.
 emoji: "🛡️"
 octicon: shield-check
-plugin: "@datalayer/loop-plugin-app-rules"
+plugin: "@datalayer/agent-plugin-app-rules"
 folder: app-rules
 implementation:
   package: "@datalayer/agent-runtimes"
@@ -77,7 +77,7 @@ implementation:
   kind: factory
 per: application
 contributions:
-  slots: [loop.sidebar]
+  slots: [agent.sidebar]
   points: []
   commands: []
 contribution_points: []
@@ -270,7 +270,7 @@ they stood. A drop-down the person changed is kept by the page for the conversat
 
 ### What the agent is told of a drop-down
 
-The page sends the options chosen with each turn (`forwardedProps.loop.header`, an option id by
+The page sends the options chosen with each turn (`forwardedProps.agent.header`, an option id by
 item id, by UI id), and the runtime tells the agent their sentences for that turn only
 (`agentspecs.ui.header_says`); an item or an option the header does not have is refused:
 

@@ -20,7 +20,7 @@ described here and not offered is refused in its own sentence wherever it is nam
 ## Not offered today
 
 Described — a spec, a register entry, a capabilities table — and not offered: naming one
-is refused with the sentence below, by the runtime, by `loop --harness` and by the Studio.
+is refused with the sentence below, by the runtime, by `agent --harness` and by the Studio.
 
 | Harness | Id | Why not |
 | --- | --- | --- |

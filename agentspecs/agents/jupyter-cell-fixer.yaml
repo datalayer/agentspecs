@@ -42,7 +42,7 @@ backend_tools:
 # grants and replaces it with the narrow one — least privilege said in the spec
 # rather than hoped for.
 #
-# A fragment, not `extends: loop-base`: inheriting the base would inherit its
+# A fragment, not `extends: agent-base`: inheriting the base would inherit its
 # subagent list too, and a specialist could then delegate to itself.
 includes:
   - notebook-surfaces:0.0.1

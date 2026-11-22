@@ -117,7 +117,7 @@ class TeamPlace(str, Enum):
     """
 
     BROWSER = "browser"
-    """In the person's browser: the in-browser target the Preview and `loop` use."""
+    """In the person's browser: the in-browser target the Preview and `agent` use."""
 
     RUNTIME = "runtime"
     """On a runtime: a cloud runtime on Datalayer, or a local one."""

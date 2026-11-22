@@ -7,13 +7,13 @@ title: Appspec reference
 
 # Appspec reference
 
-Every field of an Appspec (`schema: loop.app/v1`), what it means, its default, and an example taken from an application of the catalogue. Nothing is written for a field at its default.
+Every field of an Appspec (`schema: agent.app/v1`), what it means, its default, and an example taken from an application of the catalogue. Nothing is written for a field at its default.
 
 ## The application
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
-| `schema` | `loop.app/v1` | The version of the spec itself | `"loop.app/v1"` |
+| `schema` | `agent.app/v1` | The version of the spec itself | `"agent.app/v1"` |
 | `id` (required) | text | Unique application identifier | — |
 | `version` | text | Application version | `"0.0.1"` |
 | `name` (required) | text | Display name | — |
@@ -68,7 +68,7 @@ Each from an application of the catalogue, as its file writes it.
 ### `schema`
 
 ```yaml
-schema: loop.app/v1
+schema: agent.app/v1
 ```
 
 ### `id`
@@ -1500,7 +1500,7 @@ The theme an application runs in by default.
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
-| `variant` (required) | [ThemeVariant](#themevariant) | The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop` or `vscode` | — |
+| `variant` (required) | [ThemeVariant](#themevariant) | The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `agent` or `vscode` | — |
 | `mode` | [ThemeMode](#thememode) | `light`, `dark` or `auto` (the device's); the person's own when unsaid | empty |
 
 ### AppTool
@@ -1731,7 +1731,7 @@ A UI plugin an agent or an application names, and the renderer it is exposed thr
 
 ### ThemeVariant {#themevariant}
 
-`datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop`, `vscode`
+`datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `agent`, `vscode`
 
 ### TriggerType {#triggertype}
 

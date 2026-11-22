@@ -272,8 +272,8 @@ def test_a_scene_writes_the_document_it_was_read_from() -> None:
 
 
 def test_another_schema_or_an_unknown_key_is_refused_in_a_sentence() -> None:
-    with pytest.raises(SceneError, match="schema: schema 'loop.scene/v2' is not one this package reads"):
-        parse_scene({**raw("month-end-close"), "schema": "loop.scene/v2"})
+    with pytest.raises(SceneError, match="schema: schema 'agent.scene/v2' is not one this package reads"):
+        parse_scene({**raw("month-end-close"), "schema": "agent.scene/v2"})
     with pytest.raises(SceneError, match="month-end-close: curtain is not a field of the spec"):
         parse_scene({**raw("month-end-close"), "curtain": "red"})
     with pytest.raises(SceneError, match="the scene stages nobody"):
@@ -620,7 +620,7 @@ def test_a_scene_spec_is_a_pydantic_model_a_host_can_build() -> None:
 
 def _scripted(**overrides: Any) -> Dict[str, Any]:
     document: Dict[str, Any] = {
-        "schema": "loop.scene/v1",
+        "schema": "agent.scene/v1",
         "id": "a-shop",
         "kind": "scripted",
         "name": "A Shop",

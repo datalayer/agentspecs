@@ -13,7 +13,7 @@
 # It runs on a runtime, where its connection is, and answers over A2A at
 # `/api/v1/a2a/agents/crop-monitoring/`: the person's page talks to it there.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: crop-monitoring
 version: 0.0.2
 name: Crop Monitoring

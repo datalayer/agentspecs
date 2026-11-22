@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Agent picker — the Reactor plugin `@datalayer/loop-plugin-agentspecs`.
+# UI Specification: Agent picker — the Reactor plugin `@datalayer/agent-plugin-agentspecs`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/agentspecs):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -14,7 +14,7 @@ description: >-
   Choose which agent answers in this conversation.
 emoji: "🤖"
 octicon: people
-plugin: "@datalayer/loop-plugin-agentspecs"
+plugin: "@datalayer/agent-plugin-agentspecs"
 folder: "agentspecs"
 # Its implementation: `import { AgentspecsPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/agentspecs"`
 # is the plugin, whose manifest says what this spec says.
@@ -27,9 +27,9 @@ implementation:
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.header"
+  - "agent.header"
   points:
-  - "loop.command"
+  - "agent.command"
   commands:
   - "agents"
 # The Contribution Points it offers to other plugins.

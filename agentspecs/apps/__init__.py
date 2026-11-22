@@ -69,7 +69,7 @@ from ..ui import UiChoice, ui_choices_problems
 _ROOT = Path(__file__).parent.parent
 
 #: The version of the spec itself. A reader refuses one it does not know.
-APP_SCHEMA = "loop.app/v1"
+APP_SCHEMA = "agent.app/v1"
 
 #: Every version of the spec this package reads.
 KNOWN_SCHEMAS = (APP_SCHEMA,)
@@ -1634,7 +1634,7 @@ CUSTOM_SOURCE = re.compile(r"(?:https://[A-Za-z0-9.-]+(?::\d+)?|http://(?:localh
 
 #: A custom component's module as a file of the application's folder:
 #: its path in the folder, a `.js` or `.mjs` file inside it — no
-#: absolute path, no `..`. Packaged with the application (`loop apps
+#: absolute path, no `..`. Packaged with the application (`agent apps
 #: package`), it is served by the server its package is installed beside.
 CUSTOM_FILE = re.compile(r"(?:\./)?(?:[A-Za-z0-9_][A-Za-z0-9_.-]*/)*[A-Za-z0-9_][A-Za-z0-9_.-]*\.m?js")
 
@@ -1991,7 +1991,7 @@ class ThemeVariant(str, Enum):
     SAND = "sand"
     IVORY = "ivory"
     SUN = "sun"
-    LOOP = "loop"
+    AGENT = "agent"
     VSCODE = "vscode"
 
 
@@ -2008,7 +2008,7 @@ class AppTheme(_Strict):
 
     variant: ThemeVariant = Field(
         description=(
-            "The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop` or `vscode`"
+            "The theme: `datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `agent` or `vscode`"
         ),
     )
     mode: Optional[ThemeMode] = Field(

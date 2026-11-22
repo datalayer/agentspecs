@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Blocks — the Reactor plugin `@datalayer/loop-plugin-ui`, one per ui.
+# UI Specification: Blocks — the Reactor plugin `@datalayer/agent-plugin-ui`, one per ui.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/canvas-blocks):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -14,7 +14,7 @@ description: >-
   The blocks you place on your application's page in the visual editor, one set for each part that draws them.
 emoji: "🧱"
 octicon: apps
-plugin: "@datalayer/loop-plugin-ui"
+plugin: "@datalayer/agent-plugin-ui"
 folder: "canvas-blocks"
 # Its implementation: `import { CANVAS_BLOCK_PLUGINS } from "@datalayer/agent-runtimes/lib/apps/plugins/canvas-blocks"`
 # is its instances, whose manifest says what this spec says.
@@ -29,7 +29,7 @@ per: ui
 contributions:
   slots: []
   points:
-  - "loop.canvas.block"
+  - "agent.canvas.block"
   commands: []
 # The Contribution Points it offers to other plugins.
 contribution_points: []

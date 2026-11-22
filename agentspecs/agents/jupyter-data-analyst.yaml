@@ -23,7 +23,7 @@
 #
 # One spec for both ways it runs. On a server it is a pydantic-ai agent on a
 # Jupyter sandbox with the notebook and document surfaces the fragment below
-# gives it; in a page — the landing, the Loop examples — the loop turns in the
+# gives it; in a page — the landing, the Agent examples — the loop turns in the
 # visitor's browser against the browser sandbox, and the notebook tools arrive
 # from the workspace, so a visitor with no account still gets a live notebook
 # and an agent that works in it. There used to be a second analyst for the
@@ -70,7 +70,7 @@ delegable:
   - id: data.visualise
 
 # The seventh seed agent (the user, 18 November 2026): enabled and offered by the pickers
-# — /agents/new, the chats, the assign menu and loop — beside the Marketer, the Shopper,
+# — /agents/new, the chats, the assign menu and `agent` — beside the Marketer, the Shopper,
 # the Accountant, the Traveller, Terra and the Steward for AWS. It was enabled and out of
 # the pickers (`listed: false`) from 14 November 2026 until then.
 enabled: true

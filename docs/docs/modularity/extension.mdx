@@ -13,7 +13,7 @@ A child names one parent and overrides what it needs.
 ```yaml
 # agents/cell-fixer.yaml
 id: cell-fixer
-extends: loop-base:0.0.1
+extends: agent-base:0.0.1
 model: "bedrock:us.anthropic.claude-sonnet-4-6"   # overrides the parent's
 system_prompt_append: >-
   Fix the failing cell and prove the fix by running it.
@@ -23,7 +23,7 @@ system_prompt_append: >-
   nobody can read is worse than a repeated field.
 - A cycle is refused by name at generation time (`a → b → a`), not discovered at
   runtime.
-- The reference may be versioned (`loop-base:0.0.1`) or bare (`loop-base`).
+- The reference may be versioned (`agent-base:0.0.1`) or bare (`agent-base`).
 
 Extension carries *everything* the parent declares, subagent lists included —
 which is the reason a specialist that only needs shared capability should

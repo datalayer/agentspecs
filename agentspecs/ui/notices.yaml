@@ -15,7 +15,7 @@ description: >-
   A short notice the agent slides in from an edge of the chat for a few seconds: info, success, warning or error, a title and a line, said to come from the agent.
 emoji: "🔔"
 octicon: bell
-plugin: "@datalayer/loop-plugin-notices"
+plugin: "@datalayer/agent-plugin-notices"
 folder: "notices"
 # Its implementation: `import { NoticesPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/notices"`
 # is the plugin, whose manifest says what this spec says.
@@ -28,9 +28,9 @@ implementation:
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.viewOverlay"
+  - "agent.viewOverlay"
   points:
-  - "loop.chat.extras"
+  - "agent.chat.extras"
   - "reactor.ui.renderer"
   - "reactor.ui.toolBinding"
   commands: []

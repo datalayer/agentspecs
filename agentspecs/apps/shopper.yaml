@@ -8,12 +8,12 @@
 # the shop could not answer. It connects to nothing and buys nothing itself.
 #
 # It is the entry of the team `buy-from-a-shop`, and runs in the person's
-# browser (the in-browser target that the Preview and `loop` use): its
+# browser (the in-browser target that the Preview and `agent` use): its
 # agent's instructions and model turn there. Its one tool, ask_demo_shop, is the
 # team's A2A link to the Demo Shop. Its own agent's runtime tools do not
 # exist in a browser.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: shopper
 version: 0.0.2
 name: Shopper

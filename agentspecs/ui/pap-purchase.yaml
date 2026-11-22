@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Approve a purchase — the Reactor plugin `@datalayer/loop-plugin-pap-purchase`.
+# UI Specification: Approve a purchase — the Reactor plugin `@datalayer/agent-plugin-pap-purchase`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/pap-purchase):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -16,7 +16,7 @@ description: >-
   A company's operation you approve, in the chat: the company, its summary and every term, the exact revision and until when it holds, above the chat's own approval (pap_confirm).
 emoji: "💳"
 octicon: credit-card
-plugin: "@datalayer/loop-plugin-pap-purchase"
+plugin: "@datalayer/agent-plugin-pap-purchase"
 folder: "pap-purchase"
 # Its implementation: `import { PapPurchasePlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/pap-purchase"`
 # is the plugin, whose manifest says what this spec says.

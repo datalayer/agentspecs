@@ -7,7 +7,7 @@
 # with the narrowest sign-in each person gives it. Datalayer keeps that
 # sign-in, renews it and ends it on Disconnect; the application never holds it.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: order-tracker
 version: 0.0.2
 name: Order Tracker

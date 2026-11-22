@@ -6,7 +6,7 @@
 # a generic player application with the orb as avatar). It runs in the
 # browser; the arena binds its tools to the Player's side.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: player
 version: 0.0.1
 name: Player

@@ -7,7 +7,7 @@
 # A2A from the page. Four beats: the checklist (a table), the accruals (the
 # sources), the expenses (a chart), posting the accruals (an approval).
 
-schema: loop.scene/v1
+schema: agent.scene/v1
 id: month-end-close
 version: 0.0.1
 name: Month-end Close

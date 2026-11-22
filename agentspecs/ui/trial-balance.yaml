@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Trial balance — the Reactor plugin `@datalayer/loop-plugin-trial-balance`.
+# UI Specification: Trial balance — the Reactor plugin `@datalayer/agent-plugin-trial-balance`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/trial-balance):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -16,7 +16,7 @@ description: >-
   Each account's debit, credit and balance for a period, with the totals and whether they agree (show_trial_balance).
 emoji: "⚖️"
 octicon: law
-plugin: "@datalayer/loop-plugin-trial-balance"
+plugin: "@datalayer/agent-plugin-trial-balance"
 folder: "trial-balance"
 # Its implementation: `import { TrialBalancePlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/trial-balance"`
 # is the plugin, whose manifest says what this spec says.

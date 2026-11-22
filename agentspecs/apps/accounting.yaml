@@ -17,7 +17,7 @@
 # catalog (an A2UI surface: sources, a table, a chart, a choice) beside it when
 # the caller accepts them (`interface.outputs`, the card's output modes).
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: accounting
 version: 0.0.2
 name: Accounting

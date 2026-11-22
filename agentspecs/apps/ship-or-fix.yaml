@@ -5,7 +5,7 @@
 # A decision: which agent configuration to ship, on the evidence of a
 # benchmark run. Three criteria are measured by the run, two are asked of a decision model.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: ship-or-fix
 version: 0.0.3
 name: Ship or Fix

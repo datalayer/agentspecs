@@ -10,7 +10,7 @@
 # hosts it for examples; it accepts a personal agent
 # once its issuer is registered there (PACT 1.0 §3.1).
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: travel-desk
 version: 0.0.2
 name: Travel Desk

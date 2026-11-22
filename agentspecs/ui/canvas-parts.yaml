@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Parts — the Reactor plugin `@datalayer/loop-plugin-parts`, one per source.
+# UI Specification: Parts — the Reactor plugin `@datalayer/agent-plugin-parts`, one per source.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/canvas-parts):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -14,7 +14,7 @@ description: >-
   What you drop on your agent in the visual editor: connections, skills, models, rules, tests and events.
 emoji: "🧰"
 octicon: package
-plugin: "@datalayer/loop-plugin-parts"
+plugin: "@datalayer/agent-plugin-parts"
 folder: "canvas-parts"
 # Its implementation: `import { CANVAS_PART_PLUGINS } from "@datalayer/agent-runtimes/lib/apps/plugins/canvas-parts"`
 # is its instances, whose manifest says what this spec says.
@@ -29,7 +29,7 @@ per: source
 contributions:
   slots: []
   points:
-  - "loop.canvas.part"
+  - "agent.canvas.part"
   commands: []
 # The Contribution Points it offers to other plugins.
 contribution_points: []

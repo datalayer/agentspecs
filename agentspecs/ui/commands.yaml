@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Command palette — the Reactor plugin `@datalayer/loop-plugin-commands`.
+# UI Specification: Command palette — the Reactor plugin `@datalayer/agent-plugin-commands`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/commands):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -14,20 +14,20 @@ description: >-
   Every command at hand, with Ctrl-K.
 emoji: "⌘"
 octicon: command-palette
-plugin: "@datalayer/loop-plugin-commands"
+plugin: "@datalayer/agent-plugin-commands"
 folder: "commands"
-# Its implementation: `import { LoopCommandsPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/commands"`
+# Its implementation: `import { AgentCommandsPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/commands"`
 # is the plugin, whose manifest says what this spec says.
 implementation:
   package: "@datalayer/agent-runtimes"
   module: "lib/apps/plugins/commands"
-  export: "LoopCommandsPlugin"
+  export: "AgentCommandsPlugin"
   kind: plugin
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.status"
+  - "agent.status"
   points: []
   commands: []
 # The Contribution Points it offers to other plugins.

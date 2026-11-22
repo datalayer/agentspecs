@@ -17,7 +17,7 @@ a signed user, a runtime's address or a file's bytes.
 One spec, ``sessions/datalayer-session-1.yaml``: the format's id, its caps,
 the states, the kinds an entry may carry, the redaction rules by name and
 the sentences a reader refuses a file in — the same words on every surface
-(the runtime, ``loop``, the chat, agent-teams), generated into each by
+(the runtime, ``agent``, the chat, agent-teams), generated into each by
 agent-runtimes' ``make specs``. The models here validate one line at a time
 (:func:`parse_line`); a line that is not one of the three, an entry of a
 kind the record does not have, an entry without ``at``, a team line without

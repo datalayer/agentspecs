@@ -13,7 +13,7 @@
 # own consent screen through Datalayer; a version that can send is deployed
 # only once its safety tests passed on it.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: inbox-triage
 version: 0.0.2
 name: Inbox Triage

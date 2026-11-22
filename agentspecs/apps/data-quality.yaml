@@ -6,7 +6,7 @@
 # a decision. Two criteria are measured in the sandbox, one is asked of a decision model, and
 # one says what kind of anomaly it is.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: data-quality
 version: 0.0.3
 name: Data Quality Investigation

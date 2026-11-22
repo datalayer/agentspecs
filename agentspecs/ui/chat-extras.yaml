@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Banner and status — the Reactor plugin `@datalayer/loop-plugin-chat-extras`.
+# UI Specification: Banner and status — the Reactor plugin `@datalayer/agent-plugin-chat-extras`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/chat-extras):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -14,7 +14,7 @@ description: >-
   A live banner over the conversation and a status line under it, set by the page around it.
 emoji: "📣"
 octicon: megaphone
-plugin: "@datalayer/loop-plugin-chat-extras"
+plugin: "@datalayer/agent-plugin-chat-extras"
 folder: "chat-extras"
 # Its implementation: `import { createChatExtrasPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/chat-extras"`
 # is what makes the plugin, whose manifest says what this spec says.
@@ -28,7 +28,7 @@ implementation:
 contributions:
   slots: []
   points:
-  - "loop.chat.extras"
+  - "agent.chat.extras"
   commands: []
 # The Contribution Points it offers to other plugins.
 contribution_points: []

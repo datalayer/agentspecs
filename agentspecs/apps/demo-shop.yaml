@@ -11,7 +11,7 @@
 # operation, placing an order, is a test order: nothing is charged, nothing
 # ships, nothing is kept.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: demo-shop
 version: 0.0.1
 name: Demo Shop

@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Models — the Reactor plugin `@datalayer/loop-plugin-models`.
+# UI Specification: Models — the Reactor plugin `@datalayer/agent-plugin-models`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/models):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -14,7 +14,7 @@ description: >-
   Which model answers, and the models you may choose from.
 emoji: "🧠"
 octicon: cpu
-plugin: "@datalayer/loop-plugin-models"
+plugin: "@datalayer/agent-plugin-models"
 folder: "models"
 # Its implementation: `import { ModelsPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/models"`
 # is the plugin, whose manifest says what this spec says.
@@ -28,7 +28,7 @@ implementation:
 contributions:
   slots: []
   points:
-  - "loop.command"
+  - "agent.command"
   commands:
   - "models"
 # The Contribution Points it offers to other plugins.

@@ -6,7 +6,7 @@
 
 `enabled: false` says an agent is not offered today: an application naming it has it to
 set up. `listed: false` (0.0.187, the user, 14 November 2026) keeps an enabled agent out
-of the pickers — the new agent page, the chats, the assign menu, loop's local and cloud
+of the pickers — the new agent page, the chats, the assign menu, `agent`'s local and cloud
 pickers — while it stays runnable by id, the default of blank applications and quick
 launches, and the agent of the applications that name it.
 """

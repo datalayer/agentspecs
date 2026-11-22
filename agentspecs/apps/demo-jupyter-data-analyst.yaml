@@ -13,7 +13,7 @@
 # things wrong with it, computed beforehand — shows the cell the agent would
 # add for each answer, and says that nothing ran here.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: demo-jupyter-data-analyst
 version: 0.0.6
 name: Jupyter Data Analyst

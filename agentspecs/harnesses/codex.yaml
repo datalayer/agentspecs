@@ -23,7 +23,7 @@ acp:
     NO_BROWSER: "1"
 
 requires:
-  # Local only: run with `loop --harness`, the CLI or a laptop demo, it takes this
+  # Local only: run with `agent --harness`, the CLI or a laptop demo, it takes this
   # key from the environment. On a Datalayer runtime no key is given: it is given a
   # configuration directory (CODEX_HOME) naming ai-inference's Responses route,
   # answered from AWS Bedrock, with no token in it. No call reaches OpenAI.

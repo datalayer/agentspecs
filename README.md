@@ -296,7 +296,7 @@ op["gates"], op["track"]
 ### Applications (`agentspecs/apps`)
 
 An application is what a person uses: an agent with an interface, rules, tests
-and a place to run. One spec — the **Appspec**, `schema: loop.app/v1` — for a
+and a place to run. One spec — the **Appspec**, `schema: agent.app/v1` — for a
 `chat`, a `widget`, a `decision` and a `worker`. It stands alone: `agent`,
 `connections`, `rules`, `interface`, `tests`, `record` and `deployment` in
 plain fields; Guards, Gates and a Track optional, under `checks`.

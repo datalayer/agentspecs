@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Floating composer — the Reactor plugin `@datalayer/loop-plugin-prompt`.
+# UI Specification: Floating composer — the Reactor plugin `@datalayer/agent-plugin-prompt`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/prompt):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -14,7 +14,7 @@ description: >-
   The composer in a card you move over the page, and the commands that bring it back or start over.
 emoji: "🪶"
 octicon: paper-airplane
-plugin: "@datalayer/loop-plugin-prompt"
+plugin: "@datalayer/agent-plugin-prompt"
 folder: "prompt"
 # Its implementation: `import { PromptPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/prompt"`
 # is the plugin, whose manifest says what this spec says.
@@ -27,9 +27,9 @@ implementation:
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.promptAction"
+  - "agent.promptAction"
   points:
-  - "loop.command"
+  - "agent.command"
   commands:
   - "new"
   - "prompt"

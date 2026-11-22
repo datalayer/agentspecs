@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Satellite scenes — the Reactor plugin `@datalayer/loop-plugin-earth-scenes`.
+# UI Specification: Satellite scenes — the Reactor plugin `@datalayer/agent-plugin-earth-scenes`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/earth-scenes):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -16,7 +16,7 @@ description: >-
   The satellite scenes found, by date, each with its collection, sensor and cloud cover as the catalogue gave them (show_scenes).
 emoji: "🛰️"
 octicon: globe
-plugin: "@datalayer/loop-plugin-earth-scenes"
+plugin: "@datalayer/agent-plugin-earth-scenes"
 folder: "earth-scenes"
 # Its implementation: `import { EarthScenesPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/earth-scenes"`
 # is the plugin, whose manifest says what this spec says.

@@ -7,7 +7,7 @@
 # agent writes reaches the person as it is written, and a conversation cut
 # off picks up where it was, nothing said twice.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: live-shop-chat
 version: 0.0.2
 name: Live Shop Chat

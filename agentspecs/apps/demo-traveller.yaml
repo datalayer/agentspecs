@@ -25,7 +25,7 @@
 # map (show_trip_map, over
 # Overture's open basemap). Flights stay Kiwi.com's; stays stay the example.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: demo-traveller
 version: 0.0.8
 name: Traveller

@@ -9,7 +9,7 @@ learn; it answers each message through its agent inside a step; it saves an
 insight from a button, and gives a structured result when the interview ends.
 
 Its Appspec, ``customer-interview.yaml`` beside this folder, is what
-``loop apps build`` writes from this file; agent-runtimes' tests build it
+``agent apps build`` writes from this file; agent-runtimes' tests build it
 again and compare, so that the two never drift.
 
 What was verified, and how, is said in its spec (``tests.verified``), on its
@@ -29,7 +29,7 @@ class Insight(BaseModel):
 
 app = Application.from_spec(
     {
-        "schema": "loop.app/v1",
+        "schema": "agent.app/v1",
         "id": "customer-interview",
         "version": "0.0.3",
         "name": "Customer Interview",

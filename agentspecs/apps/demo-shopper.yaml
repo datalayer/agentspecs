@@ -22,7 +22,7 @@
 # fine to search items)"): the `shopify` server, which takes no key, read only,
 # real products from Shopify stores found and compared, never bought here.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: demo-shopper
 version: 0.0.13
 name: Shopper

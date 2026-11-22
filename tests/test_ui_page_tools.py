@@ -104,11 +104,11 @@ def test_a_page_ui_is_a_ui_and_a_frontend_tool_set_of_one_id():
 @pytest.mark.parametrize("ui_id", sorted(PAGE_UIS))
 def test_a_page_ui_goes_in_the_conversation_and_hands_its_tools_with_the_chats_extras(ui_id):
     spec = ui.UI_CATALOGUE[ui_id]
-    assert spec.plugin == f"@datalayer/loop-plugin-{ui_id}"
+    assert spec.plugin == f"@datalayer/agent-plugin-{ui_id}"
     # In the conversation by default; in a side panel where an agent places it (18 November 2026).
     assert [p.value for p in spec.placements] == ["message", "right", "left"]
     assert spec.header is None
-    assert sorted(spec.contributions.points) == ["loop.chat.extras", "reactor.ui.renderer", "reactor.ui.toolBinding"]
+    assert sorted(spec.contributions.points) == ["agent.chat.extras", "reactor.ui.renderer", "reactor.ui.toolBinding"]
 
 
 @pytest.mark.parametrize("ui_id", sorted(PAGE_UIS))

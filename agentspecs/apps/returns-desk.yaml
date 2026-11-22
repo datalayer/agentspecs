@@ -7,7 +7,7 @@
 # repair with its exact terms and a version; the person approves that version,
 # and it is done at most once.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: returns-desk
 version: 0.0.2
 name: Returns Desk

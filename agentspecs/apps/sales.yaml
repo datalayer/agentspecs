@@ -8,13 +8,13 @@
 # Accounting could not answer. It connects to nothing and writes nothing.
 #
 # It is the entry of the team `sales-and-accounting`, and runs in the
-# person's browser (the in-browser target that the Preview and `loop` use):
+# person's browser (the in-browser target that the Preview and `agent` use):
 # its agent's instructions and model turn there. Its one tool, ask_accounting,
 # is the team's A2A link to Accounting. Its request and answer are text, as
 # Accounting's agent card says (its one skill, `accounting`). Its own agent's
 # runtime tools do not exist in a browser.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: sales
 version: 0.0.3
 name: Sales

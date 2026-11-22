@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Sign in at a company — the Reactor plugin `@datalayer/loop-plugin-pap-sign-in`.
+# UI Specification: Sign in at a company — the Reactor plugin `@datalayer/agent-plugin-pap-sign-in`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/pap-sign-in):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -14,7 +14,7 @@ description: >-
   Where your agent asks you to sign in at a company: its page, the code, and until when.
 emoji: "🔑"
 octicon: sign-in
-plugin: "@datalayer/loop-plugin-pap-sign-in"
+plugin: "@datalayer/agent-plugin-pap-sign-in"
 folder: "pap-sign-in"
 # Its implementation: `import { PapSignInPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/pap-sign-in"`
 # is the plugin, whose manifest says what this spec says.
@@ -27,7 +27,7 @@ implementation:
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.chatHeader"
+  - "agent.chatHeader"
   points:
   - "reactor.ui.renderer"
   - "reactor.ui.toolBinding"

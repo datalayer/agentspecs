@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Shopping header — the Reactor plugin `@datalayer/loop-plugin-shop-header`.
+# UI Specification: Shopping header — the Reactor plugin `@datalayer/agent-plugin-shop-header`.
 #
 # A header UI (the user, 18 November 2026: "plugins to show suited buttons in
 # the header for the other seed agents ... a drop-down choice, or visual
@@ -19,7 +19,7 @@ description: >-
   The Shopper's title bar: the basket it is putting together (items and total), a budget drop-down, and whether a purchase waits for the person's approval.
 emoji: "🛍️"
 octicon: package
-plugin: "@datalayer/loop-plugin-shop-header"
+plugin: "@datalayer/agent-plugin-shop-header"
 folder: "shop-header"
 # Its implementation: `import { shopHeaderPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/shop-header"`
 # is what makes the plugin, whose manifest says what this spec says.
@@ -32,10 +32,10 @@ implementation:
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.chatHeader"
+  - "agent.chatHeader"
   points:
-  - "loop.chat.extras"
-  - "loop.runProps"
+  - "agent.chat.extras"
+  - "agent.runProps"
   commands: []
 # The Contribution Points it offers to other plugins.
 contribution_points: []

@@ -9,7 +9,7 @@
 # The shop is the protocol's demo company, Manzanita Outfitters, as Datalayer
 # hosts it for examples.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: order-desk
 version: 0.0.2
 name: Order Desk

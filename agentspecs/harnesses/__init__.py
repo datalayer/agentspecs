@@ -333,7 +333,7 @@ class HarnessSpec(_Strict):
     unavailable_because: str = Field(
         default="",
         description=(
-            "Why it is not offered today, in a sentence the runtime, `loop` and the Studio say "
+            "Why it is not offered today, in a sentence the runtime, `agent` and the Studio say "
             "when it is named: said when `enabled` is false, and only then (`custom` needs none)"
         ),
     )
@@ -567,7 +567,7 @@ def offered_refusal(harness_id: str) -> Optional[str]:
 
     A harness with a spec and `enabled: false` is described, never launched:
     the sentence is its `unavailable_because`, said wherever it is named — the
-    runtime, `loop --harness`, the Studio. `custom` is refused by its own
+    runtime, `agent --harness`, the Studio. `custom` is refused by its own
     sentence (it names no command), not this one; a harness the catalogue
     does not know is none of this (see `listed_refusal`).
     """
@@ -763,7 +763,7 @@ def reference_text() -> str:
         "## Not offered today",
         "",
         "Described — a spec, a register entry, a capabilities table — and not offered: naming one",
-        "is refused with the sentence below, by the runtime, by `loop --harness` and by the Studio.",
+        "is refused with the sentence below, by the runtime, by `agent --harness` and by the Studio.",
         "",
         "| Harness | Id | Why not |",
         "| --- | --- | --- |",

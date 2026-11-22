@@ -6,7 +6,7 @@
 # 6 November 2026). It runs in the browser; the deck it builds is drawn
 # under it as Datalayer Decks draws one.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: deck-maker
 version: 0.0.1
 name: Deck Maker

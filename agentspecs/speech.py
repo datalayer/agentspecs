@@ -54,7 +54,7 @@ REGISTER_PATH = _ROOT / "speech-licences.yaml"
 
 #: Where a step of speech may run: in the person's browser (`device`), on ai-agents
 #: (`server`), or on the person's own machine through agent-runtimes' `voice` extra
-#: (`machine`: `loop --voice --speak`).
+#: (`machine`: `agent --voice --speak`).
 Where = Literal["device", "server", "machine"]
 
 #: What a speech model does.

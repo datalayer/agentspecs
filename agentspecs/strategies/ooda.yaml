@@ -1,14 +1,14 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Strategy Specification: OODA Loop
+# Strategy Specification: OODA Agent
 # The classic Observe → Orient → Decide → Act control loop, adapted for
 # LLM-driven agents. Generic enough to drive any decision-oriented task where
 # the agent must repeatedly re-assess a changing environment.
 
 id: ooda
 version: 0.0.1
-name: OODA Loop
+name: OODA Agent
 description: >
   A generic Observe → Orient → Decide → Act control loop. The agent observes
   the current state, orients by interpreting it in the context of the goal,

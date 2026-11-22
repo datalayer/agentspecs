@@ -91,14 +91,14 @@ def test_what_may_go_in_a_side_panel_says_so():
 def test_the_side_panels_and_the_notices_are_page_uis(ui_id, tools):
     spec = ui.UI_CATALOGUE[ui_id]
     assert ui.hands_frontend_tools(ui_id)
-    assert spec.plugin == f"@datalayer/loop-plugin-{ui_id}"
+    assert spec.plugin == f"@datalayer/agent-plugin-{ui_id}"
     assert [p.value for p in spec.placements] == ["message"]
     assert sorted(spec.contributions.points) == [
-        "loop.chat.extras",
+        "agent.chat.extras",
         "reactor.ui.renderer",
         "reactor.ui.toolBinding",
     ]
-    assert spec.contributions.slots == (["loop.viewOverlay"] if ui_id == "notices" else [])
+    assert spec.contributions.slots == (["agent.viewOverlay"] if ui_id == "notices" else [])
     toolset = raw("frontend-tools", ui_id)
     assert toolset["toolset"] == tools
     assert set(toolset) == {
