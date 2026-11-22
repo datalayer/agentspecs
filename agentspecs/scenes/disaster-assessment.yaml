@@ -8,7 +8,7 @@
 # searching the imagery NASA Earthdata holds — then reports. Four beats: a flood (a
 # table), a fire (the sources), a storm (a chart), an alert (an approval).
 
-schema: loop.scene/v1
+schema: agent.scene/v1
 id: disaster-assessment
 version: 0.0.1
 name: Disaster Assessment

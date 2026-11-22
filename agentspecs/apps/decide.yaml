@@ -7,7 +7,7 @@
 # no with its probability, one of named options, or a step on a scale. Its one
 # tool, decide, reaches nothing but ai-inference: a reader, done without asking.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: decide
 version: 0.0.2
 name: Decide

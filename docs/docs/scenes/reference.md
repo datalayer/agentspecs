@@ -7,13 +7,13 @@ title: Scene spec reference
 
 # Scene spec reference
 
-Every field of a scene spec (`schema: loop.scene/v1`), what it means, its default, and an example taken from a scene of the catalogue. Nothing is written for a field at its default.
+Every field of a scene spec (`schema: agent.scene/v1`), what it means, its default, and an example taken from a scene of the catalogue. Nothing is written for a field at its default.
 
 ## The scene
 
 | Field | Type | Meaning | Default |
 | --- | --- | --- | --- |
-| `schema` | `loop.scene/v1` | The version of the spec itself | `"loop.scene/v1"` |
+| `schema` | `agent.scene/v1` | The version of the spec itself | `"agent.scene/v1"` |
 | `id` (required) | text | Unique scene identifier | — |
 | `version` | text | Scene version | `"0.0.1"` |
 | `name` (required) | text | Display name: the tab's | — |
@@ -42,7 +42,7 @@ Each from a scene of the catalogue, as its file writes it.
 ### `schema`
 
 ```yaml
-schema: loop.scene/v1
+schema: agent.scene/v1
 ```
 
 ### `id`

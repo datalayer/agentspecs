@@ -64,9 +64,9 @@ def test_a_header_ui_is_calm_named_and_set_by_its_own_tool(plugin):
         assert item.octicon, item.id
     # What it registers: its items in the title bar, its tool with the chat's extras, and its
     # drop-downs with every run.
-    assert spec.contributions.slots == ["loop.chatHeader"]
+    assert spec.contributions.slots == ["agent.chatHeader"]
     choices = [item for item in header.items if item.kind is ui.UiHeaderItemKind.CHOICE]
-    assert spec.contributions.points == ["loop.chat.extras", *(["loop.runProps"] if choices else [])]
+    assert spec.contributions.points == ["agent.chat.extras", *(["agent.runProps"] if choices else [])]
 
 
 def test_the_three_kinds_and_the_four_displays_are_all_shown_by_a_seed_agent():

@@ -25,7 +25,7 @@
 # It runs on a runtime, where its workspace is, and answers over A2A at
 # `/api/v1/a2a/agents/code-explainer/`: the person's page talks to it there.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: code-explainer
 version: 0.0.1
 name: Code Explainer

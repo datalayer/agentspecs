@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Trip header — the Reactor plugin `@datalayer/loop-plugin-trip-header`.
+# UI Specification: Trip header — the Reactor plugin `@datalayer/agent-plugin-trip-header`.
 #
 # A header UI (the user, 18 November 2026: "plugins to show suited buttons in
 # the header for the other seed agents ... a drop-down choice, or visual
@@ -19,7 +19,7 @@ description: >-
   The Traveller's title bar: the trip being planned (where and when), a drop-down for how many travel, and how many options are ready to compare.
 emoji: "🧭"
 octicon: paper-airplane
-plugin: "@datalayer/loop-plugin-trip-header"
+plugin: "@datalayer/agent-plugin-trip-header"
 folder: "trip-header"
 # Its implementation: `import { tripHeaderPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/trip-header"`
 # is what makes the plugin, whose manifest says what this spec says.
@@ -32,10 +32,10 @@ implementation:
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.chatHeader"
+  - "agent.chatHeader"
   points:
-  - "loop.chat.extras"
-  - "loop.runProps"
+  - "agent.chat.extras"
+  - "agent.runProps"
   commands: []
 # The Contribution Points it offers to other plugins.
 contribution_points: []

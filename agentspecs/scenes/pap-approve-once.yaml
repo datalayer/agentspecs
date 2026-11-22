@@ -7,7 +7,7 @@
 # answers, proposals and results word for word — with nothing live behind it.
 # The audience takes the person's part where the person decides.
 
-schema: loop.scene/v1
+schema: agent.scene/v1
 id: pap-approve-once
 version: 0.0.1
 kind: scripted

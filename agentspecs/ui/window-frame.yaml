@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Window — the Reactor plugin `@datalayer/loop-plugin-window-frame`.
+# UI Specification: Window — the Reactor plugin `@datalayer/agent-plugin-window-frame`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/window-frame):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -14,7 +14,7 @@ description: >-
   Draws the editor as a window, with room in its title bar for controls and actions.
 emoji: "🪟"
 octicon: browser
-plugin: "@datalayer/loop-plugin-window-frame"
+plugin: "@datalayer/agent-plugin-window-frame"
 folder: "window-frame"
 # Its implementation: `import { WindowFramePlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/window-frame"`
 # is the plugin, whose manifest says what this spec says.
@@ -27,8 +27,8 @@ implementation:
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.header"
-  - "loop.window.controls"
+  - "agent.header"
+  - "agent.window.controls"
   points: []
   commands: []
 # The Contribution Points it offers to other plugins.

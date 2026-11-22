@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Plugins — the Reactor plugin `@datalayer/loop-plugin-plugin-manager`.
+# UI Specification: Plugins — the Reactor plugin `@datalayer/agent-plugin-plugin-manager`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/plugin-manager):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -19,10 +19,10 @@ id: "plugin-manager"
 version: 0.0.1
 name: Plugins
 description: >-
-  A plug button in the chat's footer that opens the plugins manager in a dialog over the page: every plugin of the application's platform, filtered by name, each with a switch to turn it off and back on while the application runs. Every application has it, listed in its `ui` or not, unless its spec leaves it out (`interface.plugin_manager_disabled: true`). Needs no connection: an anonymous visitor has it.
+  A plug button in the chat's footer, in its row under the prompt (`agent.promptStatus`, usable while the prompt is closed), that opens the plugins manager in a dialog over the page: every plugin of the application's platform, filtered by name, each with a switch to turn it off and back on while the application runs. Every application has it, listed in its `ui` or not, unless its spec leaves it out (`interface.plugin_manager_disabled: true`). Needs no connection: an anonymous visitor has it.
 emoji: "🔌"
 octicon: plug
-plugin: "@datalayer/loop-plugin-plugin-manager"
+plugin: "@datalayer/agent-plugin-plugin-manager"
 folder: "plugin-manager"
 # Its implementation: `import { pluginManagerPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/plugin-manager"`
 # is what makes the plugin, whose manifest says what this spec says.
@@ -35,7 +35,7 @@ implementation:
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.status"
+  - "agent.promptStatus"
   points: []
   commands: []
 # The Contribution Points it offers to other plugins.

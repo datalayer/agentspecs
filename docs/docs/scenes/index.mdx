@@ -9,7 +9,7 @@ A scene stages a [team](../agent-teams/applications#scenes). The team says
 who is on stage — its members, their roles, who asks whom over what; the
 scene says what happens there: the setting, the script, the stage
 directions, the audience, the rehearsal and where it plays. Its spec is the
-**scene spec**, `schema: loop.scene/v1`, one YAML per scene under
+**scene spec**, `schema: agent.scene/v1`, one YAML per scene under
 `agentspecs/scenes/`. Nothing of membership is said twice: a scene names its
 team, or writes a `cast` that makes one.
 
@@ -40,7 +40,7 @@ the `studio` backdrop:
 
 ```yaml
 # scenes/sales-and-accounting.yaml
-schema: loop.scene/v1
+schema: agent.scene/v1
 id: sales-and-accounting
 name: Sales & Accounting
 description: A sales desk asks Accounting for the figures and hands them over.
@@ -132,7 +132,7 @@ six protocol scenes above are written this way.
 
 ```yaml
 # scenes/pap-approve-once.yaml
-schema: loop.scene/v1
+schema: agent.scene/v1
 id: pap-approve-once
 kind: scripted
 name: A Change, Approved Once
@@ -223,13 +223,13 @@ runs a harness has a workspace (`harness_of`).
 
 What the last rehearsal found is kept beside the specs, in the scene's own
 file `<id>/rehearsal.json` (`played_path`), written by
-`loop scenes rehearse --cloud` and never by hand: when it was played, where,
+`agent scenes rehearse --cloud` and never by hand: when it was played, where,
 whether every beat `passed`, the verdict in one sentence, each beat's verdict
 (`passed`, `failed` with what differed, `not_run` with why) and the
 agent-runtimes that played it. `scene_played(id)` reads it as a `ScenePlayed`,
 `write_played` keeps one, and a file that is not a rehearsal's result is
 refused in a sentence rather than read as a pass. A scene whose last
-rehearsal passed is *Live* — in `loop scenes ls`, in the catalogue
+rehearsal passed is *Live* — in `agent scenes ls`, in the catalogue
 agent-runtimes generates and on the home page; one that did not says so with
 the verdict's sentence. The hand-written `verified` sentences stay what a
 person says of the scene beside it.
@@ -251,7 +251,7 @@ rehearsal:
 
 The file is the transcript a stage exports with *Export JSON* —
 `{version: 1, scene, lines}`, each line who said or did what to whom and
-when — written by `loop scenes record` from a rehearsal that passed. A stage
+when — written by `agent scenes record` from a rehearsal that passed. A stage
 plays it at the pace it was recorded, under the label *Recording, taken
 &lt;date&gt;*, and a line of it opens in the drill-down with no span behind
 it. `scene_recording(id)` reads it, and refuses in a sentence a file that is
@@ -296,5 +296,5 @@ scene_setup(scene)            # what is not enabled yet, in sentences
 ```
 
 The JSON Schema of the spec is written beside the scenes
-(`agentspecs/scenes/loop.scene.schema.json`) by `python -m agentspecs.scenes`,
+(`agentspecs/scenes/agent.scene.schema.json`) by `python -m agentspecs.scenes`,
 with the [reference](./reference) of every field.

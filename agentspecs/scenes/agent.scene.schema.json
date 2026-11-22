@@ -1011,7 +1011,7 @@
       "type": "string"
     }
   },
-  "$id": "https://agentspecs.datalayer.tech/schemas/loop.scene/v1.json",
+  "$id": "https://agentspecs.datalayer.tech/schemas/agent.scene/v1.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "description": "Specification for a scene: a team, staged \u2014 or, `kind: scripted`, lines written out.",
@@ -1098,8 +1098,8 @@
       "description": "Its tests"
     },
     "schema": {
-      "const": "loop.scene/v1",
-      "default": "loop.scene/v1",
+      "const": "agent.scene/v1",
+      "default": "agent.scene/v1",
       "description": "The version of the spec itself",
       "title": "Schema"
     },

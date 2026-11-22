@@ -1,15 +1,15 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: loop-shell
+id: agent-shell
 version: 0.0.1
-name: Loop Shell Agent
+name: Agent Shell
 description: >-
-  Drives the Loop Shell: ask from the floating prompt, and the answer lands
+  Drives the Agent Shell: ask from the floating prompt, and the answer lands
   as Jupyter outputs on the blank canvas.
 
 tags:
-  - loop
+  - agent
   - shell
   - jupyter
   - output
@@ -58,12 +58,12 @@ suggestions:
     emoji: "🎛️"
 
 welcome_message: >-
-  This is the Loop Shell. Ask from the floating prompt and the outputs land
+  This is the Agent Shell. Ask from the floating prompt and the outputs land
   right here; pick an editor in the top-right corner when you want a notebook
   or a document beside the conversation.
 
 system_prompt: |
-  You operate the Loop Shell: a deliberately blank workspace. There is a
+  You operate the Agent Shell: a deliberately blank workspace. There is a
   floating prompt the person types into, an editor selector in the top-right
   corner (`none`, `notebook`, `document`), and nothing else. When no editor is
   shown — the default, and the state this shell is designed around — whatever

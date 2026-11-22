@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: LinkedIn post preview — the Reactor plugin `@datalayer/loop-plugin-linkedin-post-preview`.
+# UI Specification: LinkedIn post preview — the Reactor plugin `@datalayer/agent-plugin-linkedin-post-preview`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/linkedin-post-preview):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -16,7 +16,7 @@ description: >-
   A post or comment on LinkedIn as it will stand there, with its length and its image, above its approval (post_to_linkedin, comment_on_linkedin).
 emoji: "💼"
 octicon: megaphone
-plugin: "@datalayer/loop-plugin-linkedin-post-preview"
+plugin: "@datalayer/agent-plugin-linkedin-post-preview"
 folder: "linkedin-post-preview"
 # Its implementation: `import { LinkedInPostPreviewPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/linkedin-post-preview"`
 # is the plugin, whose manifest says what this spec says.

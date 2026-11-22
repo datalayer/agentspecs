@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Books header — the Reactor plugin `@datalayer/loop-plugin-books-header`.
+# UI Specification: Books header — the Reactor plugin `@datalayer/agent-plugin-books-header`.
 #
 # A header UI (the user, 18 November 2026: "plugins to show suited buttons in
 # the header for the other seed agents ... a drop-down choice, or visual
@@ -19,7 +19,7 @@ description: >-
   The Accountant's title bar: a drop-down for the period it reads, how many payments are still to match, and the invoices still open.
 emoji: "🧮"
 octicon: book
-plugin: "@datalayer/loop-plugin-books-header"
+plugin: "@datalayer/agent-plugin-books-header"
 folder: "books-header"
 # Its implementation: `import { booksHeaderPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/books-header"`
 # is what makes the plugin, whose manifest says what this spec says.
@@ -32,10 +32,10 @@ implementation:
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.chatHeader"
+  - "agent.chatHeader"
   points:
-  - "loop.chat.extras"
-  - "loop.runProps"
+  - "agent.chat.extras"
+  - "agent.runProps"
   commands: []
 # The Contribution Points it offers to other plugins.
 contribution_points: []

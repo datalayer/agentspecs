@@ -17,7 +17,7 @@
 # connects to none, needs none — nor a linked X, Bluesky or LinkedIn account, whose
 # posting tools have no social token on the visitors' runtime.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: demo-marketer
 version: 0.0.8
 name: Marketer

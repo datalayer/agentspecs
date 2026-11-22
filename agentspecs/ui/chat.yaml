@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Chat — the Reactor plugin `@datalayer/loop-plugin-chat`.
+# UI Specification: Chat — the Reactor plugin `@datalayer/agent-plugin-chat`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/chat):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -14,7 +14,7 @@ description: >-
   The conversation: what you ask, what it answers, and the work it opens beside it.
 emoji: "💬"
 octicon: comment-discussion
-plugin: "@datalayer/loop-plugin-chat"
+plugin: "@datalayer/agent-plugin-chat"
 folder: "chat"
 # Its implementation: `import { ChatPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/chat"`
 # is the plugin, whose manifest says what this spec says.
@@ -28,23 +28,23 @@ implementation:
 contributions:
   slots: []
   points:
-  - "loop.chat.turn"
-  - "loop.command"
-  - "loop.document.toolbar.item"
-  - "loop.notebook.toolbar.item"
-  - "loop.session.action"
-  - "loop.viewType"
+  - "agent.chat.turn"
+  - "agent.command"
+  - "agent.document.toolbar.item"
+  - "agent.notebook.toolbar.item"
+  - "agent.session.action"
+  - "agent.viewType"
   commands:
   - "chat"
 # The Contribution Points it offers to other plugins.
 contribution_points:
-- "loop.agent.available"
-- "loop.chat.composer"
-- "loop.chat.extras"
-- "loop.chat.header"
-- "loop.chat.suggestion"
-- "loop.chat.turn"
-- "loop.frontendTool"
+- "agent.available"
+- "agent.chat.composer"
+- "agent.chat.extras"
+- "agent.chat.header"
+- "agent.chat.suggestion"
+- "agent.chat.turn"
+- "agent.frontendTool"
 # Its settings: the JSON Schema of its configuration, its defaults the plugin's.
 settings:
   type: object

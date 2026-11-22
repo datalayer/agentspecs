@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Chat title bar — the Reactor plugin `@datalayer/loop-plugin-chat-header`.
+# UI Specification: Chat title bar — the Reactor plugin `@datalayer/agent-plugin-chat-header`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/chat-header):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -14,7 +14,7 @@ description: >-
   The conversation's title bar: who answers, what it runs on, and its actions.
 emoji: "🏷️"
 octicon: rows
-plugin: "@datalayer/loop-plugin-chat-header"
+plugin: "@datalayer/agent-plugin-chat-header"
 folder: "chat-header"
 # Its implementation: `import { ChatHeaderPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/chat-header"`
 # is the plugin, whose manifest says what this spec says.
@@ -28,7 +28,7 @@ implementation:
 contributions:
   slots: []
   points:
-  - "loop.chat.header"
+  - "agent.chat.header"
   commands: []
 # The Contribution Points it offers to other plugins.
 contribution_points: []

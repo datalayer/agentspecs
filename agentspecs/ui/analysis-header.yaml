@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Analysis header — the Reactor plugin `@datalayer/loop-plugin-analysis-header`.
+# UI Specification: Analysis header — the Reactor plugin `@datalayer/agent-plugin-analysis-header`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/analysis-header):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -18,7 +18,7 @@ description: >-
   The Functional Analyst's title bar: what is being analysed, whether its diagrams parse, and a button that asks for it on the canvas.
 emoji: "📐"
 octicon: workflow
-plugin: "@datalayer/loop-plugin-analysis-header"
+plugin: "@datalayer/agent-plugin-analysis-header"
 folder: "analysis-header"
 # Its implementation: `import { analysisHeaderPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/analysis-header"`
 # is what makes the plugin, whose manifest says what this spec says.
@@ -29,9 +29,9 @@ implementation:
   kind: factory
 contributions:
   slots:
-  - "loop.chatHeader"
+  - "agent.chatHeader"
   points:
-  - "loop.chat.extras"
+  - "agent.chat.extras"
   commands: []
 contribution_points: []
 renderers: []

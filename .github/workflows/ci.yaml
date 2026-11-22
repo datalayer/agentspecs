@@ -47,7 +47,7 @@ jobs:
           grep -q '^agentspecs/cogs/.*\.yaml$' wheel-files.txt
           for kind in ops guards gates tracks apps scenes; do grep -q "^agentspecs/$kind/.*\.yaml$" wheel-files.txt; done
           grep -q '^agentspecs/apps/appspec\.schema\.json$' wheel-files.txt
-          grep -q '^agentspecs/scenes/loop\.scene\.schema\.json$' wheel-files.txt
+          grep -q '^agentspecs/scenes/agent\.scene\.schema\.json$' wheel-files.txt
 
       - name: Import the built wheel
         run: |

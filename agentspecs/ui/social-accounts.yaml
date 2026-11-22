@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Linked social accounts — the Reactor plugin `@datalayer/loop-plugin-social-accounts`.
+# UI Specification: Linked social accounts — the Reactor plugin `@datalayer/agent-plugin-social-accounts`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/social-accounts):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -16,7 +16,7 @@ description: >-
   Which of X, Bluesky and LinkedIn you linked, as whom, and whether each posts, reads or needs connecting again: drawn where the Marketer reads your accounts (social_accounts).
 emoji: "🪪"
 octicon: person
-plugin: "@datalayer/loop-plugin-social-accounts"
+plugin: "@datalayer/agent-plugin-social-accounts"
 folder: "social-accounts"
 # Its implementation: `import { socialAccountsPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/social-accounts"`
 # is what makes the plugin, whose manifest says what this spec says.
@@ -29,7 +29,7 @@ implementation:
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.chatHeader"
+  - "agent.chatHeader"
   points: []
   commands: []
 # The Contribution Points it offers to other plugins.

@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Composer — the Reactor plugin `@datalayer/loop-plugin-composer-portal`.
+# UI Specification: Composer — the Reactor plugin `@datalayer/agent-plugin-composer-portal`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/composer-portal):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -9,7 +9,7 @@
 # A button in the chat's toolbar that opens the application's Composer full
 # screen (the user, 21 November 2026): its Canvas, its spec and its Python,
 # read only. What fills it is the host's when the host contributes to the
-# `loop.composerView` slot, otherwise the plugin's own spec and Python.
+# `agent.composerView` slot, otherwise the plugin's own spec and Python.
 # On every application's chat by default (the user, 21 November 2026), unless
 # its spec sets `interface.composer_portal_disabled: true`.
 
@@ -19,8 +19,8 @@ name: Composer
 description: >-
   A button in the chat's toolbar that opens the application's Composer full screen: its Canvas, its spec and its Python, read only. Every application's chat has it, listed in its `ui` or not, unless its spec leaves it out (`interface.composer_portal_disabled: true`). Needs no connection: an anonymous visitor has it.
 emoji: "🧱"
-octicon: stack
-plugin: "@datalayer/loop-plugin-composer-portal"
+octicon: pencil
+plugin: "@datalayer/agent-plugin-composer-portal"
 folder: "composer-portal"
 # Its implementation: `import { composerPortalPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/composer-portal"`
 # is what makes the plugin, whose manifest says what this spec says.
@@ -33,7 +33,7 @@ implementation:
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.promptAction"
+  - "agent.promptAction"
   points: []
   commands: []
 # The Contribution Points it offers to other plugins.

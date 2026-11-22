@@ -6,7 +6,7 @@
 # the order history, the price lists and the delivery records. Three criteria
 # are measured, one is asked of a decision model, and one says what is missing.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: supplier-comparison
 version: 0.0.3
 name: Supplier Comparison

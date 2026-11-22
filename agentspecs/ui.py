@@ -6,7 +6,7 @@
 
 The interface of an application is made of Reactor plugins: the chat, the
 notebook and its toolbar, the page an application draws, its rules and
-approvals… — those of agent-runtimes (``src/apps/plugins/``) the Loop editor
+approvals… — those of agent-runtimes (``src/apps/plugins/``) the Agent editor
 assembles. **A UI spec is one of them**, one YAML per plugin under ``ui/``,
 named for the plugin's folder: the name the plugin registers under, its
 Contributions (the Slots it fills, the Contribution Points it contributes to,

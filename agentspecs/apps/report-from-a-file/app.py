@@ -14,7 +14,7 @@ where it stands at /status; its button runs it, and the file chosen answers
 what its code asks (``session.ask``).
 
 Its Appspec, ``report-from-a-file.yaml`` beside this folder, is what
-``loop apps build`` writes from this file; agent-runtimes' tests build it
+``agent apps build`` writes from this file; agent-runtimes' tests build it
 again and compare, so that the two never drift.
 
 What was verified, and how, is said in its spec (``tests.verified``), on its
@@ -101,7 +101,7 @@ ORDERS_WITH_AN_INSTRUCTION = """order_id,date,customer,amount,notes
 
 app = Application.from_spec(
     {
-        "schema": "loop.app/v1",
+        "schema": "agent.app/v1",
         "id": "report-from-a-file",
         "version": "0.0.5",
         "name": "Report from a File",

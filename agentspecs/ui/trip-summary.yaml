@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Trip being planned — the Reactor plugin `@datalayer/loop-plugin-trip-summary`.
+# UI Specification: Trip being planned — the Reactor plugin `@datalayer/agent-plugin-trip-summary`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/trip-summary):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -16,7 +16,7 @@ description: >-
   The trip being planned, in the chat's title bar: where and when, and its budget so far, read from the trip the agent showed (show_itinerary, show_trip_options, show_trip_budget).
 emoji: "🧭"
 octicon: paper-airplane
-plugin: "@datalayer/loop-plugin-trip-summary"
+plugin: "@datalayer/agent-plugin-trip-summary"
 folder: "trip-summary"
 # Its implementation: `import { tripSummaryPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/trip-summary"`
 # is what makes the plugin, whose manifest says what this spec says.
@@ -29,7 +29,7 @@ implementation:
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.chatHeader"
+  - "agent.chatHeader"
   points: []
   commands: []
 # The Contribution Points it offers to other plugins.

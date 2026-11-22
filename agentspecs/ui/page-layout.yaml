@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Page layout — the Reactor plugin `@datalayer/loop-plugin-page-layout`.
+# UI Specification: Page layout — the Reactor plugin `@datalayer/agent-plugin-page-layout`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/page-layout):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -14,23 +14,23 @@ description: >-
   The work on a centred sheet like a document, the composer above it and the conversation in a panel beside it; or the conversation and the work side by side.
 emoji: "📄"
 octicon: file
-plugin: "@datalayer/loop-plugin-page-layout"
+plugin: "@datalayer/agent-plugin-page-layout"
 folder: "page-layout"
-# Its implementation: `import { LoopPageLayoutPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/page-layout"`
+# Its implementation: `import { AgentPageLayoutPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/page-layout"`
 # is the plugin, whose manifest says what this spec says.
 implementation:
   package: "@datalayer/agent-runtimes"
   module: "lib/apps/plugins/page-layout"
-  export: "LoopPageLayoutPlugin"
+  export: "AgentPageLayoutPlugin"
   kind: plugin
 # Its Contributions: the Slots it fills, the Contribution Points it
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.header"
+  - "agent.header"
   points:
-  - "loop.chat.layout"
-  - "loop.prompt.panel"
+  - "agent.chat.layout"
+  - "agent.prompt.panel"
   commands: []
 # The Contribution Points it offers to other plugins.
 contribution_points: []

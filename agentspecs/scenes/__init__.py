@@ -79,7 +79,7 @@ from ..teams import (
 from ..overrides import check_overrides, override_model_problem
 
 #: The version of the spec itself. A reader refuses one it does not know.
-SCENE_SCHEMA = "loop.scene/v1"
+SCENE_SCHEMA = "agent.scene/v1"
 
 #: Every version of the spec this package reads.
 KNOWN_SCHEMAS = (SCENE_SCHEMA,)
@@ -530,7 +530,7 @@ class ScenePlayedBeat(_Strict):
 
 
 class ScenePlayed(_Strict):
-    """What came of the last rehearsal `loop scenes rehearse --cloud` played.
+    """What came of the last rehearsal `agent scenes rehearse --cloud` played.
 
     Written by the command to the scene's file beside the specs
     (:func:`played_path`: ``<id>/rehearsal.json``), never by hand; read by
@@ -1231,7 +1231,7 @@ def write_played(scene_id: str, played: ScenePlayed, directory: Optional[Path] =
 # --- the recording ---------------------------------------------------------------------
 
 #: The version of a recording's file: the transcript JSON a stage exports
-#: (*Export JSON*) and `loop scenes record` writes — `{version, scene, lines}`.
+#: (*Export JSON*) and `agent scenes record` writes — `{version, scene, lines}`.
 RECORDING_VERSION = 1
 
 
@@ -1289,7 +1289,7 @@ def json_schema() -> Dict[str, Any]:
 
 
 #: Where the published JSON Schema is kept, beside the specs.
-SCHEMA_PATH = Path(__file__).parent / "loop.scene.schema.json"
+SCHEMA_PATH = Path(__file__).parent / "agent.scene.schema.json"
 
 
 def schema_text() -> str:

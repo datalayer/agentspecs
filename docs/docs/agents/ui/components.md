@@ -11,80 +11,80 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 
 | UI plugin | Registered as | Renderers | Catalog | Components |
 | --- | --- | --- | --- | --- |
-| `a2ui-surface` (Surfaces in the conversation) | `@datalayer/loop-plugin-a2ui-surface` | `a2ui` | a2ui/v0.9 | 25 |
-| `a2ui-view` (Surface view) | `@datalayer/loop-plugin-a2ui` | `a2ui` | — | none of its own |
-| `agentspecs` (Agent picker) | `@datalayer/loop-plugin-agentspecs` | — | — | none of its own |
-| `analysis-header` (Analysis header) | `@datalayer/loop-plugin-analysis-header` | — | — | none of its own |
-| `app-activity` (Activity) | `@datalayer/loop-plugin-app-activity` (one per application) | — | — | none of its own |
-| `app-components` (Your own components) | `@datalayer/loop-plugin-app-components` (one per application) | `a2ui` | — | none of its own |
-| `app-computer` (Computer) | `@datalayer/loop-plugin-app-computer` (one per application) | — | — | none of its own |
-| `app-elements` (Side panel and pages) | `@datalayer/loop-plugin-app-elements` | `a2ui` | — | none of its own |
-| `app-page` (Application page) | `@datalayer/loop-plugin-app-page` (one per application) | `a2ui`, `mcp-apps` | — | none of its own |
-| `app-rules` (Rules and approvals) | `@datalayer/loop-plugin-app-rules` (one per application) | — | — | none of its own |
-| `aws-header` (AWS header) | `@datalayer/loop-plugin-aws-header` | — | — | none of its own |
-| `aws-savings` (AWS savings) | `@datalayer/loop-plugin-aws-savings` | `a2ui` | — | none of its own |
-| `aws-savings-badge` (Savings found) | `@datalayer/loop-plugin-aws-savings-badge` | — | — | none of its own |
-| `bank-reconciliation` (Bank reconciliation) | `@datalayer/loop-plugin-bank-reconciliation` | `a2ui` | — | none of its own |
-| `basket-total` (Basket total) | `@datalayer/loop-plugin-basket-total` | — | — | none of its own |
-| `bluesky-post-preview` (Bluesky post preview) | `@datalayer/loop-plugin-bluesky-post-preview` | `a2ui` | — | none of its own |
-| `books-header` (Books header) | `@datalayer/loop-plugin-books-header` | — | — | none of its own |
-| `browser-session` (Browser sessions) | `@datalayer/loop-plugin-browser-session` | — | — | none of its own |
-| `canvas-blocks` (Blocks) | `@datalayer/loop-plugin-ui` (one per ui) | — | — | none of its own |
-| `canvas-parts` (Parts) | `@datalayer/loop-plugin-parts` (one per source) | — | — | none of its own |
-| `chat` (Chat) | `@datalayer/loop-plugin-chat` | — | — | none of its own |
-| `chat-extras` (Banner and status) | `@datalayer/loop-plugin-chat-extras` | — | — | none of its own |
-| `chat-header` (Chat title bar) | `@datalayer/loop-plugin-chat-header` | — | — | none of its own |
-| `chat-view` (Chat button) | `@datalayer/loop-plugin-chat-view` | — | — | none of its own |
-| `commands` (Command palette) | `@datalayer/loop-plugin-commands` | — | — | none of its own |
-| `composer-portal` (Composer) | `@datalayer/loop-plugin-composer-portal` | — | — | none of its own |
-| `document` (Document) | `@datalayer/loop-plugin-document` | — | — | none of its own |
-| `document-toolbar` (Document toolbar) | `@datalayer/loop-plugin-document-toolbar` | — | — | none of its own |
-| `document-view` (Document button) | `@datalayer/loop-plugin-document-view` | — | — | none of its own |
-| `earth-area` (Area and dates) | `@datalayer/loop-plugin-earth-area` | — | — | none of its own |
-| `earth-header` (Earth header) | `@datalayer/loop-plugin-earth-header` | — | — | none of its own |
-| `earth-index` (Index and change) | `@datalayer/loop-plugin-earth-index` | `a2ui` | — | none of its own |
-| `earth-scenes` (Satellite scenes) | `@datalayer/loop-plugin-earth-scenes` | `a2ui` | — | none of its own |
-| `input-prompt` (Composer) | `@datalayer/loop-plugin-input-prompt` | — | — | none of its own |
-| `linkedin-link` (Link LinkedIn) | `@datalayer/loop-plugin-linkedin-link` | — | — | none of its own |
-| `linkedin-post-preview` (LinkedIn post preview) | `@datalayer/loop-plugin-linkedin-post-preview` | `a2ui` | — | none of its own |
-| `models` (Models) | `@datalayer/loop-plugin-models` | — | — | none of its own |
-| `notebook` (Notebook) | `@datalayer/loop-plugin-notebook` | — | — | none of its own |
-| `notebook-header` (Notebook header) | `@datalayer/loop-plugin-notebook-header` | — | — | none of its own |
-| `notebook-toolbar` (Notebook toolbar) | `@datalayer/loop-plugin-notebook-toolbar` | — | — | none of its own |
-| `notebook-view` (Notebook button) | `@datalayer/loop-plugin-notebook-view` | — | — | none of its own |
-| `notices` (Notices) | `@datalayer/loop-plugin-notices` | — | — | none of its own |
-| `odoo-context` (Odoo company and period) | `@datalayer/loop-plugin-odoo-context` | — | — | none of its own |
-| `page-deck` (Deck in the page) | `@datalayer/loop-plugin-page-deck` | — | — | none of its own |
-| `page-excalidraw` (Excalidraw in the page) | `@datalayer/loop-plugin-page-excalidraw` | — | — | none of its own |
-| `page-layout` (Page layout) | `@datalayer/loop-plugin-page-layout` | — | — | none of its own |
-| `page-mermaid` (Mermaid in the page) | `@datalayer/loop-plugin-page-mermaid` | — | — | none of its own |
-| `page-sheet` (Sheet in the page) | `@datalayer/loop-plugin-page-sheet` | — | — | none of its own |
-| `pap-purchase` (Approve a purchase) | `@datalayer/loop-plugin-pap-purchase` | — | — | none of its own |
-| `pap-sign-in` (Sign in at a company) | `@datalayer/loop-plugin-pap-sign-in` | `mcp-ui` | — | none of its own |
-| `plugin-manager` (Plugins) | `@datalayer/loop-plugin-plugin-manager` | — | — | none of its own |
-| `product-cards` (Product cards) | `@datalayer/loop-plugin-product-cards` | — | — | none of its own |
-| `product-comparison` (Product comparison) | `@datalayer/loop-plugin-product-comparison` | `a2ui` | — | none of its own |
-| `prompt` (Floating composer) | `@datalayer/loop-plugin-prompt` | — | — | none of its own |
-| `shop-header` (Shopping header) | `@datalayer/loop-plugin-shop-header` | — | — | none of its own |
-| `shopping-basket` (Shopping basket) | `@datalayer/loop-plugin-shopping-basket` | `a2ui` | — | none of its own |
-| `side-panels` (Side panels) | `@datalayer/loop-plugin-side-panels` | — | — | none of its own |
-| `social-accounts` (Linked social accounts) | `@datalayer/loop-plugin-social-accounts` | — | — | none of its own |
-| `social-header` (Social header) | `@datalayer/loop-plugin-social-header` | — | — | none of its own |
-| `spreadsheet` (Spreadsheet) | `@datalayer/loop-plugin-spreadsheet` | — | — | none of its own |
-| `spreadsheet-view` (Spreadsheet button) | `@datalayer/loop-plugin-spreadsheet-view` | — | — | none of its own |
-| `stripe-checkout` (Stripe checkout) | `@datalayer/loop-plugin-stripe-checkout` | `a2ui` | — | none of its own |
-| `subagent-activity` (Delegated work) | `@datalayer/loop-plugin-subagent-activity` | — | — | none of its own |
-| `trial-balance` (Trial balance) | `@datalayer/loop-plugin-trial-balance` | — | — | none of its own |
-| `trip-budget` (Trip budget) | `@datalayer/loop-plugin-trip-budget` | — | — | none of its own |
-| `trip-header` (Trip header) | `@datalayer/loop-plugin-trip-header` | — | — | none of its own |
-| `trip-itinerary` (Trip itinerary) | `@datalayer/loop-plugin-trip-itinerary` | — | — | none of its own |
-| `trip-map` (Trip map) | `@datalayer/loop-plugin-trip-map` | — | — | none of its own |
-| `trip-options` (Trip options) | `@datalayer/loop-plugin-trip-options` | `a2ui` | — | none of its own |
-| `trip-summary` (Trip being planned) | `@datalayer/loop-plugin-trip-summary` | — | — | none of its own |
-| `vat-summary` (VAT summary) | `@datalayer/loop-plugin-vat-summary` | — | — | none of its own |
-| `window-frame` (Window) | `@datalayer/loop-plugin-window-frame` | — | — | none of its own |
-| `x-budget` (X budget) | `@datalayer/loop-plugin-x-budget` | — | — | none of its own |
-| `x-post-preview` (X post preview) | `@datalayer/loop-plugin-x-post-preview` | `a2ui` | — | none of its own |
+| `a2ui-surface` (Surfaces in the conversation) | `@datalayer/agent-plugin-a2ui-surface` | `a2ui` | a2ui/v0.9 | 25 |
+| `a2ui-view` (Surface view) | `@datalayer/agent-plugin-a2ui` | `a2ui` | — | none of its own |
+| `agentspecs` (Agent picker) | `@datalayer/agent-plugin-agentspecs` | — | — | none of its own |
+| `analysis-header` (Analysis header) | `@datalayer/agent-plugin-analysis-header` | — | — | none of its own |
+| `app-activity` (Activity) | `@datalayer/agent-plugin-app-activity` (one per application) | — | — | none of its own |
+| `app-components` (Your own components) | `@datalayer/agent-plugin-app-components` (one per application) | `a2ui` | — | none of its own |
+| `app-computer` (Computer) | `@datalayer/agent-plugin-app-computer` (one per application) | — | — | none of its own |
+| `app-elements` (Side panel and pages) | `@datalayer/agent-plugin-app-elements` | `a2ui` | — | none of its own |
+| `app-page` (Application page) | `@datalayer/agent-plugin-app-page` (one per application) | `a2ui`, `mcp-apps` | — | none of its own |
+| `app-rules` (Rules and approvals) | `@datalayer/agent-plugin-app-rules` (one per application) | — | — | none of its own |
+| `aws-header` (AWS header) | `@datalayer/agent-plugin-aws-header` | — | — | none of its own |
+| `aws-savings` (AWS savings) | `@datalayer/agent-plugin-aws-savings` | `a2ui` | — | none of its own |
+| `aws-savings-badge` (Savings found) | `@datalayer/agent-plugin-aws-savings-badge` | — | — | none of its own |
+| `bank-reconciliation` (Bank reconciliation) | `@datalayer/agent-plugin-bank-reconciliation` | `a2ui` | — | none of its own |
+| `basket-total` (Basket total) | `@datalayer/agent-plugin-basket-total` | — | — | none of its own |
+| `bluesky-post-preview` (Bluesky post preview) | `@datalayer/agent-plugin-bluesky-post-preview` | `a2ui` | — | none of its own |
+| `books-header` (Books header) | `@datalayer/agent-plugin-books-header` | — | — | none of its own |
+| `browser-session` (Browser sessions) | `@datalayer/agent-plugin-browser-session` | — | — | none of its own |
+| `canvas-blocks` (Blocks) | `@datalayer/agent-plugin-ui` (one per ui) | — | — | none of its own |
+| `canvas-parts` (Parts) | `@datalayer/agent-plugin-parts` (one per source) | — | — | none of its own |
+| `chat` (Chat) | `@datalayer/agent-plugin-chat` | — | — | none of its own |
+| `chat-extras` (Banner and status) | `@datalayer/agent-plugin-chat-extras` | — | — | none of its own |
+| `chat-header` (Chat title bar) | `@datalayer/agent-plugin-chat-header` | — | — | none of its own |
+| `chat-view` (Chat button) | `@datalayer/agent-plugin-chat-view` | — | — | none of its own |
+| `commands` (Command palette) | `@datalayer/agent-plugin-commands` | — | — | none of its own |
+| `composer-portal` (Composer) | `@datalayer/agent-plugin-composer-portal` | — | — | none of its own |
+| `document` (Document) | `@datalayer/agent-plugin-document` | — | — | none of its own |
+| `document-toolbar` (Document toolbar) | `@datalayer/agent-plugin-document-toolbar` | — | — | none of its own |
+| `document-view` (Document button) | `@datalayer/agent-plugin-document-view` | — | — | none of its own |
+| `earth-area` (Area and dates) | `@datalayer/agent-plugin-earth-area` | — | — | none of its own |
+| `earth-header` (Earth header) | `@datalayer/agent-plugin-earth-header` | — | — | none of its own |
+| `earth-index` (Index and change) | `@datalayer/agent-plugin-earth-index` | `a2ui` | — | none of its own |
+| `earth-scenes` (Satellite scenes) | `@datalayer/agent-plugin-earth-scenes` | `a2ui` | — | none of its own |
+| `input-prompt` (Composer) | `@datalayer/agent-plugin-input-prompt` | — | — | none of its own |
+| `linkedin-link` (Link LinkedIn) | `@datalayer/agent-plugin-linkedin-link` | — | — | none of its own |
+| `linkedin-post-preview` (LinkedIn post preview) | `@datalayer/agent-plugin-linkedin-post-preview` | `a2ui` | — | none of its own |
+| `models` (Models) | `@datalayer/agent-plugin-models` | — | — | none of its own |
+| `notebook` (Notebook) | `@datalayer/agent-plugin-notebook` | — | — | none of its own |
+| `notebook-header` (Notebook header) | `@datalayer/agent-plugin-notebook-header` | — | — | none of its own |
+| `notebook-toolbar` (Notebook toolbar) | `@datalayer/agent-plugin-notebook-toolbar` | — | — | none of its own |
+| `notebook-view` (Notebook button) | `@datalayer/agent-plugin-notebook-view` | — | — | none of its own |
+| `notices` (Notices) | `@datalayer/agent-plugin-notices` | — | — | none of its own |
+| `odoo-context` (Odoo company and period) | `@datalayer/agent-plugin-odoo-context` | — | — | none of its own |
+| `page-deck` (Deck in the page) | `@datalayer/agent-plugin-page-deck` | — | — | none of its own |
+| `page-excalidraw` (Excalidraw in the page) | `@datalayer/agent-plugin-page-excalidraw` | — | — | none of its own |
+| `page-layout` (Page layout) | `@datalayer/agent-plugin-page-layout` | — | — | none of its own |
+| `page-mermaid` (Mermaid in the page) | `@datalayer/agent-plugin-page-mermaid` | — | — | none of its own |
+| `page-sheet` (Sheet in the page) | `@datalayer/agent-plugin-page-sheet` | — | — | none of its own |
+| `pap-purchase` (Approve a purchase) | `@datalayer/agent-plugin-pap-purchase` | — | — | none of its own |
+| `pap-sign-in` (Sign in at a company) | `@datalayer/agent-plugin-pap-sign-in` | `mcp-ui` | — | none of its own |
+| `plugin-manager` (Plugins) | `@datalayer/agent-plugin-plugin-manager` | — | — | none of its own |
+| `product-cards` (Product cards) | `@datalayer/agent-plugin-product-cards` | — | — | none of its own |
+| `product-comparison` (Product comparison) | `@datalayer/agent-plugin-product-comparison` | `a2ui` | — | none of its own |
+| `prompt` (Floating composer) | `@datalayer/agent-plugin-prompt` | — | — | none of its own |
+| `shop-header` (Shopping header) | `@datalayer/agent-plugin-shop-header` | — | — | none of its own |
+| `shopping-basket` (Shopping basket) | `@datalayer/agent-plugin-shopping-basket` | `a2ui` | — | none of its own |
+| `side-panels` (Side panels) | `@datalayer/agent-plugin-side-panels` | — | — | none of its own |
+| `social-accounts` (Linked social accounts) | `@datalayer/agent-plugin-social-accounts` | — | — | none of its own |
+| `social-header` (Social header) | `@datalayer/agent-plugin-social-header` | — | — | none of its own |
+| `spreadsheet` (Spreadsheet) | `@datalayer/agent-plugin-spreadsheet` | — | — | none of its own |
+| `spreadsheet-view` (Spreadsheet button) | `@datalayer/agent-plugin-spreadsheet-view` | — | — | none of its own |
+| `stripe-checkout` (Stripe checkout) | `@datalayer/agent-plugin-stripe-checkout` | `a2ui` | — | none of its own |
+| `subagent-activity` (Delegated work) | `@datalayer/agent-plugin-subagent-activity` | — | — | none of its own |
+| `trial-balance` (Trial balance) | `@datalayer/agent-plugin-trial-balance` | — | — | none of its own |
+| `trip-budget` (Trip budget) | `@datalayer/agent-plugin-trip-budget` | — | — | none of its own |
+| `trip-header` (Trip header) | `@datalayer/agent-plugin-trip-header` | — | — | none of its own |
+| `trip-itinerary` (Trip itinerary) | `@datalayer/agent-plugin-trip-itinerary` | — | — | none of its own |
+| `trip-map` (Trip map) | `@datalayer/agent-plugin-trip-map` | — | — | none of its own |
+| `trip-options` (Trip options) | `@datalayer/agent-plugin-trip-options` | `a2ui` | — | none of its own |
+| `trip-summary` (Trip being planned) | `@datalayer/agent-plugin-trip-summary` | — | — | none of its own |
+| `vat-summary` (VAT summary) | `@datalayer/agent-plugin-vat-summary` | — | — | none of its own |
+| `window-frame` (Window) | `@datalayer/agent-plugin-window-frame` | — | — | none of its own |
+| `x-budget` (X budget) | `@datalayer/agent-plugin-x-budget` | — | — | none of its own |
+| `x-post-preview` (X post preview) | `@datalayer/agent-plugin-x-post-preview` | `a2ui` | — | none of its own |
 
 ## Surfaces in the conversation (`a2ui-surface`)
 

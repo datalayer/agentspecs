@@ -43,7 +43,7 @@ def _minimal(**overrides) -> dict:
     spec = {
         "id": "t",
         "name": "T",
-        "supervisor": {"name": "S", "ref": "loop-base:0.0.1"},
+        "supervisor": {"name": "S", "ref": "agent-base:0.0.1"},
         "agents": [{"id": "a", "ref": "x:0.0.1"}],
     }
     spec.update(overrides)
@@ -286,7 +286,7 @@ class TestTeamsOfApplications:
         assert sales.display_name == "sales"
 
     def test_the_applications_validate(self):
-        """`loop apps validate`, the checks it makes of the spec, for each member."""
+        """`agent apps validate`, the checks it makes of the spec, for each member."""
         from agentspecs.apps import APP_CATALOGUE, app_problems
 
         team = get_team("sales-and-accounting")

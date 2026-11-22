@@ -24,7 +24,7 @@ acp:
   native_session: none
 
 requires:
-  # Local only: run with `loop --harness`, the CLI or a laptop demo, it takes this
+  # Local only: run with `agent --harness`, the CLI or a laptop demo, it takes this
   # key from the environment. On a Datalayer runtime no key is given: pi is given a
   # configuration directory (PI_CODING_AGENT_DIR) naming ai-inference's
   # Anthropic-shaped route, with no token in it.

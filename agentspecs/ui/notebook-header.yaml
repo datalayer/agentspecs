@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Notebook header — the Reactor plugin `@datalayer/loop-plugin-notebook-header`.
+# UI Specification: Notebook header — the Reactor plugin `@datalayer/agent-plugin-notebook-header`.
 #
 # A header UI (the user, 18 November 2026: "plugins to show suited buttons in
 # the header for the other seed agents ... a drop-down choice, or visual
@@ -19,7 +19,7 @@ description: >-
   The Jupyter Data Analyst's title bar: the dataset it works on, what has run, and a button that asks for a profile of the data.
 emoji: "📓"
 octicon: table
-plugin: "@datalayer/loop-plugin-notebook-header"
+plugin: "@datalayer/agent-plugin-notebook-header"
 folder: "notebook-header"
 # Its implementation: `import { notebookHeaderPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/notebook-header"`
 # is what makes the plugin, whose manifest says what this spec says.
@@ -32,9 +32,9 @@ implementation:
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.chatHeader"
+  - "agent.chatHeader"
   points:
-  - "loop.chat.extras"
+  - "agent.chat.extras"
   commands: []
 # The Contribution Points it offers to other plugins.
 contribution_points: []

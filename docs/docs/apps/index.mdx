@@ -25,7 +25,7 @@ builder who wants their rigour — and nobody has to name one.
 
 ```yaml
 # apps/inbox-triage.yaml
-schema: loop.app/v1
+schema: agent.app/v1
 id: inbox-triage
 version: 0.0.2
 name: Inbox Triage
@@ -99,7 +99,7 @@ deployment:
 
 | Field | Meaning |
 | --- | --- |
-| `schema` | The version of the spec itself: `loop.app/v1`. A reader refuses one it does not know. |
+| `schema` | The version of the spec itself: `agent.app/v1`. A reader refuses one it does not know. |
 | `id`, `version`, `name`, `description`, `owner` | As on every spec. |
 | `emoji` | Its face: one emoji, shown wherever the application appears — an approval, an activity line, a card. 👀 until one is chosen. |
 | `avatar`, `banner` | Its picture and its banner, as people keep theirs on their profile: `avatar` is `emoji:<emoji>` or a drawing of `@datalayer/icons-react` (`@datalayer/icons-react:<Name>Icon`), its emoji when unsaid; `banner` names one of the banners people choose theirs from. Not the floating assistant: that is `interface.avatar`. |
@@ -133,8 +133,8 @@ The `interface` block:
 | Key | Meaning |
 | --- | --- |
 | `layout` | `chat`, `page` or `split`; the kind's own when unsaid. |
-| `accent` | Its one colour: `green`, `rose`, `sky`, `lime`, `sun` or `violet`. It colours the `loop` theme only. |
-| `theme` | The theme it runs in by default: a `variant` of Appearance's (`datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `loop`, `vscode`) and optionally a `mode` (`light`, `dark`, `auto`); the person's own when unsaid. |
+| `accent` | Its one colour: `green`, `rose`, `sky`, `lime`, `sun` or `violet`. It colours the `agent` theme only. |
+| `theme` | The theme it runs in by default: a `variant` of Appearance's (`datalayer`, `spatial`, `lovely`, `matrix`, `earth`, `sand`, `ivory`, `sun`, `agent`, `vscode`) and optionally a `mode` (`light`, `dark`, `auto`); the person's own when unsaid. |
 | `welcome`, `starters`, `profiles` | What it says first, the first messages it offers, and several assistants in one application. See *Profiles and starters*. |
 | `commands`, `modes` | Slash commands and switches in the composer. See *Commands and modes*. |
 | `uploads` | What a person may send without being asked. See *What a person sends*. |
@@ -554,7 +554,7 @@ conversation, with `spreadsheet-view`, its button under the composer.
 
 The table is one function, `agentspecs.apps.ui_for` (`ui_of` reads it off a
 spec), and agent-runtimes' `uiFor` is the same: both are held to one table of
-cases. A new blank application starts with its kind's — `loop apps init` and
+cases. A new blank application starts with its kind's — `agent apps init` and
 the Studio's *Start blank* write them in its `ui` — and lists more as its
 layout, outputs, PAP and components grow.
 
@@ -1139,7 +1139,7 @@ by somebody who looked.
 
 An application written in Python (an `app.py`) can go where plain words are
 not enough, and says so in its spec, so that the Canvas shows it and
-validation runs it. `loop apps build` writes these fields from
+validation runs it. `agent apps build` writes these fields from
 the decorators; a spec written by hand may hold them too, but only the file
 makes them run.
 
@@ -1500,7 +1500,7 @@ The catalogue holds 33 applications, each a spec of its own under
 `agentspecs/apps/`. Three are written in Python (*Customer Interview*, *Report
 from a File*, and *Exchange Desk*, whose `exchange_order` exchanges at the
 hosted test shop Manzanita): their `app.py` sits in a folder named for the
-example (`apps/customer-interview/app.py`), and their spec is the one `loop
+example (`apps/customer-interview/app.py`), and their spec is the one `agent
 apps build` writes from it (agent-runtimes' application API, imported from
 `agent_runtimes.apps`).
 

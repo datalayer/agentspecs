@@ -8,7 +8,7 @@
 # Its surface binds what a widget's page publishes and takes: each setting at
 # /inputs/<id>, what it gave at /output, where it stands at /status.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: quote-calculator
 version: 0.0.6
 name: Quote Calculator

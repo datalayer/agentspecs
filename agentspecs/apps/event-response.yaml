@@ -12,10 +12,10 @@
 # by the members it asks.
 #
 # It is the entry of the scene and runs in the person's browser (the
-# in-browser target that the Preview and `loop` use), as Sales does in
+# in-browser target that the Preview and `agent` use), as Sales does in
 # `sales-and-accounting`: its instructions and its model turn there.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: event-response
 version: 0.0.3
 name: Event response

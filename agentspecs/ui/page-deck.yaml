@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Deck in the page — the Reactor plugin `@datalayer/loop-plugin-page-deck`.
+# UI Specification: Deck in the page — the Reactor plugin `@datalayer/agent-plugin-page-deck`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/page-deck):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -21,7 +21,7 @@ description: >-
   A deck the agent builds in the conversation, slide by slide, with tools run in the page: shown as it is built, its notes under it, presented full screen.
 emoji: "🎞️"
 octicon: project
-plugin: "@datalayer/loop-plugin-page-deck"
+plugin: "@datalayer/agent-plugin-page-deck"
 folder: "page-deck"
 # Its implementation: `import { PageDeckPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/page-deck"`
 # is the plugin, whose manifest says what this spec says.
@@ -35,7 +35,7 @@ implementation:
 contributions:
   slots: []
   points:
-  - "loop.chat.extras"
+  - "agent.chat.extras"
   - "reactor.ui.renderer"
   - "reactor.ui.toolBinding"
   commands: []

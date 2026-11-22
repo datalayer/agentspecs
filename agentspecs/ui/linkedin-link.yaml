@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: Link LinkedIn — the Reactor plugin `@datalayer/loop-plugin-linkedin-link`.
+# UI Specification: Link LinkedIn — the Reactor plugin `@datalayer/agent-plugin-linkedin-link`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/linkedin-link):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -18,7 +18,7 @@ description: >-
   datalayer-social LinkedIn tools, never for an anonymous visitor.
 emoji: "🔗"
 octicon: link
-plugin: "@datalayer/loop-plugin-linkedin-link"
+plugin: "@datalayer/agent-plugin-linkedin-link"
 folder: "linkedin-link"
 # Its implementation: `import { linkedInLinkPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/linkedin-link"`
 # is what makes the plugin, whose manifest says what this spec says.
@@ -31,7 +31,7 @@ implementation:
 # contributes to, the Commands it adds (the composer's `/` commands by name).
 contributions:
   slots:
-  - "loop.chatBanner"
+  - "agent.chatBanner"
   points: []
   commands: []
 # The Contribution Points it offers to other plugins.

@@ -6,7 +6,7 @@
 # measured and what a decision model reads in the answers. Three criteria are measured
 # by the run, two are asked of a decision model, and one says what is missing.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: model-choice
 version: 0.0.3
 name: Model Choice

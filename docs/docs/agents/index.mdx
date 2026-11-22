@@ -62,7 +62,7 @@ tags:
 Whether agent is active (default: `true`). An application naming an agent that is not enabled has it to set up.
 
 ### `listed` (boolean)
-Whether the pickers offer an enabled agent (default: `true`): the new agent page, the chats, the assign menu and loop's local and cloud pickers. Say it only as `listed: false`, on an enabled agent that runs by id, as the default of blank applications and quick launches, and for the applications that name it, without being offered: `example-simple`, the neutral default, is one. The pickers offer the agents that are enabled and listed, the seven seed agents.
+Whether the pickers offer an enabled agent (default: `true`): the new agent page, the chats, the assign menu and `agent`'s local and cloud pickers. Say it only as `listed: false`, on an enabled agent that runs by id, as the default of blank applications and quick launches, and for the applications that name it, without being offered: `example-simple`, the neutral default, is one. The pickers offer the agents that are enabled and listed, the seven seed agents.
 
 ### `mcp_servers` (list of strings)
 MCP server references. Prefer `id:version` format.
@@ -229,7 +229,7 @@ model: "bedrock:us.anthropic.claude-sonnet-4-6"
 model_additionals:
   - "alibaba:qwen-max"
 ```
-A runtime offers the agent's `model` and those of its `model_additionals` its inference can run: routed through datalayer-ai-inference, those the service lists at `GET /api/ai-inference/v1/models` when the runtime starts. The chat's model menu and the `loop` CLI's `/models` show that list, and a switch to a model outside it is refused. The enabled agents list as additionals the chat models datalayer-ai-inference serves from the catalogue.
+A runtime offers the agent's `model` and those of its `model_additionals` its inference can run: routed through datalayer-ai-inference, those the service lists at `GET /api/ai-inference/v1/models` when the runtime starts. The chat's model menu and the `agent` CLI's `/models` show that list, and a switch to a model outside it is refused. The enabled agents list as additionals the chat models datalayer-ai-inference serves from the catalogue.
 
 ### `icon` (string)
 UI icon identifier (e.g., `"trending-up"`, `"code"`, `"database"`)

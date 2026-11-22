@@ -7,7 +7,7 @@
 # answers. Four beats, each a cue the audience may say, each answered
 # with a different kind: a table, a chart, the sources, an approval.
 
-schema: loop.scene/v1
+schema: agent.scene/v1
 id: sales-and-accounting
 version: 0.0.1
 name: Sales & Accounting

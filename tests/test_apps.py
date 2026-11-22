@@ -714,7 +714,7 @@ def test_customer_interview_s_tests_are_conversations_its_code_can_pass() -> Non
     assert [case.ask for case in cases] == ["", "", "", ""]
     assert [case.turns[0].choose for case in cases] == ["No", "Yes", "Yes", "Yes"]
     header = (APPS_DIR / "customer-interview.yaml").read_text()
-    actions = set(re.findall(r"^# loop:code action (\w+):", header, re.M))
+    actions = set(re.findall(r"^# agent:code action (\w+):", header, re.M))
     assert actions == {"save", "finish"}
     pressed = [turn.press for case in cases for turn in case.turns if turn.press]
     assert set(pressed) == actions
@@ -1077,13 +1077,13 @@ def test_accounting_only_reads_the_books_and_asks_before_anything_that_would_cha
 
 def test_the_python_examples_sit_beside_their_spec() -> None:
     """An example built in Python keeps its `app.py` in a folder named
-    for it, and its spec is the one `loop apps build` wrote from it."""
+    for it, and its spec is the one `agent apps build` wrote from it."""
     built = sorted(path.parent.name for path in APPS_DIR.glob("*/app.py"))
     assert built == ["customer-interview", "exchange-desk", "report-from-a-file"]
     for identity in built:
         text = (APPS_DIR / f"{identity}.yaml").read_text()
-        assert text.startswith("# Built from app.py by `loop apps build`"), identity
-        assert "# loop:code " in text, identity
+        assert text.startswith("# Built from app.py by `agent apps build`"), identity
+        assert "# agent:code " in text, identity
 
 
 def test_the_canvas_example_says_its_page_was_composed_on_the_canvas() -> None:
@@ -1209,10 +1209,10 @@ def test_an_application_names_the_theme_it_runs_in_by_default() -> None:
     assert plain.interface.theme is None
     assert "interface" not in dump_app(plain)
     assert [variant.value for variant in ThemeVariant] == [
-        "datalayer", "spatial", "lovely", "matrix", "earth", "sand", "ivory", "sun", "loop", "vscode",
+        "datalayer", "spatial", "lovely", "matrix", "earth", "sand", "ivory", "sun", "agent", "vscode",
     ]
     assert [mode.value for mode in ThemeMode] == ["light", "dark", "auto"]
-    for theme in ({"variant": "earth"}, {"variant": "matrix", "mode": "dark"}, {"variant": "loop", "mode": "auto"}):
+    for theme in ({"variant": "earth"}, {"variant": "matrix", "mode": "dark"}, {"variant": "agent", "mode": "auto"}):
         said = app(interface={"theme": theme})
         assert said.interface.theme is not None
         assert said.interface.theme.variant == ThemeVariant(theme["variant"])
@@ -1637,7 +1637,7 @@ def test_an_application_is_translated_in_its_spec() -> None:
         ({"agent": ""}, "names who does the work"),
         ({"team": "jupyter"}, "not both"),
         ({"colour": "red"}, "colour is not a field of the spec"),
-        ({"schema": "loop.app/v9"}, "written in 'loop.app/v9'"),
+        ({"schema": "agent.app/v9"}, "written in 'agent.app/v9'"),
         ({"id": "Desk Top"}, "cannot use 'Desk Top' as an id"),
         ({"kind": "worker"}, "a worker says its `goal`"),
         ({"kind": "worker", "goal": "Sort the mail"}, "what starts its work"),

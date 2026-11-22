@@ -8,7 +8,7 @@ Every UI spec is one plugin of agent-runtimes, well formed, and names only
 renderers of the ``ui-renderers`` catalogue; every renderer is well formed;
 the old shape — a renderer listed as a UI — is refused wherever it is said,
 with no compatibility reading. That each UI spec is its plugin's registration,
-and each plugin of the Loop editor has one, is agent-runtimes' test
+and each plugin of the Agent editor has one, is agent-runtimes' test
 (``src/apps/__tests__/ui-specs.test.ts``): the registrations are there.
 """
 
@@ -54,7 +54,7 @@ def test_a_ui_spec_is_a_reactor_plugin_named_for_its_file():
     folders = [spec.folder for spec in catalogue.values()]
     assert len(set(folders)) == len(folders)
     for spec in catalogue.values():
-        assert spec.plugin.startswith("@datalayer/loop-plugin-"), spec.id
+        assert spec.plugin.startswith("@datalayer/agent-plugin-"), spec.id
         assert spec.name and spec.description.strip() and spec.emoji, spec.id
 
 
@@ -400,7 +400,7 @@ def test_each_seed_agent_and_its_demo_bring_the_composer(agent, demo):
     app = load_apps()[demo]
     assert "composer-portal" in [choice.plugin for choice in app.ui], demo
     composer = ui.UI_CATALOGUE["composer-portal"]
-    assert composer.plugin == "@datalayer/loop-plugin-composer-portal"
+    assert composer.plugin == "@datalayer/agent-plugin-composer-portal"
     assert [p.value for p in composer.placements][0] == "toolbar"
 
 
@@ -437,9 +437,12 @@ def test_every_application_has_the_plugins_manager_unless_it_leaves_it_out():
 
     assert PLUGIN_MANAGER == "plugin-manager" and PLUGIN_MANAGER in ui.UI_CATALOGUE
     manager = ui.UI_CATALOGUE[PLUGIN_MANAGER]
-    assert manager.plugin == "@datalayer/loop-plugin-plugin-manager"
+    assert manager.plugin == "@datalayer/agent-plugin-plugin-manager"
     assert [p.value for p in manager.placements][0] == "footer"
-    assert manager.contributions.slots == ["loop.status"]
+    # The one Slot it fills is the one its description puts it in (the chat's footer row under the prompt
+    # since 22 November 2026), read from the spec rather than pinned here.
+    (slot,) = manager.contributions.slots
+    assert slot.startswith("agent.") and f"(`{slot}`" in manager.description, slot
     assert manager.implementation.model_dump(exclude_none=True) == {
         "package": "@datalayer/agent-runtimes",
         "module": "lib/apps/plugins/plugin-manager",

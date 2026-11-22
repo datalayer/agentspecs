@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# UI Specification: X post preview — the Reactor plugin `@datalayer/loop-plugin-x-post-preview`.
+# UI Specification: X post preview — the Reactor plugin `@datalayer/agent-plugin-x-post-preview`.
 #
 # Read from the plugin's registration in agent-runtimes (src/apps/plugins/x-post-preview):
 # its Slots, Contributions, Commands and Contribution Points are what the
@@ -16,7 +16,7 @@ description: >-
   A post or reply on X as it will stand there, with its length against the 280 characters X takes and its images, above its approval (post_to_x, reply_on_x).
 emoji: "𝕏"
 octicon: megaphone
-plugin: "@datalayer/loop-plugin-x-post-preview"
+plugin: "@datalayer/agent-plugin-x-post-preview"
 folder: "x-post-preview"
 # Its implementation: `import { XPostPreviewPlugin } from "@datalayer/agent-runtimes/lib/apps/plugins/x-post-preview"`
 # is the plugin, whose manifest says what this spec says.

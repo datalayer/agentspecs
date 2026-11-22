@@ -16,7 +16,7 @@ Three fields say how such a team runs:
 | Field | On | Meaning |
 | --- | --- | --- |
 | `app` | a member, the supervisor | An application of the catalogue, `id` or `id:version`. A member is an agent (`ref`) or an application (`app`), not both. |
-| `runs_in` | a member | Where its loop turns: `browser`, in the person's page (the in-browser target that the Preview and `loop` use), or `runtime`, on a runtime (a cloud runtime on Datalayer, or a local one). Unsaid, wherever the team runs. |
+| `runs_in` | a member | Where its loop turns: `browser`, in the person's page (the in-browser target that the Preview and `agent` use), or `runtime`, on a runtime (a cloud runtime on Datalayer, or a local one). Unsaid, wherever the team runs. |
 | `talks_to` | a member | The members it asks directly while it works, each `{member, over}`. `over` is `a2a`: the member asked is served over A2A, and its agent card says what it may be asked and how it answers; or `mcp`, where the member asked is a `server` of the scene (see [Members](./members#server-string)). |
 | `entry` | the team | The member a person talks to, by its id: the team's front door. Unsaid, the supervisor answers first. |
 
@@ -101,7 +101,7 @@ What the model says of a scene:
 - **Its page words** are its `name`, its `description` (one line) and its
   `suggestions`, the starters of its entry.
 - **What happens on stage is the [scene spec's](../scenes)** (`scenes/`,
-  `loop.scene/v1`): the setting, the script, the stage directions, the
+  `agent.scene/v1`): the setting, the script, the stage directions, the
   audience, the rehearsal and where it plays. The team stays who is on stage.
 
 What each scene needs is said as setup, not as a mistake (`app_setup`): the
@@ -138,6 +138,6 @@ its supervisor, so a host can check that it has them before it runs the team.
 ## Running it
 
 agent-runtimes serves an application of a team over A2A with fasta2a
-(`loop apps run apps/accounting.yaml --cloud --a2a`), and its
+(`agent apps run apps/accounting.yaml --cloud --a2a`), and its
 `AgentA2ATeamExample` puts the two on screen as Office Assistant characters,
 with the A2A exchange shown as it happens.

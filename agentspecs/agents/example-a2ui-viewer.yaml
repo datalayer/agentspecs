@@ -21,12 +21,12 @@ description: >-
 tags:
   - a2ui
   - viewer
-  - loop
+  - agent
 
 enabled: false
 protocol: vercel-ai
 model: "bedrock:us.anthropic.claude-sonnet-4-6"
-# The loop turns in the page by default, like the Loop Shell's agent; on a
+# The loop turns in the page by default, like the Agent Shell's agent; on a
 # server target the location decides the harness, whatever is said here.
 harness: vercel-ai
 runtime_engine: datalayer
@@ -52,7 +52,7 @@ emoji: 🔍
 color: indigo
 
 # One suggestion per scene of the Viewer, in the scene's own words — then
-# the sandbox: the same demonstrations the Loop Shell offers, because the
+# the sandbox: the same demonstrations the Agent Shell offers, because the
 # Viewer runs on the same loop and shows kernel outputs the same way.
 suggestions:
   - text: Show a recipe card for a Mediterranean quinoa bowl, with a photo, its rating and review count, prep and cook time, and how many it serves.

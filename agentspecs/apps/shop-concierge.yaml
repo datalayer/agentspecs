@@ -7,7 +7,7 @@
 # shop's own agent for the person, hands the conversation to one of the shop's
 # people when the person asks, and ends it when they are done.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: shop-concierge
 version: 0.0.2
 name: Shop Concierge

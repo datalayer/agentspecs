@@ -11,7 +11,7 @@
 # has copied both, the Studio points it at the business's copy and registers
 # it there.
 
-schema: loop.app/v1
+schema: agent.app/v1
 id: errand-runner
 version: 0.0.2
 name: Errand Runner
