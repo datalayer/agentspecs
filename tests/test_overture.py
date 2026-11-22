@@ -44,10 +44,12 @@ def test_its_tools_only_read_as_a_connection_and_on_the_gateway() -> None:
     assert set(server_specs()["overture"]["actions"]["tools"]) == set(TOOLS)
 
 
-def test_the_traveller_holds_it_always_with_its_map() -> None:
+def test_the_traveller_holds_it_optional_with_its_map() -> None:
+    # Optional since 22 November 2026 (the user: "make the overture mcp server optional for traveller, we
+    # need to show traveller for anonymous visitors"): the Traveller starts without the gateway's key.
     agent = _spec("agents", "worker-traveller")
     assert "overture:0.0.1" in agent["mcp_servers"]
-    assert "overture:0.0.1" not in agent["optional"]["mcp_servers"]
+    assert "overture:0.0.1" in agent["optional"]["mcp_servers"]
     assert "show-trip-map:0.0.1" in agent["backend_tools"]
     prompt = agent["system_prompt"]
     assert "overture_search_places" in prompt and "show_trip_map" in prompt

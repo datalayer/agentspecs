@@ -2699,8 +2699,9 @@ def test_the_demos_connect_to_every_server_they_can_and_only_read() -> None:
     # The Traveller's Kiwi.com: its search alone, never the feedback form that sends to Kiwi.
     kiwi, overture, maps = APP_CATALOGUE["demo-traveller"].connections
     assert kiwi.only == ["search-flight"] and not kiwi.optional
-    # Its Overture places: every tool, all reads, never optional (no key).
-    assert not overture.only and not overture.optional
+    # Its Overture places: every tool, all reads, optional since 22 November 2026 (the demo is shown to a
+    # visitor whatever the gateway holds).
+    assert not overture.only and overture.optional
     # The Shopper still buys its test orders at the Demo Shop alone.
     [shop] = APP_CATALOGUE["demo-shopper"].pap.connections
     assert shop.company == "demo-shop.agent.datalayer.ai"
@@ -2710,7 +2711,7 @@ def test_the_traveller_demo_starts_google_maps_only_with_its_key() -> None:
     # The user, 19 November 2026: the demo may use Google Maps with the billed key among the demo
     # account's own secrets; without it, Kiwi.com alone, and nothing said about Maps.
     found = APP_CATALOGUE["demo-traveller"]
-    assert found.version == "0.0.8"
+    assert found.version == "0.0.9"  # Overture optional (22 November 2026)
     maps = next(c for c in found.connections if c.server == "google-maps:0.0.1")
     # Optional, so the runtime leaves it off when the account holds no such secret, as the agent does.
     assert maps.optional

@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.1.15
+
+- The Traveller starts without Overture Maps (the user, 22 November 2026: "make the overture mcp server optional for traveller, we need to show traveller for anonymous visitors"): `overture:0.0.1` is among worker-traveller's optional servers and demo-traveller's connection to it is optional (demo-traveller 0.0.9); without the gateway's key it says once that it could not check restaurants and sights, and plans the rest.
+
 ## 0.1.14
 
 - The plugins manager stands in the chat's footer row under the prompt (`agent.promptStatus`), not in a row of its own below it; its test reads the slot from the spec.
