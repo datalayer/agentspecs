@@ -12,7 +12,7 @@ Each version names the boxes it carries, as its commits say them, and links the 
 
 - **Loop is Agent** (the user, 22 November 2026: "Rename Loop to Agent all over the place ... We don't want to use loop naming anymore"). A breaking change, with no alias and no fallback, released with agent-runtimes 1.8.0:
   - the Appspec's schema is `agent.app/v1` (was `loop.app/v1`), the scene spec's `agent.scene/v1` (was `loop.scene/v1`), its JSON Schema `scenes/agent.scene.schema.json`; a spec still saying `loop.*/v1` is refused;
-  - every UI spec and plugin manifest names its slots `agent.<slot>` (`agent.app`, `agent.chatHeader`, `agent.promptStatus`, `agent.chat.extras`, `agent.command`...) and its plugin `@datalayer/agent-plugin-<id>` (was `@datalayer/loop-plugin-<id>`);
+  - every UI spec and plugin manifest names its slots `agent.<slot>` (`agent.app`, `agent.chatHeader`, `agent.promptStatus`, `agent.chat.extras`, `agent.command`...; `loop.agent.available` is `agent.available`) and its plugin `@datalayer/agent-plugin-<id>` (was `@datalayer/loop-plugin-<id>`);
   - the theme `loop` is `agent` (`ThemeVariant.AGENT`);
   - the agent `loop-shell` is `agent-shell` (*Agent Shell*), the base agent named in the extension docs `agent-base`;
   - the docs and the specs' comments say the `agent` command (`agent apps validate`, `agent scenes rehearse`...).

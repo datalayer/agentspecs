@@ -38,7 +38,7 @@ contributions:
   - "chat"
 # The Contribution Points it offers to other plugins.
 contribution_points:
-- "agent.agent.available"
+- "agent.available"
 - "agent.chat.composer"
 - "agent.chat.extras"
 - "agent.chat.header"
