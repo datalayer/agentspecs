@@ -439,7 +439,10 @@ def test_every_application_has_the_plugins_manager_unless_it_leaves_it_out():
     manager = ui.UI_CATALOGUE[PLUGIN_MANAGER]
     assert manager.plugin == "@datalayer/loop-plugin-plugin-manager"
     assert [p.value for p in manager.placements][0] == "footer"
-    assert manager.contributions.slots == ["loop.status"]
+    # The one Slot it fills is the one its description puts it in (the chat's footer row under the prompt
+    # since 22 November 2026), read from the spec rather than pinned here.
+    (slot,) = manager.contributions.slots
+    assert slot.startswith("loop.") and f"(`{slot}`" in manager.description, slot
     assert manager.implementation.model_dump(exclude_none=True) == {
         "package": "@datalayer/agent-runtimes",
         "module": "lib/apps/plugins/plugin-manager",
