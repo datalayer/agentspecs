@@ -8,8 +8,11 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
-## Unreleased
+## 0.1.14
 
+- The plugins manager stands in the chat's footer row under the prompt (`agent.promptStatus`), not in a row of its own below it; its test reads the slot from the spec.
+- The Composer portal's UI spec wears the pencil octicon.
+- `example-a2ui-restaurant`: the agent behind the A2UI Restaurant example's Search, its model from the spec.
 - **Loop is Agent** (the user, 22 November 2026: "Rename Loop to Agent all over the place ... We don't want to use loop naming anymore"). A breaking change, with no alias and no fallback, released with agent-runtimes 1.8.0:
   - the Appspec's schema is `agent.app/v1` (was `loop.app/v1`), the scene spec's `agent.scene/v1` (was `loop.scene/v1`), its JSON Schema `scenes/agent.scene.schema.json`; a spec still saying `loop.*/v1` is refused;
   - every UI spec and plugin manifest names its slots `agent.<slot>` (`agent.app`, `agent.chatHeader`, `agent.promptStatus`, `agent.chat.extras`, `agent.command`...; `loop.agent.available` is `agent.available`) and its plugin `@datalayer/agent-plugin-<id>` (was `@datalayer/loop-plugin-<id>`);
