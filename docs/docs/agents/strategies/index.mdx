@@ -54,7 +54,7 @@ observability tools can share one notion of an agent's strategy.
 # strategies/ooda.yaml
 id: ooda
 version: 0.0.1
-name: OODA Agent
+name: OODA Loop
 description: >
   A generic Observe → Orient → Decide → Act control loop.
 objective: >
@@ -95,7 +95,7 @@ and runs it against a live notebook, where the loop's state lives.
 
 | Strategy | Name | Family | Phases | Human | What it is |
 | --- | --- | --- | --- | --- | --- |
-| `data-analysis` | Data Analysis Agent | observe-think-act-evaluate | observe, think, act, evaluate | initiate | A generic iterative loop for data analysis: each iteration observes the runtime's state, decides the next step, runs code in the notebook and evaluates the result against the objective. Intermediate state stays outside the model, so each call stays small. |
+| `data-analysis` | Data Analysis Loop | observe-think-act-evaluate | observe, think, act, evaluate | initiate | A generic iterative loop for data analysis: each iteration observes the runtime's state, decides the next step, runs code in the notebook and evaluates the result against the objective. Intermediate state stays outside the model, so each call stays small. |
 | `human-in-the-loop` | Human-in-the-Loop | observe-think-act-evaluate | observe, think, act, evaluate | approve | A control loop that runs on its own but stops for explicit human approval before any sensitive or irreversible action (deleting data, sending email, spending money, deploying to production). |
-| `ooda` | OODA Agent | ooda | observe, orient, decide, act | none | A generic Observe → Orient → Decide → Act control loop, suited to decision-oriented and monitoring tasks over a changing environment. |
+| `ooda` | OODA Loop | ooda | observe, orient, decide, act | none | A generic Observe → Orient → Decide → Act control loop, suited to decision-oriented and monitoring tasks over a changing environment. |
 | `plan-execute-critic` | Plan / Execute / Critic Loop | plan-execute-critic | plan, execute, critic | feedback | A loop with three roles: the planner decomposes the goal into the next step, the executor performs it, and the critic evaluates the outcome; it repeats until the critic is satisfied or the iteration budget is spent. |

@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Strategy Specification: Data Analysis Agent
+# Strategy Specification: Data Analysis Loop
 # A generic observe → think → act → evaluate loop for iterative data analysis.
 # The LLM acts as an orchestrator that decides the next step each iteration
 # instead of solving the whole task in a single prompt. State (dataframes,
@@ -9,7 +9,7 @@
 
 id: data-analysis
 version: 0.0.1
-name: Data Analysis Agent
+name: Data Analysis Loop
 description: >
   A generic iterative loop for data analysis. Each iteration the agent observes
   the current runtime state, decides the next step, executes code in the
@@ -22,7 +22,7 @@ objective: >
   Analyze the provided dataset, identify the most important trends and metrics,
   produce clear visualizations, and summarize actionable findings.
 
-# Agent strategy family
+# Loop strategy family
 strategy: observe-think-act-evaluate
 
 # Ordered phases that make up one iteration
