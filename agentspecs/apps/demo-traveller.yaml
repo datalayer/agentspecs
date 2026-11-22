@@ -27,7 +27,7 @@
 
 schema: agent.app/v1
 id: demo-traveller
-version: 0.0.8
+version: 0.0.9
 name: Traveller
 kind: chat
 description: >-
@@ -41,7 +41,9 @@ agent: worker-traveller:0.0.1
 # the feedback form that sends a text to Kiwi.com. Google Maps, read only and
 # optional (its agent says it optional): started only with the demo account's
 # own GOOGLE_MAPS_API_KEY secret, off without it. Overture Maps' open places,
-# read only through the gateway in its owner's account: its three tools, which
+# read only through the gateway in its owner's account, optional too (22
+# November 2026, so that a visitor is shown the Traveller whatever the gateway
+# holds): its three tools, which
 # all only read (search, a place's details, an area's categories); a demo
 # reaches every read tool of a server it connects.
 connections:
@@ -52,6 +54,7 @@ connections:
   - server: overture:0.0.1
     access: read
     as: owner
+    optional: true
   - server: google-maps:0.0.1
     access: read
     as: owner
@@ -87,7 +90,9 @@ instructions: >-
   show the answer's attribution line once with them (Overture Maps
   Foundation, its release and the places' sources). Overture gives no prices
   and no opening hours: a meal is an estimate (about 20.00 to 35.00 a person
-  in Lisbon) and says so, and you name no opening hour.
+  in Lisbon) and says so, and you name no opening hour. When Overture's tools
+  are not among your tools, say once that restaurants and sights could not be
+  checked here, and plan the flights, the example stays and the budget.
   If you have Google Maps' tools (search_places, compute_routes,
   search_along_route, lookup_weather) among your tools, you may check a travel
   time or the weather with them and attribute each to Google Maps with its

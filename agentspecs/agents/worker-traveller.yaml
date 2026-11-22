@@ -17,7 +17,8 @@
 #
 # Overture Maps (the user, 19 November 2026: "for traveller add also maps with
 # https://overturemaps.org/"): the gateway's `overture` toolset, open places
-# with no key, always on, and show_trip_map, the options' places on a map over
+# with no key of Overture's (optional: the gateway takes a DATALAYER_API_KEY),
+# and show_trip_map, the options' places on a map over
 # Overture's open basemap. Google Maps stays for travel times, routes and the
 # weather when the person has a key.
 
@@ -85,10 +86,14 @@ skills:
 # key (GOOGLE_MAPS_API_KEY), web search TAVILY_API_KEY: each off without its
 # secrets, and the agent says what it cannot do. No `at_least_one`: with
 # Kiwi.com alone it still plans the flights, the budget and the map links, and
-# says it could not check stays or places. Overture is always on (the gateway,
-# no key): places are there whatever the person holds.
+# says it could not check stays or places. Overture is optional too (the user,
+# 22 November 2026: "make the overture mcp server optional for traveller, we
+# need to show traveller for anonymous visitors"): it goes through the gateway,
+# which needs a DATALAYER_API_KEY; without one the Traveller still starts, and
+# says it could not check restaurants and sights.
 optional:
   mcp_servers:
+    - overture:0.0.1
     - booking-com:0.0.1
     - google-maps:0.0.1
   skills:
@@ -161,6 +166,8 @@ system_prompt: >-
   access) and Google Maps (routes and travel times, places along a route,
   weather, when the person has a key), following the travel-planning,
   fare-and-stay-comparison and dining skills.
+  When Overture's tools are not among your tools, say once that you could not
+  check restaurants and sights, and plan the rest.
   Find places with Overture first: overture_search_places around a point
   (radius_m at most 5000) with a category (restaurant, cafe, museum,
   landmark_and_historical_building, park, hotel...; overture_place_categories

@@ -258,12 +258,14 @@ def test_the_marketer_reads_and_acts_on_x_with_the_linked_account_within_a_budge
 def test_the_traveller_plans_with_kiwi_and_starts_without_booking_and_maps():
     """The Traveller (the user, 15 November 2026): Kiwi.com anonymous, Booking.com and Google Maps the person's own."""
     traveller = dict(_agents())["worker-traveller"]
-    # Overture Maps (19 November 2026): the gateway's open places, always there (no key of the person's).
+    # Overture Maps (19 November 2026): the gateway's open places. Optional since 22 November 2026 (the
+    # gateway takes a DATALAYER_API_KEY), so that an anonymous visitor is shown the Traveller.
     assert traveller["mcp_servers"] == ["kiwi:0.0.1", "overture:0.0.1", "booking-com:0.0.1", "google-maps:0.0.1"]
     assert traveller["optional"] == {
-        "mcp_servers": ["booking-com:0.0.1", "google-maps:0.0.1"],
+        "mcp_servers": ["overture:0.0.1", "booking-com:0.0.1", "google-maps:0.0.1"],
         "skills": ["crawl:0.0.1"],
     }
+    assert "could not check restaurants and sights" in " ".join(traveller["system_prompt"].split())
     for skill in ("travel-planning:0.0.1", "fare-and-stay-comparison:0.0.1", "dining:0.0.1"):
         assert skill in traveller["skills"]
         spec = yaml.safe_load((ROOT / "skills" / f"{_base(skill)}.yaml").read_text())
