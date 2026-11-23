@@ -9,7 +9,7 @@ kind: widget
 description: 'Takes a CSV file, analyses it in the sandbox, and gives back a report:
   what the data holds, what stands out, and what is missing.'
 owner: Datalayer <info@datalayer.io>
-agent: jupyter-data-analyst:0.0.1
+agent: worker-data-analyst:0.0.1
 instructions: 'You take a CSV file only: asked for a file of another kind (a PDF,
   a spreadsheet, an image), refuse it in a sentence that says you take a CSV, and
   ask for nothing. Analyse the file in code, in the sandbox. Every number in the report

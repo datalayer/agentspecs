@@ -15,7 +15,7 @@ description: >-
   run? For an AI platform team, after every run.
 owner: Datalayer <info@datalayer.io>
 
-agent: jupyter-data-analyst:0.0.1
+agent: worker-data-analyst:0.0.1
 
 contents:
   - "The benchmark run: task results, traces, cost and latency"

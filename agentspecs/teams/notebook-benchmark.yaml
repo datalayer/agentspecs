@@ -31,7 +31,7 @@ enabled: true
 icon: beaker
 emoji: 🧪
 color: teal
-agent_spec_id: jupyter-data-analyst:0.0.1
+agent_spec_id: worker-data-analyst:0.0.1
 orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:

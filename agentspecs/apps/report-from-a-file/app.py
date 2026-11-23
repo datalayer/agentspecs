@@ -111,7 +111,7 @@ app = Application.from_spec(
             "a report: what the data holds, what stands out, and what is missing."
         ),
         "owner": "Datalayer <info@datalayer.io>",
-        "agent": "jupyter-data-analyst:0.0.1",
+        "agent": "worker-data-analyst:0.0.1",
         "instructions": (
             "You take a CSV file only: asked for a file of another kind (a PDF, a "
             "spreadsheet, an image), refuse it in a sentence that says you take a "

@@ -29,7 +29,7 @@ DEMOS = {
     "demo-traveller": "worker-traveller",
     "demo-terra": "worker-terra",
     "demo-aws-steward": "worker-steward-aws",
-    "demo-jupyter-data-analyst": "jupyter-data-analyst",
+    "demo-data-analyst": "worker-data-analyst",
     "demo-functional-analyst": "worker-functional-analyst",
 }
 

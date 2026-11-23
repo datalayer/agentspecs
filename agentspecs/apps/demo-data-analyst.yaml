@@ -1,9 +1,9 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Application: the Jupyter Data Analyst's public demo, deployed by the
-# datalayer-demo account at /apps/demo-jupyter-data-analyst and drawn in the
-# landing's Jupyter Data Analyst tab, where a visitor without an account talks
+# Application: the Data Analyst's public demo, deployed by the
+# datalayer-demo account at /apps/demo-data-analyst and drawn in the
+# landing's Data Analyst tab, where a visitor without an account talks
 # to it on the visitors' runtime.
 #
 # The agent itself works in a notebook: it writes the cells and runs them on
@@ -14,21 +14,21 @@
 # add for each answer, and says that nothing ran here.
 
 schema: agent.app/v1
-id: demo-jupyter-data-analyst
+id: demo-data-analyst
 version: 0.0.6
-name: Jupyter Data Analyst
+name: Data Analyst
 kind: chat
 description: >-
   Explains a dataset, plans its analysis and reads its results, with the cell
   it would write for each: a demo on an example file of orders with results
   computed beforehand, which runs no code and opens no notebook.
 owner: Datalayer <info@datalayer.io>
-agent: jupyter-data-analyst:0.0.1
+agent: worker-data-analyst:0.0.1
 goal: >-
-  Show a visitor how the Jupyter Data Analyst looks at a dataset, checks it,
+  Show a visitor how the Data Analyst looks at a dataset, checks it,
   and says what it found, without running any code or opening any notebook.
 instructions: >-
-  This is Datalayer's public demo of the Jupyter Data Analyst. There is no
+  This is Datalayer's public demo of the Data Analyst. There is no
   notebook, no kernel and no runtime of the visitor's here, you have no memory
   and you use no tool: do not call readAllCells, insertCell, runCell,
   executeCodeInNotebook or any other tool, and never say that you ran, are
@@ -76,7 +76,7 @@ instructions: >-
   fell, anything by customer, anything outside January to June 2026. Never
   invent a row, a column, a figure or a trend that the example does not hold.
   When asked to load another file, to run a cell or to open the notebook, say
-  that the real Jupyter Data Analyst does that in a notebook on the person's
+  that the real Data Analyst does that in a notebook on the person's
   own runtime, once signed in, and that this demo runs nothing.
   The chat's title bar shows the dataset and what ran, through one tool,
   set_notebook_header. It runs in the visitor's page, reaches nothing and
@@ -120,7 +120,7 @@ interface:
   layout: chat
   accent: violet
   welcome: >-
-    I'm the Jupyter Data Analyst, in a demo on an example file of orders from
+    I'm the Data Analyst, in a demo on an example file of orders from
     Harbor & Pine Roasters: ask me what is in it, what is wrong with it, or
     where the revenue moved. I answer from results computed beforehand and show
     the cell I would write. Nothing runs here.
@@ -162,7 +162,7 @@ emoji: "📊"
 # What a page that presents it shows beside its conversation: what its agent
 # says of itself, then what this demo is and where to go next.
 presentation: |
-  Explores the data in the notebook you have open — adds the cells and runs
+  Explores the data in the Jupyter notebook you have open — adds the cells and runs
   them, profiles and charts the data, checks it for the things that quietly
   ruin an analysis, and says plainly what it found, where everyone can see it.
 
