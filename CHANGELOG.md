@@ -8,7 +8,7 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
-## Unreleased
+## 0.1.16
 
 - **The Data Analyst** (the user, 23 November 2026: "rename 'Jupyter Data Analyst' to 'Data Analyst'"). A breaking change, with no alias: the agent `jupyter-data-analyst` is `worker-data-analyst` (*Data Analyst*), like the other seed agents, and its public demo `demo-jupyter-data-analyst` is `demo-data-analyst`; a spec, a team or an application still naming the old ids is refused. The applications on it (`data-quality`, `model-choice`, `quote-calculator`, `report-from-a-file`, `ship-or-fix`, `supplier-comparison`), the Jupyter team and the notebook benchmark name `worker-data-analyst:0.0.1`. Its description says it works in the Jupyter notebook you have open. Tests: the whole suite.
 
