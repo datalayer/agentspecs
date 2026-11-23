@@ -2841,6 +2841,21 @@
           "default": null,
           "description": "The UI renderer of `agentspecs/ui-renderers` it is exposed through, by id",
           "title": "Renderer"
+        },
+        "tab": {
+          "anyOf": [
+            {
+              "maxLength": 40,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Its visible name in a left or right panel tab; the UI spec's name unsaid",
+          "title": "Tab"
         }
       },
       "required": [

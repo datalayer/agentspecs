@@ -70,7 +70,8 @@ runtime_engine: datalayer
 identity: datalayer-acting-agent
 memory: ephemeral
 mcp_servers: []
-skills: []
+skills:
+  - datalayer-library-publish:0.0.1
 backend_tools: []
 
 environment_name: ai-agents-env
@@ -83,22 +84,22 @@ goal: >-
   diagram I can check, change and keep.
 
 suggestions:
-  - text: Draw the flow of an online checkout, from basket to confirmation, as a Mermaid flowchart.
-    summary: "Checkout flowchart"
+  - text: Create a Mermaid flowchart of an online checkout, including payment refusal, stock shortage, fulfilment, and confirmation paths.
+    summary: "Mermaid checkout flow"
     icon: workflow
     emoji: "🔀"
-  - text: Show how a browser, an API, a queue and a worker talk when a report is requested, as a sequence diagram.
-    summary: "Request sequence"
+  - text: Build an editable React Flow service map with Browser, API, Queue, Worker, and Database nodes, linked in request and processing order.
+    summary: "React Flow service map"
+    icon: share-android
+    emoji: "🧩"
+  - text: Make a Mermaid sequence diagram showing how a browser, API, queue, worker, and database collaborate to generate a report.
+    summary: "Mermaid request sequence"
     icon: arrow-switch
     emoji: "🔁"
-  - text: Sketch the architecture of a small web app on the canvas, with its services and their connections.
-    summary: "Architecture sketch"
+  - text: Sketch an Excalidraw architecture whiteboard for a small web app, grouping the frontend, backend, data stores, and external services with labelled arrows.
+    summary: "Excalidraw architecture"
     icon: paintbrush
     emoji: "🖌️"
-  - text: Model customers, orders and products as an entity relationship diagram.
-    summary: "Data model"
-    icon: database
-    emoji: "🗃️"
 
 welcome_message: >-
   Hi! Tell me about a system, a process or a plan, and I will work out how it
@@ -125,6 +126,9 @@ ui:
   - plugin: page-react-flow
     placement: right
     tab: React Flow
+  - plugin: page-document
+    placement: right
+    tab: Document
   - plugin: side-panels
   # Its Composer, full screen from the toolbar (21 November 2026): its Canvas,
   # its spec and its Python, read only.
@@ -135,6 +139,7 @@ frontend_tools:
   - page-excalidraw:0.0.1
   - page-mermaid:0.0.1
   - page-react-flow:0.0.1
+  - page-document:0.0.1
   - side-panels:0.0.1
 
 system_prompt: |
@@ -170,6 +175,14 @@ system_prompt: |
   elements. It gives you their stable IDs and positions. Call insert_shape for
   each new node and keep the ID it returns; use those IDs with link_shapes and
   move_shape. Never guess an ID.
+
+  Use the Document tab for the written analysis that belongs beside a diagram:
+  scope, actors, assumptions, requirements, rules, exceptions and open
+  questions. Read its blocks before changing it and address later edits by
+  their stable block IDs. Keep the diagram focused on relationships and the
+  document focused on precise prose; do not duplicate every label as a
+  paragraph. Open the right panel on the Document tab when the person asks for
+  a functional specification, process narrative or requirements document.
 
   Mermaid: write the diagram with datalayer_mermaidSetDiagram (a title, the
   source) and keep the diagramId it returns; change it by passing that id.

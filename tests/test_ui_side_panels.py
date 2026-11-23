@@ -41,13 +41,18 @@ SEVEN = {
 
 #: The agents with something placed in a side panel, and what.
 PLACED = {
-    "worker-marketer": ("page-deck",),
+    "worker-marketer": ("page-deck", "page-document"),
     "worker-accountant": ("page-sheet",),
     # The user, 18 November 2026: the Data Analyst's dataset profile and chart, the Steward's findings by service.
-    "worker-data-analyst": ("page-sheet",),
+    "worker-data-analyst": ("page-sheet", "page-document"),
     "worker-steward-aws": ("page-sheet",),
     # The user, 19 November 2026: the Analyst's canvas and diagrams, one above the other.
-    "worker-functional-analyst": ("page-excalidraw", "page-mermaid", "page-react-flow"),
+    "worker-functional-analyst": (
+        "page-excalidraw",
+        "page-mermaid",
+        "page-react-flow",
+        "page-document",
+    ),
 }
 
 
@@ -138,11 +143,19 @@ def test_each_seed_agent_has_notices_and_its_placed_ui_its_side_panels(agent_id)
     assert ("side-panels" in sets) == bool(placed) == ("side-panels" in plugins)
     for each in placed or ():
         expected = {"plugin": each, "placement": "right"}
-        if agent_id == "worker-functional-analyst":
+        if agent_id == "worker-marketer":
+            expected["tab"] = {"page-deck": "Deck", "page-document": "Document"}[each]
+        elif agent_id == "worker-data-analyst":
+            expected["tab"] = {
+                "page-sheet": "Spreadsheet",
+                "page-document": "Document",
+            }[each]
+        elif agent_id == "worker-functional-analyst":
             expected["tab"] = {
                 "page-excalidraw": "Excalidraw",
                 "page-mermaid": "Mermaid",
                 "page-react-flow": "React Flow",
+                "page-document": "Document",
             }[each]
         assert expected in agent["ui"]
         assert expected in demo["ui"]
@@ -164,10 +177,39 @@ def test_the_analyst_and_the_steward_say_what_their_sheet_holds():
         said = " ".join(raw("apps", demo)["instructions"].split())
         assert "sheet_create" in said and "they too are tools you use here" in said
         assert "only" in said
-    # The Analyst's demo still runs nothing, and says so.
-    assert "nothing ran here" in " ".join(
-        raw("apps", "demo-data-analyst")["instructions"].split()
-    )
+    # The Analyst's demo now opens the live notebook and uses its cell tools.
+    analyst_demo = raw("apps", "demo-data-analyst")
+    assert {"plugin": "notebook"} in analyst_demo["ui"]
+    assert analyst_demo["interface"]["layout"] == "split"
+    analyst_words = " ".join(analyst_demo["instructions"].split())
+    assert "readAllCells" in analyst_words and "insertCell" in analyst_words
+    assert "runCell" in analyst_words and "nothing ran here" not in analyst_words
+
+
+def test_the_marketer_names_the_deck_tab_and_a_concrete_deck_deliverable():
+    marketer = raw("agents", "worker-marketer")
+    assert {"plugin": "page-deck", "placement": "right", "tab": "Deck"} in marketer["ui"]
+    suggestions = " ".join(each["text"] for each in marketer["suggestions"])
+    assert "six-slide launch deck" in suggestions
+    assert "audience and problem" in suggestions and "speaker notes" in suggestions
+
+
+def test_recent_workspace_plugins_all_have_ui_and_frontend_tool_specs():
+    """The named work surfaces are catalogue entries, not implementation-only folders."""
+    recent = {
+        "page-deck": "Deck in the page",
+        "page-sheet": "Sheet in the page",
+        "page-mermaid": "Mermaid in the page",
+        "page-excalidraw": "Excalidraw in the page",
+        "page-react-flow": "React Flow in the page",
+        "page-document": "Document in the page",
+    }
+    for ui_id, name in recent.items():
+        assert ui.UI_CATALOGUE[ui_id].name == name
+        tools = raw("frontend-tools", ui_id)
+        assert tools["id"] == ui_id and tools["toolset"]
+    for ui_id in ("notebook", "spreadsheet"):
+        assert ui_id in ui.UI_CATALOGUE
 
 
 def test_only_the_agents_that_name_a_set_name_its_ui():

@@ -99,6 +99,7 @@ def test_a_page_ui_is_a_ui_and_a_frontend_tool_set_of_one_id():
     # Besides the deck and the sheet, the side panels and the notices (tests/test_ui_side_panels.py).
     assert sorted(i for i in ui.UI_CATALOGUE if ui.hands_frontend_tools(i)) == sorted(
         [*PAGE_UIS, "notices", "side-panels"]
+        + ["page-document"]
     )
     # A UI that draws a backend tool's card hands no tool; an id that is no id reads no file.
     assert not ui.hands_frontend_tools("trial-balance")
@@ -133,8 +134,9 @@ def test_the_agent_names_the_set_and_the_ui_together_and_is_told_when_to_use_the
     assert f"{ui_id}:0.0.1" in agent["frontend_tools"]
     # Placed in the chat's right panel: drawn there, a line per call in the conversation.
     expected = {"plugin": ui_id, "placement": "right"}
-    if ui_id in ("page-excalidraw", "page-mermaid", "page-react-flow"):
+    if ui_id in ("page-deck", "page-excalidraw", "page-mermaid", "page-react-flow"):
         expected["tab"] = {
+            "page-deck": "Deck",
             "page-excalidraw": "Excalidraw",
             "page-mermaid": "Mermaid",
             "page-react-flow": "React Flow",
@@ -165,8 +167,9 @@ def test_the_public_demo_has_it_and_builds_from_its_example_only(ui_id):
     demo = raw("apps", demo_id)
     assert demo["agent"].split(":")[0] == agent_id
     expected = {"plugin": ui_id, "placement": "right"}
-    if ui_id in ("page-excalidraw", "page-mermaid", "page-react-flow"):
+    if ui_id in ("page-deck", "page-excalidraw", "page-mermaid", "page-react-flow"):
         expected["tab"] = {
+            "page-deck": "Deck",
             "page-excalidraw": "Excalidraw",
             "page-mermaid": "Mermaid",
             "page-react-flow": "React Flow",
@@ -201,6 +204,27 @@ def test_the_marketer_lays_a_deck_out_in_one_or_two_calls():
     for said in (agent, demo):
         assert "never a call a slide" in said
         assert "eep deck_add_slide for a single slide" in said
+
+
+def test_the_analysts_suggestions_name_the_surface_and_the_deliverable():
+    functional = raw("agents", "worker-functional-analyst")
+    functional_suggestions = " ".join(item["text"] for item in functional["suggestions"])
+    for surface in ("Mermaid", "React Flow", "Excalidraw"):
+        assert surface in functional_suggestions
+    assert "payment refusal" in functional_suggestions
+    assert "Browser, API, Queue, Worker, and Database" in functional_suggestions
+    assert "frontend, backend, data stores" in functional_suggestions
+
+    data = raw("agents", "worker-data-analyst")
+    data_suggestions = " ".join(item["text"] for item in data["suggestions"])
+    assert "complete exploratory Jupyter notebook" in data_suggestions
+    assert "title, data overview, quality checks" in data_suggestions
+    assert "spreadsheet profile" in data_suggestions
+    assert "page-sheet:0.0.1" in data["frontend_tools"]
+    assert "notebook-surfaces:0.0.1" in data["includes"]
+    prompt = " ".join(data["system_prompt"].split())
+    assert "create a complete Jupyter React notebook" in prompt
+    assert "Markdown title and purpose" in prompt
 
 
 #: Every agent and demo that builds a sheet, with the title bar's tool it sets beside it.

@@ -78,11 +78,20 @@ instructions: >-
   they are tools you use here. Use a notice at most once in a turn, for what the
   visitor should not miss, such as a deck finished or a draft waiting for their
   approval.
+  The Document tab is a Lexical campaign brief you can create and revise with
+  the page-document block tools. Use it for a content calendar, launch plan or
+  results report; read the blocks before revising them and keep their stable
+  IDs for later edits. Open the right panel on Document when the visitor asks
+  to review the written deliverable.
 ui:
   - plugin: chat
   - plugin: social-header
   - plugin: page-deck
     placement: right
+    tab: Deck
+  - plugin: page-document
+    placement: right
+    tab: Document
   - plugin: side-panels
   - plugin: notices
   - plugin: composer-portal
@@ -100,6 +109,8 @@ interface:
       message: Draft today's post for each network announcing the new Brazilian lot, in Harbor & Pine's voice.
     - label: What came back
       message: Read last week's replies and numbers and tell me what worked and what to change.
+    - label: Build a launch deck
+      message: Create a six-slide launch deck in the Deck tab for Harbor & Pine's decaf bean box, covering the audience, positioning, channel plan, calendar and success measures, with speaker notes.
 tests:
   ready_at: 0.8
   cases:

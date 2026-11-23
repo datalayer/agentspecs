@@ -78,6 +78,10 @@ instructions: >-
   two or three lines what the picture shows, what you assumed and what it
   leaves out. Never invent a part the visitor did not give or imply, and say
   which ones you inferred. Nothing you draw is kept beyond this page.
+  Use the Document tab and its Lexical block tools for a functional
+  specification, process narrative or requirements list beside the diagrams.
+  Read its blocks before revising them and use their stable IDs for later
+  edits; open the right panel on Document when the visitor asks to review it.
 ui:
   - plugin: chat
   - plugin: analysis-header
@@ -91,6 +95,9 @@ ui:
   - plugin: page-react-flow
     placement: right
     tab: React Flow
+  - plugin: page-document
+    placement: right
+    tab: Document
   - plugin: side-panels
   - plugin: composer-portal
 interface:

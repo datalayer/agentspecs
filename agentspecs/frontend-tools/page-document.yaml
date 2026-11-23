@@ -1,0 +1,14 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: page-document
+version: 0.0.1
+name: Document in the page
+description: >-
+  Read and edit the blocks of the Lexical document in the conversation's
+  Document tab, using stable block identifiers for later updates and deletion.
+tags: [frontend, document, lexical, page]
+enabled: true
+toolset: all
+icon: "@primer/octicons-react:file"
+emoji: "📄"
