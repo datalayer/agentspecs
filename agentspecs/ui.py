@@ -575,6 +575,12 @@ class UiChoice(BaseModel):
     placement: Optional[UiPlacement] = Field(
         default=None, description="Where in the chat it goes, one of its spec's `placements`; its default unsaid"
     )
+    tab: Optional[str] = Field(
+        default=None,
+        min_length=1,
+        max_length=40,
+        description="Its visible name in a left or right panel tab; the UI spec's name unsaid",
+    )
 
     @model_validator(mode="before")
     @classmethod
@@ -688,6 +694,14 @@ def ui_choices_problems(choices: Sequence[Any], *, to_ship: bool) -> List[str]:
                     f"The UI plugin {spec.name} ({plugin_id!r}) does not go in the chat's {placement}: "
                     f"in its {', '.join(allowed)} only."
                 )
+        resolved_placement = str(placement) if placement is not None else (
+            spec.placements[0].value if spec.placements else UiPlacement.MESSAGE.value
+        )
+        if choice.get("tab") is not None and resolved_placement not in SIDE_PLACEMENTS:
+            problems.append(
+                f"The UI plugin {spec.name} ({plugin_id!r}) names a `tab`, but it goes in the chat's "
+                f"{resolved_placement}, not its left or right panel."
+            )
         if renderer_id is None:
             continue
         renderer = UI_RENDERER_CATALOGUE.get(str(renderer_id))

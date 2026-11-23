@@ -349,6 +349,22 @@ places a UI in one with `placement: left` or `placement: right`, when its spec l
 | `page-deck`, `page-sheet` | The deck or the sheet, live: the conversation keeps a line per call. |
 | A header UI (`shop-header`, `books-header`…) | Its items stacked under its name: its drop-downs, its buttons, what the agent set, a dash before it said anything. |
 
+When a side contains several components, the shared Datalayer view tabs show one at a time. The
+person can choose a tab, and the agent can select the same component by its visible name or stable
+id with `open_side_panel({side, tab})`. A successful tool call belonging to a component also brings
+that component's tab to the front. A UI choice may give the tab a concise name; otherwise its UI
+spec's name is used:
+
+```yaml
+ui:
+  - plugin: page-excalidraw
+    placement: right
+    tab: Excalidraw
+  - plugin: page-mermaid
+    placement: right
+    tab: Mermaid
+```
+
 The left panel also holds what a host says about the application, its presentation, before
 what is placed there. A card a backend tool draws (`trial-balance`, `shopping-basket`…) stays
 in the conversation: its spec lists `message` alone.
@@ -358,8 +374,8 @@ the left one leading the chat's title bar, the right one trailing it. It opens:
 
 - with the **first call of the UI placed in it** in the conversation (the deck's first slide,
   the sheet's first range);
-- when the **agent** calls `open_side_panel`, and closes when it calls `close_side_panel`, both
-  with their `side`: the `side-panels` page UI and its
+- when the **agent** calls `open_side_panel`, optionally naming the component's `tab`, and closes
+  when it calls `close_side_panel`, both with their `side`: the `side-panels` page UI and its
   [tool set](../frontend-tools/#the-side-panels-and-the-notices-side-panels-notices);
 - when the **person** uses its toggle, and closes with its Close control or Escape; the person's
   word holds until the agent's next call.

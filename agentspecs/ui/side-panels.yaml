@@ -13,7 +13,7 @@ id: "side-panels"
 version: 0.0.1
 name: Side panels
 description: >-
-  The agent opens and closes the chat's left and right panels, where its UI placed there shows: the deck it builds, the sheet it fills, its title bar's controls.
+  The agent opens and closes the chat's left and right panels and selects a named tab when several UI components are placed there: the deck it builds, the sheet it fills, its diagrams or controls.
 emoji: "🗂️"
 octicon: sidebar-expand
 plugin: "@datalayer/agent-plugin-side-panels"

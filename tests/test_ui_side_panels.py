@@ -47,7 +47,7 @@ PLACED = {
     "worker-data-analyst": ("page-sheet",),
     "worker-steward-aws": ("page-sheet",),
     # The user, 19 November 2026: the Analyst's canvas and diagrams, one above the other.
-    "worker-functional-analyst": ("page-excalidraw", "page-mermaid"),
+    "worker-functional-analyst": ("page-excalidraw", "page-mermaid", "page-react-flow"),
 }
 
 
@@ -82,6 +82,12 @@ def test_what_may_go_in_a_side_panel_says_so():
     assert refused == [
         "The UI plugin Trial balance ('trial-balance') does not go in the chat's right: in its message only."
     ]
+    assert ui.ui_choices_problems(
+        [{"plugin": "page-deck", "placement": "right", "tab": "Slides"}], to_ship=True
+    ) == []
+    assert "names a `tab`" in ui.ui_choices_problems(
+        [{"plugin": "chat", "tab": "Conversation"}], to_ship=True
+    )[0]
 
 
 @pytest.mark.parametrize(
@@ -131,8 +137,15 @@ def test_each_seed_agent_has_notices_and_its_placed_ui_its_side_panels(agent_id)
     # The side panels, for those with something placed there: opened by its first call.
     assert ("side-panels" in sets) == bool(placed) == ("side-panels" in plugins)
     for each in placed or ():
-        assert {"plugin": each, "placement": "right"} in agent["ui"]
-        assert {"plugin": each, "placement": "right"} in demo["ui"]
+        expected = {"plugin": each, "placement": "right"}
+        if agent_id == "worker-functional-analyst":
+            expected["tab"] = {
+                "page-excalidraw": "Excalidraw",
+                "page-mermaid": "Mermaid",
+                "page-react-flow": "React Flow",
+            }[each]
+        assert expected in agent["ui"]
+        assert expected in demo["ui"]
     if placed:
         assert {"plugin": "side-panels"} in demo["ui"]
         for words in (prompt, said):

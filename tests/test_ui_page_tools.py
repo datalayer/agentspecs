@@ -83,6 +83,11 @@ PAGE_UIS = {
             "datalayer_mermaidListDiagramTypes",
         ],
     ),
+    "page-react-flow": (
+        "worker-functional-analyst",
+        "demo-functional-analyst",
+        ["list_shapes", "insert_shape", "link_shapes", "move_shape"],
+    ),
 }
 
 
@@ -127,7 +132,14 @@ def test_the_agent_names_the_set_and_the_ui_together_and_is_told_when_to_use_the
     agent = raw("agents", agent_id)
     assert f"{ui_id}:0.0.1" in agent["frontend_tools"]
     # Placed in the chat's right panel: drawn there, a line per call in the conversation.
-    assert {"plugin": ui_id, "placement": "right"} in agent["ui"]
+    expected = {"plugin": ui_id, "placement": "right"}
+    if ui_id in ("page-excalidraw", "page-mermaid", "page-react-flow"):
+        expected["tab"] = {
+            "page-excalidraw": "Excalidraw",
+            "page-mermaid": "Mermaid",
+            "page-react-flow": "React Flow",
+        }[ui_id]
+    assert expected in agent["ui"]
     prompt = " ".join(agent["system_prompt"].split())
     first = tools[0]
     assert first in prompt, f"{agent_id} is not told {first}"
@@ -152,7 +164,14 @@ def test_the_public_demo_has_it_and_builds_from_its_example_only(ui_id):
     agent_id, demo_id, tools = PAGE_UIS[ui_id]
     demo = raw("apps", demo_id)
     assert demo["agent"].split(":")[0] == agent_id
-    assert {"plugin": ui_id, "placement": "right"} in demo["ui"]
+    expected = {"plugin": ui_id, "placement": "right"}
+    if ui_id in ("page-excalidraw", "page-mermaid", "page-react-flow"):
+        expected["tab"] = {
+            "page-excalidraw": "Excalidraw",
+            "page-mermaid": "Mermaid",
+            "page-react-flow": "React Flow",
+        }[ui_id]
+    assert expected in demo["ui"]
     said = " ".join(demo["instructions"].split())
     for tool in tools:
         if tool != "deck_set_title":
