@@ -99,7 +99,7 @@ def test_a_page_ui_is_a_ui_and_a_frontend_tool_set_of_one_id():
     # Besides the deck and the sheet, the side panels and the notices (tests/test_ui_side_panels.py).
     assert sorted(i for i in ui.UI_CATALOGUE if ui.hands_frontend_tools(i)) == sorted(
         [*PAGE_UIS, "notices", "side-panels"]
-        + ["page-document"]
+        + ["page-document", "public-library"]
     )
     # A UI that draws a backend tool's card hands no tool; an id that is no id reads no file.
     assert not ui.hands_frontend_tools("trial-balance")

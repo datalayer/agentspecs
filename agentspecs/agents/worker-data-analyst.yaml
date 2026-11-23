@@ -164,10 +164,12 @@ ui:
   # Its Composer, full screen from the toolbar (21 November 2026): its Canvas,
   # its spec and its Python, read only.
   - plugin: composer-portal
+  - plugin: public-library
 # The tools run in the page (18 November 2026): the live notebook's complete
 # read/edit/run toolset comes from notebook-surfaces; the others draw the
 # notice, sheet and panel controls around it.
 frontend_tools:
+  - public-library:0.0.1
   - notices:0.0.1
   - page-sheet:0.0.1
   - page-document:0.0.1
