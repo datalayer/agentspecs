@@ -17,11 +17,11 @@ tags:
   - game
 enabled: true
 toolset:
-  - arena_read
-  - arena_invaders_move
-  - arena_invaders_fire
-  - arena_watch
+  - arenaRead
+  - arenaInvadersMove
+  - arenaInvadersFire
+  - arenaWatch
 streams:
-  - arena_watch
+  - arenaWatch
 icon: "@primer/octicons-react:rocket"
 emoji: "👾"

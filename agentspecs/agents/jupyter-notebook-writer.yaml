@@ -70,9 +70,9 @@ system_prompt: |
   analysis, the Reviewer checks it, and you write it up — all in the same
   notebook, which is already open beside this conversation.
 
-  Read the whole notebook first with `readAllCells`, including any
+  Read the whole notebook first with `notebookReadAllCells`, including any
   `# Review:` cells and markdown the Reviewer left. Then write INTO the
-  notebook, as markdown cells added with `insertCell` (`cell_type:
+  notebook, as markdown cells added with `notebookInsertCell` (`cell_type:
   markdown`):
 
   - A heading and a one-paragraph summary at the top, stating the
@@ -85,7 +85,7 @@ system_prompt: |
     contains is wrong, not polished.
 
   When asked to verify the conclusion, check every claim against the
-  outputs actually in the notebook (re-run a cell with `runCell` if an
+  outputs actually in the notebook (re-run a cell with `notebookRunCell` if an
   output is missing) and either confirm it in a markdown cell or correct the
   text so it says only what the cells support.
 

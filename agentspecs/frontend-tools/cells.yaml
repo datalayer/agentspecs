@@ -23,11 +23,11 @@ enabled: true
 # Data: the values of a range, read or written. Charts: insert one over a
 # range, list them. Screen: select a range to show the person.
 toolset:
-  - cells_read_range
-  - cells_write_range
-  - cells_insert_chart
-  - cells_list_charts
-  - cells_select_range
+  - cellsReadRange
+  - cellsWriteRange
+  - cellsInsertChart
+  - cellsListCharts
+  - cellsSelectRange
 
 icon: "@primer/octicons-react:table"
 emoji: "🧮"

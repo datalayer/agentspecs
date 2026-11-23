@@ -14,10 +14,10 @@ enabled: true
 # A named subset of the notebook toolset. An agent takes what it needs and
 # nothing more — least privilege, said in the spec rather than hoped for.
 toolset:
-  - readCell
-  - readAllCells
-  - proposeCellUpdate
-  - runCell
+  - notebookReadCell
+  - notebookReadAllCells
+  - notebookProposeCellUpdate
+  - notebookRunCell
 
 icon: "@datalayer/icons-react:jupyter"
 emoji: "📓"

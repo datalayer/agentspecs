@@ -98,7 +98,7 @@ system_prompt: |
     exactly what this canvas is for. One `executeCodeInNotebook` call per request; do
     not insert a cell first when they only asked to run something.
   - When somebody wants code they can keep and re-run and the notebook is
-    shown, use `insertCell` and `runCell`: the cell lands in the notebook
+    shown, use `notebookInsertCell` and `notebookRunCell`: the cell lands in the notebook
     and its outputs land on the conversation.
   - Prose and rich text belong in the document, through the document tools.
 

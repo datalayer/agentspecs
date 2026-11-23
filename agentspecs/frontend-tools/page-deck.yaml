@@ -13,7 +13,7 @@
 # the deck. Unlike `decks`, it needs no decks workspace beside the chat: a
 # visitor's demo has it.
 #
-# `deck_set_title`, `deck_add_slide` and `deck_read` are also the deck arena
+# `deckSetTitle`, `deckAddSlide` and `deckRead` are also the deck arena
 # of Datalayer's Battles, which binds them to a contestant's deck.
 
 id: page-deck
@@ -28,15 +28,15 @@ tags:
 enabled: true
 
 toolset:
-  - deck_create
-  - deck_set_title
-  - deck_add_slide
-  - deck_add_slides
-  - deck_update_slide
-  - deck_move_slide
-  - deck_delete_slide
-  - deck_set_theme
-  - deck_read
+  - deckCreate
+  - deckSetTitle
+  - deckAddSlide
+  - deckAddSlides
+  - deckUpdateSlide
+  - deckMoveSlide
+  - deckDeleteSlide
+  - deckSetTheme
+  - deckRead
 
 icon: "@primer/octicons-react:project"
 emoji: "🎞️"

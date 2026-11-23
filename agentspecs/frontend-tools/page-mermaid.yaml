@@ -23,12 +23,12 @@ tags:
 enabled: true
 
 toolset:
-  - datalayer_mermaidSetDiagram
-  - datalayer_mermaidReadDiagram
-  - datalayer_mermaidListDiagrams
-  - datalayer_mermaidValidate
-  - datalayer_mermaidRenderSvg
-  - datalayer_mermaidListDiagramTypes
+  - mermaidSetDiagram
+  - mermaidReadDiagram
+  - mermaidListDiagrams
+  - mermaidValidate
+  - mermaidRenderSvg
+  - mermaidListDiagramTypes
 
 icon: "@primer/octicons-react:workflow"
 emoji: "🧜"

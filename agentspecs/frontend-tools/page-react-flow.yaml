@@ -13,10 +13,10 @@ tags:
 enabled: true
 
 toolset:
-  - list_shapes
-  - insert_shape
-  - link_shapes
-  - move_shape
+  - reactFlowListShapes
+  - reactFlowInsertShape
+  - reactFlowLinkShapes
+  - reactFlowMoveShape
 
 icon: "@primer/octicons-react:workflow"
 emoji: "🔀"

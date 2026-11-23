@@ -52,7 +52,7 @@ instructions: >-
   estimate (by aws, or by datalayer with the method) and its fix with its
   rollback. You change nothing and buy nothing: buying a Savings Plan is
   left to the person.
-  The chat's title bar shows what was found, through one tool, set_aws_header.
+  The chat's title bar shows what was found, through one tool, setAwsHeader.
   It runs in the visitor's page, reaches nothing and changes nothing, and it is
   the one exception to the tools you leave alone here. Once you have listed
   recommendations, call it with savings (how many you listed as value, their
@@ -60,16 +60,16 @@ instructions: >-
   example) and, when you speak of Savings Plans, with coverage (value 38, tone
   attention). The region chosen in the title bar's drop-down is told to you with
   the turn: keep to the example's resources of that region and say so.
-  show_notice slides a short notice in from an edge of the visitor's chat: a
+  noticeShow slides a short notice in from an edge of the visitor's chat: a
   title and a line, info, success, warning or error. It runs in the visitor's
   page, reaches nothing and changes nothing, and it is one of the tools you use
   here. Use a notice at most once in a turn, for what the visitor should not
   miss, such as savings found or a recommendation that needs care before it is
   applied.
   You can also build a spreadsheet in the right panel of the visitor's chat with
-  the sheet tools (sheet_create, sheet_write_range, sheet_read_range,
-  sheet_format_range, sheet_freeze, sheet_add_tab, sheet_show_tab,
-  sheet_insert_chart), open_side_panel and close_side_panel (side right): they
+  the sheet tools (sheetCreate, sheetWriteRange, sheetReadRange,
+  sheetFormatRange, sheetFreeze, sheetAddTab, sheetShowTab,
+  sheetInsertChart), sidePanelOpen and sidePanelClose (side right): they
   run in the visitor's page, reach no account and change nothing, and they too
   are tools you use here; the panel opens with the sheet's first range. When the
   visitor asks for the findings as a table or a sheet, build it from these
@@ -77,11 +77,11 @@ instructions: >-
   Monthly saving (USD, currency format), one row for each of the six
   recommendations, largest first, the total =SUM(E2:E7) in bold (2,701 USD a
   month), and on request a chart of the savings by service with
-  sheet_insert_chart.
+  sheetInsertChart.
   Build the sheet in as few responses as you can, making all the calls of a
-  step together in one response: sheet_create and sheet_write_range in one
-  response, then sheet_format_range, open_side_panel if the panel is closed,
-  and set_aws_header in the next. Keep single calls for later edits.
+  step together in one response: sheetCreate and sheetWriteRange in one
+  response, then sheetFormatRange, sidePanelOpen if the panel is closed,
+  and setAwsHeader in the next. Keep single calls for later edits.
   Then say in two or three lines what the sheet contains and
   that it is built on the recorded example.
 ui:

@@ -25,8 +25,8 @@ tags:
 enabled: true
 
 toolset:
-  - open_side_panel
-  - close_side_panel
+  - sidePanelOpen
+  - sidePanelClose
 
 icon: "@primer/octicons-react:sidebar-expand"
 emoji: "🗂️"

@@ -13,9 +13,9 @@ tags:
 enabled: true
 
 toolset:
-  - search_public_library
-  - list_public_library
-  - publish_library_item
+  - publicLibrarySearch
+  - publicLibraryList
+  - publicLibraryPublishItem
 
 icon: "@primer/octicons-react:book"
 emoji: "📚"
