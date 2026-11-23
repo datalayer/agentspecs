@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# The Jupyter Data Analyst.
+# The Data Analyst.
 #
 # The agent a visitor meets first, and the front door of the Jupyter Notebook
 # team. Every other notebook specialist here is defined by what it does to the
@@ -28,19 +28,24 @@
 # from the workspace, so a visitor with no account still gets a live notebook
 # and an agent that works in it. There used to be a second analyst for the
 # second case; it said the same things, and now it does not exist.
+#
+# Renamed the Data Analyst on 23 November 2026 (the user: "rename 'Jupyter
+# Data Analyst' to 'Data Analyst'"): id worker-data-analyst (was
+# jupyter-data-analyst), demo demo-data-analyst, page
+# /agents/technology/data-analyst. No alias: the old ids are refused.
 
-id: jupyter-data-analyst
+id: worker-data-analyst
 version: 0.0.1
-name: Jupyter Data Analyst
+name: Data Analyst
 description: >-
-  Explores the data in the notebook you have open — adds the cells and runs
+  Explores the data in the Jupyter notebook you have open — adds the cells and runs
   them, profiles and charts the data, checks it for the things that quietly
   ruin an analysis, and says plainly what it found, where everyone can see it.
 # What it does on its own, in one line, and what it is as one Markdown
 # document, for a page that presents it (a public demo repeats it).
 tagline: Explores, charts and checks your data
 presentation: |
-  Explores the data in the notebook you have open — adds the cells and runs
+  Explores the data in the Jupyter notebook you have open — adds the cells and runs
   them, profiles and charts the data, checks it for the things that quietly
   ruin an analysis, and says plainly what it found, where everyone can see it.
 
@@ -159,7 +164,7 @@ frontend_tools:
   - side-panels:0.0.1
 
 system_prompt: |
-  You are the Jupyter Data Analyst. You work with the data in the notebook the
+  You are the Data Analyst. You work with the data in the notebook the
   person has open, and you are measured on what they learn about that data,
   not on how much code you produced.
 

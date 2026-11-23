@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## Unreleased
+
+- **The Data Analyst** (the user, 23 November 2026: "rename 'Jupyter Data Analyst' to 'Data Analyst'"). A breaking change, with no alias: the agent `jupyter-data-analyst` is `worker-data-analyst` (*Data Analyst*), like the other seed agents, and its public demo `demo-jupyter-data-analyst` is `demo-data-analyst`; a spec, a team or an application still naming the old ids is refused. The applications on it (`data-quality`, `model-choice`, `quote-calculator`, `report-from-a-file`, `ship-or-fix`, `supplier-comparison`), the Jupyter team and the notebook benchmark name `worker-data-analyst:0.0.1`. Its description says it works in the Jupyter notebook you have open. Tests: the whole suite.
+
 ## 0.1.15
 
 - The Traveller starts without Overture Maps (the user, 22 November 2026: "make the overture mcp server optional for traveller, we need to show traveller for anonymous visitors"): `overture:0.0.1` is among worker-traveller's optional servers and demo-traveller's connection to it is optional (demo-traveller 0.0.9); without the gateway's key it says once that it could not check restaurants and sights, and plans the rest.

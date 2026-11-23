@@ -421,7 +421,7 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
     for identity in ("quote-calculator", "report-from-a-file", "customer-interview"):
         spec = APP_CATALOGUE[identity]
         assert spec.enabled and spec.unavailable_because == "", identity
-        # Their agent, jupyter-data-analyst, is enabled (the seventh seed agent, offered by
+        # Their agent, worker-data-analyst, is enabled (the seventh seed agent, offered by
         # the pickers since 0.0.215, 18 November 2026): nothing to set up.
         assert app_setup(spec) == [], identity
     # Decide's agent, example-simple, the neutral default, likewise.
@@ -809,13 +809,13 @@ def test_a_decision_is_tried_on_alternatives_it_can_rank(samples: dict, says: st
 
 def test_the_four_decision_templates_are_in_the_catalogue() -> None:
     """The landing's four templates, each an Appspec of its own — the
-    Jupyter data analyst, the decision's ten components, typed decisions."""
+    Data Analyst, the decision's ten components, typed decisions."""
     ship = APP_CATALOGUE["ship-or-fix"]
     templates = ["ship-or-fix", "supplier-comparison", "data-quality", "model-choice"]
     for identity in templates:
         found = APP_CATALOGUE[identity]
         assert found.kind is AppKind.DECISION, identity
-        assert found.agent == "jupyter-data-analyst:0.0.1", identity
+        assert found.agent == "worker-data-analyst:0.0.1", identity
         assert found.interface.components == ship.interface.components, identity
         assert (
             found.decision is not None
@@ -925,7 +925,7 @@ EXAMPLES = {
     "demo-traveller": AppKind.CHAT,
     "demo-accountant": AppKind.CHAT,
     "demo-aws-steward": AppKind.CHAT,
-    "demo-jupyter-data-analyst": AppKind.CHAT,
+    "demo-data-analyst": AppKind.CHAT,
     "demo-functional-analyst": AppKind.CHAT,
 }
 
@@ -2666,7 +2666,7 @@ def test_a_lent_repository_is_a_public_url_at_one_commit() -> None:
 #: owner's account. Left out, a server that needs a person's own account or a key the demo
 #: account does not hold: the Marketer's Discord (a bot in a server of the person's) and LinkedIn
 #: (the person's session); the Traveller's Booking.com (a partner's keys); the Steward and the
-#: Jupyter Data Analyst name no server, nor does the Analyst, whose tools all run in the page. The Traveller's Google Maps is optional: started only
+#: Data Analyst name no server, nor does the Analyst, whose tools all run in the page. The Traveller's Google Maps is optional: started only
 #: with the billed GOOGLE_MAPS_API_KEY among the demo account's secrets (the user, 19 November 2026).
 DEMO_CONNECTIONS = {
     "demo-shopper": ["shopify:0.0.1"],
@@ -2675,7 +2675,7 @@ DEMO_CONNECTIONS = {
     "demo-traveller": ["kiwi:0.0.1", "overture:0.0.1", "google-maps:0.0.1"],
     "demo-marketer": [],
     "demo-aws-steward": [],
-    "demo-jupyter-data-analyst": [],
+    "demo-data-analyst": [],
     "demo-functional-analyst": [],
 }
 

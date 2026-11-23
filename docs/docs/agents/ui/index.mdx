@@ -182,7 +182,7 @@ ui:
 
 `ui_choices_problems` refuses a placement the spec does not list. Each of the six seed agents
 that bring cards collects at least one UI in the chat's chrome and one A2UI message
-(`tests/test_ui.py`); the seventh, the Jupyter Data Analyst, works in the notebook's cells and
+(`tests/test_ui.py`); the seventh, the Data Analyst, works in the notebook's cells and
 brings no card of its own. Each of the seven has a header UI, described next.
 
 ## In the chat's title bar: `header`
@@ -299,7 +299,7 @@ listed — until its tool says otherwise.
 | Traveller | `trip-header` | **Trip** (label: where and when) · **Travellers** (drop-down) · **Options ready** (counter) |
 | Terra | `earth-header` | **Sensor** (drop-down: any, Sentinel-2, Landsat) · **Cloud cover** (meter, of the scene read) |
 | Steward for AWS | `aws-header` | **Savings found** (counter: recommendations, monthly sum) · **Region** (drop-down) · **Savings Plans coverage** (meter) |
-| Jupyter Data Analyst | `notebook-header` | **Dataset** (label) · **Run** (status: what ran, or that nothing did) · **Profile data** (button) |
+| Data Analyst | `notebook-header` | **Dataset** (label) · **Run** (status: what ran, or that nothing did) · **Profile data** (button) |
 
 Each agent names its header under `ui`, and so does its public demo, whose instructions allow
 that one tool and say what to show from the example data (`tests/test_ui_header.py`). An
@@ -381,7 +381,7 @@ frontend_tools:
 ```
 
 An agent names `side-panels` when something is placed in its panels: the Marketer (its deck), and
-the Accountant, the Jupyter Data Analyst and the Steward for AWS (a sheet each: the books, the dataset's
+the Accountant, the Data Analyst and the Steward for AWS (a sheet each: the books, the dataset's
 profile and a chart, the findings by service), their demos with them; `open_side_panel` on a panel with nothing in it is
 refused in a sentence.
 

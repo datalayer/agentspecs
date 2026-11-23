@@ -17,7 +17,7 @@
 # demo-functional-analyst, page /agents/technology/functional-analyst.
 #
 # Its id is worker-functional-analyst, not `analyst`: the Jupyter team and the notebook
-# benchmark already seat a member called `analyst` (the Jupyter Data
+# benchmark already seat a member called `analyst` (the Data
 # Analyst), and the network views read that bare word as a seat.
 #
 # Both tool sets are @datalayer/reactor-excalidraw's and

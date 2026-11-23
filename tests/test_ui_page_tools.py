@@ -188,8 +188,8 @@ def test_the_marketer_lays_a_deck_out_in_one_or_two_calls():
 SHEET_BUILDERS = {
     ("agents", "worker-accountant"): "set_books_header",
     ("apps", "demo-accountant"): "set_books_header",
-    ("agents", "jupyter-data-analyst"): "set_notebook_header",
-    ("apps", "demo-jupyter-data-analyst"): "set_notebook_header",
+    ("agents", "worker-data-analyst"): "set_notebook_header",
+    ("apps", "demo-data-analyst"): "set_notebook_header",
     ("agents", "worker-steward-aws"): "set_aws_header",
     ("apps", "demo-aws-steward"): "set_aws_header",
 }

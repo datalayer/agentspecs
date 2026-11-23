@@ -31,7 +31,7 @@ HEADERS = {
     "worker-traveller": ("demo-traveller", "trip-header"),
     "worker-terra": ("demo-terra", "earth-header"),
     "worker-steward-aws": ("demo-aws-steward", "aws-header"),
-    "jupyter-data-analyst": ("demo-jupyter-data-analyst", "notebook-header"),
+    "worker-data-analyst": ("demo-data-analyst", "notebook-header"),
     "worker-functional-analyst": ("demo-functional-analyst", "analysis-header"),
 }
 

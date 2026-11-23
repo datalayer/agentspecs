@@ -355,7 +355,7 @@ The section is validated against agent-shield's own schema, carried verbatim as 
 - `*` beside other entries;
 - an entry named twice.
 
-Datalayer's catalogue agents declare `egress: ["*"]`, because the MCP servers and tools they run call out, for example `npx tavily-mcp`. The seed agents are narrower (15 November 2026): the Marketer, the Shopper and the Traveller reach the web only, `["*:80", "*:443"]`; the Accountant, Terra and the AWS Steward name each host they reach (Datalayer's gateway, NASA's Earthdata hosts, AWS's endpoints), on 443, and the tokenizer file every runtime fetches, `openaipublic.blob.core.windows.net:443`. The seventh, the Jupyter Data Analyst, keeps `["*"]`: the code it runs in a notebook loads data from wherever the person keeps it.
+Datalayer's catalogue agents declare `egress: ["*"]`, because the MCP servers and tools they run call out, for example `npx tavily-mcp`. The seed agents are narrower (15 November 2026): the Marketer, the Shopper and the Traveller reach the web only, `["*:80", "*:443"]`; the Accountant, Terra and the AWS Steward name each host they reach (Datalayer's gateway, NASA's Earthdata hosts, AWS's endpoints), on 443, and the tokenizer file every runtime fetches, `openaipublic.blob.core.windows.net:443`. The seventh, the Data Analyst, keeps `["*"]`: the code it runs in a notebook loads data from wherever the person keeps it.
 
 An organization may bound every agent's firewall with a ceiling in its [policy](../policies#an-organizations-firewall-ceiling): an entry the ceiling does not cover is dropped when the rule is applied, and `*` becomes the ceiling's own entries.
 

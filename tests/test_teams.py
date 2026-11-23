@@ -212,7 +212,7 @@ class TestJupyterTeam:
 
     def test_the_analyst_supervises_and_cannot_end_the_run(self):
         team = get_team("jupyter")
-        assert team.supervisor.ref == "jupyter-data-analyst:0.0.1"
+        assert team.supervisor.ref == "worker-data-analyst:0.0.1"
         # A front door that could end the run would end it when its own
         # analysis is done, which is exactly when a requested write-up, deck or
         # compaction has not happened yet.
@@ -221,7 +221,7 @@ class TestJupyterTeam:
     def test_all_six_specialists_are_members(self):
         team = get_team("jupyter")
         assert [m.ref for m in team.agents] == [
-            "jupyter-data-analyst:0.0.1",
+            "worker-data-analyst:0.0.1",
             "jupyter-notebook-reviewer:0.0.1",
             "jupyter-notebook-writer:0.0.1",
             "example-decks:0.0.1",

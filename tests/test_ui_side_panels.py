@@ -35,7 +35,7 @@ SEVEN = {
     "worker-traveller": "demo-traveller",
     "worker-terra": "demo-terra",
     "worker-steward-aws": "demo-aws-steward",
-    "jupyter-data-analyst": "demo-jupyter-data-analyst",
+    "worker-data-analyst": "demo-data-analyst",
     "worker-functional-analyst": "demo-functional-analyst",
 }
 
@@ -43,8 +43,8 @@ SEVEN = {
 PLACED = {
     "worker-marketer": ("page-deck",),
     "worker-accountant": ("page-sheet",),
-    # The user, 18 November 2026: the Jupyter Data Analyst's dataset profile and chart, the Steward's findings by service.
-    "jupyter-data-analyst": ("page-sheet",),
+    # The user, 18 November 2026: the Data Analyst's dataset profile and chart, the Steward's findings by service.
+    "worker-data-analyst": ("page-sheet",),
     "worker-steward-aws": ("page-sheet",),
     # The user, 19 November 2026: the Analyst's canvas and diagrams, one above the other.
     "worker-functional-analyst": ("page-excalidraw", "page-mermaid"),
@@ -143,17 +143,17 @@ def test_each_seed_agent_has_notices_and_its_placed_ui_its_side_panels(agent_id)
 
 
 def test_the_analyst_and_the_steward_say_what_their_sheet_holds():
-    analyst = " ".join(raw("agents", "jupyter-data-analyst")["system_prompt"].split())
+    analyst = " ".join(raw("agents", "worker-data-analyst")["system_prompt"].split())
     assert "a tab Profile with one row per column" in analyst and "sheet_insert_chart" in analyst
     steward = " ".join(raw("agents", "worker-steward-aws")["system_prompt"].split())
     assert "Monthly saving" in steward and "=SUM(E2:E7)" in steward
-    for demo in ("demo-jupyter-data-analyst", "demo-aws-steward"):
+    for demo in ("demo-data-analyst", "demo-aws-steward"):
         said = " ".join(raw("apps", demo)["instructions"].split())
         assert "sheet_create" in said and "they too are tools you use here" in said
         assert "only" in said
     # The Analyst's demo still runs nothing, and says so.
     assert "nothing ran here" in " ".join(
-        raw("apps", "demo-jupyter-data-analyst")["instructions"].split()
+        raw("apps", "demo-data-analyst")["instructions"].split()
     )
 
 

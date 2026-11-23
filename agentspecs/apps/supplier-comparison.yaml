@@ -16,7 +16,7 @@ description: >-
   procurement lead, at each sourcing round.
 owner: Datalayer <info@datalayer.io>
 
-agent: jupyter-data-analyst:0.0.1
+agent: worker-data-analyst:0.0.1
 
 contents:
   - Order history
