@@ -15,7 +15,7 @@
 # too, which hands it the tools and draws the sheet. Unlike `cells`, it
 # needs no spreadsheet editor beside the chat: a visitor's demo has it.
 #
-# `sheet_write_range`, `sheet_read_range` and `sheet_insert_chart` are also
+# `sheetWriteRange`, `sheetReadRange` and `sheetInsertChart` are also
 # the sheet arena of Datalayer's Battles, which binds them to a contestant's
 # workbook.
 
@@ -31,14 +31,14 @@ tags:
 enabled: true
 
 toolset:
-  - sheet_create
-  - sheet_write_range
-  - sheet_read_range
-  - sheet_format_range
-  - sheet_freeze
-  - sheet_add_tab
-  - sheet_show_tab
-  - sheet_insert_chart
+  - sheetCreate
+  - sheetWriteRange
+  - sheetReadRange
+  - sheetFormatRange
+  - sheetFreeze
+  - sheetAddTab
+  - sheetShowTab
+  - sheetInsertChart
 
 icon: "@primer/octicons-react:table"
 emoji: "📑"

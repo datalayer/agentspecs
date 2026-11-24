@@ -24,14 +24,14 @@ tags:
 enabled: true
 
 toolset:
-  - arena_read
-  - arena_pong_move
-  - arena_pong_serve
-  - arena_watch
+  - arenaRead
+  - arenaPongMove
+  - arenaPongServe
+  - arenaWatch
 
 # The tools of the set that stream: called once, each keeps pushing events.
 streams:
-  - arena_watch
+  - arenaWatch
 
 icon: "@primer/octicons-react:play"
 emoji: "🏓"

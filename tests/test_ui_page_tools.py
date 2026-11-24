@@ -27,29 +27,29 @@ PAGE_UIS = {
         "worker-marketer",
         "demo-marketer",
         [
-            "deck_create",
-            "deck_set_title",
-            "deck_add_slide",
-            "deck_add_slides",
-            "deck_update_slide",
-            "deck_move_slide",
-            "deck_delete_slide",
-            "deck_set_theme",
-            "deck_read",
+            "deckCreate",
+            "deckSetTitle",
+            "deckAddSlide",
+            "deckAddSlides",
+            "deckUpdateSlide",
+            "deckMoveSlide",
+            "deckDeleteSlide",
+            "deckSetTheme",
+            "deckRead",
         ],
     ),
     "page-sheet": (
         "worker-accountant",
         "demo-accountant",
         [
-            "sheet_create",
-            "sheet_write_range",
-            "sheet_read_range",
-            "sheet_format_range",
-            "sheet_freeze",
-            "sheet_add_tab",
-            "sheet_show_tab",
-            "sheet_insert_chart",
+            "sheetCreate",
+            "sheetWriteRange",
+            "sheetReadRange",
+            "sheetFormatRange",
+            "sheetFreeze",
+            "sheetAddTab",
+            "sheetShowTab",
+            "sheetInsertChart",
         ],
     ),
     # The Functional Analyst's canvas and diagrams (the user, 19 November 2026): the tools of
@@ -58,30 +58,35 @@ PAGE_UIS = {
         "worker-functional-analyst",
         "demo-functional-analyst",
         [
-            "datalayer_excalidrawInsertNode",
-            "datalayer_excalidrawFromMermaid",
-            "datalayer_excalidrawListDrawings",
-            "datalayer_excalidrawReadScene",
-            "datalayer_excalidrawAddElements",
-            "datalayer_excalidrawUpdateElements",
-            "datalayer_excalidrawConnectElements",
-            "datalayer_excalidrawDeleteElements",
-            "datalayer_excalidrawSetAppState",
-            "datalayer_excalidrawResize",
-            "datalayer_excalidrawClearScene",
+            "excalidrawInsertNode",
+            "excalidrawFromMermaid",
+            "excalidrawListDrawings",
+            "excalidrawReadScene",
+            "excalidrawAddElements",
+            "excalidrawUpdateElements",
+            "excalidrawConnectElements",
+            "excalidrawDeleteElements",
+            "excalidrawSetAppState",
+            "excalidrawResize",
+            "excalidrawClearScene",
         ],
     ),
     "page-mermaid": (
         "worker-functional-analyst",
         "demo-functional-analyst",
         [
-            "datalayer_mermaidSetDiagram",
-            "datalayer_mermaidReadDiagram",
-            "datalayer_mermaidListDiagrams",
-            "datalayer_mermaidValidate",
-            "datalayer_mermaidRenderSvg",
-            "datalayer_mermaidListDiagramTypes",
+            "mermaidSetDiagram",
+            "mermaidReadDiagram",
+            "mermaidListDiagrams",
+            "mermaidValidate",
+            "mermaidRenderSvg",
+            "mermaidListDiagramTypes",
         ],
+    ),
+    "page-react-flow": (
+        "worker-functional-analyst",
+        "demo-functional-analyst",
+        ["reactFlowListShapes", "reactFlowInsertShape", "reactFlowLinkShapes", "reactFlowMoveShape"],
     ),
 }
 
@@ -94,6 +99,7 @@ def test_a_page_ui_is_a_ui_and_a_frontend_tool_set_of_one_id():
     # Besides the deck and the sheet, the side panels and the notices (tests/test_ui_side_panels.py).
     assert sorted(i for i in ui.UI_CATALOGUE if ui.hands_frontend_tools(i)) == sorted(
         [*PAGE_UIS, "notices", "side-panels"]
+        + ["page-document", "public-library"]
     )
     # A UI that draws a backend tool's card hands no tool; an id that is no id reads no file.
     assert not ui.hands_frontend_tools("trial-balance")
@@ -127,7 +133,15 @@ def test_the_agent_names_the_set_and_the_ui_together_and_is_told_when_to_use_the
     agent = raw("agents", agent_id)
     assert f"{ui_id}:0.0.1" in agent["frontend_tools"]
     # Placed in the chat's right panel: drawn there, a line per call in the conversation.
-    assert {"plugin": ui_id, "placement": "right"} in agent["ui"]
+    expected = {"plugin": ui_id, "placement": "right"}
+    if ui_id in ("page-deck", "page-excalidraw", "page-mermaid", "page-react-flow"):
+        expected["tab"] = {
+            "page-deck": "Deck",
+            "page-excalidraw": "Excalidraw",
+            "page-mermaid": "Mermaid",
+            "page-react-flow": "React Flow",
+        }[ui_id]
+    assert expected in agent["ui"]
     prompt = " ".join(agent["system_prompt"].split())
     first = tools[0]
     assert first in prompt, f"{agent_id} is not told {first}"
@@ -152,10 +166,18 @@ def test_the_public_demo_has_it_and_builds_from_its_example_only(ui_id):
     agent_id, demo_id, tools = PAGE_UIS[ui_id]
     demo = raw("apps", demo_id)
     assert demo["agent"].split(":")[0] == agent_id
-    assert {"plugin": ui_id, "placement": "right"} in demo["ui"]
+    expected = {"plugin": ui_id, "placement": "right"}
+    if ui_id in ("page-deck", "page-excalidraw", "page-mermaid", "page-react-flow"):
+        expected["tab"] = {
+            "page-deck": "Deck",
+            "page-excalidraw": "Excalidraw",
+            "page-mermaid": "Mermaid",
+            "page-react-flow": "React Flow",
+        }[ui_id]
+    assert expected in demo["ui"]
     said = " ".join(demo["instructions"].split())
     for tool in tools:
-        if tool != "deck_set_title":
+        if tool != "deckSetTitle":
             assert tool in said, f"{demo_id} does not name {tool}"
     assert "they run in the page" in said
     if demo_id == "demo-accountant":
@@ -169,7 +191,7 @@ def test_the_public_demo_has_it_and_builds_from_its_example_only(ui_id):
 def test_the_accountant_reads_before_it_writes_over_the_persons_cells():
     for spec in (raw("agents", "worker-accountant")["system_prompt"], raw("apps", "demo-accountant")["instructions"]):
         said = " ".join(spec.split())
-        assert "sheet_read_range before" in said
+        assert "sheetReadRange before" in said
         assert "=SUM(" in said
 
 
@@ -177,21 +199,42 @@ def test_the_marketer_lays_a_deck_out_in_one_or_two_calls():
     # One call a slide took a run a slide, and a message takes ten runs of page tools at most.
     agent = " ".join(raw("agents", "worker-marketer")["system_prompt"].split())
     demo = " ".join(raw("apps", "demo-marketer")["instructions"].split())
-    assert "in one or two deck_add_slides calls" in agent
-    assert "in one deck_add_slides call" in demo
+    assert "in one or two deckAddSlides calls" in agent
+    assert "in one deckAddSlides call" in demo
     for said in (agent, demo):
         assert "never a call a slide" in said
-        assert "eep deck_add_slide for a single slide" in said
+        assert "eep deckAddSlide for a single slide" in said
+
+
+def test_the_analysts_suggestions_name_the_surface_and_the_deliverable():
+    functional = raw("agents", "worker-functional-analyst")
+    functional_suggestions = " ".join(item["text"] for item in functional["suggestions"])
+    for surface in ("Mermaid", "React Flow", "Excalidraw"):
+        assert surface in functional_suggestions
+    assert "payment refusal" in functional_suggestions
+    assert "Browser, API, Queue, Worker, and Database" in functional_suggestions
+    assert "frontend, backend, data stores" in functional_suggestions
+
+    data = raw("agents", "worker-data-analyst")
+    data_suggestions = " ".join(item["text"] for item in data["suggestions"])
+    assert "complete exploratory Jupyter notebook" in data_suggestions
+    assert "title, data overview, quality checks" in data_suggestions
+    assert "spreadsheet profile" in data_suggestions
+    assert "page-sheet:0.0.1" in data["frontend_tools"]
+    assert "notebook-surfaces:0.0.1" in data["includes"]
+    prompt = " ".join(data["system_prompt"].split())
+    assert "create a complete Jupyter React notebook" in prompt
+    assert "Markdown title and purpose" in prompt
 
 
 #: Every agent and demo that builds a sheet, with the title bar's tool it sets beside it.
 SHEET_BUILDERS = {
-    ("agents", "worker-accountant"): "set_books_header",
-    ("apps", "demo-accountant"): "set_books_header",
-    ("agents", "worker-data-analyst"): "set_notebook_header",
-    ("apps", "demo-data-analyst"): "set_notebook_header",
-    ("agents", "worker-steward-aws"): "set_aws_header",
-    ("apps", "demo-aws-steward"): "set_aws_header",
+    ("agents", "worker-accountant"): "setBooksHeader",
+    ("apps", "demo-accountant"): "setBooksHeader",
+    ("agents", "worker-data-analyst"): "notebookSetHeader",
+    ("apps", "demo-data-analyst"): "notebookSetHeader",
+    ("agents", "worker-steward-aws"): "setAwsHeader",
+    ("apps", "demo-aws-steward"): "setAwsHeader",
 }
 
 
@@ -217,6 +260,6 @@ def test_a_sheet_is_built_a_step_a_response(where):
     header = SHEET_BUILDERS[where]
     assert "Build the sheet in as few responses as you can" in said, name
     assert "making all the calls of a step together in one response" in said, name
-    assert "sheet_create and sheet_write_range in one response" in said, name
-    assert f"then sheet_format_range, open_side_panel if the panel is closed, and {header} in the next" in said, name
+    assert "sheetCreate and sheetWriteRange in one response" in said, name
+    assert f"then sheetFormatRange, sidePanelOpen if the panel is closed, and {header} in the next" in said, name
     assert "Keep single calls for later edits" in said, name

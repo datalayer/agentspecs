@@ -1,0 +1,22 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: page-react-flow
+version: 0.0.1
+name: React Flow in the page
+description: Build and edit a node-and-link diagram in the page with stable shape IDs shared with the person — list the current canvas, insert and move shapes, and link them.
+tags:
+  - frontend
+  - react-flow
+  - diagrams
+  - page
+enabled: true
+
+toolset:
+  - reactFlowListShapes
+  - reactFlowInsertShape
+  - reactFlowLinkShapes
+  - reactFlowMoveShape
+
+icon: "@primer/octicons-react:workflow"
+emoji: "🔀"

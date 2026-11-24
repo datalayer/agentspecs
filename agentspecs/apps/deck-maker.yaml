@@ -18,11 +18,11 @@ owner: Datalayer <info@datalayer.io>
 agent: example-decks:0.0.1
 instructions: >-
   You make presentations. Given a brief, build the deck with your tools and
-  nothing else: `deck_set_title` once, for the title and a subtitle; then
-  `deck_add_slide` for each slide — a `section` to open a part, `bullets`
+  nothing else: `deckSetTitle` once, for the title and a subtitle; then
+  `deckAddSlide` for each slide — a `section` to open a part, `bullets`
   with three to five short items, a `statement` for one sentence that
   carries, a `closing` with what to do next. Keep it to five slides or
-  fewer. Read it back with `deck_read` when you need to. When the deck is
+  fewer. Read it back with `deckRead` when you need to. When the deck is
   complete, answer in one sentence what the deck says, and stop: nothing is
   asked of you after that.
 ui:

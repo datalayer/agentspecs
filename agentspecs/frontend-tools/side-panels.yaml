@@ -5,8 +5,10 @@
 # "the agent can open, close and fill them through frontend tools").
 #
 # The tools run in the page: they open and close the left or the right panel
-# of the chat, and nothing else. What fills a panel is the UI an agent places
-# there and its own tools (page-deck, page-sheet, a header UI); a panel with
+# of the chat, and nothing else. An open call may name the visible tab or its
+# stable component id, so the agent can put the relevant surface in front.
+# What fills a panel is the UI an agent places there and its own tools
+# (page-deck, page-sheet, a header UI); a panel with
 # nothing placed in it is not opened, and the agent is told so. Their
 # handlers come from agent-runtimes' `side-panels` UI plugin
 # (src/apps/plugins/side-panels), never from the spec. An agent that names
@@ -15,7 +17,7 @@
 id: side-panels
 version: 0.0.1
 name: Side panels
-description: Open and close the chat's left and right panels, where the UI placed there shows — run in the page, changing nothing else.
+description: Open and close the chat's left and right panels, selecting a named component tab when several UIs are placed there — run in the page, changing nothing else.
 tags:
   - frontend
   - page
@@ -23,8 +25,8 @@ tags:
 enabled: true
 
 toolset:
-  - open_side_panel
-  - close_side_panel
+  - sidePanelOpen
+  - sidePanelClose
 
 icon: "@primer/octicons-react:sidebar-expand"
 emoji: "🗂️"

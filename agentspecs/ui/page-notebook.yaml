@@ -1,0 +1,31 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: page-notebook
+version: 0.0.1
+name: Notebook in the page
+description: >-
+  A live Jupyter notebook the agent reads, writes and runs in a named
+  side-panel tab.
+emoji: "📓"
+octicon: rows
+plugin: "@datalayer/agent-plugin-page-notebook"
+folder: page-notebook
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/page-notebook"
+  export: PageNotebookPlugin
+  kind: plugin
+contributions:
+  slots: []
+  points:
+    - agent.chat.extras
+    - reactor.ui.renderer
+    - reactor.ui.toolBinding
+  commands: []
+contribution_points: []
+renderers: []
+placements:
+  - message
+  - right
+  - left

@@ -18,7 +18,7 @@ description: >-
   the total is made.
 owner: Datalayer <info@datalayer.io>
 
-agent: worker-data-analyst:0.0.1
+agent: worker-data-analyst:0.0.2
 instructions: >-
   Before you write a word, search the price list with search_documents, for
   every request, even one you refuse. Then compute the quote in code from the

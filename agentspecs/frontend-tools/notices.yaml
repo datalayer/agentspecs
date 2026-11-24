@@ -3,10 +3,10 @@
 
 # Frontend tool set: notices (the user, 18 November 2026: "the N/E/S/W
 # sliding panels are only for notices ... triggered by the agent through one
-# frontend tool (e.g. `show_notice` with tone, title, text, edge, optional
+# frontend tool (e.g. `noticeShow` with tone, title, text, edge, optional
 # duration). They hold no controls or plugins").
 #
-# `show_notice` runs in the page: a notice — info, success, warning or error,
+# `noticeShow` runs in the page: a notice — info, success, warning or error,
 # a title and a line — slides in from an edge of the chat (north, east,
 # south, west), inside its bounds, says it comes from the agent, and goes
 # after its seconds or when closed. One per edge. Words only, nothing kept.
@@ -25,7 +25,7 @@ tags:
 enabled: true
 
 toolset:
-  - show_notice
+  - noticeShow
 
 icon: "@primer/octicons-react:bell"
 emoji: "🔔"

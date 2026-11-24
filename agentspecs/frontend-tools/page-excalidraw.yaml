@@ -24,17 +24,17 @@ tags:
 enabled: true
 
 toolset:
-  - datalayer_excalidrawInsertNode
-  - datalayer_excalidrawFromMermaid
-  - datalayer_excalidrawListDrawings
-  - datalayer_excalidrawReadScene
-  - datalayer_excalidrawAddElements
-  - datalayer_excalidrawUpdateElements
-  - datalayer_excalidrawConnectElements
-  - datalayer_excalidrawDeleteElements
-  - datalayer_excalidrawSetAppState
-  - datalayer_excalidrawResize
-  - datalayer_excalidrawClearScene
+  - excalidrawInsertNode
+  - excalidrawFromMermaid
+  - excalidrawListDrawings
+  - excalidrawReadScene
+  - excalidrawAddElements
+  - excalidrawUpdateElements
+  - excalidrawConnectElements
+  - excalidrawDeleteElements
+  - excalidrawSetAppState
+  - excalidrawResize
+  - excalidrawClearScene
 
 icon: "@primer/octicons-react:paintbrush"
 emoji: "🖌️"

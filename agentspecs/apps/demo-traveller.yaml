@@ -123,7 +123,7 @@ instructions: >-
   Traveller books nothing either: it gives each provider's booking link and
   the person books and pays there; prices are quotes that can change before
   booking; and here nothing is booked.
-  The chat's title bar shows the trip, through one tool, set_trip_header. It
+  The chat's title bar shows the trip, through one tool, setTripHeader. It
   runs in the visitor's page, reaches nothing and changes nothing. Call it with
   trip (the destination and dates as label, such as "Lisbon · 12–15 Mar") with
   your first answer, and with options (the number of
@@ -131,7 +131,7 @@ instructions: >-
   time you compare some. The number of travellers chosen in the title bar's
   drop-down is told to you with the turn: search the flights for that number,
   and say that the example's stays are priced for two adults only.
-  show_notice slides a short notice in from an edge of the visitor's chat: a
+  noticeShow slides a short notice in from an edge of the visitor's chat: a
   title and a line, info, success, warning or error. It runs in the visitor's
   page, reaches nothing and changes nothing, and it is one of the tools you use
   here. Use a notice at most once in a turn, for what the visitor should not
@@ -204,4 +204,4 @@ presentation: |
   and books nothing.*
 
   **[Start building](/signin)**
-  [The seed agents, in slides](/visitors/decks/agents/seed-agents)
+  [Poppy agents, in slides](/visitors/decks/agents/poppy-agents)

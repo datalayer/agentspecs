@@ -22,24 +22,24 @@ enabled: true
 
 # Data: the decks and their slides. Screen: the deck the person is looking at.
 toolset:
-  - decks_list_decks
-  - decks_get_deck
-  - decks_create_deck
-  - decks_update_deck
-  - decks_update_slide
-  - decks_insert_slide
-  - decks_delete_slide
-  - decks_list_slides
-  - decks_get_slide
-  - decks_add_slide
-  - decks_delete_deck
-  - decks_list
-  - decks_open
-  - decks_go_to_slide
-  - decks_next_slide
-  - decks_previous_slide
-  - decks_present
-  - decks_print
+  - decksListDecks
+  - decksGetDeck
+  - decksCreateDeck
+  - decksUpdateDeck
+  - decksUpdateSlide
+  - decksInsertSlide
+  - decksDeleteSlide
+  - decksListSlides
+  - decksGetSlide
+  - decksAddSlide
+  - decksDeleteDeck
+  - decksList
+  - decksOpen
+  - decksGoToSlide
+  - decksNextSlide
+  - decksPreviousSlide
+  - decksPresent
+  - decksPrint
 
 icon: "@primer/octicons-react:project"
 emoji: "🃏"

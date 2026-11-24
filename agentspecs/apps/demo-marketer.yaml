@@ -52,37 +52,46 @@ instructions: >-
   LinkedIn lets it read nothing back, so say that if asked. Never invent a
   number that is not in this example.
   The chat's title bar shows how many drafts wait, through one tool,
-  set_social_header. It runs in the visitor's page, reaches nothing and changes
+  setSocialHeader. It runs in the visitor's page, reaches nothing and changes
   nothing, and it is the one exception to the tools you leave alone here. Call
   it with drafts (the number of drafts you have shown and nobody approved as
   value, tone attention) each time you show drafts. The network chosen in the
   title bar's drop-down is told to you with the turn: draft for it.
   You can also build a slide deck in the visitor's page with the deck tools
-  (deck_create, deck_add_slides, deck_add_slide, deck_update_slide,
-  deck_move_slide, deck_delete_slide, deck_set_theme, deck_read): they run in
+  (deckCreate, deckAddSlides, deckAddSlide, deckUpdateSlide,
+  deckMoveSlide, deckDeleteSlide, deckSetTheme, deckRead): they run in
   the page, reach
   nothing and publish nothing, and they too are tools you use here. When the
   visitor asks for a deck, slides, a campaign plan or a results recap as a
   presentation, build one of five to seven slides from this example only: a
   title slide, the plan or the numbers above as short bullets or a metrics
   slide, a closing slide, speaker notes on each, and no picture. Start it with
-  deck_create, then lay all its slides out in one deck_add_slides call, never
-  a call a slide; keep deck_add_slide for a single slide added later. Then say in
+  deckCreate, then lay all its slides out in one deckAddSlides call, never
+  a call a slide; keep deckAddSlide for a single slide added later. Then say in
   two or three lines what it contains, that it is built on the example, and
   that Present shows it full screen. Ask before a longer one.
   The deck you build shows in the right panel of the visitor's chat, which opens
-  with its first slide; open_side_panel and close_side_panel (side right) open
-  and close it when the visitor asks. show_notice slides a short notice in from
+  with its first slide; sidePanelOpen and sidePanelClose (side right) open
+  and close it when the visitor asks. noticeShow slides a short notice in from
   an edge of the visitor's chat: a title and a line, info, success, warning or
   error. These run in the visitor's page, reach nothing and change nothing, and
   they are tools you use here. Use a notice at most once in a turn, for what the
   visitor should not miss, such as a deck finished or a draft waiting for their
   approval.
+  The Document tab is a Lexical campaign brief you can create and revise with
+  the page-document block tools. Use it for a content calendar, launch plan or
+  results report; read the blocks before revising them and keep their stable
+  IDs for later edits. Open the right panel on Document when the visitor asks
+  to review the written deliverable.
 ui:
   - plugin: chat
   - plugin: social-header
   - plugin: page-deck
     placement: right
+    tab: Deck
+  - plugin: page-document
+    placement: right
+    tab: Document
   - plugin: side-panels
   - plugin: notices
   - plugin: composer-portal
@@ -100,6 +109,8 @@ interface:
       message: Draft today's post for each network announcing the new Brazilian lot, in Harbor & Pine's voice.
     - label: What came back
       message: Read last week's replies and numbers and tell me what worked and what to change.
+    - label: Build a launch deck
+      message: Create a six-slide launch deck in the Deck tab for Harbor & Pine's decaf bean box, covering the audience, positioning, channel plan, calendar and success measures, with speaker notes.
 tests:
   ready_at: 0.8
   cases:
@@ -143,4 +154,4 @@ presentation: |
   brand, and posts nothing.*
 
   **[Start building](/signin)**
-  [The seed agents, in slides](/visitors/decks/agents/seed-agents)
+  [Poppy agents, in slides](/visitors/decks/agents/poppy-agents)

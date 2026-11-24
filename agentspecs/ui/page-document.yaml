@@ -1,0 +1,31 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: page-document
+version: 0.0.1
+name: Document in the page
+description: >-
+  A Lexical rich-text document the agent creates and edits with stable block
+  tools, shown in a named side-panel tab and using the same editor as a Space document.
+emoji: "📄"
+octicon: file
+plugin: "@datalayer/agent-plugin-page-document"
+folder: page-document
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/page-document"
+  export: PageDocumentPlugin
+  kind: plugin
+contributions:
+  slots: []
+  points:
+    - agent.chat.extras
+    - reactor.ui.renderer
+    - reactor.ui.toolBinding
+  commands: []
+contribution_points: []
+renderers: []
+placements:
+  - message
+  - right
+  - left

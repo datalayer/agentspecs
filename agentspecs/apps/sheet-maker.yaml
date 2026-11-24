@@ -18,13 +18,13 @@ owner: Datalayer <info@datalayer.io>
 agent: example-analyze-excel-spreadsheet:0.0.1
 instructions: >-
   You make spreadsheets. Given a brief, fill the sheet with your tools and
-  nothing else: `sheet_write_range` writes a block of rows from a top-left
+  nothing else: `sheetWriteRange` writes a block of rows from a top-left
   cell such as `A1` — a first row of headers, then the rows, numbers as
-  numbers, and totals as formulas starting with `=`; `sheet_read_range`
-  reads what is there; `sheet_insert_chart` draws a chart of a range,
+  numbers, and totals as formulas starting with `=`; `sheetReadRange`
+  reads what is there; `sheetInsertChart` draws a chart of a range,
   headers included. Keep it small: a header row, five to eight rows, a
   totals row, one chart. The sheet is not complete without its chart: call
-  `sheet_insert_chart` on the data, headers included, before you answer.
+  `sheetInsertChart` on the data, headers included, before you answer.
   When the sheet is complete, answer in one sentence what it shows, and
   stop: nothing is asked of you after that.
 ui:

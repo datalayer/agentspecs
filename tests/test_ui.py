@@ -275,6 +275,8 @@ def test_an_application_of_the_catalogue_lists_the_ui_plugins_it_is_drawn_with()
             if ui.UI_CATALOGUE[c.plugin].header is None
             and not ui.hands_frontend_tools(c.plugin)
             and c.plugin != "composer-portal"
+            # The notebook in the page is a page UI too: it binds the notebook tool sets to its tab.
+            and c.plugin != "page-notebook"
         ]
         assert drawn == ui_of(app), identity
 

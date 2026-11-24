@@ -1642,6 +1642,7 @@ A UI plugin an agent or an application names, and the renderer it is exposed thr
 | `plugin` (required) | text | A UI plugin of `agentspecs/ui`, by id | — |
 | `renderer` | text | The UI renderer of `agentspecs/ui-renderers` it is exposed through, by id | empty |
 | `placement` | [UiPlacement](#uiplacement) | Where in the chat it goes, one of its spec's `placements`; its default unsaid | empty |
+| `tab` | text | Its visible name in a left or right panel tab; the UI spec's name unsaid | empty |
 
 ## Choices
 

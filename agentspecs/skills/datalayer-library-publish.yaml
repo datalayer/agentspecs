@@ -1,0 +1,20 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: datalayer-library-publish
+version: 0.0.1
+name: Publish to the Library
+description: >-
+  Publish one item the person owns in Datalayer's public Library, only after
+  explicit confirmation, without exposing the runtime owner's credential.
+module: datalayer_skills.skills.library_publish
+dependencies:
+  - datalayer-skills
+enabled: true
+install:
+  type: python
+  command: "pip install datalayer-skills"
+  note: "Standard library only; the script publishes through agent-runtimes on the pod loopback."
+tags: [datalayer, library, publish, artifact]
+icon: "@primer/octicons-react:globe"
+emoji: "🌍"
