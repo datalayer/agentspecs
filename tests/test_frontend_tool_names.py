@@ -38,7 +38,14 @@ SPECIAL = {
     "search_public_library": "publicLibrarySearch",
     "list_public_library": "publicLibraryList",
     "publish_library_item": "publicLibraryPublishItem",
+    # The kernel tools, handed under their editor's domain (agent-runtimes' notebook and Lexical adapters).
+    "executeCodeInNotebook": "notebookExecuteCodeInNotebook",
+    "executeCodeInDocument": "documentExecuteCodeInDocument",
 }
+
+#: The domains the notebook and Lexical adapters hand their tools under: a bare camel-case name
+#: whose domain-prefixed form is a tool is that tool's old name.
+DOMAINS = ("notebook", "document")
 
 #: The notebook's tools were camel case already, without their domain.
 NOTEBOOK_OLD = {"readCell", "readAllCells", "insertCell", "updateCell", "runCell", "executeCode", "proposeCellUpdate"}
@@ -52,8 +59,10 @@ def _camel(name: str) -> str:
 #: export of its UI plugins' tools, held to it below when agent-runtimes is beside this checkout.
 INVENTORY_PATH = Path(__file__).resolve().parent / "fixtures" / "wildcard_frontend_tools.json"
 INVENTORY = json.loads(INVENTORY_PATH.read_text(encoding="utf-8"))
-#: agent-runtimes' export, where agentspecs is its nested checkout.
-EXPORT_PATH = ROOT.parents[1] / "src" / "specs" / "uiFrontendTools.generated.ts"
+#: agent-runtimes' export: agentspecs nested in its checkout, or beside it in one workspace.
+_EXPORT = Path("src") / "specs" / "uiFrontendTools.generated.ts"
+EXPORT_CANDIDATES = (ROOT.parents[1] / _EXPORT, ROOT.parents[1] / "agent-runtimes" / _EXPORT)
+EXPORT_PATH = next((path for path in EXPORT_CANDIDATES if path.is_file()), EXPORT_CANDIDATES[0])
 
 
 def _frontend_tools() -> set[str]:
@@ -81,10 +90,10 @@ def stale_names(text: str) -> list[str]:
     for token in TOKEN.findall(text):
         if token in TOOLS:
             continue
-        renamed = SPECIAL.get(token) or (_camel(token) if "_" in token else None)
-        if token in NOTEBOOK_OLD:
-            renamed = "notebook" + token[0].upper() + token[1:]
-        if renamed in TOOLS:
+        renamed = {SPECIAL.get(token) or (_camel(token) if "_" in token else None)}
+        if token in NOTEBOOK_OLD or "_" not in token:
+            renamed |= {domain + token[0].upper() + token[1:] for domain in DOMAINS}
+        if renamed & TOOLS:
             found.append(token)
     return found
 
@@ -112,6 +121,18 @@ def test_it_finds_an_old_name():
         "document_insert_block",
     ]
     assert stale_names("documentReadAllBlocks, then documentInsertBlock") == []
+    # The kernel tools take their editor's domain.
+    assert stale_names("run it with executeCodeInNotebook or executeCodeInDocument") == [
+        "executeCodeInNotebook",
+        "executeCodeInDocument",
+    ]
+    assert stale_names("run it with notebookExecuteCodeInNotebook or documentExecuteCodeInDocument") == []
+
+
+def test_the_export_is_looked_for_nested_and_beside():
+    assert EXPORT_CANDIDATES[0].parts[-3:] == ("src", "specs", "uiFrontendTools.generated.ts")
+    assert EXPORT_CANDIDATES[0].parent.parent.parent == ROOT.parents[1]
+    assert EXPORT_CANDIDATES[1].parent.parent.parent == ROOT.parents[1] / "agent-runtimes"
 
 
 def test_every_set_of_all_its_tools_has_an_inventory():
