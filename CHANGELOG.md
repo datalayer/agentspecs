@@ -11,6 +11,7 @@ Each version names the boxes it carries, as its commits say them, and links the 
 ## 0.1.19
 
 - **The kernel tools under their editor's domain** (review of 0.1.18): the Data Analyst, Agent Shell and the two document examples say `notebookExecuteCodeInNotebook` and `documentExecuteCodeInDocument`, the names the notebook and Lexical adapters hand the model, no longer the bare `executeCodeInNotebook` and `executeCodeInDocument`. The frontend tool name check refuses a bare camel-case name whose notebook- or document-prefixed form is a tool, reads the tools of the sets declared `toolset: all` from a vendored inventory, and holds that inventory to agent-runtimes' export whether agentspecs is nested in agent-runtimes or beside it. Tests: test_frontend_tool_names, the whole suite.
+- **The page notebook and document go in a side panel only** (`page-notebook`, `page-document`: placements `right` and `left`, right by default): their message placement drew a card with no editor and no kernel.
 
 ## 0.1.18
 

@@ -26,6 +26,5 @@ contributions:
 contribution_points: []
 renderers: []
 placements:
-  - message
   - right
   - left
