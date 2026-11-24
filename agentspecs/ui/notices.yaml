@@ -4,7 +4,7 @@
 # A page UI (the user, 18 November 2026: "the N/E/S/W sliding panels are only
 # for notices: info, success, warning, error and the like. They are short,
 # dismissible, triggered by the agent through one frontend tool"): it hands
-# the chat's agent `show_notice` (agentspecs/frontend-tools/notices.yaml),
+# the chat's agent `noticeShow` (agentspecs/frontend-tools/notices.yaml),
 # run in the page, slides the notice in from an edge of the view, inside its
 # bounds, and draws each call as a line in the conversation. Words only.
 

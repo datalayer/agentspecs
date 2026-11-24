@@ -5,9 +5,9 @@
 # (6 November 2026).
 #
 # The arena is drawn in the page by Datalayer's Battles and bound to its
-# state there: `arena_read` says where the ball and the paddles are and the
-# score, `arena_pong_move` moves this contestant's paddle, `arena_pong_serve`
-# serves when the serve is this contestant's, and `arena_watch` streams —
+# state there: `arenaRead` says where the ball and the paddles are and the
+# score, `arenaPongMove` moves this contestant's paddle, `arenaPongServe`
+# serves when the serve is this contestant's, and `arenaWatch` streams —
 # called once, it keeps telling the contestant where the ball is, as turns
 # it did not ask for, until the game ends. The handlers come from the page,
 # never from the spec.
