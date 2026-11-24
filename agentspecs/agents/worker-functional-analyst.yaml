@@ -76,7 +76,7 @@ backend_tools: []
 
 environment_name: ai-agents-env
 icon: workflow
-emoji: "📐"
+emoji: "🔀"
 color: purple
 
 goal: >-

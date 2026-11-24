@@ -68,7 +68,7 @@ execution_mode: supervisor
 # deck or compaction has not happened yet.
 supervisor:
   name: Jupyter Analyst
-  ref: worker-data-analyst:0.0.1
+  ref: worker-data-analyst:0.0.2
   model: "bedrock:us.anthropic.claude-sonnet-4-6"
   goal: >-
     Keep the work in the notebook. Answer analysis requests directly; send a
@@ -163,7 +163,7 @@ validation:
 
 agents:
   - id: analyst
-    ref: worker-data-analyst:0.0.1
+    ref: worker-data-analyst:0.0.2
     name: Jupyter Analyst
     role: initiator
     goal: >-

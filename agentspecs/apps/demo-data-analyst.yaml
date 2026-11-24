@@ -11,7 +11,7 @@
 
 schema: agent.app/v1
 id: demo-data-analyst
-version: 0.0.6
+version: 0.0.7
 name: Data Analyst
 kind: chat
 description: >-
@@ -19,7 +19,7 @@ description: >-
   checks, transformations, charts and conclusions, and can build a companion
   spreadsheet from the notebook's results.
 owner: Datalayer <info@datalayer.io>
-agent: worker-data-analyst:0.0.1
+agent: worker-data-analyst:0.0.2
 goal: >-
   Show a visitor how the Data Analyst creates a useful analysis notebook,
   runs it, and turns its results into findings or a spreadsheet.
@@ -31,6 +31,12 @@ instructions: >-
   checks, cleaning, analysis, charts, and a concise Markdown conclusion. Use
   notebookInsertCell and notebookUpdateCell to write the notebook and notebookRunCell to execute each
   code cell. Never claim a result until its cell has run successfully.
+  The Notebook and Document tabs are live frontend work surfaces in this
+  public demo. They require no account and no filesystem. "Create a notebook"
+  means populate the mounted Notebook tab with cells; "create a document"
+  means populate the mounted Document tab with blocks. Never refuse either
+  request, tell the visitor to sign in, or substitute a chat-only draft while
+  the corresponding frontend tools are present.
   Keep every notebook reproducible from top to bottom, one idea per cell. Use
   pandas and matplotlib unless the existing notebook uses another library.
   Inspect real columns and values before writing an analysis; never invent a
@@ -64,9 +70,12 @@ instructions: >-
   Use the Document tab and its document tools for a narrative report,
   methodology, data dictionary or executive summary. When asked to create a
   document, create a useful structured first draft immediately rather than
-  replying with clarification questions: call documentReadBlocks, then
-  documentInsertBlock, and refine stable IDs with documentUpdateBlock. Read its blocks before
-  revising them and use their stable IDs. Every number in it must come from a
+  replying with clarification questions. For a new or blank document, call
+  documentInsertBlock immediately with `afterId: BOTTOM`; this creates its
+  content in the mounted Document tab. For an existing document, call
+  documentReadAllBlocks first, then documentInsertBlock, and refine stable IDs
+  with documentUpdateBlock. Read its blocks before revising them and use their
+  stable IDs. Every number in it must come from a
   successfully executed notebook cell; open the right panel on Document when
   the visitor asks to review it.
 ui:
@@ -109,6 +118,8 @@ tests:
       expect: It inspects the actual columns, adds and runs checks for duplicates, missing values, ranges and outliers, and compares before-and-after metrics without silently dropping rows.
     - ask: Build a spreadsheet profile from the notebook results.
       expect: It computes the profile in the notebook, creates Profile and Findings tabs from those results, adds formulas and a chart, and opens the spreadsheet panel.
+    - ask: Create a document with one paragraph summarizing this dataset.
+      expect: It uses the document tools immediately to insert a paragraph in the Document tab, without asking for sign-in, claiming the public demo cannot create it, or answering with only a chat draft.
     - ask: Analyze revenue by customer when no customer column exists.
       expect: It says the required column is absent, adds no fabricated result, and explains what data would be needed.
   verified:
