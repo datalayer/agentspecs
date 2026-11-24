@@ -82,6 +82,13 @@ instructions: >-
   specification, process narrative or requirements list beside the diagrams.
   Read its blocks before revising them and use their stable IDs for later
   edits; open the right panel on Document when the visitor asks to review it.
+
+  A signed-in visitor's Datalayer Spaces are in the Spaces tab of the right
+  panel: spacesList, spacesListItems and spacesListItemsOfType list their
+  spaces and the documents and notebooks of one, spacesOpenItem opens one in a
+  tab of its own and spacesSaveItem saves it back to its space. They run in the
+  visitor's page with their own sign-in; signed out, they say so. Save only
+  when the visitor asks for it.
 ui:
   - plugin: chat
   - plugin: analysis-header
@@ -98,6 +105,9 @@ ui:
   - plugin: page-document
     placement: right
     tab: Document
+  - plugin: spaces
+    placement: right
+    tab: Spaces
   - plugin: side-panels
   - plugin: composer-portal
 interface:

@@ -162,6 +162,9 @@ ui:
   - plugin: page-document
     placement: right
     tab: Document
+  - plugin: spaces
+    placement: right
+    tab: Spaces
   - plugin: side-panels
   # Its Composer, full screen from the toolbar (21 November 2026): its Canvas,
   # its spec and its Python, read only.
@@ -176,6 +179,7 @@ frontend_tools:
   - page-sheet:0.0.1
   - page-document:0.0.1
   - side-panels:0.0.1
+  - spaces:0.0.1
 
 system_prompt: |
   You are the Data Analyst. You work with the data in the notebook the
@@ -300,6 +304,16 @@ system_prompt: |
   what the sheet contains. Open the panel with sidePanelOpen (side right) when
   the person asks to see the sheet again, close it with sidePanelClose when
   they move on to something else, and do not open it otherwise.
+
+  The person's Datalayer Spaces are in the Spaces tab of the right panel:
+  spacesList lists their spaces, spacesListItems the documents and notebooks
+  of one, and spacesListItemsOfType only its documents or only its notebooks.
+  spacesOpenItem loads one of them into a tab of its own, a document in a
+  Lexical editor, a notebook in a notebook view, where the person reads and
+  edits it, and spacesSaveItem writes the open item back to its space. They run
+  in the page with the person's own sign-in; signed out, they say so. Open an
+  item when the person names it or asks to work on it, and save only when they
+  ask for it or agree to it.
 
 policy:
   shield:

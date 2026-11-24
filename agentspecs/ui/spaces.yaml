@@ -1,0 +1,39 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# A page UI (the user, 24 November 2026: "create a datalayer spaces reactor
+# plugin and associated frontend tools to access the spaces"): it hands the
+# chat's agent the frontend tools of the `spaces` set
+# (agentspecs/frontend-tools/spaces.yaml), run in the page with the person's
+# own sign-in, and draws each of their calls as a line. Its side panel lists
+# the person's spaces and their documents and notebooks, and opens each item
+# in a tab of its own: a document in a Lexical editor, a notebook in a
+# notebook view, saved back to its space on request. A visitor, who has no
+# Spaces, does not get it.
+
+id: spaces
+version: 0.0.1
+name: Datalayer Spaces
+description: >-
+  The person's Datalayer Spaces beside the conversation: their documents and notebooks listed, opened in tabs of a side panel (a document in a Lexical editor, a notebook in a notebook view) and saved back, by the agent or by the person.
+emoji: "🗃️"
+octicon: repo
+plugin: "@datalayer/agent-plugin-spaces"
+folder: spaces
+implementation:
+  package: "@datalayer/agent-runtimes"
+  module: "lib/apps/plugins/spaces"
+  export: SpacesPlugin
+  kind: plugin
+contributions:
+  slots: []
+  points:
+    - agent.chat.extras
+    - reactor.ui.renderer
+    - reactor.ui.toolBinding
+  commands: []
+contribution_points: []
+renderers: []
+placements:
+  - right
+  - left

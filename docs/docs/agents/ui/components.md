@@ -74,6 +74,7 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `side-panels` (Side panels) | `@datalayer/agent-plugin-side-panels` | — | — | none of its own |
 | `social-accounts` (Linked social accounts) | `@datalayer/agent-plugin-social-accounts` | — | — | none of its own |
 | `social-header` (Social header) | `@datalayer/agent-plugin-social-header` | — | — | none of its own |
+| `spaces` (Datalayer Spaces) | `@datalayer/agent-plugin-spaces` | — | — | none of its own |
 | `spreadsheet` (Spreadsheet) | `@datalayer/agent-plugin-spreadsheet` | — | — | none of its own |
 | `spreadsheet-view` (Spreadsheet button) | `@datalayer/agent-plugin-spreadsheet-view` | — | — | none of its own |
 | `stripe-checkout` (Stripe checkout) | `@datalayer/agent-plugin-stripe-checkout` | `a2ui` | — | none of its own |

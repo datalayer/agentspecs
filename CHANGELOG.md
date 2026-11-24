@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.1.20
+
+- **The person's Datalayer Spaces beside the conversation**: the UI spec and frontend tool set `spaces` (*Datalayer Spaces*: `spacesList`, `spacesListItems`, `spacesListItemsOfType`, `spacesOpenItem`, `spacesSaveItem`), run in the page with the person's own sign-in. An item opens in a tab of its own in the Spaces side panel, a document in a Lexical editor, a notebook in a notebook view, and is saved back to its space; signed out, each tool answers in a sentence. The Data Analyst, the Functional Analyst, Terra and the Steward for AWS carry it in a Spaces tab of the right panel, with the Document tab (`page-document`, new for Terra and the Steward; Terra gets `side-panels` with them), their demos too, and are told when to open and save. The frontend tools and UI catalogue pages follow. Tests: test_ui_side_panels, test_ui_page_tools, the whole suite.
+
 ## 0.1.19
 
 - **The kernel tools under their editor's domain** (review of 0.1.18): the Data Analyst, Agent Shell and the two document examples say `notebookExecuteCodeInNotebook` and `documentExecuteCodeInDocument`, the names the notebook and Lexical adapters hand the model, no longer the bare `executeCodeInNotebook` and `executeCodeInDocument`. The frontend tool name check refuses a bare camel-case name whose notebook- or document-prefixed form is a tool, reads the tools of the sets declared `toolset: all` from a vendored inventory, and holds that inventory to agent-runtimes' export whether agentspecs is nested in agent-runtimes or beside it. Tests: test_frontend_tool_names, the whole suite.

@@ -62,6 +62,7 @@ emoji: "🧮"
 | `lexical-document` | 3 | Read and write the blocks of a Lexical document, run Jupyter cells in the page, and draw diagrams into the document with Excalidraw. |
 | `page-deck` | 8 | Build a slide deck in the conversation: create it, add, replace, move and delete slides with speaker notes and pictures, set its look, read it back. |
 | `page-sheet` | 8 | Fill a spreadsheet in the conversation: a sheet with named columns, rows and ranges, formulas, number and currency formats, a frozen header, tabs, a chart. |
+| `spaces` | 5 | List the person's Datalayer Spaces and their documents and notebooks, open an item in a tab of the Spaces side panel and save it back to its space. |
 
 The three notebook sets beside `jupyter-notebook` say how far an agent may go
 in a notebook: `jupyter-notebook-reproducer` names `jupyter-notebook-read`,
@@ -221,6 +222,44 @@ Their handlers are agent-runtimes' `side-panels` and `notices` UI plugins: an ag
 set under `frontend_tools` with its UI under `ui`. What a panel shows is the UI placed in it and
 its own tools; what is open is read from these calls, so a conversation opened again shows its
 panels as it left them. A notice is not kept. Both run for a visitor too.
+
+## The person's Spaces: `spaces`
+
+The person's Datalayer Spaces, beside the conversation (24 November 2026). The tools run in the
+page with the person's own sign-in, through agent-runtimes' Spacer client:
+
+| Tool | What it does |
+| --- | --- |
+| `spacesList()` | The spaces the person belongs to: uid, name, handle, variant, description. |
+| `spacesListItems({spaceUid})` | The documents and the notebooks of one space: uid, type, name, description. |
+| `spacesListItemsOfType({spaceUid, type})` | Only its documents (`type: document`) or only its notebooks (`type: notebook`). |
+| `spacesOpenItem({uid, type})` | Load an item and open it in a tab of its own in the Spaces side panel: a document in a Lexical editor, a notebook in a notebook view. Opening it again loads it again. |
+| `spacesSaveItem({uid?})` | Write the open item back to its space as its tab holds it, the person's edits included; the item whose tab is shown when `uid` is unsaid. |
+
+```yaml
+ui:
+  - plugin: page-document
+    placement: right
+    tab: Document
+  - plugin: spaces
+    placement: right
+    tab: Spaces
+  - plugin: side-panels
+frontend_tools:
+  - page-document:0.0.1
+  - spaces:0.0.1
+  - side-panels:0.0.1
+```
+
+The Spaces tab lists the spaces, and the documents and notebooks of the one chosen (all of them,
+the documents or the notebooks); a click opens an item in its own tab, as `spacesOpenItem` does.
+Each item's tab has a **Save** button and closes from its tab. An item's cells run on the page's
+kernel, the workspace's or Python in the browser, as the Document and Notebook tabs' do.
+
+Signed out, each tool answers in a sentence that the person must sign in, and so does a refusal
+from Spacer: nothing is thrown at the agent. A visitor to a public demo has no Spaces and is not
+given the UI. The Data Analyst, the Functional Analyst, Terra and the Steward for AWS carry it,
+with the Document tab (`page-document`), their demos too.
 
 ## Backend tools and frontend tools
 
