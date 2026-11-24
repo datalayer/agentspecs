@@ -55,9 +55,12 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `notices` (Notices) | `@datalayer/agent-plugin-notices` | — | — | none of its own |
 | `odoo-context` (Odoo company and period) | `@datalayer/agent-plugin-odoo-context` | — | — | none of its own |
 | `page-deck` (Deck in the page) | `@datalayer/agent-plugin-page-deck` | — | — | none of its own |
+| `page-document` (Document in the page) | `@datalayer/agent-plugin-page-document` | — | — | none of its own |
 | `page-excalidraw` (Excalidraw in the page) | `@datalayer/agent-plugin-page-excalidraw` | — | — | none of its own |
 | `page-layout` (Page layout) | `@datalayer/agent-plugin-page-layout` | — | — | none of its own |
 | `page-mermaid` (Mermaid in the page) | `@datalayer/agent-plugin-page-mermaid` | — | — | none of its own |
+| `page-notebook` (Notebook in the page) | `@datalayer/agent-plugin-page-notebook` | — | — | none of its own |
+| `page-react-flow` (React Flow in the page) | `@datalayer/agent-plugin-page-react-flow` | — | — | none of its own |
 | `page-sheet` (Sheet in the page) | `@datalayer/agent-plugin-page-sheet` | — | — | none of its own |
 | `pap-purchase` (Approve a purchase) | `@datalayer/agent-plugin-pap-purchase` | — | — | none of its own |
 | `pap-sign-in` (Sign in at a company) | `@datalayer/agent-plugin-pap-sign-in` | `mcp-ui` | — | none of its own |
@@ -65,6 +68,7 @@ Every UI plugin, and the visual components each renders, by the name a surface g
 | `product-cards` (Product cards) | `@datalayer/agent-plugin-product-cards` | — | — | none of its own |
 | `product-comparison` (Product comparison) | `@datalayer/agent-plugin-product-comparison` | `a2ui` | — | none of its own |
 | `prompt` (Floating composer) | `@datalayer/agent-plugin-prompt` | — | — | none of its own |
+| `public-library` (Public Library) | `@datalayer/agent-plugin-public-library` | `a2ui` | — | none of its own |
 | `shop-header` (Shopping header) | `@datalayer/agent-plugin-shop-header` | — | — | none of its own |
 | `shopping-basket` (Shopping basket) | `@datalayer/agent-plugin-shopping-basket` | `a2ui` | — | none of its own |
 | `side-panels` (Side panels) | `@datalayer/agent-plugin-side-panels` | — | — | none of its own |

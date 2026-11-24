@@ -36,6 +36,19 @@ HEADERS = {
 }
 
 
+#: The name the model is given for a header's tool (e9fb357, normalized frontend tools): the page
+#: hands ``set_<its id>`` in camel case, the notebook's under its domain. agent-runtimes'
+#: ``frontendToolName`` does the renaming.
+SAID_AS = {"set_notebook_header": "notebookSetHeader"}
+
+
+def _said_as(tool: str) -> str:
+    if tool in SAID_AS:
+        return SAID_AS[tool]
+    head, *rest = tool.split("_")
+    return head + "".join(word.capitalize() for word in rest)
+
+
 def _yaml(folder: str, name: str) -> dict:
     return yaml.safe_load((ROOT / folder / f"{name}.yaml").read_text())
 
@@ -78,7 +91,7 @@ def test_the_three_kinds_and_the_four_displays_are_all_shown_by_a_seed_agent():
 @pytest.mark.parametrize("agent_id", sorted(HEADERS))
 def test_each_seed_agent_and_its_demo_name_their_header_and_say_when_to_set_it(agent_id):
     demo_id, plugin = HEADERS[agent_id]
-    tool = ui.UI_CATALOGUE[plugin].header.tool
+    tool = _said_as(ui.UI_CATALOGUE[plugin].header.tool)
     agent, demo = _yaml("agents", agent_id), _yaml("apps", demo_id)
     assert {"plugin": plugin} in agent["ui"], agent_id
     assert {"plugin": plugin} in demo["ui"], demo_id

@@ -11,9 +11,9 @@ only for notices ... triggered by the agent through one frontend tool."
 
 - ``left`` and ``right`` are placements beside ``header``, ``toolbar``, ``footer``, ``banner`` and
   ``message``; ``panel``, which had no place in any chat, is gone.
-- ``side-panels`` is a page UI: its set, ``open_side_panel`` and ``close_side_panel``, opens and
+- ``side-panels`` is a page UI: its set, ``sidePanelOpen`` and ``sidePanelClose``, opens and
   closes them; what fills one is the UI placed there.
-- ``notices`` is a page UI: its one tool, ``show_notice``, slides a notice in over the view.
+- ``notices`` is a page UI: its one tool, ``noticeShow``, slides a notice in over the view.
 """
 
 from __future__ import annotations
@@ -44,7 +44,7 @@ PLACED = {
     "worker-marketer": ("page-deck", "page-document"),
     "worker-accountant": ("page-sheet",),
     # The user, 18 November 2026: the Data Analyst's dataset profile and chart, the Steward's findings by service.
-    "worker-data-analyst": ("page-sheet", "page-document"),
+    "worker-data-analyst": ("page-notebook", "page-sheet", "page-document"),
     "worker-steward-aws": ("page-sheet",),
     # The user, 19 November 2026: the Analyst's canvas and diagrams, one above the other.
     "worker-functional-analyst": (
@@ -97,7 +97,7 @@ def test_what_may_go_in_a_side_panel_says_so():
 
 @pytest.mark.parametrize(
     "ui_id,tools",
-    [("side-panels", ["open_side_panel", "close_side_panel"]), ("notices", ["show_notice"])],
+    [("side-panels", ["sidePanelOpen", "sidePanelClose"]), ("notices", ["noticeShow"])],
 )
 def test_the_side_panels_and_the_notices_are_page_uis(ui_id, tools):
     spec = ui.UI_CATALOGUE[ui_id]
@@ -137,7 +137,7 @@ def test_each_seed_agent_has_notices_and_its_placed_ui_its_side_panels(agent_id)
     assert "notices" in sets and "notices" in plugins
     assert {"plugin": "notices"} in demo["ui"]
     for words in (prompt, said):
-        assert "show_notice" in words and "at most once in a turn" in words
+        assert "noticeShow" in words and "at most once in a turn" in words
     placed = PLACED.get(agent_id)
     # The side panels, for those with something placed there: opened by its first call.
     assert ("side-panels" in sets) == bool(placed) == ("side-panels" in plugins)
@@ -147,6 +147,7 @@ def test_each_seed_agent_has_notices_and_its_placed_ui_its_side_panels(agent_id)
             expected["tab"] = {"page-deck": "Deck", "page-document": "Document"}[each]
         elif agent_id == "worker-data-analyst":
             expected["tab"] = {
+                "page-notebook": "Notebook",
                 "page-sheet": "Spreadsheet",
                 "page-document": "Document",
             }[each]
@@ -162,7 +163,7 @@ def test_each_seed_agent_has_notices_and_its_placed_ui_its_side_panels(agent_id)
     if placed:
         assert {"plugin": "side-panels"} in demo["ui"]
         for words in (prompt, said):
-            assert "open_side_panel" in words and "close_side_panel" in words
+            assert "sidePanelOpen" in words and "sidePanelClose" in words
             assert "right panel" in words
     assert ui.ui_choices_problems(agent["ui"], to_ship=False) == []
     assert ui.ui_choices_problems(demo["ui"], to_ship=True) == []
@@ -170,20 +171,21 @@ def test_each_seed_agent_has_notices_and_its_placed_ui_its_side_panels(agent_id)
 
 def test_the_analyst_and_the_steward_say_what_their_sheet_holds():
     analyst = " ".join(raw("agents", "worker-data-analyst")["system_prompt"].split())
-    assert "a tab Profile with one row per column" in analyst and "sheet_insert_chart" in analyst
+    assert "a tab Profile with one row per column" in analyst and "sheetInsertChart" in analyst
     steward = " ".join(raw("agents", "worker-steward-aws")["system_prompt"].split())
     assert "Monthly saving" in steward and "=SUM(E2:E7)" in steward
     for demo in ("demo-data-analyst", "demo-aws-steward"):
         said = " ".join(raw("apps", demo)["instructions"].split())
-        assert "sheet_create" in said and "they too are tools you use here" in said
+        assert "sheetCreate" in said and "they too are tools you use here" in said
         assert "only" in said
     # The Analyst's demo now opens the live notebook and uses its cell tools.
     analyst_demo = raw("apps", "demo-data-analyst")
-    assert {"plugin": "notebook"} in analyst_demo["ui"]
-    assert analyst_demo["interface"]["layout"] == "split"
+    # Since e9fb357 the notebook is a tab of the right panel, beside the conversation.
+    assert {"plugin": "page-notebook", "placement": "right", "tab": "Notebook"} in analyst_demo["ui"]
+    assert analyst_demo["interface"]["layout"] == "chat"
     analyst_words = " ".join(analyst_demo["instructions"].split())
-    assert "readAllCells" in analyst_words and "insertCell" in analyst_words
-    assert "runCell" in analyst_words and "nothing ran here" not in analyst_words
+    assert "notebookReadAllCells" in analyst_words and "notebookInsertCell" in analyst_words
+    assert "notebookRunCell" in analyst_words and "nothing ran here" not in analyst_words
 
 
 def test_the_marketer_names_the_deck_tab_and_a_concrete_deck_deliverable():

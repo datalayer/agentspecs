@@ -815,7 +815,7 @@ def test_the_four_decision_templates_are_in_the_catalogue() -> None:
     for identity in templates:
         found = APP_CATALOGUE[identity]
         assert found.kind is AppKind.DECISION, identity
-        assert found.agent == "worker-data-analyst:0.0.1", identity
+        assert found.agent == "worker-data-analyst:0.0.2", identity
         assert found.interface.components == ship.interface.components, identity
         assert (
             found.decision is not None
