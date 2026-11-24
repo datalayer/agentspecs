@@ -14,6 +14,7 @@ normalized form is a frontend tool while the token itself is not.
 
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -47,12 +48,22 @@ def _camel(name: str) -> str:
     return re.sub(r"_+([a-zA-Z0-9])", lambda m: m.group(1).upper(), name.removeprefix("datalayer_"))
 
 
+#: The tools of the sets declared ``toolset: all``, which name none: vendored from agent-runtimes'
+#: export of its UI plugins' tools, held to it below when agent-runtimes is beside this checkout.
+INVENTORY_PATH = Path(__file__).resolve().parent / "fixtures" / "wildcard_frontend_tools.json"
+INVENTORY = json.loads(INVENTORY_PATH.read_text(encoding="utf-8"))
+#: agent-runtimes' export, where agentspecs is its nested checkout.
+EXPORT_PATH = ROOT.parents[1] / "src" / "specs" / "uiFrontendTools.generated.ts"
+
+
 def _frontend_tools() -> set[str]:
     names: set[str] = set()
     for path in (ROOT / "frontend-tools").glob("*.yaml"):
         toolset = (yaml.safe_load(path.read_text(encoding="utf-8")) or {}).get("toolset")
         if isinstance(toolset, list):
             names.update(toolset)
+        elif toolset == "all":
+            names.update(INVENTORY["tools"][INVENTORY["sources"][path.stem]])
     # A header's tool, as the model is given it.
     for spec in ui.UI_CATALOGUE.values():
         if spec.header is not None and spec.header.tool:
@@ -95,6 +106,26 @@ def test_it_finds_an_old_name():
     ]
     assert stale_names("call arenaWatch, deckCreate, noticeShow and notebookReadAllCells") == []
     assert stale_names("sales_by_region and set_up are no tools") == []
+    # A set declared `toolset: all` names its tools through the inventory (page-document's here).
+    assert stale_names("read it with document_read_all_blocks, then document_insert_block") == [
+        "document_read_all_blocks",
+        "document_insert_block",
+    ]
+    assert stale_names("documentReadAllBlocks, then documentInsertBlock") == []
+
+
+def test_every_set_of_all_its_tools_has_an_inventory():
+    for path in sorted((ROOT / "frontend-tools").glob("*.yaml")):
+        if (yaml.safe_load(path.read_text(encoding="utf-8")) or {}).get("toolset") == "all":
+            assert INVENTORY["tools"].get(INVENTORY["sources"].get(path.stem, "")), path.stem
+
+
+@pytest.mark.skipif(not EXPORT_PATH.is_file(), reason="agent-runtimes is not beside this checkout")
+def test_the_inventory_is_agent_runtimes_export():
+    text = EXPORT_PATH.read_text(encoding="utf-8")
+    exported = json.loads(text[text.index("= {") + 2 : text.rindex("};") + 1])
+    for plugin, tools in INVENTORY["tools"].items():
+        assert tools == [tool["name"] for tool in exported[plugin]], plugin
 
 
 @pytest.mark.parametrize("path", SPECS, ids=lambda path: f"{path.parent.name}/{path.stem}")
