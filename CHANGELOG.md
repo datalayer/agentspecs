@@ -8,6 +8,11 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.1.19
+
+- **The kernel tools under their editor's domain** (review of 0.1.18): the Data Analyst, Agent Shell and the two document examples say `notebookExecuteCodeInNotebook` and `documentExecuteCodeInDocument`, the names the notebook and Lexical adapters hand the model, no longer the bare `executeCodeInNotebook` and `executeCodeInDocument`. The frontend tool name check refuses a bare camel-case name whose notebook- or document-prefixed form is a tool, reads the tools of the sets declared `toolset: all` from a vendored inventory, and holds that inventory to agent-runtimes' export whether agentspecs is nested in agent-runtimes or beside it. Tests: test_frontend_tool_names, the whole suite.
+- **The page notebook and document go in a side panel only** (`page-notebook`, `page-document`: placements `right` and `left`, right by default): their message placement drew a card with no editor and no kernel.
+
 ## 0.1.18
 
 - **Every spec names the frontend tools as the page hands them**, which 0.1.17 left undone outside the seed agents (review of 0.1.17): the Pong and Space Invaders battles' goals and rubrics, the Player agent and application (`arenaWatch`, `arenaRead`, `arenaPongMove`, `arenaPongServe`, `arenaInvadersMove`, `arenaInvadersFire`), the Output example's sheet chart (`cellsReadRange`, `cellsInsertChart`), the Decks example and the Pitcher (`decksCreateDeck`, `decksUpdateSlide`, `decksPresent`...), the arena tool sets' and the notices' descriptions, and the docs (frontend tools, UI, battles). A new test refuses a spec in `agents`, `apps`, `battles`, `teams` or `scenes` that says the old name of a frontend tool (one whose normalized form is a tool while it is not). Tests: test_frontend_tool_names, the whole suite.

@@ -80,7 +80,7 @@ system_prompt: >-
   excalidrawListDrawings for its block_id and excalidrawReadScene for its
   contents before editing it, because element ids only come from reading the
   scene.
-  Use executeCodeInDocument only for temporary inspection code that should not
+  Use documentExecuteCodeInDocument only for temporary inspection code that should not
   become part of the document.
 
 system_prompt_codemode_addons: >-
