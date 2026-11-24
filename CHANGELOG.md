@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## Unreleased
+
+- **The runtime engines, as specs**: a new kind, `runtime-engines/`, one YAML each for `datalayer` (*Datalayer*, the default), `kagent` (*Kagent*) and `agentcore` (*AWS AgentCore*): its name, what it is, its documentation, its place where the engines are offered (`position`), the harnesses it runs (`harnesses`, null for any) and whether it is `enabled`. `RUNTIME_ENGINES`, `DEFAULT_RUNTIME_ENGINE` and `ENGINE_HARNESSES` are read from them, no list kept beside; `agent_runtime_engine_problems` refuses as before. `runtime-engine.schema.json` and the reference page are written by `python -m agentspecs.runtime_engines`. Tests: test_runtime_engines, the whole suite.
+
 ## 0.1.20
 
 - **The person's Datalayer Spaces beside the conversation**: the UI spec and frontend tool set `spaces` (*Datalayer Spaces*: `spacesList`, `spacesListItems`, `spacesListItemsOfType`, `spacesOpenItem`, `spacesSaveItem`), run in the page with the person's own sign-in. An item opens in a tab of its own in the Spaces side panel, a document in a Lexical editor, a notebook in a notebook view, and is saved back to its space; signed out, each tool answers in a sentence. The Data Analyst, the Functional Analyst, Terra and the Steward for AWS carry it in a Spaces tab of the right panel, with the Document tab (`page-document`, new for Terra and the Steward; Terra gets `side-panels` with them), their demos too (`demo-data-analyst` 0.0.8, `demo-functional-analyst` 0.0.3, `demo-terra` 0.0.9, `demo-aws-steward` 0.0.11), and are told when to open and save. The frontend tools and UI catalogue pages follow. Tests: test_ui_side_panels, test_ui_page_tools, the whole suite.

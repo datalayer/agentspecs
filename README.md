@@ -27,6 +27,7 @@ agentspecs/
 ├── frames/           # Frame specs: owned, scoped context a Cog works under
 ├── cogs/             # Cog specs: an agent, equipped with Frames
 ├── harnesses/        # Harness specs: an agent program driven over ACP, and its register
+├── runtime-engines/  # Runtime engine specs: what runs and hosts an agent (Datalayer, Kagent, AWS AgentCore)
 ├── ops/              # Op specs: Cogs, orchestrated, with a validation strategy
 ├── guards/           # Guard specs: a check, extending a Policy
 ├── gates/            # Gate specs: what happens on what the Guards found
@@ -246,6 +247,28 @@ from agentspecs.harnesses import HARNESS_CATALOGUE, agent_harness_problems
 
 print(HARNESS_CATALOGUE["claude-code"].acp.args)
 print(agent_harness_problems({"harness": "claude-code", "subagents": [{"id": "x"}]}))
+```
+
+### Runtime engines (`agentspecs/runtime-engines`)
+
+What runs and hosts an agent: `datalayer` (a Datalayer agent runtime, the
+default), `kagent` (Kagent, a Kubernetes control plane for agents) and
+`agentcore` (AWS AgentCore, in the AWS account of the organization that
+launches the agent). An agent spec names one with `runtime_engine:`, on the
+line after `harness:`; a spec that names none, or another, or asks an engine
+for a harness it does not run, is refused at load, in a sentence.
+`RUNTIME_ENGINES` and `ENGINE_HARNESSES` are read from these specs.
+
+Common fields:
+
+- `id`, `version`, `name`, `description`, `docs_url`, `enabled`
+- `position` (where it is offered, 1 the default), `harnesses` (the harness ids it runs, null for any)
+
+```python
+from agentspecs.runtime_engines import RUNTIME_ENGINE_CATALOGUE, agent_runtime_engine_problems
+
+print(RUNTIME_ENGINE_CATALOGUE["kagent"].name)
+print(agent_runtime_engine_problems({"id": "a", "harness": "codex", "runtime_engine": "kagent"}))
 ```
 
 ### Ops, Guards, Gates and Tracks

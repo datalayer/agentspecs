@@ -56,6 +56,10 @@ Protocol: Claude Code, Codex, OpenCode, pi, Gemini CLI, goose, OpenHands, or any
 agent a framework exposes over ACP. How it is launched, what it needs, what it
 honours of an agent spec, and the register of the terms it is served under.
 
+**[Runtime engines](./runtime-engines)** — what runs and hosts an agent:
+Datalayer, Kagent or AWS AgentCore. An agent spec names one beside its harness,
+and an engine refuses a harness it does not run.
+
 **[Ops](./ops)** — the orchestrated, supervised workflow a person launches: the
 Cogs that do the work and the validation strategy that says how it is
 verified. An Op is not complete without one.
@@ -152,6 +156,7 @@ agentspecs/
 ├── policies/
 ├── protocol-tools/
 ├── protocols/
+├── runtime-engines/
 ├── scenes/
 ├── battles/
 ├── identities/
