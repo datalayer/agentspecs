@@ -1,0 +1,30 @@
+{
+  "_about": "The tools of the frontend tool sets declared `toolset: all`, as agent-runtimes' src/specs/uiFrontendTools.generated.ts exports their UI plugins' tools (page-document for page-document and lexical-document, page-notebook for jupyter-notebook). tests/test_frontend_tool_names.py checks it against that export when agent-runtimes is beside this checkout.",
+  "sources": {
+    "page-document": "page-document",
+    "lexical-document": "page-document",
+    "jupyter-notebook": "page-notebook"
+  },
+  "tools": {
+    "page-document": [
+      "documentInsertBlock",
+      "documentUpdateBlock",
+      "documentDeleteBlocks",
+      "documentReadBlock",
+      "documentReadAllBlocks",
+      "documentRunBlock",
+      "documentRunAllBlocks",
+      "documentListAvailableBlocks",
+      "documentExecuteCodeInDocument"
+    ],
+    "page-notebook": [
+      "notebookInsertCell",
+      "notebookDeleteCells",
+      "notebookUpdateCell",
+      "notebookReadCell",
+      "notebookReadAllCells",
+      "notebookRunCell",
+      "notebookExecuteCodeInNotebook"
+    ]
+  }
+}
