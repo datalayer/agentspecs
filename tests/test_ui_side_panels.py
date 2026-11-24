@@ -44,16 +44,47 @@ PLACED = {
     "worker-marketer": ("page-deck", "page-document"),
     "worker-accountant": ("page-sheet",),
     # The user, 18 November 2026: the Data Analyst's dataset profile and chart, the Steward's findings by service.
-    "worker-data-analyst": ("page-notebook", "page-sheet", "page-document"),
-    "worker-steward-aws": ("page-sheet",),
+    # The user, 24 November 2026: the document and the person's Spaces for the four seed agents.
+    "worker-data-analyst": ("page-notebook", "page-sheet", "page-document", "spaces"),
+    "worker-steward-aws": ("page-sheet", "page-document", "spaces"),
+    "worker-terra": ("page-document", "spaces"),
     # The user, 19 November 2026: the Analyst's canvas and diagrams, one above the other.
     "worker-functional-analyst": (
         "page-excalidraw",
         "page-mermaid",
         "page-react-flow",
         "page-document",
+        "spaces",
     ),
 }
+
+#: The tab each placed UI takes in the right panel, when it names one.
+TABS = {
+    "worker-marketer": {"page-deck": "Deck", "page-document": "Document"},
+    "worker-data-analyst": {
+        "page-notebook": "Notebook",
+        "page-sheet": "Spreadsheet",
+        "page-document": "Document",
+        "spaces": "Spaces",
+    },
+    "worker-steward-aws": {"page-document": "Document", "spaces": "Spaces"},
+    "worker-terra": {"page-document": "Document", "spaces": "Spaces"},
+    "worker-functional-analyst": {
+        "page-excalidraw": "Excalidraw",
+        "page-mermaid": "Mermaid",
+        "page-react-flow": "React Flow",
+        "page-document": "Document",
+        "spaces": "Spaces",
+    },
+}
+
+#: The four seed agents that carry the document and the person's Spaces (24 November 2026).
+WITH_SPACES = (
+    "worker-data-analyst",
+    "worker-functional-analyst",
+    "worker-terra",
+    "worker-steward-aws",
+)
 
 
 def raw(folder: str, name: str) -> dict:
@@ -143,21 +174,9 @@ def test_each_seed_agent_has_notices_and_its_placed_ui_its_side_panels(agent_id)
     assert ("side-panels" in sets) == bool(placed) == ("side-panels" in plugins)
     for each in placed or ():
         expected = {"plugin": each, "placement": "right"}
-        if agent_id == "worker-marketer":
-            expected["tab"] = {"page-deck": "Deck", "page-document": "Document"}[each]
-        elif agent_id == "worker-data-analyst":
-            expected["tab"] = {
-                "page-notebook": "Notebook",
-                "page-sheet": "Spreadsheet",
-                "page-document": "Document",
-            }[each]
-        elif agent_id == "worker-functional-analyst":
-            expected["tab"] = {
-                "page-excalidraw": "Excalidraw",
-                "page-mermaid": "Mermaid",
-                "page-react-flow": "React Flow",
-                "page-document": "Document",
-            }[each]
+        tab = TABS.get(agent_id, {}).get(each)
+        if tab:
+            expected["tab"] = tab
         assert expected in agent["ui"]
         assert expected in demo["ui"]
     if placed:
@@ -223,3 +242,45 @@ def test_only_the_agents_that_name_a_set_name_its_ui():
             assert (ui_id in sets) == (ui_id in plugins), (
                 f"{path.stem}: {ui_id} is named on one side only"
             )
+
+
+def test_spaces_is_a_page_ui_with_its_set():
+    spec = ui.UI_CATALOGUE["spaces"]
+    assert ui.hands_frontend_tools("spaces")
+    assert spec.plugin == "@datalayer/agent-plugin-spaces"
+    assert [p.value for p in spec.placements] == ["right", "left"]
+    toolset = raw("frontend-tools", "spaces")
+    assert toolset["toolset"] == [
+        "spacesList",
+        "spacesListItems",
+        "spacesListItemsOfType",
+        "spacesOpenItem",
+        "spacesSaveItem",
+    ]
+    assert "page" in toolset["tags"] and "frontend" in toolset["tags"]
+
+
+@pytest.mark.parametrize("agent_id", WITH_SPACES)
+def test_the_four_seed_agents_carry_the_document_and_the_spaces(agent_id):
+    agent = raw("agents", agent_id)
+    demo = raw("apps", SEVEN[agent_id])
+    sets = {str(each).split(":")[0] for each in agent.get("frontend_tools") or []}
+    assert {"page-document", "spaces"} <= sets
+    for choices in (agent["ui"], demo["ui"]):
+        assert {"plugin": "page-document", "placement": "right", "tab": "Document"} in choices
+        assert {"plugin": "spaces", "placement": "right", "tab": "Spaces"} in choices
+    for words in (
+        " ".join(agent["system_prompt"].split()),
+        " ".join(demo["instructions"].split()),
+    ):
+        for tool in ("spacesList", "spacesListItems", "spacesListItemsOfType", "spacesOpenItem", "spacesSaveItem"):
+            assert tool in words, f"{agent_id} is not told {tool}"
+        assert "Document tab" in words
+
+
+def test_only_the_agents_that_name_spaces_name_its_ui():
+    for path in sorted((ROOT / "agents").glob("*.yaml")):
+        agent = yaml.safe_load(path.read_text(encoding="utf-8"))
+        sets = {str(each).split(":")[0] for each in agent.get("frontend_tools") or []}
+        plugins = {each["plugin"] for each in agent.get("ui") or [] if isinstance(each, dict)}
+        assert ("spaces" in sets) == ("spaces" in plugins), f"{path.stem}: spaces is named on one side only"

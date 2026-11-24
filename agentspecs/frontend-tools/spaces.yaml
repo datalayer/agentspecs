@@ -1,0 +1,35 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Frontend tool set: the person's Datalayer Spaces (the user, 24 November
+# 2026: "list spaces, list items by space, list items by space and type
+# (document, notebook) and load, display in tabs and save items").
+#
+# The tools run in the page with the person's own sign-in: they list the
+# spaces and their documents and notebooks, open an item in a tab of the
+# Spaces side panel, and save it back to its space. Signed out, each answers
+# in a sentence. Their handlers come from agent-runtimes' `spaces` UI plugin
+# (src/apps/plugins/spaces), never from the spec. An agent that names this
+# set names the `spaces` UI too.
+
+id: spaces
+version: 0.0.1
+name: Datalayer Spaces
+description: List the person's Datalayer Spaces and their documents and notebooks, open an item in a tab of the Spaces side panel and save it back to its space — run in the page with the person's own sign-in.
+tags:
+  - frontend
+  - page
+  - spaces
+  - document
+  - notebook
+enabled: true
+
+toolset:
+  - spacesList
+  - spacesListItems
+  - spacesListItemsOfType
+  - spacesOpenItem
+  - spacesSaveItem
+
+icon: "@primer/octicons-react:repo"
+emoji: "🗃️"

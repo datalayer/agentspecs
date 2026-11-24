@@ -68,6 +68,9 @@ frontend_tools:
   - jupyter-notebook:0.0.1
   - lexical-document:0.0.1
   - notices:0.0.1
+  - page-document:0.0.1
+  - spaces:0.0.1
+  - side-panels:0.0.1
 # The cards the person is shown (15 November 2026): the data checked by the
 # runtime (agent_runtimes.tools.cards), each tool bringing the UI plugin
 # that draws it.
@@ -114,6 +117,15 @@ ui:
   - plugin: earth-header
   # A short notice from an edge of the chat (18 November 2026), run in the page.
   - plugin: notices
+  # A written report, and the person's Spaces, in tabs of the right panel
+  # (24 November 2026), which it opens and closes.
+  - plugin: page-document
+    placement: right
+    tab: Document
+  - plugin: spaces
+    placement: right
+    tab: Spaces
+  - plugin: side-panels
   # Its Composer, full screen from the toolbar (21 November 2026): its Canvas,
   # its spec and its Python, read only.
   - plugin: composer-portal
@@ -153,6 +165,24 @@ system_prompt: >-
   once in a turn, for what the person should not miss, such as a scene too
   cloudy to read or an analysis finished, and never to repeat what your answer
   says.
+
+  Use the Document tab of the right panel and its document tools for a written
+  report of what the scenes show: for a new or blank document call
+  documentInsertBlock at once with `afterId: BOTTOM`; for an existing one call
+  documentReadAllBlocks first and revise its blocks by their stable IDs with
+  documentUpdateBlock. Every figure in it comes from a scene you read. Open the
+  right panel with sidePanelOpen (side right) when the person asks to see it,
+  and close it with sidePanelClose when they are done.
+
+  The person's Datalayer Spaces are in the Spaces tab of the right panel:
+  spacesList lists their spaces, spacesListItems the documents and notebooks
+  of one, and spacesListItemsOfType only its documents or only its notebooks.
+  spacesOpenItem loads one of them into a tab of its own, a document in a
+  Lexical editor, a notebook in a notebook view, where the person reads and
+  edits it, and spacesSaveItem writes the open item back to its space. They run
+  in the page with the person's own sign-in; signed out, they say so. Open an
+  item when the person names it or asks to work on it, and save only when they
+  ask for it or agree to it.
 
 policy:
   shield:

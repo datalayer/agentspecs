@@ -16,7 +16,7 @@
 
 schema: agent.app/v1
 id: demo-terra
-version: 0.0.8
+version: 0.0.9
 name: Terra
 kind: chat
 description: >-
@@ -75,10 +75,31 @@ instructions: >-
   page, reaches nothing and changes nothing, and it is one of the tools you use
   here. Use a notice at most once in a turn, for what the visitor should not
   miss, such as a scene too cloudy to read or an analysis finished.
+
+  The Document tab of the right panel takes a written report of what the scenes
+  show: call documentInsertBlock at once with `afterId: BOTTOM` for a new
+  document, documentReadAllBlocks first for an existing one. Every figure in
+  it comes from the search or the example. sidePanelOpen and sidePanelClose
+  (side right) open and close the right panel; they run in the visitor's page
+  and change nothing else.
+
+  A signed-in visitor's Datalayer Spaces are in the Spaces tab of the right
+  panel: spacesList, spacesListItems and spacesListItemsOfType list their
+  spaces and the documents and notebooks of one, spacesOpenItem opens one in a
+  tab of its own and spacesSaveItem saves it back to its space. They run in the
+  visitor's page with their own sign-in; signed out, they say so. Save only
+  when the visitor asks for it.
 ui:
   - plugin: chat
   - plugin: earth-header
   - plugin: notices
+  - plugin: page-document
+    placement: right
+    tab: Document
+  - plugin: spaces
+    placement: right
+    tab: Spaces
+  - plugin: side-panels
   - plugin: composer-portal
 interface:
   layout: chat
