@@ -17,10 +17,10 @@ description: >-
 
 variant: game
 goal: >-
-  You are playing Space Invaders. Call `arena_watch` once: the arena then tells
+  You are playing Space Invaders. Call `arenaWatch` once: the arena then tells
   you where the invaders are and which one is nearest your cannon. Each time it
-  does, call `arena_invaders_move` with the `x` it names, then
-  `arena_invaders_fire`; move away when it says a bomb is falling on you. The
+  does, call `arenaInvadersMove` with the `x` it names, then
+  `arenaInvadersFire`; move away when it says a bomb is falling on you. The
   higher score when the wave is cleared, a cannon is hit or the wave lands wins.
 clock_seconds: 180
 arena: invaders
@@ -54,7 +54,7 @@ evals:
       threshold: 0.6
       # What the judge can see (B5): the player's tool calls, its moves, and the game's end.
       rubric: >-
-        The player watched the arena (arena_watch or arena_read, or, played
+        The player watched the arena (arenaWatch or arenaRead, or, played
         by a decision model, its decisions on what the arena showed), moved its
         cannon under the invaders and fired, and its cannon was not hit by a
         bomb it had been warned of.

@@ -8,6 +8,10 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.1.18
+
+- **Every spec names the frontend tools as the page hands them**, which 0.1.17 left undone outside the seed agents (review of 0.1.17): the Pong and Space Invaders battles' goals and rubrics, the Player agent and application (`arenaWatch`, `arenaRead`, `arenaPongMove`, `arenaPongServe`, `arenaInvadersMove`, `arenaInvadersFire`), the Output example's sheet chart (`cellsReadRange`, `cellsInsertChart`), the Decks example and the Pitcher (`decksCreateDeck`, `decksUpdateSlide`, `decksPresent`...), the arena tool sets' and the notices' descriptions, and the docs (frontend tools, UI, battles). A new test refuses a spec in `agents`, `apps`, `battles`, `teams` or `scenes` that says the old name of a frontend tool (one whose normalized form is a tool while it is not). Tests: test_frontend_tool_names, the whole suite.
+
 ## 0.1.17
 
 - **The Data Analyst fills its Notebook and Document tabs, also in its public demo**: `worker-data-analyst` 0.0.2 and `demo-data-analyst` 0.0.7 say the two tabs need no account and no filesystem; a new or blank document gets `documentInsertBlock` at once, an existing one is read first (`documentReadAllBlocks`). The notebook is the right panel's Notebook tab (`page-notebook`, the demo's layout `chat`), beside the Spreadsheet and Document tabs. The applications on the Data Analyst (`data-quality`, `model-choice`, `quote-calculator`, `report-from-a-file`, `ship-or-fix`, `supplier-comparison`), the Jupyter team and the notebook benchmark name `worker-data-analyst:0.0.2`. The notebook header's description follows.

@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Battle: Pong. Two Players at the Pong arena, drawn in the page; each reads
-# the arena through `arena_read`, is told where the ball is by `arena_watch`,
+# the arena through `arenaRead`, is told where the ball is by `arenaWatch`,
 # and moves its paddle through the arena's frontend tools. The arena keeps
 # the score: first to eleven.
 
@@ -16,10 +16,10 @@ description: >-
 
 variant: game
 goal: >-
-  You are playing Pong. Call `arena_watch` once: the arena then tells you
+  You are playing Pong. Call `arenaWatch` once: the arena then tells you
   where the ball is and where it arrives on your side. Each time it does,
-  call `arena_pong_move` with that `y` at once; serve with
-  `arena_pong_serve` when the serve is yours. First to eleven points wins.
+  call `arenaPongMove` with that `y` at once; serve with
+  `arenaPongServe` when the serve is yours. First to eleven points wins.
 clock_seconds: 180
 arena: pong
 
@@ -52,7 +52,7 @@ evals:
       threshold: 0.6
       # What the judge can see (B5): the player's tool calls, its moves, and the game's end.
       rubric: >-
-        The player watched the arena (arena_watch or arena_read, or, played
+        The player watched the arena (arenaWatch or arenaRead, or, played
         by a decision model, its decisions on what the arena showed), moved its
         paddle as the ball came and served when the serve was its own; its
         tool calls and moves show it played rather than idled.

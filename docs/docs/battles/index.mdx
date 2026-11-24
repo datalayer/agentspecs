@@ -120,19 +120,19 @@ evals:
 
 A game's arena keeps the score. A race or a challenge may name an arena too:
 the visual its contestants work in, drawn in the page under each — a `deck`
-built with `deck_set_title` and `deck_add_slide` (a title, a section, bullets,
-a statement, a closing), read back with `deck_read`; a `sheet` filled with
-`sheet_write_range`, read with `sheet_read_range`, charted with
-`sheet_insert_chart`. Deck Maker and Sheet Maker (`apps/deck-maker.yaml`,
+built with `deckSetTitle` and `deckAddSlide` (a title, a section, bullets,
+a statement, a closing), read back with `deckRead`; a `sheet` filled with
+`sheetWriteRange`, read with `sheetReadRange`, charted with
+`sheetInsertChart`. Deck Maker and Sheet Maker (`apps/deck-maker.yaml`,
 `apps/sheet-maker.yaml`) are the applications of the catalogue that play
 them, in the browser.
 
 A game's arena is a UI plugin of the catalogue drawn in the conversation and
 the frontend tools the contestants call through the page — the seam the
-`cells` tools use, so no new transport. Pong: `arena_pong_move`,
-`arena_pong_serve`, `arena_read`, and `arena_watch`, which streams; first to
-eleven. Space Invaders: `arena_invaders_move`, `arena_invaders_fire`,
-`arena_read` and `arena_watch`; a hit scores the invader's row, and the wave
+`cells` tools use, so no new transport. Pong: `arenaPongMove`,
+`arenaPongServe`, `arenaRead`, and `arenaWatch`, which streams; first to
+eleven. Space Invaders: `arenaInvadersMove`, `arenaInvadersFire`,
+`arenaRead` and `arenaWatch`; a hit scores the invader's row, and the wave
 cleared, a cannon hit or the wave landed ends it. The page refuses a move out of turn or more than one
 per tick, so a faster model does not win by flooding, and records every move
 with its tick.
@@ -151,7 +151,7 @@ contestant says `decision_model` and the page plays it.
     decision_model: "cloudflare:wrk/typesafe/jev"
 ```
 
-On each observation `arena_watch` would give a player, the page asks Jev a
+On each observation `arenaWatch` would give a player, the page asks Jev a
 `choice` through ai-inference's `POST /decisions`, with what the arena says
 of Red's side as the state, and makes the chosen move through the arena's
 own moves. Pong: which of seven zones of the court to put the paddle in,

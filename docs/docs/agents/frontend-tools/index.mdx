@@ -39,11 +39,11 @@ enabled: true
 # Data: the values of a range, read or written. Charts: insert one over a
 # range, list them. Screen: select a range to show the person.
 toolset:
-  - cells_read_range
-  - cells_write_range
-  - cells_insert_chart
-  - cells_list_charts
-  - cells_select_range
+  - cellsReadRange
+  - cellsWriteRange
+  - cellsInsertChart
+  - cellsListCharts
+  - cellsSelectRange
 
 icon: "@primer/octicons-react:table"
 emoji: "🧮"
@@ -81,7 +81,7 @@ the sixth works on the grid through the `cells` set:
 | `CHART` | One fenced `json` block whose first line is `// chart`, the rest an ECharts option. |
 | `SPREADSHEET` | One fenced `csv` block whose first line is `# filename: <name>.csv`, drawn with Datalayer Cells in the chat and in the side panel. |
 | `FILE` | One fenced block whose info string is a file extension, its first line `# filename: <name.ext>`. |
-| `SHEET CHART` | No block: asked to chart the spreadsheet shown, it calls `cells_read_range` to find the data and `cells_insert_chart` over it, then says which chart it inserted where. |
+| `SHEET CHART` | No block: asked to chart the spreadsheet shown, it calls `cellsReadRange` to find the data and `cellsInsertChart` over it, then says which chart it inserted where. |
 
 ```yaml
 # agents/example-output.yaml
@@ -130,15 +130,15 @@ ui:
 
 | Tool | Takes | Does |
 | --- | --- | --- |
-| `deck_create` | `title`, `subtitle` | Starts a new deck; a deck made before in the conversation is replaced. |
-| `deck_set_title` | `title`, `subtitle` | Renames the deck, its slides kept. |
-| `deck_add_slide` | `type`, the fields of that type, `notes`, `at` | Adds a slide at the end, or before slide `at`. |
-| `deck_add_slides` | `slides` (each as for `deck_add_slide`), `at` | Adds several slides at once, in order: a deck's outline in one or two calls. One bad slide refuses the whole batch; nothing is added. |
-| `deck_update_slide` | `slide`, then as for a new slide | Replaces a slide, whole. |
-| `deck_move_slide` | `slide`, `to` | Moves a slide to another place. |
-| `deck_delete_slide` | `slide` | Deletes a slide. |
-| `deck_set_theme` | `template`, `theme`, `color_mode` | Sets the deck's look: `datalayer`, `brand` (the theme's brand colours) or `ink`; a theme; `light`, `dark` or `auto`. |
-| `deck_read` | | The deck in words: its title and each slide, in order. |
+| `deckCreate` | `title`, `subtitle` | Starts a new deck; a deck made before in the conversation is replaced. |
+| `deckSetTitle` | `title`, `subtitle` | Renames the deck, its slides kept. |
+| `deckAddSlide` | `type`, the fields of that type, `notes`, `at` | Adds a slide at the end, or before slide `at`. |
+| `deckAddSlides` | `slides` (each as for `deckAddSlide`), `at` | Adds several slides at once, in order: a deck's outline in one or two calls. One bad slide refuses the whole batch; nothing is added. |
+| `deckUpdateSlide` | `slide`, then as for a new slide | Replaces a slide, whole. |
+| `deckMoveSlide` | `slide`, `to` | Moves a slide to another place. |
+| `deckDeleteSlide` | `slide` | Deletes a slide. |
+| `deckSetTheme` | `template`, `theme`, `color_mode` | Sets the deck's look: `datalayer`, `brand` (the theme's brand colours) or `ink`; a theme; `light`, `dark` or `auto`. |
+| `deckRead` | | The deck in words: its title and each slide, in order. |
 
 A slide is one of seven types: `title` (title, subtitle), `section` (title),
 `bullets` (title, items, and an `image` beside them), `statement` (statement,
@@ -150,14 +150,14 @@ takes `notes`, the speaker notes. Slides are numbered from 1.
 
 | Tool | Takes | Does |
 | --- | --- | --- |
-| `sheet_create` | `name`, `columns` (each a `name`, a `format`, a `currency`, `decimals`), `freeze_header` | Starts a sheet with named columns: the header row bold and kept in sight, each column in its format. The tab shown takes it while empty; otherwise a tab is added. |
-| `sheet_write_range` | `range`, `values`, `tab` | Writes rows from a top-left cell. A text starting with `=` is a formula. |
-| `sheet_read_range` | `range`, `tab` | The values of a range, or everything written: what is on screen, the person's own edits included. |
-| `sheet_format_range` | `range`, `format`, `currency`, `decimals`, `bold`, `align`, `tab` | Formats a range. |
-| `sheet_freeze` | `rows`, `columns`, `tab` | Keeps the first rows and columns in sight. |
-| `sheet_add_tab` | `name` | Adds a tab and shows it. |
-| `sheet_show_tab` | `name` | Shows a tab. |
-| `sheet_insert_chart` | `range`, `type`, `title` | Draws a chart of a range under it. |
+| `sheetCreate` | `name`, `columns` (each a `name`, a `format`, a `currency`, `decimals`), `freeze_header` | Starts a sheet with named columns: the header row bold and kept in sight, each column in its format. The tab shown takes it while empty; otherwise a tab is added. |
+| `sheetWriteRange` | `range`, `values`, `tab` | Writes rows from a top-left cell. A text starting with `=` is a formula. |
+| `sheetReadRange` | `range`, `tab` | The values of a range, or everything written: what is on screen, the person's own edits included. |
+| `sheetFormatRange` | `range`, `format`, `currency`, `decimals`, `bold`, `align`, `tab` | Formats a range. |
+| `sheetFreeze` | `rows`, `columns`, `tab` | Keeps the first rows and columns in sight. |
+| `sheetAddTab` | `name` | Adds a tab and shows it. |
+| `sheetShowTab` | `name` | Shows a tab. |
+| `sheetInsertChart` | `range`, `type`, `title` | Draws a chart of a range under it. |
 
 A format is named, never a format code: `number`, `integer`, `currency` (with
 the currency's three letters), `percent`, `date` or `text`.
@@ -199,9 +199,9 @@ have.
 ### In a Battle
 
 Three tools of each set are also the deck and the sheet arenas of
-[Battles](../../battles): `deck_set_title`, `deck_add_slide` and `deck_read`
-with the first five slide types, and `sheet_write_range`, `sheet_read_range`
-and `sheet_insert_chart` on one tab, each bound to a contestant's own deck or
+[Battles](../../battles): `deckSetTitle`, `deckAddSlide` and `deckRead`
+with the first five slide types, and `sheetWriteRange`, `sheetReadRange`
+and `sheetInsertChart` on one tab, each bound to a contestant's own deck or
 workbook.
 
 ## The side panels and the notices: `side-panels`, `notices`
@@ -210,8 +210,8 @@ Two small sets every chat can carry, run in the page (18 November 2026):
 
 | Set | Tools | What they do |
 | --- | --- | --- |
-| `side-panels` | `open_side_panel({side, tab?})`, `close_side_panel({side})` | Open or close the chat's `left` or `right` panel, where the UI an agent placed there shows. `tab` names a visible component tab (or its stable id) when several are placed there. Refused in a sentence when the side is empty or the tab is unknown. |
-| `notices` | `show_notice({tone, title, text?, edge?, seconds?})` | Slide a short notice in from an edge of the chat: `tone` info, success, warning or error; a `title` of up to 80 characters and a `text` of up to 280; `edge` north (unsaid), east, south or west; `seconds` from 0 (until closed) to 60. Anything else is refused in a sentence. |
+| `side-panels` | `sidePanelOpen({side, tab?})`, `sidePanelClose({side})` | Open or close the chat's `left` or `right` panel, where the UI an agent placed there shows. `tab` names a visible component tab (or its stable id) when several are placed there. Refused in a sentence when the side is empty or the tab is unknown. |
+| `notices` | `noticeShow({tone, title, text?, edge?, seconds?})` | Slide a short notice in from an edge of the chat: `tone` info, success, warning or error; a `title` of up to 80 characters and a `text` of up to 280; `edge` north (unsaid), east, south or west; `seconds` from 0 (until closed) to 60. Anything else is refused in a sentence. |
 
 ```json
 { "tone": "success", "title": "Deck ready", "text": "Six slides on the roast-day launch.", "edge": "north" }

@@ -351,7 +351,7 @@ places a UI in one with `placement: left` or `placement: right`, when its spec l
 
 When a side contains several components, the shared Datalayer view tabs show one at a time. The
 person can choose a tab, and the agent can select the same component by its visible name or stable
-id with `open_side_panel({side, tab})`. A successful tool call belonging to a component also brings
+id with `sidePanelOpen({side, tab})`. A successful tool call belonging to a component also brings
 that component's tab to the front. A UI choice may give the tab a concise name; otherwise its UI
 spec's name is used:
 
@@ -374,8 +374,8 @@ the left one leading the chat's title bar, the right one trailing it. It opens:
 
 - with the **first call of the UI placed in it** in the conversation (the deck's first slide,
   the sheet's first range);
-- when the **agent** calls `open_side_panel`, optionally naming the component's `tab`, and closes
-  when it calls `close_side_panel`, both with their `side`: the `side-panels` page UI and its
+- when the **agent** calls `sidePanelOpen`, optionally naming the component's `tab`, and closes
+  when it calls `sidePanelClose`, both with their `side`: the `side-panels` page UI and its
   [tool set](../frontend-tools/#the-side-panels-and-the-notices-side-panels-notices);
 - when the **person** uses its toggle, and closes with its Close control or Escape; the person's
   word holds until the agent's next call.
@@ -398,14 +398,14 @@ frontend_tools:
 
 An agent names `side-panels` when something is placed in its panels: the Marketer (its deck), and
 the Accountant, the Data Analyst and the Steward for AWS (a sheet each: the books, the dataset's
-profile and a chart, the findings by service), their demos with them; `open_side_panel` on a panel with nothing in it is
+profile and a chart, the findings by service), their demos with them; `sidePanelOpen` on a panel with nothing in it is
 refused in a sentence.
 
 ## Over the conversation, for a moment: `notices`
 
 A notice is short: info, success, warning or error, a title of a few words and a line. The
 agent slides it in from an edge of the chat — north, east, south or west — with one frontend
-tool, `show_notice`, of the `notices` page UI and its
+tool, `noticeShow`, of the `notices` page UI and its
 [set](../frontend-tools/#the-side-panels-and-the-notices-side-panels-notices). It holds words
 only: no link, no button but its Close, nothing that could pass for the application's own
 controls, and it says it comes from the agent. It stays inside the chat, never over the page
