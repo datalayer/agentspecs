@@ -12,7 +12,7 @@
 
 schema: agent.app/v1
 id: demo-functional-analyst
-version: 0.0.2
+version: 0.0.3
 name: Functional Analyst
 kind: chat
 description: >-

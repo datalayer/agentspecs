@@ -11,7 +11,7 @@
 
 schema: agent.app/v1
 id: demo-data-analyst
-version: 0.0.7
+version: 0.0.8
 name: Data Analyst
 kind: chat
 description: >-

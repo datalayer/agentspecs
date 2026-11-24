@@ -16,7 +16,7 @@
 
 schema: agent.app/v1
 id: demo-aws-steward
-version: 0.0.10
+version: 0.0.11
 name: Steward for AWS
 kind: chat
 description: >-

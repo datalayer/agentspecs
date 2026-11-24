@@ -16,7 +16,7 @@
 
 schema: agent.app/v1
 id: demo-terra
-version: 0.0.8
+version: 0.0.9
 name: Terra
 kind: chat
 description: >-
