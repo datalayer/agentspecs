@@ -63,7 +63,6 @@ def test_the_marketer_needs_one_network_and_neither_search_nor_the_repositories(
         "linkedin:0.0.1",
     ]
     assert marketer["skills"] == [
-        "crawl:0.0.1",
         "github:0.0.1",
         "datalayer-email:0.0.1",
         "image-stock:0.0.1",
@@ -92,13 +91,40 @@ def test_the_marketer_needs_one_network_and_neither_search_nor_the_repositories(
             "social-post-linkedin:0.0.1",
         ]
     ]
-    assert agents["worker-shopper"]["optional"] == {"skills": ["crawl:0.0.1"]}
+    # Crawling asks no key (25 November 2026): nothing of the Shopper's is optional.
+    assert "optional" not in agents["worker-shopper"]
+    assert "crawl:0.0.1" in agents["worker-shopper"]["skills"]
 
 
-def test_the_skills_said_optional_are_the_ones_reading_tavily_and_github():
-    for skill, name in (("crawl", "TAVILY_API_KEY:0.0.1"), ("github", "GITHUB_TOKEN:0.0.1")):
-        spec = yaml.safe_load((ROOT / "skills" / f"{skill}.yaml").read_text())
-        assert name in spec["envvars"]
+def test_the_skill_said_optional_is_the_one_reading_github():
+    spec = yaml.safe_load((ROOT / "skills" / "github.yaml").read_text())
+    assert "GITHUB_TOKEN:0.0.1" in spec["envvars"]
+
+
+def test_crawl_asks_no_key_and_no_agent_calls_it_optional():
+    """The crawl skill fetches pages itself and reads no key (the user, 25 November 2026: "Drop it").
+
+    Its scripts (datalayer-skills) never read TAVILY_API_KEY: web search is the
+    tavily MCP server's, which declares the key itself. So the skill declares no
+    variable, and an agent that carries it does not list it as something it may
+    start without: nothing can be missing.
+    """
+    crawl = yaml.safe_load((ROOT / "skills" / "crawl.yaml").read_text())
+    assert crawl["envvars"] == []
+    assert not crawl.get("optional_env_vars")
+    carrying = [name for name, agent in _agents() if "crawl:0.0.1" in (agent.get("skills") or [])]
+    assert {"worker-marketer", "worker-shopper", "worker-traveller"} <= set(carrying)
+    for name, agent in _agents():
+        assert "crawl:0.0.1" not in ((agent.get("optional") or {}).get("skills") or []), name
+
+
+def test_an_agent_that_searches_with_tavily_declares_the_server_that_reads_the_key():
+    """Nothing relied on crawl to bring TAVILY_API_KEY in: an agent that names the key names the tavily server."""
+    tavily = yaml.safe_load((ROOT / "mcp-servers" / "tavily.yaml").read_text())
+    assert "TAVILY_API_KEY:0.0.1" in tavily["envvars"]
+    for name, agent in _agents():
+        if "TAVILY_API_KEY:0.0.1" in (agent.get("envvars") or []):
+            assert "tavily:0.0.1" in (agent.get("mcp_servers") or []), name
 
 
 def test_terras_earthdata_login_is_never_required():
@@ -263,7 +289,6 @@ def test_the_traveller_plans_with_kiwi_and_starts_without_booking_and_maps():
     assert traveller["mcp_servers"] == ["kiwi:0.0.1", "overture:0.0.1", "booking-com:0.0.1", "google-maps:0.0.1"]
     assert traveller["optional"] == {
         "mcp_servers": ["overture:0.0.1", "booking-com:0.0.1", "google-maps:0.0.1"],
-        "skills": ["crawl:0.0.1"],
     }
     assert "could not check restaurants and sights" in " ".join(traveller["system_prompt"].split())
     for skill in ("travel-planning:0.0.1", "fare-and-stay-comparison:0.0.1", "dining:0.0.1"):

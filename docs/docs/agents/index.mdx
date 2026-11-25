@@ -343,7 +343,7 @@ policy:
   shield:
     egress: ["*"]                                  # any public address, any TCP port
     # egress: ["*:80", "*:443"]                    # the web only: any public address on 80 and 443
-    # egress: [api.tavily.com, "registry.npmjs.org:443", "1.1.1.0/24:53"]
+    # egress: [mcp.tavily.com, "registry.npmjs.org:443", "1.1.1.0/24:53"]
     ingress: [platform]                            # who may reach the agent's ports
 ```
 - **`egress`** is what the runtime may reach beyond the platform's own endpoints, which are always reachable. Each entry is `*` (alone), `*:port` (any public address on that TCP port only, agent-shield 0.2.21), an exact host, `host:port`, an IPv4 address or a CIDR, each with an optional port. If `egress` is empty or not given, the runtime reaches only the platform's endpoints.
@@ -356,7 +356,7 @@ The section is validated against agent-shield's own schema, carried verbatim as 
 - `*` beside other entries;
 - an entry named twice.
 
-Datalayer's catalogue agents declare `egress: ["*"]`, because the MCP servers and tools they run call out, for example `npx tavily-mcp`. The seed agents are narrower (15 November 2026): the Marketer, the Shopper and the Traveller reach the web only, `["*:80", "*:443"]`; the Accountant, Terra and the AWS Steward name each host they reach (Datalayer's gateway, NASA's Earthdata hosts, AWS's endpoints), on 443, and the tokenizer file every runtime fetches, `openaipublic.blob.core.windows.net:443`. The seventh, the Data Analyst, keeps `["*"]`: the code it runs in a notebook loads data from wherever the person keeps it.
+Datalayer's catalogue agents declare `egress: ["*"]`, because the MCP servers and tools they run call out, for example `npx @datalayer/slack-mcp-server` or Tavily's hosted server. The seed agents are narrower (15 November 2026): the Marketer, the Shopper and the Traveller reach the web only, `["*:80", "*:443"]`; the Accountant, Terra and the AWS Steward name each host they reach (Datalayer's gateway, NASA's Earthdata hosts, AWS's endpoints), on 443, and the tokenizer file every runtime fetches, `openaipublic.blob.core.windows.net:443`. The seventh, the Data Analyst, keeps `["*"]`: the code it runs in a notebook loads data from wherever the person keeps it.
 
 An organization may bound every agent's firewall with a ceiling in its [policy](../policies#an-organizations-firewall-ceiling): an entry the ceiling does not cover is dropped when the rule is applied, and `*` becomes the ceiling's own entries.
 

@@ -8,6 +8,14 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.1.22
+
+25 November 2026.
+
+- **Tavily is its hosted MCP server** (the user, 25 November 2026: "Switch Tavily to remote"): the `tavily` entry is Tavily's own server, `https://mcp.tavily.com/mcp/` over Streamable HTTP with `Authorization: Bearer ${TAVILY_API_KEY}`, no longer the `npx tavily-mcp` process that read the key in its environment. The key goes in the header so that it is in no address; the five tools keep their names (`tavily_search`, `tavily_extract`, `tavily_crawl`, `tavily_map`, `tavily_research`). The key is asked for as before, and a runtime that has none refuses the server before anything is sent. No Node.js is needed for it. Docs: MCP servers, Agents. Tests: test_env_vars_egress.
+- **Where a credential is sent, on its env-var** (`egress`: `hosts`, `header`, `prefix`): a runtime engine whose sandbox may hold no secret (Kagent) gives the sandbox a placeholder under the variable's name and has the value put in at egress for those hosts alone. Declared for `GITHUB_TOKEN` (`api.github.com`) and `TAVILY_API_KEY` (`mcp.tavily.com`), both `Authorization: Bearer`. A key sent in an address or a body (`PIXABAY_API_KEY`) cannot be put in at egress and has none. Docs: Env vars. Tests: test_env_vars_egress (6).
+- **The crawl skill asks no key** (the user, 25 November 2026: "Drop it"): its scripts fetch pages themselves and read no variable, yet the catalogue listed `TAVILY_API_KEY` on it, so an agent carrying crawl was told the skill was missing its key. `crawl` declares no variable and leaves the optional skills of the Marketer, the Shopper and the Traveller; web search is the `tavily` server's, which declares the key itself. Docs: Env vars. Tests: test_agents_optional (+2), the whole suite (1398).
+
 ## 0.1.21
 
 25 November 2026.

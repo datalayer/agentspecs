@@ -84,8 +84,8 @@ skills:
 # What it starts without (the user, 15 November 2026). Kiwi.com is anonymous,
 # so flights are always there. Booking.com needs the person's own partner
 # access (BOOKING_AFFILIATE_ID, BOOKING_DEMAND_API_KEY), Google Maps their own
-# key (GOOGLE_MAPS_API_KEY), web search TAVILY_API_KEY: each off without its
-# secrets, and the agent says what it cannot do. No `at_least_one`: with
+# key (GOOGLE_MAPS_API_KEY): each off without its secrets, and the agent says
+# what it cannot do. Crawling a page asks no key (25 November 2026). No `at_least_one`: with
 # Kiwi.com alone it still plans the flights, the budget and the map links, and
 # says it could not check stays or places. Overture is optional too (the user,
 # 22 November 2026: "make the overture mcp server optional for traveller, we
@@ -97,8 +97,6 @@ optional:
     - overture:0.0.1
     - booking-com:0.0.1
     - google-maps:0.0.1
-  skills:
-    - crawl:0.0.1
 # The cards the person is shown (15 November 2026): the data checked by the
 # runtime (agent_runtimes.tools.cards), each tool bringing the UI plugin
 # that draws it.

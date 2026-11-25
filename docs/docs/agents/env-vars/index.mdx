@@ -36,6 +36,20 @@ registrationUrl: https://github.com/settings/tokens
 registrationUrl: https://platform.openai.com/api-keys
 ```
 
+### `egress` (object)
+Where the variable is sent, when it is a credential sent in a request header to known hosts: `hosts` (DNS names, never `*`), `header` (the request header that carries it) and `prefix` (what comes before it in the header's value, `""` when nothing does).
+
+A runtime engine whose sandbox may hold no secret (Kagent) reads it: the sandbox is given a placeholder under the variable's name, and the sandbox's egress gateway replaces that header with the person's value for these hosts alone. A variable without `egress` that a program reads in its own process (a skill's script, a local MCP server's environment) cannot be kept out of the sandbox: on such an engine, an agent whose skill or local MCP server requires it is refused in a sentence. A remote MCP server's variable sent in its `headers` is put in at egress the same way, with no `egress` of its own (below).
+```yaml
+egress:
+  hosts:
+    - api.github.com
+  header: Authorization
+  prefix: "Bearer "
+```
+
+Declared only for a variable that travels in one request header to fixed hosts: `GITHUB_TOKEN` (the `github` skill, `api.github.com`) and `TAVILY_API_KEY` (Tavily's hosted MCP server, `mcp.tavily.com`). A remote MCP server's own `headers` already say where its variable goes, so its variable needs no `egress`. A key sent in an address or a request's body (`PIXABAY_API_KEY`, in the query string) cannot be put in at egress, and has none.
+
 ### `tags` (list of strings)
 Categorization tags
 ```yaml
@@ -80,6 +94,7 @@ tags:
 Environment Variable Specification
 ├── Basic Info (id, name, description)
 ├── Registration (registrationUrl)
+├── Egress (egress: hosts, header, prefix)
 ├── Categorization (tags)
 └── UI (icon, emoji)
 ```
@@ -122,7 +137,7 @@ The following environment variables are defined in `agentspecs/env-vars/`:
 
 - **`KAGGLE_API_TOKEN`** - Kaggle API authentication
 - **`GITHUB_TOKEN`** - GitHub authentication for MCP server and skills
-- **`TAVILY_API_KEY`** - Tavily search and web crawling
+- **`TAVILY_API_KEY`** - Tavily search, read by the `tavily` MCP server (the `crawl` skill asks no key)
 - **`ALPHAVANTAGE_API_KEY`** - Alpha Vantage financial data
 - **`OPENAI_API_KEY`** - OpenAI API access
 - **`SLACK_BOT_TOKEN`** - Slack bot authentication

@@ -6,6 +6,14 @@ version: 0.0.1
 name: GitHub Token
 description: GitHub API token for repository management and code operations. Required for GitHub MCP server and GitHub skill to interact with GitHub repositories programmatically.
 registrationUrl: https://github.com/settings/tokens
+# Where the token is sent, and how: the one host, in this header, after this
+# prefix. A sandbox that may hold no secret is given a placeholder under this
+# name, and its egress gateway puts the token in for these hosts alone.
+egress:
+  hosts:
+    - api.github.com
+  header: Authorization
+  prefix: "Bearer "
 tags:
   - authentication
   - token

@@ -6,6 +6,14 @@ version: 0.0.1
 name: Tavily API Key
 description: API key for Tavily web search and research capabilities. Required for web crawling, content extraction, and search operations.
 registrationUrl: https://app.tavily.com/home
+# Where the key is sent, and how: Tavily's hosted MCP server, in this header,
+# after this prefix. A sandbox that may hold no secret is given a placeholder
+# under this name, and its egress gateway puts the key in for this host alone.
+egress:
+  hosts:
+    - mcp.tavily.com
+  header: Authorization
+  prefix: "Bearer "
 tags:
   - authentication
   - api-key
