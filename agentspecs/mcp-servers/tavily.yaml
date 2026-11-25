@@ -11,26 +11,38 @@ signup_url: https://app.tavily.com
 api_key_url: https://app.tavily.com/home
 setup: "A key from the [Tavily dashboard](https://app.tavily.com/home), in `TAVILY_API_KEY`; the docs are at [docs.tavily.com](https://docs.tavily.com)."
 
-command: npx
-args:
-  - "-y"
-  - "tavily-mcp"
-
-transport: stdio
-
-env:
-  TAVILY_API_KEY: ${TAVILY_API_KEY}
+# Tavily's own hosted server, reached by the runtime itself over Streamable
+# HTTP (the user, 25 November 2026: "Switch Tavily to remote"): no command and
+# no Node.js, the url and the header sent with every request, the key's
+# `${TAVILY_API_KEY}` expanded as it starts. Read off
+# https://docs.tavily.com/documentation/mcp and the running server (tavily-mcp
+# 4.2.4) on 25 November 2026:
+# - `https://mcp.tavily.com/mcp/`, Streamable HTTP. The key is taken in the
+#   address (`?tavilyApiKey=`) or in `Authorization: Bearer <key>`: the header
+#   is the one used here, so that the key is in no address, and a sandbox that
+#   may hold no secret has it put in at egress. A request with neither is
+#   answered 401; with a key Tavily does not know, initialize and tools/list
+#   answer and a tool call says "Unauthorized: missing or invalid API key".
+# - The same five tools as the `tavily-mcp` package the entry ran before
+#   (`npx -y tavily-mcp`, 0.2.22), under the same names, each with the same
+#   arguments and a few more, all optional.
+transport: streamable-http
+url: "https://mcp.tavily.com/mcp/"
+headers:
+  Authorization: "Bearer ${TAVILY_API_KEY}"
 
 envvars:
   - TAVILY_API_KEY:0.0.1
+
+env: {}
 
 # Not offered on the platform yet: the integrations page lists it as not available.
 enabled: true
 
 install:
-  type: npm
-  command: "npm install -g tavily-mcp"
-  note: "Needs Node.js; `npx -y` also fetches it at start."
+  type: remote
+  command: ""
+  note: "Nothing to install: Tavily's hosted MCP server, reached at its URL with your TAVILY_API_KEY."
 
 tags:
   - search
@@ -43,9 +55,10 @@ emoji: 🔍
 # What each tool does to the world (agentspecs.actions). A tool not named here is
 # unknown, and unknown is the most restricted.
 actions:
-  checked: "2026-10-02"
+  checked: "2026-11-25"
   note: >-
-    Every tool searches or reads the web; none changes anything.
+    Read off the running server's tools/list: every tool searches or reads the
+    web; none changes anything.
   tools:
     tavily_search: read
     tavily_extract: read
