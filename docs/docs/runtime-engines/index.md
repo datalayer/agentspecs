@@ -10,8 +10,9 @@ What runs and hosts an agent, one spec each under `agentspecs/runtime-engines/`.
 spec names one with `runtime_engine:`, on the line after `harness:`; a spec that names
 none, or another, is refused at load, and so is an engine asked to run a harness it does
 not run. The [harness](../harnesses) says which agent program turns the agent's loop; the
-runtime engine says what runs that program and keeps it alive. The first is the default:
-an agent built in code that names no engine runs there.
+runtime engine says what runs that program and keeps it alive. An engine that is not
+enabled stays listed here and is not one an agent may name. The first enabled one is
+the default: an agent built in code that names no engine runs there.
 
 | Engine | Id | Harnesses | Enabled |
 | --- | --- | --- | --- |

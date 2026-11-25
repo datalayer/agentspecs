@@ -12,11 +12,12 @@
     },
     "docs_url": {
       "description": "Its own documentation, https",
+      "pattern": "^https://",
       "title": "Docs Url",
       "type": "string"
     },
     "enabled": {
-      "description": "Whether an agent may run on it today",
+      "description": "Whether an agent may run on it today: a disabled engine stays in the catalogue and is not one an agent may name",
       "title": "Enabled",
       "type": "boolean"
     },
@@ -33,10 +34,13 @@
         }
       ],
       "description": "The harnesses it runs, by id; null when it runs any",
-      "title": "Harnesses"
+      "minItems": 1,
+      "title": "Harnesses",
+      "uniqueItems": true
     },
     "id": {
       "description": "Its id, the file's name: what an agent's `runtime_engine` says",
+      "pattern": "^[a-z][a-z0-9-]{0,40}$",
       "title": "Id",
       "type": "string"
     },

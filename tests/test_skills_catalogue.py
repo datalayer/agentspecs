@@ -38,6 +38,15 @@ def _bare(ref: object) -> str:
     return raw.split(":", 1)[0].strip()
 
 
+def _references(spec: dict) -> list[str]:
+    """Every skill reference of a spec, as written: its ``skills`` and its ``optional.skills``."""
+    optional = (spec.get("optional") or {}).get("skills") or []
+    return [
+        ref.get("id", "") if isinstance(ref, dict) else str(ref)
+        for ref in [*(spec.get("skills") or []), *optional]
+    ]
+
+
 def _named() -> dict[str, list[str]]:
     """Each skill id a spec names, with the specs that name it."""
     named: dict[str, list[str]] = {}
@@ -92,12 +101,21 @@ def test_a_versioned_reference_names_the_catalogue_version():
             spec = yaml.safe_load(path.read_text())
             if not isinstance(spec, dict):
                 continue
-            for ref in spec.get("skills") or []:
-                raw = ref.get("id", "") if isinstance(ref, dict) else str(ref)
+            for raw in _references(spec):
                 skill_id, _, version = raw.partition(":")
                 if version and str(catalogue[skill_id]["version"]) != version:
                     wrong[f"{kind}/{path.name}"] = raw
     assert wrong == {}
+
+
+def test_an_optional_reference_is_read_with_its_version():
+    """`optional.skills` names skills too: a wrong version there is a wrong version."""
+    spec = {
+        "skills": ["crawl:0.0.1", {"id": "pdf:0.0.1"}],
+        "optional": {"skills": ["image-stock:9.9.9"]},
+    }
+    assert _references(spec) == ["crawl:0.0.1", "pdf:0.0.1", "image-stock:9.9.9"]
+    assert _references({"optional": None}) == [] and _references({}) == []
 
 
 def test_the_memory_skills_are_told_apart():

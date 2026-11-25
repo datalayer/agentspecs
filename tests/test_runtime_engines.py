@@ -180,3 +180,90 @@ def test_a_file_named_for_another_engine_is_refused(tmp_path):
     (tmp_path / "other.yaml").write_text((ENGINES / "kagent.yaml").read_text())
     with pytest.raises(ValueError, match="named for 'other'"):
         load_runtime_engines(tmp_path)
+
+
+# ---- review of 0.1.21 ------------------------------------------------------------------------
+
+
+def _engines(tmp_path, **changes):
+    """A copy of the catalogue's engines, some fields changed by engine id."""
+    for path in sorted(ENGINES.glob("*.yaml")):
+        spec = yaml.safe_load(path.read_text())
+        spec.update(changes.get(spec["id"], {}))
+        (tmp_path / path.name).write_text(yaml.safe_dump(spec))
+    return tmp_path
+
+
+def test_a_disabled_engine_stays_in_the_catalogue_and_is_not_one_an_agent_may_name(tmp_path):
+    """`enabled: false` keeps the spec and takes the engine out of the allowed ones."""
+    catalogue = runtime_engines.load_runtime_engines(_engines(tmp_path, kagent={"enabled": False}))
+    assert list(catalogue) == ["datalayer", "kagent", "agentcore"]
+    assert runtime_engines.enabled_engines(catalogue) == ("datalayer", "agentcore")
+
+
+def test_the_default_is_the_first_enabled_engine(tmp_path):
+    catalogue = runtime_engines.load_runtime_engines(
+        _engines(tmp_path, datalayer={"enabled": False})
+    )
+    assert runtime_engines.enabled_engines(catalogue)[0] == "kagent"
+
+
+def test_a_catalogue_with_no_enabled_engine_is_refused(tmp_path):
+    off = {engine: {"enabled": False} for engine in ("datalayer", "kagent", "agentcore")}
+    with pytest.raises(ValueError, match="no runtime engine is enabled"):
+        runtime_engines.load_runtime_engines(_engines(tmp_path, **off))
+
+
+def test_an_agent_naming_a_disabled_engine_is_refused_in_a_sentence(monkeypatch):
+    spec = {"id": "an-agent", "harness": "pydantic-ai", "runtime_engine": "kagent"}
+    assert runtime_engines.agent_runtime_engine_problems(spec) == []
+    monkeypatch.setattr(runtime_engines, "RUNTIME_ENGINES", ("datalayer", "agentcore"))
+    assert runtime_engines.agent_runtime_engine_problems(spec) == [
+        "an-agent: the runtime_engine 'kagent' is not enabled: one of datalayer, agentcore"
+    ]
+    # An engine nobody knows is still told apart from one that is switched off.
+    unknown = runtime_engines.agent_runtime_engine_problems({**spec, "runtime_engine": "lambda"})
+    assert unknown == [
+        "an-agent: there is no runtime_engine named 'lambda': one of datalayer, agentcore"
+    ]
+    # And a spec naming none is offered the enabled ones alone.
+    assert "kagent" not in runtime_engines.agent_runtime_engine_problems({"id": "an-agent"})[0]
+
+
+def test_the_engines_an_agent_may_name_are_the_enabled_ones():
+    assert RUNTIME_ENGINES == tuple(
+        spec.id for spec in RUNTIME_ENGINE_CATALOGUE.values() if spec.enabled
+    )
+    assert runtime_engines.DEFAULT_RUNTIME_ENGINE == RUNTIME_ENGINES[0]
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        {"id": "Not An Id"},
+        {"docs_url": "http://kagent.dev"},
+        {"harnesses": []},
+        {"harnesses": ["pydantic-ai", "pydantic-ai"]},
+        {"position": 0},
+        {"label": "KAgent"},
+        {"name": ""},
+    ],
+)
+def test_what_the_loader_refuses_the_schema_refuses_too(change):
+    """The published schema says every rule the loader holds a spec to."""
+    import jsonschema
+
+    spec = yaml.safe_load((ENGINES / "kagent.yaml").read_text())
+    validator = jsonschema.Draft202012Validator(runtime_engines.json_schema())
+    assert list(validator.iter_errors(spec)) == []
+    with pytest.raises(ValidationError):
+        RuntimeEngineSpec.model_validate({**spec, **change})
+    assert list(validator.iter_errors({**spec, **change})), change
+
+
+def test_every_engine_of_the_catalogue_satisfies_the_schema():
+    import jsonschema
+
+    validator = jsonschema.Draft202012Validator(runtime_engines.json_schema())
+    for path in sorted(ENGINES.glob("*.yaml")):
+        assert list(validator.iter_errors(yaml.safe_load(path.read_text()))) == [], path.name

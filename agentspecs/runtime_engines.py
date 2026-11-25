@@ -26,7 +26,7 @@ the harnesses it runs (``harnesses``, null for any) and whether it is
   account of the organization that launches the agent.
 
 Every agent spec of the catalogue says its engine; a spec without one, or
-naming another, is refused at load in a sentence
+naming another, or one that is not enabled, is refused at load in a sentence
 (:func:`agent_runtime_engine_problems`). ``kagent`` and ``agentcore`` serve an
 agent through the agent-runtimes server, so they take the ``pydantic-ai``
 harness only.
@@ -65,18 +65,32 @@ class RuntimeEngineSpec(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    id: str = Field(description="Its id, the file's name: what an agent's `runtime_engine` says")
+    # The rules the validators below hold a spec to are said in the schema
+    # too (`json_schema_extra`): what the loader refuses, the published
+    # schema refuses. The validators keep the sentences.
+    id: str = Field(
+        description="Its id, the file's name: what an agent's `runtime_engine` says",
+        json_schema_extra={"pattern": _ID.pattern},
+    )
     version: str = Field(description="The version of this spec")
     name: str = Field(min_length=1, description="Its name, as a person reads it")
     description: str = Field(min_length=1, description="What it is, in a sentence or two")
-    docs_url: str = Field(description="Its own documentation, https")
+    docs_url: str = Field(
+        description="Its own documentation, https",
+        json_schema_extra={"pattern": "^https://"},
+    )
     position: int = Field(
         ge=1, description="Its place where the engines are offered; 1 is the default"
     )
     harnesses: list[str] | None = Field(
-        description="The harnesses it runs, by id; null when it runs any"
+        description="The harnesses it runs, by id; null when it runs any",
+        # Read of a list alone: null is not held to them.
+        json_schema_extra={"minItems": 1, "uniqueItems": True},
     )
-    enabled: bool = Field(description="Whether an agent may run on it today")
+    enabled: bool = Field(
+        description="Whether an agent may run on it today: a disabled engine stays in the "
+        "catalogue and is not one an agent may name"
+    )
 
     @field_validator("id")
     @classmethod
@@ -123,16 +137,28 @@ def load_runtime_engines(directory: Path = RUNTIME_ENGINES_DIR) -> dict[str, Run
         raise ValueError(
             f"the runtime engines take the positions 1 to {len(found)}, each once: {positions}"
         )
+    if found and not any(spec.enabled for spec in found):
+        raise ValueError(
+            "no runtime engine is enabled: an agent has nowhere to run, and there is no "
+            "default. Enable one at least."
+        )
     return {spec.id: spec for spec in sorted(found, key=lambda spec: spec.position)}
 
 
-#: Every runtime engine of the catalogue, by id, the default first.
+def enabled_engines(catalogue: Mapping[str, RuntimeEngineSpec]) -> tuple[str, ...]:
+    """The engines of a catalogue an agent may name: the enabled ones, in their order."""
+    return tuple(spec.id for spec in catalogue.values() if spec.enabled)
+
+
+#: Every runtime engine of the catalogue, by id, in their order: the disabled
+#: ones too, which stay known (a name, a page) and are not offered.
 RUNTIME_ENGINE_CATALOGUE: dict[str, RuntimeEngineSpec] = load_runtime_engines()
 
-#: The engines an agent may name, the default first.
-RUNTIME_ENGINES: tuple[str, ...] = tuple(RUNTIME_ENGINE_CATALOGUE)
+#: The engines an agent may name, the default first: the enabled ones alone.
+RUNTIME_ENGINES: tuple[str, ...] = enabled_engines(RUNTIME_ENGINE_CATALOGUE)
 
-#: The engine of an agent built in code that names none.
+#: The engine of an agent built in code that names none: the first enabled
+#: one (a catalogue with none is refused as it loads).
 DEFAULT_RUNTIME_ENGINE = RUNTIME_ENGINES[0]
 
 #: The harnesses each engine can run; an engine absent here runs any.
@@ -151,7 +177,7 @@ def get_runtime_engine(engine_id: str) -> RuntimeEngineSpec | None:
 def agent_runtime_engine_problems(spec: Mapping[str, Any]) -> list[str]:
     """What is wrong with an agent spec's ``runtime_engine``, one sentence each.
 
-    Empty when the spec names a known engine that can run its harness.
+    Empty when the spec names an enabled engine that can run its harness.
     """
     agent = spec.get("id") or "an agent"
     if "runtime_engine" not in spec or spec.get("runtime_engine") in (None, ""):
@@ -160,6 +186,11 @@ def agent_runtime_engine_problems(spec: Mapping[str, Any]) -> list[str]:
             "on the line after harness"
         ]
     engine = spec["runtime_engine"]
+    if engine in RUNTIME_ENGINE_CATALOGUE and engine not in RUNTIME_ENGINES:
+        return [
+            f"{agent}: the runtime_engine {engine!r} is not enabled: one of "
+            f"{', '.join(RUNTIME_ENGINES)}"
+        ]
     if engine not in RUNTIME_ENGINES:
         return [
             f"{agent}: there is no runtime_engine named {engine!r}: one of "
@@ -216,8 +247,9 @@ def reference_text() -> str:
         "spec names one with `runtime_engine:`, on the line after `harness:`; a spec that names",
         "none, or another, is refused at load, and so is an engine asked to run a harness it does",
         "not run. The [harness](../harnesses) says which agent program turns the agent's loop; the",
-        "runtime engine says what runs that program and keeps it alive. The first is the default:",
-        "an agent built in code that names no engine runs there.",
+        "runtime engine says what runs that program and keeps it alive. An engine that is not",
+        "enabled stays listed here and is not one an agent may name. The first enabled one is",
+        "the default: an agent built in code that names no engine runs there.",
         "",
         "| Engine | Id | Harnesses | Enabled |",
         "| --- | --- | --- | --- |",
@@ -255,6 +287,7 @@ __all__ = [
     "RUNTIME_ENGINE_CATALOGUE",
     "RuntimeEngineSpec",
     "agent_runtime_engine_problems",
+    "enabled_engines",
     "get_runtime_engine",
     "json_schema",
     "load_runtime_engines",
