@@ -343,7 +343,7 @@ policy:
   shield:
     egress: ["*"]                                  # any public address, any TCP port
     # egress: ["*:80", "*:443"]                    # the web only: any public address on 80 and 443
-    # egress: [api.tavily.com, "registry.npmjs.org:443", "1.1.1.0/24:53"]
+    # egress: [mcp.tavily.com, "registry.npmjs.org:443", "1.1.1.0/24:53"]
     ingress: [platform]                            # who may reach the agent's ports
 ```
 - **`egress`** is what the runtime may reach beyond the platform's own endpoints, which are always reachable. Each entry is `*` (alone), `*:port` (any public address on that TCP port only, agent-shield 0.2.21), an exact host, `host:port`, an IPv4 address or a CIDR, each with an optional port. If `egress` is empty or not given, the runtime reaches only the platform's endpoints.
