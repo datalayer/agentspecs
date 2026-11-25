@@ -8,7 +8,7 @@
 id: datalayer-memory-add
 version: 0.0.1
 name: Remember Skill
-description: Keep one thing in the agent's lasting memory of the person, in their words — a preference, a fact about them or their work — for the next conversations
+description: Keep one thing in the agent's lasting memory of the person — a preference, a fact about them or their work — for the next conversations
 
 module: datalayer_skills.skills.memory_add
 

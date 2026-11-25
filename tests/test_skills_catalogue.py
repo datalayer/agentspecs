@@ -83,6 +83,23 @@ def test_a_skill_says_what_a_page_shows_of_it(skill_id):
     assert spec.get("icon") and spec.get("emoji")
 
 
+def test_a_versioned_reference_names_the_catalogue_version():
+    # A page resolves `<id>:<version>` whole: another version than the catalogue's is no skill.
+    catalogue = _catalogue()
+    wrong = {}
+    for kind in NAMING_KINDS:
+        for path in sorted((ROOT / kind).rglob("*.yaml")):
+            spec = yaml.safe_load(path.read_text())
+            if not isinstance(spec, dict):
+                continue
+            for ref in spec.get("skills") or []:
+                raw = ref.get("id", "") if isinstance(ref, dict) else str(ref)
+                skill_id, _, version = raw.partition(":")
+                if version and str(catalogue[skill_id]["version"]) != version:
+                    wrong[f"{kind}/{path.name}"] = raw
+    assert wrong == {}
+
+
 def test_the_memory_skills_are_told_apart():
     catalogue = _catalogue()
     memory = [spec for skill, spec in catalogue.items() if skill.startswith("datalayer-memory-")]

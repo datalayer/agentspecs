@@ -4,7 +4,7 @@
 id: crawl
 version: 0.0.1
 name: Web Crawl Skill
-description: Web pages fetched, JavaScript-rendered ones included, their text, links and tables extracted, and a whole site crawled within its robots rules
+description: Web pages fetched, JavaScript-rendered ones included, their text, links and tables extracted, and a site crawled within its robots rules
 
 module: datalayer_skills.skills.crawl
 

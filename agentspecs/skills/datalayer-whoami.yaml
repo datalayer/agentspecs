@@ -6,7 +6,8 @@
 # DATALAYER_API_KEY — the platform's, which no person sets, so it is not listed in envvars.
 
 id: datalayer-whoami
-version: 0.0.1
+# The version the agents name it by (datalayer-whoami:1.0.0), the skill's own.
+version: 1.0.0
 name: Who Am I Skill
 description: The Datalayer account the agent runs for — its handle, name, email, roles and avatar
 

@@ -4,7 +4,7 @@
 id: accounting
 version: 0.0.1
 name: Accounting Skill
-description: Accounting analysis over CSV books — two ledgers reconciled, the variance between two periods, the aging of open invoices and an audit-ready close summary
+description: Accounting over CSV books — ledgers reconciled, the variance between two periods, open invoices aged and an audit-ready close summary
 
 module: datalayer_skills.skills.accounting
 
