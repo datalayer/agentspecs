@@ -1,0 +1,77 @@
+{
+  "$id": "https://agentspecs.datalayer.tech/schemas/runtime-engine.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One runtime engine: what runs and hosts an agent.",
+  "properties": {
+    "description": {
+      "description": "What it is, in a sentence or two",
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "docs_url": {
+      "description": "Its own documentation, https",
+      "pattern": "^https://",
+      "title": "Docs Url",
+      "type": "string"
+    },
+    "enabled": {
+      "description": "Whether an agent may run on it today: a disabled engine stays in the catalogue and is not one an agent may name",
+      "title": "Enabled",
+      "type": "boolean"
+    },
+    "harnesses": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The harnesses it runs, by id; null when it runs any",
+      "minItems": 1,
+      "title": "Harnesses",
+      "uniqueItems": true
+    },
+    "id": {
+      "description": "Its id, the file's name: what an agent's `runtime_engine` says",
+      "pattern": "^[a-z][a-z0-9-]{0,40}$",
+      "title": "Id",
+      "type": "string"
+    },
+    "name": {
+      "description": "Its name, as a person reads it",
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "position": {
+      "description": "Its place where the engines are offered; 1 is the default",
+      "minimum": 1,
+      "title": "Position",
+      "type": "integer"
+    },
+    "version": {
+      "description": "The version of this spec",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "name",
+    "description",
+    "docs_url",
+    "position",
+    "harnesses",
+    "enabled"
+  ],
+  "title": "Runtime engine",
+  "type": "object"
+}

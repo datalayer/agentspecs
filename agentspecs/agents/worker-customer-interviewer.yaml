@@ -30,10 +30,11 @@ delegable:
   - id: support.respond
 
 enabled: false
-model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
 # Other models it may be switched to, beside its own: those
 # datalayer-ai-inference serves from the catalogue.
 model_additionals:
+  - "bedrock:us.anthropic.claude-sonnet-4-6"
   - "alibaba:qwen-max"
 harness: pydantic-ai
 runtime_engine: datalayer

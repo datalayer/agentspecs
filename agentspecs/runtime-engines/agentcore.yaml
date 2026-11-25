@@ -1,0 +1,20 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Runtime Engine Specification: AWS AgentCore
+#
+# What runs and hosts an agent (`runtime_engine`, on the line after
+# `harness` in an agent spec). `agents/worker-steward-aws.yaml` runs on it.
+
+id: agentcore
+version: 0.0.1
+name: AWS AgentCore
+description: >-
+  Amazon Bedrock AgentCore Runtime in the AWS account of the organization that launches the agent, the agent-runtimes image serving the spec (`agent-runtimes serve --target agentcore`); AgentCore starts it on each invocation, billed to that account.
+docs_url: "https://aws.amazon.com/bedrock/agentcore/"
+# Where it is offered ("Where it runs"), the default first.
+position: 3
+# It serves the agent through the agent-runtimes server.
+harnesses: [pydantic-ai]
+# Whether an agent may run on it today.
+enabled: true

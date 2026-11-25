@@ -1,0 +1,32 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# One of the four memory skills of datalayer-skills (0.2.0): its script asks the agent
+# runtime beside it, on the pod's loopback, which keeps the memory under the runtime
+# owner's account and the agent. Standard library only: no key, no egress.
+
+id: datalayer-memory-list
+version: 0.0.1
+name: List Memories Skill
+description: List everything the agent remembers of the person, newest first
+
+module: datalayer_skills.skills.memory_list
+
+dependencies:
+  - datalayer-skills>=0.2.0
+
+# Offered on the platform: the runtime image installs datalayer-skills.
+enabled: true
+
+install:
+  type: python
+  command: "pip install \"datalayer-skills>=0.2.0\""
+  note: "Standard library only; the agent runtime keeps the memory (mem0), for the person the runtime runs for and this agent."
+
+tags:
+  - memory
+  - datalayer
+  - list
+
+icon: "@primer/octicons-react:list-unordered"
+emoji: "🗂️"

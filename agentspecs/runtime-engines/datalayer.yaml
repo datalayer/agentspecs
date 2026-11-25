@@ -1,0 +1,21 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Runtime Engine Specification: Datalayer
+#
+# What runs and hosts an agent (`runtime_engine`, on the line after
+# `harness` in an agent spec). The default: an agent built in code that names
+# no engine runs here.
+
+id: datalayer
+version: 0.0.1
+name: Datalayer
+description: >-
+  A Datalayer agent runtime, launched from the platform's pools or on your own machine, metered in credits and known by its uid.
+docs_url: "https://datalayer.ai/docs/agents"
+# Where it is offered ("Where it runs"), the default first.
+position: 1
+# The harnesses it runs; null: any.
+harnesses: null
+# Whether an agent may run on it today.
+enabled: true

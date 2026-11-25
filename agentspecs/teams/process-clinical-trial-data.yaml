@@ -28,7 +28,7 @@ orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:
   name: Clinical Data Orchestrator Agent
-  model: bedrock:us.anthropic.claude-sonnet-4-6
+  model: bedrock:us.anthropic.claude-sonnet-5-5
 routing_instructions: 'Route incoming data through the Ingestion Agent first for format detection and
   parsing, then to Harmonisation Agent for CDISC SDTM standardisation, then Safety Monitor for adverse
   event screening, then Submission Preparer for final dataset assembly. Escalate serious adverse events
@@ -71,7 +71,7 @@ agents:
   name: Safety Monitor Agent
   role: contributor
   goal: Screen every data point for adverse events and safety signals
-  model: bedrock:us.anthropic.claude-sonnet-4-6
+  model: bedrock:us.anthropic.claude-sonnet-5-5
   mcp_server: Safety Database MCP
   tools:
   - AE Classifier

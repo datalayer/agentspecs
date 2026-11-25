@@ -71,7 +71,7 @@ agents:
   name: Anomaly Detector Agent
   role: contributor
   goal: Monitor all KPIs for CTR drops, CPA spikes, and budget pacing issues
-  model: bedrock:us.anthropic.claude-sonnet-4-6
+  model: bedrock:us.anthropic.claude-sonnet-5-5
   mcp_server: Monitoring MCP
   tools:
   - Anomaly Scanner

@@ -8,6 +8,8 @@
 # IAM's /social/mail — to the person the runtime runs for alone, never an address
 # the agent names, at most ten a day. No mail credential in the runtime.
 
+# Acts as the account the runtime runs for, through the runtime: no variable is set by a
+# person, and its readiness is the runtime's to say (agent-runtimes 1.8.7).
 id: datalayer-email
 version: 0.0.1
 name: Email Skill

@@ -10,10 +10,12 @@ description: Claude Fable 5 via AWS Bedrock
 provider: bedrock
 provider_url: "https://aws.amazon.com/bedrock/anthropic/"
 default: false
-# Switched off: the AWS account backing this deployment is not entitled to it.
-# Bedrock answers `AccessDeniedException` (403) — "is not available for this
-# account" — so offering it in a model menu is offering a request that can only
-# fail. Flip back to `true` once the entitlement is granted.
+# Disabled (the user, 25 November 2026): not offered and not selectable.
+# Bedrock lists it for the account and refuses every call —
+# `ValidationException`: "data retention mode 'default' is not available for
+# this model" (measured that day; it answered `AccessDeniedException` before)
+# — so offering it in a model menu is offering a request that can only fail.
+# Flip back to `true` only once a call answers.
 available: false
 tokens_limit: 64000
 

@@ -1,0 +1,47 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# AI Model Specification: Bedrock Claude Sonnet 5.5
+#
+# The latest Claude Sonnet Bedrock lists (`aws bedrock list-inference-profiles`,
+# 25 November 2026: `us.anthropic.claude-sonnet-5-5`, ACTIVE), and the one the
+# platform defaults to since that day: the account answers it (`converse`,
+# with a tool and a temperature through LiteLLM as well).
+
+id: "bedrock:us.anthropic.claude-sonnet-5-5"
+version: 0.0.1
+name: Bedrock Claude Sonnet 5.5
+description: Claude Sonnet 5.5 via AWS Bedrock - balanced performance
+provider: bedrock
+provider_url: "https://aws.amazon.com/bedrock/anthropic/"
+default: true
+available: true
+# Bedrock takes up to 128,000 output tokens for it (its own refusal of a
+# larger request, 25 November 2026); a run asks for half of that at most, as
+# for Sonnet 4.6.
+tokens_limit: 64000
+# What a request carries at least, as Sonnet 4.6 does: the larger window
+# Anthropic documents for the Sonnet 5 family was not measured on this account.
+context_window: 200000
+
+# AWS's on-demand price for the US cross-region (geo) inference profile this
+# `us.` id names, US East (N. Virginia): "Claude Sonnet 5.5", Input Tokens -
+# Standard $2.20 and Output Tokens - Standard $11.00 per million, in AWS's
+# public price list for AmazonBedrockFoundationModels (published 2026-11-23,
+# effective 2026-11-01, read 2026-11-25). Cache writes and reads are priced
+# apart there (5m write $2.75, 1h write $4.40, read $0.11); the catalogue has
+# no field for them.
+# pydantic/genai-prices (main 0061d6e, read 2026-11-25) has no entry of its
+# own for Sonnet 5.5: its `claude-sonnet-5` rule matches the id by prefix.
+pricing:
+  input_usd_per_million: 2.2
+  output_usd_per_million: 11.0
+
+required_env_vars:
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - AWS_DEFAULT_REGION
+
+capabilities:
+  - chat
+  - tools

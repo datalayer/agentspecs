@@ -10,7 +10,7 @@ model definitions from YAML specifications.
 
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 import yaml
 from pydantic import BaseModel, Field
@@ -169,6 +169,34 @@ def get_model(model_id: str) -> Optional[AIModel]:
         if model.id == model_id or model_id in model.aliases:
             return model
     return None
+
+
+#: The models a provider retired, each with the model of the catalogue that
+#: takes its place. A retired model is out of the catalogue — no spec, no enum
+#: member, no alias: an id that silently became another model would bill and
+#: behave as that other model without anybody having chosen it. A consumer
+#: that meets one (a saved spec, an old request) refuses it and names the
+#: successor (:func:`retired_successor`).
+#:
+#: Bedrock, 25 November 2026: Claude Opus 4 and Claude Sonnet 4 answer
+#: ``ResourceNotFoundException`` — "This model version has reached the end of
+#: its life".
+RETIRED_MODELS: Dict[str, str] = {
+    "bedrock:us.anthropic.claude-opus-4-20250514-v1:0": "bedrock:us.anthropic.claude-opus-5",
+    "bedrock:us.anthropic.claude-sonnet-4-20250514-v1:0": "bedrock:us.anthropic.claude-sonnet-5-5",
+}
+
+
+def retired_successor(model_id: str) -> Optional[str]:
+    """The catalogue model that takes the place of a retired one.
+
+    Args:
+        model_id: A model identifier, as a spec or a request names it.
+
+    Returns:
+        The successor's id when the model was retired by its provider, else None.
+    """
+    return RETIRED_MODELS.get((model_id or "").strip())
 
 
 def get_default_model() -> Optional[AIModel]:

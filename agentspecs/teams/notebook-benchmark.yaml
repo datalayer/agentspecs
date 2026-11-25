@@ -36,7 +36,7 @@ orchestration_protocol: datalayer
 execution_mode: sequential
 supervisor:
   name: Benchmark Supervisor
-  model: bedrock:us.anthropic.claude-sonnet-4-6
+  model: bedrock:us.anthropic.claude-sonnet-5-5
 routing_instructions: 'Place the runner first and wait for it: nothing can be analysed before the notebook
   has run. Give the analyst the runner''s outputs and the evalset''s expectations, and the reviewer the
   analyst''s comparison. Answer with the reviewer''s verdict and the evidence behind it, never with a
@@ -52,7 +52,7 @@ agents:
   name: Benchmark Runner
   role: initiator
   goal: Execute the benchmark's notebook from a clean sandbox and return it with its outputs
-  model: bedrock:us.anthropic.claude-sonnet-4-6
+  model: bedrock:us.anthropic.claude-sonnet-5-5
   tools:
   - Notebook Executor
   approval: auto
@@ -61,7 +61,7 @@ agents:
   role: contributor
   goal: Compare what the notebook produced against what the evalset expected, and say where and by how
     much they differ
-  model: bedrock:us.anthropic.claude-sonnet-4-6
+  model: bedrock:us.anthropic.claude-sonnet-5-5
   tools:
   - Notebook Reader
   depends_on:
@@ -72,7 +72,7 @@ agents:
   role: finalizer
   goal: Check the analyst's comparison against the notebook's own outputs and say whether the conclusion
     is supported by the evidence
-  model: bedrock:us.anthropic.claude-sonnet-4-6
+  model: bedrock:us.anthropic.claude-sonnet-5-5
   tools:
   - Notebook Reader
   depends_on:

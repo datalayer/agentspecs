@@ -263,3 +263,40 @@ def test_the_titan_embedding_models_are_priced_and_embed_only():
         assert model.pricing.output_usd_per_million == 0.0, model_id
         assert model.required_env_vars == [], model_id
     assert "embeddings" in MODEL_CAPABILITIES
+
+
+def test_the_default_is_the_latest_sonnet_on_bedrock_and_the_former_one_stays_offered():
+    """Sonnet 5.5 since 25 November 2026; Sonnet 4.6 is still a choice."""
+    from agentspecs.models import DEFAULT_MODEL, get_default_model
+
+    defaults = [m.id for m in AI_MODEL_CATALOGUE if m.default]
+    assert defaults == ["bedrock:us.anthropic.claude-sonnet-5-5"]
+    latest = get_default_model()
+    assert latest.available is True and DEFAULT_MODEL.value == latest.id
+    assert latest.pricing.input_usd_per_million == 2.2
+    assert latest.pricing.output_usd_per_million == 11.0
+    former = get_model("bedrock:us.anthropic.claude-sonnet-4-6")
+    assert former.available is True and former.default is False
+
+
+def test_a_retired_model_is_out_of_the_catalogue_and_names_its_successor():
+    """No spec, no alias: a retired id is refused, and its successor is a model the catalogue has."""
+    from agentspecs.models import RETIRED_MODELS, retired_successor
+
+    assert set(RETIRED_MODELS) == {
+        "bedrock:us.anthropic.claude-opus-4-20250514-v1:0",
+        "bedrock:us.anthropic.claude-sonnet-4-20250514-v1:0",
+    }
+    for retired, successor in RETIRED_MODELS.items():
+        assert get_model(retired) is None, retired
+        assert retired_successor(retired) == successor
+        assert get_model(successor) is not None, successor
+        assert successor not in RETIRED_MODELS
+    assert retired_successor("bedrock:us.anthropic.claude-sonnet-4-6") is None
+    assert retired_successor("") is None
+
+
+def test_fable_5_on_bedrock_is_known_and_not_offered():
+    """Disabled, not deleted: Bedrock refuses every call of this account."""
+    fable = get_model("bedrock:us.anthropic.claude-fable-5")
+    assert fable is not None and fable.available is False and fable.default is False

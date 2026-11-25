@@ -8,7 +8,7 @@
 
 id: video
 version: 0.0.1
-name: Video Skills
+name: Video Skill
 description: Recordings of web pages; videos read, trimmed, zoomed in and out on a point, transcoded, optimized, framed and turned to GIF
 
 module: datalayer_skills.skills.video

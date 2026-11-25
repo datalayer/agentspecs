@@ -870,7 +870,7 @@ a2a:
 ### `model`
 
 ```yaml
-model: bedrock:us.anthropic.claude-sonnet-4-6
+model: bedrock:us.anthropic.claude-sonnet-5-5
 ```
 
 ### `skills`

@@ -8,7 +8,7 @@ Model specifications define the AI models available to agents. Each specificatio
 
 ## Overview
 
-Model IDs follow the format `provider:model-name` (e.g., `bedrock:us.anthropic.claude-sonnet-4-6`, `openai:gpt-4.1`). This convention makes it easy to identify both the provider and the specific model variant at a glance.
+Model IDs follow the format `provider:model-name` (e.g., `bedrock:us.anthropic.claude-sonnet-5-5`, `openai:gpt-4.1`). This convention makes it easy to identify both the provider and the specific model variant at a glance.
 
 ## Required Fields
 
@@ -123,12 +123,12 @@ required_env_vars:
 ## Complete Example
 
 ```yaml
-# AI Model Specification: Bedrock Claude Sonnet 4.6
+# AI Model Specification: Bedrock Claude Sonnet 5.5
 
-id: "bedrock:us.anthropic.claude-sonnet-4-6"
+id: "bedrock:us.anthropic.claude-sonnet-5-5"
 version: 0.0.1
-name: Bedrock Claude Sonnet 4.6
-description: Claude Sonnet 4.6 via AWS Bedrock - balanced performance
+name: Bedrock Claude Sonnet 5.5
+description: Claude Sonnet 5.5 via AWS Bedrock - balanced performance
 provider: bedrock
 provider_url: "https://aws.amazon.com/bedrock/anthropic/"
 default: true
@@ -137,21 +137,17 @@ tokens_limit: 64000
 context_window: 200000
 
 pricing:
-  input_usd_per_million: 3.3
-  output_usd_per_million: 16.5
+  input_usd_per_million: 2.2
+  output_usd_per_million: 11.0
 
 required_env_vars:
   - AWS_ACCESS_KEY_ID
   - AWS_SECRET_ACCESS_KEY
   - AWS_DEFAULT_REGION
 
-# Asked the typed decision questions and made to answer in the adapter's
-# shape, for comparing with Jev on the same cases; its probabilities are
-# what it says they are.
 capabilities:
   - chat
   - tools
-  - decider
 ```
 
 ## Model Hierarchy
@@ -181,18 +177,26 @@ Required env vars: `ANTHROPIC_API_KEY`
 
 | Model | ID | Description |
 |-------|-----|-------------|
-| **Claude Fable 5** | `bedrock:us.anthropic.claude-fable-5` | Claude Fable 5 |
-| **Claude Opus 4.6** | `bedrock:us.anthropic.claude-opus-4-6-v1` | Claude Opus 4.6 |
-| **Claude Opus 4.8** | `bedrock:us.anthropic.claude-opus-4-8` | Claude Opus 4.8 |
-| **Claude Opus 4** | `bedrock:us.anthropic.claude-opus-4-20250514-v1:0` | highest capability |
-| **Claude Opus 5** | `bedrock:us.anthropic.claude-opus-5` | the current frontier model |
-| **Claude Sonnet 4.5** | `bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0` | balanced performance |
-| **Claude Sonnet 4.6** ⭐ | `bedrock:us.anthropic.claude-sonnet-4-6` | balanced performance (default) |
-| **Claude Sonnet 4** | `bedrock:us.anthropic.claude-sonnet-4-20250514-v1:0` | strong reasoning |
+| **Claude Sonnet 5.5** ⭐ | `bedrock:us.anthropic.claude-sonnet-5-5` | balanced performance (default, offered) |
+| **Claude Sonnet 4.6** | `bedrock:us.anthropic.claude-sonnet-4-6` | balanced performance (the former default, offered) |
+| **Claude Sonnet 4.5** | `bedrock:us.anthropic.claude-sonnet-4-5-20250929-v1:0` | balanced performance (not offered) |
+| **Claude Opus 5** | `bedrock:us.anthropic.claude-opus-5` | the frontier model of its generation (not offered) |
+| **Claude Opus 4.8** | `bedrock:us.anthropic.claude-opus-4-8` | Claude Opus 4.8 (not offered) |
+| **Claude Opus 4.6** | `bedrock:us.anthropic.claude-opus-4-6-v1` | Claude Opus 4.6 (not offered) |
+| **Claude Fable 5** | `bedrock:us.anthropic.claude-fable-5` | disabled: Bedrock refuses every call of the account |
 | **Titan Text Embeddings** | `bedrock:amazon.titan-embed-text-v1` | embeddings, 1536 dimensions: what an agent's memories are embedded with |
 | **Titan Text Embeddings V2** | `bedrock:amazon.titan-embed-text-v2:0` | embeddings, 1024, 512 or 256 dimensions |
 
 Required env vars: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`
+
+A model its provider retired is taken out of the catalogue, with no alias: an id that
+silently became another model would bill and behave as that other model without anybody
+having chosen it. `RETIRED_MODELS` (`agentspecs.models`) names the successor of each, and
+`retired_successor(model_id)` reads it, so a service that meets a retired id in a saved
+spec refuses it in a sentence that says which model to use. Bedrock retired Claude Opus 4
+(`bedrock:us.anthropic.claude-opus-4-20250514-v1:0`, successor Claude Opus 5) and Claude
+Sonnet 4 (`bedrock:us.anthropic.claude-sonnet-4-20250514-v1:0`, successor Claude Sonnet
+5.5); both left the catalogue on 25 November 2026.
 
 ### Alibaba Cloud Model Studio
 
@@ -323,7 +327,7 @@ Agents can specify a model in their YAML spec using the model ID:
 
 ```yaml
 # In agent spec
-model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
 ```
 
 If an agent does not specify a `model` field, the system default model (marked with `default: true`) is used.

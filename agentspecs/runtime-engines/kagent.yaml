@@ -1,0 +1,21 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Runtime Engine Specification: Kagent
+#
+# What runs and hosts an agent (`runtime_engine`, on the line after
+# `harness` in an agent spec). `agents/example-kagent.yaml` runs on it, and
+# agent-runtimes' `deploy/kagent` holds the three objects it needs.
+
+id: kagent
+version: 0.0.1
+name: Kagent
+description: >-
+  Kagent, a Kubernetes control plane for agents. The agent is a Kagent Agent (an AgentTemplate and a Harness running `agent-runtimes serve --target kagent` behind the Kagent bridge), reached through Kagent's A2A gateway at /agents/{namespace}/{name}; each conversation is a session actor of Agent Substrate, suspended when idle and resumed on the next message.
+docs_url: "https://kagent.dev"
+# Where it is offered ("Where it runs"), the default first.
+position: 2
+# It serves the agent through the agent-runtimes server.
+harnesses: [pydantic-ai]
+# Whether an agent may run on it today.
+enabled: true

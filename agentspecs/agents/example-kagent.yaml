@@ -1,22 +1,22 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Agent Specification: A kagent Agent
+# Agent Specification: A Kagent Agent
 #
-# The same agent as example-simple, run by kagent (`runtime_engine: kagent`)
+# The same agent as example-simple, run by Kagent (`runtime_engine: kagent`)
 # rather than on a Datalayer runtime. How it runs:
 #
-# - In kagent (https://kagent.dev, 1.0) it is an `Agent` that pairs an
-#   `AgentTemplate` (the model, as a kagent ModelConfig, and remote MCP tools)
-#   with a `Harness`: the agent-runtimes kagent image, whose bridge serves
-#   kagent's A2A v1 over gRPC and starts `agent-runtimes serve --target kagent`
+# - In Kagent (https://kagent.dev, 1.0) it is an `Agent` that pairs an
+#   `AgentTemplate` (the model, as a Kagent ModelConfig, and remote MCP tools)
+#   with a `Harness`: the agent-runtimes Kagent image, whose bridge serves
+#   Kagent's A2A v1 over gRPC and starts `agent-runtimes serve --target kagent`
 #   with `AGENT_SPEC_ID=example-kagent`. agent-runtimes' `deploy/kagent`
 #   holds the three objects.
-# - Each conversation (a kagent Session, the A2A contextId) is a session actor
+# - Each conversation (a Kagent Session, the A2A contextId) is a session actor
 #   of Agent Substrate, in a gVisor sandbox. The actor is suspended to a
 #   snapshot when it falls idle after a task, and resumed from that snapshot
 #   on the next message of the same conversation.
-# - It is reached through kagent's A2A gateway, on the kagent controller:
+# - It is reached through Kagent's A2A gateway, on the Kagent controller:
 #   the card at `GET /agents/{namespace}/{name}/.well-known/agent-card.json`
 #   and JSON-RPC (`SendMessage`, A2A 1.0) at `POST /agents/{namespace}/{name}`.
 #
@@ -44,12 +44,13 @@ tags:
 # Runnable by id, and an application naming it runs with nothing to set up.
 enabled: true
 listed: false
-# Without a ModelConfig in the kagent AgentTemplate, this model is the one
+# Without a ModelConfig in the Kagent AgentTemplate, this model is the one
 # called; with one, the template's model is.
-model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
 # Other models it may be switched to, beside its own: those
 # datalayer-ai-inference serves from the catalogue.
 model_additionals:
+  - "bedrock:us.anthropic.claude-sonnet-4-6"
   - "alibaba:qwen-max"
 harness: pydantic-ai
 runtime_engine: kagent
@@ -60,10 +61,10 @@ identity: datalayer-acting-agent
 sandbox_variant: eval
 
 # The actor's snapshot keeps the process across a suspend and a resume;
-# the conversation itself is kagent's Session.
+# the conversation itself is Kagent's Session.
 memory: ephemeral
 
-# No MCP servers of its own: the kagent AgentTemplate's remote MCP servers
+# No MCP servers of its own: the Kagent AgentTemplate's remote MCP servers
 # (Streamable HTTP) are given to it at start.
 mcp_servers: []
 

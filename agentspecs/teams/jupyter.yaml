@@ -69,7 +69,7 @@ execution_mode: supervisor
 supervisor:
   name: Jupyter Analyst
   ref: worker-data-analyst:0.0.2
-  model: "bedrock:us.anthropic.claude-sonnet-4-6"
+  model: "bedrock:us.anthropic.claude-sonnet-5-5"
   goal: >-
     Keep the work in the notebook. Answer analysis requests directly; send a
     request to check something to the Reviewer, a request to write something

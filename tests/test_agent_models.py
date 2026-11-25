@@ -16,6 +16,7 @@ AGENTS_DIR = Path(__file__).resolve().parent.parent / "agentspecs" / "agents"
 #: The chat models datalayer-ai-inference serves from the catalogue: the
 #: ones its catalogue marks available (`chat_models()`), as of 0.0.25.
 AI_INFERENCE_CHAT_MODELS = {
+    "bedrock:us.anthropic.claude-sonnet-5-5",
     "bedrock:us.anthropic.claude-sonnet-4-6",
     "alibaba:qwen-max",
 }

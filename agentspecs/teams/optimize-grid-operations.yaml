@@ -70,7 +70,7 @@ agents:
   name: Failure Predictor Agent
   role: contributor
   goal: Predict equipment failures 2–4 weeks in advance using anomaly patterns and failure history
-  model: bedrock:us.anthropic.claude-sonnet-4-6
+  model: bedrock:us.anthropic.claude-sonnet-5-5
   mcp_server: Predictive Analytics MCP
   tools:
   - Failure Correlation Engine
