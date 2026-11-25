@@ -8,8 +8,9 @@ description: Web pages fetched, JavaScript-rendered ones included, their text, l
 
 module: datalayer_skills.skills.crawl
 
-envvars:
-  - TAVILY_API_KEY:0.0.1
+# No variable: its scripts fetch the pages themselves (requests, Playwright)
+# and read no key. Web search is the tavily MCP server's, with its own key.
+envvars: []
 
 dependencies:
   - requests>=2.31.0

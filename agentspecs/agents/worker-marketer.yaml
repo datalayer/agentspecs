@@ -99,8 +99,7 @@ optional:
     - discord:0.0.1
     - linkedin:0.0.1
   skills:
-    # Web search and the repositories: off without TAVILY_API_KEY, GITHUB_TOKEN.
-    - crawl:0.0.1
+    # The repositories: off without GITHUB_TOKEN. Crawling a page asks no key.
     - github:0.0.1
     # Email needs the runtime's social token: a visitor's or a deployment's
     # runtime has none, and the agent says it cannot mail.
