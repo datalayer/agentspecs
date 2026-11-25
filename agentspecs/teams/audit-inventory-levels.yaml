@@ -64,7 +64,7 @@ agents:
   name: Demand Forecaster Agent
   role: contributor
   goal: Forecast demand by SKU using historical sales and seasonal patterns
-  model: bedrock:us.anthropic.claude-sonnet-4-6
+  model: bedrock:us.anthropic.claude-sonnet-5-5
   mcp_server: Analytics MCP
   tools:
   - Time Series Model

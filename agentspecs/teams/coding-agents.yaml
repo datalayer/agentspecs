@@ -42,7 +42,7 @@ execution_mode: sequential
 
 supervisor:
   name: Lead
-  model: "bedrock:us.anthropic.claude-sonnet-4-6"
+  model: "bedrock:us.anthropic.claude-sonnet-5-5"
   instructions: >-
     You lead two coding agents. Hand the change to the Coder with the files it
     may touch and a deadline, wait for its diff, hand the diff to the Reviewer,

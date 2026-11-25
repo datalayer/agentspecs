@@ -44,8 +44,9 @@ delegable:
   - id: data.analyse
   - id: data.visualise
 enabled: true
-model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
 model_additionals:
+  - "bedrock:us.anthropic.claude-sonnet-4-6"
   - "alibaba:qwen-max"
 harness: pydantic-ai
 runtime_engine: datalayer

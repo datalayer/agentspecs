@@ -204,7 +204,7 @@ runs that program. The catalogue's Kagent example is `example-kagent`:
 id: example-kagent
 version: 0.0.1
 name: A kagent Agent
-model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
 harness: pydantic-ai
 runtime_engine: kagent
 sandbox_variant: eval
@@ -217,7 +217,7 @@ operator's Kagent part, and is refused in a sentence where that part is off.
 ### `model` (string)
 AI model ID to use for this agent. References a model spec in `models/` directory by its `id` field. If omitted, the system default model is used.
 ```yaml
-model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
 model: "openai:gpt-4.1"
 model: "anthropic:claude-opus-4-20250514"
 ```
@@ -225,8 +225,9 @@ model: "anthropic:claude-opus-4-20250514"
 ### `model_additionals` (list of strings, optional)
 Other models of the catalogue the agent may be switched to, beside its `model`. Each is a model's `id` in `models/`; an id the catalogue does not know is refused, and so is a typed-decision model (`capabilities: [decisions]`), which runs no chat.
 ```yaml
-model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
 model_additionals:
+  - "bedrock:us.anthropic.claude-sonnet-4-6"
   - "alibaba:qwen-max"
 ```
 A runtime offers the agent's `model` and those of its `model_additionals` its inference can run: routed through datalayer-ai-inference, those the service lists at `GET /api/ai-inference/v1/models` when the runtime starts. The chat's model menu and the `agent` CLI's `/models` show that list, and a switch to a model outside it is refused. The enabled agents list as additionals the chat models datalayer-ai-inference serves from the catalogue.
@@ -375,7 +376,7 @@ name: Data Acquisition Agent
 description: Acquire and manage data from external and local sources.
 
 enabled: true
-model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
 harness: pydantic-ai
 runtime_engine: datalayer
 

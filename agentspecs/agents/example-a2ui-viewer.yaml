@@ -25,7 +25,7 @@ tags:
 
 enabled: false
 protocol: vercel-ai
-model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
 # The loop turns in the page by default, like the Agent Shell's agent; on a
 # server target the location decides the harness, whatever is said here.
 harness: vercel-ai

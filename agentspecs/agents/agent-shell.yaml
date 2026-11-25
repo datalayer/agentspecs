@@ -16,7 +16,7 @@ tags:
 
 enabled: false
 protocol: vercel-ai
-model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
 # The loop turns in the page: with the browser sandbox there is no server to
 # hold a pydantic-ai agent, so the harness is the Vercel AI SDK — saying so
 # here keeps the spec honest about where it actually runs.

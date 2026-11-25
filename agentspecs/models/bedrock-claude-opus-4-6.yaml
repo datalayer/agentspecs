@@ -10,10 +10,10 @@ description: Claude Opus 4.6 via AWS Bedrock
 provider: bedrock
 provider_url: "https://aws.amazon.com/bedrock/anthropic/"
 default: false
-# Switched off: the AWS account backing this deployment is not entitled to it.
-# Bedrock answers `AccessDeniedException` (403) — "is not available for this
-# account" — so offering it in a model menu is offering a request that can only
-# fail. Flip back to `true` once the entitlement is granted.
+# Not offered. It was switched off when the AWS account backing this
+# deployment was not entitled to it (Bedrock answered `AccessDeniedException`,
+# 403). The account answers it now (`converse`, 25 November 2026); offering it
+# is a product decision not taken yet. Flip to `true` to offer it.
 available: false
 tokens_limit: 32000
 

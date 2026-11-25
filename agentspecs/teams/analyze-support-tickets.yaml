@@ -63,7 +63,7 @@ agents:
   name: Pattern Analyzer Agent
   role: finalizer
   goal: Identify recurring issues and generate resolution recommendations
-  model: bedrock:us.anthropic.claude-sonnet-4-6
+  model: bedrock:us.anthropic.claude-sonnet-5-5
   mcp_server: Analytics MCP
   tools:
   - Pattern Detector

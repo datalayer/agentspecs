@@ -72,7 +72,7 @@ agents:
   name: Policy Impact Analyst Agent
   role: contributor
   goal: Model policy outcomes across population datasets with scenario simulation
-  model: bedrock:us.anthropic.claude-sonnet-4-6
+  model: bedrock:us.anthropic.claude-sonnet-5-5
   mcp_server: Policy Analytics MCP
   tools:
   - Monte Carlo Simulator

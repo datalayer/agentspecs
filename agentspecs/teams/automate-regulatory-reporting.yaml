@@ -57,7 +57,7 @@ agents:
   name: Risk Calculator Agent
   role: contributor
   goal: Compute Basel III/IV risk-weighted assets, capital ratios, and VaR metrics
-  model: bedrock:us.anthropic.claude-sonnet-4-6
+  model: bedrock:us.anthropic.claude-sonnet-5-5
   mcp_server: Risk Engine MCP
   tools:
   - RWA Calculator

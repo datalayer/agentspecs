@@ -38,8 +38,9 @@ delegable:
 
 # In the galleries (the user, 14 November 2026): the Accountant segment's agent.
 enabled: true
-model: "bedrock:us.anthropic.claude-sonnet-4-6"
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
 model_additionals:
+  - "bedrock:us.anthropic.claude-sonnet-4-6"
   - "alibaba:qwen-max"
 harness: pydantic-ai
 runtime_engine: datalayer

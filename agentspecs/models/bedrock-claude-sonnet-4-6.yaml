@@ -9,7 +9,9 @@ name: Bedrock Claude Sonnet 4.6
 description: Claude Sonnet 4.6 via AWS Bedrock - balanced performance
 provider: bedrock
 provider_url: "https://aws.amazon.com/bedrock/anthropic/"
-default: true
+# The platform's default until 25 November 2026, when Sonnet 5.5 took its
+# place; still offered, so an agent may be switched back to it.
+default: false
 available: true
 tokens_limit: 64000
 context_window: 200000

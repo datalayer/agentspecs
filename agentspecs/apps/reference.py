@@ -114,7 +114,7 @@ EXTRA_EXAMPLES: Dict[str, Any] = {
             }
         ],
     },
-    "model": "bedrock:us.anthropic.claude-sonnet-4-6",
+    "model": "bedrock:us.anthropic.claude-sonnet-5-5",
     "skills": ["crawl:0.0.1"],
     "backend_tools": ["current-time:0.0.1"],
     "tools": [

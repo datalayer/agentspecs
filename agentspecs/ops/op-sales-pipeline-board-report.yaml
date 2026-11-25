@@ -40,7 +40,7 @@ frames:
   - datalayer:0.0.1
 
 supervisor:
-  model: "bedrock:us.anthropic.claude-sonnet-4-6"
+  model: "bedrock:us.anthropic.claude-sonnet-5-5"
   instructions: >-
     Run the Cog on the pipeline data of the period. Send a step back to the
     Cog when a Gate asks for a retry or a revision, with what the Guard
