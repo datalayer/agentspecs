@@ -267,3 +267,12 @@ def test_every_engine_of_the_catalogue_satisfies_the_schema():
     validator = jsonschema.Draft202012Validator(runtime_engines.json_schema())
     for path in sorted(ENGINES.glob("*.yaml")):
         assert list(validator.iter_errors(yaml.safe_load(path.read_text()))) == [], path.name
+
+
+@pytest.mark.parametrize("value", [[], ["kagent"], {"id": "kagent"}, 3])
+def test_a_runtime_engine_that_is_no_name_is_refused_in_the_same_sentence(value):
+    """A list or a mapping where the engine's name goes is a problem said, never a crash."""
+    problems = runtime_engines.agent_runtime_engine_problems(
+        {"id": "an-agent", "runtime_engine": value}
+    )
+    assert len(problems) == 1 and "there is no runtime_engine named" in problems[0]

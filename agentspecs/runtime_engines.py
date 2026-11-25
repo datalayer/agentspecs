@@ -186,7 +186,8 @@ def agent_runtime_engine_problems(spec: Mapping[str, Any]) -> list[str]:
             "on the line after harness"
         ]
     engine = spec["runtime_engine"]
-    if engine in RUNTIME_ENGINE_CATALOGUE and engine not in RUNTIME_ENGINES:
+    known = isinstance(engine, str) and engine in RUNTIME_ENGINE_CATALOGUE
+    if known and engine not in RUNTIME_ENGINES:
         return [
             f"{agent}: the runtime_engine {engine!r} is not enabled: one of "
             f"{', '.join(RUNTIME_ENGINES)}"
