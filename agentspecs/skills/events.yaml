@@ -4,7 +4,7 @@
 id: events
 version: 0.0.1
 name: Events Skill
-description: Event generation, enrichment, and lifecycle orchestration
+description: The agent's events on Datalayer — created, read, listed and updated
 
 module: datalayer_skills.skills.events
 

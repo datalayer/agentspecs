@@ -4,7 +4,7 @@
 id: text-summarizer
 version: 0.0.1
 name: Text Summarizer Skill
-description: Summarize text content using extractive and abstractive techniques. Use when the user asks for summaries, key points, or condensed versions of documents.
+description: Summarize a text or a file into a few sentences or its key points
 
 # Variant 2: package + method reference
 # Attributes (license, compatibility, allowed-tools, metadata) are read

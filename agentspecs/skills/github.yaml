@@ -4,7 +4,7 @@
 id: github
 version: 0.0.1
 name: GitHub Skill
-description: GitHub repository management and code operations
+description: GitHub repositories listed and searched, one inspected, and its issues and pull requests listed
 
 module: datalayer_skills.skills.github
 

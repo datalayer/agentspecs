@@ -1,0 +1,33 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The identity skill of datalayer-skills: its script reads the profile of the account the
+# runtime runs for from Datalayer's IAM (datalayer-core's client), with the runtime's own
+# DATALAYER_API_KEY — the platform's, which no person sets, so it is not listed in envvars.
+
+id: datalayer-whoami
+version: 0.0.1
+name: Who Am I Skill
+description: The Datalayer account the agent runs for — its handle, name, email, roles and avatar
+
+module: datalayer_skills.skills.whoami
+
+dependencies:
+  - datalayer-skills
+  - datalayer-core
+
+# Offered on the platform: the runtime image installs datalayer-skills.
+enabled: true
+
+install:
+  type: python
+  command: "pip install datalayer-skills"
+  note: "Needs DATALAYER_API_KEY, which a Datalayer runtime holds; DATALAYER_RUN_URL names another platform than the default."
+
+tags:
+  - datalayer
+  - identity
+  - iam
+
+icon: "@primer/octicons-react:id-badge"
+emoji: "🪪"

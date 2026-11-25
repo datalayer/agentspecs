@@ -3,7 +3,7 @@
 
 id: datalayer-library-publish
 version: 0.0.1
-name: Publish to the Library
+name: Library Publish Skill
 description: >-
   Publish one item the person owns in Datalayer's public Library, only after
   explicit confirmation, without exposing the runtime owner's credential.
@@ -16,5 +16,5 @@ install:
   command: "pip install datalayer-skills"
   note: "Standard library only; the script publishes through agent-runtimes on the pod loopback."
 tags: [datalayer, library, publish, artifact]
-icon: "@primer/octicons-react:globe"
+icon: "@primer/octicons-react:upload"
 emoji: "🌍"

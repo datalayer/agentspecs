@@ -7,7 +7,7 @@
 
 id: image
 version: 0.0.1
-name: Image Skills
+name: Image Skill
 description: Snapshots of web pages and video frames; images read, resized, cropped, converted, optimized and thumbnailed
 
 module: datalayer_skills.skills.image

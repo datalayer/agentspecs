@@ -4,7 +4,7 @@
 id: pdf
 version: 0.0.1
 name: PDF Processing Skill
-description: PDF document reading, parsing, and extraction
+description: PDF forms checked and filled — fillable fields found, read and filled, pages turned to images, and text placed where a form has no fields
 
 module: datalayer_skills.skills.pdf
 
