@@ -27,7 +27,7 @@ A Datalayer agent runtime, launched from the platform's pools or on your own mac
 
 ### Kagent (`kagent`)
 
-Kagent, a Kubernetes control plane for agents. The agent is a Kagent Agent (an AgentTemplate and a Harness running `agent-runtimes serve --target kagent` behind the kagent bridge), reached through Kagent's A2A gateway at /agents/\{namespace\}/\{name\}; each conversation is a session actor of Agent Substrate, suspended when idle and resumed on the next message.
+Kagent, a Kubernetes control plane for agents. The agent is a Kagent Agent (an AgentTemplate and a Harness running `agent-runtimes serve --target kagent` behind the Kagent bridge), reached through Kagent's A2A gateway at /agents/\{namespace\}/\{name\}; each conversation is a session actor of Agent Substrate, suspended when idle and resumed on the next message.
 
 ### AWS AgentCore (`agentcore`)
 
