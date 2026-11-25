@@ -39,7 +39,7 @@ registrationUrl: https://platform.openai.com/api-keys
 ### `egress` (object)
 Where the variable is sent, when it is a credential sent in a request header to known hosts: `hosts` (DNS names, never `*`), `header` (the request header that carries it) and `prefix` (what comes before it in the header's value, `""` when nothing does).
 
-A runtime engine whose sandbox may hold no secret (Kagent) reads it: the sandbox is given a placeholder under the variable's name, and the sandbox's egress gateway replaces that header with the person's value for these hosts alone. A variable without `egress` is one a program reads in its own process: on such an engine, an agent whose skill or MCP server requires it is refused in a sentence.
+A runtime engine whose sandbox may hold no secret (Kagent) reads it: the sandbox is given a placeholder under the variable's name, and the sandbox's egress gateway replaces that header with the person's value for these hosts alone. A variable without `egress` that a program reads in its own process (a skill's script, a local MCP server's environment) cannot be kept out of the sandbox: on such an engine, an agent whose skill or local MCP server requires it is refused in a sentence. A remote MCP server's variable sent in its `headers` is put in at egress the same way, with no `egress` of its own (below).
 ```yaml
 egress:
   hosts:
