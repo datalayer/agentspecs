@@ -890,7 +890,7 @@ EXAMPLES = {
     "report-from-a-file": AppKind.WIDGET,
     "pipeline-report": AppKind.WORKER,
     "inbox-triage": AppKind.WORKER,
-    # Datalayer Steward for AWS: an AWS account's savings, read with a read-only role.
+    # Cloud Steward: an AWS account's savings, read with a read-only role.
     "aws-steward-agent": AppKind.WORKER,
     # The Personal Agent Protocol's: a personal agent at a shop, and a company.
     "order-desk": AppKind.CHAT,

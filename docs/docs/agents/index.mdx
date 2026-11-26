@@ -190,7 +190,7 @@ catalogue says it; a spec without one, or naming another, is refused in a senten
   as an AgentCore agent runtime, which AgentCore starts on each invocation and
   bills to that account; the organization needs its AWS connection. It takes the
   `pydantic-ai` harness only. The catalogue's AgentCore agent is
-  `worker-steward-aws`, the Datalayer Steward for AWS.
+  `worker-steward-aws`, the Cloud Steward.
 
 The spec's engine is a default: a launch may name another, on Datalayer's
 "Where it runs" when an agent is launched or an application deployed, and the
@@ -356,7 +356,7 @@ The section is validated against agent-shield's own schema, carried verbatim as 
 - `*` beside other entries;
 - an entry named twice.
 
-Datalayer's catalogue agents declare `egress: ["*"]`, because the MCP servers and tools they run call out, for example `npx @datalayer/slack-mcp-server` or Tavily's hosted server. The seed agents are narrower (15 November 2026): the Marketer, the Shopper and the Traveller reach the web only, `["*:80", "*:443"]`; the Accountant, Terra and the AWS Steward name each host they reach (Datalayer's gateway, NASA's Earthdata hosts, AWS's endpoints), on 443, and the tokenizer file every runtime fetches, `openaipublic.blob.core.windows.net:443`. The seventh, the Data Analyst, keeps `["*"]`: the code it runs in a notebook loads data from wherever the person keeps it.
+Datalayer's catalogue agents declare `egress: ["*"]`, because the MCP servers and tools they run call out, for example `npx @datalayer/slack-mcp-server` or Tavily's hosted server. The seed agents are narrower (15 November 2026): the Marketer, the Shopper and the Traveller reach the web only, `["*:80", "*:443"]`; the Accountant, Terra and the Cloud Steward name each host they reach (Datalayer's gateway, NASA's Earthdata hosts, AWS's endpoints), on 443, and the tokenizer file every runtime fetches, `openaipublic.blob.core.windows.net:443`. The seventh, the Data Analyst, keeps `["*"]`: the code it runs in a notebook loads data from wherever the person keeps it.
 
 An organization may bound every agent's firewall with a ceiling in its [policy](../policies#an-organizations-firewall-ceiling): an entry the ceiling does not cover is dropped when the rule is applied, and `*` becomes the ceiling's own entries.
 
