@@ -247,7 +247,7 @@ env:
   SLACK_CHANNEL_IDS: "${SLACK_CHANNEL_IDS}"
 ```
 
-A remote server keeps its key out of the process that runs the agent's tools: the key is a header of a request, which a runtime engine whose sandbox may hold no secret (Kagent) has put in at egress. A local server reads its variables in its own process, so an agent that requires one is refused on such an engine. Tavily is reached this way since 25 November 2026 (`https://mcp.tavily.com/mcp/`, `Authorization: Bearer ${TAVILY_API_KEY}`), with the tools and the key it had as `npx tavily-mcp`.
+A remote server keeps its key out of the process that runs the agent's tools: the key is a header of a request, which a runtime engine whose sandbox may hold no secret (Kagent) has put in at egress. A local server reads its variables in its own process, so an agent that requires one is refused on such an engine. Tavily is a local server (`npx -y tavily-mcp`, with `TAVILY_API_KEY` in its environment): it was Tavily's hosted server in agentspecs 0.1.22 and 0.1.23, which left codemode agents without its tools, and is a local process again since 0.1.24. So every agent that names it lists it in its `optional` servers: it is started whenever the key is there, and on an engine whose sandbox holds no secret (Kagent) the agent starts without it instead of being refused.
 
 ## MCP Server Hierarchy
 
@@ -295,7 +295,7 @@ named here.
 - **`salesforce`** - Salesforce records
 - **`slack`** - Slack messaging
 - **`shopify`** - Products from every Shopify store through its Global Catalog: search, compare, checkout links
-- **`tavily`** - Web search and research through Tavily's hosted server, with your key
+- **`tavily`** - Web search and research via the Tavily API (`npx tavily-mcp`, with your key)
 - **`x`** - X's hosted server: posts, users, searches and posting
 
 ### Odoo, through the Datalayer server

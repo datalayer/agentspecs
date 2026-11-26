@@ -127,6 +127,21 @@ def test_an_agent_that_searches_with_tavily_declares_the_server_that_reads_the_k
             assert "tavily:0.0.1" in (agent.get("mcp_servers") or []), name
 
 
+def test_every_agent_that_names_tavily_may_start_without_it():
+    """Tavily is a local process reading TAVILY_API_KEY (the user, 26 November 2026:
+    "make it optional, so agent can launch on kagent without tavily").
+
+    Every agent that names the server lists it optional: started whenever the key
+    is there, left out without it or on an engine whose sandbox holds no secret.
+    """
+    naming = [name for name, agent in _agents() if "tavily:0.0.1" in (agent.get("mcp_servers") or [])]
+    assert len(naming) == 37
+    assert {"worker-crawler", "example-codemode", "example-no-codemode", "example-mcp"} <= set(naming)
+    for name, agent in _agents():
+        if "tavily:0.0.1" in (agent.get("mcp_servers") or []):
+            assert "tavily:0.0.1" in ((agent.get("optional") or {}).get("mcp_servers") or []), name
+
+
 def test_terras_earthdata_login_is_never_required():
     earthdata = yaml.safe_load((ROOT / "mcp-servers" / "earthdata.yaml").read_text())
     assert "EARTHDATA_USERNAME:0.0.1" in earthdata["sandbox_envvars"]

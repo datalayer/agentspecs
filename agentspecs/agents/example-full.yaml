@@ -36,6 +36,14 @@ memory: ephemeral
 mcp_servers:
   - tavily:0.0.1
 
+# What it starts without (the user, 26 November 2026): web search, the tavily
+# server, a process that reads TAVILY_API_KEY. It is started whenever the key
+# is there; without it, or on an engine whose sandbox holds no secret (Kagent),
+# the agent starts without search and says so.
+optional:
+  mcp_servers:
+    - tavily:0.0.1
+
 # Skills
 skills:
   - crawl:0.0.1
