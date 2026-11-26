@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.1.23
+
+26 November 2026.
+
+- **Cloud Steward** (the user, 26 November 2026: rename AWS Steward to Cloud Steward): the agent, its application and its public demo are named Cloud Steward, and the agent and the demo introduce themselves so; the docs and the Dogwood example say it. What it reads is still AWS, and its descriptions say so. The ids stay: `worker-steward-aws`, `aws-steward-agent`, `demo-aws-steward`, the `steward` tag and the `aws-header` UI. `demo-aws-steward` is 0.0.12. Docs: Agents, Frontend tools, UI, Policies. Tests: test_apps.
+
 ## 0.1.22
 
 25 November 2026.
