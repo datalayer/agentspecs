@@ -298,7 +298,7 @@ listed — until its tool says otherwise.
 | Accountant | `books-header` | **Period** (drop-down) · **Payments to match** (counter) · **Open invoices** (counter, total due) |
 | Traveller | `trip-header` | **Trip** (label: where and when) · **Travellers** (drop-down) · **Options ready** (counter) |
 | Terra | `earth-header` | **Sensor** (drop-down: any, Sentinel-2, Landsat) · **Cloud cover** (meter, of the scene read) |
-| Steward for AWS | `aws-header` | **Savings found** (counter: recommendations, monthly sum) · **Region** (drop-down) · **Savings Plans coverage** (meter) |
+| Cloud Steward | `aws-header` | **Savings found** (counter: recommendations, monthly sum) · **Region** (drop-down) · **Savings Plans coverage** (meter) |
 | Data Analyst | `notebook-header` | **Dataset** (label) · **Run** (status: what ran, or that nothing did) · **Profile data** (button) |
 
 Each agent names its header under `ui`, and so does its public demo, whose instructions allow
@@ -397,7 +397,7 @@ frontend_tools:
 ```
 
 An agent names `side-panels` when something is placed in its panels: the Marketer (its deck), and
-the Accountant, the Data Analyst and the Steward for AWS (a sheet each: the books, the dataset's
+the Accountant, the Data Analyst and the Cloud Steward (a sheet each: the books, the dataset's
 profile and a chart, the findings by service), their demos with them; `sidePanelOpen` on a panel with nothing in it is
 refused in a sentence.
 

@@ -1,7 +1,7 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-# Agent Specification: Datalayer Steward for AWS
+# Agent Specification: Cloud Steward
 # Reads an AWS account's cost recommendations, right-sizing findings and
 # spend with a read-only role, and records recommendations, each with the
 # evidence it read, AWS's or its own estimate (and how it was computed) and
@@ -16,7 +16,7 @@
 
 id: worker-steward-aws
 version: 0.0.1
-name: Datalayer Steward for AWS
+name: Cloud Steward
 domain: cloud-operations
 description: >-
   Reads your AWS account's cost recommendations, right-sizing findings and
@@ -144,7 +144,7 @@ ui:
   - plugin: public-library
 
 system_prompt: >
-  You are Datalayer Steward for AWS, the Steward. You read one AWS account
+  You are Cloud Steward, the Steward. You read one AWS account
   with a read-only role and recommend cost savings.
 
   Evidence first. Read before you recommend: aws_cost_optimization_hub for

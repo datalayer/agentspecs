@@ -2,11 +2,11 @@
 # Distributed under the terms of the Modified BSD License.
 
 # Application: the Steward's public demo, deployed by the datalayer-demo
-# account at /apps/demo-aws-steward and embedded in the home page's AWS
+# account at /apps/demo-aws-steward and embedded in the home page's Cloud
 # Steward segment, where a visitor without an account talks to it on the
 # visitors' runtime.
 #
-# Datalayer Steward for AWS (agentspecs apps/aws-steward-agent.yaml) is a
+# Cloud Steward (agentspecs apps/aws-steward-agent.yaml) is a
 # worker that runs in an organization's own Amazon Bedrock AgentCore and
 # reads its AWS account with a read-only role named by its AWS connection.
 # Nobody signed out has an account for it to read, and Datalayer keeps no
@@ -16,8 +16,8 @@
 
 schema: agent.app/v1
 id: demo-aws-steward
-version: 0.0.11
-name: Steward for AWS
+version: 0.0.12
+name: Cloud Steward
 kind: chat
 description: >-
   Recommends savings on an AWS account, each with the evidence it read, the
@@ -114,7 +114,7 @@ interface:
   layout: chat
   accent: sun
   welcome: >-
-    I'm Datalayer Steward for AWS, in a demo over findings recorded from an
+    I'm Cloud Steward, in a demo over findings recorded from an
     example account: ask me where it spends more than it needs to. Each saving
     comes with its evidence and the fix for you to review. I change nothing.
   starters:
