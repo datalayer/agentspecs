@@ -8,6 +8,12 @@
 
 Each version names the boxes it carries, as its commits say them, and links the pages that document them, at <https://agentspecs.datalayer.tech>.
 
+## 0.1.24
+
+26 November 2026.
+
+- **Tavily is a local process again, and optional for every agent that names it** (the user, 26 November 2026: "Put back tavily as local process but make it optional, so agent can launch on kagent without tavily"). Tavily's hosted server (0.1.22) left every codemode agent without its tools: codemode's registry reaches local servers and plain HTTP ones only, so a codemode agent saw Tavily with no tool. The `tavily` entry is `npx -y tavily-mcp` over stdio again, as in 0.1.21, with `TAVILY_API_KEY` in its environment, and the same five tools. `TAVILY_API_KEY` says no `egress` any more: it is read in that process and travels in no header; `GITHUB_TOKEN` keeps its own. The 37 agents that name `tavily` list it in their `optional` servers: it is started whenever the key is there, as before, and without it, or on an engine whose sandbox holds no secret (Kagent), the agent starts without search and says so, instead of being refused. Docs: MCP servers, Env vars, Agents. Tests: test_env_vars_egress, test_agents_optional (+1), the whole suite (1399).
+
 ## 0.1.23
 
 26 November 2026.

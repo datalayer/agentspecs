@@ -6,8 +6,9 @@
 
 A runtime engine whose sandbox may hold no secret (Kagent) gives the sandbox a
 placeholder and has the credential put in at egress, in one request header, for
-named hosts. So a variable says ``egress`` only when that is how it travels,
-and Tavily is reached as a remote server whose key is a header.
+named hosts. So a variable says ``egress`` only when that is how it travels.
+Tavily is a local process again (26 November 2026): its key is read in that
+process, so ``TAVILY_API_KEY`` says no ``egress``.
 """
 
 from __future__ import annotations
@@ -50,7 +51,6 @@ def test_an_egress_names_hosts_a_header_and_a_prefix_and_nothing_else():
 def test_the_variables_that_say_where_they_are_sent():
     assert _egress() == {
         "GITHUB_TOKEN": {"hosts": ["api.github.com"], "header": "Authorization", "prefix": "Bearer "},
-        "TAVILY_API_KEY": {"hosts": ["mcp.tavily.com"], "header": "Authorization", "prefix": "Bearer "},
     }
 
 
@@ -84,23 +84,26 @@ def test_a_remote_servers_secret_is_a_headers_whole_value_never_in_its_address()
                 assert str(value).endswith("${" + names[0] + "}"), (server_id, header)
 
 
-def test_tavily_is_its_hosted_server_with_the_key_in_a_header():
+def test_tavily_is_a_local_process_reading_its_key_again():
+    """The hosted server (0.1.22, 0.1.23) left codemode agents without its tools:
+    the entry is ``npx -y tavily-mcp`` over stdio again, as in 0.1.21, the key in
+    its environment (the user, 26 November 2026)."""
     tavily = _specs("mcp-servers")["tavily"]
-    assert tavily["transport"] == "streamable-http"
-    assert tavily["url"] == "https://mcp.tavily.com/mcp/"
-    assert tavily["headers"] == {"Authorization": "Bearer ${TAVILY_API_KEY}"}
-    # No process, so nothing reads the key in its environment.
-    assert "command" not in tavily and "args" not in tavily
-    assert tavily["env"] == {}
-    assert tavily["install"]["type"] == "remote"
-    # The key is asked for as before.
+    assert tavily["transport"] == "stdio"
+    assert tavily["command"] == "npx"
+    assert tavily["args"] == ["-y", "tavily-mcp"]
+    assert tavily["env"] == {"TAVILY_API_KEY": "${TAVILY_API_KEY}"}
+    assert "url" not in tavily and "headers" not in tavily
+    assert tavily["install"]["type"] == "npm"
     assert tavily["envvars"] == ["TAVILY_API_KEY:0.0.1"]
     assert tavily["enabled"] is True
+    # Read in a process, so the key travels in no header: it says no egress.
+    assert "egress" not in _specs("env-vars")["TAVILY_API_KEY"]
 
 
 def test_tavily_keeps_the_tools_the_specs_name():
-    """The hosted server's tools are the package's, under the same names: what
-    the agents, the applications' rules and the action classes say."""
+    """The package's tools: what the agents, the applications' rules and the
+    action classes say."""
     tavily = _specs("mcp-servers")["tavily"]
     assert tavily["actions"]["tools"] == {
         "tavily_search": "read",

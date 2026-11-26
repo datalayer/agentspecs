@@ -48,7 +48,7 @@ egress:
   prefix: "Bearer "
 ```
 
-Declared only for a variable that travels in one request header to fixed hosts: `GITHUB_TOKEN` (the `github` skill, `api.github.com`) and `TAVILY_API_KEY` (Tavily's hosted MCP server, `mcp.tavily.com`). A remote MCP server's own `headers` already say where its variable goes, so its variable needs no `egress`. A key sent in an address or a request's body (`PIXABAY_API_KEY`, in the query string) cannot be put in at egress, and has none.
+Declared only for a variable that travels in one request header to fixed hosts: `GITHUB_TOKEN` (the `github` skill, `api.github.com`). `TAVILY_API_KEY` has none: the `tavily` server is a local process that reads it in its environment. A remote MCP server's own `headers` already say where its variable goes, so its variable needs no `egress`. A key sent in an address or a request's body (`PIXABAY_API_KEY`, in the query string) cannot be put in at egress, and has none.
 
 ### `tags` (list of strings)
 Categorization tags
