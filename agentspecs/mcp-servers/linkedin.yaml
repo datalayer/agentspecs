@@ -39,7 +39,7 @@ env:
   # A runtime has no screen: the server's browser runs headless.
   HEADLESS: "true"
 envvars: []
-# The person's own LinkedIn session, pasted in Settings › LinkedIn (the user,
+# The user's own LinkedIn session, pasted in Settings › LinkedIn (the user,
 # 15 November 2026): given to the runtime when the account has it, never
 # required; the runtime writes it as the server's session (the `li_at` cookie
 # on .linkedin.com) in the Jupyter container, never in the server's env.

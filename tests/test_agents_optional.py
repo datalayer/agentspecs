@@ -173,7 +173,7 @@ def test_linkedin_through_iam_and_its_browser_server():
     linkedin = yaml.safe_load((ROOT / "mcp-servers" / "linkedin.yaml").read_text())
     assert linkedin["envvars"] == []
     assert "Sign in to LinkedIn" in linkedin["setup"]
-    # The person's own session, pasted in Settings › LinkedIn (15 November 2026):
+    # The user's own session, pasted in Settings › LinkedIn (15 November 2026):
     # given when the account has it, never required.
     assert linkedin["optional_envvars"] == ["LINKEDIN_LI_AT:0.0.1"]
     assert "Settings › LinkedIn" in linkedin["setup"]

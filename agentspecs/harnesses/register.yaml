@@ -251,7 +251,7 @@ entries:
     licence: Apache-2.0
     licence_source: https://github.com/cline/cline/blob/main/LICENSE
     terms_source: https://cline.bot/tos
-    credential: The person's own provider API key (a Cline account's keys may not be transferred or resold)
+    credential: The user's own provider API key (a Cline account's keys may not be transferred or resold)
     served_to_third_parties: permitted
     note: >-
       Cline's terms cover its hosted account and Cline-provided keys, forbidding their transfer or resale;
@@ -609,7 +609,7 @@ entries:
     licence: Apache-2.0
     licence_source: https://github.com/stakpak/agent/blob/main/LICENSE
     terms_source: https://github.com/stakpak/agent/blob/main/LICENSE
-    credential: The person's own Anthropic or OpenAI key, or a Stakpak API key (STAKPAK_API_KEY)
+    credential: The user's own Anthropic or OpenAI key, or a Stakpak API key (STAKPAK_API_KEY)
     served_to_third_parties: permitted
     note: Stakpak's hosted-key service terms were not read; the open-source client with one's own key is what is permitted.
   - harness: stdio-bus

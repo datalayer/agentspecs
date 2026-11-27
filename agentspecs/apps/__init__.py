@@ -2270,7 +2270,7 @@ class AppInterface(_Strict):
         default=None,
         description=(
             "The theme it runs in by default, at its address, embedded, in the Studio's Preview and as an "
-            "example: a `variant` and, optionally, a colour `mode`. The person's own when unsaid. Its "
+            "example: a `variant` and, optionally, a colour `mode`. The user's own when unsaid. Its "
             "`accent`, when it names one, colours it, whichever theme it is"
         ),
     )

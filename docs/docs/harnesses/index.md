@@ -44,7 +44,7 @@ to the catalogue with a spec.
 | [BLACKBOX AI CLI](https://docs.blackbox.ai/features/blackbox-cli/acp-integration) | `blackbox-ai` | `blackbox --experimental-acp` | Proprietary (Blackbox terms of service) | refused | A Blackbox AI API key (BLACKBOX_API_KEY) |
 | [Bub](https://github.com/bubbuild/bub-contrib/tree/main/packages/bub-acp-server) | `bub` | `bub acp` | Apache-2.0 | permitted | A provider key (BUB_API_KEY); its OpenAI Codex login is a subscription credential, refused for third parties |
 | [Claw Orchestrator](https://github.com/Enderfga/claw-orchestrator/blob/main/skills/references/acp.md) | `claw-orchestrator` | `clawo acp` | MIT | permitted | The logins or keys of the engines it drives (Claude Code, Codex, OpenCode, …) |
-| [Cline](https://docs.cline.bot/usage/acp) | `cline` | `cline --acp` | Apache-2.0 | permitted | The person's own provider API key (a Cline account's keys may not be transferred or resold) |
+| [Cline](https://docs.cline.bot/usage/acp) | `cline` | `cline --acp` | Apache-2.0 | permitted | The user's own provider API key (a Cline account's keys may not be transferred or resold) |
 | [Code Assistant](https://github.com/stippi/code-assistant?tab=readme-ov-file#configuration) | `code-assistant` | `code-assistant acp` | MIT | permitted | The configured provider's key (e.g. ANTHROPIC_API_KEY) |
 | [construct](https://github.com/construct-worlds/construct#acp-agent-client-protocol-server) | `construct` | `construct acp` | MIT | permitted | Provider API keys, or the logins of the harnesses it drives (whose vendors' terms apply) |
 | [crow-cli](https://github.com/crow-cli/crow-cli) | `crow-cli` | `crow-cli acp` | MIT | permitted | An API key for an OpenAI-compatible provider |
@@ -70,7 +70,7 @@ to the catalogue with a spec.
 | [Raven](https://evermind-ai.github.io/Raven/agent-protocols/) | `raven` | `raven acp` | Apache-2.0 | permitted | The configured model provider's key |
 | [Raxol](https://github.com/DROOdotFOO/raxol/blob/master/docs/features/CODING_AGENT.md) | `raxol` | `bin/raxol-acp` | MIT | permitted | The configured provider's API key |
 | [siGit Code](https://github.com/getsigit/sigit#acp-support) | `sigit` | `sigit --acp` | Apache-2.0 | permitted | None (an on-device model); cloud inference credentials optional |
-| [Stakpak](https://github.com/stakpak/agent?tab=readme-ov-file#agent-client-protocol-acp) | `stakpak` | `stakpak acp` | Apache-2.0 | permitted | The person's own Anthropic or OpenAI key, or a Stakpak API key (STAKPAK_API_KEY) |
+| [Stakpak](https://github.com/stakpak/agent?tab=readme-ov-file#agent-client-protocol-acp) | `stakpak` | `stakpak acp` | Apache-2.0 | permitted | The user's own Anthropic or OpenAI key, or a Stakpak API key (STAKPAK_API_KEY) |
 | [stdio Bus](https://github.com/stdiobus/stdiobus) | `stdio-bus` | undocumented | Apache-2.0 | permitted | The routed worker's (an OpenAI-compatible key, or the ACP registry worker's keys) |
 | [VT Code](https://github.com/vinhnx/VTCode/blob/main/docs/guides/zed-acp.md) | `vtcode` | `vtcode acp` | MIT OR Apache-2.0 | permitted | The configured provider's key (an unofficial ChatGPT login path exists; refused here) |
 
