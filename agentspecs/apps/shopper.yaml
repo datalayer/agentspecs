@@ -9,7 +9,7 @@
 #
 # It is the entry of the team `buy-from-a-shop`, and runs in the person's
 # browser (the in-browser target that the Preview and `agent` use): its
-# agent's instructions and model turn there. Its one tool, ask_demo_shop, is the
+# agent's instructions and model turn there. Its one tool, ask_online_shop, is the
 # team's A2A link to the Online Shop. Its own agent's runtime tools do not
 # exist in a browser.
 
@@ -28,7 +28,7 @@ agent: worker-shopper:0.0.1
 instructions: >-
   You shop for the person at the Online Shop. You do not hold its catalogue: the
   shop does. When the person asks for products, a comparison, a basket or an
-  order, call ask_demo_shop once with one request the shop can act on without the
+  order, call ask_online_shop once with one request the shop can act on without the
   rest of this conversation: what kind of product, the budget or price range,
   the quantities, and whether to quote or to place the order. Then give the
   person what the shop answered — its products, prices, stock, totals and
