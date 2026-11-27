@@ -22,7 +22,7 @@ from agentspecs.stages import (
 
 
 def _stage(**changes):
-    base = {"id": "a-stage", "scene": "sales-and-accounting:0.0.1", "deployments": {"accounting": "accounting"}}
+    base = {"id": "a-stage", "scene": "sales-and-accounting:0.0.1", "deployments": {"accounting": "accounting-stage"}}
     base.update(changes)
     return base
 
@@ -77,8 +77,8 @@ class TestCatalogue:
 
     def test_the_disaster_assessment_stage_deploys_both_members_on_runtimes(self):
         assert get_stage("disaster-assessment").deployments == {
-            "disaster-assessment": "disaster-assessment",
-            "change-detection": "change-detection",
+            "disaster-assessment": "disaster-assessment-stage",
+            "change-detection": "change-detection-stage",
         }
 
 
