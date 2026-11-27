@@ -23,14 +23,14 @@ AGENTS = Path(__file__).resolve().parents[1] / "agentspecs" / "agents"
 
 #: The seed agents and their public demos.
 DEMOS = {
-    "demo-marketer": "worker-marketer",
-    "demo-shopper": "worker-shopper",
-    "demo-accountant": "worker-accountant",
-    "demo-traveller": "worker-traveller",
-    "demo-terra": "worker-terra",
-    "demo-aws-steward": "worker-steward-aws",
-    "demo-data-analyst": "worker-data-analyst",
-    "demo-functional-analyst": "worker-functional-analyst",
+    "marketer-tryout": "worker-marketer",
+    "shopper-tryout": "worker-shopper",
+    "accountant-tryout": "worker-accountant",
+    "traveller-tryout": "worker-traveller",
+    "terra-tryout": "worker-terra",
+    "aws-steward-tryout": "worker-steward-aws",
+    "data-analyst-tryout": "worker-data-analyst",
+    "functional-analyst-tryout": "worker-functional-analyst",
 }
 
 
@@ -38,7 +38,7 @@ def agent(agent_id: str) -> dict:
     return yaml.safe_load((AGENTS / f"{agent_id}.yaml").read_text())
 
 
-def raw(app_id: str = "demo-marketer") -> dict:
+def raw(app_id: str = "marketer-tryout") -> dict:
     return yaml.safe_load((AGENTS.parent / "apps" / f"{app_id}.yaml").read_text())
 
 

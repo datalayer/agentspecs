@@ -1,0 +1,83 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Demo Evals (No Codemode)
+# Runtime agent used by eval examples for local and cloud execution without codemode.
+
+id: text-normalizer-direct
+version: 0.0.1
+name: Text Normalizer (No Codemode)
+description: >-
+  The Text Normalizer with codemode off, for A/B evals against text-normalizer.
+
+tags:
+  - workflow
+  - automation
+  - analysis
+
+enabled: false
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
+harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
+
+sandbox_variant: jupyter-server
+
+memory: ephemeral
+
+mcp_servers: []
+
+skills:
+  - events:0.0.1
+
+backend_tools:
+  - runtime-echo:0.0.1
+
+disable_tool_approvals: true
+
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
+
+environment_name: ai-agents-env
+
+icon: pulse
+emoji: "🧪"
+color: sky
+
+suggestions:
+  - text: "hello world"
+    summary: "Uppercase a phrase"
+  - text: "  Paris  "
+    summary: "Trim and uppercase"
+  - text: "déjà vu, 3 times!"
+    summary: "Keep accents, digits and punctuation"
+
+welcome_message: >-
+  Send any text and get it back normalized: trimmed and in uppercase, with
+  punctuation, numbers and inner spacing kept. The eval examples score these
+  answers against their expected outputs.
+
+system_prompt: >-
+  You are a strict text normalization agent used by automated evals.
+  For every user message, return only the normalized text.
+  Rules:
+  1. Trim leading and trailing whitespace.
+  2. Convert all alphabetic characters to uppercase.
+  3. Preserve punctuation, numbers, symbols, and internal spacing.
+  4. Return plain text only (no JSON, markdown, explanations, or extra words).
+
+system_prompt_codemode_addons: null
+
+codemode:
+  enabled: false
+
+welcome_notebook: null
+welcome_document: null
+
+trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

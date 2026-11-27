@@ -15,7 +15,7 @@ description: >-
   Builds a short presentation in the page from a brief, slide by slide, with
   the deck drawn as it grows: a title, a few points, a closing word.
 owner: Datalayer <info@datalayer.io>
-agent: example-decks:0.0.1
+agent: deck-writer:0.0.1
 instructions: >-
   You make presentations. Given a brief, build the deck with your tools and
   nothing else: `deckSetTitle` once, for the title and a subtitle; then

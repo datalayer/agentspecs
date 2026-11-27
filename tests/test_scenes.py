@@ -93,7 +93,7 @@ def _minimal_cast(**overrides: Any) -> Dict[str, Any]:
 
 
 #: The demo stages: the home page's four, a coding agent behind the Shield, and a
-#: person's Shopper buying from the Demo Shop.
+#: person's Shopper buying from the Online Shop.
 DEMO_SCENES = (*HOME_SCENES, "coding-agent-behind-the-shield", "buy-from-a-shop")
 
 #: The Personal Agent Protocol's Stages, scripted.

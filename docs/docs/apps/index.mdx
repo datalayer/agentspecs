@@ -168,7 +168,7 @@ grants nothing by itself.
 
 ```yaml
 # apps/code-explainer.yaml
-agent: example-harness-opencode:0.0.1
+agent: coding-agent-opencode:0.0.1
 
 rules:
   - action: Read the repository
@@ -473,8 +473,8 @@ key, or not allowed), 402 (the spend limit is reached), 422 (the agent's answer 
 the `200` schema, twice), 429 (the rate cap).
 
 ```bash
-curl -s https://demo-shop.api.datalayer.ai/openapi.json
-curl -s -X POST https://demo-shop.api.datalayer.ai/products/find \
+curl -s https://online-shop.api.datalayer.ai/openapi.json
+curl -s -X POST https://online-shop.api.datalayer.ai/products/find \
   -H 'Content-Type: application/json' -d '{"query": "tennis", "max_price": 60}'
 ```
 
@@ -595,7 +595,7 @@ is unsaid. Its name and its `emoji` are the heading above the document, so
 the document has no heading of its own.
 
 ```yaml
-# apps/demo-marketer.yaml
+# apps/marketer-tryout.yaml
 presentation: |
   Plans and drafts social posts for X, Bluesky, LinkedIn and Discord in the
   brand's voice, reads what comes back, remembers what worked, and publishes

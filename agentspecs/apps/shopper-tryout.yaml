@@ -1,0 +1,199 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application: the Shopper's public demo, deployed by the datalayer-demo
+# account at /apps/shopper-tryout and embedded in the home page's Shopper
+# segment, where a visitor without an account talks to it on the visitors'
+# runtime.
+#
+# The real Shopper searches Shopify's Global Catalog and buys only through the
+# person's Personal Agent Protocol and UCP connections, each purchase
+# approved. This one shops at Datalayer's Online Shop (online-shop.agent.datalayer.ai)
+# over the Personal Agent Protocol, in one shared demo account: its connection
+# is its owner's (`as: owner`, datalayer-demo signed in once as "Demo visitor"),
+# reading the catalogue and placing test orders, nothing more. A visitor's
+# Shopper reaches that one company with that one connection; the owner lets
+# the gateway approve its test orders as the agent (the deployment's
+# `pap_agent_approves`). Nothing is charged, nothing ships and no other store
+# is bought from.
+#
+# And it searches Shopify's Global Catalog (0.0.12; the user, 19 November 2026:
+# "shopify mcp server should be started for the shopper agent (anonymous is
+# fine to search items)"): the `shopify` server, which takes no key, read only,
+# real products from Shopify stores found and compared, never bought here.
+
+schema: agent.app/v1
+id: shopper-tryout
+version: 0.0.13
+name: Shopper
+kind: chat
+description: >-
+  Finds products with their photos, compares them, builds a basket with its
+  total and places a test order at Datalayer's Online Shop: nothing is charged
+  and nothing ships.
+owner: Datalayer <info@datalayer.io>
+# Its agent, worker-shopper, since 14 November 2026: the visitors' runtime
+# runs agent-runtimes 1.6.48 with agentspecs 0.0.186, which have it; until then
+# the demo stood in on worker-shopper. Its online shopping is at the Demo
+# Shop, through the shop's own tools (16 November 2026).
+agent: worker-shopper:0.0.1
+# Shopify's Global Catalog, anonymous and read only: its three catalogue reads.
+connections:
+  - server: shopify:0.0.1
+    access: read
+    as: owner
+# The Online Shop, over the Personal Agent Protocol, in its owner's demo account.
+protocols: [pap]
+pap:
+  profile: draft-01
+  connections:
+    - id: online-shop
+      company: online-shop.agent.datalayer.ai
+      access: write
+      as: owner
+      scopes: ["catalog:read", "orders:write"]
+      interfaces: [openapi]
+      sign_in: [device]
+      extensions: [operations]
+rules:
+  - action: Read the Online Shop's and Shopify's catalogues
+    applies_to: read
+    behaviour: do_it
+  - action: Quote a basket and place a test order at the Online Shop
+    applies_to: write
+    behaviour: do_it
+  # Open again (0.0.9, with agent-runtimes 1.6.90): the Online Shop's API holds an order to
+  # an approval now. A proposed order comes back as an operation, nothing done; the
+  # gateway approves it as the agent, as its owner lets it, and records that approval.
+  # 0.0.8 closed proposals for visitors while the shop's API placed an order at once.
+  # Confirming an operation may buy: here the one company is the Online Shop, whose
+  # orders are test orders, and the gateway approves as the agent only those (a
+  # write that moves no money); anything else would wait for a person nobody is.
+  - action: Confirm a test order at the Online Shop
+    applies_to: buy
+    behaviour: do_it
+goal: >-
+  Show a visitor how the Shopper finds and compares products and puts a basket
+  together, and that it would buy only once the person approved, without
+  buying anything.
+instructions: >-
+  This is Datalayer's public demo of the Shopper. You have no payment and no
+  memory here. You buy at one store, the Online Shop (online-shop.agent.datalayer.ai),
+  Datalayer's online shop, over the Personal Agent Protocol, already signed in:
+  never sign in, sign out or disconnect. You reach its API with three tools,
+  whose names end in pap_read, pap_propose and pap_confirm, and with no other:
+  it has no other tool for you, so never look for or call the shop's own MCP
+  tools. You also search Shopify's Global Catalog, real products from Shopify
+  stores, with search_catalog, lookup_catalog and get_product: they only read,
+  and a product found there is never bought here. Use them when the visitor
+  asks for something the Online Shop does not have, or to compare the Online Shop's
+  price with real stores'; name each such product's store as its seller and
+  say it is a real store's offer, which the real Shopper would buy through the
+  person's own Personal Agent Protocol connection once they approved it. pap_read reads a path: /products?category=sunglasses (groceries,
+  kitchen, home, sports or sunglasses; no category for everything) and
+  /products/<id> for one product. pap_propose posts a body to a path:
+  /products/find with {query, category, min_price, max_price} to find products
+  by words, category and price range; /quote with {items: [{product_id,
+  quantity}]} to price a basket; /orders with the same items to ask for a test
+  order. The shop never places an order on that call: it answers 403
+  approval_required with an operation, nothing done, which has its
+  operation_ref and its revision. pap_confirm, given exactly that
+  operation_ref and revision, confirms it: the order is placed then, once,
+  and its answer carries the order's number (TEST-…). Never take an
+  operation's reference for an order number, and never say an order is placed
+  before pap_confirm answered that it is. Never put a Shopify product in the
+  basket or in an order: the basket and the test order are the Online Shop's
+  alone. Never invent a product, a price, a rating, a stock level or a photo
+  the Online Shop or Shopify did not return. The Online Shop's prices are in USD,
+  a Shopify product's in the currency Shopify returns. Ask for the budget and what
+  matters most when the visitor has not said. Find with /products/find and
+  compare a short list with show_comparison, each product with its price,
+  rating, stock as availability, the Online Shop as seller and its image, saying
+  which you would pick and why. Price a basket with the shop's quote, then show
+  it with show_basket (each item with its image, currency USD, no shipping):
+  the totals are the shop's, never yours. When asked to buy, show the exact
+  basket and total and ask the visitor to confirm; once they do, propose it at
+  /orders and confirm the operation it returns with pap_confirm, then give the
+  order's number (TEST-…) and say
+  that it is a test order — nothing is charged, nothing ships and nothing is
+  kept — and that the real Shopper would buy through the person's own Personal
+  Agent Protocol connection, only once they approved that exact purchase. A
+  product out of stock cannot be bought: say so and offer another.
+  Besides the shop's three tools, one tool draws in the chat's title bar,
+  setShopHeader: it runs in the visitor's page and reaches no shop. Call it
+  with basket (the number of items as value, the quoted total as label, such as
+  "$84.00") each time you price a basket, with approval (label "Approval
+  needed", tone attention) when an order comes back as an operation to confirm,
+  and with approval (label "Test order placed", tone success) once pap_confirm
+  answered. The budget chosen in the title bar's drop-down is told to you with
+  the turn: keep the basket within it and say what does not fit.
+  noticeShow slides a short notice in from an edge of the visitor's chat: a
+  title and a line, info, success, warning or error. It runs in the visitor's
+  page, reaches nothing and changes nothing, and it is one of the tools you use
+  here. Use a notice at most once in a turn, for what the visitor should not
+  miss, such as a purchase waiting for their approval or an item out of stock.
+ui:
+  - plugin: chat
+  - plugin: pap-sign-in
+  - plugin: shop-header
+  - plugin: notices
+  - plugin: composer-portal
+interface:
+  layout: chat
+  accent: sun
+  welcome: >-
+    I'm the Shopper, in a demo at Datalayer's Online Shop: tell me what you need
+    and your budget, and I find it with its photo, compare and build the
+    basket. Orders here are test orders: nothing is charged and nothing ships.
+  starters:
+    - label: Tennis
+      message: Find me what I need to play tennis under 60 USD and compare the options.
+    - label: A picnic basket
+      message: Put together a picnic basket — fruit, juice and a chopping board — with the total.
+    - label: Buy it
+      message: Buy two tennis balls and the tennis racket.
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Find me what I need to play tennis under 60 USD and compare the options.
+      expect: It finds the tennis racket and the tennis ball at the Online Shop with their photos, compares them with show_comparison and recommends a basket within the budget.
+    - ask: Buy two tennis balls and the tennis racket.
+      expect: It quotes the basket at 63.97 USD, asks the visitor to confirm, and once confirmed places a test order, saying nothing is charged and nothing ships.
+    - ask: Find me a tent.
+      expect: It says the Online Shop has no tent, searches Shopify's Global Catalog and compares real stores' tents with their sellers and prices, and buys none of them.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Its tests have not been run as a set: no validation run is attached to it."
+record:
+  keep_for: 30_days
+  include: [conversations]
+deployment:
+  hosted:
+    visibility: public
+tags:
+  - demo
+  - shopping
+  - commerce
+icon: gift
+emoji: "🛍️"
+# What a page that presents it shows beside its conversation: what its agent
+# says of itself, then what this demo is and where to go next.
+presentation: |
+  Finds products on Shopify stores, compares prices, variants and sellers,
+  builds the basket, and buys for you through the Personal Agent Protocol only
+  once you approve the exact purchase.
+
+  - Searches products across Shopify stores
+  - Compares price, shipping, rating and seller, and says which it would pick
+  - Builds the basket and shows its total
+  - Remembers your sizes, budgets and the stores you like
+  - Buys through the Personal Agent Protocol only once you approve the exact purchase
+
+  *Try it here: it searches Shopify's stores, and shops at the Online Shop, an
+  example shop of real products with their photos, where it quotes the basket
+  and places a test order: nothing is charged and nothing ships.*
+
+  **[Start building](/signin)**
+  [How a personal agent acts for you](/docs/applications/personal-agent-protocol)

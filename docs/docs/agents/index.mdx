@@ -62,7 +62,7 @@ tags:
 Whether agent is active (default: `true`). An application naming an agent that is not enabled has it to set up.
 
 ### `listed` (boolean)
-Whether the pickers offer an enabled agent (default: `true`): the new agent page, the chats, the assign menu and `agent`'s local and cloud pickers. Say it only as `listed: false`, on an enabled agent that runs by id, as the default of blank applications and quick launches, and for the applications that name it, without being offered: `example-simple`, the neutral default, is one. The pickers offer the agents that are enabled and listed, the seven seed agents.
+Whether the pickers offer an enabled agent (default: `true`): the new agent page, the chats, the assign menu and `agent`'s local and cloud pickers. Say it only as `listed: false`, on an enabled agent that runs by id, as the default of blank applications and quick launches, and for the applications that name it, without being offered: `assistant`, the neutral default, is one. The pickers offer the agents that are enabled and listed, the seven seed agents.
 
 ### `mcp_servers` (list of strings)
 MCP server references. Prefer `id:version` format.
@@ -138,7 +138,7 @@ Before a priced tool runs, agent-runtimes estimates what it may cost — a read 
 
 LinkedIn (0.0.190) lets Datalayer's application post and comment as the member and read the member's profile, nothing more: reading the member's posts, the comments and reactions on them, or a company page needs LinkedIn's Community Management API, which Datalayer has not been granted. So there is no tool that reads LinkedIn, `social-comment-linkedin` comments under a post the person names by its address, and the Marketer says it cannot read a LinkedIn post's numbers. The catalogue's `linkedin` MCP server, which needs a signed-in browser session, stays out of the Marketer.
 
-An application follows its agent's groups through its own connections: a connection may say `optional: true` when its agent says that server optional, and a group of the agent's applies to the application only when the application connects to one of its servers — with the group's linked accounts beside them. The `marketer` application needs one network at least, as its agent does; `demo-marketer`, which connects to none, needs none.
+An application follows its agent's groups through its own connections: a connection may say `optional: true` when its agent says that server optional, and a group of the agent's applies to the application only when the application connects to one of its servers — with the group's linked accounts beside them. The `marketer` application needs one network at least, as its agent does; `marketer-tryout`, which connects to none, needs none.
 
 ### `environment_name` (string)
 Runtime environment name (default: `"ai-agents"`)
@@ -151,8 +151,8 @@ Client Protocol, behind the Shield. Four are offered today: `claude-code`, `code
 `opencode` and `pi`. What a harness cannot honour of the spec (a `model:`, skills,
 MCP servers it does not take) is refused in a sentence.
 ```yaml
-# agents/example-harness-opencode.yaml
-id: example-harness-opencode
+# agents/coding-agent-opencode.yaml
+id: coding-agent-opencode
 version: 0.0.1
 name: An OpenCode Agent
 enabled: false
@@ -200,10 +200,10 @@ platform checks it as it checks the spec's (`kagent` and `agentcore` take
 `pydantic-ai` only, and `agentcore` an organization with its AWS connection).
 
 `harness` says which agent program turns the loop; `runtime_engine` says what
-runs that program. The catalogue's Kagent example is `example-kagent`:
+runs that program. The catalogue's Kagent example is `kagent-assistant`:
 ```yaml
-# agents/example-kagent.yaml
-id: example-kagent
+# agents/kagent-assistant.yaml
+id: kagent-assistant
 version: 0.0.1
 name: A kagent Agent
 model: "bedrock:us.anthropic.claude-sonnet-5-5"

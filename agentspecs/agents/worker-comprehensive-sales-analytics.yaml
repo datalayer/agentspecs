@@ -15,13 +15,14 @@ id: worker-comprehensive-sales-analytics
 version: 0.0.1
 name: Comprehensive Sales Analytics
 domain: market-analyst
-description: >
+description: >-
   A multi-agent team that replaces a single KPI monitor with four specialized
-  agents: a Data Collector that pulls real-time CRM metrics, an Anomaly
-  Detector that flags statistical outliers, a Trend Analyzer that identifies
-  patterns and forecasts, and a Report Generator that compiles executive
-  dashboards and sends alerts. Together they deliver deeper insights, faster
-  detection, and richer reporting than any single agent could.
+  agents: a Data Collector that pulls real-time CRM metrics, an Anomaly Detector
+  that flags statistical outliers, a Trend Analyzer that identifies patterns and
+  forecasts, and a Report Generator that compiles executive dashboards and sends
+  alerts. Together they deliver deeper insights, faster detection, and richer
+  reporting than any single agent could. It also sends the daily KPI report from
+  the CRM: the key figures, their trends and what needs attention.
 
 tags:
   - market-analyst
@@ -29,6 +30,7 @@ tags:
   - sales
   - analytics
   - kpi
+  - customer-support
 
 # What this worker can be delegated.
 # Ids come from the closed vocabulary in agent_runtimes.types.
@@ -138,3 +140,15 @@ policy:
   shield:
     # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
     egress: ["*"]
+
+
+suggestions:
+  # Carried over from worker-comprehensive-sales-analytics, merged into this spec.
+  - text: Show me today's sales KPI dashboard
+    summary: "Today's KPI dashboard"
+  - text: What are the current revenue trends?
+    summary: "Revenue trends"
+  - text: Flag any KPIs that deviate more than 10% from targets
+    summary: "KPIs off by 10%"
+  - text: Generate a weekly summary report
+    summary: "Weekly summary"

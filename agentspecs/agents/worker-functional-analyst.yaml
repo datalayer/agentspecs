@@ -14,7 +14,7 @@
 #
 # Renamed the Functional Analyst on 20 November 2026 (the user: "Analyst
 # should be 'Functional Analyst'"): id worker-functional-analyst, demo
-# demo-functional-analyst, page /agents/technology/functional-analyst.
+# functional-analyst-tryout, page /agents/technology/functional-analyst.
 #
 # Its id is worker-functional-analyst, not `analyst`: the Jupyter team and the notebook
 # benchmark already seat a member called `analyst` (the Data

@@ -3,16 +3,16 @@
 
 # Team Specification: Buy from a shop
 # Two applications working as a team over A2A. A person talks to their
-# Shopper, in their browser. The Shopper asks the Demo Shop, on a runtime,
+# Shopper, in their browser. The Shopper asks the Online Shop, on a runtime,
 # for products, a quote and a test order, and hands over what the shop
-# answers. The shop's member id is its application's (demo-shop), as the
+# answers. The shop's member id is its application's (online-shop), as the
 # demo account's kept deployment names it. The shop answers from its own catalogue and charges nothing.
 
 id: buy-from-a-shop
 version: 0.0.1
 name: Buy from a shop
 description: >-
-  A person's Shopper in the browser that buys from the Demo Shop, a company
+  A person's Shopper in the browser that buys from the Online Shop, a company
   application on a runtime, over A2A: the shop finds its products with their
   photos, quotes the basket and places a test order — nothing is charged and
   nothing ships.
@@ -36,7 +36,7 @@ supervisor:
   can_terminate: true
 entry: shopper
 routing_instructions: >-
-  The Shopper asks the Demo Shop for every product, quote and order, one
+  The Shopper asks the Online Shop for every product, quote and order, one
   request each time, and reports what the shop answers without adding to it.
 
 suggestions:
@@ -60,13 +60,13 @@ agents:
     role: initiator
     runs_in: browser
     goal: >-
-      Take the person's request, ask the Demo Shop for it, and hand over what
+      Take the person's request, ask the Online Shop for it, and hand over what
       the shop answered.
     talks_to:
-      - member: demo-shop
+      - member: online-shop
         over: a2a
-  - id: demo-shop
-    app: demo-shop:0.0.1
+  - id: online-shop
+    app: online-shop:0.0.1
     role: contributor
     runs_in: runtime
     goal: >-

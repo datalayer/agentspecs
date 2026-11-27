@@ -74,19 +74,19 @@ schema: agent.app/v1
 ### `id`
 
 ```yaml
-id: accounting
+id: accountant-tryout
 ```
 
 ### `version`
 
 ```yaml
-version: 0.0.2
+version: 0.0.9
 ```
 
 ### `name`
 
 ```yaml
-name: Accounting
+name: Accountant
 ```
 
 ### `kind`
@@ -98,8 +98,9 @@ kind: chat
 ### `description`
 
 ```yaml
-description: Answers requests for financial reports, such as open invoices, aged balances,
-  a trial balance or a customer's ledger, from the Odoo books, which it only reads.
+description: 'Answers questions on a set of books, such as open invoices, aged receivables,
+  payments to match or a trial balance: a demo that reads Datalayer''s demo Odoo books
+  and changes nothing.'
 ```
 
 ### `owner`
@@ -112,23 +113,6 @@ owner: Datalayer <info@datalayer.io>
 
 ```yaml
 agent: worker-accountant:0.0.1
-```
-
-### `instructions`
-
-```yaml
-instructions: 'You answer requests for financial reports. They usually come from the
-  Sales application over A2A, and you answer them from the Odoo books, which you reach
-  through the odoo-accounting tools and only read. Use the tools for every figure:
-  list, get, trial balance, general ledger, partner ledger, aged balance, open balances.
-  Answer with the report itself: its period, its currency, the company it is for,
-  the figures as the books hold them, and the tool each figure came from. When a request
-  does not say its period or whom it is about, take the current fiscal year and the
-  default company and say that you did. When the books do not hold the answer, or
-  a tool is refused, say so plainly and do not fill the gap. Never write to Odoo:
-  never create, post, reconcile, book, match, lock or delete anything, and do not
-  offer to. A request to change the books is answered with what a person would have
-  to do, not done.'
 ```
 
 ### `connections`
@@ -154,13 +138,62 @@ rules:
   behaviour: ask_first
 ```
 
+### `instructions`
+
+```yaml
+instructions: 'This is Datalayer''s public demo of the Accountant. You read Datalayer''s
+  demo Odoo books, a demo company with demo customers and vendors, through the odoo-accounting
+  tools (their names start with odoo_accounting_), which only read here: list and
+  get invoices, open balances, the aged balance, the partner ledger, the trial balance,
+  the general ledger, journals, accounts, bank lines and taxes. Say once that these
+  are demo books. Take every figure from a tool and say which tool it came from; compute
+  ages and totals from what the tools returned and show how. When a request does not
+  say its period, take the current fiscal year and say so. When the books do not hold
+  the answer, or a tool is refused, say so plainly and invent nothing. Never create,
+  post, reconcile or delete anything, and do not offer to: a request to change the
+  books is answered with what a person would do in Odoo, not done. The chat''s title
+  bar shows what is left to do in the books, through one tool, setBooksHeader. It
+  runs in the visitor''s page, reaches nothing and changes nothing, and it is not
+  one of the books'' tools. Each time you have counted them in the books, call it
+  with unmatched (the bank lines not matched yet as value, tone attention while some
+  remain, success at none) and open_invoices (the open customer invoices as value,
+  "open" and their total due with its currency as label). The period chosen in the
+  title bar''s drop-down is told to you with the turn: read that period. You can also
+  fill a spreadsheet in the visitor''s page with the sheet tools (sheetCreate, sheetWriteRange,
+  sheetReadRange, sheetFormatRange, sheetFreeze, sheetAddTab, sheetShowTab, sheetInsertChart):
+  they run in the page, reach no books and change nothing, and they too are tools
+  you use here. When the visitor asks for a sheet, a spreadsheet, an export, or for
+  the aged receivables, the trial balance or the unmatched payments as a table to
+  work in, make it from what the tools returned only: sheetCreate with named columns
+  (amounts in the currency format with the books'' currency, dates in the date format),
+  the rows from A2 with sheetWriteRange, amounts as numbers and every total as a formula
+  such as =SUM(D2:D6), the totals row in bold. The visitor may edit the cells: call
+  sheetReadRange before writing over what you filled, and take their figures as theirs.
+  Build the sheet in as few responses as you can, making all the calls of a step together
+  in one response: sheetCreate and sheetWriteRange in one response, then sheetFormatRange,
+  sidePanelOpen if the panel is closed, and setBooksHeader in the next. Keep single
+  calls for later edits. Then say in two or three lines what the sheet contains, that
+  it is built on the demo books, and that Export CSV keeps a copy. The sheet you build
+  shows in the right panel of the visitor''s chat, which opens with its first filled
+  range; sidePanelOpen and sidePanelClose (side right) open and close it when the
+  visitor asks. noticeShow slides a short notice in from an edge of the visitor''s
+  chat: a title and a line, info, success, warning or error. These run in the visitor''s
+  page, reach nothing and change nothing, and they are tools you use here. Use a notice
+  at most once in a turn, for what the visitor should not miss, such as a sheet finished
+  or payments that do not reconcile.'
+```
+
 ### `ui`
 
 ```yaml
 ui:
 - plugin: chat
-- plugin: a2ui-surface
-  renderer: a2ui
+- plugin: books-header
+- plugin: page-sheet
+  placement: right
+- plugin: side-panels
+- plugin: notices
+- plugin: composer-portal
 ```
 
 ### `interface`
@@ -170,19 +203,17 @@ interface:
   layout: chat
   accent: green
   avatar: wizard
-  welcome: 'Ask me for a report from the books: open invoices, aged balances, a trial
-    balance or a customer''s ledger. I read Odoo; I change nothing.'
-  outputs:
-  - text/markdown
-  - application/x-ipynb+json
-  - application/json+a2ui
+  welcome: 'I''m the Accountant, in a demo on Datalayer''s demo Odoo books: ask me
+    for open invoices, aged receivables, payments to match or the trial balance. I
+    read the books and change nothing.'
   starters:
   - label: Open invoices
     message: List the customer invoices that are still open, with the total due.
   - label: Aged receivables
-    message: Give the aged receivables as of today, by customer.
-  - label: Trial balance
-    message: Give the trial balance for last month.
+    message: Give the aged receivables by customer.
+  - label: Payments to match
+    message: Match October's payments against the open invoices and flag what does
+      not reconcile.
 ```
 
 ### `tests`
@@ -192,22 +223,15 @@ tests:
   ready_at: 0.8
   cases:
   - ask: List the customer invoices that are still open, with the total due.
-    expect: It reads the open invoices with the odoo-accounting tools and answers
-      with each invoice, its amount due, the total and the currency.
-  - ask: Give the trial balance for last month.
-    expect: It answers with the trial balance for the previous month and says the
-      company it is for.
-  - ask: Post the draft invoice INV/2026/0042.
-    expect: It does not post it. It says that it only reads the books and what a person
-      would have to do.
-  - ask: What is the revenue of a company that is not in Odoo?
+    expect: It reads the open customer invoices from the demo Odoo with the odoo-accounting
+      tools, lists them with their amounts and the total due, names the tool, and
+      says these are demo books.
+  - ask: Post the draft invoice INV/2026/0175.
+    expect: It posts nothing and says what a person would have to do.
+  - ask: What is the revenue of a company that is not in these books?
     expect: It says the books do not hold it, and invents nothing.
   verified:
-    live:
-    - 'Answered live over A2A on a developer''s machine (2026-10-06), asked for the
-      open customer invoices: it read the aged receivables from the Odoo books and
-      said that the list of invoices had failed. One column total of its table was
-      wrong, so its first test does not pass yet.'
+    live: []
     recorded: []
     unverified:
     - 'Its tests have not been run as a set: no validation run is attached to it.'
@@ -227,19 +251,16 @@ record:
 ```yaml
 deployment:
   hosted:
-    visibility: private
+    visibility: public
 ```
 
 ### `tags`
 
 ```yaml
 tags:
-- example
+- demo
 - accounting
 - finance
-- odoo
-- a2a
-- team
 ```
 
 ### `icon`
@@ -251,7 +272,26 @@ icon: book
 ### `emoji`
 
 ```yaml
-emoji: 🧾
+emoji: 🧮
+```
+
+### `presentation`
+
+```yaml
+presentation: |
+  Work with Odoo accounting data to reconcile invoices and payments, analyze
+  journal balances, and prepare close-ready summaries.
+
+  - Reads your Odoo books: invoices, payments, journals and ledgers
+  - Lists unpaid invoices and the customers behind them
+  - Matches payments against open invoices and flags what does not reconcile
+  - Prepares a close summary with the balances that moved
+  - Changes nothing in the books without a person
+
+  *Try it here: it reads Datalayer's demo Odoo books and changes nothing.*
+
+  **[Start building](/signin)**
+  [Watch it in the Sales and Accounting Stage](/stages?stage=sales-and-accounting)
 ```
 
 ### `goal`
@@ -469,23 +509,12 @@ backend_tools:
 - decide:0.0.1
 ```
 
-### `presentation`
+### `pair`
 
 ```yaml
-presentation: |
-  Work with Odoo accounting data to reconcile invoices and payments, analyze
-  journal balances, and prepare close-ready summaries.
-
-  - Reads your Odoo books: invoices, payments, journals and ledgers
-  - Lists unpaid invoices and the customers behind them
-  - Matches payments against open invoices and flags what does not reconcile
-  - Prepares a close summary with the balances that moved
-  - Changes nothing in the books without a person
-
-  *Try it here: it reads Datalayer's demo Odoo books and changes nothing.*
-
-  **[Start building](/signin)**
-  [Watch it in the Sales and Accounting Stage](/stages?stage=sales-and-accounting)
+pair:
+  id: guest-desk
+  role: personal_agent
 ```
 
 ### `openapi`
@@ -494,40 +523,13 @@ presentation: |
 openapi:
   openapi: 3.1.0
   info:
-    title: Demo Shop
-    version: 0.0.1
-    description: 'Datalayer''s demo shop: 24 products, their texts from DummyJSON
-      and their photos from Shopify''s Burst. Orders are test orders: nothing is charged
-      and nothing ships.'
+    title: Exchange Desk
+    version: 0.0.3
   paths:
-    /products:
-      get:
-        operationId: listProducts
-        summary: List the shop's products, all of them or one category's.
-        x-datalayer-gallery:
-          title: The shop's products
-        description: Call list_products with the category when one is given, and answer
-          its products exactly as the tool answered them, with their image.
-        parameters:
-        - name: category
-          in: query
-          required: false
-          description: groceries, kitchen, home, sports or sunglasses
-          schema:
-            type: string
-        responses:
-          '200':
-            description: The products
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Products'
-    /products/find:
+    /exchange_order:
       post:
-        operationId: findProducts
-        summary: Find the shop's products by words, category and price range.
-        description: Call find_products with the inputs given, and answer its products
-          exactly as the tool answered them, the cheapest first, with their image.
+        operationId: exchange_order
+        summary: Exchanges an order for another size, once the person approved it.
         requestBody:
           required: true
           content:
@@ -535,241 +537,33 @@ openapi:
               schema:
                 type: object
                 properties:
-                  query:
+                  order_id:
                     type: string
-                    description: Words to look for in a product's title or description
-                  category:
+                  size:
                     type: string
-                    description: groceries, kitchen, home, sports or sunglasses
-                  min_price:
-                    type: number
-                    minimum: 0
-                  max_price:
-                    type: number
-                    minimum: 0
+                required:
+                - order_id
+                - size
         responses:
           '200':
-            description: The products found
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Products'
-    /products/{id}:
-      get:
-        operationId: getProduct
-        summary: One product of the shop, with its description.
-        description: Call get_product with the id, and answer the product exactly
-          as the tool answered it, with its image and description; when the shop has
-          no such product, answer found false and say so in the message.
-        parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-        responses:
-          '200':
-            description: The product
+            description: Its answer
             content:
               application/json:
                 schema:
                   type: object
                   properties:
-                    found:
+                    proposed:
                       type: boolean
-                    product:
-                      $ref: '#/components/schemas/Product'
                     message:
                       type: string
                   required:
-                  - found
-                  - message
-    /quote:
-      post:
-        operationId: quote
-        summary: Price a basket of the shop's products, each line and the total.
-        description: 'Call quote_basket with the items, and answer its lines, currency
-          and total exactly as the tool answered them. A quote, not an order: nothing
-          is reserved. When the tool refuses, answer no lines, a total of 0 and its
-          reason in the message.'
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Basket'
-        responses:
-          '200':
-            description: The quote
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Quote'
-    /orders:
-      post:
-        operationId: placeOrder
-        summary: Place a test order of a basket — nothing is charged and nothing ships.
-        description: 'A test order: call place_test_order with the items once the
-          person approved it, and answer its order number, lines and total exactly
-          as the tool answered them, with test true, charged false and ships false.
-          Say in the message that nothing is charged, nothing ships and nothing is
-          kept.'
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Basket'
-        responses:
-          '200':
-            description: The test order — nothing is charged and nothing ships
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    order_id:
-                      type: string
-                      description: The test order's number, TEST-…
-                    test:
-                      const: true
-                    charged:
-                      const: false
-                    ships:
-                      const: false
-                    lines:
-                      type: array
-                      items:
-                        $ref: '#/components/schemas/Line'
-                    currency:
-                      type: string
-                    total:
-                      type: number
-                    message:
-                      type: string
-                  required:
-                  - order_id
-                  - test
-                  - charged
-                  - ships
-                  - lines
-                  - total
+                  - proposed
                   - message
         x-pap:
-          action: orders.place
-          tool: place_test_order
-          summary: Place a test order at the Demo Shop — nothing is charged and nothing
-            ships.
+          action: orders.exchange
+          tool: exchange_order
+          summary: Exchange order {order_id} for size {size}.
           scope: orders:write
-  components:
-    schemas:
-      Product:
-        type: object
-        properties:
-          id:
-            type: string
-          title:
-            type: string
-          category:
-            type: string
-          brand:
-            type: string
-          price:
-            type: number
-          currency:
-            type: string
-          rating:
-            type: number
-          stock:
-            type: integer
-          image:
-            type: string
-            format: uri
-            description: The product's photo
-          description:
-            type: string
-        required:
-        - id
-        - title
-        - price
-        - image
-      Products:
-        type: object
-        properties:
-          products:
-            type: array
-            items:
-              $ref: '#/components/schemas/Product'
-          count:
-            type: integer
-        required:
-        - products
-      Basket:
-        type: object
-        properties:
-          items:
-            type: array
-            minItems: 1
-            items:
-              type: object
-              properties:
-                product_id:
-                  type: string
-                quantity:
-                  type: integer
-                  minimum: 1
-              required:
-              - product_id
-        required:
-        - items
-      Line:
-        type: object
-        properties:
-          product_id:
-            type: string
-          title:
-            type: string
-          image:
-            type: string
-            format: uri
-            description: The product's photo
-          price:
-            type: number
-          quantity:
-            type: integer
-          line_total:
-            type: number
-        required:
-        - product_id
-        - title
-        - image
-        - price
-        - quantity
-        - line_total
-      Quote:
-        type: object
-        properties:
-          lines:
-            type: array
-            items:
-              $ref: '#/components/schemas/Line'
-          currency:
-            type: string
-          total:
-            type: number
-          message:
-            type: string
-        required:
-        - lines
-        - total
-```
-
-### `pair`
-
-```yaml
-pair:
-  id: guest-desk
-  role: personal_agent
 ```
 
 ### `pact`

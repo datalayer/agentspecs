@@ -1,0 +1,30 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The online shop's catalogue, a snapshot bundled with the online-shop application
+# (apps/online-shop/catalog.json): read in process, never from the network; it
+# changes nothing anywhere (agent_runtimes.tools.online_shop).
+
+id: online-shop-quote-basket
+version: 0.0.1
+name: Quote an Online Shop Basket
+description: >-
+  Price a basket of the online shop's products from its catalogue: each line and the total, summed by the tool. A quote, not an order: nothing is reserved. Drawn with each product's photo.
+tags:
+  - shopping
+  - demo
+  - online-shop
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.online_shop
+  method: quote_basket
+icon: "@primer/octicons-react:list-ordered"
+emoji: "🧾"
+
+# The UI plugin it brings to the chat that uses it: its answer drawn as
+# product cards, each with its photo.
+ui:
+  - plugin: product-cards

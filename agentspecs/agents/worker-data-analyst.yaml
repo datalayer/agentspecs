@@ -31,7 +31,7 @@
 #
 # Renamed the Data Analyst on 23 November 2026 (the user: "rename 'Jupyter
 # Data Analyst' to 'Data Analyst'"): id worker-data-analyst (was
-# jupyter-data-analyst), demo demo-data-analyst, page
+# jupyter-data-analyst), demo data-analyst-tryout, page
 # /agents/technology/data-analyst. No alias: the old ids are refused.
 
 id: worker-data-analyst

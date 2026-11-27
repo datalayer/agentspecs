@@ -1,0 +1,30 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The online shop's catalogue, a snapshot bundled with the online-shop application
+# (apps/online-shop/catalog.json): read in process, never from the network; it
+# changes nothing anywhere (agent_runtimes.tools.online_shop).
+
+id: online-shop-get-product
+version: 0.0.1
+name: Get an Online Shop Product
+description: >-
+  One product of the online shop with its photo, price, rating, stock and description. Drawn as a product card.
+tags:
+  - shopping
+  - demo
+  - online-shop
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.online_shop
+  method: get_product
+icon: "@primer/octicons-react:package"
+emoji: "📦"
+
+# The UI plugin it brings to the chat that uses it: its answer drawn as
+# product cards, each with its photo.
+ui:
+  - plugin: product-cards

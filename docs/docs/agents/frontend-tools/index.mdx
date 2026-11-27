@@ -71,7 +71,7 @@ for the person to accept them.
 
 ## An agent beside a spreadsheet
 
-The *Example Output Agent* (`agents/example-output.yaml`) answers in one of six
+The *Example Output Agent* (`agents/output-formatter.yaml`) answers in one of six
 output modes. Five are a block in the answer, which the page detects and draws;
 the sixth works on the grid through the `cells` set:
 
@@ -85,8 +85,8 @@ the sixth works on the grid through the `cells` set:
 | `SHEET CHART` | No block: asked to chart the spreadsheet shown, it calls `cellsReadRange` to find the data and `cellsInsertChart` over it, then says which chart it inserted where. |
 
 ```yaml
-# agents/example-output.yaml
-id: example-output
+# agents/output-formatter.yaml
+id: output-formatter
 harness: pydantic-ai
 backend_tools: []
 frontend_tools:

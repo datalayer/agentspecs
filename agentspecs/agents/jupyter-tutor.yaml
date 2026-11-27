@@ -23,13 +23,16 @@ name: Jupyter Tutor
 description: >-
   Teaches you Python in the notebook you have open — explaining what your code
   does, why it broke, and what to try next, and leaving you able to write the
-  next cell yourself.
+  next cell yourself. It also sets interactive, executable exercises and gives
+  step-by-step feedback on them.
 
 tags:
   - notebook
   - teaching
   - learning
   - python
+  - personal-assistant
+  - agent-worker
 
 # What this worker can be delegated.
 # Ids come from the closed vocabulary in agent_runtimes.types.

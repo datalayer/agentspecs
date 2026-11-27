@@ -36,7 +36,7 @@ description: >-
   Shield, which says the rule.
 owner: Datalayer <info@datalayer.io>
 
-agent: example-harness-opencode:0.0.1
+agent: coding-agent-opencode:0.0.1
 instructions: >-
   You explain code. You are lent one repository, the workspace you run in,
   and you may only read it: open the files you are asked about, follow what
