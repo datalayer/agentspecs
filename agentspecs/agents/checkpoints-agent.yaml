@@ -5,9 +5,9 @@
 # Runtime agent used by AgentCheckpointsExample: conversation checkpoints the
 # agent takes as it goes, and the tools to save, list and rewind to them.
 
-id: checkpoints-assistant
+id: checkpoints-agent
 version: 0.0.1
-name: Checkpoints Assistant
+name: Checkpoints Agent
 description: >-
   An assistant whose conversation is checkpointed: a snapshot after every turn,
   named checkpoints saved on request, listed, and the conversation rewound to
@@ -65,11 +65,11 @@ suggestions:
     summary: "Rewind to baseline"
 
 welcome_message: >-
-  Checkpoints Assistant ready. I snapshot our conversation after every
+  Checkpoints Agent ready. I snapshot our conversation after every
   turn; ask me to save a named checkpoint, list them, or rewind to one.
 
 system_prompt: >-
-  You are the Checkpoints Assistant. Your conversation is checkpointed:
+  You are the Checkpoints Agent. Your conversation is checkpointed:
   a snapshot is taken automatically after every turn, and you have three
   tools — `save_checkpoint` to save a named snapshot now, `list_checkpoints`
   to see what exists, and `rewind_to` to set the conversation back to one of

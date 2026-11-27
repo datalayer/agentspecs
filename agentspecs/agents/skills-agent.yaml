@@ -5,9 +5,9 @@
 # Runtime agent used by AgentSkillsExample to demonstrate
 # file-based and package-based skills.
 
-id: skills-assistant
+id: skills-agent
 version: 0.0.1
-name: Skills Assistant
+name: Skills Agent
 description: >-
   Uses skills from several sources — built-in file skills and package-registered
   ones (GitHub, PDF, crawl, events) — searches the web with Tavily, and asks for
@@ -61,7 +61,7 @@ suggestions:
     summary: "Crawl datalayer.ai"
   - text: Use github to list public repositories for an account
     summary: "GitHub public repos"
-  # Carried over from skills-assistant, merged into this spec.
+  # Carried over from skills-agent, merged into this spec.
   - text: list your tools
     summary: "List your tools"
   - text: "Search the web for the latest news on AI agents using Tavily."
@@ -80,7 +80,7 @@ suggestions:
     summary: "A joke from your skills"
 
 welcome_message: >-
-  Hi! I am the Skills Assistant. I can use built-in file skills and
+  Hi! I am the Skills Agent. I can use built-in file skills and
   package-registered skills such as datalayer-whoami.
 
 system_prompt: >-

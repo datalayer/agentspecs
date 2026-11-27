@@ -6,9 +6,9 @@
 # (`decisions: jev:0.0.1`): typed questions asked of Jev through
 # datalayer-ai-inference, with the `decide` tool the capability brings.
 
-id: assistant
+id: chat-agent
 version: 0.0.1
-name: Assistant
+name: Chat Agent
 description: >
   A simple conversational agent with one tool, decide: it asks Jev typed
   questions (yes or no with a probability, a choice, a score) through

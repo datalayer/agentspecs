@@ -380,7 +380,7 @@ def test_every_example_says_what_was_verified_and_how() -> None:
         assert said, identity
         assert all(sentence.strip().endswith((".", ")")) for sentence in said), identity
     # An application that says nothing of it says nothing: lists, empty.
-    blank = parse_app({"id": "x", "name": "X", "kind": "chat", "agent": "assistant"})
+    blank = parse_app({"id": "x", "name": "X", "kind": "chat", "agent": "chat-agent"})
     assert blank.tests.verified.live == blank.tests.verified.unverified == []
 
 
@@ -424,7 +424,7 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
         # Their agent, worker-data-analyst, is enabled (the seventh seed agent, offered by
         # the pickers since 0.0.215, 18 November 2026): nothing to set up.
         assert app_setup(spec) == [], identity
-    # Decide's agent, assistant, the neutral default, likewise.
+    # Decide's agent, chat-agent, the neutral default, likewise.
     assert app_setup(APP_CATALOGUE["decide"]) == []
     # Support Desk's agent, Document Q&A, is out of the agents' catalogue since 0.0.164
     # (8 November 2026): the application is still offered, and says so as setup.

@@ -3,14 +3,14 @@
 
 # Agent Specification: A Kagent Agent
 #
-# The same agent as assistant, run by Kagent (`runtime_engine: kagent`)
+# The same agent as chat-agent, run by Kagent (`runtime_engine: kagent`)
 # rather than on a Datalayer runtime. How it runs:
 #
 # - In Kagent (https://kagent.dev, 1.0) it is an `Agent` that pairs an
 #   `AgentTemplate` (the model, as a Kagent ModelConfig, and remote MCP tools)
 #   with a `Harness`: the agent-runtimes Kagent image, whose bridge serves
 #   Kagent's A2A v1 over gRPC and starts `agent-runtimes serve --target kagent`
-#   with `AGENT_SPEC_ID=kagent-assistant`. agent-runtimes' `deploy/kagent`
+#   with `AGENT_SPEC_ID=kagent-chat`. agent-runtimes' `deploy/kagent`
 #   holds the three objects.
 # - Each conversation (a Kagent Session, the A2A contextId) is a session actor
 #   of Agent Substrate, in a gVisor sandbox. The actor is suspended to a
@@ -25,9 +25,9 @@
 # skills, no frontend tools. Run with `AGENT_RUNTIMES_MODEL=test` in the
 # Harness env, it answers with pydantic-ai's test model and calls no model.
 
-id: kagent-assistant
+id: kagent-chat
 version: 0.0.1
-name: kagent Assistant
+name: kagent Chat
 description: >
   A simple conversational agent run by kagent: a kagent Agent whose Harness
   is agent-runtimes, each conversation a session actor of Agent Substrate,

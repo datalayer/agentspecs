@@ -5,9 +5,9 @@
 # Weather assistant using a backend tool with real API calls. Mirrors the
 # former /api/v1/examples/backend_tool_rendering endpoint agent.
 
-id: weather-assistant
+id: weather-agent
 version: 0.0.1
-name: Weather Assistant
+name: Weather Agent
 description: >
   An AG-UI weather assistant that fetches real weather data with a backend tool
   for the frontend to render as a weather card.

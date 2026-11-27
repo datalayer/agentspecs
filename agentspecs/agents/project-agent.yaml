@@ -1,9 +1,9 @@
 # Copyright (c) 2025-2026 Datalayer, Inc.
 # Distributed under the terms of the Modified BSD License.
 
-id: project-assistant
+id: project-agent
 version: 0.0.1
-name: Project Assistant
+name: Project Agent
 description: >-
   An assistant dedicated to one project, for a role and in a tone set at launch,
   its parameters checked against a JSON schema.
@@ -73,7 +73,7 @@ pre_hooks:
   sandbox:
     - |
       demo_params = """{{demo_params}}"""
-      print(f"[project-assistant] demo_params initialized: {demo_params!r}")
+      print(f"[project-agent] demo_params initialized: {demo_params!r}")
 
 welcome_message: >
   This runtime was launched for project {{project}} and role {{role}}.
