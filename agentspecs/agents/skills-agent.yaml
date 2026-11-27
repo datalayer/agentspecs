@@ -31,7 +31,16 @@ sandbox_variant: jupyter-server
 
 memory: ephemeral
 
-mcp_servers: []
+# Carried over from example-full: web search with the tavily server, a process
+# that reads TAVILY_API_KEY. It is started whenever the key is there; without
+# it, or on an engine whose sandbox holds no secret (Kagent), the agent starts
+# without search and says so.
+mcp_servers:
+  - tavily:0.0.1
+
+optional:
+  mcp_servers:
+    - tavily:0.0.1
 
 skills:
   - crawl:0.0.1
@@ -42,9 +51,15 @@ skills:
   - jokes:0.0.1
   - datalayer-whoami:1.0.0
 
-backend_tools: []
+# Carried over from example-full: runtime-echo runs at once, runtime-sensitive-echo
+# waits for a person's approval (its spec's manual approval).
+backend_tools:
+  - runtime-echo:0.0.1
+  - runtime-sensitive-echo:0.0.1
 
-frontend_tools: []
+frontend_tools:
+  - jupyter-notebook:0.0.1
+  - lexical-document:0.0.1
 
 environment_name: ai-agents-env
 

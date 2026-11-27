@@ -13,15 +13,11 @@ description: >-
   Creates a personalized daily news briefing based on each user's preferred
   topics, sources, companies, and industries. It filters out noise, identifies
   important developments, and delivers a concise summary of what matters most.
-  It also tracks emerging trends across its sources and says what is gaining
-  momentum.
 
 tags:
   - research
   - summarization
   - monitoring
-  - personal-assistant
-  - agent-worker
 
 # What this worker can be delegated.
 # Ids come from the closed vocabulary in agent_runtimes.types.

@@ -13,8 +13,6 @@ tags:
   - compliance
   - human-approval
   - audit
-  - workflow
-  - automation
 model: "bedrock:us.anthropic.claude-sonnet-5-5"
 harness: pydantic-ai
 runtime_engine: datalayer
@@ -33,10 +31,6 @@ suggestions:
     summary: "Latest audit lines"
   - text: "Explain how deferred_tool_calls resolves approval-required tool calls inline when decisions already exist."
     summary: "Deferred tool calls"
-  # Carried over from approved-automation, merged into this spec.
-  - text: >-
-      Use /home/datalayer/datasets/datalayer-nfs/compliance/approval_queue.csv to propose automation actions and require explicit human approval before execution.
-    summary: "Approval-gated automation"
 welcome_message: |
   Welcome to Approved Automation.
 

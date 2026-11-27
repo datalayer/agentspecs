@@ -135,7 +135,7 @@ def test_every_agent_that_names_tavily_may_start_without_it():
     is there, left out without it or on an engine whose sandbox holds no secret.
     """
     naming = [name for name, agent in _agents() if "tavily:0.0.1" in (agent.get("mcp_servers") or [])]
-    assert len(naming) == 29
+    assert len(naming) == 35
     assert {"worker-crawler", "web-researcher-codemode", "web-researcher", "web-researcher"} <= set(naming)
     for name, agent in _agents():
         if "tavily:0.0.1" in (agent.get("mcp_servers") or []):

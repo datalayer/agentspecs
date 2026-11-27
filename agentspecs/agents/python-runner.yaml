@@ -17,9 +17,6 @@ tags:
   - sandbox
   - code-execution
   - python
-  - operations
-  - notebook
-  - automation
 
 enabled: false
 model: "bedrock:us.anthropic.claude-sonnet-5-5"
@@ -62,10 +59,6 @@ suggestions:
       programming languages by popularity and saves it as chart.png, then
       tell me the file size.
     summary: "Bar chart saved to chart.png"
-  # Carried over from python-runner, merged into this spec.
-  - text: >-
-      Use /home/datalayer/datasets/datalayer-nfs/notebooks/experiment_metrics.csv and execute Python in a controlled runtime with clear safety and output notes.
-    summary: "Python in a controlled runtime"
 
 welcome_message: >-
   Code sandbox agent ready. Ask me to run Python: I execute it in the sandbox

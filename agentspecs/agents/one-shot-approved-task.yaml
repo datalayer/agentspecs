@@ -1,0 +1,65 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: One-shot Approved Task
+# The "once" trigger combined with tool approval:
+# the agent runs its trigger prompt once, requests manual approval
+# before executing the sensitive echo tool, and then terminates.
+
+id: one-shot-approved-task
+version: 0.0.1
+name: One-shot Approved Task
+description: >
+  Runs its trigger prompt once with a manual tool approval: when launched, it executes its trigger prompt once and invokes the
+  runtime-sensitive-echo tool, which requires manual approval before execution.
+  After completion, the runtime is terminated automatically.
+
+tags:
+  - workflow
+  - human-approval
+  - automation
+
+enabled: false
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
+harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-service-agent
+
+sandbox_variant: jupyter-server
+
+# Memory backend
+memory: ephemeral
+
+# Skills
+skills: []
+
+# Runtime tools
+backend_tools:
+  - runtime-sensitive-echo:0.0.1
+frontend_tools:
+  - jupyter-notebook:0.0.1
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: shield
+emoji: 🛡️
+color: red
+
+# Goal / Prompt
+goal: >-
+  Call runtime_sensitive_echo exactly once with
+  message="Tool approval demo executed" and reason="audit".
+  Do not call any other tool.
+
+# Trigger configuration
+trigger:
+  type: once
+  description: Run once with approval and terminate
+  prompt: "Call runtime_sensitive_echo exactly once with message='Tool approval demo executed' and reason='audit'. Do not call any other tool."
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

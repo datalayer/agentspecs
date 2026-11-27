@@ -54,6 +54,11 @@ frontend_tools: []
 
 environment_name: ai-agents-env
 
+# Tool by tool (example-no-codemode, merged here): the Tavily tools used directly,
+# no codemode; web-researcher-codemode composes them in code.
+codemode:
+  enabled: false
+
 icon: globe
 emoji: "🌐"
 color: sky
