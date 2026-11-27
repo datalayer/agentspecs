@@ -91,7 +91,7 @@ class TestRefusals:
             ({"scene": "", "battle": "pong:0.0.1"}, "names no deployments"),
             ({"id": "A Stage"}, "a slug"),
             ({"deployments": {"Accounting": "accounting"}}, "a slug"),
-            ({"deployments": {"accounting": "Demo Accounting"}}, "demo-accounting"),
+            ({"deployments": {"accounting": "Demo Accounting"}}, "accounting-stage"),
             ({"extra": 1}, "extra"),
         ],
     )

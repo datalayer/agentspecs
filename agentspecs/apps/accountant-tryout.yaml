@@ -10,7 +10,7 @@
 # should also use the odoo account mcp server connected to the demo odoo, use
 # the same credential as the Accounting agent in the accounting stage"): the
 # gateway's odoo-accounting toolset, read only, in its owner's account — the
-# books the demo account's Accounting (demo-accounting, a member of the Sales &
+# books the demo account's Accounting (accounting-stage, a member of the Sales &
 # Accounting Stage) reads with its principal, the gateway reading that
 # account's DATALAYER_ODOO_URL and DATALAYER_ODOO_API_KEY. On the visitors'
 # runtime the connection is reached with the demo account's own key, given to

@@ -18,7 +18,7 @@ id: sales-and-accounting
 version: 0.0.1
 scene: sales-and-accounting:0.0.1     # one of scene | app | battle
 deployments:
-  accounting: demo-accounting         # the member on a runtime → the deployment that answers for it
+  accounting: accounting-stage         # the member on a runtime → the deployment that answers for it
 public: true                          # a page of its own, no account needed
 tags: [example, demo, scene]
 ```
@@ -59,15 +59,15 @@ does not hold is refused.
 
 | Stage | On stage | Public | Plays |
 | --- | --- | --- | --- |
-| `sales-and-accounting` | scene | yes | Accounting at `demo-accounting`; Sales in the browser |
-| `month-end-close` | scene | yes | at `demo-month-end-close` |
-| `crop-monitoring` | scene | yes | at `demo-crop-monitoring` |
-| `disaster-assessment` | scene | yes | two members on runtimes, `demo-disaster-assessment` and `demo-change-detection` |
-| `coding-agent-behind-the-shield` | scene | yes | at `demo-code-explainer` |
+| `sales-and-accounting` | scene | yes | Accounting at `accounting-stage`; Sales in the browser |
+| `month-end-close` | scene | yes | at `month-end-close-stage` |
+| `crop-monitoring` | scene | yes | at `crop-monitoring-stage` |
+| `disaster-assessment` | scene | yes | two members on runtimes, `disaster-assessment-stage` and `change-detection-stage` |
+| `coding-agent-behind-the-shield` | scene | yes | at `code-explainer-stage` |
 | `pap-a-person-and-a-company`, `pap-approve-once`, `pap-your-application-a-company`, `pap-two-companies` | scripted scene | yes | in the page, from the Personal Agent Protocol's demo companies |
 | `ucp-a-purchase-approved` | scripted scene | yes | in the page, at the test shop |
 | `pact-a-personal-agent-at-a-business` | scripted scene | yes | in the page, at the demo airline |
-| `accounting` | app | no | Accounting alone, at `demo-accounting` |
+| `accounting` | app | no | Accounting alone, at `accounting-stage` |
 | `pong` | battle | no | the Pong Battle, on the visitor's key |
 
 The five demo Stages are the ones Datalayer keeps running under its demo
@@ -83,7 +83,7 @@ from agentspecs.stages import get_stage, list_stages, staged_of, StageKind
 stage = get_stage("sales-and-accounting")
 stage.kind                 # StageKind.SCENE
 stage.stages               # 'sales-and-accounting:0.0.1'
-stage.deployments          # {'accounting': 'demo-accounting'}
+stage.deployments          # {'accounting': 'accounting-stage'}
 staged_of(stage).name      # 'Sales & Accounting', the scene itself
 list_stages(public=True)   # the eleven with a page of their own
 list_stages(StageKind.BATTLE)   # [pong]

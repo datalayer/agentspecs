@@ -95,7 +95,7 @@ class StageSpec(_Strict):
             if not _ID.match(member):
                 raise ValueError(f"a deployment names a member by its id, a slug, not {member!r}")
             if not _ID.match(slug):
-                raise ValueError(f"member {member!r} is deployed at a slug, `demo-accounting`, not {slug!r}")
+                raise ValueError(f"member {member!r} is deployed at a slug, `accounting-stage`, not {slug!r}")
         return deployments
 
     @model_validator(mode="after")
