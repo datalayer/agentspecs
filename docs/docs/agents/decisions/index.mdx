@@ -20,8 +20,8 @@ decisions spec.
 ## In an agent spec
 
 ```yaml
-# agents/example-simple.yaml
-id: example-simple
+# agents/chat-agent.yaml
+id: chat-agent
 model: "bedrock:us.anthropic.claude-sonnet-5-5"
 memory: ephemeral
 decisions: jev:0.0.1
@@ -119,6 +119,6 @@ jev = get_decisions("jev:0.0.1")
 jev.model          # "cloudflare:wrk/typesafe/jev"
 jev.questions      # ["noul", "choice", "score"]
 
-agent_decisions({"id": "example-simple", "decisions": "jev:0.0.1"})  # the spec
+agent_decisions({"id": "chat-agent", "decisions": "jev:0.0.1"})  # the spec
 agent_decisions({"id": "plain"})                                      # None
 ```

@@ -56,8 +56,8 @@ def test_every_agent_says_it_on_the_line_after_its_harness():
 
 def test_the_kagent_example_is_the_one_agent_on_kagent():
     on_kagent = [spec["id"] for _, spec in _agents() if spec["runtime_engine"] == "kagent"]
-    assert on_kagent == ["example-kagent"]
-    spec = yaml.safe_load((AGENTS / "example-kagent.yaml").read_text())
+    assert on_kagent == ["kagent-chat"]
+    spec = yaml.safe_load((AGENTS / "kagent-chat.yaml").read_text())
     assert spec["harness"] == "pydantic-ai"
     assert "/agents/{namespace}/{name}" in spec["description"]
 

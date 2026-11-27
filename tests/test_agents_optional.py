@@ -135,8 +135,8 @@ def test_every_agent_that_names_tavily_may_start_without_it():
     is there, left out without it or on an engine whose sandbox holds no secret.
     """
     naming = [name for name, agent in _agents() if "tavily:0.0.1" in (agent.get("mcp_servers") or [])]
-    assert len(naming) == 37
-    assert {"worker-crawler", "example-codemode", "example-no-codemode", "example-mcp"} <= set(naming)
+    assert len(naming) == 35
+    assert {"worker-crawler", "web-researcher-codemode", "web-researcher", "web-researcher"} <= set(naming)
     for name, agent in _agents():
         if "tavily:0.0.1" in (agent.get("mcp_servers") or []):
             assert "tavily:0.0.1" in ((agent.get("optional") or {}).get("mcp_servers") or []), name
@@ -166,7 +166,7 @@ def test_linkedin_through_iam_and_its_browser_server():
     for ref in ("social-post-linkedin:0.0.1", "social-comment-linkedin:0.0.1"):
         assert ref in marketer["backend_tools"] and ref in marketer["optional"]["backend_tools"]
     assert "social-post-linkedin:0.0.1" in marketer["optional"]["at_least_one"][0]
-    for app in ("marketer", "demo-marketer"):
+    for app in ("marketer", "marketer-tryout"):
         spec = yaml.safe_load((ROOT / "apps" / f"{app}.yaml").read_text())
         assert "linkedin:0.0.1" not in [c.get("server") for c in spec.get("connections") or []]
         assert "LinkedIn" in spec["description"], app

@@ -1,0 +1,93 @@
+id: approved-automation
+version: 0.0.1
+name: Approved Automation
+enabled: false
+description: >-
+  Prepares the work and runs the safe steps itself; every sensitive action — a
+  deletion, a report sent, a notification — waits for a person's approval, and
+  each decision (allow, deny, approval needed, delegated) is logged for audit.
+# A PrimeIcons class name had leaked in here; the catalogue names octicons.
+icon: shield
+emoji: "✅"
+tags:
+  - compliance
+  - human-approval
+  - audit
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
+harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
+backend_tools:
+  - runtime-sensitive-echo:0.0.1
+  - runtime-echo:0.0.1
+suggestions:
+  - text: "Call runtime_sensitive_echo with reason 'read logs' and message 'hello approvals'."
+    summary: "Sensitive echo: read logs"
+  - text: "Call runtime_sensitive_echo with reason 'delete project' and observe deny behavior from Python policy hook."
+    summary: "Sensitive echo: delete project"
+  - text: "Call runtime_echo with any message to compare a non-sensitive tool path."
+    summary: "Non-sensitive echo"
+  - text: "Use execute_code to print the latest lines from /tmp/agent_runtimes_tool_approvals_audit.jsonl."
+    summary: "Latest audit lines"
+  - text: "Explain how deferred_tool_calls resolves approval-required tool calls inline when decisions already exist."
+    summary: "Deferred tool calls"
+welcome_message: |
+  Welcome to Approved Automation.
+
+  I run behind authorization hooks where each
+  sensitive tool call is evaluated against policy and logged for audit.
+system_prompt: >
+  You are Approved Automation: you prepare the work and run the safe steps yourself, and every sensitive action waits for a person's approval.
+
+  Sensitive tool calls should go through the authorization flow.
+
+  Explain decisions clearly: allow, deny, approval_needed, or delegated_allow.
+
+  Keep responses concise and focused on what was authorized and executed.
+
+  Hook names align with pydantic-ai capability hooks:
+  before_tool_execute, after_tool_execute, on_tool_execute_error,
+  and deferred_tool_calls.
+tool_hooks:
+  actor: "${USER}"
+  audit_log_path: "agent_runtimes_tool_approvals_audit.jsonl"
+  current_delegations:
+    - "delegate:read-only-low-risk"
+  before_tool_execute:
+    - function: agent_runtimes.integrations.tool_policy:evaluate_tool_request
+    - python: |
+        reason = str(request.get("arguments", {}).get("reason", "")).lower()
+        if "delete" in reason or "drop" in reason:
+            hook_result = {
+                "decision": "deny",
+                "reason": "blocked_by_local_python_reason_policy"
+            }
+        elif request.get("risk_class") == "low":
+            hook_result = {
+                "decision": "delegated_allow",
+                "reason": "delegated_low_risk_auto_allow"
+            }
+  after_tool_execute:
+    - python: |
+        print(
+            "[approved-automation]",
+            payload.get("tool"),
+            payload.get("status"),
+            payload.get("decision"),
+        )
+  on_tool_execute_error:
+    - python: |
+        print(
+            "[approved-automation:error]",
+            payload.get("tool"),
+            payload.get("error_type"),
+            payload.get("decision"),
+        )
+  deferred_tool_calls:
+    - python: |
+        print("[approved-automation] deferred_tool_calls invoked")
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

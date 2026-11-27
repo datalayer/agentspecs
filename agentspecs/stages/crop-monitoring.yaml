@@ -7,7 +7,7 @@ id: crop-monitoring
 version: 0.0.1
 scene: crop-monitoring:0.0.1
 deployments:
-  crop-monitoring: demo-crop-monitoring
+  crop-monitoring: crop-monitoring-stage
 public: true
 tags:
   - example

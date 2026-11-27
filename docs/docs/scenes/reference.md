@@ -108,14 +108,14 @@ cast:
   persona:
     name: Shopper
     line: I shop for you, and bring back what the shop says.
-  brief: 'Ask the Demo Shop for every product, quote and order, one request each time,
-    and report what it answers without adding to it. Do not question the audience
+  brief: 'Ask the Online Shop for every product, quote and order, one request each
+    time, and report what it answers without adding to it. Do not question the audience
     first: a cue is the whole of what it says, and nobody is standing there to answer
     you back. A cue that says what to place an order for is the go-ahead: ask the
     shop to place that test order.'
-- member: demo-shop
+- member: online-shop
   persona:
-    name: Demo Shop
+    name: Online Shop
     line: I answer from my own catalogue; my orders are test orders.
   brief: 'Answer only from your tools: find the products with find_products, quote
     a basket with quote_basket and place an order with place_test_order when asked
@@ -128,9 +128,9 @@ cast:
 setting:
   period: today
   language: en
-  assumes: 'Two agents over A2A — your Shopper in your browser, the Demo Shop on Datalayer
-    — on the shop''s own catalogue of 24 products. Its orders are test orders: nothing
-    is charged and nothing ships.'
+  assumes: 'Two agents over A2A — your Shopper in your browser, the Online Shop on
+    Datalayer — on the shop''s own catalogue of 24 products. Its orders are test orders:
+    nothing is charged and nothing ships.'
 ```
 
 ### `script`
@@ -143,10 +143,10 @@ script:
   narration: The Shopper asks the shop, which looks in its catalogue.
   moves:
   - who: shopper
-    asks: demo-shop
+    asks: online-shop
     over: a2a
     what: the shop's products for tennis
-  - who: demo-shop
+  - who: online-shop
     answers: words
     what: its tennis racket and tennis ball, each with its price, rating and stock
   - who: shopper
@@ -161,10 +161,10 @@ script:
   narration: The shop prices the basket; the Shopper adds nothing up itself.
   moves:
   - who: shopper
-    asks: demo-shop
+    asks: online-shop
     over: a2a
     what: a quote for two tennis balls and one tennis racket
-  - who: demo-shop
+  - who: online-shop
     answers: words
     what: each line and the total, summed by the shop
   - who: shopper
@@ -177,10 +177,10 @@ script:
   narration: An order, said to be a test — nothing is charged, nothing ships.
   moves:
   - who: shopper
-    asks: demo-shop
+    asks: online-shop
     over: a2a
     what: a test order of two tennis balls and one tennis racket
-  - who: demo-shop
+  - who: online-shop
     answers: words
     what: the test order's number, and that nothing is charged and nothing ships
   - who: shopper
@@ -200,7 +200,7 @@ stage:
     shopper:
       x: 0.25
       y: 0.5
-    demo-shop:
+    online-shop:
       x: 0.75
       y: 0.5
   opens_first: shopper
@@ -235,8 +235,8 @@ rehearsal:
   - beat: find
     lines:
     - You → Shopper
-    - Shopper → Demo Shop
-    - 'Demo Shop: words'
+    - Shopper → Online Shop
+    - 'Online Shop: words'
     - 'Shopper: words'
     must_say:
     - racket
@@ -247,8 +247,8 @@ rehearsal:
   - beat: quote
     lines:
     - You → Shopper
-    - Shopper → Demo Shop
-    - 'Demo Shop: words'
+    - Shopper → Online Shop
+    - 'Online Shop: words'
     - 'Shopper: words'
     must_say:
     - '63.97'
@@ -256,8 +256,8 @@ rehearsal:
   - beat: order
     lines:
     - You → Shopper
-    - Shopper → Demo Shop
-    - 'Demo Shop: words'
+    - Shopper → Online Shop
+    - 'Online Shop: words'
     - 'Shopper: words'
     must_say:
     - TEST-
@@ -271,8 +271,8 @@ rehearsal:
       tennis products, a quote of 63.97 USD summed by the tool, a test order charging
       nothing.'
     unverified:
-    - 'Not played yet: the Demo Shop must be kept always on under the demo account
-      (demo-shop) for the Shopper to reach it.'
+    - 'Not played yet: the Online Shop must be kept always on under the demo account
+      (online-shop) for the Shopper to reach it.'
 ```
 
 ### `deployment`
@@ -282,7 +282,7 @@ deployment:
   account: demo
   page: /
   addresses:
-    demo-shop: DATALAYER_DEMO_SCENE_BUY_FROM_A_SHOP_DEMO_SHOP_A2A_URL
+    online-shop: DATALAYER_DEMO_SCENE_BUY_FROM_A_SHOP_DEMO_SHOP_A2A_URL
 ```
 
 ### `kind`

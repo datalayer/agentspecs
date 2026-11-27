@@ -1,0 +1,81 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Agentic Generative UI (AG-UI)
+# Plan/step generation with incremental updates. Mirrors the former
+# /api/v1/examples/agentic_generative_ui endpoint agent.
+
+id: plan-tracker
+version: 0.0.1
+name: Plan Tracker
+description: >-
+  An AG-UI agent that creates plans with steps and updates individual steps as
+  progress is made using JSON Patch (RFC 6902) state deltas. It also draws rich
+  content with the render tools the page gives it.
+
+tags:
+  - workflow
+  - automation
+  - analysis
+
+enabled: false
+protocol: ag-ui
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
+harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
+
+# Memory backend
+memory: ephemeral
+
+# No MCP servers
+mcp_servers: []
+
+# No skills
+skills: []
+
+# Runtime tools
+backend_tools:
+  - example-create-plan:0.0.1
+  - example-update-plan-step:0.0.1
+frontend_tools: []
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: list-unordered
+emoji: 📋
+color: indigo
+
+# Chat suggestions
+suggestions:
+  - text: Create a project plan for building a mobile app.
+    summary: "Mobile app plan"
+  - text: Generate a marketing strategy for a new product launch.
+    summary: "Marketing strategy"
+
+welcome_message: >
+  Hi! Give me a goal and I'll create a plan, then work through the steps.
+
+system_prompt: |
+  You are a helpful assistant that creates and executes plans.
+
+  When asked to do something:
+  1. Call `create_plan` with a list of step descriptions
+  2. As you work through steps, call `update_plan_step` to mark them complete
+
+  IMPORTANT:
+  - Always create a plan first before doing anything
+  - Mark steps as completed as you work through them
+  - Don't repeat the plan in your messages
+  - Give a brief summary (one sentence with emojis) after completing steps
+  - Say you actually did the steps, not merely generated them
+
+system_prompt_codemode_addons: null
+trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

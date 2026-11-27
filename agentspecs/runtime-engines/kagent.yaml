@@ -4,7 +4,7 @@
 # Runtime Engine Specification: Kagent
 #
 # What runs and hosts an agent (`runtime_engine`, on the line after
-# `harness` in an agent spec). `agents/example-kagent.yaml` runs on it, and
+# `harness` in an agent spec). `agents/kagent-chat.yaml` runs on it, and
 # agent-runtimes' `deploy/kagent` holds the three objects it needs.
 
 id: kagent

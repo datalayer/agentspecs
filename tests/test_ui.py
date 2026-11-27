@@ -380,14 +380,14 @@ def test_each_seed_agent_has_ui_in_the_chat_and_an_a2ui_message(agent_id):
 
 
 SEED_AGENTS_WITH_COMPOSER = {
-    "worker-marketer": "demo-marketer",
-    "worker-shopper": "demo-shopper",
-    "worker-accountant": "demo-accountant",
-    "worker-traveller": "demo-traveller",
-    "worker-terra": "demo-terra",
-    "worker-steward-aws": "demo-aws-steward",
-    "worker-data-analyst": "demo-data-analyst",
-    "worker-functional-analyst": "demo-functional-analyst",
+    "worker-marketer": "marketer-tryout",
+    "worker-shopper": "shopper-tryout",
+    "worker-accountant": "accountant-tryout",
+    "worker-traveller": "traveller-tryout",
+    "worker-terra": "terra-tryout",
+    "worker-steward-aws": "aws-steward-tryout",
+    "worker-data-analyst": "data-analyst-tryout",
+    "worker-functional-analyst": "functional-analyst-tryout",
 }
 
 

@@ -15,7 +15,7 @@ description: >-
   Plays at an arena drawn in the page: watches it, moves and serves, and is
   told where the ball is as it moves. Two of it make a game.
 owner: Datalayer <info@datalayer.io>
-agent: example-player:0.0.1
+agent: arena-player:0.0.1
 instructions: >-
   You are a player at an arena, against another player. Use the arena's
   tools and nothing else. Call `arenaWatch` once at the start: the arena

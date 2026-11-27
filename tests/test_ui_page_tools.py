@@ -25,7 +25,7 @@ ROOT = Path(ui.__file__).resolve().parent
 PAGE_UIS = {
     "page-deck": (
         "worker-marketer",
-        "demo-marketer",
+        "marketer-tryout",
         [
             "deckCreate",
             "deckSetTitle",
@@ -40,7 +40,7 @@ PAGE_UIS = {
     ),
     "page-sheet": (
         "worker-accountant",
-        "demo-accountant",
+        "accountant-tryout",
         [
             "sheetCreate",
             "sheetWriteRange",
@@ -56,7 +56,7 @@ PAGE_UIS = {
     # @datalayer/reactor-excalidraw and @datalayer/reactor-mermaid, run in the page.
     "page-excalidraw": (
         "worker-functional-analyst",
-        "demo-functional-analyst",
+        "functional-analyst-tryout",
         [
             "excalidrawInsertNode",
             "excalidrawFromMermaid",
@@ -73,7 +73,7 @@ PAGE_UIS = {
     ),
     "page-mermaid": (
         "worker-functional-analyst",
-        "demo-functional-analyst",
+        "functional-analyst-tryout",
         [
             "mermaidSetDiagram",
             "mermaidReadDiagram",
@@ -85,7 +85,7 @@ PAGE_UIS = {
     ),
     "page-react-flow": (
         "worker-functional-analyst",
-        "demo-functional-analyst",
+        "functional-analyst-tryout",
         ["reactFlowListShapes", "reactFlowInsertShape", "reactFlowLinkShapes", "reactFlowMoveShape"],
     ),
 }
@@ -180,7 +180,7 @@ def test_the_public_demo_has_it_and_builds_from_its_example_only(ui_id):
         if tool != "deckSetTitle":
             assert tool in said, f"{demo_id} does not name {tool}"
     assert "they run in the page" in said
-    if demo_id == "demo-accountant":
+    if demo_id == "accountant-tryout":
         # It reads the demo Odoo books (0.0.8): the sheet holds what the books' tools returned.
         assert "make it from what the tools returned only" in said
     else:
@@ -189,7 +189,7 @@ def test_the_public_demo_has_it_and_builds_from_its_example_only(ui_id):
 
 
 def test_the_accountant_reads_before_it_writes_over_the_persons_cells():
-    for spec in (raw("agents", "worker-accountant")["system_prompt"], raw("apps", "demo-accountant")["instructions"]):
+    for spec in (raw("agents", "worker-accountant")["system_prompt"], raw("apps", "accountant-tryout")["instructions"]):
         said = " ".join(spec.split())
         assert "sheetReadRange before" in said
         assert "=SUM(" in said
@@ -198,7 +198,7 @@ def test_the_accountant_reads_before_it_writes_over_the_persons_cells():
 def test_the_marketer_lays_a_deck_out_in_one_or_two_calls():
     # One call a slide took a run a slide, and a message takes ten runs of page tools at most.
     agent = " ".join(raw("agents", "worker-marketer")["system_prompt"].split())
-    demo = " ".join(raw("apps", "demo-marketer")["instructions"].split())
+    demo = " ".join(raw("apps", "marketer-tryout")["instructions"].split())
     assert "in one or two deckAddSlides calls" in agent
     assert "in one deckAddSlides call" in demo
     for said in (agent, demo):
@@ -230,11 +230,11 @@ def test_the_analysts_suggestions_name_the_surface_and_the_deliverable():
 #: Every agent and demo that builds a sheet, with the title bar's tool it sets beside it.
 SHEET_BUILDERS = {
     ("agents", "worker-accountant"): "setBooksHeader",
-    ("apps", "demo-accountant"): "setBooksHeader",
+    ("apps", "accountant-tryout"): "setBooksHeader",
     ("agents", "worker-data-analyst"): "notebookSetHeader",
-    ("apps", "demo-data-analyst"): "notebookSetHeader",
+    ("apps", "data-analyst-tryout"): "notebookSetHeader",
     ("agents", "worker-steward-aws"): "setAwsHeader",
-    ("apps", "demo-aws-steward"): "setAwsHeader",
+    ("apps", "aws-steward-tryout"): "setAwsHeader",
 }
 
 

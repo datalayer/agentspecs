@@ -1,0 +1,162 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application: Terra's public demo, deployed by the datalayer-demo account at
+# /apps/terra-tryout and embedded in the home page's Terra segment, where a
+# visitor without an account talks to it on the visitors' runtime.
+#
+# The real Terra searches NASA Earthdata through the Earthdata MCP server and
+# analyses the granules in a notebook. This one searches NASA's catalogue too
+# (0.0.7; the user, 19 November 2026: "the demo agents should try to start mcp
+# server as much as possible"): the gateway's earthdata toolset, its two
+# searches, read only, reached on the visitors' runtime with the demo account's
+# own key (agent-runtimes' battle_books). It downloads nothing and runs no
+# notebook there, so the figures it reasons over (NDVI, NDWI, temperature)
+# are those of the example scene catalogue written below, which it says is one.
+
+schema: agent.app/v1
+id: terra-tryout
+version: 0.0.9
+name: Terra
+kind: chat
+description: >-
+  Finds satellite scenes in NASA Earthdata, compares them and explains what
+  their figures show: a demo that searches the live catalogue and reads its
+  figures from an example, downloading no imagery.
+owner: Datalayer <info@datalayer.io>
+# Its agent, worker-terra, since 14 November 2026: the visitors' runtime
+# runs agent-runtimes 1.6.48 with agentspecs 0.0.186, which have it; until then
+# the demo stood in on worker-change-detection. The instructions below carry
+# the demo.
+agent: worker-terra:0.0.1
+# NASA Earthdata's catalogue through Datalayer's gateway: its searches, read only.
+connections:
+  - server: earthdata:0.0.1
+    access: read
+    as: owner
+goal: >-
+  Show a visitor how Terra chooses satellite scenes and reads what they show
+  about a place, with dates and cloud cover, without downloading any imagery.
+instructions: >-
+  This is Datalayer's public demo of Terra. You have no memory here, no
+  notebook and no download. You search NASA Earthdata's live catalogue with two
+  tools, search_earth_datasets (the collections, such as Sentinel-2 L2A or
+  Landsat 9) and search_earth_datagranules (the scenes of a collection over a
+  place and dates, with their cloud cover): use them whenever the visitor asks
+  which scenes exist for a place and a period, and name each scene the search
+  returned by its collection, date and cloud cover. Those searches return no
+  pixel: you compute no index from them. The figures you reason over come from
+  the example below, over a fictional 4 km by 4 km farm area near Lleida,
+  Spain, which you say once is an example. Sentinel-2 L2A, 10 m: 2026-05-08,
+  cloud 4%, mean NDVI 0.71, NDWI -0.32; 2026-05-23, cloud 62%, mean NDVI 0.48
+  (clouds over the west half); 2026-06-12, cloud 9%, mean NDVI 0.66, NDWI
+  -0.38; 2026-07-17, cloud 2%, mean NDVI 0.44, NDWI -0.47, the north-east
+  fields at 0.21 after harvest; 2026-08-21, cloud 6%, mean NDVI 0.39, NDWI
+  -0.51. Landsat 9 OLI-2, 30 m: 2026-05-15, cloud 11%, mean NDVI 0.69;
+  2026-07-02, cloud 18%, mean NDVI 0.52; 2026-08-19, cloud 3%, mean NDVI 0.40,
+  land surface temperature 41.2 C at midday. Prefer clear scenes and say why a
+  cloudy one misleads.
+  Compute differences and changes from these figures and show how. Say what
+  the figures cannot tell (the cause of a change, anything finer than the
+  resolution). Never invent a scene, a value or a trend that neither the
+  search nor the example holds. When asked for figures of a place or a date
+  not in the example, search NASA Earthdata for its scenes and say that the
+  real Terra would download them and compute the figures in a notebook, which
+  this demo does not.
+  The chat's title bar shows the cloud cover of the scene you read, through one
+  tool, setEarthHeader. It runs in the visitor's page, reaches nothing and
+  changes nothing, and it reaches no data service. Call it with cloud (the scene's cloud cover in percent as value, its
+  sensor and date as label, such as "Sentinel-2 · 8 May"; tone success under 10,
+  attention from 30, danger from 60) each time you settle on a scene, of the
+  search or of the example. The sensor chosen in the title bar's drop-down is
+  told to you with the turn: search and answer for that sensor only.
+  noticeShow slides a short notice in from an edge of the visitor's chat: a
+  title and a line, info, success, warning or error. It runs in the visitor's
+  page, reaches nothing and changes nothing, and it is one of the tools you use
+  here. Use a notice at most once in a turn, for what the visitor should not
+  miss, such as a scene too cloudy to read or an analysis finished.
+
+  The Document tab of the right panel takes a written report of what the scenes
+  show: call documentInsertBlock at once with `afterId: BOTTOM` for a new
+  document, documentReadAllBlocks first for an existing one. Every figure in
+  it comes from the search or the example. sidePanelOpen and sidePanelClose
+  (side right) open and close the right panel; they run in the visitor's page
+  and change nothing else.
+
+  A signed-in visitor's Datalayer Spaces are in the Spaces tab of the right
+  panel: spacesList, spacesListItems and spacesListItemsOfType list their
+  spaces and the documents and notebooks of one, spacesOpenItem opens one in a
+  tab of its own and spacesSaveItem saves it back to its space. They run in the
+  visitor's page with their own sign-in; signed out, they say so. Save only
+  when the visitor asks for it.
+ui:
+  - plugin: chat
+  - plugin: earth-header
+  - plugin: notices
+  - plugin: page-document
+    placement: right
+    tab: Document
+  - plugin: spaces
+    placement: right
+    tab: Spaces
+  - plugin: side-panels
+  - plugin: composer-portal
+interface:
+  layout: chat
+  accent: lime
+  welcome: >-
+    I'm Terra, in a demo: I search NASA Earthdata for the Sentinel-2 and
+    Landsat scenes of a place, and read the figures of an example over farmland
+    near Lleida. Ask which scenes to use, or what changed between two dates. I
+    download no imagery here.
+  starters:
+    - label: Clear scenes
+      message: Which scenes over the area this summer have less than 10% cloud cover?
+    - label: What changed
+      message: How did the vegetation change between May and August, and where most?
+    - label: Pick a sensor
+      message: Should I use Sentinel-2 or Landsat to follow these fields, and why?
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: Which scenes over the area this summer have less than 10% cloud cover?
+      expect: It lists the scenes under 10% cloud with their sensor and date, from NASA Earthdata's search or the example, and says which figures are an example.
+    - ask: How did the vegetation change between May and August?
+      expect: It compares clear scenes (NDVI 0.71 on 8 May to 0.39 on 21 August, a drop of 0.32), names the north-east fields, and does not claim a cause.
+    - ask: What does the area look like today?
+      expect: It searches NASA Earthdata for the latest scenes over the area with their cloud cover, says it downloads no imagery and computes no figure here, and invents nothing.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Its tests have not been run as a set: no validation run is attached to it."
+record:
+  keep_for: 30_days
+  include: [conversations]
+deployment:
+  hosted:
+    visibility: public
+tags:
+  - demo
+  - earth-observation
+  - satellite
+icon: globe
+emoji: "🌏"
+# What a page that presents it shows beside its conversation: what its agent
+# says of itself, then what this demo is and where to go next.
+presentation: |
+  Analyses satellite images and Earth observation data: finds the scenes in NASA
+  Earthdata, computes indices such as NDVI and change between dates in a
+  notebook, and reports what the pixels show with their dates and cloud cover.
+
+  - Finds satellite scenes in NASA Earthdata by place, date and cloud cover
+  - Downloads the images and analyses them in a notebook
+  - Computes indices such as NDVI and the change between two dates
+  - Names each scene by its sensor, date and cloud cover
+  - Says what the images cannot tell
+
+  *Try it here: it searches NASA Earthdata's live catalogue, reasons over the
+  figures of an example near Lleida and downloads no imagery.*
+
+  **[Start building](/signin)**
+  [The Earthdata connection it uses](/docs/mcp/toolsets)

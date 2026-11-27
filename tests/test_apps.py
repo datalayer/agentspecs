@@ -380,7 +380,7 @@ def test_every_example_says_what_was_verified_and_how() -> None:
         assert said, identity
         assert all(sentence.strip().endswith((".", ")")) for sentence in said), identity
     # An application that says nothing of it says nothing: lists, empty.
-    blank = parse_app({"id": "x", "name": "X", "kind": "chat", "agent": "example-simple"})
+    blank = parse_app({"id": "x", "name": "X", "kind": "chat", "agent": "chat-agent"})
     assert blank.tests.verified.live == blank.tests.verified.unverified == []
 
 
@@ -424,7 +424,7 @@ def test_an_example_is_offered_where_its_agent_works_and_says_why_otherwise() ->
         # Their agent, worker-data-analyst, is enabled (the seventh seed agent, offered by
         # the pickers since 0.0.215, 18 November 2026): nothing to set up.
         assert app_setup(spec) == [], identity
-    # Decide's agent, example-simple, the neutral default, likewise.
+    # Decide's agent, chat-agent, the neutral default, likewise.
     assert app_setup(APP_CATALOGUE["decide"]) == []
     # Support Desk's agent, Document Q&A, is out of the agents' catalogue since 0.0.164
     # (8 November 2026): the application is still offered, and says so as setup.
@@ -918,15 +918,15 @@ EXAMPLES = {
     "shopper": AppKind.CHAT,
     # The home page's live demos (moved from the landing, 14 November 2026): chats on
     # example data that a visitor signed out may talk to, each its agent's variant.
-    "demo-marketer": AppKind.CHAT,
-    "demo-shop": AppKind.CHAT,
-    "demo-shopper": AppKind.CHAT,
-    "demo-terra": AppKind.CHAT,
-    "demo-traveller": AppKind.CHAT,
-    "demo-accountant": AppKind.CHAT,
-    "demo-aws-steward": AppKind.CHAT,
-    "demo-data-analyst": AppKind.CHAT,
-    "demo-functional-analyst": AppKind.CHAT,
+    "marketer-tryout": AppKind.CHAT,
+    "online-shop": AppKind.CHAT,
+    "shopper-tryout": AppKind.CHAT,
+    "terra-tryout": AppKind.CHAT,
+    "traveller-tryout": AppKind.CHAT,
+    "accountant-tryout": AppKind.CHAT,
+    "aws-steward-tryout": AppKind.CHAT,
+    "data-analyst-tryout": AppKind.CHAT,
+    "functional-analyst-tryout": AppKind.CHAT,
 }
 
 #: Each of the SDK's seven recorded PAP journeys (agent-runtimes' trace examples) and the example it became.
@@ -980,8 +980,8 @@ HOSTED_COUNTERPARTS = {
     "store.examples.datalayer.run",
     "outfitters.examples.datalayer.run",
     "verify.examples.datalayer.run",
-    # Datalayer's own Demo Shop, which the Shopper's public demo buys from.
-    "demo-shop.agent.datalayer.ai",
+    # Datalayer's own Online Shop, which the Shopper's public demo buys from.
+    "online-shop.agent.datalayer.ai",
 }
 
 
@@ -2669,14 +2669,14 @@ def test_a_lent_repository_is_a_public_url_at_one_commit() -> None:
 #: Data Analyst name no server, nor does the Analyst, whose tools all run in the page. The Traveller's Google Maps is optional: started only
 #: with the billed GOOGLE_MAPS_API_KEY among the demo account's secrets (the user, 19 November 2026).
 DEMO_CONNECTIONS = {
-    "demo-shopper": ["shopify:0.0.1"],
-    "demo-accountant": ["odoo-accounting:0.0.1"],
-    "demo-terra": ["earthdata:0.0.1"],
-    "demo-traveller": ["kiwi:0.0.1", "overture:0.0.1", "google-maps:0.0.1"],
-    "demo-marketer": [],
-    "demo-aws-steward": [],
-    "demo-data-analyst": [],
-    "demo-functional-analyst": [],
+    "shopper-tryout": ["shopify:0.0.1"],
+    "accountant-tryout": ["odoo-accounting:0.0.1"],
+    "terra-tryout": ["earthdata:0.0.1"],
+    "traveller-tryout": ["kiwi:0.0.1", "overture:0.0.1", "google-maps:0.0.1"],
+    "marketer-tryout": [],
+    "aws-steward-tryout": [],
+    "data-analyst-tryout": [],
+    "functional-analyst-tryout": [],
 }
 
 
@@ -2697,20 +2697,20 @@ def test_the_demos_connect_to_every_server_they_can_and_only_read() -> None:
         assert app_problems(found) == [], identity
         assert app_setup(found) == [], identity
     # The Traveller's Kiwi.com: its search alone, never the feedback form that sends to Kiwi.
-    kiwi, overture, maps = APP_CATALOGUE["demo-traveller"].connections
+    kiwi, overture, maps = APP_CATALOGUE["traveller-tryout"].connections
     assert kiwi.only == ["search-flight"] and not kiwi.optional
     # Its Overture places: every tool, all reads, optional since 22 November 2026 (the demo is shown to a
     # visitor whatever the gateway holds).
     assert not overture.only and overture.optional
-    # The Shopper still buys its test orders at the Demo Shop alone.
-    [shop] = APP_CATALOGUE["demo-shopper"].pap.connections
-    assert shop.company == "demo-shop.agent.datalayer.ai"
+    # The Shopper still buys its test orders at the Online Shop alone.
+    [shop] = APP_CATALOGUE["shopper-tryout"].pap.connections
+    assert shop.company == "online-shop.agent.datalayer.ai"
 
 
 def test_the_traveller_demo_starts_google_maps_only_with_its_key() -> None:
     # The user, 19 November 2026: the demo may use Google Maps with the billed key among the demo
     # account's own secrets; without it, Kiwi.com alone, and nothing said about Maps.
-    found = APP_CATALOGUE["demo-traveller"]
+    found = APP_CATALOGUE["traveller-tryout"]
     assert found.version == "0.0.9"  # Overture optional (22 November 2026)
     maps = next(c for c in found.connections if c.server == "google-maps:0.0.1")
     # Optional, so the runtime leaves it off when the account holds no such secret, as the agent does.
@@ -2728,19 +2728,19 @@ def test_the_traveller_demo_starts_google_maps_only_with_its_key() -> None:
 
 
 def test_the_demos_that_read_live_services_say_so_and_invent_nothing() -> None:
-    accountant = APP_CATALOGUE["demo-accountant"].instructions
+    accountant = APP_CATALOGUE["accountant-tryout"].instructions
     assert "odoo_accounting_" in accountant and "Harbor & Pine" not in accountant
     assert "Never create, post, reconcile or delete" in accountant
-    assert "search_catalog" in APP_CATALOGUE["demo-shopper"].instructions
-    assert "search_earth_datagranules" in APP_CATALOGUE["demo-terra"].instructions
-    assert "search-flight" in APP_CATALOGUE["demo-traveller"].instructions
-    assert "overture_search_places" in APP_CATALOGUE["demo-traveller"].instructions
+    assert "search_catalog" in APP_CATALOGUE["shopper-tryout"].instructions
+    assert "search_earth_datagranules" in APP_CATALOGUE["terra-tryout"].instructions
+    assert "search-flight" in APP_CATALOGUE["traveller-tryout"].instructions
+    assert "overture_search_places" in APP_CATALOGUE["traveller-tryout"].instructions
 
 
 def test_the_traveller_demo_finds_real_places_with_overture_in_any_city() -> None:
     # The user, 19 November 2026: real restaurants and sights in any city from Overture,
     # attributed, on a map; flights from Kiwi.com; the stays stay an example.
-    found = APP_CATALOGUE["demo-traveller"]
+    found = APP_CATALOGUE["traveller-tryout"]
     instructions = found.instructions
     assert "in any city" in instructions
     assert "attribution" in instructions and "Overture Maps" in instructions

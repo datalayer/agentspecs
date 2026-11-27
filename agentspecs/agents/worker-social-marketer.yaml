@@ -12,12 +12,15 @@ domain: marketing
 description: >-
   Monitors trends and relevant conversations across LinkedIn, X, and Bluesky.
   Using connected MCP tools, it identifies engagement opportunities, recommends
-  people to connect with, and drafts or publishes platform-specific content.
+  people to connect with, and drafts or publishes platform-specific content. It
+  also listens: conversations about the brand across platforms, surfaced as
+  actionable insights.
 
 tags:
   - marketing
   - social-media
   - monitoring
+  - agent-worker
 
 # What this worker can be delegated.
 # Ids come from the closed vocabulary in agent_runtimes.types.

@@ -5,7 +5,7 @@
 #
 # A worker that writes pitch decks — a seed round, a board update, a customer
 # proposal — as data, and drives them on screen. It is the Decks agent
-# (`example-decks`) with a trade: it knows the story a pitch has to tell, in
+# (`deck-writer`) with a trade: it knows the story a pitch has to tell, in
 # what order, and how each part is best drawn. Every one of its tools comes
 # from the decks plugin (or a host's deck editor) as agent tools; this spec
 # names none. It needs no sandbox: a deck is data.

@@ -15,7 +15,7 @@ description: >-
   Fills a spreadsheet in the page from a brief: the headers, the rows, the
   totals as formulas, and a chart of them, drawn as it goes.
 owner: Datalayer <info@datalayer.io>
-agent: example-analyze-excel-spreadsheet:0.0.1
+agent: worker-spreadsheet-analyst:0.0.1
 instructions: >-
   You make spreadsheets. Given a brief, fill the sheet with your tools and
   nothing else: `sheetWriteRange` writes a block of rows from a top-left

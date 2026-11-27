@@ -1,0 +1,93 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Haiku Generative UI (AG-UI)
+# Haiku generator rendered as cards by the frontend. Mirrors the former
+# /api/v1/examples/haiku_generative_ui endpoint agent.
+
+id: haiku-writer
+version: 0.0.1
+name: Haiku Writer
+description: >
+  An AG-UI agent that generates Japanese haiku with English translations and a
+  gradient, rendered as cards by the frontend.
+
+tags:
+  - workflow
+  - automation
+  - analysis
+
+enabled: false
+protocol: ag-ui
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
+harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
+
+# Memory backend
+memory: ephemeral
+
+# No MCP servers
+mcp_servers: []
+
+# No skills
+skills: []
+
+# Runtime tools
+backend_tools:
+  - example-generate-haiku:0.0.1
+frontend_tools: []
+
+# Frontend render bindings: which backend tool the UI renders inline, the
+# renderer key the example maps to a component, and an optional CSS file.
+frontend_render_tools:
+  - tool: generate_haiku
+    renderer: haiku-card
+    css: haiku-card.css
+
+# Runtime environment
+environment_name: ai-agents-env
+
+# UI customization
+icon: pencil
+emoji: 🖋️
+color: indigo
+
+# Chat suggestions
+suggestions:
+  - text: Write me a haiku about cherry blossoms in spring.
+    summary: "Cherry blossom haiku"
+  - text: Create a haiku about coding late at night.
+    summary: "Late-night coding haiku"
+  - text: Generate a haiku about hiking a mountain trail.
+    summary: "Mountain trail haiku"
+
+welcome_message: >
+  Hi! Give me a theme and I'll craft a haiku for you.
+
+system_prompt: |
+  You are an expert haiku generator that creates beautiful Japanese haiku poems
+  and their English translations.
+
+  When generating a haiku:
+  1. Create a traditional 5-7-5 syllable structure haiku in Japanese
+  2. Provide an accurate and poetic English translation
+  3. Choose a CSS gradient that matches the mood of the haiku
+
+  Always use the generate_haiku tool to create your haiku. The tool will handle
+  the formatting and validation of your response.
+
+  Focus on creating haiku that capture the essence of Japanese poetry: nature
+  imagery, seasonal references, emotional depth, and moments of beauty or
+  contemplation. That said, any topic is fair game.
+
+  Do not repeat the haiku content in your text response - the UI will display it
+  beautifully. Just acknowledge that you've created the haiku.
+
+system_prompt_codemode_addons: null
+trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

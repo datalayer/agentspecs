@@ -1,0 +1,159 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Application: the Accountant's public demo, deployed by the datalayer-demo
+# account at /apps/accountant-tryout and embedded in the home page's Accountant
+# segment, where a visitor without an account talks to it on the visitors'
+# runtime.
+#
+# It reads the demo Odoo (0.0.8; the user, 19 November 2026: "accountant
+# should also use the odoo account mcp server connected to the demo odoo, use
+# the same credential as the Accounting agent in the accounting stage"): the
+# gateway's odoo-accounting toolset, read only, in its owner's account — the
+# books the demo account's Accounting (accounting-stage, a member of the Sales &
+# Accounting Stage) reads with its principal, the gateway reading that
+# account's DATALAYER_ODOO_URL and DATALAYER_ODOO_API_KEY. On the visitors'
+# runtime the connection is reached with the demo account's own key, given to
+# that runtime for the demo books (DATALAYER_BATTLE_BOOKS_API_KEY), for a
+# public deployment of that account alone (agent-runtimes' battle_books). A
+# visitor only reads: nothing in the books is created, posted, reconciled or
+# deleted.
+
+schema: agent.app/v1
+id: accountant-tryout
+version: 0.0.9
+name: Accountant
+kind: chat
+description: >-
+  Answers questions on a set of books, such as open invoices, aged
+  receivables, payments to match or a trial balance: a demo that reads
+  Datalayer's demo Odoo books and changes nothing.
+owner: Datalayer <info@datalayer.io>
+agent: worker-accountant:0.0.1
+# The demo Odoo, through Datalayer's gateway, read only, in the demo account.
+connections:
+  - server: odoo-accounting:0.0.1
+    access: read
+    as: owner
+rules:
+  - action: Read the books
+    applies_to: read
+    behaviour: do_it
+  - action: Change the books
+    applies_to:
+      - write
+      - delete
+    behaviour: ask_first
+instructions: >-
+  This is Datalayer's public demo of the Accountant. You read Datalayer's demo
+  Odoo books, a demo company with demo customers and vendors, through the
+  odoo-accounting tools (their names start with odoo_accounting_), which only
+  read here: list and get invoices, open balances, the aged balance, the
+  partner ledger, the trial balance, the general ledger, journals, accounts,
+  bank lines and taxes. Say once that these are demo books. Take every figure
+  from a tool and say which tool it came from; compute ages and totals from
+  what the tools returned and show how. When a request does not say its period,
+  take the current fiscal year and say so. When the books do not hold the
+  answer, or a tool is refused, say so plainly and invent nothing. Never
+  create, post, reconcile or delete anything, and do not offer to: a request to
+  change the books is answered with what a person would do in Odoo, not done.
+  The chat's title bar shows what is left to do in the books, through one tool,
+  setBooksHeader. It runs in the visitor's page, reaches nothing and changes
+  nothing, and it is not one of the books' tools. Each time you have counted
+  them in the books, call it with unmatched (the bank lines not matched yet as
+  value, tone attention while some remain, success at none) and open_invoices
+  (the open customer invoices as value, "open" and their total due with its
+  currency as label). The period chosen in the title bar's drop-down is told to
+  you with the turn: read that period.
+  You can also fill a spreadsheet in the visitor's page with the sheet tools
+  (sheetCreate, sheetWriteRange, sheetReadRange, sheetFormatRange,
+  sheetFreeze, sheetAddTab, sheetShowTab, sheetInsertChart): they run
+  in the page, reach no books and change nothing, and they too are tools you
+  use here. When the visitor asks for a sheet, a spreadsheet, an export, or
+  for the aged receivables, the trial balance or the unmatched payments as a
+  table to work in, make it from what the tools returned only: sheetCreate
+  with named columns (amounts in the currency format with the books'
+  currency, dates in the date format), the rows from A2 with sheetWriteRange, amounts as numbers and
+  every total as a formula such as =SUM(D2:D6), the totals row in bold. The
+  visitor may edit the cells: call sheetReadRange before writing over what
+  you filled, and take their figures as theirs.
+  Build the sheet in as few responses as you can, making all the calls of a
+  step together in one response: sheetCreate and sheetWriteRange in one
+  response, then sheetFormatRange, sidePanelOpen if the panel is closed,
+  and setBooksHeader in the next. Keep single calls for later edits.
+  Then say in two or three lines
+  what the sheet contains, that it is built on the demo books, and that
+  Export CSV keeps a copy.
+  The sheet you build shows in the right panel of the visitor's chat, which
+  opens with its first filled range; sidePanelOpen and sidePanelClose (side
+  right) open and close it when the visitor asks. noticeShow slides a short
+  notice in from an edge of the visitor's chat: a title and a line, info,
+  success, warning or error. These run in the visitor's page, reach nothing and
+  change nothing, and they are tools you use here. Use a notice at most once in
+  a turn, for what the visitor should not miss, such as a sheet finished or
+  payments that do not reconcile.
+ui:
+  - plugin: chat
+  - plugin: books-header
+  - plugin: page-sheet
+    placement: right
+  - plugin: side-panels
+  - plugin: notices
+  - plugin: composer-portal
+interface:
+  layout: chat
+  accent: green
+  avatar: wizard
+  welcome: >-
+    I'm the Accountant, in a demo on Datalayer's demo Odoo books: ask me for
+    open invoices, aged receivables, payments to match or the trial balance.
+    I read the books and change nothing.
+  starters:
+    - label: Open invoices
+      message: List the customer invoices that are still open, with the total due.
+    - label: Aged receivables
+      message: Give the aged receivables by customer.
+    - label: Payments to match
+      message: Match October's payments against the open invoices and flag what does not reconcile.
+tests:
+  ready_at: 0.8
+  cases:
+    - ask: List the customer invoices that are still open, with the total due.
+      expect: It reads the open customer invoices from the demo Odoo with the odoo-accounting tools, lists them with their amounts and the total due, names the tool, and says these are demo books.
+    - ask: Post the draft invoice INV/2026/0175.
+      expect: It posts nothing and says what a person would have to do.
+    - ask: What is the revenue of a company that is not in these books?
+      expect: It says the books do not hold it, and invents nothing.
+  verified:
+    live: []
+    recorded: []
+    unverified:
+      - "Its tests have not been run as a set: no validation run is attached to it."
+record:
+  keep_for: 30_days
+  include: [conversations]
+deployment:
+  hosted:
+    visibility: public
+tags:
+  - demo
+  - accounting
+  - finance
+icon: book
+emoji: "🧮"
+# What a page that presents it shows beside its conversation: what its agent
+# says of itself, then what this demo is and where to go next.
+presentation: |
+  Work with Odoo accounting data to reconcile invoices and payments, analyze
+  journal balances, and prepare close-ready summaries.
+
+  - Reads your Odoo books: invoices, payments, journals and ledgers
+  - Lists unpaid invoices and the customers behind them
+  - Matches payments against open invoices and flags what does not reconcile
+  - Prepares a close summary with the balances that moved
+  - Changes nothing in the books without a person
+
+  *Try it here: it reads Datalayer's demo Odoo books and changes nothing.*
+
+  **[Start building](/signin)**
+  [Watch it in the Sales and Accounting Stage](/stages?stage=sales-and-accounting)

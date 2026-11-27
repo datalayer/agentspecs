@@ -56,8 +56,8 @@ def test_the_pickers_offer_the_eight_seed_agents():
 def test_the_neutral_default_runs_and_is_not_offered():
     agents = dict(_agents())
     for name in (
-        "example-simple",
-        "example-blank",
+        "chat-agent",
+        "blank",
     ):
         assert agents[name]["enabled"] is True, name
         assert agents[name]["listed"] is False, name

@@ -8,7 +8,7 @@ id: coding-agent-behind-the-shield
 version: 0.0.1
 scene: coding-agent-behind-the-shield:0.0.1
 deployments:
-  code-explainer: demo-code-explainer
+  code-explainer: code-explainer-stage
 public: true
 tags:
   - example

@@ -7,7 +7,7 @@ id: month-end-close
 version: 0.0.1
 scene: month-end-close:0.0.1
 deployments:
-  month-end-close: demo-month-end-close
+  month-end-close: month-end-close-stage
 public: true
 tags:
   - example

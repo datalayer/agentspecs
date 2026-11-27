@@ -12,7 +12,7 @@ description: >-
   a Stage made from one application.
 app: accounting:0.0.2
 deployments:
-  accounting: demo-accounting
+  accounting: accounting-stage
 public: false
 tags:
   - example

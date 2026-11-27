@@ -1,0 +1,171 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+id: hooks-agent
+version: 0.0.1
+name: Hooks Agent
+description: >-
+  Reports what the sandbox lifecycle hooks did: the pre-hook that installs a
+  package and writes a marker before the agent starts, the post-hook that writes
+  one when it stops, and the per-tool hooks around sensitive calls.
+
+tags:
+  - workflow
+  - automation
+  - analysis
+
+enabled: false
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
+harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
+
+sandbox_variant: eval
+memory: ephemeral
+
+mcp_servers: []
+skills: []
+backend_tools:
+  - runtime-echo:0.0.1
+  - runtime-sensitive-echo:0.0.1
+frontend_tools: []
+
+environment_name: ai-agents-env
+
+icon: zap
+emoji: "🪝"
+color: cyan
+
+suggestions:
+  - text: "Read the pre-hook marker file at /tmp/agent_runtimes_pre_hook_demo.txt using execute_code."
+    summary: "Read the pre-hook marker"
+  - text: "Print the hook_ran_at and hook_name variables that the pre-hook set in the sandbox."
+    summary: "Print the hook variables"
+  - text: "Run execute_code to verify that the 'rich' package was installed by the pre-hook."
+    summary: "Verify rich installed"
+  - text: "Show me all variables that the pre-hook defined in the sandbox namespace."
+    summary: "Pre-hook variables"
+  - text: "Call runtime_sensitive_echo with reason 'audit' to trigger per-tool authorization hooks."
+    summary: "Trigger authorization hooks"
+  - text: "Use execute_code to read /tmp/agent_runtimes_tool_approvals_audit.jsonl and summarize the latest authorization + execution entries."
+    summary: "Summarize the audit log"
+
+welcome_message: >
+  I ran a pre-hook before starting up. It installed the 'rich' package, wrote a
+  marker file, and set several sandbox variables (hook_name, hook_ran_at,
+  hook_env). Ask me to read the file or inspect those variables.
+
+system_prompt: >
+  You are the Hooks Agent: you report what the lifecycle hooks did.
+
+  The sandbox pre-hook ran before this agent started and did three things:
+
+  1. Installed the Python package 'rich' (pip install).
+  2. Wrote a UTF-8 marker file to /tmp/agent_runtimes_pre_hook_demo.txt
+     with the content: "pre-hook executed for hooks-agent at <timestamp>".
+  3. Defined these Python variables in the sandbox namespace:
+     - hook_name    (str) - "hooks-agent:pre"
+     - hook_ran_at  (str) - ISO-8601 timestamp of when the pre-hook ran
+     - hook_env     (dict) - subset of os.environ captured at hook time
+
+  A post-hook is also configured — it will write
+  /tmp/agent_runtimes_post_hook_demo.txt when the agent shuts down.
+
+  Your runtime-sensitive tool calls also run through per-tool hooks.
+  Each proposed tool call is converted into an authorization request with actor,
+  tool, arguments, resource, current delegations, and risk class. Hook decisions
+  can be allow, deny, approval_needed, or delegated_allow. Decisions and
+  execution results are logged.
+
+  Hook names align with pydantic-ai capability hooks:
+  - before_tool_execute
+  - after_tool_execute
+  - on_tool_execute_error
+  - deferred_tool_calls
+
+  When the user asks about hooks, use execute_code to show concrete evidence:
+  read the marker file, print the variables, or import rich to confirm it
+  was installed.
+
+pre_hooks:
+  packages:
+    - rich
+  sandbox:
+    - |
+      import datetime
+      import os
+      from pathlib import Path
+
+      hook_name = "hooks-agent:pre"
+      hook_ran_at = datetime.datetime.now().isoformat()
+      hook_env = {
+          k: os.environ[k]
+          for k in ("PATH", "HOME", "DATALAYER_CODE_SANDBOX_VARIANT")
+          if k in os.environ
+      }
+
+      Path('/tmp/agent_runtimes_pre_hook_demo.txt').write_text(
+          f'pre-hook executed for hooks-agent at {hook_ran_at}\n',
+          encoding='utf-8',
+      )
+      print(f"[hooks-agent] pre-hook done: hook_ran_at={hook_ran_at!r}")
+
+post_hooks:
+  sandbox:
+    - |
+      import datetime
+      from pathlib import Path
+
+      post_ran_at = datetime.datetime.now().isoformat()
+      Path('/tmp/agent_runtimes_post_hook_demo.txt').write_text(
+          f'post-hook executed for hooks-agent at {post_ran_at}\n',
+          encoding='utf-8',
+      )
+      print(f"[hooks-agent] post-hook done: post_ran_at={post_ran_at!r}")
+
+tool_hooks:
+  actor: "${USER}"
+  audit_log_path: "agent_runtimes_tool_approvals_audit.jsonl"
+  current_delegations:
+    - "delegate:read-only-low-risk"
+  before_tool_execute:
+    - function: agent_runtimes.integrations.tool_policy:evaluate_tool_request
+    - python: |
+        # Plain Python hook variant. It can enforce extra local policy.
+        reason = str(request.get("arguments", {}).get("reason", "")).lower()
+        if "delete" in reason or "drop" in reason:
+            hook_result = {
+                "decision": "deny",
+                "reason": "blocked_by_local_python_hook_reason_policy"
+            }
+  after_tool_execute:
+    - python: |
+        # Post hook receives execution result payload in `payload`.
+        print(
+        "[hooks-agent] after_tool_execute",
+            payload.get("tool"),
+            payload.get("status"),
+            payload.get("decision"),
+        )
+  on_tool_execute_error:
+    - python: |
+        print(
+            "[hooks-agent] on_tool_execute_error",
+            payload.get("tool"),
+            payload.get("error_type"),
+            payload.get("decision"),
+        )
+  deferred_tool_calls:
+    - python: |
+        # Demonstrates the deferred hook key in spec config.
+        print("[hooks-agent] deferred_tool_calls invoked")
+
+system_prompt_codemode_addons: null
+welcome_notebook: null
+welcome_document: null
+trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

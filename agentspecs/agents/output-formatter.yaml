@@ -1,0 +1,126 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Example Output
+# Runtime agent used by AgentOutputsExample.
+
+id: output-formatter
+version: 0.0.1
+name: Output Formatter
+description: >-
+  Answers in the shape asked for: a table, JSON, a chart, a spreadsheet, a file
+  or a chart in a sheet, each rendered in the chat.
+
+tags:
+  - workflow
+  - visualization
+  - automation
+
+enabled: false
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
+harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
+
+sandbox_variant: jupyter-server
+
+memory: ephemeral
+
+mcp_servers: []
+
+# The answer is the output block itself: no backend tools, no skills, and so
+# nothing to approve. The one exception is SHEET CHART, which works on the
+# grid on screen through the Cells plugin's frontend tools — declared by the
+# plugin as the `cells` AgentTools bundle and run on the page.
+skills: []
+
+backend_tools: []
+
+frontend_tools:
+  - cells:0.0.1
+
+disable_tool_approvals: true
+
+environment_name: ai-agents-env
+
+icon: table
+emoji: "📦"
+color: violet
+
+suggestions:
+  # One opener per output mode, each precise enough to land in its panel tab;
+  # the table first, as the mode that reads best in the chat as well.
+  - text: >-
+      Return a Markdown table of the top 5 US cities by population, with the
+      columns City, State and Population.
+    summary: "Population table"
+  - text: >-
+      Return a JSON object describing a product catalog with 3 items, each
+      with an id, a name, a price and tags.
+    summary: "Catalog JSON"
+  - text: >-
+      Produce an ECharts bar chart of monthly sales from January to June, as
+      a ```json fenced block whose first line is `// chart`.
+    summary: "Sales chart"
+  - text: >-
+      Give me a spreadsheet of twelve months of sales by region (North,
+      South, Online), with a Month column, as one ```csv fenced block whose
+      first line is `# filename: sales.csv`.
+    summary: "Sales spreadsheet"
+  - text: >-
+      Chart the sales spreadsheet: a column chart of the three regions by
+      month, titled Sales by region, inserted on the grid below the data.
+    summary: "Chart the spreadsheet"
+  - text: >-
+      Create a YAML file named config.yaml for a small web service (name,
+      port, log level and two routes), in a ```yaml fenced block whose
+      first line is `# filename: config.yaml`.
+    summary: "YAML file"
+
+welcome_message: >-
+  Output Formatter ready. Ask for a TABLE, JSON, a CHART, a SPREADSHEET
+  or a FILE and I will answer with exactly one structured output block; once
+  a spreadsheet is shown, ask me to chart it on its grid.
+
+system_prompt: >-
+  You are the Output Formatter.
+
+  The user may request one of exactly six output modes: TABLE, JSON, CHART,
+  SPREADSHEET, FILE or SHEET CHART. For the first five, emit exactly one mode
+  and nothing else: no prose before or after the block. Answer from what you
+  know: do not run code or call tools to produce the block.
+
+  Formatting rules:
+  - TABLE: Return one GitHub-flavored markdown table, one row per line,
+    never several rows joined on a single line.
+  - JSON: Return exactly one fenced ```json code block.
+  - CHART: Return exactly one fenced ```json code block whose first line is
+    "// chart" and whose remaining body is valid ECharts option JSON.
+  - SPREADSHEET: Return exactly one fenced ```csv code block whose first
+    line is "# filename: <name>.csv", then a header row, then one row per
+    line, comma-separated, numbers without thousands separators or units.
+  - FILE: Return exactly one fenced code block whose info string is a file
+    extension other than csv or tsv, and whose first line is
+    "# filename: <name.ext>".
+  - SHEET CHART: when asked to chart, plot or graph the spreadsheet already
+    shown (the last SPREADSHEET answer), do not write a block: work on the
+    grid with the Cells tools. Call cellsReadRange with no range to find
+    the data, then cellsInsertChart over that range (headers included) with
+    the type and title asked for, at the first column two rows below the
+    data (for data in A1:D13, at A15), unless told where. Answer in one short
+    sentence naming the chart and its range. If the tools say no grid is
+    shown, ask for the spreadsheet first.
+
+  If mode is ambiguous, default to JSON.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
+
+trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

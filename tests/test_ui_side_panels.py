@@ -29,14 +29,14 @@ from agentspecs import ui
 ROOT = Path(ui.__file__).resolve().parent
 
 SEVEN = {
-    "worker-marketer": "demo-marketer",
-    "worker-shopper": "demo-shopper",
-    "worker-accountant": "demo-accountant",
-    "worker-traveller": "demo-traveller",
-    "worker-terra": "demo-terra",
-    "worker-steward-aws": "demo-aws-steward",
-    "worker-data-analyst": "demo-data-analyst",
-    "worker-functional-analyst": "demo-functional-analyst",
+    "worker-marketer": "marketer-tryout",
+    "worker-shopper": "shopper-tryout",
+    "worker-accountant": "accountant-tryout",
+    "worker-traveller": "traveller-tryout",
+    "worker-terra": "terra-tryout",
+    "worker-steward-aws": "aws-steward-tryout",
+    "worker-data-analyst": "data-analyst-tryout",
+    "worker-functional-analyst": "functional-analyst-tryout",
 }
 
 #: The agents with something placed in a side panel, and what.
@@ -193,12 +193,12 @@ def test_the_analyst_and_the_steward_say_what_their_sheet_holds():
     assert "a tab Profile with one row per column" in analyst and "sheetInsertChart" in analyst
     steward = " ".join(raw("agents", "worker-steward-aws")["system_prompt"].split())
     assert "Monthly saving" in steward and "=SUM(E2:E7)" in steward
-    for demo in ("demo-data-analyst", "demo-aws-steward"):
+    for demo in ("data-analyst-tryout", "aws-steward-tryout"):
         said = " ".join(raw("apps", demo)["instructions"].split())
         assert "sheetCreate" in said and "they too are tools you use here" in said
         assert "only" in said
     # The Analyst's demo now opens the live notebook and uses its cell tools.
-    analyst_demo = raw("apps", "demo-data-analyst")
+    analyst_demo = raw("apps", "data-analyst-tryout")
     # Since e9fb357 the notebook is a tab of the right panel, beside the conversation.
     assert {"plugin": "page-notebook", "placement": "right", "tab": "Notebook"} in analyst_demo["ui"]
     assert analyst_demo["interface"]["layout"] == "chat"

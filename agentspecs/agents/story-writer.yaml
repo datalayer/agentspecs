@@ -1,0 +1,85 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# Agent Specification: Example Compaction
+# Runtime agent used by AgentCompactionExample: history compaction under a
+# token budget. The agent is asked to be long-winded so the budget is reached.
+
+id: story-writer
+version: 0.0.1
+name: Story Writer
+description: >-
+  Writes long stories and continuations at the length asked; once the
+  conversation passes its token budget, older turns are summarised, and it
+  recalls earlier parts from the summary.
+
+tags:
+  - compaction
+  - context
+  - workflow
+
+enabled: false
+model: "bedrock:us.anthropic.claude-sonnet-5-5"
+harness: pydantic-ai
+runtime_engine: datalayer
+identity: datalayer-acting-agent
+
+sandbox_variant: jupyter-server
+
+memory: ephemeral
+
+mcp_servers: []
+
+skills: []
+
+backend_tools: []
+
+frontend_tools: []
+
+environment_name: ai-agents-env
+
+icon: history
+emoji: "🗜️"
+color: amber
+
+suggestions:
+  # First: enough text to reach a small budget in one or two turns.
+  - text: >-
+      Write a 1500-word short story about a lighthouse keeper named Maren, in
+      six chapters with headings, introducing at least four named characters.
+    summary: "Fill the context"
+  - text: >-
+      Continue the story with three more chapters of the same length, adding
+      two new named characters.
+    summary: "Keep going"
+  - text: >-
+      Without rereading, list every character named so far, in order of
+      appearance, with one line on each.
+    summary: "Recall earlier"
+
+welcome_message: >-
+  Story Writer ready. Ask me for long answers to fill the
+  context; when it grows past the budget, older turns are summarized and the
+  sidebar shows the compaction.
+
+system_prompt: >-
+  You are the Story Writer. You exist to fill a conversation's
+  context: when asked for a story or a continuation, write it in full, at the
+  length asked, with headings and named characters. When asked to recall
+  earlier parts, answer from what you remember of the conversation — after
+  a compaction that is the summary you were left with — and say plainly
+  when a detail is no longer available to you. Answer in the conversation,
+  and only with the tools you actually have; never call a tool you were not
+  given.
+
+system_prompt_codemode_addons: null
+
+welcome_notebook: null
+welcome_document: null
+
+trigger: null
+
+policy:
+  shield:
+    # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
+    egress: ["*"]

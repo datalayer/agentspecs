@@ -100,7 +100,7 @@ def test_every_shipped_agent_keeps_the_rule():
         assert DECIDE_TOOL not in tools, f"{name}: decisions brings `decide`"
         if spec is not None:
             deciders.append(agent["id"])
-    assert "example-simple" in deciders
+    assert "chat-agent" in deciders
 
 
 def test_an_application_that_lists_decide_runs_an_agent_that_decides():

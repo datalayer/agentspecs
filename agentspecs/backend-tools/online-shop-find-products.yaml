@@ -1,0 +1,30 @@
+# Copyright (c) 2025-2026 Datalayer, Inc.
+# Distributed under the terms of the Modified BSD License.
+
+# The online shop's catalogue, a snapshot bundled with the online-shop application
+# (apps/online-shop/catalog.json): read in process, never from the network; it
+# changes nothing anywhere (agent_runtimes.tools.online_shop).
+
+id: online-shop-find-products
+version: 0.0.1
+name: Find Online Shop Products
+description: >-
+  Find the online shop's products by words, category and price range, the cheapest first, each with its photo, price, rating and stock. Drawn as a grid of product cards.
+tags:
+  - shopping
+  - demo
+  - online-shop
+enabled: true
+action: read
+approval: auto
+runtime:
+  language: python
+  package: agent_runtimes.tools.online_shop
+  method: find_products
+icon: "@primer/octicons-react:search"
+emoji: "🔎"
+
+# The UI plugin it brings to the chat that uses it: its answer drawn as
+# product cards, each with its photo.
+ui:
+  - plugin: product-cards

@@ -249,7 +249,7 @@ def test_a_page_shows_one_gallery() -> None:
 
 
 def test_the_demo_shops_page_shows_its_products() -> None:
-    shop = load_app(Path(agentspecs.apps.__file__).parent / "demo-shop.yaml")
+    shop = load_app(Path(agentspecs.apps.__file__).parent / "online-shop.yaml")
     found = gallery_operation(openapi_operations(shop.openapi))
     assert found is not None and found.operation_id == "listProducts"
     assert found.gallery == {"title": "The shop's products"}

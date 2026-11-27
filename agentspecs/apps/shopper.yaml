@@ -3,14 +3,14 @@
 
 # Application Specification: Shopper
 # A person's shopper, in their browser. Asked for products, a basket or an
-# order, it asks the Demo Shop, over A2A, and hands over what the shop
+# order, it asks the Online Shop, over A2A, and hands over what the shop
 # answered: it never makes up a product, a price or a total, and it says when
 # the shop could not answer. It connects to nothing and buys nothing itself.
 #
 # It is the entry of the team `buy-from-a-shop`, and runs in the person's
 # browser (the in-browser target that the Preview and `agent` use): its
-# agent's instructions and model turn there. Its one tool, ask_demo_shop, is the
-# team's A2A link to the Demo Shop. Its own agent's runtime tools do not
+# agent's instructions and model turn there. Its one tool, ask_online_shop, is the
+# team's A2A link to the Online Shop. Its own agent's runtime tools do not
 # exist in a browser.
 
 schema: agent.app/v1
@@ -19,16 +19,16 @@ version: 0.0.2
 name: Shopper
 kind: chat
 description: >-
-  Shops at the Demo Shop for you: asks it for products, gets a basket quoted
+  Shops at the Online Shop for you: asks it for products, gets a basket quoted
   and places a test order once you say so, and hands over what the shop
   answered without adding a product or a figure of its own.
 owner: Datalayer <info@datalayer.io>
 
 agent: worker-shopper:0.0.1
 instructions: >-
-  You shop for the person at the Demo Shop. You do not hold its catalogue: the
+  You shop for the person at the Online Shop. You do not hold its catalogue: the
   shop does. When the person asks for products, a comparison, a basket or an
-  order, call ask_demo_shop once with one request the shop can act on without the
+  order, call ask_online_shop once with one request the shop can act on without the
   rest of this conversation: what kind of product, the budget or price range,
   the quantities, and whether to quote or to place the order. Then give the
   person what the shop answered — its products, prices, stock, totals and
@@ -47,7 +47,7 @@ interface:
   layout: chat
   accent: sun
   welcome: >-
-    I'm your Shopper at the Demo Shop: tell me what you need and your budget,
+    I'm your Shopper at the Online Shop: tell me what you need and your budget,
     and I ask the shop, compare what it has and get the basket quoted. Its
     orders are test orders: nothing is charged and nothing ships.
   starters:

@@ -18,7 +18,7 @@ description: >-
   its confidence.
 owner: Datalayer <info@datalayer.io>
 
-agent: example-simple:0.0.1
+agent: chat-agent:0.0.1
 backend_tools:
   - decide:0.0.1
 instructions: >-

@@ -15,13 +15,13 @@ id: worker-comprehensive-sales-analytics
 version: 0.0.1
 name: Comprehensive Sales Analytics
 domain: market-analyst
-description: >
+description: >-
   A multi-agent team that replaces a single KPI monitor with four specialized
-  agents: a Data Collector that pulls real-time CRM metrics, an Anomaly
-  Detector that flags statistical outliers, a Trend Analyzer that identifies
-  patterns and forecasts, and a Report Generator that compiles executive
-  dashboards and sends alerts. Together they deliver deeper insights, faster
-  detection, and richer reporting than any single agent could.
+  agents: a Data Collector that pulls real-time CRM metrics, an Anomaly Detector
+  that flags statistical outliers, a Trend Analyzer that identifies patterns and
+  forecasts, and a Report Generator that compiles executive dashboards and sends
+  alerts. Together they deliver deeper insights, faster detection, and richer
+  reporting than any single agent could.
 
 tags:
   - market-analyst
@@ -138,3 +138,6 @@ policy:
   shield:
     # Any public address: the MCP servers and tools it runs call out (agent-shield's firewall).
     egress: ["*"]
+
+
+suggestions:

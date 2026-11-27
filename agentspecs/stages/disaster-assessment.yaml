@@ -8,8 +8,8 @@ id: disaster-assessment
 version: 0.0.1
 scene: disaster-assessment:0.0.1
 deployments:
-  disaster-assessment: demo-disaster-assessment
-  change-detection: demo-change-detection
+  disaster-assessment: disaster-assessment-stage
+  change-detection: change-detection-stage
 public: true
 tags:
   - example

@@ -8,7 +8,7 @@ id: sales-and-accounting
 version: 0.0.1
 scene: sales-and-accounting:0.0.1
 deployments:
-  accounting: demo-accounting
+  accounting: accounting-stage
 public: true
 tags:
   - example
